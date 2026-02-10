@@ -201,6 +201,33 @@ export function useGame(gameCode: string | undefined): UseGameReturn {
     });
   }, [gameCode, isHost]);
 
+  // End the current round (called when timer expires)
+  const endRound = useCallback(async () => {
+    if (!gameCode || !isHost) return;
+
+    const gameRef = doc(db, 'games', gameCode);
+    await updateDoc(gameRef, {
+      status: 'round_end' as GameStatus,
+      updatedAt: serverTimestamp(),
+    });
+  }, [gameCode, isHost]);
+
+  // Auto-end round when timer expires (host only)
+  useEffect(() => {
+    if (!isHost || !game || game.status !== 'active' || !game.roundEndTime) return;
+
+    const checkTimer = () => {
+      const now = Date.now();
+      const endTime = game.roundEndTime!.toMillis();
+      if (now >= endTime) {
+        endRound();
+      }
+    };
+
+    const interval = setInterval(checkTimer, 1000);
+    return () => clearInterval(interval);
+  }, [isHost, game?.status, game?.roundEndTime, endRound]);
+
   return {
     game,
     loading,
