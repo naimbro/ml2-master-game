@@ -335,6 +335,18 @@ export const processRoundEnd = functions
           processedAt: admin.firestore.Timestamp.now(),
         });
 
+      // Update player totalScores in the game document
+      const playerUpdates: Record<string, number> = {};
+      for (const score of scores) {
+        const currentPlayer = game.players?.[score.playerId];
+        const currentTotal = currentPlayer?.totalScore || 0;
+        playerUpdates[`players.${score.playerId}.totalScore`] = currentTotal + score.score;
+      }
+
+      if (Object.keys(playerUpdates).length > 0) {
+        await db.collection('games').doc(gameCode).update(playerUpdates);
+      }
+
       return { success: true, rankings };
 
     } catch (error) {

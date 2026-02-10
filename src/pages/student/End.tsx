@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Trophy, Medal, Star, Home, FileText } from 'lucide-react';
+import { Trophy, Medal, Star, Home, Download } from 'lucide-react';
 import { useGame } from '../../hooks/useGame';
 import { useAuth } from '../../hooks/useAuth';
 import { httpsCallable } from 'firebase/functions';
 import { functions } from '../../lib/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
+import jsPDF from 'jspdf';
 
 interface PlayerFinalScore {
   playerId: string;
@@ -83,18 +84,171 @@ export default function End() {
   }, [gameCode, game]);
 
   const handleDownloadReport = async () => {
-    if (!gameCode || !user) return;
+    if (!gameCode || !user || !userRanking) return;
 
     setReportLoading(true);
     try {
+      // Call Cloud Function to get report data
       const generateReport = httpsCallable(functions, 'generateStudentReport');
       const result = await generateReport({ gameCode, playerId: user.uid });
+      const reportData = result.data as {
+        success: boolean;
+        report: {
+          sessionTitle: string;
+          averageScore: number;
+          roundDetails: Array<{
+            round: number;
+            scenario: string;
+            evaluation?: {
+              finalScore: number;
+              evaluations: Array<{
+                judgeName: string;
+                feedback: string;
+                strengths: string[];
+                improvements: string[];
+              }>;
+            };
+          }>;
+          summary: {
+            strengths: string[];
+            improvements: string[];
+            conceptsIdentified: string[];
+          };
+        };
+      };
 
-      // For now, just show alert - PDF generation would go here
-      console.log('Report data:', result.data);
-      alert('Funcion de descarga de PDF en desarrollo. Los datos del reporte estan en la consola.');
+      if (!reportData.success) {
+        throw new Error('Failed to generate report');
+      }
+
+      const report = reportData.report;
+
+      // Generate PDF
+      const doc = new jsPDF();
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const margin = 20;
+      let y = 20;
+
+      // Title
+      doc.setFontSize(20);
+      doc.setTextColor(75, 0, 130);
+      doc.text('Reporte de Desempeno', margin, y);
+      y += 10;
+
+      doc.setFontSize(14);
+      doc.setTextColor(100, 100, 100);
+      doc.text(report.sessionTitle || 'ML2 Master Game', margin, y);
+      y += 15;
+
+      // Player Info
+      doc.setFontSize(12);
+      doc.setTextColor(0, 0, 0);
+      doc.text(`Estudiante: ${user.displayName || user.email}`, margin, y);
+      y += 8;
+      doc.text(`Posicion Final: #${userRanking.rank} de ${finalRankings.length}`, margin, y);
+      y += 8;
+      doc.text(`Puntaje Total: ${userRanking.totalScore}`, margin, y);
+      y += 8;
+      doc.text(`Promedio: ${report.averageScore}`, margin, y);
+      y += 15;
+
+      // Round Scores
+      doc.setFontSize(14);
+      doc.setTextColor(0, 102, 204);
+      doc.text('Puntajes por Ronda:', margin, y);
+      y += 8;
+      doc.setFontSize(10);
+      doc.setTextColor(0, 0, 0);
+      userRanking.roundScores.forEach((score, i) => {
+        doc.text(`Ronda ${i + 1}: ${score || 0} puntos`, margin + 5, y);
+        y += 6;
+      });
+      y += 10;
+
+      // Strong Concepts
+      if (report.summary.strengths.length > 0) {
+        doc.setFontSize(14);
+        doc.setTextColor(34, 139, 34);
+        doc.text('Fortalezas Identificadas:', margin, y);
+        y += 8;
+        doc.setFontSize(10);
+        doc.setTextColor(0, 0, 0);
+        report.summary.strengths.slice(0, 5).forEach((strength) => {
+          const lines = doc.splitTextToSize(`* ${strength}`, pageWidth - 2 * margin);
+          lines.forEach((line: string) => {
+            if (y > 270) {
+              doc.addPage();
+              y = 20;
+            }
+            doc.text(line, margin + 5, y);
+            y += 5;
+          });
+        });
+        y += 8;
+      }
+
+      // Areas for Improvement
+      if (report.summary.improvements.length > 0) {
+        if (y > 240) {
+          doc.addPage();
+          y = 20;
+        }
+        doc.setFontSize(14);
+        doc.setTextColor(220, 20, 60);
+        doc.text('Areas de Mejora:', margin, y);
+        y += 8;
+        doc.setFontSize(10);
+        doc.setTextColor(0, 0, 0);
+        report.summary.improvements.slice(0, 5).forEach((improvement) => {
+          const lines = doc.splitTextToSize(`* ${improvement}`, pageWidth - 2 * margin);
+          lines.forEach((line: string) => {
+            if (y > 270) {
+              doc.addPage();
+              y = 20;
+            }
+            doc.text(line, margin + 5, y);
+            y += 5;
+          });
+        });
+        y += 8;
+      }
+
+      // Concepts Identified
+      if (report.summary.conceptsIdentified.length > 0) {
+        if (y > 240) {
+          doc.addPage();
+          y = 20;
+        }
+        doc.setFontSize(14);
+        doc.setTextColor(128, 0, 128);
+        doc.text('Conceptos Evaluados:', margin, y);
+        y += 8;
+        doc.setFontSize(10);
+        doc.setTextColor(0, 0, 0);
+        const conceptsText = report.summary.conceptsIdentified.join(', ');
+        const lines = doc.splitTextToSize(conceptsText, pageWidth - 2 * margin);
+        lines.forEach((line: string) => {
+          if (y > 270) {
+            doc.addPage();
+            y = 20;
+          }
+          doc.text(line, margin + 5, y);
+          y += 5;
+        });
+      }
+
+      // Footer
+      doc.setFontSize(8);
+      doc.setTextColor(150, 150, 150);
+      doc.text(`Generado el ${new Date().toLocaleDateString('es-CL')}`, margin, 285);
+
+      // Save
+      const fileName = `reporte_${(user.displayName || 'estudiante').replace(/\s+/g, '_')}_ML2.pdf`;
+      doc.save(fileName);
+
     } catch (err) {
       console.error('Report error:', err);
+      alert('Error al generar el reporte. Por favor intenta de nuevo.');
     } finally {
       setReportLoading(false);
     }
@@ -259,7 +413,7 @@ export default function End() {
             <button
               onClick={handleDownloadReport}
               disabled={reportLoading}
-              className="w-full p-3 bg-white/10 hover:bg-white/20 rounded-lg transition-colors flex items-center justify-center gap-2"
+              className="w-full p-3 bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-700 hover:to-cyan-700 rounded-lg transition-colors flex items-center justify-center gap-2 font-medium"
             >
               {reportLoading ? (
                 <>
@@ -268,8 +422,8 @@ export default function End() {
                 </>
               ) : (
                 <>
-                  <FileText className="w-5 h-5" />
-                  Descargar Reporte Completo
+                  <Download className="w-5 h-5" />
+                  Descargar Reporte PDF
                 </>
               )}
             </button>

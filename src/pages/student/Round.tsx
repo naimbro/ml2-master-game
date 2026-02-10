@@ -1,17 +1,42 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Clock, Send, CheckCircle, AlertCircle } from 'lucide-react';
+import { Clock, Send, CheckCircle, AlertCircle, StopCircle } from 'lucide-react';
 import { useGame } from '../../hooks/useGame';
 import { useAuth } from '../../hooks/useAuth';
+import { doc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '../../lib/firebase';
 
 export default function Round() {
   const { gameCode } = useParams<{ gameCode: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { game, loading, error, submitAnswer, submissions } = useGame(gameCode);
+  const { game, loading, error, submitAnswer, submissions, isHost } = useGame(gameCode);
 
   const [response, setResponse] = useState('');
+  const [endingRound, setEndingRound] = useState(false);
+
+  // Manual end round (host only)
+  const handleEndRound = async () => {
+    if (!gameCode || !isHost || endingRound) return;
+
+    const confirm = window.confirm(
+      '¿Estás seguro de terminar la ronda ahora? Se evaluarán las respuestas enviadas.'
+    );
+
+    if (confirm) {
+      setEndingRound(true);
+      try {
+        await updateDoc(doc(db, 'games', gameCode), {
+          status: 'round_end',
+          updatedAt: serverTimestamp(),
+        });
+      } catch (err) {
+        console.error('Error ending round:', err);
+        setEndingRound(false);
+      }
+    }
+  };
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
@@ -134,6 +159,29 @@ export default function Round() {
             </p>
           </div>
         </div>
+
+        {/* Host Controls */}
+        {isHost && (
+          <div className="max-w-4xl mx-auto mt-3 flex justify-end">
+            <button
+              onClick={handleEndRound}
+              disabled={endingRound}
+              className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-all disabled:opacity-50"
+            >
+              {endingRound ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  Terminando...
+                </>
+              ) : (
+                <>
+                  <StopCircle className="w-4 h-4" />
+                  Terminar Ronda Ahora
+                </>
+              )}
+            </button>
+          </div>
+        )}
       </header>
 
       {/* Main Content */}

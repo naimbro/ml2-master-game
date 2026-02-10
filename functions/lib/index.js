@@ -192,6 +192,7 @@ exports.processRoundEnd = functions
     .region('us-central1')
     .runWith({ timeoutSeconds: 300, memory: '1GB', secrets: ['OPENAI_API_KEY'] })
     .https.onCall(async (data, context) => {
+    var _a;
     if (!context.auth) {
         throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
     }
@@ -282,6 +283,16 @@ exports.processRoundEnd = functions
             rankings,
             processedAt: admin.firestore.Timestamp.now(),
         });
+        // Update player totalScores in the game document
+        const playerUpdates = {};
+        for (const score of scores) {
+            const currentPlayer = (_a = game.players) === null || _a === void 0 ? void 0 : _a[score.playerId];
+            const currentTotal = (currentPlayer === null || currentPlayer === void 0 ? void 0 : currentPlayer.totalScore) || 0;
+            playerUpdates[`players.${score.playerId}.totalScore`] = currentTotal + score.score;
+        }
+        if (Object.keys(playerUpdates).length > 0) {
+            await db.collection('games').doc(gameCode).update(playerUpdates);
+        }
         return { success: true, rankings };
     }
     catch (error) {

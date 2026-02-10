@@ -209,8 +209,8 @@ export default function Results() {
           </motion.div>
         )}
 
-        {/* Leaderboard */}
-        {roundResults && (
+        {/* Cumulative Leaderboard */}
+        {roundResults && game.players && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -219,46 +219,82 @@ export default function Results() {
           >
             <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
               <TrendingUp className="w-5 h-5 text-cyan-400" />
-              Ranking de la Ronda
+              Ranking Acumulado
             </h2>
 
+            {/* Column Headers */}
+            <div className="flex items-center gap-4 px-3 py-2 text-xs text-white/50 uppercase tracking-wide border-b border-white/10 mb-2">
+              <div className="w-8"></div>
+              <span className="flex-1">Jugador</span>
+              <span className="w-20 text-right">Esta Ronda</span>
+              <span className="w-20 text-right">Promedio</span>
+            </div>
+
             <div className="space-y-2">
-              {roundResults.rankings.map((player, index) => (
-                <motion.div
-                  key={player.playerId}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                  className={`flex items-center gap-4 p-3 rounded-lg ${
-                    player.playerId === user?.uid
-                      ? 'bg-cyan-500/20 border border-cyan-500/30'
-                      : 'bg-white/5'
-                  }`}
-                >
-                  <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${
-                      player.rank === 1
-                        ? 'bg-yellow-500 text-black'
-                        : player.rank === 2
-                        ? 'bg-gray-400 text-black'
-                        : player.rank === 3
-                        ? 'bg-amber-600 text-black'
-                        : 'bg-white/20'
+              {(() => {
+                // Calculate cumulative rankings
+                const cumulativeRankings = Object.entries(game.players)
+                  .map(([playerId, player]) => {
+                    const roundScore = roundResults.rankings.find(r => r.playerId === playerId)?.score || 0;
+                    const totalScore = player.totalScore || 0;
+                    const avgScore = game.currentRound > 0 ? totalScore / game.currentRound : 0;
+                    return {
+                      playerId,
+                      playerName: player.name,
+                      roundScore,
+                      totalScore,
+                      avgScore: Math.round(avgScore * 10) / 10,
+                    };
+                  })
+                  .sort((a, b) => b.avgScore - a.avgScore)
+                  .map((player, index) => ({ ...player, rank: index + 1 }));
+
+                return cumulativeRankings.map((player, index) => (
+                  <motion.div
+                    key={player.playerId}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                    className={`flex items-center gap-4 p-3 rounded-lg ${
+                      player.playerId === user?.uid
+                        ? 'bg-cyan-500/20 border border-cyan-500/30'
+                        : 'bg-white/5'
                     }`}
                   >
-                    {player.rank}
-                  </div>
+                    <div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
+                        player.rank === 1
+                          ? 'bg-yellow-500 text-black'
+                          : player.rank === 2
+                          ? 'bg-gray-400 text-black'
+                          : player.rank === 3
+                          ? 'bg-amber-600 text-black'
+                          : 'bg-white/20'
+                      }`}
+                    >
+                      {player.rank}
+                    </div>
 
-                  <span className="flex-1 font-medium">
-                    {player.playerName}
-                    {player.playerId === user?.uid && (
-                      <span className="text-cyan-400 text-sm ml-2">(Tu)</span>
-                    )}
-                  </span>
+                    <span className="flex-1 font-medium">
+                      {player.playerName}
+                      {player.playerId === user?.uid && (
+                        <span className="text-cyan-400 text-sm ml-2">(Tú)</span>
+                      )}
+                    </span>
 
-                  <span className="font-mono font-bold text-lg">{player.score}</span>
-                </motion.div>
-              ))}
+                    <span className={`w-20 text-right font-mono text-sm ${
+                      player.roundScore >= 80 ? 'text-green-400' :
+                      player.roundScore >= 60 ? 'text-yellow-400' : 'text-red-400'
+                    }`}>
+                      +{player.roundScore}
+                    </span>
+
+                    <span className="w-20 text-right font-mono font-bold text-lg">
+                      {player.avgScore}
+                    </span>
+                  </motion.div>
+                ));
+              })()}
             </div>
           </motion.div>
         )}
