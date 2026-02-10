@@ -33,7 +33,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.seedJudges = exports.generateOralTask = exports.generateStudentReport = exports.processRoundEnd = exports.evaluateSubmission = void 0;
+exports.seedJudges = exports.generateClassReport = exports.generateOralTask = exports.generateStudentReport = exports.processRoundEnd = exports.evaluateSubmission = void 0;
 const functions = __importStar(require("firebase-functions"));
 const admin = __importStar(require("firebase-admin"));
 admin.initializeApp();
@@ -478,6 +478,150 @@ Genera la tarea en JSON con este formato:
     catch (error) {
         console.error('Generate oral task error:', error);
         throw new functions.https.HttpsError('internal', 'Failed to generate oral task');
+    }
+});
+// =====================================
+// GENERATE CLASS REPORT (Professor)
+// =====================================
+exports.generateClassReport = functions
+    .region('us-central1')
+    .runWith({ timeoutSeconds: 60, memory: '256MB' })
+    .https.onCall(async (data, context) => {
+    var _a, _b;
+    if (!context.auth) {
+        throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
+    }
+    const { gameCode } = data;
+    if (!gameCode) {
+        throw new functions.https.HttpsError('invalid-argument', 'Missing gameCode');
+    }
+    try {
+        // Get game document
+        const gameDoc = await db.collection('games').doc(gameCode).get();
+        if (!gameDoc.exists) {
+            throw new functions.https.HttpsError('not-found', 'Game not found');
+        }
+        const game = gameDoc.data();
+        // Verify user is the host
+        if (game.hostId !== context.auth.uid) {
+            throw new functions.https.HttpsError('permission-denied', 'Only the host can generate class reports');
+        }
+        // Get all submissions for this game
+        const submissionsSnapshot = await db.collection('games').doc(gameCode)
+            .collection('submissions')
+            .get();
+        // Group submissions by player and round
+        const playerData = {};
+        submissionsSnapshot.docs.forEach(doc => {
+            var _a, _b, _c;
+            const data = doc.data();
+            const playerId = data.playerId;
+            if (!playerData[playerId]) {
+                playerData[playerId] = {
+                    name: data.playerName || 'Anonimo',
+                    roundScores: {},
+                    totalScore: 0,
+                    roundDetails: [],
+                };
+            }
+            const score = ((_a = data.evaluation) === null || _a === void 0 ? void 0 : _a.finalScore) || 0;
+            playerData[playerId].roundScores[data.round] = score;
+            playerData[playerId].totalScore += score;
+            // Collect feedback
+            const strengths = [];
+            const improvements = [];
+            (_c = (_b = data.evaluation) === null || _b === void 0 ? void 0 : _b.evaluations) === null || _c === void 0 ? void 0 : _c.forEach((e) => {
+                strengths.push(...(e.strengths || []));
+                improvements.push(...(e.improvements || []));
+            });
+            playerData[playerId].roundDetails.push({
+                round: data.round,
+                score,
+                strengths: [...new Set(strengths)],
+                improvements: [...new Set(improvements)],
+            });
+        });
+        // Calculate class statistics
+        const players = Object.entries(playerData).map(([playerId, data]) => {
+            const roundCount = Object.keys(data.roundScores).length;
+            return {
+                playerId,
+                name: data.name,
+                roundScores: data.roundScores,
+                totalScore: data.totalScore,
+                averageScore: roundCount > 0 ? Math.round(data.totalScore / roundCount) : 0,
+                roundDetails: data.roundDetails.sort((a, b) => a.round - b.round),
+            };
+        });
+        // Sort by average score descending
+        players.sort((a, b) => b.averageScore - a.averageScore);
+        // Assign ranks
+        let currentRank = 1;
+        const rankedPlayers = players.map((player, index) => {
+            if (index > 0 && player.averageScore < players[index - 1].averageScore) {
+                currentRank = index + 1;
+            }
+            return { ...player, rank: currentRank };
+        });
+        // Calculate class-level stats
+        const allScores = players.map(p => p.averageScore);
+        const classAverage = allScores.length > 0
+            ? Math.round(allScores.reduce((a, b) => a + b, 0) / allScores.length)
+            : 0;
+        // Score distribution
+        const distribution = {
+            excellent: players.filter(p => p.averageScore >= 90).length,
+            good: players.filter(p => p.averageScore >= 75 && p.averageScore < 90).length,
+            average: players.filter(p => p.averageScore >= 60 && p.averageScore < 75).length,
+            needsWork: players.filter(p => p.averageScore < 60).length,
+        };
+        // Per-round class averages
+        const roundAverages = {};
+        for (let r = 1; r <= game.totalRounds; r++) {
+            const roundScores = players
+                .map(p => p.roundScores[r])
+                .filter(s => s !== undefined);
+            if (roundScores.length > 0) {
+                roundAverages[r] = Math.round(roundScores.reduce((a, b) => a + b, 0) / roundScores.length);
+            }
+        }
+        // Collect all improvement areas (most common)
+        const allImprovements = {};
+        players.forEach(p => {
+            p.roundDetails.forEach(rd => {
+                rd.improvements.forEach(imp => {
+                    allImprovements[imp] = (allImprovements[imp] || 0) + 1;
+                });
+            });
+        });
+        const topImprovementAreas = Object.entries(allImprovements)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 5)
+            .map(([area, count]) => ({ area, count }));
+        return {
+            success: true,
+            report: {
+                gameCode,
+                sessionTitle: ((_a = game.sessionConfig) === null || _a === void 0 ? void 0 : _a.title) || 'Sesion',
+                totalRounds: game.totalRounds,
+                totalPlayers: players.length,
+                classAverage,
+                distribution,
+                roundAverages,
+                topImprovementAreas,
+                players: rankedPlayers,
+                scenarios: ((_b = game.scenarios) === null || _b === void 0 ? void 0 : _b.map((s, i) => ({
+                    round: i + 1,
+                    title: s.title,
+                    category: s.category,
+                }))) || [],
+                generatedAt: admin.firestore.Timestamp.now(),
+            },
+        };
+    }
+    catch (error) {
+        console.error('Generate class report error:', error);
+        throw new functions.https.HttpsError('internal', 'Failed to generate class report');
     }
 });
 // =====================================

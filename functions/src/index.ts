@@ -558,6 +558,180 @@ Genera la tarea en JSON con este formato:
   });
 
 // =====================================
+// GENERATE CLASS REPORT (Professor)
+// =====================================
+export const generateClassReport = functions
+  .region('us-central1')
+  .runWith({ timeoutSeconds: 60, memory: '256MB' })
+  .https.onCall(async (data, context) => {
+    if (!context.auth) {
+      throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
+    }
+
+    const { gameCode } = data;
+
+    if (!gameCode) {
+      throw new functions.https.HttpsError('invalid-argument', 'Missing gameCode');
+    }
+
+    try {
+      // Get game document
+      const gameDoc = await db.collection('games').doc(gameCode).get();
+      if (!gameDoc.exists) {
+        throw new functions.https.HttpsError('not-found', 'Game not found');
+      }
+
+      const game = gameDoc.data()!;
+
+      // Verify user is the host
+      if (game.hostId !== context.auth.uid) {
+        throw new functions.https.HttpsError('permission-denied', 'Only the host can generate class reports');
+      }
+
+      // Get all submissions for this game
+      const submissionsSnapshot = await db.collection('games').doc(gameCode)
+        .collection('submissions')
+        .get();
+
+      // Group submissions by player and round
+      const playerData: Record<string, {
+        name: string;
+        email?: string;
+        roundScores: Record<number, number>;
+        totalScore: number;
+        roundDetails: Array<{
+          round: number;
+          score: number;
+          strengths: string[];
+          improvements: string[];
+        }>;
+      }> = {};
+
+      submissionsSnapshot.docs.forEach(doc => {
+        const data = doc.data();
+        const playerId = data.playerId;
+
+        if (!playerData[playerId]) {
+          playerData[playerId] = {
+            name: data.playerName || 'Anonimo',
+            roundScores: {},
+            totalScore: 0,
+            roundDetails: [],
+          };
+        }
+
+        const score = data.evaluation?.finalScore || 0;
+        playerData[playerId].roundScores[data.round] = score;
+        playerData[playerId].totalScore += score;
+
+        // Collect feedback
+        const strengths: string[] = [];
+        const improvements: string[] = [];
+        data.evaluation?.evaluations?.forEach((e: Evaluation) => {
+          strengths.push(...(e.strengths || []));
+          improvements.push(...(e.improvements || []));
+        });
+
+        playerData[playerId].roundDetails.push({
+          round: data.round,
+          score,
+          strengths: [...new Set(strengths)],
+          improvements: [...new Set(improvements)],
+        });
+      });
+
+      // Calculate class statistics
+      const players = Object.entries(playerData).map(([playerId, data]) => {
+        const roundCount = Object.keys(data.roundScores).length;
+        return {
+          playerId,
+          name: data.name,
+          roundScores: data.roundScores,
+          totalScore: data.totalScore,
+          averageScore: roundCount > 0 ? Math.round(data.totalScore / roundCount) : 0,
+          roundDetails: data.roundDetails.sort((a, b) => a.round - b.round),
+        };
+      });
+
+      // Sort by average score descending
+      players.sort((a, b) => b.averageScore - a.averageScore);
+
+      // Assign ranks
+      let currentRank = 1;
+      const rankedPlayers = players.map((player, index) => {
+        if (index > 0 && player.averageScore < players[index - 1].averageScore) {
+          currentRank = index + 1;
+        }
+        return { ...player, rank: currentRank };
+      });
+
+      // Calculate class-level stats
+      const allScores = players.map(p => p.averageScore);
+      const classAverage = allScores.length > 0
+        ? Math.round(allScores.reduce((a, b) => a + b, 0) / allScores.length)
+        : 0;
+
+      // Score distribution
+      const distribution = {
+        excellent: players.filter(p => p.averageScore >= 90).length,
+        good: players.filter(p => p.averageScore >= 75 && p.averageScore < 90).length,
+        average: players.filter(p => p.averageScore >= 60 && p.averageScore < 75).length,
+        needsWork: players.filter(p => p.averageScore < 60).length,
+      };
+
+      // Per-round class averages
+      const roundAverages: Record<number, number> = {};
+      for (let r = 1; r <= game.totalRounds; r++) {
+        const roundScores = players
+          .map(p => p.roundScores[r])
+          .filter(s => s !== undefined);
+        if (roundScores.length > 0) {
+          roundAverages[r] = Math.round(roundScores.reduce((a, b) => a + b, 0) / roundScores.length);
+        }
+      }
+
+      // Collect all improvement areas (most common)
+      const allImprovements: Record<string, number> = {};
+      players.forEach(p => {
+        p.roundDetails.forEach(rd => {
+          rd.improvements.forEach(imp => {
+            allImprovements[imp] = (allImprovements[imp] || 0) + 1;
+          });
+        });
+      });
+      const topImprovementAreas = Object.entries(allImprovements)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5)
+        .map(([area, count]) => ({ area, count }));
+
+      return {
+        success: true,
+        report: {
+          gameCode,
+          sessionTitle: game.sessionConfig?.title || 'Sesion',
+          totalRounds: game.totalRounds,
+          totalPlayers: players.length,
+          classAverage,
+          distribution,
+          roundAverages,
+          topImprovementAreas,
+          players: rankedPlayers,
+          scenarios: game.scenarios?.map((s: Record<string, unknown>, i: number) => ({
+            round: i + 1,
+            title: s.title,
+            category: s.category,
+          })) || [],
+          generatedAt: admin.firestore.Timestamp.now(),
+        },
+      };
+
+    } catch (error) {
+      console.error('Generate class report error:', error);
+      throw new functions.https.HttpsError('internal', 'Failed to generate class report');
+    }
+  });
+
+// =====================================
 // SEED JUDGES (One-time initialization)
 // =====================================
 export const seedJudges = functions

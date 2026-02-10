@@ -11,6 +11,7 @@ import End from './pages/student/End';
 // Professor Pages
 import Dashboard from './pages/professor/Dashboard';
 import CreateGame from './pages/professor/CreateGame';
+import ClassReport from './pages/professor/ClassReport';
 
 // Auth context
 import { AuthProvider, useAuth } from './hooks/useAuth';
@@ -64,6 +65,10 @@ function AppRoutes() {
       <Route
         path="/professor/create"
         element={user ? <CreateGame /> : <Navigate to="/" replace />}
+      />
+      <Route
+        path="/professor/report/:gameCode"
+        element={user ? <ClassReport /> : <Navigate to="/" replace />}
       />
 
       {/* Fallback */}

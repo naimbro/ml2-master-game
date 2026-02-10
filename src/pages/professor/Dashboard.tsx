@@ -10,6 +10,7 @@ import {
   Clock,
   ChevronRight,
   LogOut,
+  FileText,
 } from 'lucide-react';
 import { collection, query, where, orderBy, getDocs, limit } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
@@ -248,13 +249,22 @@ export default function Dashboard() {
                   )}
 
                   {game.status === 'finished' && (
-                    <Link
-                      to={`/game/${game.gameCode}/end`}
-                      className="px-4 py-2 bg-white/10 text-white/70 rounded-lg hover:bg-white/20 transition-colors flex items-center gap-1"
-                    >
-                      Ver resultados
-                      <ChevronRight className="w-4 h-4" />
-                    </Link>
+                    <div className="flex gap-2">
+                      <Link
+                        to={`/professor/report/${game.gameCode}`}
+                        className="px-4 py-2 bg-purple-500/20 text-purple-400 rounded-lg hover:bg-purple-500/30 transition-colors flex items-center gap-1"
+                      >
+                        <FileText className="w-4 h-4" />
+                        Reporte
+                      </Link>
+                      <Link
+                        to={`/game/${game.gameCode}/end`}
+                        className="px-4 py-2 bg-white/10 text-white/70 rounded-lg hover:bg-white/20 transition-colors flex items-center gap-1"
+                      >
+                        Resultados
+                        <ChevronRight className="w-4 h-4" />
+                      </Link>
+                    </div>
                   )}
                 </div>
               ))}
