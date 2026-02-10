@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Trophy, Medal, Star, Home, Download } from 'lucide-react';
+import { Trophy, Medal, Star, Home, Download, FileText } from 'lucide-react';
 import { useGame } from '../../hooks/useGame';
 import { useAuth } from '../../hooks/useAuth';
 import { httpsCallable } from 'firebase/functions';
@@ -21,7 +21,7 @@ interface PlayerFinalScore {
 export default function End() {
   const { gameCode } = useParams<{ gameCode: string }>();
   const { user } = useAuth();
-  const { game, loading, error } = useGame(gameCode);
+  const { game, loading, error, isHost } = useGame(gameCode);
   const [finalRankings, setFinalRankings] = useState<PlayerFinalScore[]>([]);
   const [loadingRankings, setLoadingRankings] = useState(true);
   const [reportLoading, setReportLoading] = useState(false);
@@ -491,6 +491,31 @@ export default function End() {
             ))}
           </div>
         </motion.div>
+
+        {/* Professor Class Report Button */}
+        {isHost && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7 }}
+            className="dramatic-card p-6"
+          >
+            <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+              <FileText className="w-5 h-5 text-purple-400" />
+              Panel del Profesor
+            </h2>
+            <p className="text-white/60 text-sm mb-4">
+              Como profesor, puedes ver el reporte completo de la clase con estadisticas detalladas de todos los estudiantes.
+            </p>
+            <Link
+              to={`/professor/report/${gameCode}`}
+              className="w-full p-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 rounded-lg transition-colors flex items-center justify-center gap-2 font-medium"
+            >
+              <FileText className="w-5 h-5" />
+              Ver Reporte de Clase
+            </Link>
+          </motion.div>
+        )}
 
         {/* Return Home Button */}
         <motion.div
