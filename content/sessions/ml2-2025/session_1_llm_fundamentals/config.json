@@ -1,0 +1,24 @@
+{
+  "sessionId": "session_1_llm_fundamentals",
+  "title": "Fundamentos de LLMs",
+  "description": "Comprension de arquitecturas transformer, tokenizacion, embeddings y riesgos de LLMs",
+  "date": "2025-03-13",
+  "roundCount": 4,
+  "roundDurationSeconds": 300,
+  "bufferSeconds": 120,
+  "conceptTags": [
+    "transformers",
+    "attention_mechanism",
+    "embeddings",
+    "tokenization",
+    "hallucination",
+    "context_window",
+    "temperature",
+    "api_vs_opensource"
+  ],
+  "judges": [
+    { "judgeId": "technical_expert", "weight": 0.35 },
+    { "judgeId": "public_sector", "weight": 0.35 },
+    { "judgeId": "professor_twin", "weight": 0.30 }
+  ]
+}

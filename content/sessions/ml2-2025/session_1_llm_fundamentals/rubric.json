@@ -1,0 +1,182 @@
+{
+  "sessionId": "session_1_llm_fundamentals",
+  "globalInstructions": "Evalua las respuestas considerando el contexto del sector publico chileno. Los estudiantes son profesionales que trabajan en gobierno y necesitan aplicar estos conceptos en su trabajo diario. Valora especialmente la aplicacion practica y el pensamiento critico sobre las limitaciones de la tecnologia.",
+  "dimensions": [
+    {
+      "id": "technical_accuracy",
+      "name": "Precision Tecnica",
+      "weight": 0.35,
+      "description": "Comprension correcta de conceptos tecnicos de LLMs",
+      "levels": [
+        {
+          "score": 100,
+          "label": "Excepcional",
+          "indicators": [
+            "Demuestra comprension profunda de arquitectura transformer",
+            "Explica correctamente tokenizacion, embeddings, attention",
+            "Menciona detalles tecnicos avanzados (temperature, sampling, context window)",
+            "No comete errores conceptuales"
+          ]
+        },
+        {
+          "score": 80,
+          "label": "Competente",
+          "indicators": [
+            "Comprension solida de conceptos fundamentales",
+            "Usa terminologia tecnica correctamente",
+            "Puede tener omisiones menores pero sin errores graves"
+          ]
+        },
+        {
+          "score": 60,
+          "label": "En Desarrollo",
+          "indicators": [
+            "Comprension basica de conceptos principales",
+            "Algunos errores o confusiones conceptuales",
+            "Mezcla conceptos o los explica superficialmente"
+          ]
+        },
+        {
+          "score": 40,
+          "label": "Insuficiente",
+          "indicators": [
+            "Errores conceptuales significativos",
+            "Confunde terminologia basica",
+            "Demuestra comprension muy limitada"
+          ]
+        },
+        {
+          "score": 20,
+          "label": "No Demuestra Comprension",
+          "indicators": [
+            "Respuesta incorrecta o irrelevante",
+            "No aborda los conceptos tecnicos",
+            "Errores fundamentales en cada punto"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "practical_application",
+      "name": "Aplicacion Practica",
+      "weight": 0.35,
+      "description": "Capacidad de aplicar conceptos al contexto del sector publico",
+      "levels": [
+        {
+          "score": 100,
+          "label": "Excepcional",
+          "indicators": [
+            "Propone soluciones especificas y viables para el escenario",
+            "Considera restricciones reales (presupuesto, tiempo, capacidades)",
+            "Anticipa problemas de implementacion",
+            "Incluye consideraciones de escalabilidad y mantenimiento"
+          ]
+        },
+        {
+          "score": 80,
+          "label": "Competente",
+          "indicators": [
+            "Soluciones practicas bien fundamentadas",
+            "Considera el contexto del sector publico",
+            "Aborda las restricciones principales del escenario"
+          ]
+        },
+        {
+          "score": 60,
+          "label": "En Desarrollo",
+          "indicators": [
+            "Propuestas genericas pero aplicables",
+            "Considera algunas restricciones pero no todas",
+            "Falta profundidad en la aplicacion practica"
+          ]
+        },
+        {
+          "score": 40,
+          "label": "Insuficiente",
+          "indicators": [
+            "Soluciones teoricas sin considerar contexto real",
+            "Ignora restricciones importantes del escenario",
+            "Propuestas poco viables o irrealistas"
+          ]
+        },
+        {
+          "score": 20,
+          "label": "No Demuestra Aplicacion",
+          "indicators": [
+            "No conecta conceptos con el escenario",
+            "Respuesta puramente teorica sin aplicacion",
+            "Propuestas completamente irrealistas"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "critical_thinking",
+      "name": "Pensamiento Critico",
+      "weight": 0.30,
+      "description": "Analisis de trade-offs, limitaciones y consideraciones eticas",
+      "levels": [
+        {
+          "score": 100,
+          "label": "Excepcional",
+          "indicators": [
+            "Analiza multiples alternativas con pros y contras claros",
+            "Considera implicaciones eticas y de privacidad",
+            "Anticipa riesgos y propone mitigaciones",
+            "Justifica decisiones con razonamiento solido"
+          ]
+        },
+        {
+          "score": 80,
+          "label": "Competente",
+          "indicators": [
+            "Reconoce trade-offs principales",
+            "Considera algunas implicaciones eticas",
+            "Justifica decisiones adecuadamente"
+          ]
+        },
+        {
+          "score": 60,
+          "label": "En Desarrollo",
+          "indicators": [
+            "Menciona algunos trade-offs superficialmente",
+            "Consideracion limitada de riesgos",
+            "Justificaciones parciales"
+          ]
+        },
+        {
+          "score": 40,
+          "label": "Insuficiente",
+          "indicators": [
+            "No analiza alternativas",
+            "Ignora riesgos evidentes",
+            "Decisiones sin justificacion"
+          ]
+        },
+        {
+          "score": 20,
+          "label": "No Demuestra Pensamiento Critico",
+          "indicators": [
+            "Respuesta sin analisis",
+            "Acepta tecnologia sin cuestionamiento",
+            "No considera consecuencias"
+          ]
+        }
+      ]
+    }
+  ],
+  "bonusIndicators": [
+    "Menciona fallback a agente humano para casos complejos",
+    "Propone sistema de verificacion/validacion de respuestas",
+    "Considera versionado de bases de conocimiento",
+    "Menciona explicabilidad y auditabilidad",
+    "Propone enfoque hibrido o escalonado para implementacion"
+  ],
+  "penaltyIndicators": [
+    "Propone soluciones sin considerar costos",
+    "Ignora completamente la privacidad de datos ciudadanos",
+    "Sugiere fine-tuning sin justificacion clara",
+    "Recomienda temperature alta para casos que requieren precision",
+    "No menciona supervision humana en casos criticos"
+  ]
+}

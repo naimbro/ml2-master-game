@@ -1,0 +1,126 @@
+[
+  {
+    "id": "s1_scenario_1",
+    "order": 1,
+    "title": "El Chatbot del Servicio Publico",
+    "category": "Implementacion LLM en Gobierno",
+    "difficulty": "medium",
+    "context": "El Ministerio de Desarrollo Social quiere implementar un chatbot para responder consultas ciudadanas sobre bonos y subsidios. El sistema debe manejar 10,000 consultas diarias, ser preciso en informacion legal, y absolutamente NO debe inventar requisitos o montos que no existen. El presupuesto es limitado y hay presion politica por lanzar pronto.",
+    "question": "Describe que tipo de LLM usarias (API comercial vs open source), como manejarias el problema de alucinaciones en informacion legal critica, y que estrategia de prompting aplicarias. Justifica cada decision considerando el contexto de sector publico chileno.",
+    "conceptTags": ["api_vs_opensource", "hallucination", "transformers"],
+    "idealAnswer": {
+      "keyPoints": [
+        "Eleccion justificada entre API comercial (GPT-4, Claude) vs open source (Llama, Mistral) considerando costo, latencia, y privacidad",
+        "Estrategia de RAG para anclar respuestas en documentacion oficial",
+        "Uso de system prompts con restricciones explicitas para no inventar informacion",
+        "Mencion de temperatura baja (0.1-0.3) para reducir creatividad indeseada",
+        "Consideracion de auditabilidad y transparencia para sector publico"
+      ],
+      "expectedConcepts": ["RAG", "system_prompt", "temperature", "grounding", "hallucination"],
+      "commonMistakes": [
+        "No mencionar RAG como solucion a alucinaciones",
+        "Ignorar aspectos de costo y escalabilidad para 10k consultas diarias",
+        "No considerar privacidad de datos ciudadanos",
+        "Proponer fine-tuning sin justificar por que seria necesario"
+      ],
+      "excellentResponseIndicators": [
+        "Menciona fallback a agente humano para casos complejos",
+        "Propone sistema de verificacion/validacion de respuestas",
+        "Considera versionado de la base de conocimientos legal"
+      ]
+    }
+  },
+  {
+    "id": "s1_scenario_2",
+    "order": 2,
+    "title": "El Asistente Legislativo",
+    "category": "Procesamiento de Documentos",
+    "difficulty": "medium",
+    "context": "La Biblioteca del Congreso Nacional quiere crear un sistema que permita a asesores legislativos buscar precedentes en los 40 anos de historia legislativa chilena. Tienen 500,000 documentos (proyectos de ley, mociones, informes de comision). Los asesores necesitan encontrar documentos semanticamente similares, no solo por palabras clave.",
+    "question": "Explica como usarias embeddings para este sistema de busqueda semantica. Describe que es un embedding, como se generan, y por que son mejores que busqueda por palabras clave para este caso. Menciona las limitaciones del context window y como las manejarias con 500k documentos.",
+    "conceptTags": ["embeddings", "context_window", "transformers"],
+    "idealAnswer": {
+      "keyPoints": [
+        "Definicion clara de embeddings como vectores numericos que capturan significado semantico",
+        "Explicacion de como los transformers generan embeddings (encoder)",
+        "Ventaja sobre keyword search: captura sinonimos, conceptos relacionados, intencion",
+        "Estrategia para manejar documentos largos: chunking, summarization, hierarchical embeddings",
+        "Mencion de bases de datos vectoriales (Pinecone, Weaviate, pgvector)"
+      ],
+      "expectedConcepts": ["embeddings", "semantic_search", "chunking", "vector_database", "context_window"],
+      "commonMistakes": [
+        "No explicar que son los embeddings en terminos comprensibles",
+        "Ignorar el problema de documentos que exceden el context window",
+        "No mencionar donde se almacenan los embeddings",
+        "Confundir embeddings con el output del LLM"
+      ],
+      "excellentResponseIndicators": [
+        "Menciona estrategias de chunking con overlap",
+        "Propone metadata filtering ademas de busqueda semantica",
+        "Considera re-ranking de resultados"
+      ]
+    }
+  },
+  {
+    "id": "s1_scenario_3",
+    "order": 3,
+    "title": "El Clasificador de Denuncias",
+    "category": "Clasificacion y Triaje",
+    "difficulty": "hard",
+    "context": "La Contraloria General de la Republica recibe 50,000 denuncias ciudadanas al ano. Actualmente, funcionarios las leen manualmente para clasificarlas en 15 categorias (corrupcion, mal uso de recursos, negligencia, etc.) y asignar prioridad. Quieren automatizar la clasificacion inicial para reducir tiempo de respuesta.",
+    "question": "Compara dos enfoques: (1) fine-tuning de un modelo open source con denuncias historicas etiquetadas, vs (2) usar una API comercial con prompting sofisticado. Analiza trade-offs de costo, precision, privacidad, y mantenimiento. Que recomendarias y por que?",
+    "conceptTags": ["api_vs_opensource", "tokenization", "transformers"],
+    "idealAnswer": {
+      "keyPoints": [
+        "Fine-tuning: mayor control, potencialmente mas preciso para dominio especifico, pero requiere datos etiquetados y expertise tecnico",
+        "API con prompting: mas rapido de implementar, sin necesidad de infraestructura, pero costo por token y dependencia de proveedor",
+        "Consideracion de privacidad: denuncias pueden contener datos sensibles",
+        "Analisis de costo: 50k denuncias/ano a ~$0.01/clasificacion vs costo fijo de fine-tuning + hosting",
+        "Recomendacion justificada segun contexto"
+      ],
+      "expectedConcepts": ["fine_tuning", "prompting", "tokenization", "privacy", "cost_analysis"],
+      "commonMistakes": [
+        "No considerar el costo de tokens para 50k documentos",
+        "Ignorar que denuncias contienen datos sensibles",
+        "No mencionar el esfuerzo de crear dataset de entrenamiento para fine-tuning",
+        "Recomendar sin justificar"
+      ],
+      "excellentResponseIndicators": [
+        "Propone enfoque hibrido o escalonado",
+        "Menciona evaluacion continua del modelo",
+        "Considera explicabilidad de clasificaciones"
+      ]
+    }
+  },
+  {
+    "id": "s1_scenario_4",
+    "order": 4,
+    "title": "El Sistema de Alerta Temprana",
+    "category": "Generacion de Texto",
+    "difficulty": "medium",
+    "context": "ONEMI quiere usar IA para generar borradores de alertas de emergencia (terremotos, tsunamis, incendios). Las alertas deben ser precisas, claras, y NO deben generar panico innecesario. Un error en el texto podria causar evacuaciones innecesarias o, peor, que la gente ignore alertas reales.",
+    "question": "Explica como configurarias los parametros de generacion (temperature, top_p, max_tokens) para este caso de uso critico. Por que estos parametros importan? Que otros controles implementarias para asegurar que el texto generado sea confiable?",
+    "conceptTags": ["temperature", "hallucination", "transformers"],
+    "idealAnswer": {
+      "keyPoints": [
+        "Temperature muy baja (0.0-0.2) para maxima determinismo y consistencia",
+        "Explicacion de que temperature controla la aleatoriedad en la seleccion de tokens",
+        "Top_p bajo para limitar vocabulario a opciones mas probables",
+        "Max_tokens limitado para evitar generacion excesiva",
+        "Validacion humana obligatoria antes de enviar"
+      ],
+      "expectedConcepts": ["temperature", "sampling", "determinism", "human_in_the_loop"],
+      "commonMistakes": [
+        "No explicar que hace cada parametro",
+        "Proponer temperature alta para creatividad (inapropiado para alertas)",
+        "Olvidar la necesidad de revision humana",
+        "No considerar templates pre-aprobados"
+      ],
+      "excellentResponseIndicators": [
+        "Propone sistema de templates con campos variables",
+        "Menciona logging y auditoria de todas las alertas",
+        "Sugiere A/B testing con alertas no criticas primero"
+      ]
+    }
+  }
+]

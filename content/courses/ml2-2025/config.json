@@ -1,0 +1,17 @@
+{
+  "courseId": "ml2-2025",
+  "name": "Machine Learning II - IA Generativa y Procesos Publicos",
+  "code": "ML2-2025-1",
+  "professorEmail": "naim.bro@gmail.com",
+  "university": "Universidad Adolfo Ibanez",
+  "program": "Magister en Economia y Politicas Publicas",
+  "startDate": "2025-03-06",
+  "endDate": "2025-04-24",
+  "sessions": [
+    "session_1_llm_fundamentals",
+    "session_2_apis",
+    "session_3_prompting_dspy",
+    "session_4_rag",
+    "session_5_chatbots"
+  ]
+}

@@ -1,0 +1,218 @@
+import { useEffect, useState, useCallback } from 'react';
+import { doc, onSnapshot, updateDoc, collection, query, where, addDoc, Timestamp, serverTimestamp } from 'firebase/firestore';
+import { db } from '../lib/firebase';
+import type { Game, Player, Submission, RoundResults, GameStatus } from '../types/game';
+import { useAuth } from './useAuth';
+
+interface UseGameReturn {
+  game: Game | null;
+  loading: boolean;
+  error: string | null;
+  isHost: boolean;
+  currentPlayer: Player | null;
+
+  // Actions
+  joinGame: (gameCode: string, playerName: string) => Promise<void>;
+  startGame: () => Promise<void>;
+  submitAnswer: (response: string) => Promise<void>;
+  nextRound: () => Promise<void>;
+  endGame: () => Promise<void>;
+
+  // Round data
+  submissions: Submission[];
+  roundResults: RoundResults | null;
+}
+
+export function useGame(gameCode: string | undefined): UseGameReturn {
+  const { user } = useAuth();
+  const [game, setGame] = useState<Game | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [submissions, setSubmissions] = useState<Submission[]>([]);
+  const [roundResults, setRoundResults] = useState<RoundResults | null>(null);
+
+  // Subscribe to game document
+  useEffect(() => {
+    if (!gameCode) {
+      setLoading(false);
+      return;
+    }
+
+    const gameRef = doc(db, 'games', gameCode);
+    const unsubscribe = onSnapshot(
+      gameRef,
+      (snapshot) => {
+        if (snapshot.exists()) {
+          setGame({ gameCode, ...snapshot.data() } as Game);
+          setError(null);
+        } else {
+          setError('Juego no encontrado');
+          setGame(null);
+        }
+        setLoading(false);
+      },
+      (err) => {
+        console.error('Game subscription error:', err);
+        setError('Error al cargar el juego');
+        setLoading(false);
+      }
+    );
+
+    return () => unsubscribe();
+  }, [gameCode]);
+
+  // Subscribe to submissions for current round
+  useEffect(() => {
+    if (!gameCode || !game) return;
+
+    const submissionsRef = collection(db, 'games', gameCode, 'submissions');
+    const q = query(submissionsRef, where('round', '==', game.currentRound));
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const subs = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })) as Submission[];
+      setSubmissions(subs);
+    });
+
+    return () => unsubscribe();
+  }, [gameCode, game?.currentRound]);
+
+  // Subscribe to round results
+  useEffect(() => {
+    if (!gameCode || !game || game.status !== 'round_end') return;
+
+    const roundRef = doc(db, 'games', gameCode, 'rounds', `round_${game.currentRound}`);
+    const unsubscribe = onSnapshot(roundRef, (snapshot) => {
+      if (snapshot.exists()) {
+        setRoundResults(snapshot.data() as RoundResults);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [gameCode, game?.currentRound, game?.status]);
+
+  // Computed values
+  const isHost = user?.uid === game?.hostId;
+  const currentPlayer = user && game?.players?.[user.uid] ? game.players[user.uid] : null;
+
+  // Actions
+  const joinGame = useCallback(async (code: string, playerName: string) => {
+    if (!user) throw new Error('Debe iniciar sesion');
+
+    const gameRef = doc(db, 'games', code);
+
+    const player: Player = {
+      id: user.uid,
+      name: playerName,
+      email: user.email || '',
+      photoURL: user.photoURL || undefined,
+      joinedAt: Timestamp.now(),
+      isReady: false,
+      totalScore: 0,
+    };
+
+    await updateDoc(gameRef, {
+      [`players.${user.uid}`]: player,
+      playerCount: (game?.playerCount || 0) + 1,
+      updatedAt: serverTimestamp(),
+    });
+  }, [user, game?.playerCount]);
+
+  const startGame = useCallback(async () => {
+    if (!gameCode || !isHost) return;
+
+    const gameRef = doc(db, 'games', gameCode);
+    const now = Timestamp.now();
+    const endTime = new Timestamp(
+      now.seconds + (game?.roundDurationSeconds || 300),
+      now.nanoseconds
+    );
+
+    await updateDoc(gameRef, {
+      status: 'active' as GameStatus,
+      currentRound: 1,
+      roundStartTime: now,
+      roundEndTime: endTime,
+      updatedAt: serverTimestamp(),
+    });
+  }, [gameCode, isHost, game?.roundDurationSeconds]);
+
+  const submitAnswer = useCallback(async (response: string) => {
+    if (!gameCode || !user || !game) return;
+
+    const submissionsRef = collection(db, 'games', gameCode, 'submissions');
+
+    const submission: Omit<Submission, 'id'> = {
+      gameCode,
+      playerId: user.uid,
+      playerName: currentPlayer?.name || user.displayName || 'Anonimo',
+      round: game.currentRound,
+      response,
+      submittedAt: Timestamp.now(),
+      evaluated: false,
+    };
+
+    await addDoc(submissionsRef, submission);
+  }, [gameCode, user, game, currentPlayer]);
+
+  const nextRound = useCallback(async () => {
+    if (!gameCode || !isHost || !game) return;
+
+    const gameRef = doc(db, 'games', gameCode);
+    const nextRoundNum = game.currentRound + 1;
+
+    if (nextRoundNum > game.totalRounds) {
+      // End the game
+      await updateDoc(gameRef, {
+        status: 'finished' as GameStatus,
+        finishedAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      });
+    } else {
+      // Start next round
+      const now = Timestamp.now();
+      const endTime = new Timestamp(
+        now.seconds + (game.roundDurationSeconds || 300),
+        now.nanoseconds
+      );
+
+      await updateDoc(gameRef, {
+        status: 'active' as GameStatus,
+        currentRound: nextRoundNum,
+        roundStartTime: now,
+        roundEndTime: endTime,
+        updatedAt: serverTimestamp(),
+      });
+
+      setRoundResults(null);
+    }
+  }, [gameCode, isHost, game]);
+
+  const endGame = useCallback(async () => {
+    if (!gameCode || !isHost) return;
+
+    const gameRef = doc(db, 'games', gameCode);
+    await updateDoc(gameRef, {
+      status: 'finished' as GameStatus,
+      finishedAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    });
+  }, [gameCode, isHost]);
+
+  return {
+    game,
+    loading,
+    error,
+    isHost,
+    currentPlayer,
+    joinGame,
+    startGame,
+    submitAnswer,
+    nextRound,
+    endGame,
+    submissions,
+    roundResults,
+  };
+}
