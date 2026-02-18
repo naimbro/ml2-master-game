@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { doc, onSnapshot, updateDoc, collection, query, where, addDoc, Timestamp, serverTimestamp } from 'firebase/firestore';
-import { db } from '../lib/firebase';
+import { httpsCallable } from 'firebase/functions';
+import { db, functions } from '../lib/firebase';
 import type { Game, Player, Submission, RoundResults, GameStatus } from '../types/game';
 import { useAuth } from './useAuth';
 
@@ -154,7 +155,13 @@ export function useGame(gameCode: string | undefined): UseGameReturn {
       evaluated: false,
     };
 
-    await addDoc(submissionsRef, submission);
+    const docRef = await addDoc(submissionsRef, submission);
+
+    // Fire-and-forget: evaluate immediately, don't block the UI
+    const evaluate = httpsCallable(functions, 'evaluateSubmission');
+    evaluate({ gameCode, round: game.currentRound, submissionId: docRef.id }).catch(err => {
+      console.error('Background evaluation error:', err);
+    });
   }, [gameCode, user, game, currentPlayer]);
 
   const nextRound = useCallback(async () => {

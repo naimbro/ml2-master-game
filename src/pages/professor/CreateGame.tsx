@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Play, BookOpen, Clock, Copy, Check } from 'lucide-react';
-import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, setDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -74,8 +74,18 @@ export default function CreateGame() {
         sessionConfig: selectedSession.config,
         scenarios: selectedSession.scenarios,
 
-        players: {},
-        playerCount: 0,
+        players: {
+          [user.uid]: {
+            id: user.uid,
+            name: user.displayName || user.email || 'Profesor',
+            email: user.email || '',
+            photoURL: user.photoURL || undefined,
+            joinedAt: Timestamp.now(),
+            isReady: false,
+            totalScore: 0,
+          }
+        },
+        playerCount: 1,
 
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
