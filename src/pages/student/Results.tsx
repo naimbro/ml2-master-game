@@ -37,10 +37,11 @@ export default function Results() {
 
   // Play score reveal sound + confetti when evaluation appears
   useEffect(() => {
-    if (userSubmission?.evaluation && !scoreSoundPlayed.current && !isProcessing) {
+    const userSub = submissions.find(s => s.playerId === user?.uid);
+    if (userSub?.evaluation && !scoreSoundPlayed.current && !isProcessing) {
       scoreSoundPlayed.current = true;
       playScoreReveal();
-      const score = userSubmission.evaluation.finalScore;
+      const score = userSub.evaluation.finalScore;
       // Delay celebration sounds to play after reveal drumroll
       setTimeout(() => {
         if (score >= 90) {
@@ -54,7 +55,7 @@ export default function Results() {
         }
       }, 600);
     }
-  });
+  }, [submissions, user?.uid, isProcessing]);
 
   // Process round if host and not yet processed
   useEffect(() => {
