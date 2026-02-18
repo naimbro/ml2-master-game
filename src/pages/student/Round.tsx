@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Clock, Send, CheckCircle, AlertCircle, StopCircle, Info } from 'lucide-react';
+import { Clock, Send, AlertCircle, StopCircle, Info, MessageSquare } from 'lucide-react';
 import { useGame } from '../../hooks/useGame';
 import { useAuth } from '../../hooks/useAuth';
 import { doc, updateDoc, serverTimestamp } from 'firebase/firestore';
@@ -256,23 +256,125 @@ export default function Round() {
 
             {/* Response Area */}
             {hasSubmitted ? (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="dramatic-card p-8 text-center"
-              >
-                <CheckCircle className="w-16 h-16 text-green-400 mx-auto mb-4" />
-                <h3 className="text-2xl font-bold mb-2">Respuesta Enviada</h3>
-                <p className="text-white/60">
-                  Esperando a que termine el tiempo o todos respondan...
-                </p>
-                <div className="mt-4 p-4 bg-white/5 rounded-lg text-left">
-                  <p className="text-sm text-white/50 mb-2">Tu respuesta:</p>
-                  <p className="text-white/80 text-sm whitespace-pre-wrap">
-                    {response || submissions.find(s => s.playerId === user?.uid)?.response}
-                  </p>
-                </div>
-              </motion.div>
+              (() => {
+                const userSub = submissions.find(s => s.playerId === user?.uid);
+                const evaluation = userSub?.evaluation;
+                const evaluated = userSub?.evaluated;
+
+                return evaluated && evaluation ? (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="dramatic-card p-6"
+                  >
+                    <div className="flex items-center justify-between mb-6">
+                      <h3 className="text-xl font-bold">Tu Resultado</h3>
+                      {isNonRanked && (
+                        <span className="px-3 py-1 bg-amber-500/20 text-amber-300 rounded-full text-xs font-medium">
+                          Diagnostica
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="flex items-center gap-6 mb-6">
+                      <div className="text-center">
+                        <div
+                          className={`text-5xl font-bold ${
+                            evaluation.finalScore >= 80
+                              ? 'text-green-400'
+                              : evaluation.finalScore >= 60
+                              ? 'text-yellow-400'
+                              : 'text-red-400'
+                          }`}
+                        >
+                          {evaluation.finalScore}
+                        </div>
+                        <p className="text-white/50 text-sm">Puntaje</p>
+                      </div>
+
+                      <div className="flex-1 space-y-2">
+                        {evaluation.evaluations?.map((ev: { judgeName: string; score: number; feedback: string; strengths: string[]; improvements: string[] }, i: number) => (
+                          <div key={i} className="flex items-center gap-3">
+                            <span className="text-sm text-white/70 w-32 truncate">
+                              {ev.judgeName}
+                            </span>
+                            <div className="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
+                              <motion.div
+                                initial={{ width: 0 }}
+                                animate={{ width: `${ev.score}%` }}
+                                transition={{ duration: 0.5, delay: i * 0.1 }}
+                                className="h-full bg-gradient-to-r from-cyan-500 to-purple-500"
+                              />
+                            </div>
+                            <span className="text-sm font-mono w-10 text-right">
+                              {ev.score}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {evaluation.evaluations?.map((ev: { judgeName: string; score: number; feedback: string; strengths: string[]; improvements: string[] }, i: number) => (
+                      <div key={i} className="mb-4 p-4 bg-white/5 rounded-lg">
+                        <div className="flex items-center gap-2 mb-2">
+                          <MessageSquare className="w-4 h-4 text-cyan-400" />
+                          <span className="font-medium">{ev.judgeName}</span>
+                        </div>
+                        <p className="text-white/80 text-sm mb-3">{ev.feedback}</p>
+
+                        {ev.strengths?.length > 0 && (
+                          <div className="mb-2">
+                            <span className="text-xs text-green-400 font-medium">Fortalezas:</span>
+                            <ul className="text-xs text-white/60 ml-4 mt-1">
+                              {ev.strengths.map((s: string, j: number) => (
+                                <li key={j}>• {s}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+
+                        {ev.improvements?.length > 0 && (
+                          <div>
+                            <span className="text-xs text-yellow-400 font-medium">Areas de mejora:</span>
+                            <ul className="text-xs text-white/60 ml-4 mt-1">
+                              {ev.improvements.map((s: string, j: number) => (
+                                <li key={j}>• {s}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+
+                    <div className="mt-4 pt-4 border-t border-white/10 text-center">
+                      <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full">
+                        <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                        <span className="text-white/70 text-sm">
+                          Esperando a que termine la ronda...
+                        </span>
+                      </div>
+                    </div>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="dramatic-card p-8 text-center"
+                  >
+                    <div className="w-16 h-16 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+                    <h3 className="text-2xl font-bold mb-2">Respuesta Enviada</h3>
+                    <p className="text-white/70">
+                      3 jueces AI estan evaluando tu respuesta...
+                    </p>
+                    <div className="mt-4 p-4 bg-white/5 rounded-lg text-left">
+                      <p className="text-sm text-white/50 mb-2">Tu respuesta:</p>
+                      <p className="text-white/80 text-sm whitespace-pre-wrap">
+                        {response || userSub?.response}
+                      </p>
+                    </div>
+                  </motion.div>
+                );
+              })()
             ) : (
               <div className="dramatic-card p-6">
                 <label className="block text-sm font-semibold text-white/70 uppercase tracking-wide mb-3">
