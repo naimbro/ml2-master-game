@@ -1,9 +1,21 @@
 import { useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Users, Play, Clock, BookOpen } from 'lucide-react';
+import { ArrowLeft, Users, Play, Clock, Zap } from 'lucide-react';
 import { useGame } from '../../hooks/useGame';
 import { useAuth } from '../../hooks/useAuth';
+
+// Kahoot-inspired player card colors
+const PLAYER_COLORS = [
+  'from-kahoot-red to-pink-600',
+  'from-kahoot-blue to-blue-600',
+  'from-kahoot-green to-emerald-600',
+  'from-kahoot-orange to-amber-600',
+  'from-purple-500 to-violet-600',
+  'from-cyan-500 to-teal-600',
+  'from-rose-500 to-red-600',
+  'from-indigo-500 to-blue-700',
+];
 
 export default function Lobby() {
   const { gameCode } = useParams<{ gameCode: string }>();
@@ -22,8 +34,8 @@ export default function Lobby() {
     return (
       <div className="min-h-screen bg-gradient-main flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-white/70">Cargando juego...</p>
+          <div className="w-16 h-16 border-4 border-kahoot-green border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-white/70 font-semibold">Cargando juego...</p>
         </div>
       </div>
     );
@@ -33,8 +45,8 @@ export default function Lobby() {
     return (
       <div className="min-h-screen bg-gradient-main flex items-center justify-center p-4">
         <div className="text-center">
-          <p className="text-red-400 mb-4">{error || 'Juego no encontrado'}</p>
-          <Link to="/" className="text-cyan-400 hover:underline">
+          <p className="text-red-400 mb-4 font-semibold">{error || 'Juego no encontrado'}</p>
+          <Link to="/" className="text-kahoot-green hover:underline font-bold">
             Volver al inicio
           </Link>
         </div>
@@ -45,108 +57,121 @@ export default function Lobby() {
   const players = Object.values(game.players || {});
 
   return (
-    <div className="min-h-screen bg-gradient-main">
+    <div className="min-h-screen bg-gradient-main relative overflow-hidden">
       {/* Header */}
-      <header className="p-4 flex justify-between items-center">
+      <header className="relative z-10 p-4 flex justify-between items-center">
         <Link
           to="/"
-          className="flex items-center gap-2 text-white/70 hover:text-white transition-colors"
+          className="flex items-center gap-2 text-white/70 hover:text-white transition-colors font-semibold"
         >
           <ArrowLeft className="w-5 h-5" />
           Salir
         </Link>
 
-        <div className="text-center">
-          <p className="text-white/50 text-xs">Codigo del juego</p>
-          <p className="text-2xl font-mono font-bold tracking-wider text-cyan-400">
-            {gameCode}
-          </p>
+        <div className="flex items-center gap-2 text-white/60 font-semibold text-sm">
+          <Clock className="w-4 h-4" />
+          {game.totalRounds} rondas x {Math.floor((game.roundDurationSeconds || 300) / 60)} min
         </div>
-
-        <div className="w-20"></div>
       </header>
 
-      {/* Main Content */}
-      <main className="max-w-4xl mx-auto px-4 py-8">
-        {/* Session Info */}
+      {/* Big Game Code - Kahoot style */}
+      <div className="relative z-10 text-center py-6">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="dramatic-card p-6 mb-8"
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: 'spring', stiffness: 150 }}
         >
-          <div className="flex items-start gap-4">
-            <div className="w-14 h-14 bg-gradient-to-br from-cyan-500 to-purple-600 rounded-xl flex items-center justify-center flex-shrink-0">
-              <BookOpen className="w-7 h-7 text-white" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold mb-1">
-                {game.sessionConfig?.title || 'Sesion'}
-              </h1>
-              <p className="text-white/60 text-sm mb-3">
-                {game.sessionConfig?.description || ''}
-              </p>
-              <div className="flex flex-wrap gap-4 text-sm">
-                <div className="flex items-center gap-2 text-white/70">
-                  <Clock className="w-4 h-4" />
-                  {game.totalRounds} rondas x {Math.floor((game.roundDurationSeconds || 300) / 60)} min
-                </div>
-                <div className="flex items-center gap-2 text-white/70">
-                  <Users className="w-4 h-4" />
-                  {players.length} jugadores
-                </div>
-              </div>
-            </div>
+          <p className="text-white/50 text-sm font-bold uppercase tracking-widest mb-2">
+            Codigo del Juego
+          </p>
+          <div className="inline-block bg-white/10 rounded-2xl px-10 py-4 border-2 border-white/20">
+            <p className="text-5xl md:text-7xl font-black tracking-[0.2em] text-white">
+              {gameCode}
+            </p>
           </div>
         </motion.div>
+      </div>
 
-        {/* Players Grid */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="mb-8"
-        >
-          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <Users className="w-5 h-5 text-cyan-400" />
-            Jugadores ({players.length})
-          </h2>
+      {/* Session Title */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="text-center mb-6"
+      >
+        <h1 className="text-xl font-bold text-white/80">
+          {game.sessionConfig?.title || 'Sesion'}
+        </h1>
+      </motion.div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-            {players.map((player, index) => (
-              <motion.div
-                key={player.id}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: index * 0.05 }}
-                className={`dramatic-card p-4 text-center ${
-                  player.id === user?.uid ? 'ring-2 ring-cyan-400' : ''
-                }`}
-              >
-                {player.photoURL ? (
-                  <img
-                    src={player.photoURL}
-                    alt={player.name}
-                    className="w-12 h-12 rounded-full mx-auto mb-2 border-2 border-white/20"
-                  />
-                ) : (
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500 to-purple-600 mx-auto mb-2 flex items-center justify-center text-xl font-bold">
-                    {player.name.charAt(0).toUpperCase()}
-                  </div>
-                )}
-                <p className="font-medium text-sm truncate">{player.name}</p>
-                {player.id === user?.uid && (
-                  <span className="text-xs text-cyan-400">(Tu)</span>
-                )}
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+      {/* Player Count */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3 }}
+        className="text-center mb-6"
+      >
+        <div className="inline-flex items-center gap-3 bg-white/10 rounded-full px-6 py-3 border border-white/15">
+          <Users className="w-5 h-5 text-kahoot-green" />
+          <span className="font-bold text-lg">
+            <motion.span
+              key={players.length}
+              initial={{ scale: 1.5, color: '#66BF39' }}
+              animate={{ scale: 1, color: '#FFFFFF' }}
+              transition={{ duration: 0.3 }}
+              className="inline-block"
+            >
+              {players.length}
+            </motion.span>
+            {' '}jugador{players.length !== 1 ? 'es' : ''}
+          </span>
+        </div>
+      </motion.div>
+
+      {/* Players Grid */}
+      <main className="relative z-10 max-w-4xl mx-auto px-4 pb-8">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mb-8">
+          {players.map((player, index) => (
+            <motion.div
+              key={player.id}
+              initial={{ opacity: 0, scale: 0.5, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{
+                type: 'spring',
+                stiffness: 300,
+                damping: 20,
+                delay: index * 0.05,
+              }}
+              className={`relative rounded-2xl p-4 text-center bg-gradient-to-br ${
+                PLAYER_COLORS[index % PLAYER_COLORS.length]
+              } shadow-lg ${
+                player.id === user?.uid ? 'ring-3 ring-white ring-offset-2 ring-offset-[#46178F]' : ''
+              }`}
+            >
+              {player.photoURL ? (
+                <img
+                  src={player.photoURL}
+                  alt={player.name}
+                  className="w-12 h-12 rounded-full mx-auto mb-2 border-2 border-white/40"
+                />
+              ) : (
+                <div className="w-12 h-12 rounded-full bg-white/20 mx-auto mb-2 flex items-center justify-center text-xl font-black">
+                  {player.name.charAt(0).toUpperCase()}
+                </div>
+              )}
+              <p className="font-bold text-sm truncate">{player.name}</p>
+              {player.id === user?.uid && (
+                <span className="text-[10px] font-bold uppercase tracking-wider text-white/70">Tu</span>
+              )}
+            </motion.div>
+          ))}
+        </div>
 
         {/* Host Controls or Waiting Message */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+          transition={{ delay: 0.4 }}
           className="text-center"
         >
           {isHost ? (
@@ -154,25 +179,28 @@ export default function Lobby() {
               <button
                 onClick={startGame}
                 disabled={players.length < 1}
-                className="primary-button px-8 py-4 text-lg flex items-center gap-3 mx-auto"
+                className="primary-button px-10 py-5 text-xl flex items-center gap-3 mx-auto"
               >
-                <Play className="w-5 h-5" />
+                <Play className="w-6 h-6" />
                 Comenzar Juego
               </button>
               {players.length < 2 && (
-                <p className="text-white/50 text-sm mt-3">
+                <p className="text-white/50 text-sm mt-4 font-medium">
                   Esperando mas jugadores...
                 </p>
               )}
             </div>
           ) : (
-            <div className="dramatic-card p-6 inline-block">
-              <div className="flex items-center gap-3">
-                <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-                <p className="text-white/70">
-                  Esperando que el profesor inicie el juego...
-                </p>
-              </div>
+            <div className="inline-flex items-center gap-3 bg-white/10 rounded-2xl px-8 py-5 border border-white/15">
+              <motion.div
+                animate={{ scale: [1, 1.3, 1] }}
+                transition={{ repeat: Infinity, duration: 1.5 }}
+              >
+                <Zap className="w-5 h-5 text-kahoot-green" />
+              </motion.div>
+              <p className="text-white/80 font-semibold">
+                Esperando que el profesor inicie el juego...
+              </p>
             </div>
           )}
         </motion.div>

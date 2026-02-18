@@ -62,11 +62,11 @@ export default function Results() {
     return (
       <div className="min-h-screen bg-gradient-main flex items-center justify-center">
         <div className="text-center">
-          <div className="w-20 h-20 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-white/70 text-lg">
+          <div className="w-20 h-20 border-4 border-kahoot-green border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-white/80 text-lg font-bold">
             {isProcessing ? 'Evaluando respuestas con IA...' : 'Cargando resultados...'}
           </p>
-          <p className="text-white/50 text-sm mt-2">
+          <p className="text-white/50 text-sm mt-2 font-medium">
             3 jueces AI estan analizando cada respuesta
           </p>
         </div>
@@ -78,7 +78,7 @@ export default function Results() {
     return (
       <div className="min-h-screen bg-gradient-main flex items-center justify-center p-4">
         <div className="text-center">
-          <p className="text-red-400">{error || 'Error al cargar resultados'}</p>
+          <p className="text-red-400 font-semibold">{error || 'Error al cargar resultados'}</p>
         </div>
       </div>
     );
@@ -90,19 +90,22 @@ export default function Results() {
   const userRank = roundResults?.rankings.find(r => r.playerId === user?.uid);
   const isRankedRound = game?.scenarios?.[game.currentRound - 1]?.ranked !== false;
 
+  // Judge bar colors (Kahoot answer colors)
+  const JUDGE_COLORS = ['bg-kahoot-red', 'bg-kahoot-blue', 'bg-kahoot-green'];
+
   return (
     <div className="min-h-screen bg-gradient-main">
       {/* Header */}
-      <header className="p-4 border-b border-white/10">
+      <header className="p-4 border-b-2 border-white/10">
         <div className="max-w-4xl mx-auto flex justify-between items-center">
           <div>
-            <span className="text-white/50 text-sm">Resultados Ronda</span>
-            <p className="text-xl font-bold">
-              {game.currentRound} / {game.totalRounds}
+            <span className="text-white/50 text-xs font-bold uppercase tracking-wider">Resultados Ronda</span>
+            <p className="text-xl font-black">
+              {game.currentRound} <span className="text-white/40 font-bold">/ {game.totalRounds}</span>
             </p>
           </div>
 
-          <div className="text-2xl font-mono font-bold text-cyan-400">
+          <div className="text-2xl font-black tracking-wider text-white/60">
             {gameCode}
           </div>
         </div>
@@ -113,14 +116,20 @@ export default function Results() {
         {/* User Score Card */}
         {userEvaluation && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
             className="dramatic-card p-6"
           >
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold">Tu Resultado</h2>
+              <h2 className="text-xl font-black">Tu Resultado</h2>
               {isRankedRound && userRank && (
-                <div className="flex items-center gap-2">
+                <motion.div
+                  initial={{ scale: 0, rotate: -180 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={{ type: 'spring', stiffness: 200, delay: 0.3 }}
+                  className="flex items-center gap-2"
+                >
                   <Trophy
                     className={`w-6 h-6 ${
                       userRank.rank === 1
@@ -132,11 +141,11 @@ export default function Results() {
                         : 'text-white/50'
                     }`}
                   />
-                  <span className="text-lg font-bold">#{userRank.rank}</span>
-                </div>
+                  <span className="text-lg font-black">#{userRank.rank}</span>
+                </motion.div>
               )}
               {!isRankedRound && (
-                <span className="px-3 py-1 bg-amber-500/20 text-amber-300 rounded-full text-xs font-medium">
+                <span className="px-3 py-1 bg-kahoot-orange/25 text-orange-200 rounded-full text-xs font-bold uppercase tracking-wider">
                   Diagnostica
                 </span>
               )}
@@ -144,35 +153,38 @@ export default function Results() {
 
             <div className="flex items-center gap-6 mb-6">
               <div className="text-center">
-                <div
-                  className={`text-5xl font-bold ${
+                <motion.div
+                  initial={{ scale: 0.3, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ type: 'spring', stiffness: 200, delay: 0.2 }}
+                  className={`text-6xl font-black ${
                     userEvaluation.finalScore >= 80
-                      ? 'text-green-400'
+                      ? 'text-kahoot-green'
                       : userEvaluation.finalScore >= 60
-                      ? 'text-yellow-400'
-                      : 'text-red-400'
+                      ? 'text-kahoot-yellow'
+                      : 'text-kahoot-red'
                   }`}
                 >
                   {userEvaluation.finalScore}
-                </div>
-                <p className="text-white/50 text-sm">Puntaje</p>
+                </motion.div>
+                <p className="text-white/50 text-sm font-bold">Puntaje</p>
               </div>
 
-              <div className="flex-1 space-y-2">
+              <div className="flex-1 space-y-3">
                 {userEvaluation.evaluations?.map((evaluation: JudgeEvaluation, i: number) => (
                   <div key={i} className="flex items-center gap-3">
-                    <span className="text-sm text-white/70 w-32 truncate">
+                    <span className="text-sm text-white/70 w-32 truncate font-semibold">
                       {evaluation.judgeName}
                     </span>
-                    <div className="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
+                    <div className="flex-1 h-3 bg-white/10 rounded-full overflow-hidden">
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${evaluation.score}%` }}
-                        transition={{ duration: 0.5, delay: i * 0.1 }}
-                        className="h-full bg-gradient-to-r from-cyan-500 to-purple-500"
+                        transition={{ duration: 0.7, delay: 0.4 + i * 0.15, ease: 'easeOut' }}
+                        className={`h-full rounded-full ${JUDGE_COLORS[i]}`}
                       />
                     </div>
-                    <span className="text-sm font-mono w-10 text-right">
+                    <span className="text-sm font-mono font-bold w-10 text-right">
                       {evaluation.score}
                     </span>
                   </div>
@@ -182,17 +194,19 @@ export default function Results() {
 
             {/* Feedback */}
             {userEvaluation.evaluations?.map((evaluation: JudgeEvaluation, i: number) => (
-              <div key={i} className="mb-4 p-4 bg-white/5 rounded-lg">
+              <div key={i} className="mb-4 p-4 bg-white/5 rounded-xl">
                 <div className="flex items-center gap-2 mb-2">
-                  <MessageSquare className="w-4 h-4 text-cyan-400" />
-                  <span className="font-medium">{evaluation.judgeName}</span>
+                  <MessageSquare className={`w-4 h-4 ${
+                    i === 0 ? 'text-kahoot-red' : i === 1 ? 'text-kahoot-blue' : 'text-kahoot-green'
+                  }`} />
+                  <span className="font-bold">{evaluation.judgeName}</span>
                 </div>
-                <p className="text-white/80 text-sm mb-3">{evaluation.feedback}</p>
+                <p className="text-white/80 text-sm mb-3 font-medium">{evaluation.feedback}</p>
 
                 {evaluation.strengths?.length > 0 && (
                   <div className="mb-2">
-                    <span className="text-xs text-green-400 font-medium">Fortalezas:</span>
-                    <ul className="text-xs text-white/60 ml-4 mt-1">
+                    <span className="text-xs text-kahoot-green font-bold uppercase tracking-wider">Fortalezas:</span>
+                    <ul className="text-xs text-white/60 ml-4 mt-1 font-medium">
                       {evaluation.strengths.map((s: string, j: number) => (
                         <li key={j}>• {s}</li>
                       ))}
@@ -202,8 +216,8 @@ export default function Results() {
 
                 {evaluation.improvements?.length > 0 && (
                   <div>
-                    <span className="text-xs text-yellow-400 font-medium">Areas de mejora:</span>
-                    <ul className="text-xs text-white/60 ml-4 mt-1">
+                    <span className="text-xs text-kahoot-orange font-bold uppercase tracking-wider">Areas de mejora:</span>
+                    <ul className="text-xs text-white/60 ml-4 mt-1 font-medium">
                       {evaluation.improvements.map((s: string, j: number) => (
                         <li key={j}>• {s}</li>
                       ))}
@@ -215,7 +229,7 @@ export default function Results() {
           </motion.div>
         )}
 
-        {/* Cumulative Leaderboard (ranked rounds only) or diagnostic message */}
+        {/* Cumulative Leaderboard (ranked rounds only) */}
         {roundResults && game.players && isRankedRound && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -223,13 +237,13 @@ export default function Results() {
             transition={{ delay: 0.2 }}
             className="dramatic-card p-6"
           >
-            <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-cyan-400" />
+            <h2 className="text-xl font-black mb-4 flex items-center gap-2">
+              <TrendingUp className="w-5 h-5 text-kahoot-green" />
               Ranking Acumulado
             </h2>
 
             {/* Column Headers */}
-            <div className="flex items-center gap-4 px-3 py-2 text-xs text-white/50 uppercase tracking-wide border-b border-white/10 mb-2">
+            <div className="flex items-center gap-4 px-3 py-2 text-[10px] text-white/50 uppercase tracking-widest font-bold border-b border-white/10 mb-2">
               <div className="w-8"></div>
               <span className="flex-1">Jugador</span>
               <span className="w-20 text-right">Esta Ronda</span>
@@ -238,12 +252,10 @@ export default function Results() {
 
             <div className="space-y-2">
               {(() => {
-                // Calculate cumulative rankings (only from ranked rounds via totalScore)
                 const cumulativeRankings = Object.entries(game.players)
                   .map(([playerId, player]) => {
                     const roundScore = roundResults.rankings.find(r => r.playerId === playerId)?.score || 0;
                     const totalScore = player.totalScore || 0;
-                    // Count only ranked rounds completed so far
                     const rankedRoundsPlayed = game.scenarios
                       ?.slice(0, game.currentRound)
                       .filter((s: { ranked?: boolean }) => s.ranked !== false).length || 1;
@@ -262,17 +274,17 @@ export default function Results() {
                 return cumulativeRankings.map((player, index) => (
                   <motion.div
                     key={player.playerId}
-                    initial={{ opacity: 0, x: -20 }}
+                    initial={{ opacity: 0, x: -30 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                    className={`flex items-center gap-4 p-3 rounded-lg ${
+                    transition={{ delay: 0.3 + index * 0.06 }}
+                    className={`flex items-center gap-4 p-3 rounded-xl ${
                       player.playerId === user?.uid
-                        ? 'bg-cyan-500/20 border border-cyan-500/30'
+                        ? 'bg-kahoot-green/15 border-2 border-kahoot-green/30'
                         : 'bg-white/5'
                     }`}
                   >
                     <div
-                      className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
+                      className={`w-8 h-8 rounded-lg flex items-center justify-center font-black text-sm ${
                         player.rank === 1
                           ? 'bg-yellow-500 text-black'
                           : player.rank === 2
@@ -285,21 +297,21 @@ export default function Results() {
                       {player.rank}
                     </div>
 
-                    <span className="flex-1 font-medium">
+                    <span className="flex-1 font-bold truncate">
                       {player.playerName}
                       {player.playerId === user?.uid && (
-                        <span className="text-cyan-400 text-sm ml-2">(Tu)</span>
+                        <span className="text-kahoot-green text-sm ml-2 font-bold">(Tu)</span>
                       )}
                     </span>
 
-                    <span className={`w-20 text-right font-mono text-sm ${
-                      player.roundScore >= 80 ? 'text-green-400' :
-                      player.roundScore >= 60 ? 'text-yellow-400' : 'text-red-400'
+                    <span className={`w-20 text-right font-mono font-bold text-sm ${
+                      player.roundScore >= 80 ? 'text-kahoot-green' :
+                      player.roundScore >= 60 ? 'text-kahoot-yellow' : 'text-kahoot-red'
                     }`}>
                       +{player.roundScore}
                     </span>
 
-                    <span className="w-20 text-right font-mono font-bold text-lg">
+                    <span className="w-20 text-right font-mono font-black text-lg">
                       {player.avgScore}
                     </span>
                   </motion.div>
@@ -318,10 +330,10 @@ export default function Results() {
             className="dramatic-card p-6"
           >
             <div className="flex items-center gap-3 mb-3">
-              <Info className="w-5 h-5 text-amber-400" />
-              <h2 className="text-lg font-bold text-amber-200">Ronda Diagnostica</h2>
+              <Info className="w-5 h-5 text-kahoot-orange" />
+              <h2 className="text-lg font-black text-orange-200">Ronda Diagnostica</h2>
             </div>
-            <p className="text-white/60 text-sm">
+            <p className="text-white/60 text-sm font-medium">
               Esta ronda no afecta el ranking. Tu respuesta se usa para sugerir equipos y temas de proyecto.
               El feedback de los jueces es informativo para que conozcas como se evalua en el curso.
             </p>
@@ -336,7 +348,7 @@ export default function Results() {
             transition={{ delay: 0.4 }}
             className="text-center"
           >
-            <button onClick={handleNextRound} className="primary-button px-8 py-4 text-lg">
+            <button onClick={handleNextRound} className="primary-button px-10 py-5 text-lg">
               {game.currentRound < game.totalRounds ? (
                 <>
                   Siguiente Ronda
@@ -360,9 +372,9 @@ export default function Results() {
             transition={{ delay: 0.4 }}
             className="text-center"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full">
-              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-              <span className="text-white/70">
+            <div className="inline-flex items-center gap-2 px-5 py-3 bg-white/10 rounded-full">
+              <div className="w-2 h-2 bg-kahoot-green rounded-full animate-pulse" />
+              <span className="text-white/70 font-semibold">
                 Esperando la siguiente ronda...
               </span>
             </div>

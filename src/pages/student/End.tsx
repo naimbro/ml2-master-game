@@ -18,6 +18,13 @@ interface PlayerFinalScore {
   rank: number;
 }
 
+// Podium colors matching Kahoot's energetic palette
+const PODIUM_STYLES = {
+  1: { bg: 'from-yellow-400 to-yellow-600', text: 'text-black', border: 'border-yellow-300', shadow: 'shadow-yellow-500/40', h: 'h-48' },
+  2: { bg: 'from-gray-300 to-gray-500', text: 'text-black', border: 'border-gray-200', shadow: 'shadow-gray-400/30', h: 'h-36' },
+  3: { bg: 'from-amber-500 to-amber-700', text: 'text-black', border: 'border-amber-400', shadow: 'shadow-amber-500/30', h: 'h-28' },
+};
+
 export default function End() {
   const { gameCode } = useParams<{ gameCode: string }>();
   const { user } = useAuth();
@@ -33,11 +40,9 @@ export default function End() {
 
     const calculateFinalRankings = async () => {
       try {
-        // Get all submissions
         const submissionsRef = collection(db, 'games', gameCode, 'submissions');
         const submissionsSnapshot = await getDocs(submissionsRef);
 
-        // Group by player
         const playerScores: Record<string, { name: string; scores: number[] }> = {};
 
         submissionsSnapshot.docs.forEach((doc) => {
@@ -53,7 +58,6 @@ export default function End() {
           }
         });
 
-        // Only sum scores from ranked rounds for ranking
         const rankings: PlayerFinalScore[] = Object.entries(playerScores)
           .map(([playerId, data]) => {
             const rankedTotal = data.scores.reduce((sum, score, idx) => {
@@ -70,7 +74,6 @@ export default function End() {
           })
           .sort((a, b) => b.totalScore - a.totalScore);
 
-        // Assign ranks (handling ties)
         let currentRank = 1;
         rankings.forEach((player, index) => {
           if (index > 0 && player.totalScore < rankings[index - 1].totalScore) {
@@ -95,7 +98,6 @@ export default function End() {
 
     setReportLoading(true);
     try {
-      // Call Cloud Function to get report data
       const generateReport = httpsCallable(functions, 'generateStudentReport');
       const result = await generateReport({ gameCode, playerId: user.uid });
       const reportData = result.data as {
@@ -130,15 +132,13 @@ export default function End() {
 
       const report = reportData.report;
 
-      // Generate PDF
       const doc = new jsPDF();
       const pageWidth = doc.internal.pageSize.getWidth();
       const margin = 20;
       let y = 20;
 
-      // Title
       doc.setFontSize(20);
-      doc.setTextColor(75, 0, 130);
+      doc.setTextColor(70, 23, 143);
       doc.text('Reporte de Desempeno', margin, y);
       y += 10;
 
@@ -147,7 +147,6 @@ export default function End() {
       doc.text(report.sessionTitle || 'ML2 Master Game', margin, y);
       y += 15;
 
-      // Player Info
       doc.setFontSize(12);
       doc.setTextColor(0, 0, 0);
       doc.text(`Estudiante: ${user.displayName || user.email}`, margin, y);
@@ -159,7 +158,6 @@ export default function End() {
       doc.text(`Promedio: ${report.averageScore}`, margin, y);
       y += 15;
 
-      // Round Scores
       doc.setFontSize(14);
       doc.setTextColor(0, 102, 204);
       doc.text('Puntajes por Ronda:', margin, y);
@@ -172,7 +170,6 @@ export default function End() {
       });
       y += 10;
 
-      // Strong Concepts
       if (report.summary.strengths.length > 0) {
         doc.setFontSize(14);
         doc.setTextColor(34, 139, 34);
@@ -183,10 +180,7 @@ export default function End() {
         report.summary.strengths.slice(0, 5).forEach((strength) => {
           const lines = doc.splitTextToSize(`* ${strength}`, pageWidth - 2 * margin);
           lines.forEach((line: string) => {
-            if (y > 270) {
-              doc.addPage();
-              y = 20;
-            }
+            if (y > 270) { doc.addPage(); y = 20; }
             doc.text(line, margin + 5, y);
             y += 5;
           });
@@ -194,12 +188,8 @@ export default function End() {
         y += 8;
       }
 
-      // Areas for Improvement
       if (report.summary.improvements.length > 0) {
-        if (y > 240) {
-          doc.addPage();
-          y = 20;
-        }
+        if (y > 240) { doc.addPage(); y = 20; }
         doc.setFontSize(14);
         doc.setTextColor(220, 20, 60);
         doc.text('Areas de Mejora:', margin, y);
@@ -209,10 +199,7 @@ export default function End() {
         report.summary.improvements.slice(0, 5).forEach((improvement) => {
           const lines = doc.splitTextToSize(`* ${improvement}`, pageWidth - 2 * margin);
           lines.forEach((line: string) => {
-            if (y > 270) {
-              doc.addPage();
-              y = 20;
-            }
+            if (y > 270) { doc.addPage(); y = 20; }
             doc.text(line, margin + 5, y);
             y += 5;
           });
@@ -220,12 +207,8 @@ export default function End() {
         y += 8;
       }
 
-      // Concepts Identified
       if (report.summary.conceptsIdentified.length > 0) {
-        if (y > 240) {
-          doc.addPage();
-          y = 20;
-        }
+        if (y > 240) { doc.addPage(); y = 20; }
         doc.setFontSize(14);
         doc.setTextColor(128, 0, 128);
         doc.text('Conceptos Evaluados:', margin, y);
@@ -235,21 +218,16 @@ export default function End() {
         const conceptsText = report.summary.conceptsIdentified.join(', ');
         const lines = doc.splitTextToSize(conceptsText, pageWidth - 2 * margin);
         lines.forEach((line: string) => {
-          if (y > 270) {
-            doc.addPage();
-            y = 20;
-          }
+          if (y > 270) { doc.addPage(); y = 20; }
           doc.text(line, margin + 5, y);
           y += 5;
         });
       }
 
-      // Footer
       doc.setFontSize(8);
       doc.setTextColor(150, 150, 150);
       doc.text(`Generado el ${new Date().toLocaleDateString('es-CL')}`, margin, 285);
 
-      // Save
       const fileName = `reporte_${(user.displayName || 'estudiante').replace(/\s+/g, '_')}_ML2.pdf`;
       doc.save(fileName);
 
@@ -295,8 +273,8 @@ export default function End() {
     return (
       <div className="min-h-screen bg-gradient-main flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-white/70">Calculando resultados finales...</p>
+          <div className="w-16 h-16 border-4 border-kahoot-green border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-white/70 font-bold">Calculando resultados finales...</p>
         </div>
       </div>
     );
@@ -306,8 +284,8 @@ export default function End() {
     return (
       <div className="min-h-screen bg-gradient-main flex items-center justify-center p-4">
         <div className="text-center">
-          <p className="text-red-400">{error || 'Error al cargar resultados'}</p>
-          <Link to="/" className="text-cyan-400 hover:underline mt-4 inline-block">
+          <p className="text-red-400 font-semibold">{error || 'Error al cargar resultados'}</p>
+          <Link to="/" className="text-kahoot-green hover:underline mt-4 inline-block font-bold">
             Volver al inicio
           </Link>
         </div>
@@ -322,34 +300,39 @@ export default function End() {
     <div className="min-h-screen bg-gradient-main">
       {/* Header */}
       <header className="p-4 text-center">
-        <h1 className="text-2xl font-bold">{game.sessionConfig?.title || 'Sesion'}</h1>
-        <p className="text-white/50">Resultados Finales</p>
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <h1 className="text-2xl font-black">{game.sessionConfig?.title || 'Sesion'}</h1>
+          <p className="text-white/50 font-bold uppercase tracking-wider text-sm">Resultados Finales</p>
+        </motion.div>
       </header>
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 py-6 space-y-8">
         {/* Podium */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex justify-center items-end gap-4 h-64 mb-8"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="flex justify-center items-end gap-3 md:gap-5 h-72 mb-8"
         >
           {/* Second Place */}
           {topThree[1] && (
             <motion.div
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 60 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
+              transition={{ delay: 0.5, type: 'spring', stiffness: 150 }}
               className="flex flex-col items-center"
             >
-              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-gray-400 to-gray-600 flex items-center justify-center mb-2 border-4 border-gray-300">
-                <span className="text-2xl font-bold">2</span>
+              <div className={`w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br ${PODIUM_STYLES[2].bg} flex items-center justify-center mb-2 border-4 ${PODIUM_STYLES[2].border} shadow-lg ${PODIUM_STYLES[2].shadow}`}>
+                <span className={`text-2xl font-black ${PODIUM_STYLES[2].text}`}>2</span>
               </div>
-              <p className="font-medium text-center text-sm mb-2 max-w-24 truncate">
+              <p className="font-bold text-center text-sm mb-2 max-w-24 truncate">
                 {topThree[1].playerName}
               </p>
-              <div className="w-24 h-32 bg-gradient-to-t from-gray-600 to-gray-400 rounded-t-lg flex items-center justify-center">
-                <span className="text-2xl font-bold">{topThree[1].totalScore}</span>
+              <div className={`w-24 md:w-28 ${PODIUM_STYLES[2].h} bg-gradient-to-t ${PODIUM_STYLES[2].bg} rounded-t-xl flex items-center justify-center shadow-lg podium-grow`}>
+                <span className={`text-2xl font-black ${PODIUM_STYLES[2].text}`}>{topThree[1].totalScore}</span>
               </div>
             </motion.div>
           )}
@@ -357,20 +340,25 @@ export default function End() {
           {/* First Place */}
           {topThree[0] && (
             <motion.div
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 60 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
+              transition={{ delay: 0.3, type: 'spring', stiffness: 150 }}
               className="flex flex-col items-center"
             >
-              <Trophy className="w-10 h-10 text-yellow-400 mb-2" />
-              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center mb-2 border-4 border-yellow-300 shadow-lg shadow-yellow-500/30">
-                <span className="text-3xl font-bold text-black">1</span>
+              <motion.div
+                animate={{ rotate: [0, -5, 5, -5, 0] }}
+                transition={{ delay: 0.8, duration: 0.5 }}
+              >
+                <Trophy className="w-10 h-10 text-yellow-400 mb-2" />
+              </motion.div>
+              <div className={`w-20 h-20 md:w-24 md:h-24 rounded-full bg-gradient-to-br ${PODIUM_STYLES[1].bg} flex items-center justify-center mb-2 border-4 ${PODIUM_STYLES[1].border} shadow-xl ${PODIUM_STYLES[1].shadow}`}>
+                <span className={`text-3xl font-black ${PODIUM_STYLES[1].text}`}>1</span>
               </div>
-              <p className="font-bold text-center mb-2 max-w-28 truncate">
+              <p className="font-black text-center mb-2 max-w-28 truncate text-lg">
                 {topThree[0].playerName}
               </p>
-              <div className="w-28 h-44 bg-gradient-to-t from-yellow-600 to-yellow-400 rounded-t-lg flex items-center justify-center shadow-lg">
-                <span className="text-3xl font-bold text-black">{topThree[0].totalScore}</span>
+              <div className={`w-28 md:w-32 ${PODIUM_STYLES[1].h} bg-gradient-to-t ${PODIUM_STYLES[1].bg} rounded-t-xl flex items-center justify-center shadow-xl podium-grow`}>
+                <span className={`text-3xl font-black ${PODIUM_STYLES[1].text}`}>{topThree[0].totalScore}</span>
               </div>
             </motion.div>
           )}
@@ -378,19 +366,19 @@ export default function End() {
           {/* Third Place */}
           {topThree[2] && (
             <motion.div
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 60 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
+              transition={{ delay: 0.7, type: 'spring', stiffness: 150 }}
               className="flex flex-col items-center"
             >
-              <div className="w-18 h-18 rounded-full bg-gradient-to-br from-amber-600 to-amber-800 flex items-center justify-center mb-2 border-4 border-amber-500 w-16 h-16">
-                <span className="text-xl font-bold">3</span>
+              <div className={`w-14 h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-br ${PODIUM_STYLES[3].bg} flex items-center justify-center mb-2 border-4 ${PODIUM_STYLES[3].border} shadow-lg ${PODIUM_STYLES[3].shadow}`}>
+                <span className={`text-xl font-black ${PODIUM_STYLES[3].text}`}>3</span>
               </div>
-              <p className="font-medium text-center text-sm mb-2 max-w-20 truncate">
+              <p className="font-bold text-center text-sm mb-2 max-w-20 truncate">
                 {topThree[2].playerName}
               </p>
-              <div className="w-20 h-24 bg-gradient-to-t from-amber-800 to-amber-600 rounded-t-lg flex items-center justify-center">
-                <span className="text-xl font-bold">{topThree[2].totalScore}</span>
+              <div className={`w-20 md:w-24 ${PODIUM_STYLES[3].h} bg-gradient-to-t ${PODIUM_STYLES[3].bg} rounded-t-xl flex items-center justify-center shadow-lg podium-grow`}>
+                <span className={`text-xl font-black ${PODIUM_STYLES[3].text}`}>{topThree[2].totalScore}</span>
               </div>
             </motion.div>
           )}
@@ -401,64 +389,83 @@ export default function End() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
+            transition={{ delay: 0.8 }}
             className="dramatic-card p-6"
           >
-            <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-              <Star className="w-5 h-5 text-cyan-400" />
+            <h2 className="text-xl font-black mb-4 flex items-center gap-2">
+              <Star className="w-5 h-5 text-kahoot-yellow" />
               Tu Resultado Final
             </h2>
 
             <div className="grid grid-cols-3 gap-4 text-center mb-6">
-              <div className="p-4 bg-white/5 rounded-lg">
-                <p className="text-3xl font-bold text-cyan-400">#{userRanking.rank}</p>
-                <p className="text-sm text-white/50">Posicion</p>
+              <div className="p-4 bg-white/5 rounded-xl">
+                <motion.p
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 1, type: 'spring' }}
+                  className="text-3xl font-black text-kahoot-green"
+                >
+                  #{userRanking.rank}
+                </motion.p>
+                <p className="text-sm text-white/50 font-bold">Posicion</p>
               </div>
-              <div className="p-4 bg-white/5 rounded-lg">
-                <p className="text-3xl font-bold">{userRanking.totalScore}</p>
-                <p className="text-sm text-white/50">Puntaje Total</p>
+              <div className="p-4 bg-white/5 rounded-xl">
+                <motion.p
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 1.1, type: 'spring' }}
+                  className="text-3xl font-black"
+                >
+                  {userRanking.totalScore}
+                </motion.p>
+                <p className="text-sm text-white/50 font-bold">Puntaje Total</p>
               </div>
-              <div className="p-4 bg-white/5 rounded-lg">
-                <p className="text-3xl font-bold">
+              <div className="p-4 bg-white/5 rounded-xl">
+                <motion.p
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 1.2, type: 'spring' }}
+                  className="text-3xl font-black"
+                >
                   {Math.round(userRanking.totalScore / (userRanking.roundScores.length || 1))}
-                </p>
-                <p className="text-sm text-white/50">Promedio</p>
+                </motion.p>
+                <p className="text-sm text-white/50 font-bold">Promedio</p>
               </div>
             </div>
 
             <div className="mb-6">
-              <p className="text-sm text-white/50 mb-2">Puntaje por ronda:</p>
+              <p className="text-xs text-white/50 mb-2 font-bold uppercase tracking-wider">Puntaje por ronda:</p>
               <div className="flex gap-2">
                 {userRanking.roundScores.map((score, i) => {
                   const isRoundRanked = game?.scenarios?.[i]?.ranked !== false;
                   return (
                     <div
                       key={i}
-                      className={`flex-1 p-2 rounded text-center ${
+                      className={`flex-1 p-2 rounded-xl text-center ${
                         !isRoundRanked
-                          ? 'border border-dashed border-white/20 bg-white/5 text-white/50'
+                          ? 'border-2 border-dashed border-white/20 bg-white/5 text-white/50'
                           : score >= 80
-                          ? 'bg-green-500/20 text-green-400'
+                          ? 'bg-kahoot-green/20 text-kahoot-green border-2 border-kahoot-green/30'
                           : score >= 60
-                          ? 'bg-yellow-500/20 text-yellow-400'
-                          : 'bg-red-500/20 text-red-400'
+                          ? 'bg-kahoot-yellow/20 text-kahoot-yellow border-2 border-kahoot-yellow/30'
+                          : 'bg-kahoot-red/20 text-kahoot-red border-2 border-kahoot-red/30'
                       }`}
                     >
-                      <p className="text-xs text-white/50">R{i + 1}{!isRoundRanked ? '*' : ''}</p>
-                      <p className="font-bold">{score || '-'}</p>
+                      <p className="text-[10px] text-white/50 font-bold">R{i + 1}{!isRoundRanked ? '*' : ''}</p>
+                      <p className="font-black">{score || '-'}</p>
                     </div>
                   );
                 })}
               </div>
               {game?.scenarios?.some((s: { ranked?: boolean }) => s.ranked === false) && (
-                <p className="text-xs text-white/40 mt-2">* Ronda diagnostica (no afecta ranking)</p>
+                <p className="text-xs text-white/40 mt-2 font-medium">* Ronda diagnostica (no afecta ranking)</p>
               )}
             </div>
 
             <button
               onClick={handleDownloadReport}
               disabled={reportLoading}
-              className="w-full p-3 bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-700 hover:to-cyan-700 rounded-lg transition-colors flex items-center justify-center gap-2 font-medium"
+              className="w-full p-4 bg-kahoot-blue hover:bg-kahoot-blue/90 rounded-xl transition-colors flex items-center justify-center gap-2 font-bold shadow-lg shadow-kahoot-blue/20"
             >
               {reportLoading ? (
                 <>
@@ -479,26 +486,29 @@ export default function End() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
+          transition={{ delay: 0.9 }}
           className="dramatic-card p-6"
         >
-          <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+          <h2 className="text-xl font-black mb-4 flex items-center gap-2">
             <Medal className="w-5 h-5 text-purple-400" />
             Ranking Completo
           </h2>
 
           <div className="space-y-2">
-            {finalRankings.map((player) => (
-              <div
+            {finalRankings.map((player, index) => (
+              <motion.div
                 key={player.playerId}
-                className={`flex items-center gap-4 p-3 rounded-lg ${
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 1 + index * 0.04 }}
+                className={`flex items-center gap-4 p-3 rounded-xl ${
                   player.playerId === user?.uid
-                    ? 'bg-cyan-500/20 border border-cyan-500/30'
+                    ? 'bg-kahoot-green/15 border-2 border-kahoot-green/30'
                     : 'bg-white/5'
                 }`}
               >
                 <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
+                  className={`w-8 h-8 rounded-lg flex items-center justify-center font-black text-sm ${
                     player.rank === 1
                       ? 'bg-yellow-500 text-black'
                       : player.rank === 2
@@ -511,10 +521,10 @@ export default function End() {
                   {player.rank}
                 </div>
 
-                <span className="flex-1 font-medium truncate">
+                <span className="flex-1 font-bold truncate">
                   {player.playerName}
                   {player.playerId === user?.uid && (
-                    <span className="text-cyan-400 text-sm ml-2">(Tu)</span>
+                    <span className="text-kahoot-green text-sm ml-2 font-bold">(Tu)</span>
                   )}
                 </span>
 
@@ -524,7 +534,7 @@ export default function End() {
                     return (
                       <span
                         key={i}
-                        className={`text-xs w-8 text-center ${
+                        className={`text-xs w-8 text-center font-semibold ${
                           !isRoundRanked ? 'text-white/30 italic' : 'text-white/50'
                         }`}
                       >
@@ -534,10 +544,10 @@ export default function End() {
                   })}
                 </div>
 
-                <span className="font-mono font-bold text-lg w-12 text-right">
+                <span className="font-mono font-black text-lg w-12 text-right">
                   {player.totalScore}
                 </span>
-              </div>
+              </motion.div>
             ))}
           </div>
         </motion.div>
@@ -547,20 +557,20 @@ export default function End() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7 }}
+            transition={{ delay: 1.1 }}
             className="dramatic-card p-6"
           >
-            <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+            <h2 className="text-xl font-black mb-4 flex items-center gap-2">
               <FileText className="w-5 h-5 text-purple-400" />
               Panel del Profesor
             </h2>
-            <p className="text-white/60 text-sm mb-4">
+            <p className="text-white/60 text-sm mb-4 font-medium">
               Como profesor, puedes ver el reporte completo de la clase con estadisticas detalladas de todos los estudiantes.
             </p>
             <div className="space-y-3">
               <Link
                 to={`/professor/report/${gameCode}`}
-                className="w-full p-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 rounded-lg transition-colors flex items-center justify-center gap-2 font-medium"
+                className="w-full p-4 bg-purple-600 hover:bg-purple-700 rounded-xl transition-colors flex items-center justify-center gap-2 font-bold shadow-lg shadow-purple-600/20"
               >
                 <FileText className="w-5 h-5" />
                 Ver Reporte de Clase
@@ -568,7 +578,7 @@ export default function End() {
               <button
                 onClick={handleExportSignals}
                 disabled={signalsLoading}
-                className="w-full p-3 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 rounded-lg transition-colors flex items-center justify-center gap-2 font-medium"
+                className="w-full p-4 bg-kahoot-orange hover:bg-kahoot-orange/90 rounded-xl transition-colors flex items-center justify-center gap-2 font-bold shadow-lg shadow-kahoot-orange/20"
               >
                 {signalsLoading ? (
                   <>
@@ -590,7 +600,7 @@ export default function End() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.8 }}
+          transition={{ delay: 1.2 }}
           className="text-center pb-8"
         >
           <Link to="/" className="primary-button inline-flex items-center gap-2">

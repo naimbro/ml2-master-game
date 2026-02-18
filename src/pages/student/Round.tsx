@@ -21,7 +21,7 @@ export default function Round() {
     if (!gameCode || !isHost || endingRound) return;
 
     const confirm = window.confirm(
-      '¿Estás seguro de terminar la ronda ahora? Se evaluarán las respuestas enviadas.'
+      '¿Estas seguro de terminar la ronda ahora? Se evaluaran las respuestas enviadas.'
     );
 
     if (confirm) {
@@ -104,8 +104,8 @@ export default function Round() {
     return (
       <div className="min-h-screen bg-gradient-main flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-white/70">Cargando ronda...</p>
+          <div className="w-16 h-16 border-4 border-kahoot-green border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-white/70 font-semibold">Cargando ronda...</p>
         </div>
       </div>
     );
@@ -115,8 +115,8 @@ export default function Round() {
     return (
       <div className="min-h-screen bg-gradient-main flex items-center justify-center p-4">
         <div className="text-center">
-          <AlertCircle className="w-16 h-16 text-red-400 mx-auto mb-4" />
-          <p className="text-red-400 mb-4">{error || 'Error al cargar el juego'}</p>
+          <AlertCircle className="w-16 h-16 text-kahoot-red mx-auto mb-4" />
+          <p className="text-red-300 mb-4 font-semibold">{error || 'Error al cargar el juego'}</p>
         </div>
       </div>
     );
@@ -127,70 +127,87 @@ export default function Round() {
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft % 60;
   const isLowTime = timeLeft <= 60;
+  const totalTime = game.roundDurationSeconds || 300;
+  const timeProgress = ((totalTime - timeLeft) / totalTime) * 100;
 
   return (
     <div className="min-h-screen bg-gradient-main">
       {/* Header with Timer */}
-      <header className="sticky top-0 z-10 bg-slate-900/80 backdrop-blur-sm border-b border-white/10 p-4">
-        <div className="max-w-4xl mx-auto flex justify-between items-center">
-          <div>
-            <span className="text-white/50 text-sm">Ronda</span>
-            <p className="text-xl font-bold">
-              {game.currentRound} / {game.totalRounds}
-            </p>
-          </div>
+      <header className="sticky top-0 z-10 bg-[#2D1065]/90 backdrop-blur-sm border-b-2 border-white/10 p-4">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex justify-between items-center mb-3">
+            <div>
+              <span className="text-white/50 text-xs font-bold uppercase tracking-wider">Ronda</span>
+              <p className="text-xl font-black">
+                {game.currentRound} <span className="text-white/40 font-bold">/ {game.totalRounds}</span>
+              </p>
+            </div>
 
-          <div
-            className={`flex items-center gap-2 px-4 py-2 rounded-full ${
-              isLowTime
-                ? 'bg-red-500/20 text-red-400 animate-pulse'
-                : 'bg-white/10 text-white'
-            }`}
-          >
-            <Clock className="w-5 h-5" />
-            <span className="font-mono text-lg font-bold">
-              {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
-            </span>
-          </div>
-
-          <div className="text-right">
-            <span className="text-white/50 text-sm">Respuestas</span>
-            <p className="text-xl font-bold text-cyan-400">
-              {submissions.length} / {Object.keys(game.players || {}).length}
-            </p>
-          </div>
-        </div>
-
-        {/* Host Controls */}
-        {isHost && (
-          <div className="max-w-4xl mx-auto mt-3 flex justify-end">
-            <button
-              onClick={handleEndRound}
-              disabled={endingRound}
-              className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-all disabled:opacity-50"
+            {/* Dramatic Timer */}
+            <motion.div
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-black text-lg ${
+                isLowTime
+                  ? 'bg-kahoot-red/30 text-kahoot-red border-2 border-kahoot-red/50'
+                  : 'bg-white/10 text-white border-2 border-white/15'
+              }`}
+              animate={isLowTime ? { scale: [1, 1.05, 1] } : {}}
+              transition={isLowTime ? { repeat: Infinity, duration: 0.8 } : {}}
             >
-              {endingRound ? (
-                <>
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  Terminando...
-                </>
-              ) : (
-                <>
-                  <StopCircle className="w-4 h-4" />
-                  Terminar Ronda Ahora
-                </>
-              )}
-            </button>
+              <Clock className="w-5 h-5" />
+              <span className="font-mono tabular-nums">
+                {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
+              </span>
+            </motion.div>
+
+            <div className="text-right">
+              <span className="text-white/50 text-xs font-bold uppercase tracking-wider">Respuestas</span>
+              <p className="text-xl font-black text-kahoot-green">
+                {submissions.length} <span className="text-white/40 font-bold">/ {Object.keys(game.players || {}).length}</span>
+              </p>
+            </div>
           </div>
-        )}
+
+          {/* Progress bar */}
+          <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+            <motion.div
+              className={`h-full rounded-full ${isLowTime ? 'bg-kahoot-red' : 'bg-kahoot-green'}`}
+              initial={{ width: 0 }}
+              animate={{ width: `${timeProgress}%` }}
+              transition={{ duration: 0.5 }}
+            />
+          </div>
+
+          {/* Host Controls */}
+          {isHost && (
+            <div className="mt-3 flex justify-end">
+              <button
+                onClick={handleEndRound}
+                disabled={endingRound}
+                className="flex items-center gap-2 px-4 py-2 bg-kahoot-red/80 hover:bg-kahoot-red text-white rounded-lg font-bold text-sm transition-all disabled:opacity-50"
+              >
+                {endingRound ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    Terminando...
+                  </>
+                ) : (
+                  <>
+                    <StopCircle className="w-4 h-4" />
+                    Terminar Ronda
+                  </>
+                )}
+              </button>
+            </div>
+          )}
+        </div>
       </header>
 
       {/* Non-ranked banner */}
       {isNonRanked && (
-        <div className="bg-amber-500/15 border-b border-amber-500/30">
+        <div className="bg-kahoot-orange/15 border-b-2 border-kahoot-orange/30">
           <div className="max-w-4xl mx-auto px-4 py-3 flex items-center gap-3">
-            <Info className="w-5 h-5 text-amber-400 shrink-0" />
-            <p className="text-amber-200 text-sm">
+            <Info className="w-5 h-5 text-kahoot-orange shrink-0" />
+            <p className="text-orange-200 text-sm font-semibold">
               No afecta ranking. Esto se usa para sugerir equipos y temas. Se honesto/a.
             </p>
           </div>
@@ -210,18 +227,18 @@ export default function Round() {
             <div className="dramatic-card p-6 mb-6">
               <div className="flex items-center gap-3 mb-4">
                 {currentScenario.category && (
-                  <span className="px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full text-xs font-medium">
+                  <span className="px-3 py-1 bg-kahoot-blue/25 text-blue-200 rounded-full text-xs font-bold uppercase tracking-wider">
                     {currentScenario.category}
                   </span>
                 )}
                 {currentScenario.difficulty && (
                   <span
-                    className={`px-3 py-1 rounded-full text-xs font-medium ${
+                    className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
                       currentScenario.difficulty === 'easy'
-                        ? 'bg-green-500/20 text-green-300'
+                        ? 'bg-kahoot-green/25 text-green-200'
                         : currentScenario.difficulty === 'medium'
-                        ? 'bg-yellow-500/20 text-yellow-300'
-                        : 'bg-red-500/20 text-red-300'
+                        ? 'bg-kahoot-orange/25 text-orange-200'
+                        : 'bg-kahoot-red/25 text-red-200'
                     }`}
                   >
                     {currentScenario.difficulty === 'easy'
@@ -233,22 +250,22 @@ export default function Round() {
                 )}
               </div>
 
-              <h2 className="text-2xl font-bold mb-4">{currentScenario.title}</h2>
+              <h2 className="text-2xl font-black mb-4">{currentScenario.title}</h2>
 
               <div className="mb-6">
-                <h3 className="text-sm font-semibold text-white/70 uppercase tracking-wide mb-2">
+                <h3 className="text-xs font-bold text-white/50 uppercase tracking-widest mb-2">
                   Contexto
                 </h3>
-                <p className="text-white/80 leading-relaxed whitespace-pre-wrap">
+                <p className="text-white/80 leading-relaxed whitespace-pre-wrap font-medium">
                   {currentScenario.context}
                 </p>
               </div>
 
-              <div className="p-4 bg-cyan-500/10 border border-cyan-500/30 rounded-lg">
-                <h3 className="text-sm font-semibold text-cyan-400 uppercase tracking-wide mb-2">
+              <div className="p-5 bg-kahoot-blue/15 border-2 border-kahoot-blue/30 rounded-xl">
+                <h3 className="text-xs font-bold text-blue-300 uppercase tracking-widest mb-2">
                   Pregunta
                 </h3>
-                <p className="text-white leading-relaxed">
+                <p className="text-white leading-relaxed font-semibold">
                   {currentScenario.question}
                 </p>
               </div>
@@ -268,9 +285,9 @@ export default function Round() {
                     className="dramatic-card p-6"
                   >
                     <div className="flex items-center justify-between mb-6">
-                      <h3 className="text-xl font-bold">Tu Resultado</h3>
+                      <h3 className="text-xl font-black">Tu Resultado</h3>
                       {isNonRanked && (
-                        <span className="px-3 py-1 bg-amber-500/20 text-amber-300 rounded-full text-xs font-medium">
+                        <span className="px-3 py-1 bg-kahoot-orange/25 text-orange-200 rounded-full text-xs font-bold uppercase tracking-wider">
                           Diagnostica
                         </span>
                       )}
@@ -278,35 +295,40 @@ export default function Round() {
 
                     <div className="flex items-center gap-6 mb-6">
                       <div className="text-center">
-                        <div
-                          className={`text-5xl font-bold ${
+                        <motion.div
+                          initial={{ scale: 0.3, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          transition={{ type: 'spring', stiffness: 200, delay: 0.2 }}
+                          className={`text-5xl font-black ${
                             evaluation.finalScore >= 80
-                              ? 'text-green-400'
+                              ? 'text-kahoot-green'
                               : evaluation.finalScore >= 60
-                              ? 'text-yellow-400'
-                              : 'text-red-400'
+                              ? 'text-kahoot-yellow'
+                              : 'text-kahoot-red'
                           }`}
                         >
                           {evaluation.finalScore}
-                        </div>
-                        <p className="text-white/50 text-sm">Puntaje</p>
+                        </motion.div>
+                        <p className="text-white/50 text-sm font-bold">Puntaje</p>
                       </div>
 
                       <div className="flex-1 space-y-2">
                         {evaluation.evaluations?.map((ev: { judgeName: string; score: number; feedback: string; strengths: string[]; improvements: string[] }, i: number) => (
                           <div key={i} className="flex items-center gap-3">
-                            <span className="text-sm text-white/70 w-32 truncate">
+                            <span className="text-sm text-white/70 w-32 truncate font-semibold">
                               {ev.judgeName}
                             </span>
-                            <div className="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
+                            <div className="flex-1 h-3 bg-white/10 rounded-full overflow-hidden">
                               <motion.div
                                 initial={{ width: 0 }}
                                 animate={{ width: `${ev.score}%` }}
-                                transition={{ duration: 0.5, delay: i * 0.1 }}
-                                className="h-full bg-gradient-to-r from-cyan-500 to-purple-500"
+                                transition={{ duration: 0.6, delay: 0.3 + i * 0.15, ease: 'easeOut' }}
+                                className={`h-full rounded-full ${
+                                  i === 0 ? 'bg-kahoot-red' : i === 1 ? 'bg-kahoot-blue' : 'bg-kahoot-green'
+                                }`}
                               />
                             </div>
-                            <span className="text-sm font-mono w-10 text-right">
+                            <span className="text-sm font-mono font-bold w-10 text-right">
                               {ev.score}
                             </span>
                           </div>
@@ -315,17 +337,19 @@ export default function Round() {
                     </div>
 
                     {evaluation.evaluations?.map((ev: { judgeName: string; score: number; feedback: string; strengths: string[]; improvements: string[] }, i: number) => (
-                      <div key={i} className="mb-4 p-4 bg-white/5 rounded-lg">
+                      <div key={i} className="mb-4 p-4 bg-white/5 rounded-xl">
                         <div className="flex items-center gap-2 mb-2">
-                          <MessageSquare className="w-4 h-4 text-cyan-400" />
-                          <span className="font-medium">{ev.judgeName}</span>
+                          <MessageSquare className={`w-4 h-4 ${
+                            i === 0 ? 'text-kahoot-red' : i === 1 ? 'text-kahoot-blue' : 'text-kahoot-green'
+                          }`} />
+                          <span className="font-bold">{ev.judgeName}</span>
                         </div>
-                        <p className="text-white/80 text-sm mb-3">{ev.feedback}</p>
+                        <p className="text-white/80 text-sm mb-3 font-medium">{ev.feedback}</p>
 
                         {ev.strengths?.length > 0 && (
                           <div className="mb-2">
-                            <span className="text-xs text-green-400 font-medium">Fortalezas:</span>
-                            <ul className="text-xs text-white/60 ml-4 mt-1">
+                            <span className="text-xs text-kahoot-green font-bold uppercase tracking-wider">Fortalezas:</span>
+                            <ul className="text-xs text-white/60 ml-4 mt-1 font-medium">
                               {ev.strengths.map((s: string, j: number) => (
                                 <li key={j}>• {s}</li>
                               ))}
@@ -335,8 +359,8 @@ export default function Round() {
 
                         {ev.improvements?.length > 0 && (
                           <div>
-                            <span className="text-xs text-yellow-400 font-medium">Areas de mejora:</span>
-                            <ul className="text-xs text-white/60 ml-4 mt-1">
+                            <span className="text-xs text-kahoot-orange font-bold uppercase tracking-wider">Areas de mejora:</span>
+                            <ul className="text-xs text-white/60 ml-4 mt-1 font-medium">
                               {ev.improvements.map((s: string, j: number) => (
                                 <li key={j}>• {s}</li>
                               ))}
@@ -348,8 +372,8 @@ export default function Round() {
 
                     <div className="mt-4 pt-4 border-t border-white/10 text-center">
                       <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full">
-                        <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                        <span className="text-white/70 text-sm">
+                        <div className="w-2 h-2 bg-kahoot-green rounded-full animate-pulse" />
+                        <span className="text-white/70 text-sm font-semibold">
                           Esperando a que termine la ronda...
                         </span>
                       </div>
@@ -361,14 +385,14 @@ export default function Round() {
                     animate={{ opacity: 1, scale: 1 }}
                     className="dramatic-card p-8 text-center"
                   >
-                    <div className="w-16 h-16 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-                    <h3 className="text-2xl font-bold mb-2">Respuesta Enviada</h3>
-                    <p className="text-white/70">
+                    <div className="w-16 h-16 border-4 border-kahoot-green border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+                    <h3 className="text-2xl font-black mb-2">Respuesta Enviada</h3>
+                    <p className="text-white/70 font-semibold">
                       3 jueces AI estan evaluando tu respuesta...
                     </p>
-                    <div className="mt-4 p-4 bg-white/5 rounded-lg text-left">
-                      <p className="text-sm text-white/50 mb-2">Tu respuesta:</p>
-                      <p className="text-white/80 text-sm whitespace-pre-wrap">
+                    <div className="mt-4 p-4 bg-white/5 rounded-xl text-left">
+                      <p className="text-sm text-white/50 mb-2 font-bold uppercase tracking-wider text-xs">Tu respuesta:</p>
+                      <p className="text-white/80 text-sm whitespace-pre-wrap font-medium">
                         {response || userSub?.response}
                       </p>
                     </div>
@@ -377,7 +401,7 @@ export default function Round() {
               })()
             ) : (
               <div className="dramatic-card p-6">
-                <label className="block text-sm font-semibold text-white/70 uppercase tracking-wide mb-3">
+                <label className="block text-xs font-bold text-white/50 uppercase tracking-widest mb-3">
                   Tu Respuesta
                 </label>
                 <textarea
@@ -390,7 +414,7 @@ export default function Round() {
                 />
 
                 <div className="flex justify-between items-center">
-                  <span className="text-white/50 text-sm">
+                  <span className="text-white/50 text-sm font-semibold">
                     {response.length} caracteres
                   </span>
 
@@ -417,8 +441,8 @@ export default function Round() {
           </motion.div>
         ) : (
           <div className="text-center py-12">
-            <AlertCircle className="w-16 h-16 text-yellow-400 mx-auto mb-4" />
-            <p className="text-white/70">No hay escenario disponible</p>
+            <AlertCircle className="w-16 h-16 text-kahoot-orange mx-auto mb-4" />
+            <p className="text-white/70 font-semibold">No hay escenario disponible</p>
           </div>
         )}
       </main>

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Gamepad2, Users } from 'lucide-react';
+import { ArrowLeft, Users, Zap } from 'lucide-react';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { useAuth } from '../../hooks/useAuth';
@@ -72,7 +72,7 @@ export default function JoinGame() {
       <header className="p-4">
         <Link
           to="/"
-          className="flex items-center gap-2 text-white/70 hover:text-white transition-colors w-fit"
+          className="flex items-center gap-2 text-white/70 hover:text-white transition-colors w-fit font-semibold"
         >
           <ArrowLeft className="w-5 h-5" />
           Volver
@@ -80,18 +80,23 @@ export default function JoinGame() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-md mx-auto px-4 py-12">
+      <main className="max-w-md mx-auto px-4 py-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.4 }}
         >
           <div className="text-center mb-8">
-            <div className="w-20 h-20 bg-gradient-to-br from-cyan-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <Gamepad2 className="w-10 h-10 text-white" />
-            </div>
-            <h1 className="text-3xl font-bold mb-2">Unirse al Juego</h1>
-            <p className="text-white/60">
+            <motion.div
+              initial={{ scale: 0.5, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ type: 'spring', stiffness: 200, delay: 0.1 }}
+              className="w-20 h-20 bg-kahoot-green rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-lg shadow-kahoot-green/30"
+            >
+              <Zap className="w-10 h-10 text-white" />
+            </motion.div>
+            <h1 className="text-3xl font-black mb-2">Unirse al Juego</h1>
+            <p className="text-white/60 font-medium">
               Ingresa el codigo de 6 letras que aparece en pantalla
             </p>
           </div>
@@ -99,7 +104,7 @@ export default function JoinGame() {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Game Code Input */}
             <div>
-              <label className="block text-sm font-medium text-white/80 mb-2">
+              <label className="block text-sm font-bold text-white/80 mb-2 uppercase tracking-wider">
                 Codigo del Juego
               </label>
               <input
@@ -108,14 +113,14 @@ export default function JoinGame() {
                 onChange={(e) => setGameCode(e.target.value.toUpperCase())}
                 placeholder="ABCDEF"
                 maxLength={6}
-                className="input-field text-center text-2xl tracking-[0.3em] uppercase font-mono"
+                className="input-field text-center text-3xl tracking-[0.4em] uppercase font-black py-5"
                 autoFocus
               />
             </div>
 
             {/* Player Name Input */}
             <div>
-              <label className="block text-sm font-medium text-white/80 mb-2">
+              <label className="block text-sm font-bold text-white/80 mb-2 uppercase tracking-wider">
                 Tu Nombre
               </label>
               <input
@@ -133,7 +138,7 @@ export default function JoinGame() {
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-300 text-sm text-center"
+                className="p-3 bg-kahoot-red/20 border-2 border-kahoot-red/40 rounded-xl text-red-200 text-sm text-center font-semibold"
               >
                 {error}
               </motion.div>
@@ -143,7 +148,7 @@ export default function JoinGame() {
             <button
               type="submit"
               disabled={isJoining}
-              className="primary-button w-full py-4 text-lg flex items-center justify-center gap-3"
+              className="primary-button w-full py-5 text-lg flex items-center justify-center gap-3"
             >
               {isJoining ? (
                 <>
