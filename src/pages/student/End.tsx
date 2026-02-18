@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Trophy, Medal, Star, Home, Download, FileText } from 'lucide-react';
+import { Trophy, Medal, Star, Home, Download, FileText, FileJson } from 'lucide-react';
 import { useGame } from '../../hooks/useGame';
 import { useAuth } from '../../hooks/useAuth';
 import { httpsCallable } from 'firebase/functions';
@@ -25,6 +25,7 @@ export default function End() {
   const [finalRankings, setFinalRankings] = useState<PlayerFinalScore[]>([]);
   const [loadingRankings, setLoadingRankings] = useState(true);
   const [reportLoading, setReportLoading] = useState(false);
+  const [signalsLoading, setSignalsLoading] = useState(false);
 
   // Calculate final rankings
   useEffect(() => {
@@ -52,15 +53,21 @@ export default function End() {
           }
         });
 
-        // Calculate totals and sort
+        // Only sum scores from ranked rounds for ranking
         const rankings: PlayerFinalScore[] = Object.entries(playerScores)
-          .map(([playerId, data]) => ({
-            playerId,
-            playerName: data.name,
-            roundScores: data.scores,
-            totalScore: data.scores.reduce((a, b) => a + (b || 0), 0),
-            rank: 0,
-          }))
+          .map(([playerId, data]) => {
+            const rankedTotal = data.scores.reduce((sum, score, idx) => {
+              const isRanked = game?.scenarios?.[idx]?.ranked !== false;
+              return sum + (isRanked ? (score || 0) : 0);
+            }, 0);
+            return {
+              playerId,
+              playerName: data.name,
+              roundScores: data.scores,
+              totalScore: rankedTotal,
+              rank: 0,
+            };
+          })
           .sort((a, b) => b.totalScore - a.totalScore);
 
         // Assign ranks (handling ties)
@@ -254,6 +261,36 @@ export default function End() {
     }
   };
 
+  const handleExportSignals = async () => {
+    if (!gameCode) return;
+
+    setSignalsLoading(true);
+    try {
+      const exportFn = httpsCallable(functions, 'exportSignalsSummary');
+      const result = await exportFn({ gameCode });
+      const data = result.data as { success: boolean; export: Record<string, unknown> };
+
+      if (!data.success) {
+        throw new Error('Failed to export signals');
+      }
+
+      const blob = new Blob([JSON.stringify(data.export, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `senales_${gameCode}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Export signals error:', err);
+      alert('Error al exportar senales. Intenta de nuevo.');
+    } finally {
+      setSignalsLoading(false);
+    }
+  };
+
   if (loading || loadingRankings) {
     return (
       <div className="min-h-screen bg-gradient-main flex items-center justify-center">
@@ -392,22 +429,30 @@ export default function End() {
             <div className="mb-6">
               <p className="text-sm text-white/50 mb-2">Puntaje por ronda:</p>
               <div className="flex gap-2">
-                {userRanking.roundScores.map((score, i) => (
-                  <div
-                    key={i}
-                    className={`flex-1 p-2 rounded text-center ${
-                      score >= 80
-                        ? 'bg-green-500/20 text-green-400'
-                        : score >= 60
-                        ? 'bg-yellow-500/20 text-yellow-400'
-                        : 'bg-red-500/20 text-red-400'
-                    }`}
-                  >
-                    <p className="text-xs text-white/50">R{i + 1}</p>
-                    <p className="font-bold">{score || '-'}</p>
-                  </div>
-                ))}
+                {userRanking.roundScores.map((score, i) => {
+                  const isRoundRanked = game?.scenarios?.[i]?.ranked !== false;
+                  return (
+                    <div
+                      key={i}
+                      className={`flex-1 p-2 rounded text-center ${
+                        !isRoundRanked
+                          ? 'border border-dashed border-white/20 bg-white/5 text-white/50'
+                          : score >= 80
+                          ? 'bg-green-500/20 text-green-400'
+                          : score >= 60
+                          ? 'bg-yellow-500/20 text-yellow-400'
+                          : 'bg-red-500/20 text-red-400'
+                      }`}
+                    >
+                      <p className="text-xs text-white/50">R{i + 1}{!isRoundRanked ? '*' : ''}</p>
+                      <p className="font-bold">{score || '-'}</p>
+                    </div>
+                  );
+                })}
               </div>
+              {game?.scenarios?.some((s: { ranked?: boolean }) => s.ranked === false) && (
+                <p className="text-xs text-white/40 mt-2">* Ronda diagnostica (no afecta ranking)</p>
+              )}
             </div>
 
             <button
@@ -474,14 +519,19 @@ export default function End() {
                 </span>
 
                 <div className="flex gap-1">
-                  {player.roundScores.map((score, i) => (
-                    <span
-                      key={i}
-                      className="text-xs text-white/50 w-8 text-center"
-                    >
-                      {score || '-'}
-                    </span>
-                  ))}
+                  {player.roundScores.map((score, i) => {
+                    const isRoundRanked = game?.scenarios?.[i]?.ranked !== false;
+                    return (
+                      <span
+                        key={i}
+                        className={`text-xs w-8 text-center ${
+                          !isRoundRanked ? 'text-white/30 italic' : 'text-white/50'
+                        }`}
+                      >
+                        {score || '-'}{!isRoundRanked ? '*' : ''}
+                      </span>
+                    );
+                  })}
                 </div>
 
                 <span className="font-mono font-bold text-lg w-12 text-right">
@@ -507,13 +557,32 @@ export default function End() {
             <p className="text-white/60 text-sm mb-4">
               Como profesor, puedes ver el reporte completo de la clase con estadisticas detalladas de todos los estudiantes.
             </p>
-            <Link
-              to={`/professor/report/${gameCode}`}
-              className="w-full p-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 rounded-lg transition-colors flex items-center justify-center gap-2 font-medium"
-            >
-              <FileText className="w-5 h-5" />
-              Ver Reporte de Clase
-            </Link>
+            <div className="space-y-3">
+              <Link
+                to={`/professor/report/${gameCode}`}
+                className="w-full p-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 rounded-lg transition-colors flex items-center justify-center gap-2 font-medium"
+              >
+                <FileText className="w-5 h-5" />
+                Ver Reporte de Clase
+              </Link>
+              <button
+                onClick={handleExportSignals}
+                disabled={signalsLoading}
+                className="w-full p-3 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 rounded-lg transition-colors flex items-center justify-center gap-2 font-medium"
+              >
+                {signalsLoading ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    Exportando...
+                  </>
+                ) : (
+                  <>
+                    <FileJson className="w-5 h-5" />
+                    Exportar Resumen de Senales (JSON)
+                  </>
+                )}
+              </button>
+            </div>
           </motion.div>
         )}
 

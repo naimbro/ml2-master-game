@@ -7,8 +7,8 @@ import { db } from '../../lib/firebase';
 import { useAuth } from '../../hooks/useAuth';
 
 // Import session content - in production this would be loaded dynamically
-import session1Config from '../../../content/sessions/ml2-2025/session_1_llm_fundamentals/config.json';
-import session1Scenarios from '../../../content/sessions/ml2-2025/session_1_llm_fundamentals/scenarios.json';
+import session1Config from '../../../content/sessions/ml2-2025/session_1_ia_procesos_sector_publico/config.json';
+import session1Scenarios from '../../../content/sessions/ml2-2025/session_1_ia_procesos_sector_publico/scenarios.json';
 
 interface SessionOption {
   id: string;
@@ -23,9 +23,9 @@ interface SessionOption {
 // Available sessions - would be dynamically loaded in production
 const availableSessions: SessionOption[] = [
   {
-    id: 'session_1_llm_fundamentals',
-    title: 'Sesion 1: Fundamentos de LLMs',
-    description: 'Transformers, tokenizacion, embeddings, y riesgos de alucinacion',
+    id: 'session_1_ia_procesos_sector_publico',
+    title: 'Sesion 1: IA, Procesos y Sector Publico',
+    description: 'Marco del curso, procesos de decision, TRL, preferencias de proyecto y perfil estudiantil',
     rounds: 4,
     duration: 5,
     config: session1Config,

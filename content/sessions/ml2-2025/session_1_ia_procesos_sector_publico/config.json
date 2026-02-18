@@ -1,0 +1,22 @@
+{
+  "sessionId": "session_1_ia_procesos_sector_publico",
+  "title": "IA, Procesos y Sector Publico",
+  "description": "Marco del curso: procesos de decision en sector publico, TRL, riesgo de implementacion, preferencias de proyecto y perfil estudiantil",
+  "date": "2026-03-06",
+  "roundCount": 4,
+  "roundDurationSeconds": 300,
+  "bufferSeconds": 120,
+  "conceptTags": [
+    "procesos_publicos",
+    "decision_unit",
+    "TRL",
+    "riesgo_implementacion",
+    "preferencias_proyecto",
+    "perfil_estudiante"
+  ],
+  "judges": [
+    { "judgeId": "technical_expert", "weight": 0.35 },
+    { "judgeId": "public_sector", "weight": 0.35 },
+    { "judgeId": "professor_twin", "weight": 0.30 }
+  ]
+}

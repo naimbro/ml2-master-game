@@ -81,6 +81,18 @@ export interface JudgeEvaluation {
   strengths: string[];
   improvements: string[];
   rawResponse?: Record<string, unknown>;
+  parsedSignals?: StudentSignals;
+}
+
+export interface StudentSignals {
+  interestByScenario?: Record<string, number>;
+  sectorKnowledge?: Record<string, number>;
+  technicalConfidence?: Record<string, number>;
+  preferredRole?: string;
+  comfortProcessDesign?: number;
+  comfortPipelineBuilding?: number;
+  openQuestion?: string;
+  extractionConfidence?: number;
 }
 
 // =====================================
@@ -96,6 +108,7 @@ export interface RoundRanking {
 
 export interface RoundResults {
   round: number;
+  ranked: boolean;
   rankings: RoundRanking[];
   processedAt: Timestamp;
 }
@@ -140,6 +153,7 @@ export interface Scenario {
   title: string;
   category?: string;
   difficulty?: 'easy' | 'medium' | 'hard';
+  ranked?: boolean;
   context: string;
   question: string;
   conceptTags: string[];

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Trophy, TrendingUp, ArrowRight, MessageSquare } from 'lucide-react';
+import { Trophy, TrendingUp, ArrowRight, MessageSquare, Info } from 'lucide-react';
 import { useGame } from '../../hooks/useGame';
 import { useAuth } from '../../hooks/useAuth';
 import { httpsCallable } from 'firebase/functions';
@@ -88,6 +88,7 @@ export default function Results() {
   const userSubmission = submissions.find(s => s.playerId === user?.uid);
   const userEvaluation = userSubmission?.evaluation;
   const userRank = roundResults?.rankings.find(r => r.playerId === user?.uid);
+  const isRankedRound = game?.scenarios?.[game.currentRound - 1]?.ranked !== false;
 
   return (
     <div className="min-h-screen bg-gradient-main">
@@ -118,7 +119,7 @@ export default function Results() {
           >
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold">Tu Resultado</h2>
-              {userRank && (
+              {isRankedRound && userRank && (
                 <div className="flex items-center gap-2">
                   <Trophy
                     className={`w-6 h-6 ${
@@ -133,6 +134,11 @@ export default function Results() {
                   />
                   <span className="text-lg font-bold">#{userRank.rank}</span>
                 </div>
+              )}
+              {!isRankedRound && (
+                <span className="px-3 py-1 bg-amber-500/20 text-amber-300 rounded-full text-xs font-medium">
+                  Diagnostica
+                </span>
               )}
             </div>
 
@@ -209,8 +215,8 @@ export default function Results() {
           </motion.div>
         )}
 
-        {/* Cumulative Leaderboard */}
-        {roundResults && game.players && (
+        {/* Cumulative Leaderboard (ranked rounds only) or diagnostic message */}
+        {roundResults && game.players && isRankedRound && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -232,12 +238,16 @@ export default function Results() {
 
             <div className="space-y-2">
               {(() => {
-                // Calculate cumulative rankings
+                // Calculate cumulative rankings (only from ranked rounds via totalScore)
                 const cumulativeRankings = Object.entries(game.players)
                   .map(([playerId, player]) => {
                     const roundScore = roundResults.rankings.find(r => r.playerId === playerId)?.score || 0;
                     const totalScore = player.totalScore || 0;
-                    const avgScore = game.currentRound > 0 ? totalScore / game.currentRound : 0;
+                    // Count only ranked rounds completed so far
+                    const rankedRoundsPlayed = game.scenarios
+                      ?.slice(0, game.currentRound)
+                      .filter((s: { ranked?: boolean }) => s.ranked !== false).length || 1;
+                    const avgScore = rankedRoundsPlayed > 0 ? totalScore / rankedRoundsPlayed : 0;
                     return {
                       playerId,
                       playerName: player.name,
@@ -278,7 +288,7 @@ export default function Results() {
                     <span className="flex-1 font-medium">
                       {player.playerName}
                       {player.playerId === user?.uid && (
-                        <span className="text-cyan-400 text-sm ml-2">(Tú)</span>
+                        <span className="text-cyan-400 text-sm ml-2">(Tu)</span>
                       )}
                     </span>
 
@@ -296,6 +306,25 @@ export default function Results() {
                 ));
               })()}
             </div>
+          </motion.div>
+        )}
+
+        {/* Diagnostic message for non-ranked rounds */}
+        {roundResults && !isRankedRound && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="dramatic-card p-6"
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <Info className="w-5 h-5 text-amber-400" />
+              <h2 className="text-lg font-bold text-amber-200">Ronda Diagnostica</h2>
+            </div>
+            <p className="text-white/60 text-sm">
+              Esta ronda no afecta el ranking. Tu respuesta se usa para sugerir equipos y temas de proyecto.
+              El feedback de los jueces es informativo para que conozcas como se evalua en el curso.
+            </p>
           </motion.div>
         )}
 

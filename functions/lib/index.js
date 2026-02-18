@@ -33,7 +33,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.seedJudges = exports.generateClassReport = exports.generateOralTask = exports.generateStudentReport = exports.processRoundEnd = exports.evaluateSubmission = void 0;
+exports.seedJudges = exports.exportSignalsSummary = exports.generateClassReport = exports.generateOralTask = exports.generateStudentReport = exports.processRoundEnd = exports.evaluateSubmission = void 0;
 const functions = __importStar(require("firebase-functions"));
 const admin = __importStar(require("firebase-admin"));
 admin.initializeApp();
@@ -57,7 +57,7 @@ async function getOpenAI() {
 }
 // Helper function to evaluate with a single judge
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function evaluateWithJudge(openai, judge, scenario, studentResponse, sessionConfig, knowledgeBase, referenceDocs) {
+async function evaluateWithJudge(openai, judge, scenario, studentResponse, sessionConfig, knowledgeBase, referenceDocs, isRanked = true) {
     var _a, _b;
     let prompt = judge.promptTemplate
         .replace('{{name}}', judge.name)
@@ -69,6 +69,16 @@ async function evaluateWithJudge(openai, judge, scenario, studentResponse, sessi
         .replace('{{scenario}}', JSON.stringify(scenario, null, 2))
         .replace('{{idealAnswer}}', JSON.stringify(scenario.idealAnswer || {}, null, 2))
         .replace('{{studentResponse}}', studentResponse);
+    // For non-ranked rounds, add signal extraction instructions
+    if (!isRanked) {
+        prompt += `\n\nINSTRUCCIONES ADICIONALES PARA RONDA DIAGNOSTICA:
+Esta ronda NO afecta el ranking. Ademas de evaluar normalmente, debes extraer senales del estudiante.
+Si la respuesta contiene un bloque [SENALES]...[/SENALES], parsea los valores estructurados dentro de ese bloque.
+Incluye en tu JSON de respuesta un campo adicional "parsedSignals" con los valores extraidos como objeto.
+Si el bloque [SENALES] no existe o esta malformado, incluye "parsedSignals": null y agrega "extractionConfidence": 0.
+Si el bloque existe y se parseo correctamente, agrega "extractionConfidence" entre 0.5 y 1.0 segun la calidad del parseo.
+Manten tu respuesta concisa (max 120 palabras de feedback + bloque de senales).`;
+    }
     try {
         const completion = await openai.chat.completions.create({
             model: 'gpt-4o',
@@ -77,20 +87,28 @@ async function evaluateWithJudge(openai, judge, scenario, studentResponse, sessi
                 { role: 'user', content: 'Evalua la respuesta del estudiante y responde SOLO con JSON valido.' }
             ],
             temperature: 0.3,
-            max_tokens: 1000,
+            max_tokens: isRanked ? 1000 : 1500,
             response_format: { type: 'json_object' },
         });
         const responseText = ((_b = (_a = completion.choices[0]) === null || _a === void 0 ? void 0 : _a.message) === null || _b === void 0 ? void 0 : _b.content) || '{}';
         const response = JSON.parse(responseText);
-        return {
+        const evaluation = {
             judgeId: judge.judgeId,
             judgeName: judge.name,
             score: response.score || 0,
-            feedback: response.feedback || 'Sin retroalimentación',
+            feedback: response.feedback || 'Sin retroalimentacion',
             strengths: response.strengths || [],
             improvements: response.improvements || [],
             rawResponse: response,
         };
+        // Extract parsed signals for non-ranked rounds
+        if (!isRanked && response.parsedSignals) {
+            evaluation.parsedSignals = { ...response.parsedSignals };
+            if (response.extractionConfidence !== undefined) {
+                evaluation.parsedSignals.extractionConfidence = response.extractionConfidence;
+            }
+        }
+        return evaluation;
     }
     catch (error) {
         console.error(`Error with judge ${judge.judgeId}:`, error);
@@ -98,7 +116,7 @@ async function evaluateWithJudge(openai, judge, scenario, studentResponse, sessi
             judgeId: judge.judgeId,
             judgeName: judge.name,
             score: 50,
-            feedback: 'Error en la evaluación. Se asignó puntaje neutral.',
+            feedback: 'Error en la evaluacion. Se asigno puntaje neutral.',
             strengths: [],
             improvements: [],
             rawResponse: { error: String(error) },
@@ -145,6 +163,7 @@ exports.evaluateSubmission = functions
             { judgeId: 'public_sector', weight: 0.35 },
             { judgeId: 'professor_twin', weight: 0.30 },
         ];
+        const isRanked = scenario.ranked !== false;
         const evaluationPromises = judgeWeights.map(async (jw) => {
             var _a;
             const judge = (_a = judgesConfig === null || judgesConfig === void 0 ? void 0 : judgesConfig.judges) === null || _a === void 0 ? void 0 : _a.find((j) => j.judgeId === jw.judgeId);
@@ -152,7 +171,7 @@ exports.evaluateSubmission = functions
                 console.warn(`Judge ${jw.judgeId} not found`);
                 return null;
             }
-            return evaluateWithJudge(openai, judge, scenario, submission.response, sessionConfig, game.knowledgeBase || '', game.referenceDocs || '');
+            return evaluateWithJudge(openai, judge, scenario, submission.response, sessionConfig, game.knowledgeBase || '', game.referenceDocs || '', isRanked);
         });
         const evaluations = (await Promise.all(evaluationPromises)).filter(Boolean);
         let totalWeight = 0;
@@ -220,6 +239,7 @@ exports.processRoundEnd = functions
             { judgeId: 'public_sector', weight: 0.35 },
             { judgeId: 'professor_twin', weight: 0.30 },
         ];
+        const isRanked = scenario.ranked !== false;
         const unevaluatedDocs = submissionsSnapshot.docs.filter(doc => !doc.data().evaluated);
         for (const doc of unevaluatedDocs) {
             const submission = doc.data();
@@ -228,7 +248,7 @@ exports.processRoundEnd = functions
                 const judge = (_a = judgesConfig === null || judgesConfig === void 0 ? void 0 : judgesConfig.judges) === null || _a === void 0 ? void 0 : _a.find((j) => j.judgeId === jw.judgeId);
                 if (!judge)
                     return null;
-                return evaluateWithJudge(openai, judge, scenario, submission.response, sessionConfig, game.knowledgeBase || '', game.referenceDocs || '');
+                return evaluateWithJudge(openai, judge, scenario, submission.response, sessionConfig, game.knowledgeBase || '', game.referenceDocs || '', isRanked);
             });
             const evaluations = (await Promise.all(evaluationPromises)).filter(Boolean);
             let totalWeight = 0;
@@ -280,20 +300,23 @@ exports.processRoundEnd = functions
         await db.collection('games').doc(gameCode)
             .collection('rounds').doc(`round_${round}`).set({
             round,
+            ranked: isRanked,
             rankings,
             processedAt: admin.firestore.Timestamp.now(),
         });
-        // Update player totalScores in the game document
-        const playerUpdates = {};
-        for (const score of scores) {
-            const currentPlayer = (_a = game.players) === null || _a === void 0 ? void 0 : _a[score.playerId];
-            const currentTotal = (currentPlayer === null || currentPlayer === void 0 ? void 0 : currentPlayer.totalScore) || 0;
-            playerUpdates[`players.${score.playerId}.totalScore`] = currentTotal + score.score;
+        // Only update player totalScores for ranked rounds
+        if (isRanked) {
+            const playerUpdates = {};
+            for (const score of scores) {
+                const currentPlayer = (_a = game.players) === null || _a === void 0 ? void 0 : _a[score.playerId];
+                const currentTotal = (currentPlayer === null || currentPlayer === void 0 ? void 0 : currentPlayer.totalScore) || 0;
+                playerUpdates[`players.${score.playerId}.totalScore`] = currentTotal + score.score;
+            }
+            if (Object.keys(playerUpdates).length > 0) {
+                await db.collection('games').doc(gameCode).update(playerUpdates);
+            }
         }
-        if (Object.keys(playerUpdates).length > 0) {
-            await db.collection('games').doc(gameCode).update(playerUpdates);
-        }
-        return { success: true, rankings };
+        return { success: true, rankings, ranked: isRanked };
     }
     catch (error) {
         console.error('Process round error:', error);
@@ -328,17 +351,20 @@ exports.generateStudentReport = functions
             .orderBy('round')
             .get();
         const roundDetails = submissionsSnapshot.docs.map(doc => {
-            var _a;
             const data = doc.data();
+            const scenarioData = game.scenarios[data.round - 1];
             return {
                 round: data.round,
-                scenario: ((_a = game.scenarios[data.round - 1]) === null || _a === void 0 ? void 0 : _a.title) || `Ronda ${data.round}`,
+                ranked: (scenarioData === null || scenarioData === void 0 ? void 0 : scenarioData.ranked) !== false,
+                scenario: (scenarioData === null || scenarioData === void 0 ? void 0 : scenarioData.title) || `Ronda ${data.round}`,
                 response: data.response,
                 evaluation: data.evaluation,
             };
         });
-        const totalScore = roundDetails.reduce((sum, r) => { var _a; return sum + (((_a = r.evaluation) === null || _a === void 0 ? void 0 : _a.finalScore) || 0); }, 0);
-        const avgScore = roundDetails.length > 0 ? Math.round(totalScore / roundDetails.length) : 0;
+        // Only sum ranked round scores for totalScore/averageScore
+        const rankedRounds = roundDetails.filter(r => r.ranked);
+        const totalScore = rankedRounds.reduce((sum, r) => { var _a; return sum + (((_a = r.evaluation) === null || _a === void 0 ? void 0 : _a.finalScore) || 0); }, 0);
+        const avgScore = rankedRounds.length > 0 ? Math.round(totalScore / rankedRounds.length) : 0;
         const allStrengths = [];
         const allImprovements = [];
         const allConcepts = [];
@@ -513,9 +539,11 @@ exports.generateClassReport = functions
         // Group submissions by player and round
         const playerData = {};
         submissionsSnapshot.docs.forEach(doc => {
-            var _a, _b, _c;
+            var _a, _b, _c, _d;
             const data = doc.data();
             const playerId = data.playerId;
+            const scenarioData = (_a = game.scenarios) === null || _a === void 0 ? void 0 : _a[data.round - 1];
+            const isRoundRanked = (scenarioData === null || scenarioData === void 0 ? void 0 : scenarioData.ranked) !== false;
             if (!playerData[playerId]) {
                 playerData[playerId] = {
                     name: data.playerName || 'Anonimo',
@@ -524,32 +552,36 @@ exports.generateClassReport = functions
                     roundDetails: [],
                 };
             }
-            const score = ((_a = data.evaluation) === null || _a === void 0 ? void 0 : _a.finalScore) || 0;
+            const score = ((_b = data.evaluation) === null || _b === void 0 ? void 0 : _b.finalScore) || 0;
             playerData[playerId].roundScores[data.round] = score;
-            playerData[playerId].totalScore += score;
+            // Only sum ranked round scores
+            if (isRoundRanked) {
+                playerData[playerId].totalScore += score;
+            }
             // Collect feedback
             const strengths = [];
             const improvements = [];
-            (_c = (_b = data.evaluation) === null || _b === void 0 ? void 0 : _b.evaluations) === null || _c === void 0 ? void 0 : _c.forEach((e) => {
+            (_d = (_c = data.evaluation) === null || _c === void 0 ? void 0 : _c.evaluations) === null || _d === void 0 ? void 0 : _d.forEach((e) => {
                 strengths.push(...(e.strengths || []));
                 improvements.push(...(e.improvements || []));
             });
             playerData[playerId].roundDetails.push({
                 round: data.round,
                 score,
+                ranked: isRoundRanked,
                 strengths: [...new Set(strengths)],
                 improvements: [...new Set(improvements)],
             });
         });
-        // Calculate class statistics
+        // Calculate class statistics (only ranked rounds for averages)
         const players = Object.entries(playerData).map(([playerId, data]) => {
-            const roundCount = Object.keys(data.roundScores).length;
+            const rankedRoundCount = data.roundDetails.filter(r => r.ranked).length;
             return {
                 playerId,
                 name: data.name,
                 roundScores: data.roundScores,
                 totalScore: data.totalScore,
-                averageScore: roundCount > 0 ? Math.round(data.totalScore / roundCount) : 0,
+                averageScore: rankedRoundCount > 0 ? Math.round(data.totalScore / rankedRoundCount) : 0,
                 roundDetails: data.roundDetails.sort((a, b) => a.round - b.round),
             };
         });
@@ -622,6 +654,142 @@ exports.generateClassReport = functions
     catch (error) {
         console.error('Generate class report error:', error);
         throw new functions.https.HttpsError('internal', 'Failed to generate class report');
+    }
+});
+// =====================================
+// EXPORT SIGNALS SUMMARY (Professor)
+// =====================================
+exports.exportSignalsSummary = functions
+    .region('us-central1')
+    .runWith({ timeoutSeconds: 60, memory: '256MB' })
+    .https.onCall(async (data, context) => {
+    var _a;
+    if (!context.auth) {
+        throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
+    }
+    const { gameCode } = data;
+    if (!gameCode) {
+        throw new functions.https.HttpsError('invalid-argument', 'Missing gameCode');
+    }
+    try {
+        const gameDoc = await db.collection('games').doc(gameCode).get();
+        if (!gameDoc.exists) {
+            throw new functions.https.HttpsError('not-found', 'Game not found');
+        }
+        const game = gameDoc.data();
+        // Verify user is the host
+        if (game.hostId !== context.auth.uid) {
+            throw new functions.https.HttpsError('permission-denied', 'Only the host can export signals');
+        }
+        const submissionsSnapshot = await db.collection('games').doc(gameCode)
+            .collection('submissions')
+            .get();
+        // Build scenario info
+        const scenarioInfo = (game.scenarios || []).map((s, i) => ({
+            round: i + 1,
+            id: s.id,
+            title: s.title,
+            ranked: s.ranked !== false,
+        }));
+        // Group by student
+        const studentData = {};
+        submissionsSnapshot.docs.forEach(doc => {
+            var _a, _b, _c, _d, _e, _f;
+            const sub = doc.data();
+            const playerId = sub.playerId;
+            const roundIdx = sub.round - 1;
+            const scenarioData = (_a = game.scenarios) === null || _a === void 0 ? void 0 : _a[roundIdx];
+            const isRoundRanked = (scenarioData === null || scenarioData === void 0 ? void 0 : scenarioData.ranked) !== false;
+            if (!studentData[playerId]) {
+                studentData[playerId] = {
+                    name: sub.playerName || 'Anonimo',
+                    hardSignals: {},
+                    softSignals: {},
+                };
+            }
+            const roundKey = `round_${sub.round}`;
+            if (isRoundRanked) {
+                // Hard signals: ranked round scores
+                const judgeScores = {};
+                (_c = (_b = sub.evaluation) === null || _b === void 0 ? void 0 : _b.evaluations) === null || _c === void 0 ? void 0 : _c.forEach((e) => {
+                    judgeScores[e.judgeId] = e.score;
+                });
+                studentData[playerId].hardSignals[roundKey] = {
+                    finalScore: ((_d = sub.evaluation) === null || _d === void 0 ? void 0 : _d.finalScore) || 0,
+                    judgeScores,
+                };
+            }
+            else {
+                // Soft signals: merge parsedSignals from evaluations
+                const merged = {};
+                (_f = (_e = sub.evaluation) === null || _e === void 0 ? void 0 : _e.evaluations) === null || _f === void 0 ? void 0 : _f.forEach((e) => {
+                    if (e.parsedSignals) {
+                        Object.assign(merged, e.parsedSignals);
+                    }
+                });
+                studentData[playerId].softSignals[roundKey] = merged;
+            }
+        });
+        // Build per-scenario aggregates
+        const scenarioSummary = {};
+        for (const scenario of scenarioInfo) {
+            if (!scenario.ranked) {
+                const roundKey = `round_${scenario.round}`;
+                const allInterests = [];
+                const roles = {};
+                let n = 0;
+                Object.values(studentData).forEach(student => {
+                    const signals = student.softSignals[roundKey];
+                    if (signals) {
+                        n++;
+                        // Collect interest values
+                        const interest = signals.interestByScenario;
+                        if (interest) {
+                            Object.values(interest).forEach(v => {
+                                if (typeof v === 'number')
+                                    allInterests.push(v);
+                            });
+                        }
+                        // Collect roles
+                        const role = signals.preferredRole;
+                        if (role) {
+                            roles[role] = (roles[role] || 0) + 1;
+                        }
+                    }
+                });
+                scenarioSummary[roundKey] = {
+                    n,
+                    avg_interest: allInterests.length > 0
+                        ? Math.round((allInterests.reduce((a, b) => a + b, 0) / allInterests.length) * 10) / 10
+                        : null,
+                    share_ge4: allInterests.length > 0
+                        ? Math.round((allInterests.filter(v => v >= 4).length / allInterests.length) * 100) / 100
+                        : null,
+                    roles_distribution: roles,
+                };
+            }
+        }
+        const students = Object.entries(studentData).map(([playerId, data]) => ({
+            playerId,
+            name: data.name,
+            hardSignals: data.hardSignals,
+            softSignals: data.softSignals,
+        }));
+        return {
+            success: true,
+            export: {
+                gameCode,
+                sessionTitle: ((_a = game.sessionConfig) === null || _a === void 0 ? void 0 : _a.title) || 'Sesion',
+                exportedAt: admin.firestore.Timestamp.now(),
+                scenarioInfo,
+                scenarioSummary,
+                students,
+            },
+        };
+    }
+    catch (error) {
+        console.error('Export signals error:', error);
+        throw new functions.https.HttpsError('internal', 'Failed to export signals summary');
     }
 });
 // =====================================

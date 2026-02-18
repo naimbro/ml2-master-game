@@ -1,0 +1,126 @@
+[
+  {
+    "id": "s1ip_scenario_1",
+    "order": 1,
+    "title": "De tema a decision",
+    "category": "Estructuracion de Procesos",
+    "difficulty": "medium",
+    "ranked": true,
+    "context": "La Municipalidad de Santiago recibe miles de reclamos ciudadanos al ano relacionados con basura y microbasurales en la via publica. Actualmente, los reclamos llegan por distintos canales (telefono, web, presencial) y se derivan manualmente a la Direccion de Aseo y Ornato. No existe un proceso estandarizado para priorizar ni para medir si la respuesta fue efectiva. El alcalde quiere usar IA para mejorar la gestion, pero antes de cualquier solucion tecnologica, necesitas estructurar el problema.",
+    "question": "Identifica: (1) el proceso concreto que se quiere mejorar, (2) quien es el actor que toma la decision clave (la \"unidad de decision\"), (3) cual es la decision especifica que toma ese actor, y (4) un resultado medible que permita saber si la IA mejoro el proceso. Se preciso y operacional, no generico.",
+    "conceptTags": ["procesos_publicos", "decision_unit"],
+    "idealAnswer": {
+      "keyPoints": [
+        "Proceso: triaje y priorizacion de reclamos de basura/microbasurales para asignar cuadrillas de limpieza",
+        "Unidad de decision: jefe de operaciones de Aseo y Ornato (o coordinador de cuadrillas)",
+        "Decision especifica: a que reclamos asignar cuadrillas primero y con que urgencia",
+        "Resultado medible: tiempo promedio entre recepcion de reclamo y resolucion en terreno, porcentaje de reclamos resueltos en <48h"
+      ],
+      "expectedConcepts": ["proceso_concreto", "unidad_de_decision", "resultado_medible"],
+      "commonMistakes": [
+        "Describir el proceso de forma vaga ('mejorar la gestion de reclamos')",
+        "No identificar un actor humano concreto como unidad de decision",
+        "Proponer resultados no medibles ('mejorar la satisfaccion ciudadana' sin metrica)",
+        "Saltar directo a la solucion de IA sin estructurar el problema"
+      ],
+      "excellentResponseIndicators": [
+        "Distingue entre el proceso de recepcion y el de priorizacion/asignacion",
+        "Menciona que la decision ya existe (se hace manualmente) y la IA la apoyaria",
+        "Propone mas de una metrica complementaria"
+      ]
+    }
+  },
+  {
+    "id": "s1ip_scenario_2",
+    "order": 2,
+    "title": "TRL y riesgo de implementacion",
+    "category": "Evaluacion de Madurez",
+    "difficulty": "hard",
+    "ranked": true,
+    "context": "El Servicio de Salud Metropolitano quiere implementar un sistema de NLP (procesamiento de lenguaje natural) para priorizar automaticamente los reclamos que llegan por OIRS (Oficina de Informaciones, Reclamos y Sugerencias). La idea es que el sistema lea cada reclamo, lo clasifique por urgencia (critico, alto, medio, bajo) y lo derive al departamento correspondiente. Actualmente hay un piloto en Excel con reglas manuales que funciona en un hospital.",
+    "question": "Responde con precision: (1) Estima el TRL (Technology Readiness Level, 1-9) de esta solucion y justifica tu estimacion. (2) Nombra 2 requisitos concretos que deben cumplirse para que el TRL suba a 7 o mas. (3) Identifica 1 riesgo NO tecnico que podria hacer fracasar el proyecto aun si la tecnologia funciona perfectamente.",
+    "conceptTags": ["TRL", "riesgo_implementacion"],
+    "idealAnswer": {
+      "keyPoints": [
+        "TRL estimado: 3-4 (concepto validado con piloto limitado, pero no probado en ambiente operacional real)",
+        "Requisito 1: dataset etiquetado de reclamos reales con consenso de clasificacion entre funcionarios",
+        "Requisito 2: integracion con el sistema de gestion de reclamos existente (OIRS) para prueba en ambiente real",
+        "Riesgo no tecnico: resistencia de funcionarios que actualmente hacen la priorizacion manual y podrian percibir la IA como amenaza a su trabajo"
+      ],
+      "expectedConcepts": ["TRL", "riesgo_no_tecnico", "requisitos_operacionales"],
+      "commonMistakes": [
+        "Asignar TRL alto (7+) solo porque la tecnologia NLP existe",
+        "Confundir madurez de la tecnologia generica (NLP) con madurez de esta solucion especifica",
+        "Nombrar requisitos tecnicos genericos en vez de concretos para este caso",
+        "Dar un riesgo tecnico cuando se pide especificamente uno no tecnico"
+      ],
+      "excellentResponseIndicators": [
+        "Distingue entre TRL de NLP en general vs TRL de esta solucion especifica",
+        "Menciona la necesidad de gold standard para evaluar la clasificacion",
+        "Identifica riesgo organizacional o politico concreto"
+      ]
+    }
+  },
+  {
+    "id": "s1ip_scenario_3",
+    "order": 3,
+    "title": "Preferencias e interes",
+    "category": "Diagnostico",
+    "difficulty": "easy",
+    "ranked": false,
+    "context": "Durante el semestre trabajaras en uno de tres proyectos reales con IA aplicada al sector publico:\n\n**Proyecto A - Chatbot Congreso:** Un chatbot para la Biblioteca del Congreso Nacional que responda preguntas ciudadanas sobre leyes y proyectos de ley. Involucra procesamiento de lenguaje natural, RAG sobre documentos legislativos, y diseno de interaccion.\n\n**Proyecto B - RAG IMFD:** Un sistema de retrieval-augmented generation para el Instituto Milenio Fundamento de los Datos que permita buscar y sintetizar informacion de investigaciones academicas. Involucra embeddings, bases vectoriales, y evaluacion de calidad de respuestas.\n\n**Proyecto C - RAG YouTube:** Un sistema que procese transcripciones de videos de YouTube sobre politica publica chilena, permitiendo busqueda semantica y generacion de resumenes. Involucra procesamiento de audio/texto, chunking, y presentacion de resultados.",
+    "question": "Responde en el siguiente formato EXACTO (respeta los encabezados):\n\n[SENALES]\nPROYECTO A - INTERES (1-5): <numero>\nPROYECTO A - CONOCIMIENTO DEL SECTOR (1-5): <numero>\nPROYECTO A - CONFIANZA TECNICA (1-5): <numero>\nPROYECTO B - INTERES (1-5): <numero>\nPROYECTO B - CONOCIMIENTO DEL SECTOR (1-5): <numero>\nPROYECTO B - CONFIANZA TECNICA (1-5): <numero>\nPROYECTO C - INTERES (1-5): <numero>\nPROYECTO C - CONOCIMIENTO DEL SECTOR (1-5): <numero>\nPROYECTO C - CONFIANZA TECNICA (1-5): <numero>\nROL PREFERIDO (Tecnico/Institucional/Sintesis): <rol>\nPREGUNTA ABIERTA (opcional): <tu pregunta sobre los proyectos>\n[/SENALES]\n\nDonde 1=muy bajo, 5=muy alto. Puedes agregar una breve justificacion despues del bloque si quieres.",
+    "conceptTags": ["preferencias_proyecto", "perfil_estudiante"],
+    "idealAnswer": {
+      "keyPoints": [
+        "Formato [SENALES]...[/SENALES] respetado correctamente",
+        "Valores numericos entre 1-5 para cada campo",
+        "Rol elegido entre las opciones validas",
+        "Respuestas diferenciadas (no todo 3 o todo 5)"
+      ],
+      "expectedConcepts": ["auto_evaluacion", "preferencias"],
+      "commonMistakes": [
+        "No respetar el formato solicitado",
+        "Dar todos los valores iguales sin diferenciacion",
+        "No completar todos los campos"
+      ],
+      "excellentResponseIndicators": [
+        "Valores diferenciados que muestran reflexion genuina",
+        "Pregunta abierta relevante y especifica",
+        "Justificacion breve que muestra comprension de los proyectos"
+      ]
+    }
+  },
+  {
+    "id": "s1ip_scenario_4",
+    "order": 4,
+    "title": "Perfil real vs percibido",
+    "category": "Diagnostico",
+    "difficulty": "medium",
+    "ranked": false,
+    "context": "La Subsecretaria de Prevision Social quiere crear un chatbot interno para que los funcionarios consulten procedimientos administrativos (licencias, tramites, normativa interna). El chatbot debe buscar en 3 fuentes: (1) manual de procedimientos (PDF, 200 paginas), (2) circulares internas (emails, ~500 documentos), y (3) preguntas frecuentes del area de RRHH (planilla Excel, 150 filas).\n\nEste escenario tiene dos partes. La Parte A se evalua normalmente. La Parte B es una auto-evaluacion que NO afecta tu puntaje.",
+    "question": "**PARTE A** (evaluada): Responde con precision:\n1. Para cada una de las 3 fuentes de datos, indica que tipo de procesamiento necesita antes de ser usada por el chatbot (no digas solo \"preprocesamiento\", se especifico).\n2. Dado que las 3 fuentes tienen formatos distintos, que tipo de retrieval usarias: keyword search, semantic search, o hibrido? Justifica.\n3. Nombra 1 metrica de calidad que NO sea \"precision de la respuesta\" para evaluar este chatbot.\n\n**PARTE B** (auto-evaluacion, no afecta puntaje):\n[SENALES]\nCOMODIDAD DISENO DE PROCESOS (1-5): <numero>\nCOMODIDAD CONSTRUCCION DE PIPELINES (1-5): <numero>\n[/SENALES]",
+    "conceptTags": ["perfil_estudiante", "procesos_publicos"],
+    "idealAnswer": {
+      "keyPoints": [
+        "PDF: extraccion de texto (OCR si es escaneado), chunking por secciones/capitulos",
+        "Emails/circulares: parseo de metadata (fecha, asunto, remitente), limpieza de headers/footers, chunking por circular",
+        "Excel FAQ: conversion a pares pregunta-respuesta, posible enriquecimiento con contexto",
+        "Retrieval hibrido: keyword para consultas exactas (numeros de circular, articulos), semantic para preguntas abiertas",
+        "Metrica alternativa: tiempo promedio hasta encontrar respuesta, tasa de escalamiento a humano, satisfaccion del usuario"
+      ],
+      "expectedConcepts": ["procesamiento_datos", "retrieval", "metricas_evaluacion"],
+      "commonMistakes": [
+        "Decir 'preprocesamiento' sin especificar que implica para cada fuente",
+        "Elegir solo keyword o solo semantic sin justificar",
+        "Proponer 'accuracy' como metrica cuando se pidio explicitamente otra",
+        "No considerar las diferencias entre los 3 formatos"
+      ],
+      "excellentResponseIndicators": [
+        "Menciona problemas especificos de cada formato (OCR para PDF, encoding para Excel)",
+        "Justifica retrieval hibrido con ejemplos concretos de cada tipo de consulta",
+        "Propone metrica creativa y relevante (ej: tasa de 'no encontrado', coherencia entre fuentes)"
+      ]
+    }
+  }
+]

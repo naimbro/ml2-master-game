@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Clock, Send, CheckCircle, AlertCircle, StopCircle } from 'lucide-react';
+import { Clock, Send, CheckCircle, AlertCircle, StopCircle, Info } from 'lucide-react';
 import { useGame } from '../../hooks/useGame';
 import { useAuth } from '../../hooks/useAuth';
 import { doc, updateDoc, serverTimestamp } from 'firebase/firestore';
@@ -123,6 +123,7 @@ export default function Round() {
   }
 
   const currentScenario = game.scenarios?.[game.currentRound - 1];
+  const isNonRanked = currentScenario?.ranked === false;
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft % 60;
   const isLowTime = timeLeft <= 60;
@@ -183,6 +184,18 @@ export default function Round() {
           </div>
         )}
       </header>
+
+      {/* Non-ranked banner */}
+      {isNonRanked && (
+        <div className="bg-amber-500/15 border-b border-amber-500/30">
+          <div className="max-w-4xl mx-auto px-4 py-3 flex items-center gap-3">
+            <Info className="w-5 h-5 text-amber-400 shrink-0" />
+            <p className="text-amber-200 text-sm">
+              No afecta ranking. Esto se usa para sugerir equipos y temas. Se honesto/a.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 py-6">
