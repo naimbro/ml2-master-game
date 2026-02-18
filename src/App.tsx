@@ -15,6 +15,7 @@ import ClassReport from './pages/professor/ClassReport';
 
 // Auth context
 import { AuthProvider, useAuth } from './hooks/useAuth';
+import SoundToggle from './components/SoundToggle';
 
 function AppRoutes() {
   const { user, loading } = useAuth();
@@ -81,6 +82,7 @@ function App() {
   return (
     <AuthProvider>
       <AppRoutes />
+      <SoundToggle />
     </AuthProvider>
   );
 }

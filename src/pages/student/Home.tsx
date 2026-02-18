@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { LogIn, LogOut, User, Zap, Brain, Trophy } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
+import { initAudio, playClick } from '../../lib/sounds';
 
 export default function Home() {
   const { user, login, logout } = useAuth();
@@ -10,6 +11,7 @@ export default function Home() {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   const handleLogin = async () => {
+    initAudio(); // Initialize audio on first user interaction
     setIsLoggingIn(true);
     try {
       await login();
@@ -21,6 +23,7 @@ export default function Home() {
   };
 
   const handleJoinGame = () => {
+    playClick();
     navigate('/join');
   };
 

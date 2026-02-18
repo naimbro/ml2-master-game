@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Trophy, Medal, Star, Home, Download, FileText, FileJson } from 'lucide-react';
@@ -9,6 +9,8 @@ import { functions } from '../../lib/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import jsPDF from 'jspdf';
+import { playPodiumFanfare, playLeaderboardTick } from '../../lib/sounds';
+import { confettiPodium, confettiStars } from '../../lib/confetti';
 
 interface PlayerFinalScore {
   playerId: string;
@@ -33,6 +35,7 @@ export default function End() {
   const [loadingRankings, setLoadingRankings] = useState(true);
   const [reportLoading, setReportLoading] = useState(false);
   const [signalsLoading, setSignalsLoading] = useState(false);
+  const celebrationPlayed = useRef(false);
 
   // Calculate final rankings
   useEffect(() => {
@@ -92,6 +95,22 @@ export default function End() {
 
     calculateFinalRankings();
   }, [gameCode, game]);
+
+  // Play podium celebration when rankings appear
+  useEffect(() => {
+    if (finalRankings.length > 0 && !loadingRankings && !celebrationPlayed.current) {
+      celebrationPlayed.current = true;
+      // Podium fanfare with slight delay for the animation to start
+      setTimeout(() => {
+        playPodiumFanfare();
+        confettiPodium();
+      }, 400);
+      // Stars burst for user result reveal
+      setTimeout(() => {
+        confettiStars();
+      }, 1200);
+    }
+  }, [finalRankings, loadingRankings]);
 
   const handleDownloadReport = async () => {
     if (!gameCode || !user || !userRanking) return;
@@ -501,6 +520,7 @@ export default function End() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 1 + index * 0.04 }}
+                onAnimationStart={() => setTimeout(() => playLeaderboardTick(index), (1 + index * 0.04) * 1000)}
                 className={`flex items-center gap-4 p-3 rounded-xl ${
                   player.playerId === user?.uid
                     ? 'bg-kahoot-green/15 border-2 border-kahoot-green/30'

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Clock, Send, AlertCircle, StopCircle, Info, MessageSquare } from 'lucide-react';
@@ -6,6 +6,8 @@ import { useGame } from '../../hooks/useGame';
 import { useAuth } from '../../hooks/useAuth';
 import { doc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
+import { playCountdownTick, playCriticalTick, playSubmitSuccess, playScoreReveal, playGoodScore, playBadScore } from '../../lib/sounds';
+import { confettiBurst, confettiCannons, confettiPop } from '../../lib/confetti';
 
 export default function Round() {
   const { gameCode } = useParams<{ gameCode: string }>();
@@ -40,6 +42,8 @@ export default function Round() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
+  const [screenFlash, setScreenFlash] = useState(false);
+  const prevEvaluated = useRef(false);
 
   // Check if current user has already submitted
   useEffect(() => {
@@ -62,7 +66,7 @@ export default function Round() {
     }
   }, [game?.status, gameCode, navigate]);
 
-  // Timer
+  // Timer + countdown sounds
   useEffect(() => {
     if (!game?.roundEndTime) return;
 
@@ -79,6 +83,35 @@ export default function Round() {
     return () => clearInterval(interval);
   }, [game?.roundEndTime]);
 
+  // Countdown tick sounds (last 10 seconds)
+  useEffect(() => {
+    if (timeLeft > 0 && timeLeft <= 10 && !hasSubmitted) {
+      if (timeLeft <= 3) {
+        playCriticalTick();
+      } else {
+        playCountdownTick(timeLeft);
+      }
+    }
+  }, [timeLeft, hasSubmitted]);
+
+  // Sound + confetti when evaluation arrives
+  useEffect(() => {
+    if (!hasSubmitted) return;
+    const userSub = submissions.find(s => s.playerId === user?.uid);
+    if (userSub?.evaluated && !prevEvaluated.current) {
+      prevEvaluated.current = true;
+      const score = userSub.evaluation?.finalScore || 0;
+      playScoreReveal();
+      if (score >= 90) {
+        setTimeout(() => { playGoodScore(); confettiCannons(); }, 600);
+      } else if (score >= 75) {
+        setTimeout(() => { playGoodScore(); confettiBurst(); }, 600);
+      } else if (score < 50) {
+        setTimeout(() => playBadScore(), 600);
+      }
+    }
+  }, [submissions, hasSubmitted, user?.uid]);
+
   const handleSubmit = useCallback(async () => {
     if (!response.trim() || hasSubmitted || isSubmitting) return;
 
@@ -86,6 +119,11 @@ export default function Round() {
     try {
       await submitAnswer(response.trim());
       setHasSubmitted(true);
+      playSubmitSuccess();
+      confettiPop();
+      // Screen flash
+      setScreenFlash(true);
+      setTimeout(() => setScreenFlash(false), 300);
     } catch (err) {
       console.error('Submit error:', err);
     } finally {
@@ -131,7 +169,16 @@ export default function Round() {
   const timeProgress = ((totalTime - timeLeft) / totalTime) * 100;
 
   return (
-    <div className="min-h-screen bg-gradient-main">
+    <div className="min-h-screen bg-gradient-main relative">
+      {/* Screen flash on submit */}
+      {screenFlash && (
+        <motion.div
+          initial={{ opacity: 0.6 }}
+          animate={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          className="fixed inset-0 bg-kahoot-green/30 z-50 pointer-events-none"
+        />
+      )}
       {/* Header with Timer */}
       <header className="sticky top-0 z-10 bg-[#2D1065]/90 backdrop-blur-sm border-b-2 border-white/10 p-4">
         <div className="max-w-4xl mx-auto">

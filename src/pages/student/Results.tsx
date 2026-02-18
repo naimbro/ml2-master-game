@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Trophy, TrendingUp, ArrowRight, MessageSquare, Info } from 'lucide-react';
@@ -6,6 +6,8 @@ import { useGame } from '../../hooks/useGame';
 import { useAuth } from '../../hooks/useAuth';
 import { httpsCallable } from 'firebase/functions';
 import { functions } from '../../lib/firebase';
+import { playScoreReveal, playGoodScore, playBadScore, playLeaderboardTick } from '../../lib/sounds';
+import { confettiBurst, confettiCannons } from '../../lib/confetti';
 
 interface JudgeEvaluation {
   judgeName: string;
@@ -22,6 +24,7 @@ export default function Results() {
   const { game, loading, error, roundResults, isHost, nextRound, submissions } = useGame(gameCode);
   const [isProcessing, setIsProcessing] = useState(false);
   const [, setEvaluationComplete] = useState(false);
+  const scoreSoundPlayed = useRef(false);
 
   // Navigate based on game status
   useEffect(() => {
@@ -31,6 +34,27 @@ export default function Results() {
       navigate(`/game/${gameCode}/end`);
     }
   }, [game?.status, gameCode, navigate]);
+
+  // Play score reveal sound + confetti when evaluation appears
+  useEffect(() => {
+    if (userSubmission?.evaluation && !scoreSoundPlayed.current && !isProcessing) {
+      scoreSoundPlayed.current = true;
+      playScoreReveal();
+      const score = userSubmission.evaluation.finalScore;
+      // Delay celebration sounds to play after reveal drumroll
+      setTimeout(() => {
+        if (score >= 90) {
+          playGoodScore();
+          confettiCannons();
+        } else if (score >= 80) {
+          playGoodScore();
+          confettiBurst();
+        } else if (score < 50) {
+          playBadScore();
+        }
+      }, 600);
+    }
+  });
 
   // Process round if host and not yet processed
   useEffect(() => {
@@ -277,6 +301,7 @@ export default function Results() {
                     initial={{ opacity: 0, x: -30 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.3 + index * 0.06 }}
+                    onAnimationStart={() => setTimeout(() => playLeaderboardTick(index), (0.3 + index * 0.06) * 1000)}
                     className={`flex items-center gap-4 p-3 rounded-xl ${
                       player.playerId === user?.uid
                         ? 'bg-kahoot-green/15 border-2 border-kahoot-green/30'

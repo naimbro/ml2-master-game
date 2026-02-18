@@ -1,9 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Users, Play, Clock, Zap } from 'lucide-react';
 import { useGame } from '../../hooks/useGame';
 import { useAuth } from '../../hooks/useAuth';
+import { playPlayerJoin, playRoundStart } from '../../lib/sounds';
 
 // Kahoot-inspired player card colors
 const PLAYER_COLORS = [
@@ -23,9 +24,21 @@ export default function Lobby() {
   const { user } = useAuth();
   const { game, loading, error, isHost, startGame } = useGame(gameCode);
 
+  const prevPlayerCount = useRef(0);
+
+  // Play sound when new players join
+  useEffect(() => {
+    const currentCount = Object.keys(game?.players || {}).length;
+    if (currentCount > prevPlayerCount.current && prevPlayerCount.current > 0) {
+      playPlayerJoin();
+    }
+    prevPlayerCount.current = currentCount;
+  }, [game?.players]);
+
   // Navigate when game starts
   useEffect(() => {
     if (game?.status === 'active') {
+      playRoundStart();
       navigate(`/game/${gameCode}/round`);
     }
   }, [game?.status, gameCode, navigate]);
