@@ -126,8 +126,10 @@ export function useGame(gameCode: string | undefined): UseGameReturn {
 
     const gameRef = doc(db, 'games', gameCode);
     const now = Timestamp.now();
+    const firstScenario = game?.scenarios?.[0];
+    const duration = firstScenario?.durationSeconds || game?.roundDurationSeconds || 300;
     const endTime = new Timestamp(
-      now.seconds + (game?.roundDurationSeconds || 300),
+      now.seconds + duration,
       now.nanoseconds
     );
 
@@ -138,7 +140,7 @@ export function useGame(gameCode: string | undefined): UseGameReturn {
       roundEndTime: endTime,
       updatedAt: serverTimestamp(),
     });
-  }, [gameCode, isHost, game?.roundDurationSeconds]);
+  }, [gameCode, isHost, game?.roundDurationSeconds, game?.scenarios]);
 
   const submitAnswer = useCallback(async (response: string) => {
     if (!gameCode || !user || !game) return;
@@ -180,8 +182,10 @@ export function useGame(gameCode: string | undefined): UseGameReturn {
     } else {
       // Start next round
       const now = Timestamp.now();
+      const nextScenario = game.scenarios?.[nextRoundNum - 1];
+      const duration = nextScenario?.durationSeconds || game.roundDurationSeconds || 300;
       const endTime = new Timestamp(
-        now.seconds + (game.roundDurationSeconds || 300),
+        now.seconds + duration,
         now.nanoseconds
       );
 

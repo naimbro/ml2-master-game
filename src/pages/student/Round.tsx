@@ -165,7 +165,7 @@ export default function Round() {
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft % 60;
   const isLowTime = timeLeft <= 60;
-  const totalTime = game.roundDurationSeconds || 300;
+  const totalTime = currentScenario?.durationSeconds || game.roundDurationSeconds || 300;
   const timeProgress = ((totalTime - timeLeft) / totalTime) * 100;
 
   return (

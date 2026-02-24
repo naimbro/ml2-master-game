@@ -154,6 +154,7 @@ export interface Scenario {
   category?: string;
   difficulty?: 'easy' | 'medium' | 'hard';
   ranked?: boolean;
+  durationSeconds?: number;
   context: string;
   question: string;
   conceptTags: string[];

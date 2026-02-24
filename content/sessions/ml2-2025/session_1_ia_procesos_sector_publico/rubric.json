@@ -1,6 +1,6 @@
 {
   "sessionId": "session_1_ia_procesos_sector_publico",
-  "globalInstructions": "Evalua las respuestas considerando que esta es la primera clase del curso. Los estudiantes son profesionales del sector publico chileno que pueden no tener formacion tecnica profunda. Valora especialmente la capacidad de estructurar problemas, identificar actores y decisiones concretas, y pensar en riesgos no tecnicos. Para rondas no-ranked (ranked=false), evalua normalmente pero ademas extrae las senales estructuradas del bloque [SENALES].",
+  "globalInstructions": "Evalua las respuestas considerando que esta es la primera clase del curso. Los estudiantes son profesionales del sector publico chileno que pueden no tener formacion tecnica profunda. Valora especialmente la capacidad de estructurar problemas, identificar actores y decisiones concretas, pensar en riesgos no tecnicos, y definir limites de sistemas de IA. Para rondas no-ranked (ranked=false), evalua normalmente pero ademas extrae las senales estructuradas segun las instrucciones de cada ronda.",
   "dimensions": [
     {
       "id": "process_structuring",
@@ -63,7 +63,7 @@
       "id": "institutional_realism",
       "name": "Realismo Institucional",
       "weight": 0.35,
-      "description": "Comprension del contexto institucional, riesgos no tecnicos, y madurez tecnologica (TRL)",
+      "description": "Comprension del contexto institucional, riesgos no tecnicos, madurez tecnologica (TRL), y limites de sistemas de IA",
       "levels": [
         {
           "score": 100,
@@ -72,7 +72,8 @@
             "Demuestra comprension del funcionamiento real de instituciones publicas",
             "Identifica riesgos no tecnicos especificos y plausibles",
             "Usa TRL correctamente distinguiendo tecnologia generica de solucion especifica",
-            "Considera resistencia organizacional, presupuesto, y capacidades reales"
+            "Considera resistencia organizacional, presupuesto, y capacidades reales",
+            "Define limites de sistema concretos y mecanismos de prevencion factibles"
           ]
         },
         {
@@ -82,7 +83,8 @@
             "Buena comprension institucional",
             "Riesgos no tecnicos identificados aunque genericos",
             "TRL aplicado razonablemente",
-            "Considera restricciones principales"
+            "Considera restricciones principales",
+            "Limites de sistema identificados con alguna especificidad"
           ]
         },
         {
@@ -92,7 +94,8 @@
             "Comprension institucional basica",
             "Riesgos mencionados pero poco especificos",
             "TRL asignado sin justificacion clara",
-            "Algunas restricciones consideradas"
+            "Algunas restricciones consideradas",
+            "Limites genericos sin mecanismo de prevencion"
           ]
         },
         {
@@ -102,7 +105,8 @@
             "Ignora contexto institucional",
             "No identifica riesgos no tecnicos",
             "TRL incorrecto o sin justificacion",
-            "No considera restricciones reales"
+            "No considera restricciones reales",
+            "No menciona limites del sistema"
           ]
         },
         {
@@ -111,7 +115,7 @@
           "indicators": [
             "Respuesta desconectada del contexto institucional",
             "Asume que la tecnologia resuelve todo",
-            "No aborda riesgos de ningún tipo"
+            "No aborda riesgos ni limites de ningún tipo"
           ]
         }
       ]
@@ -177,13 +181,18 @@
     "Menciona que la decision ya existe y la IA la apoyaria, no la reemplazaria",
     "Distingue TRL de la tecnologia generica vs TRL de la solucion especifica",
     "Identifica riesgo organizacional o politico concreto y plausible",
-    "Propone metricas complementarias o creativas"
+    "Propone metricas complementarias o creativas",
+    "Define limites que reflejan comprension del dominio especifico de la familia elegida",
+    "Mecanismo de prevencion que combina componente tecnico y organizacional",
+    "Menciona consecuencia institucional vinculada a marco legal o normativo chileno"
   ],
   "penaltyIndicators": [
     "Salta directo a solucion de IA sin estructurar el problema primero",
     "Confunde TRL de NLP en general con TRL de la solucion especifica",
     "Da respuestas genericas que podrian aplicar a cualquier problema",
     "No identifica actores humanos concretos",
-    "Propone metricas no medibles"
+    "Propone metricas no medibles",
+    "Limites genericos que aplican a cualquier sistema ('no debe fallar', 'no debe ser sesgado')",
+    "Mecanismo de prevencion generico ('hacer auditorias') sin especificar que se audita"
   ]
 }

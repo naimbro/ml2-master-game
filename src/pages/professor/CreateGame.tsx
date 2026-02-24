@@ -25,8 +25,8 @@ const availableSessions: SessionOption[] = [
   {
     id: 'session_1_ia_procesos_sector_publico',
     title: 'Sesion 1: IA, Procesos y Sector Publico',
-    description: 'Marco del curso, procesos de decision, TRL, preferencias de proyecto y perfil estudiantil',
-    rounds: 4,
+    description: '6 rondas: estructuracion de procesos, TRL, limites de IA, feria de familias, preferencias y estilo de trabajo',
+    rounds: 6,
     duration: 5,
     config: session1Config,
     scenarios: session1Scenarios as typeof session1Scenarios,

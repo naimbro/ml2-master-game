@@ -91,32 +91,75 @@ Los proyectos de IA en sector publico fracasan mas frecuentemente por razones no
 
 ---
 
-## 4. Los Tres Proyectos del Semestre
+## 4. Limites de Sistemas de IA en el Sector Publico
 
-### Proyecto A: Chatbot Congreso
-**Institucion:** Biblioteca del Congreso Nacional
-**Problema:** Los ciudadanos quieren entender proyectos de ley pero el lenguaje legislativo es complejo.
-**Solucion propuesta:** Chatbot que responde preguntas ciudadanas sobre leyes usando RAG sobre documentos legislativos.
-**Desafios tecnicos:** Procesamiento de lenguaje legal, RAG sobre documentos extensos, evaluacion de fidelidad.
-**Desafios institucionales:** Precision legal es critica, no puede "inventar" interpretaciones de leyes.
+### Por que definir limites es parte del diseno
+Un sistema de IA bien disenado no solo define que HACE, sino que explicitamente define que NO debe hacer. En el sector publico esto es critico porque:
+- Las decisiones afectan derechos ciudadanos
+- Hay responsabilidad legal institucional
+- La confianza publica es un activo fragil
+- Los errores pueden tener consecuencias desproporcionadas
 
-### Proyecto B: RAG IMFD
-**Institucion:** Instituto Milenio Fundamento de los Datos
-**Problema:** Investigadores necesitan sintetizar informacion de multiples publicaciones academicas.
-**Solucion propuesta:** Sistema RAG que permite busqueda semantica y sintesis de papers academicos.
-**Desafios tecnicos:** Embeddings para lenguaje academico, evaluacion de calidad de sintesis, manejo de citas.
-**Desafios institucionales:** Precision academica, respeto por autoria, actualizacion continua del corpus.
+### Tipos de limites
+- **Limites duros**: cosas que el sistema NUNCA debe hacer (ej: tomar decisiones legales vinculantes sin revision humana)
+- **Limites blandos**: cosas que el sistema debe escalar a un humano (ej: casos ambiguos, outliers)
+- **Limites de alcance**: dominios o preguntas fuera del ambito del sistema
 
-### Proyecto C: RAG YouTube
-**Institucion:** Aplicacion abierta
-**Problema:** Hay mucho contenido en video sobre politica publica chilena pero no es buscable.
-**Solucion propuesta:** Sistema que procesa transcripciones de YouTube y permite busqueda semantica y resumen.
-**Desafios tecnicos:** Transcripcion automatica (ASR), chunking de transcripciones, presentacion de resultados con timestamps.
-**Desafios institucionales:** Calidad variable de transcripciones, derechos de autor, verificacion de informacion.
+### Mecanismos de prevencion
+- Human-in-the-loop para decisiones criticas
+- Filtros de salida que bloquean respuestas fuera de rango
+- Auditorias periodicas de decisiones automatizadas
+- Botones de panico / kill switch
+- Logging obligatorio de todas las decisiones para trazabilidad
 
 ---
 
-## 5. Procesamiento de Fuentes de Datos
+## 5. Las Seis Familias de Problemas del Semestre
+
+### Familia 1: Monitoreo de entorno publico
+**Que hace:** Vigilancia automatizada de fuentes legislativas, medios de comunicacion y redes sociales para detectar temas relevantes para una institucion.
+**Ejemplo:** Sistema que alerta a un ministerio cuando un proyecto de ley relevante avanza en el Congreso, o cuando un tema institucional se vuelve trending en redes.
+**Desafios clave:** Volumen de datos, filtrado de ruido, definicion de "relevante", actualizacion en tiempo real.
+**Tecnologias involucradas:** Web scraping, NLP para clasificacion y resumen, alertas automatizadas.
+
+### Familia 2: Voz ciudadana & OIRS
+**Que hace:** Procesamiento masivo de reclamos, consultas y sugerencias ciudadanas para generar sintesis accionables.
+**Ejemplo:** Sistema que lee miles de reclamos OIRS, los agrupa por tema, detecta tendencias y genera un reporte semanal para el director del servicio.
+**Desafios clave:** Lenguaje coloquial, multiples canales, categorizacion consistente, privacidad.
+**Tecnologias involucradas:** NLP para clasificacion, clustering, generacion de resumenes.
+
+### Familia 3: Atencion al ciudadano (chat/RAG)
+**Que hace:** Chatbots que responden preguntas ciudadanas sobre tramites, leyes o servicios publicos usando documentos oficiales como fuente.
+**Ejemplo:** Chatbot para la Biblioteca del Congreso Nacional que responde preguntas sobre proyectos de ley en lenguaje ciudadano.
+**Desafios clave:** Precision legal es critica (no puede inventar), lenguaje accesible, cobertura de preguntas, escalamiento a humano.
+**Tecnologias involucradas:** RAG, embeddings, diseno conversacional, evaluacion de fidelidad.
+
+### Familia 4: Gestion de conocimiento institucional
+**Que hace:** Sistemas RAG internos para buscar y sintetizar documentos institucionales (informes, normativa, investigaciones).
+**Ejemplo:** Sistema para un instituto de investigacion que permite buscar y sintetizar hallazgos de multiples papers y reportes internos.
+**Desafios clave:** Heterogeneidad de formatos, precision academica/tecnica, actualizacion del corpus, respeto por autoria.
+**Tecnologias involucradas:** RAG, embeddings, procesamiento de PDFs, evaluacion de calidad de sintesis.
+
+### Familia 5: Compliance & procesos internos
+**Que hace:** Automatizacion de revision de compras publicas, transparencia, contratos o procesos juridicos internos.
+**Ejemplo:** Sistema que revisa automaticamente ordenes de compra para detectar irregularidades o incumplimientos de normativa.
+**Desafios clave:** Precision legal, auditabilidad, integracion con sistemas existentes (ChileCompra, etc.), false positives.
+**Tecnologias involucradas:** NLP para documentos legales, clasificacion, deteccion de anomalias.
+
+### Familia 6: Priorizacion / triage de casos
+**Que hace:** Sistemas que ayudan a priorizar fiscalizaciones, inspecciones o asignacion de recursos segun riesgo.
+**Ejemplo:** Sistema para una superintendencia que prioriza que empresas fiscalizar primero basandose en indicadores de riesgo.
+**Desafios clave:** Sesgo en datos historicos, explicabilidad de priorizacion, consecuencias de falsos negativos, equidad.
+**Tecnologias involucradas:** ML para scoring de riesgo, feature engineering, dashboards de decision.
+
+### Mapeo de proyectos anteriores
+- **Chatbot Congreso** → Familia 3 (Atencion al ciudadano)
+- **RAG IMFD** → Familia 4 (Gestion de conocimiento institucional)
+- **RAG YouTube** → Componentes absorbidos en Familias 1 y 2 (monitoreo + voz ciudadana)
+
+---
+
+## 6. Procesamiento de Fuentes de Datos
 
 ### Tipos de fuentes comunes en sector publico
 - **PDFs:** Requieren extraccion de texto (PyPDF, pdfplumber), posiblemente OCR si son escaneados. Chunking por secciones o capitulos.
@@ -145,9 +188,10 @@ Esta es la primera clase. Se espera:
 - Identificacion de actores y decisiones concretas
 - Comprension basica de TRL y su aplicacion
 - Pensamiento sobre riesgos no tecnicos
+- Capacidad de definir limites de un sistema de IA
 - Honestidad en la auto-evaluacion de preferencias y capacidades
 
 No se espera aun:
 - Conocimiento tecnico profundo de ML/NLP
 - Experiencia con herramientas especificas
-- Dominio de todos los proyectos (por eso se pregunta preferencia)
+- Dominio de todas las familias (por eso se preguntan preferencias)

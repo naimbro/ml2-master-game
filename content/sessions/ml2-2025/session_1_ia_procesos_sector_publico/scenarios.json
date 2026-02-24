@@ -6,6 +6,7 @@
     "category": "Estructuracion de Procesos",
     "difficulty": "medium",
     "ranked": true,
+    "durationSeconds": 300,
     "context": "La Municipalidad de Santiago recibe miles de reclamos ciudadanos al ano relacionados con basura y microbasurales en la via publica. Actualmente, los reclamos llegan por distintos canales (telefono, web, presencial) y se derivan manualmente a la Direccion de Aseo y Ornato. No existe un proceso estandarizado para priorizar ni para medir si la respuesta fue efectiva. El alcalde quiere usar IA para mejorar la gestion, pero antes de cualquier solucion tecnologica, necesitas estructurar el problema.",
     "question": "Identifica: (1) el proceso concreto que se quiere mejorar, (2) quien es el actor que toma la decision clave (la \"unidad de decision\"), (3) cual es la decision especifica que toma ese actor, y (4) un resultado medible que permita saber si la IA mejoro el proceso. Se preciso y operacional, no generico.",
     "conceptTags": ["procesos_publicos", "decision_unit"],
@@ -37,6 +38,7 @@
     "category": "Evaluacion de Madurez",
     "difficulty": "hard",
     "ranked": true,
+    "durationSeconds": 300,
     "context": "El Servicio de Salud Metropolitano quiere implementar un sistema de NLP (procesamiento de lenguaje natural) para priorizar automaticamente los reclamos que llegan por OIRS (Oficina de Informaciones, Reclamos y Sugerencias). La idea es que el sistema lea cada reclamo, lo clasifique por urgencia (critico, alto, medio, bajo) y lo derive al departamento correspondiente. Actualmente hay un piloto en Excel con reglas manuales que funciona en un hospital.",
     "question": "Responde con precision: (1) Estima el TRL (Technology Readiness Level, 1-9) de esta solucion y justifica tu estimacion. (2) Nombra 2 requisitos concretos que deben cumplirse para que el TRL suba a 7 o mas. (3) Identifica 1 riesgo NO tecnico que podria hacer fracasar el proyecto aun si la tecnologia funciona perfectamente.",
     "conceptTags": ["TRL", "riesgo_implementacion"],
@@ -64,62 +66,127 @@
   {
     "id": "s1ip_scenario_3",
     "order": 3,
-    "title": "Preferencias e interes",
+    "title": "Limites y Responsabilidad",
+    "category": "Diseno Responsable",
+    "difficulty": "hard",
+    "ranked": true,
+    "durationSeconds": 240,
+    "context": "Durante el semestre trabajaras con una de las seis familias de problemas de IA en el sector publico:\n\n1. **Monitoreo de entorno publico** - Vigilancia legislativa, medios y redes sociales para detectar temas relevantes para una institucion.\n2. **Voz ciudadana & OIRS** - Procesamiento masivo de reclamos, consultas y sugerencias ciudadanas para generar sintesis accionables.\n3. **Atencion al ciudadano (chat/RAG)** - Chatbots que responden preguntas ciudadanas sobre tramites, leyes o servicios usando documentos oficiales.\n4. **Gestion de conocimiento institucional** - Sistemas RAG internos para buscar y sintetizar documentos institucionales (informes, normativa, investigaciones).\n5. **Compliance & procesos internos** - Automatizacion de revision de compras publicas, transparencia, contratos o procesos juridicos.\n6. **Priorizacion / triage de casos** - Sistemas que ayudan a priorizar fiscalizaciones, inspecciones o asignacion de recursos segun riesgo.\n\nCualquier sistema de IA en el sector publico tiene limites criticos. Disenar un buen sistema incluye definir explicitamente que NO debe hacer.",
+    "question": "Elige UNA de las 6 familias. Para esa familia: (1) Nombra 2 cosas concretas que un sistema de IA en esa familia NO debe hacer nunca (limites duros). (2) Explica la consecuencia institucional si el sistema viola uno de esos limites. (3) Propone 1 mecanismo concreto de prevencion (tecnico u organizacional) para evitar que se viole ese limite. Se especifico, no generico.",
+    "conceptTags": ["limites_sistema", "riesgo_implementacion"],
+    "idealAnswer": {
+      "keyPoints": [
+        "Familia elegida claramente identificada",
+        "2 limites duros concretos y especificos para esa familia (no genericos como 'no violar privacidad')",
+        "Consecuencia institucional concreta (ej: responsabilidad legal, perdida de confianza publica, dano a ciudadanos)",
+        "Mecanismo de prevencion especifico y factible (ej: human-in-the-loop para decisiones criticas, filtro de salida, auditoria periodica)"
+      ],
+      "expectedConcepts": ["limites_sistema", "consecuencia_institucional", "prevencion"],
+      "commonMistakes": [
+        "Limites genericos que aplican a cualquier sistema ('no debe fallar', 'no debe ser sesgado')",
+        "No elegir una familia concreta o mezclar varias",
+        "Consecuencia vaga ('seria malo') en vez de institucional concreta",
+        "Mecanismo de prevencion generico ('hacer auditorias') sin especificar que se audita"
+      ],
+      "excellentResponseIndicators": [
+        "Limites que reflejan comprension del dominio especifico de la familia elegida",
+        "Consecuencia que menciona marco legal o normativo chileno",
+        "Mecanismo que combina componente tecnico y organizacional",
+        "Muestra comprension de que los limites definen el alcance, no solo las fallas"
+      ]
+    }
+  },
+  {
+    "id": "s1ip_scenario_4_feria",
+    "order": 4,
+    "title": "Feria Comprimida",
     "category": "Diagnostico",
     "difficulty": "easy",
     "ranked": false,
-    "context": "Durante el semestre trabajaras en uno de tres proyectos reales con IA aplicada al sector publico:\n\n**Proyecto A - Chatbot Congreso:** Un chatbot para la Biblioteca del Congreso Nacional que responda preguntas ciudadanas sobre leyes y proyectos de ley. Involucra procesamiento de lenguaje natural, RAG sobre documentos legislativos, y diseno de interaccion.\n\n**Proyecto B - RAG IMFD:** Un sistema de retrieval-augmented generation para el Instituto Milenio Fundamento de los Datos que permita buscar y sintetizar informacion de investigaciones academicas. Involucra embeddings, bases vectoriales, y evaluacion de calidad de respuestas.\n\n**Proyecto C - RAG YouTube:** Un sistema que procese transcripciones de videos de YouTube sobre politica publica chilena, permitiendo busqueda semantica y generacion de resumenes. Involucra procesamiento de audio/texto, chunking, y presentacion de resultados.",
-    "question": "Responde en el siguiente formato EXACTO (respeta los encabezados):\n\n[SENALES]\nPROYECTO A - INTERES (1-5): <numero>\nPROYECTO A - CONOCIMIENTO DEL SECTOR (1-5): <numero>\nPROYECTO A - CONFIANZA TECNICA (1-5): <numero>\nPROYECTO B - INTERES (1-5): <numero>\nPROYECTO B - CONOCIMIENTO DEL SECTOR (1-5): <numero>\nPROYECTO B - CONFIANZA TECNICA (1-5): <numero>\nPROYECTO C - INTERES (1-5): <numero>\nPROYECTO C - CONOCIMIENTO DEL SECTOR (1-5): <numero>\nPROYECTO C - CONFIANZA TECNICA (1-5): <numero>\nROL PREFERIDO (Tecnico/Institucional/Sintesis): <rol>\nPREGUNTA ABIERTA (opcional): <tu pregunta sobre los proyectos>\n[/SENALES]\n\nDonde 1=muy bajo, 5=muy alto. Puedes agregar una breve justificacion despues del bloque si quieres.",
+    "durationSeconds": 180,
+    "context": "Imagina que estas en una feria de proyectos. Cada stand representa una de las 6 familias de problemas del semestre:\n\n1. **Monitoreo de entorno publico** - Vigilancia legislativa + medios + redes.\n2. **Voz ciudadana & OIRS** - Reclamos masivos → sintesis accionable.\n3. **Atencion al ciudadano (chat/RAG)** - Chatbot sobre tramites/leyes/servicios.\n4. **Gestion de conocimiento institucional** - RAG interno sobre documentos institucionales.\n5. **Compliance & procesos internos** - Revision automatizada de compras/transparencia/juridico.\n6. **Priorizacion / triage de casos** - Priorizar fiscalizaciones/inspecciones por riesgo.\n\nTienes 3 minutos para visitar UN stand y dejar tu tarjeta.",
+    "question": "Elige UNA familia (indica el numero) y responde en texto libre:\n(a) Una decision concreta que ese sistema ayudaria a tomar.\n(b) Una cosa que ese sistema NO debe hacer.\n(c) Una metrica para saber si el sistema funciona.\n\nNo hay formato obligatorio. Escribe naturalmente.",
+    "conceptTags": ["feria_proyectos", "decision_unit", "limites_sistema"],
+    "idealAnswer": {
+      "keyPoints": [
+        "Familia claramente elegida con numero",
+        "Decision concreta y operacional, no generica",
+        "Limite relevante para la familia elegida",
+        "Metrica medible y especifica"
+      ],
+      "expectedConcepts": ["decision_concreta", "limite_sistema", "metrica"],
+      "commonMistakes": [
+        "No elegir familia o elegir varias",
+        "Decision generica ('mejorar la gestion')",
+        "Limite generico ('no fallar')",
+        "Metrica no medible ('que funcione bien')"
+      ],
+      "excellentResponseIndicators": [
+        "Coherencia entre familia, decision, limite y metrica",
+        "Especificidad que demuestra comprension del dominio",
+        "Brevedad y precision"
+      ]
+    }
+  },
+  {
+    "id": "s1ip_scenario_5",
+    "order": 5,
+    "title": "Preferencias de Proyecto",
+    "category": "Diagnostico",
+    "difficulty": "easy",
+    "ranked": false,
+    "durationSeconds": 180,
+    "context": "Para formar equipos de proyecto, necesitamos conocer tus preferencias y habilidades. Las 6 familias de problemas del semestre son:\n\n1. Monitoreo de entorno publico\n2. Voz ciudadana & OIRS\n3. Atencion al ciudadano (chat/RAG)\n4. Gestion de conocimiento institucional\n5. Compliance & procesos internos\n6. Priorizacion / triage de casos\n\nY los perfiles de habilidad que buscamos en cada equipo son:\n- **Tecnico**: comodidad con codigo, APIs, pipelines de datos\n- **Institucional**: conocimiento del sector publico, normativa, stakeholders\n- **Comunicacion**: capacidad de explicar, documentar, presentar\n- **Project Management**: organizacion, plazos, coordinacion de equipo",
+    "question": "Responde en el siguiente formato EXACTO (respeta los encabezados):\n\n[SENALES]\npref_1: <numero de tu familia favorita, 1-6>\npref_2: <numero de tu segunda opcion, 1-6>\npref_3: <numero de tu tercera opcion, 1-6>\nskill_tech: <1-5, tu nivel tecnico>\nskill_inst: <1-5, tu nivel institucional>\nskill_comm: <1-5, tu nivel de comunicacion>\nskill_pm: <1-5, tu nivel de project management>\nrole_lead: <1-5, interes en liderar>\nrole_build: <1-5, interes en construir/implementar>\nrole_analyze: <1-5, interes en analizar/investigar>\nrole_present: <1-5, interes en presentar/comunicar>\n[/SENALES]\n\nDonde 1=muy bajo, 5=muy alto. Puedes agregar una breve justificacion despues del bloque si quieres.",
     "conceptTags": ["preferencias_proyecto", "perfil_estudiante"],
     "idealAnswer": {
       "keyPoints": [
         "Formato [SENALES]...[/SENALES] respetado correctamente",
         "Valores numericos entre 1-5 para cada campo",
-        "Rol elegido entre las opciones validas",
+        "pref_1/2/3 son numeros distintos entre 1-6",
         "Respuestas diferenciadas (no todo 3 o todo 5)"
       ],
       "expectedConcepts": ["auto_evaluacion", "preferencias"],
       "commonMistakes": [
         "No respetar el formato solicitado",
         "Dar todos los valores iguales sin diferenciacion",
-        "No completar todos los campos"
+        "No completar todos los campos",
+        "Repetir el mismo numero en pref_1/2/3"
       ],
       "excellentResponseIndicators": [
         "Valores diferenciados que muestran reflexion genuina",
-        "Pregunta abierta relevante y especifica",
-        "Justificacion breve que muestra comprension de los proyectos"
+        "Justificacion breve que muestra comprension de las familias",
+        "Coherencia entre skills reportados y preferencias de rol"
       ]
     }
   },
   {
-    "id": "s1ip_scenario_4",
-    "order": 4,
-    "title": "Perfil real vs percibido",
+    "id": "s1ip_scenario_6",
+    "order": 6,
+    "title": "Estilo de Trabajo",
     "category": "Diagnostico",
-    "difficulty": "medium",
+    "difficulty": "easy",
     "ranked": false,
-    "context": "La Subsecretaria de Prevision Social quiere crear un chatbot interno para que los funcionarios consulten procedimientos administrativos (licencias, tramites, normativa interna). El chatbot debe buscar en 3 fuentes: (1) manual de procedimientos (PDF, 200 paginas), (2) circulares internas (emails, ~500 documentos), y (3) preguntas frecuentes del area de RRHH (planilla Excel, 150 filas).\n\nEste escenario tiene dos partes. La Parte A se evalua normalmente. La Parte B es una auto-evaluacion que NO afecta tu puntaje.",
-    "question": "**PARTE A** (evaluada): Responde con precision:\n1. Para cada una de las 3 fuentes de datos, indica que tipo de procesamiento necesita antes de ser usada por el chatbot (no digas solo \"preprocesamiento\", se especifico).\n2. Dado que las 3 fuentes tienen formatos distintos, que tipo de retrieval usarias: keyword search, semantic search, o hibrido? Justifica.\n3. Nombra 1 metrica de calidad que NO sea \"precision de la respuesta\" para evaluar este chatbot.\n\n**PARTE B** (auto-evaluacion, no afecta puntaje):\n[SENALES]\nCOMODIDAD DISENO DE PROCESOS (1-5): <numero>\nCOMODIDAD CONSTRUCCION DE PIPELINES (1-5): <numero>\n[/SENALES]",
-    "conceptTags": ["perfil_estudiante", "procesos_publicos"],
+    "durationSeconds": 180,
+    "context": "Ultimo paso antes de formar equipos. Necesitamos entender tu estilo de trabajo y que esperas aprender este semestre. No hay respuestas correctas ni incorrectas — esto es puramente diagnostico para armar los mejores equipos posibles.",
+    "question": "Responde en texto libre (3 minutos, se breve):\n\n1. **Tu fortaleza principal**: Que aportas a un equipo? (una oracion)\n2. **Estilo de trabajo**: Prefieres trabajar de forma autonoma o colaborativa? Como manejas los plazos?\n3. **Que quieres aprender**: Nombra 1 cosa concreta que esperas saber hacer al final del semestre que hoy no sabes.\n\nEscribe naturalmente, sin formato especial.",
+    "conceptTags": ["perfil_estudiante", "senales_estudiante"],
     "idealAnswer": {
       "keyPoints": [
-        "PDF: extraccion de texto (OCR si es escaneado), chunking por secciones/capitulos",
-        "Emails/circulares: parseo de metadata (fecha, asunto, remitente), limpieza de headers/footers, chunking por circular",
-        "Excel FAQ: conversion a pares pregunta-respuesta, posible enriquecimiento con contexto",
-        "Retrieval hibrido: keyword para consultas exactas (numeros de circular, articulos), semantic para preguntas abiertas",
-        "Metrica alternativa: tiempo promedio hasta encontrar respuesta, tasa de escalamiento a humano, satisfaccion del usuario"
+        "Fortaleza concreta y especifica (no 'soy responsable')",
+        "Estilo de trabajo honesto con matices",
+        "Objetivo de aprendizaje concreto y verificable"
       ],
-      "expectedConcepts": ["procesamiento_datos", "retrieval", "metricas_evaluacion"],
+      "expectedConcepts": ["autoconocimiento", "expectativas"],
       "commonMistakes": [
-        "Decir 'preprocesamiento' sin especificar que implica para cada fuente",
-        "Elegir solo keyword o solo semantic sin justificar",
-        "Proponer 'accuracy' como metrica cuando se pidio explicitamente otra",
-        "No considerar las diferencias entre los 3 formatos"
+        "Respuestas genericas sin contenido personal",
+        "Fortaleza que es un cliche ('trabajo en equipo')",
+        "Objetivo de aprendizaje vago ('aprender IA')"
       ],
       "excellentResponseIndicators": [
-        "Menciona problemas especificos de cada formato (OCR para PDF, encoding para Excel)",
-        "Justifica retrieval hibrido con ejemplos concretos de cada tipo de consulta",
-        "Propone metrica creativa y relevante (ej: tasa de 'no encontrado', coherencia entre fuentes)"
+        "Fortaleza que conecta con su experiencia profesional real",
+        "Estilo de trabajo con ejemplo concreto",
+        "Objetivo de aprendizaje que menciona una habilidad especifica (ej: 'construir un pipeline RAG')"
       ]
     }
   }
