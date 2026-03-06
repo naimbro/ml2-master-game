@@ -2,7 +2,7 @@
   "sessionId": "session_1_ia_procesos_sector_publico",
   "globalInstructions": "Evalua SOLO lo que esta escrito. No asumas informacion faltante. Premia estructura y especificidad. Penaliza vaguedad. Si el estudiante describe modelos en vez de decision/proceso, baja 'Estructuracion' y 'Realismo'. Los estudiantes son profesionales del sector publico chileno en su primera clase. Para rondas no-ranked (ranked=false), evalua normalmente pero ademas extrae senales segun las instrucciones de cada ronda.",
   "scoring": {
-    "scaleLevels": [100, 80, 60, 40, 20],
+    "scaleLevels": [100, 80, 60, 40, 20, 0],
     "instructions": "Evalua SOLO lo que esta escrito. No asumas informacion faltante. Premia estructura y especificidad. Penaliza vaguedad. Si el estudiante describe modelos en vez de decision/proceso, baja 'Estructuracion' y 'Realismo'. Usa el campo 'judgeFocus' del escenario como ancla principal para esta ronda."
   },
   "dimensions": [
@@ -15,7 +15,8 @@
       "level_80": "Casi todo esta, pero 1 elemento es parcialmente vago (ej: KPI no totalmente medible o decision algo amplia).",
       "level_60": "Hay intencion de estructurar, pero faltan 2+ elementos clave o estan formulados de forma generica (ej: 'mejorar eficiencia').",
       "level_40": "Habla del tema, pero no aterriza en unidad de decision ni medicion. Menciona acciones sueltas.",
-      "level_20": "Respuesta mayoritariamente general, tecnologica o retorica. No hay proceso/decision/KPI."
+      "level_20": "Respuesta mayoritariamente general, tecnologica o retorica. No hay proceso/decision/KPI.",
+      "level_0": "No responde, dice 'no se', o escribe texto completamente irrelevante."
     },
     {
       "id": "institutional_realism",
@@ -26,7 +27,8 @@
       "level_80": "Menciona restricciones/riesgos plausibles pero con mitigacion algo generica.",
       "level_60": "Riesgos mencionados pero vagos o demasiado generales; mitigacion debil.",
       "level_40": "Casi no considera institucion. Supone implementacion trivial.",
-      "level_20": "Ignora contexto institucional o propone algo inviable sin reconocerlo."
+      "level_20": "Ignora contexto institucional o propone algo inviable sin reconocerlo.",
+      "level_0": "No responde, dice 'no se', o escribe texto completamente irrelevante."
     },
     {
       "id": "precision_clarity",
@@ -37,7 +39,8 @@
       "level_80": "Mayormente claro; 1-2 frases vagas o redundantes.",
       "level_60": "Mezcla partes claras con vaguedad; cuesta evaluar.",
       "level_40": "Prosa amplia, repetitiva o confusa; poca informacion accionable.",
-      "level_20": "Dificil de entender o puro humo."
+      "level_20": "Dificil de entender o puro humo.",
+      "level_0": "No responde, dice 'no se', o escribe texto completamente irrelevante."
     }
   ],
   "globalPenalties": [

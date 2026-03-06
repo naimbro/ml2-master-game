@@ -131,8 +131,8 @@ Manten tu respuesta concisa (max 120 palabras de feedback + bloque de senales).`
         { role: 'system', content: prompt },
         { role: 'user', content: 'Evalua la respuesta del estudiante y responde SOLO con JSON valido.' }
       ],
-      temperature: 0.3,
-      max_tokens: isRanked ? 1000 : 1500,
+      temperature: 0.5,
+      max_tokens: isRanked ? 1200 : 1500,
       response_format: { type: 'json_object' },
     });
 
@@ -988,10 +988,11 @@ COMO USAR LA RUBRICA:
 1. Lee el campo "judgeFocus" del escenario — es tu PRIORIDAD para esta ronda.
 2. Evalua la respuesta en CADA dimension de la rubrica (ver "dimensions" abajo).
 3. Para cada dimension, identifica en que nivel cae (100/80/60/40/20) usando los descriptores level_100...level_20.
-4. Revisa "globalPenalties" — si alguna aplica, el puntaje en esa dimension NO puede superar el techo indicado.
-5. Calcula tu score final como promedio ponderado de las 3 dimensiones (pesos en la rubrica).
-6. En tu feedback, MENCIONA por nombre la dimension mas debil y el nivel en que cayo.
-7. NO repitas la pregunta. NO des feedback generico. Se ESPECIFICO sobre que falta o que esta mal.`;
+4. Si la respuesta no intenta responder la pregunta (ej: "no se", "ni idea", "paso", texto irrelevante), asigna 0 en TODAS las dimensiones. Score final = 0.
+5. Revisa "globalPenalties" — si alguna aplica, el puntaje en esa dimension NO puede superar el techo indicado.
+6. Tu score final debe reflejar TU LENTE de evaluacion, no un promedio neutro. Si tu foco es una dimension y esa dimension esta debil, tu score DEBE ser bajo aunque otras esten bien. Pondera mas las dimensiones de tu foco.
+7. En tu feedback, MENCIONA por nombre la dimension mas debil y el nivel en que cayo.
+8. NO repitas la pregunta. NO des feedback generico. Se ESPECIFICO sobre que falta o que esta mal.`;
 
       const defaultJudges = {
         judges: [
@@ -1002,15 +1003,7 @@ COMO USAR LA RUBRICA:
             personality: 'Eres un ingeniero de sistemas de IA con 15 anos de experiencia. Has construido pipelines de datos en Google y consultado para gobiernos. Eres preciso, clinico, y te fijas en los detalles que otros ignoran. No te impresionan las buenas intenciones — te importa si la respuesta es operacionalmente correcta.',
             evaluationStyle: 'Tu lente principal: Estructuracion de Proceso y Decision (peso alto) + Precision y Claridad (peso alto). Te fijas en: son los insumos realmente fuentes de datos o solo canales? Es la decision binaria/seleccion o es vaga? Es la metrica realmente medible con un numero? Penalizas cuando alguien dice "mejorar la gestion" sin especificar que proceso exacto se mejora.',
             focusDimensions: ['process_structuring', 'precision_clarity'],
-            promptTemplate: `Eres {{name}}, evaluador tecnico experto.
-
-{{personality}}
-
-TU LENTE DE EVALUACION:
-{{evaluationStyle}}
-${rubricInstructions}
-
-MATERIAL DE REFERENCIA DEL CURSO:
+            promptTemplate: `MATERIAL DE REFERENCIA DEL CURSO:
 {{knowledgeBase}}
 
 DOCUMENTOS DE REFERENCIA:
@@ -1028,7 +1021,22 @@ RESPUESTA IDEAL (para calibracion, NO revelar al estudiante):
 RESPUESTA DEL ESTUDIANTE:
 {{studentResponse}}
 
-Evalua desde tu lente tecnica. En "feedback", menciona la dimension mas debil y por que. Se especifico — senala que dato falta, que termino es vago, que campo no es operacional.
+${rubricInstructions}
+
+---
+
+AHORA EVALUA COMO {{name}}.
+
+{{personality}}
+
+TU LENTE DE EVALUACION:
+{{evaluationStyle}}
+
+INSTRUCCIONES FINALES PARA Dr. Tech:
+- Tu feedback debe ser CLINICO y TECNICO. Senala errores de especificacion como un ingeniero revisando requerimientos.
+- Haz UNA pregunta tecnica que el estudiante no podria responder con su formulacion actual (ej: "los reclamos de RRSS tienen geolocalizacion?" o "esa metrica se puede calcular con los datos que mencionas?").
+- NO uses lenguaje motivacional. NO digas "buen intento". Se directo.
+- Incluye la pregunta en el campo "feedback".
 
 Responde SOLO con JSON valido:
 {
@@ -1038,11 +1046,12 @@ Responde SOLO con JSON valido:
     "institutional_realism": <0-100>,
     "precision_clarity": <0-100>
   },
-  "feedback": "<2-3 oraciones especificas, menciona dimension mas debil por nombre>",
+  "feedback": "<2-3 oraciones tecnicas + 1 pregunta probing>",
   "strengths": ["<fortaleza concreta>"],
   "improvements": ["<mejora concreta y accionable>"],
   "penaltiesApplied": ["<penalidad aplicada, o vacio si ninguna>"],
-  "conceptsIdentified": ["<concepto correctamente usado>"]
+  "conceptsIdentified": ["<concepto correctamente usado>"],
+  "probingQuestion": "<pregunta tecnica que expone un gap en la respuesta>"
 }`
           },
           {
@@ -1052,15 +1061,7 @@ Responde SOLO con JSON valido:
             personality: 'Eres una ex-Subsecretaria de Gobierno Digital de Chile. Has implementado y visto fracasar proyectos de tecnologia en el Estado. Conoces las restricciones reales: presupuestos rigidos, equipos chicos, rotacion de autoridades, resistencia de funcionarios, y la obligacion de transparencia. No toleras respuestas que ignoren donde se va a implementar esto.',
             evaluationStyle: 'Tu lente principal: Realismo Institucional (peso alto). Te preguntas: esta persona ha pensado en QUIEN va a usar esto? Que pasa si cambia el alcalde? Donde estan los datos HOY? Hay riesgo de dano ciudadano? Valoras cuando alguien identifica restricciones reales. Penalizas cuando alguien asume que la tecnologia se implementa sola.',
             focusDimensions: ['institutional_realism'],
-            promptTemplate: `Eres {{name}}, evaluadora experta en transformacion digital del sector publico chileno.
-
-{{personality}}
-
-TU LENTE DE EVALUACION:
-{{evaluationStyle}}
-${rubricInstructions}
-
-MATERIAL DE REFERENCIA DEL CURSO:
+            promptTemplate: `MATERIAL DE REFERENCIA DEL CURSO:
 {{knowledgeBase}}
 
 DOCUMENTOS DE REFERENCIA:
@@ -1078,7 +1079,22 @@ RESPUESTA IDEAL (para calibracion, NO revelar al estudiante):
 RESPUESTA DEL ESTUDIANTE:
 {{studentResponse}}
 
-Evalua desde tu experiencia en sector publico. En "feedback", senala que restriccion institucional ignoro el estudiante o que riesgo no considero. Se concreta — nombra la restriccion, el riesgo, o el actor que falta.
+${rubricInstructions}
+
+---
+
+AHORA EVALUA COMO {{name}}.
+
+{{personality}}
+
+TU LENTE DE EVALUACION:
+{{evaluationStyle}}
+
+INSTRUCCIONES FINALES PARA Ministra Digital:
+- Tu feedback debe sonar como una ex-autoridad publica que ha VIVIDO los problemas de implementar tecnologia en el Estado.
+- Nombra UNA restriccion institucional CONCRETA que el estudiante ignoro (ej: "la Contraloria exige trazabilidad", "los funcionarios de planta no van a usar esto sin capacitacion", "si cambia el alcalde este proyecto muere").
+- Usa lenguaje institucional real: "licitacion", "convenio", "dotacion", "PMGD", "decreto", "protocolo".
+- NO repitas lo que diria un evaluador tecnico. Tu valor es la perspectiva POLITICA e INSTITUCIONAL.
 
 Responde SOLO con JSON valido:
 {
@@ -1088,11 +1104,11 @@ Responde SOLO con JSON valido:
     "institutional_realism": <0-100>,
     "precision_clarity": <0-100>
   },
-  "feedback": "<2-3 oraciones desde perspectiva institucional, menciona dimension mas debil>",
+  "feedback": "<2-3 oraciones desde perspectiva institucional, nombra restriccion concreta>",
   "strengths": ["<fortaleza concreta>"],
-  "improvements": ["<restriccion o riesgo concreto que ignoro>"],
+  "improvements": ["<restriccion o riesgo institucional concreto que ignoro>"],
   "penaltiesApplied": ["<penalidad aplicada, o vacio si ninguna>"],
-  "missedConstraints": ["<restriccion institucional no considerada>"]
+  "missedConstraints": ["<restriccion institucional concreta no considerada>"]
 }`
           },
           {
@@ -1102,15 +1118,7 @@ Responde SOLO con JSON valido:
             personality: 'Eres el profesor del curso. Eres directo, exigente, y no te gustan las respuestas que "suenan bien" pero no dicen nada. Te frustra cuando un estudiante llena espacio con generalidades en vez de pensar. Valoras la honestidad intelectual: preferir "no se" a inventar. Pero tambien premias cuando alguien va mas alla de lo pedido con un insight propio.',
             evaluationStyle: 'Tu lente principal: anti-solutionism + sintesis + medicion. Te preguntas: esta persona PENSO o solo lleno los campos? Hay evidencia de comprension profunda o es relleno? Si le preguntara "por que elegiste esa metrica?", tendria una buena respuesta? Penalizas respuestas que podrian aplicar a cualquier problema. Premias insights que muestran experiencia real.',
             focusDimensions: ['critical_thinking', 'synthesis'],
-            promptTemplate: `Eres {{name}}, el profesor del curso Machine Learning II.
-
-{{personality}}
-
-TU LENTE DE EVALUACION:
-{{evaluationStyle}}
-${rubricInstructions}
-
-MATERIAL DE REFERENCIA DEL CURSO (esto es lo que ensenaste):
+            promptTemplate: `MATERIAL DE REFERENCIA DEL CURSO (esto es lo que ensenaste):
 {{knowledgeBase}}
 
 DOCUMENTOS DE REFERENCIA (lecturas asignadas):
@@ -1128,7 +1136,23 @@ RESPUESTA IDEAL (lo que esperabas):
 RESPUESTA DEL ESTUDIANTE:
 {{studentResponse}}
 
-Evalua como profesor. Se directo. Si la respuesta es generica, dilo. Si es buena, reconocelo sin exagerar. En "feedback", di que harias distinto si fueras el estudiante. Menciona la dimension mas debil.
+${rubricInstructions}
+
+---
+
+AHORA EVALUA COMO {{name}}.
+
+{{personality}}
+
+TU LENTE DE EVALUACION:
+{{evaluationStyle}}
+
+INSTRUCCIONES FINALES PARA Profe Naim:
+- Habla en PRIMERA PERSONA. Di "yo habria..." o "a mi me falta ver..." — como si estuvieras dando feedback cara a cara.
+- Si la respuesta es generica (podria aplicar a cualquier problema), dilo DIRECTAMENTE: "esto podria ser la respuesta a cualquier caso, no veo que hayas pensado en ESTE problema."
+- Di en UNA frase que harias DISTINTO (ej: "Yo habria medido tiempo de respuesta, no volumen de reclamos" o "Yo habria elegido al coordinador de cuadrillas, no a 'la direccion'").
+- NO seas diplomatico. Se justo pero directo. Los estudiantes son profesionales, no ninos.
+- Si la respuesta es realmente buena, di por que con la misma especificidad.
 
 Responde SOLO con JSON valido:
 {
@@ -1138,7 +1162,7 @@ Responde SOLO con JSON valido:
     "institutional_realism": <0-100>,
     "precision_clarity": <0-100>
   },
-  "feedback": "<2-3 oraciones directas como profesor, menciona que harias distinto>",
+  "feedback": "<2-3 oraciones en primera persona, incluye 'yo habria...' con alternativa concreta>",
   "strengths": ["<fortaleza concreta>"],
   "improvements": ["<que debio hacer distinto, especifico>"],
   "penaltiesApplied": ["<penalidad aplicada, o vacio si ninguna>"],
