@@ -21,7 +21,7 @@ export default function Results() {
   const { gameCode } = useParams<{ gameCode: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { game, loading, error, roundResults, isHost, nextRound, submissions } = useGame(gameCode);
+  const { game, loading, error, roundResults, isHost, nextRound, endGame, submissions } = useGame(gameCode);
   const [isProcessing, setIsProcessing] = useState(false);
   const [, setEvaluationComplete] = useState(false);
   const scoreSoundPlayed = useRef(false);
@@ -81,6 +81,11 @@ export default function Results() {
 
   const handleNextRound = async () => {
     await nextRound();
+  };
+
+  const handleEndGame = async () => {
+    if (!window.confirm('Terminar el juego ahora? Se mostrara el podio final con los resultados hasta esta ronda.')) return;
+    await endGame();
   };
 
   if (loading || isProcessing) {
@@ -372,7 +377,7 @@ export default function Results() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="text-center"
+            className="flex justify-center gap-4"
           >
             <button onClick={handleNextRound} className="primary-button px-10 py-5 text-lg">
               {game.currentRound < game.totalRounds ? (
@@ -387,6 +392,14 @@ export default function Results() {
                 </>
               )}
             </button>
+            {game.currentRound < game.totalRounds && (
+              <button
+                onClick={handleEndGame}
+                className="px-6 py-5 text-lg font-bold rounded-xl bg-red-600/20 text-red-300 border-2 border-red-500/30 hover:bg-red-600/40 hover:border-red-500/50 transition-all"
+              >
+                Terminar Juego
+              </button>
+            )}
           </motion.div>
         )}
 
