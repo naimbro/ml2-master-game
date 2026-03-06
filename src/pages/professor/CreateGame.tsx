@@ -9,6 +9,8 @@ import { useAuth } from '../../hooks/useAuth';
 // Import session content - in production this would be loaded dynamically
 import session1Config from '../../../content/sessions/ml2-2025/session_1_ia_procesos_sector_publico/config.json';
 import session1Scenarios from '../../../content/sessions/ml2-2025/session_1_ia_procesos_sector_publico/scenarios.json';
+import session1Rubric from '../../../content/sessions/ml2-2025/session_1_ia_procesos_sector_publico/rubric.json';
+import session1KnowledgeBase from '../../../content/sessions/ml2-2025/session_1_ia_procesos_sector_publico/knowledge_base.md?raw';
 
 interface SessionOption {
   id: string;
@@ -18,6 +20,8 @@ interface SessionOption {
   duration: number;
   config: typeof session1Config;
   scenarios: typeof session1Scenarios;
+  rubric: typeof session1Rubric;
+  knowledgeBase: string;
 }
 
 // Available sessions - would be dynamically loaded in production
@@ -30,6 +34,8 @@ const availableSessions: SessionOption[] = [
     duration: 5,
     config: session1Config,
     scenarios: session1Scenarios as typeof session1Scenarios,
+    rubric: session1Rubric,
+    knowledgeBase: session1KnowledgeBase,
   },
 ];
 
@@ -71,8 +77,9 @@ export default function CreateGame() {
         totalRounds: selectedSession.scenarios.length,
         roundDurationSeconds: selectedSession.config.roundDurationSeconds,
 
-        sessionConfig: selectedSession.config,
+        sessionConfig: { ...selectedSession.config, rubric: selectedSession.rubric },
         scenarios: selectedSession.scenarios,
+        knowledgeBase: selectedSession.knowledgeBase,
 
         players: {
           [user.uid]: {
