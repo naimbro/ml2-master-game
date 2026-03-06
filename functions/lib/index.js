@@ -256,6 +256,14 @@ exports.processRoundEnd = functions
     }
     const openai = await getOpenAI();
     try {
+        // Idempotency check: if round was already processed, return existing results
+        const roundDocRef = db.collection('games').doc(gameCode)
+            .collection('rounds').doc(`round_${round}`);
+        const existingRound = await roundDocRef.get();
+        if (existingRound.exists) {
+            const data = existingRound.data();
+            return { success: true, rankings: data.rankings, ranked: data.ranked, alreadyProcessed: true };
+        }
         const submissionsSnapshot = await db.collection('games').doc(gameCode)
             .collection('submissions')
             .where('round', '==', round)
@@ -854,7 +862,7 @@ COMO USAR LA RUBRICA:
 3. Para cada dimension, identifica en que nivel cae (100/80/60/40/20) usando los descriptores level_100...level_20.
 4. Si la respuesta no intenta responder la pregunta (ej: "no se", "ni idea", "paso", texto irrelevante), asigna 0 en TODAS las dimensiones. Score final = 0.
 5. Revisa "globalPenalties" — si alguna aplica, el puntaje en esa dimension NO puede superar el techo indicado.
-6. Tu score final debe reflejar TU LENTE de evaluacion, no un promedio neutro. Si tu foco es una dimension y esa dimension esta debil, tu score DEBE ser bajo aunque otras esten bien. Pondera mas las dimensiones de tu foco.
+6. Para calcular tu score final, usa la FORMULA DE PESOS especifica que aparece en tus instrucciones finales (cada juez tiene pesos distintos).
 7. En tu feedback, MENCIONA por nombre la dimension mas debil y el nivel en que cayo.
 8. NO repitas la pregunta. NO des feedback generico. Se ESPECIFICO sobre que falta o que esta mal.`;
         const defaultJudges = {
@@ -900,10 +908,11 @@ INSTRUCCIONES FINALES PARA Dr. Tech:
 - Haz UNA pregunta tecnica que el estudiante no podria responder con su formulacion actual (ej: "los reclamos de RRSS tienen geolocalizacion?" o "esa metrica se puede calcular con los datos que mencionas?").
 - NO uses lenguaje motivacional. NO digas "buen intento". Se directo.
 - Incluye la pregunta en el campo "feedback".
+- FORMULA DE PESOS: score = 0.50 * process_structuring + 0.10 * institutional_realism + 0.40 * precision_clarity
 
 Responde SOLO con JSON valido:
 {
-  "score": <0-100, promedio ponderado de dimensiones>,
+  "score": <0-100, calcula con formula: 0.50*structuring + 0.10*realism + 0.40*precision>,
   "dimensionScores": {
     "process_structuring": <0-100>,
     "institutional_realism": <0-100>,
@@ -958,10 +967,11 @@ INSTRUCCIONES FINALES PARA Ministra Digital:
 - Nombra UNA restriccion institucional CONCRETA que el estudiante ignoro (ej: "la Contraloria exige trazabilidad", "los funcionarios de planta no van a usar esto sin capacitacion", "si cambia el alcalde este proyecto muere").
 - Usa lenguaje institucional real: "licitacion", "convenio", "dotacion", "PMGD", "decreto", "protocolo".
 - NO repitas lo que diria un evaluador tecnico. Tu valor es la perspectiva POLITICA e INSTITUCIONAL.
+- FORMULA DE PESOS: score = 0.15 * process_structuring + 0.65 * institutional_realism + 0.20 * precision_clarity
 
 Responde SOLO con JSON valido:
 {
-  "score": <0-100, promedio ponderado de dimensiones>,
+  "score": <0-100, calcula con formula: 0.15*structuring + 0.65*realism + 0.20*precision>,
   "dimensionScores": {
     "process_structuring": <0-100>,
     "institutional_realism": <0-100>,
@@ -1016,10 +1026,11 @@ INSTRUCCIONES FINALES PARA Profe Naim:
 - Di en UNA frase que harias DISTINTO (ej: "Yo habria medido tiempo de respuesta, no volumen de reclamos" o "Yo habria elegido al coordinador de cuadrillas, no a 'la direccion'").
 - NO seas diplomatico. Se justo pero directo. Los estudiantes son profesionales, no ninos.
 - Si la respuesta es realmente buena, di por que con la misma especificidad.
+- FORMULA DE PESOS: score = 0.35 * process_structuring + 0.30 * institutional_realism + 0.35 * precision_clarity. PERO si la respuesta es generica (podria aplicar a cualquier caso), aplica un multiplicador de 0.7 al score final.
 
 Responde SOLO con JSON valido:
 {
-  "score": <0-100, promedio ponderado de dimensiones>,
+  "score": <0-100, calcula con formula: 0.35*structuring + 0.30*realism + 0.35*precision, luego *0.7 si es generica>,
   "dimensionScores": {
     "process_structuring": <0-100>,
     "institutional_realism": <0-100>,
