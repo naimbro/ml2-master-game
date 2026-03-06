@@ -105,12 +105,25 @@ Un sistema de IA bien disenado no solo define que HACE, sino que explicitamente 
 - **Limites blandos**: cosas que el sistema debe escalar a un humano (ej: casos ambiguos, outliers)
 - **Limites de alcance**: dominios o preguntas fuera del ambito del sistema
 
-### Mecanismos de prevencion
+### Mecanismos de prevencion (guardrails)
 - Human-in-the-loop para decisiones criticas
 - Filtros de salida que bloquean respuestas fuera de rango
+- Umbrales de confianza: si el sistema no esta seguro, escalar a humano
+- Listas permitidas (allowlists) de respuestas validas
+- Pedir aclaracion al usuario cuando la consulta es ambigua
+- Citar fuente: siempre mostrar de donde viene la informacion
+- Fallback a humano cuando la consulta esta fuera del dominio
+- Logging obligatorio de todas las decisiones para trazabilidad
 - Auditorias periodicas de decisiones automatizadas
 - Botones de panico / kill switch
-- Logging obligatorio de todas las decisiones para trazabilidad
+
+### Anti-alucinacion
+Los sistemas RAG/chat en sector publico tienen un riesgo critico: **fabricar informacion que parece correcta pero no lo es**. Estrategias concretas:
+- Solo responder con datos que existan en la base de conocimiento
+- Si la consulta no matchea ninguna fuente, responder "no encontre esa informacion" en vez de inventar
+- Citar texto literal de la fuente, con link al documento original
+- Verificar respuestas contra base de datos oficial antes de mostrar al usuario
+- Disclaimer visible: "esta informacion es orientativa, consulte en oficina"
 
 ---
 
@@ -159,7 +172,26 @@ Un sistema de IA bien disenado no solo define que HACE, sino que explicitamente 
 
 ---
 
-## 6. Procesamiento de Fuentes de Datos
+## 6. Caso INE: Chatbot de Datos Estadisticos
+
+El Instituto Nacional de Estadisticas (INE) es la fuente oficial de datos estadisticos de Chile. Un chatbot del INE que responde consultas en lenguaje natural tiene un riesgo critico: **si entrega un dato incorrecto, puede afectar decisiones de politica publica, reportajes periodisticos, o investigacion academica**. La credibilidad del INE como fuente oficial es un activo institucional que un error publico puede erosionar.
+
+### TRL del chatbot INE
+Un prototipo que funciona con algunos indicadores pero falla con preguntas ambiguas esta en TRL 3-4 (prueba de concepto con datos reales, pero no validado en ambiente operacional). Para llegar a TRL 7+:
+- Necesita benchmark de consultas reales con respuestas validadas por el equipo del INE
+- Integracion con la API oficial de datos del INE
+- Monitoreo de queries fallidas y mecanismo de feedback
+- Protocolo de gobernanza: quien aprueba cambios al modelo
+
+### Anti-alucinacion en el caso INE
+- Solo responder con series que existan en la base de datos oficial
+- Si la consulta no matchea, responder "no encontre esa serie" (no inventar)
+- Mostrar fuente, fecha de actualizacion y metodologia de cada dato
+- Nunca interpolar ni extrapolar datos sin advertirlo explicitamente
+
+---
+
+## 7. Procesamiento de Fuentes de Datos
 
 ### Tipos de fuentes comunes en sector publico
 - **PDFs:** Requieren extraccion de texto (PyPDF, pdfplumber), posiblemente OCR si son escaneados. Chunking por secciones o capitulos.

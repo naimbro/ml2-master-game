@@ -73,25 +73,41 @@ async function evaluateWithJudge(openai, judge, scenario, studentResponse, sessi
     if (!isRanked) {
         const scenarioId = scenario.id || '';
         const isFeria = scenarioId.includes('feria');
+        const isEstilo = scenarioId.includes('estilo');
         if (isFeria) {
-            // R4 "Feria Comprimida": implicit signal extraction from free text
+            // R4 "Feria Comprimida": implicit signal extraction from structured free text
             prompt += `\n\nINSTRUCCIONES ADICIONALES PARA RONDA DIAGNOSTICA (FERIA):
-Esta ronda NO afecta el ranking. Evalua normalmente, pero ademas extrae senales IMPLICITAS del texto libre del estudiante.
-No hay bloque [SENALES]. Debes inferir del contenido de la respuesta los siguientes campos:
-- "family_chosen": nombre o numero de la familia que eligio (1-6 o texto)
+Esta ronda NO afecta el ranking. Evalua normalmente, pero ademas extrae senales IMPLICITAS del texto del estudiante.
+Debes inferir del contenido de la respuesta los siguientes campos:
+- "family_chosen": numero de la familia que eligio (1-6)
 - "decision_clarity": 1-5, que tan concreta es la decision que describe
 - "boundary_quality": 1-5, que tan bien define lo que el sistema NO debe hacer
 - "metric_quality": 1-5, que tan concreta y medible es la metrica propuesta
-- "risk_awareness": 1-5, nivel de conciencia de riesgos implicito en la respuesta
+- "output_preference": "reporte" / "chatbot" / "ambos" (si lo indica)
 - "writing_concision": 1-5, claridad y economia del lenguaje
 Incluye en tu JSON de respuesta un campo "parsedSignals" con estos valores y "extractionConfidence" entre 0.3 y 1.0.
 Manten tu feedback conciso (max 120 palabras).`;
         }
+        else if (isEstilo) {
+            // R6 "Estilo de trabajo": semi-structured extraction from labeled fields
+            prompt += `\n\nINSTRUCCIONES ADICIONALES PARA RONDA DIAGNOSTICA (ESTILO):
+Esta ronda NO afecta el ranking. Evalua normalmente, pero ademas extrae senales del texto del estudiante.
+Busca estos campos en la respuesta (pueden estar etiquetados o en texto libre):
+- "primary_strength": su fortaleza principal (texto breve)
+- "work_style": "autonomo" / "colaborativo" / "mixto"
+- "conflict_style": "decidir_rapido" / "buscar_consenso" / "pedir_evidencia"
+- "ventana_reunion": "manana" / "almuerzo" / "tarde" / "noche" / "finde"
+- "redes_acceso": texto libre indicando si tiene contactos y donde, o "no"
+- "learning_goal": que quiere aprender (texto breve)
+Incluye en tu JSON de respuesta un campo "parsedSignals" con estos valores y "extractionConfidence" entre 0.3 y 1.0.
+Manten tu feedback conciso (max 120 palabras).`;
+        }
         else {
-            // R5/R6: explicit [SENALES] block extraction
+            // R5: explicit [SENALES] block extraction
             prompt += `\n\nINSTRUCCIONES ADICIONALES PARA RONDA DIAGNOSTICA:
 Esta ronda NO afecta el ranking. Ademas de evaluar normalmente, debes extraer senales del estudiante.
 Si la respuesta contiene un bloque [SENALES]...[/SENALES], parsea los valores estructurados dentro de ese bloque.
+Campos esperados: PREFERENCIAS_FAMILIAS (3 numeros 1-6), SKILL_TECH/SKILL_DATOS/SKILL_SECTOR_PUBLICO/SKILL_ESCRITURA_PRESENTAR (1-5 cada uno), ROL_PREFERIDO (builder/owner/analyst/communicator), DISPONIBILIDAD_HORAS_SEMANA (numero), OUTPUT_PREFERIDO (reporte/chatbot/ambos).
 Incluye en tu JSON de respuesta un campo adicional "parsedSignals" con los valores extraidos como objeto.
 Si el bloque [SENALES] no existe o esta malformado, incluye "parsedSignals": null y agrega "extractionConfidence": 0.
 Si el bloque existe y se parseo correctamente, agrega "extractionConfidence" entre 0.5 y 1.0 segun la calidad del parseo.
