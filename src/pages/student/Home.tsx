@@ -202,7 +202,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="fixed bottom-0 left-0 right-0 p-4 text-center text-white/30 text-sm font-medium">
-        Universidad Adolfo Ibanez — Machine Learning II
+        <a href="https://naimbro.github.io/" target="_blank" rel="noopener noreferrer" className="hover:text-white/50 transition-colors">Naim Bro</a> — Escuela de Gobierno, Universidad Adolfo Ibanez
       </footer>
     </div>
   );
