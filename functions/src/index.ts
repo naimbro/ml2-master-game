@@ -37,6 +37,7 @@ interface Evaluation {
   improvements: string[];
   rawResponse: Record<string, unknown>;
   parsedSignals?: Record<string, unknown>;
+  promptUsed?: string;
 }
 
 interface SubmissionEvaluation {
@@ -147,6 +148,7 @@ Manten tu respuesta concisa (max 120 palabras de feedback + bloque de senales).`
       strengths: response.strengths || [],
       improvements: response.improvements || [],
       rawResponse: response,
+      promptUsed: prompt,
     };
 
     // Extract parsed signals for non-ranked rounds
@@ -262,6 +264,13 @@ export const evaluateSubmission = functions
         conceptsIdentified: [...new Set(conceptsIdentified)],
         processedAt: admin.firestore.Timestamp.now(),
       };
+
+      // Race condition guard: re-read to check if already evaluated
+      // (processRoundEnd may have evaluated this submission concurrently)
+      const freshDoc = await submissionRef.get();
+      if (freshDoc.data()?.evaluated) {
+        return { success: true, alreadyEvaluated: true };
+      }
 
       await submissionRef.update({
         evaluation: evaluationResult,

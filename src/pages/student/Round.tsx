@@ -6,7 +6,7 @@ import { useGame } from '../../hooks/useGame';
 import { useAuth } from '../../hooks/useAuth';
 import { doc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
-import { playCountdownTick, playCriticalTick, playSubmitSuccess, playScoreReveal, playGoodScore, playBadScore } from '../../lib/sounds';
+import { playCountdownTick, playCriticalTick, playSubmitSuccess, playScoreReveal, playGoodScore, playBadScore, startBackgroundMusic, stopBackgroundMusic, getMuted } from '../../lib/sounds';
 import { confettiBurst, confettiCannons, confettiPop } from '../../lib/confetti';
 
 export default function Round() {
@@ -93,6 +93,14 @@ export default function Round() {
       }
     }
   }, [timeLeft, hasSubmitted]);
+
+  // Background music (host only — projected screen with speakers)
+  useEffect(() => {
+    if (!isHost || game?.status !== 'active') return;
+    if (getMuted()) return;
+    startBackgroundMusic();
+    return () => { stopBackgroundMusic(); };
+  }, [isHost, game?.status]);
 
   // Sound + confetti when evaluation arrives
   useEffect(() => {

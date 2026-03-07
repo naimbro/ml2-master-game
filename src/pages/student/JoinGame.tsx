@@ -47,6 +47,26 @@ export default function JoinGame() {
 
       const gameData = gameDoc.data();
 
+      // Check if player is already registered (reconnection case)
+      const isReconnecting = user?.uid && gameData.players?.[user.uid];
+
+      if (isReconnecting) {
+        // Player already in game — navigate to correct page based on status
+        const status = gameData.status;
+        if (status === 'waiting') {
+          navigate(`/game/${code}/lobby`);
+        } else if (status === 'active') {
+          navigate(`/game/${code}/round`);
+        } else if (status === 'round_end') {
+          navigate(`/game/${code}/results`);
+        } else if (status === 'finished') {
+          navigate(`/game/${code}/end`);
+        } else {
+          navigate(`/game/${code}/lobby`);
+        }
+        return;
+      }
+
       if (gameData.status !== 'waiting') {
         setError('Este juego ya ha comenzado o terminado.');
         setIsJoining(false);

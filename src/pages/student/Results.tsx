@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Trophy, TrendingUp, ArrowRight, MessageSquare, Info } from 'lucide-react';
+import { Trophy, TrendingUp, ArrowRight, MessageSquare, Info, Code } from 'lucide-react';
 import { useGame } from '../../hooks/useGame';
 import { useAuth } from '../../hooks/useAuth';
 import { httpsCallable } from 'firebase/functions';
@@ -15,6 +15,7 @@ interface JudgeEvaluation {
   feedback: string;
   strengths: string[];
   improvements: string[];
+  promptUsed?: string;
 }
 
 export default function Results() {
@@ -25,6 +26,7 @@ export default function Results() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [, setEvaluationComplete] = useState(false);
   const scoreSoundPlayed = useRef(false);
+  const [expandedPrompts, setExpandedPrompts] = useState<Record<number, boolean>>({});
 
   // Navigate based on game status
   useEffect(() => {
@@ -252,6 +254,24 @@ export default function Results() {
                         <li key={j}>• {s}</li>
                       ))}
                     </ul>
+                  </div>
+                )}
+
+                {/* Prompt viewer (host only) */}
+                {isHost && evaluation.promptUsed && (
+                  <div className="mt-3 pt-3 border-t border-white/10">
+                    <button
+                      onClick={() => setExpandedPrompts(prev => ({ ...prev, [i]: !prev[i] }))}
+                      className="flex items-center gap-1.5 text-xs text-white/40 hover:text-white/70 transition-colors font-semibold"
+                    >
+                      <Code className="w-3 h-3" />
+                      {expandedPrompts[i] ? 'Ocultar Prompt' : 'Ver Prompt'}
+                    </button>
+                    {expandedPrompts[i] && (
+                      <pre className="mt-2 p-3 bg-black/30 rounded-lg text-[10px] text-white/50 overflow-x-auto max-h-64 overflow-y-auto whitespace-pre-wrap break-words font-mono">
+                        {evaluation.promptUsed}
+                      </pre>
+                    )}
                   </div>
                 )}
               </div>

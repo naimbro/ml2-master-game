@@ -204,6 +204,119 @@ export function playClick() {
 }
 
 // ========================================
+// BACKGROUND MUSIC (Host only, Kahoot-style tension loop)
+// ========================================
+
+let musicIntervalId: ReturnType<typeof setInterval> | null = null;
+let musicGainNode: GainNode | null = null;
+
+/** Start a looping background music track. Call stopBackgroundMusic() to end. */
+export function startBackgroundMusic() {
+  if (isMuted || musicIntervalId) return;
+  const ctx = getCtx();
+
+  // Master gain for music
+  const masterGain = ctx.createGain();
+  masterGain.gain.setValueAtTime(0.12, ctx.currentTime);
+  masterGain.connect(ctx.destination);
+  musicGainNode = masterGain;
+
+  // ~140 BPM = beat every ~0.4286s. 4 bars of 4 beats = 16 beats per loop
+  const BPM = 140;
+  const beatDur = 60 / BPM; // ~0.4286s
+  const loopDur = beatDur * 16; // ~6.857s per loop
+
+  function scheduleLoop() {
+    if (isMuted || !musicGainNode) return;
+    const ctx = getCtx();
+    const now = ctx.currentTime;
+
+    // Bass line (triangle wave, low octave) — plays on beats 1,3,5,7... (half notes feel)
+    const bassNotes = [131, 131, 147, 147, 165, 165, 147, 147]; // C3, D3, E3, D3 pattern
+    bassNotes.forEach((freq, i) => {
+      const t = now + i * beatDur * 2;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, t);
+      osc.connect(gain);
+      gain.connect(musicGainNode!);
+      gain.gain.setValueAtTime(0.001, t);
+      gain.gain.exponentialRampToValueAtTime(0.5, t + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + beatDur * 1.8);
+      osc.start(t);
+      osc.stop(t + beatDur * 2);
+    });
+
+    // Arpeggio (square wave, mid octave) — 16th note feel on off-beats
+    const arpNotes = [523, 659, 784, 659, 523, 587, 698, 587,
+                      523, 659, 784, 1047, 784, 659, 523, 587]; // C5-E5-G5 arpeggio variants
+    arpNotes.forEach((freq, i) => {
+      const t = now + i * beatDur;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(freq, t);
+      osc.connect(gain);
+      gain.connect(musicGainNode!);
+      gain.gain.setValueAtTime(0.001, t);
+      gain.gain.exponentialRampToValueAtTime(0.15, t + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + beatDur * 0.7);
+      osc.start(t);
+      osc.stop(t + beatDur);
+    });
+
+    // Hi-hat style ticks (noise) on every beat
+    for (let i = 0; i < 16; i++) {
+      const t = now + i * beatDur;
+      const bufferSize = Math.floor(ctx.sampleRate * 0.03);
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let j = 0; j < bufferSize; j++) {
+        data[j] = (Math.random() * 2 - 1) * Math.pow(1 - j / bufferSize, 3);
+      }
+      const source = ctx.createBufferSource();
+      source.buffer = buffer;
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(i % 4 === 0 ? 0.18 : 0.08, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.03);
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'highpass';
+      filter.frequency.value = 8000;
+      source.connect(filter);
+      filter.connect(gain);
+      gain.connect(musicGainNode!);
+      source.start(t);
+      source.stop(t + 0.05);
+    }
+  }
+
+  // Schedule first loop immediately, then repeat
+  scheduleLoop();
+  musicIntervalId = setInterval(scheduleLoop, loopDur * 1000);
+}
+
+/** Stop background music */
+export function stopBackgroundMusic() {
+  if (musicIntervalId) {
+    clearInterval(musicIntervalId);
+    musicIntervalId = null;
+  }
+  if (musicGainNode) {
+    try {
+      const ctx = getCtx();
+      musicGainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+      setTimeout(() => {
+        musicGainNode?.disconnect();
+        musicGainNode = null;
+      }, 400);
+    } catch {
+      musicGainNode = null;
+    }
+  }
+}
+
+// ========================================
 // MUTE CONTROLS
 // ========================================
 

@@ -135,6 +135,7 @@ Manten tu respuesta concisa (max 120 palabras de feedback + bloque de senales).`
             strengths: response.strengths || [],
             improvements: response.improvements || [],
             rawResponse: response,
+            promptUsed: prompt,
         };
         // Extract parsed signals for non-ranked rounds
         if (!isRanked && response.parsedSignals) {
@@ -165,6 +166,7 @@ exports.evaluateSubmission = functions
     .region('us-central1')
     .runWith({ timeoutSeconds: 120, memory: '512MB', secrets: ['OPENAI_API_KEY'] })
     .https.onCall(async (data, context) => {
+    var _a;
     if (!context.auth) {
         throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
     }
@@ -228,6 +230,12 @@ exports.evaluateSubmission = functions
             conceptsIdentified: [...new Set(conceptsIdentified)],
             processedAt: admin.firestore.Timestamp.now(),
         };
+        // Race condition guard: re-read to check if already evaluated
+        // (processRoundEnd may have evaluated this submission concurrently)
+        const freshDoc = await submissionRef.get();
+        if ((_a = freshDoc.data()) === null || _a === void 0 ? void 0 : _a.evaluated) {
+            return { success: true, alreadyEvaluated: true };
+        }
         await submissionRef.update({
             evaluation: evaluationResult,
             evaluated: true,
