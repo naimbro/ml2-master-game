@@ -1,0 +1,33 @@
+{
+  "sessionId": "session_2_apis",
+  "title": "LLMs via API: Del Texto al Sistema",
+  "description": "6 rondas: API vs modelo local, I/O estructurado, pipelines multi-paso, embeddings, privacidad y costos, evaluacion y monitoreo",
+  "date": "2026-03-13",
+  "roundCount": 6,
+  "roundDurationSeconds": 300,
+  "bufferSeconds": 120,
+  "conceptTags": [
+    "api_vs_local",
+    "privacidad_datos",
+    "estimacion_costos",
+    "structured_io",
+    "json_output",
+    "prompt_design",
+    "validacion",
+    "pipeline_llm",
+    "cadena_pasos",
+    "manejo_errores",
+    "embeddings",
+    "similitud_semantica",
+    "busqueda_vectorial",
+    "gobernanza_datos",
+    "evaluacion_llm",
+    "metricas_clasificacion",
+    "monitoreo_drift"
+  ],
+  "judges": [
+    { "judgeId": "technical_expert", "weight": 0.35 },
+    { "judgeId": "public_sector", "weight": 0.35 },
+    { "judgeId": "professor_twin", "weight": 0.30 }
+  ]
+}

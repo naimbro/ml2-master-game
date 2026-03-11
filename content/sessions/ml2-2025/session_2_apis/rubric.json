@@ -1,0 +1,77 @@
+{
+  "sessionId": "session_2_apis",
+  "globalInstructions": "Evalua SOLO lo que esta escrito. No asumas informacion faltante. Premia estructura y especificidad. Penaliza vaguedad. Si el estudiante habla de APIs o LLMs en abstracto sin aterrizar en el caso concreto, baja 'Estructuracion' y 'Realismo'. Los estudiantes son profesionales del sector publico chileno en su segunda clase. Ya vieron en la clase 1: procesos de decision, TRL, limites y guardrails. Ahora deben aplicar esos conceptos al uso de LLMs via API. Usa el campo 'judgeFocus' del escenario como ancla principal para cada ronda.",
+  "scoring": {
+    "scaleLevels": [100, 80, 60, 40, 20, 0],
+    "instructions": "Evalua SOLO lo que esta escrito. No asumas informacion faltante. Premia estructura y especificidad. Penaliza vaguedad. Si el estudiante describe conceptos genericos de IA sin aplicarlos al caso, baja 'Estructuracion'. Si ignora restricciones institucionales (privacidad, costo, capacidad tecnica), baja 'Realismo'. Usa el campo 'judgeFocus' del escenario como ancla principal para esta ronda."
+  },
+  "dimensions": [
+    {
+      "id": "process_structuring",
+      "name": "Estructuracion de Proceso y Decision",
+      "weight": 0.40,
+      "description": "Capacidad de disenar sistemas concretos: definir inputs/outputs, pasos de pipeline, arquitectura de solucion, metricas de evaluacion",
+      "level_100": "Diseno completo y concreto: inputs, outputs, pasos, conexiones entre pasos, y metricas. Cada componente es especifico al caso (no generico). Usa formatos estructurados (JSON, tags) cuando corresponde. Estimaciones numericas justificadas (tokens, costos, tamanos de muestra).",
+      "level_80": "Casi todo esta, pero 1 elemento es parcialmente vago (ej: output sin tipos de dato, o estimacion sin razonamiento).",
+      "level_60": "Hay intencion de estructurar, pero faltan 2+ elementos clave o estan formulados genericamente (ej: 'procesar los datos con un LLM').",
+      "level_40": "Habla del tema, pero no aterriza en componentes concretos. Menciona conceptos sueltos sin conectarlos en un diseno.",
+      "level_20": "Respuesta mayoritariamente general, teorica o retorica. No hay diseno concreto de solucion.",
+      "level_0": "No responde, dice 'no se', o escribe texto completamente irrelevante."
+    },
+    {
+      "id": "institutional_realism",
+      "name": "Realismo Institucional y Riesgos No Tecnicos",
+      "weight": 0.35,
+      "description": "Comprension de restricciones reales: privacidad de datos, costos operacionales, capacidad tecnica del equipo, regulacion, gobernanza, riesgos de depender de APIs externas",
+      "level_100": "Reconoce restricciones concretas del caso (privacidad, costos, dependencia de proveedor, capacidad tecnica). Identifica al menos 1 riesgo especifico y propone mitigacion concreta y viable. Considera regulacion chilena o restricciones institucionales.",
+      "level_80": "Menciona restricciones/riesgos plausibles pero con mitigacion algo generica o incompleta.",
+      "level_60": "Riesgos mencionados pero vagos o demasiado generales; mitigacion debil o ausente.",
+      "level_40": "Casi no considera restricciones reales. Supone implementacion trivial de APIs.",
+      "level_20": "Ignora completamente costos, privacidad, y restricciones institucionales.",
+      "level_0": "No responde, dice 'no se', o escribe texto completamente irrelevante."
+    },
+    {
+      "id": "precision_clarity",
+      "name": "Precision, Claridad y Antivaguedad",
+      "weight": 0.25,
+      "description": "Respuestas concretas, estructuradas, sin buzzwords ni relleno. Uso correcto de terminologia tecnica (tokens, embeddings, cosine similarity, etc.)",
+      "level_100": "Lenguaje concreto, terminologia tecnica usada correctamente. Maximo 10-12 lineas bien usadas. Define terminos cuando los usa. Facil de evaluar. Ejemplos cuando corresponde.",
+      "level_80": "Mayormente claro; 1-2 frases vagas o un termino usado incorrectamente.",
+      "level_60": "Mezcla partes claras con vaguedad; usa buzzwords sin definir o confunde terminologia.",
+      "level_40": "Prosa amplia, repetitiva o confusa; poca informacion accionable. Buzzwords sin contenido.",
+      "level_20": "Dificil de entender o puro humo. Terminologia usada incorrectamente.",
+      "level_0": "No responde, dice 'no se', o escribe texto completamente irrelevante."
+    }
+  ],
+  "globalPenalties": [
+    "Si el estudiante propone usar un LLM via API sin considerar la naturaleza de los datos (sensibles vs no sensibles), no puede superar 60 en Realismo.",
+    "Si hay estimaciones de costo sin razonamiento basado en tokens o volumenes, baja Estructuracion.",
+    "Si el estudiante usa terminologia tecnica incorrectamente (ej: confunde embeddings con fine-tuning, o tokens con palabras), baja Precision.",
+    "Si no usa el formato de tags solicitado en la pregunta, baja Precision.",
+    "Si la respuesta es aplicable a cualquier caso (no especifica al contexto del escenario), baja Estructuracion y Realismo."
+  ],
+  "bonusIndicators": [
+    "Compara alternativas con trade-offs explicitos (costo vs privacidad vs rendimiento)",
+    "Estima costos con razonamiento basado en tokens y modelo especifico",
+    "Distingue entre modelos caros (GPT-4o) y baratos (GPT-4o-mini) segun la tarea",
+    "Menciona anonimizacion como alternativa a modelo local para datos sensibles",
+    "Propone validacion de output del LLM (no asumir que siempre esta correcto)",
+    "Diseña pipelines donde cada paso es verificable independientemente",
+    "Identifica limitaciones concretas de embeddings (falsos positivos/negativos)",
+    "Menciona monitoreo continuo con sampling (no revision manual de cada caso)",
+    "Propone gold standard con tamano y metodo justificados",
+    "Conecta conceptos de clase 1 (TRL, guardrails, limites) con el diseno de sistemas API"
+  ],
+  "penaltyIndicators": [
+    "Propone usar GPT-4/APIs externas con datos sensibles sin considerar privacidad",
+    "Estimaciones de costo sin base numerica ('es barato', 'es caro')",
+    "Confunde embeddings con generacion de texto",
+    "Confunde tokens con palabras o caracteres",
+    "Pipeline donde todos los pasos hacen lo mismo ('pedirle al LLM')",
+    "Validacion generica ('verificar que esta bien') sin mecanismo concreto",
+    "Metrica vaga ('medir si funciona') sin definir contra que se compara",
+    "Baseline irrealizable ('etiquetar todo manualmente')",
+    "Respuesta que podria aplicar a cualquier caso sin modificacion",
+    "Ignora restricciones de datos sensibles en el sector publico"
+  ]
+}

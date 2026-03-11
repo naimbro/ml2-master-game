@@ -12,6 +12,11 @@ import session1Scenarios from '../../../content/sessions/ml2-2025/session_1_ia_p
 import session1Rubric from '../../../content/sessions/ml2-2025/session_1_ia_procesos_sector_publico/rubric.json';
 import session1KnowledgeBase from '../../../content/sessions/ml2-2025/session_1_ia_procesos_sector_publico/knowledge_base.md?raw';
 
+import session2Config from '../../../content/sessions/ml2-2025/session_2_apis/config.json';
+import session2Scenarios from '../../../content/sessions/ml2-2025/session_2_apis/scenarios.json';
+import session2Rubric from '../../../content/sessions/ml2-2025/session_2_apis/rubric.json';
+import session2KnowledgeBase from '../../../content/sessions/ml2-2025/session_2_apis/knowledge_base.md?raw';
+
 interface SessionOption {
   id: string;
   title: string;
@@ -36,6 +41,17 @@ const availableSessions: SessionOption[] = [
     scenarios: session1Scenarios as typeof session1Scenarios,
     rubric: session1Rubric,
     knowledgeBase: session1KnowledgeBase,
+  },
+  {
+    id: 'session_2_apis',
+    title: session2Config.title,
+    description: session2Config.description,
+    rounds: session2Scenarios.length,
+    duration: Math.round(session2Config.roundDurationSeconds / 60),
+    config: session2Config,
+    scenarios: session2Scenarios as typeof session1Scenarios,
+    rubric: session2Rubric,
+    knowledgeBase: session2KnowledgeBase,
   },
 ];
 
@@ -256,7 +272,7 @@ export default function CreateGame() {
                 <div>
                   <h3 className="text-lg font-bold text-white/50">Mas sesiones proximamente</h3>
                   <p className="text-white/30 text-sm">
-                    APIs, Prompting, RAG, y mas...
+                    Prompting, RAG, y mas...
                   </p>
                 </div>
               </div>
