@@ -1,40 +1,40 @@
 {
   "sessionId": "session_2_apis",
-  "globalInstructions": "Evalua SOLO lo que esta escrito. No asumas informacion faltante. Premia estructura y especificidad. Penaliza vaguedad. Si el estudiante habla de APIs o LLMs en abstracto sin aterrizar en el caso concreto, baja 'Estructuracion' y 'Realismo'. Los estudiantes son profesionales del sector publico chileno en su segunda clase. Ya vieron en la clase 1: procesos de decision, TRL, limites y guardrails. Ahora deben aplicar esos conceptos al uso de LLMs via API. Usa el campo 'judgeFocus' del escenario como ancla principal para cada ronda.",
+  "globalInstructions": "Evalua SOLO lo que esta escrito. No asumas informacion faltante. Premia estructura y especificidad. Penaliza vaguedad. El principio rector de esta sesion es: cada respuesta debe demostrar (1) comprension de la herramienta tecnica, (2) ubicacion dentro de una actividad institucional concreta con actor/usuario, y (3) anticipacion de riesgos, restricciones y condiciones de implementacion responsable. No premiar 'usar GPT para X' sino 'usar GPT/API para modificar una actividad especifica de un proceso publico, con datos y restricciones reales'. Los estudiantes son profesionales del sector publico chileno en su segunda clase. Ya vieron en la clase 1: procesos de decision, TRL, limites y guardrails. Conocen la guia de innovacion publica (problema, personas usuarias, actores, actividades, prefactibilidad PESTL, madurez de datos, objetivos SMART). Usa el campo 'judgeFocus' del escenario como ancla principal para cada ronda.",
   "scoring": {
     "scaleLevels": [100, 80, 60, 40, 20, 0],
-    "instructions": "Evalua SOLO lo que esta escrito. No asumas informacion faltante. Premia estructura y especificidad. Penaliza vaguedad. Si el estudiante describe conceptos genericos de IA sin aplicarlos al caso, baja 'Estructuracion'. Si ignora restricciones institucionales (privacidad, costo, capacidad tecnica), baja 'Realismo'. Usa el campo 'judgeFocus' del escenario como ancla principal para esta ronda."
+    "instructions": "Evalua SOLO lo que esta escrito. No asumas informacion faltante. Premia estructura y especificidad. Penaliza vaguedad. La respuesta debe conectar herramienta tecnica con actividad institucional y riesgos de implementacion. Usa el campo 'judgeFocus' del escenario como ancla principal para esta ronda."
   },
   "dimensions": [
     {
       "id": "process_structuring",
-      "name": "Estructuracion de Proceso y Decision",
-      "weight": 0.40,
-      "description": "Capacidad de disenar sistemas concretos: definir inputs/outputs, pasos de pipeline, arquitectura de solucion, metricas de evaluacion",
-      "level_100": "Diseno completo y concreto: inputs, outputs, pasos, conexiones entre pasos, y metricas. Cada componente es especifico al caso (no generico). Usa formatos estructurados (JSON, tags) cuando corresponde. Estimaciones numericas justificadas (tokens, costos, tamanos de muestra).",
-      "level_80": "Casi todo esta, pero 1 elemento es parcialmente vago (ej: output sin tipos de dato, o estimacion sin razonamiento).",
-      "level_60": "Hay intencion de estructurar, pero faltan 2+ elementos clave o estan formulados genericamente (ej: 'procesar los datos con un LLM').",
-      "level_40": "Habla del tema, pero no aterriza en componentes concretos. Menciona conceptos sueltos sin conectarlos en un diseno.",
-      "level_20": "Respuesta mayoritariamente general, teorica o retorica. No hay diseno concreto de solucion.",
+      "name": "Estructuracion del Sistema y del Proceso",
+      "weight": 0.35,
+      "description": "Capacidad de disenar sistemas concretos SITUADOS en una actividad institucional: identificar la actividad que se modifica, definir inputs/outputs, pasos de pipeline, conexiones y metricas. Distinguir entre problema, actividad y herramienta.",
+      "level_100": "Identifica actividad institucional especifica que se modifica. Diseno completo: inputs, outputs, pasos, conexiones, fallback. Muestra como la solucion cambia una actividad concreta, no 'el sistema' en abstracto. Distingue bien problema, actividad y herramienta. Estimaciones numericas justificadas.",
+      "level_80": "Casi todo esta, pero 1 elemento es parcialmente vago (ej: actividad no del todo clara, o output sin tipos de dato).",
+      "level_60": "Tiene arquitectura basica, pero no queda claro que actividad cambia o como se integra al proceso institucional.",
+      "level_40": "Habla del tema, pero no aterriza en componentes concretos ni en actividad institucional. Menciona conceptos sueltos.",
+      "level_20": "Describe solo una idea general de IA sin proceso, actividad ni diseno concreto.",
       "level_0": "No responde, dice 'no se', o escribe texto completamente irrelevante."
     },
     {
       "id": "institutional_realism",
-      "name": "Realismo Institucional y Riesgos No Tecnicos",
-      "weight": 0.35,
-      "description": "Comprension de restricciones reales: privacidad de datos, costos operacionales, capacidad tecnica del equipo, regulacion, gobernanza, riesgos de depender de APIs externas",
-      "level_100": "Reconoce restricciones concretas del caso (privacidad, costos, dependencia de proveedor, capacidad tecnica). Identifica al menos 1 riesgo especifico y propone mitigacion concreta y viable. Considera regulacion chilena o restricciones institucionales.",
-      "level_80": "Menciona restricciones/riesgos plausibles pero con mitigacion algo generica o incompleta.",
-      "level_60": "Riesgos mencionados pero vagos o demasiado generales; mitigacion debil o ausente.",
+      "name": "Realismo Institucional + IA Responsable",
+      "weight": 0.40,
+      "description": "Comprension de restricciones reales (PESTL: politicas, economicas, sociales, tecnologicas, normativas), riesgos no tecnicos, privacidad, justicia, transparencia, gobernanza, evaluacion de impacto, capacidades humanas, sostenibilidad operativa, y criterio de 'freno' (no avanzar si faltan condiciones minimas).",
+      "level_100": "Reconoce restricciones PESTL relevantes para el caso. Identifica al menos 1 riesgo no tecnico concreto y propone mitigacion operativa. Cuando aplica, incorpora transparencia, evaluacion de impacto o gobernanza. Considera acceso a datos, privacidad, sostenibilidad y capacidades humanas. Muestra criterio de 'cuando NO avanzar'.",
+      "level_80": "Menciona restricciones/riesgos plausibles pero sin priorizacion o con mitigacion algo generica.",
+      "level_60": "Enumera riesgos pero sin priorizacion ni mitigacion operativa. No conecta con restricciones institucionales reales.",
       "level_40": "Casi no considera restricciones reales. Supone implementacion trivial de APIs.",
-      "level_20": "Ignora completamente costos, privacidad, y restricciones institucionales.",
+      "level_20": "Ignora privacidad, justicia, transparencia, restricciones legales, capacidad institucional o sostenibilidad.",
       "level_0": "No responde, dice 'no se', o escribe texto completamente irrelevante."
     },
     {
       "id": "precision_clarity",
-      "name": "Precision, Claridad y Antivaguedad",
+      "name": "Precision Tecnica, Claridad y Antivaguedad",
       "weight": 0.25,
-      "description": "Respuestas concretas, estructuradas, sin buzzwords ni relleno. Uso correcto de terminologia tecnica (tokens, embeddings, cosine similarity, etc.)",
+      "description": "Respuestas concretas, estructuradas, sin buzzwords ni relleno. Uso correcto de terminologia tecnica (tokens, embeddings, cosine similarity, etc.). No confundir 'usar LLM' con 'resolver el problema'.",
       "level_100": "Lenguaje concreto, terminologia tecnica usada correctamente. Maximo 10-12 lineas bien usadas. Define terminos cuando los usa. Facil de evaluar. Ejemplos cuando corresponde.",
       "level_80": "Mayormente claro; 1-2 frases vagas o un termino usado incorrectamente.",
       "level_60": "Mezcla partes claras con vaguedad; usa buzzwords sin definir o confunde terminologia.",
@@ -44,23 +44,25 @@
     }
   ],
   "globalPenalties": [
-    "Si el estudiante propone usar un LLM via API sin considerar la naturaleza de los datos (sensibles vs no sensibles), no puede superar 60 en Realismo.",
-    "Si hay estimaciones de costo sin razonamiento basado en tokens o volumenes, baja Estructuracion.",
-    "Si el estudiante usa terminologia tecnica incorrectamente (ej: confunde embeddings con fine-tuning, o tokens con palabras), baja Precision.",
+    "Tope 60 en Realismo si envia datos sensibles a API externa sin minimizacion, anonimizacion o justificacion.",
+    "Tope 60 en Estructuracion si no identifica la actividad especifica del proceso que se modifica.",
+    "Tope 60 en Precision si confunde embeddings con clasificacion, tokens con palabras, o resume mal el rol de un pipeline.",
+    "Penalizar si propone una solucion de IA para un problema que podria resolverse con algo mas simple sin justificar por que el LLM agrega valor.",
     "Si no usa el formato de tags solicitado en la pregunta, baja Precision.",
     "Si la respuesta es aplicable a cualquier caso (no especifica al contexto del escenario), baja Estructuracion y Realismo."
   ],
   "bonusIndicators": [
+    "Conecta herramienta tecnica con actividad institucional concreta y actor/usuario",
+    "Identifica restricciones PESTL especificas al caso (no genericas)",
     "Compara alternativas con trade-offs explicitos (costo vs privacidad vs rendimiento)",
     "Estima costos con razonamiento basado en tokens y modelo especifico",
     "Distingue entre modelos caros (GPT-4o) y baratos (GPT-4o-mini) segun la tarea",
     "Menciona anonimizacion como alternativa a modelo local para datos sensibles",
-    "Propone validacion de output del LLM (no asumir que siempre esta correcto)",
-    "Diseña pipelines donde cada paso es verificable independientemente",
-    "Identifica limitaciones concretas de embeddings (falsos positivos/negativos)",
-    "Menciona monitoreo continuo con sampling (no revision manual de cada caso)",
-    "Propone gold standard con tamano y metodo justificados",
-    "Conecta conceptos de clase 1 (TRL, guardrails, limites) con el diseno de sistemas API"
+    "Propone validacion de output del LLM con reglas sintacticas Y de negocio",
+    "Distingue metricas de modelo vs metricas de proceso vs metricas de impacto",
+    "Muestra criterio de 'freno': identifica condiciones bajo las cuales NO se deberia implementar",
+    "Conecta conceptos de clase 1 (TRL, guardrails, limites) con el diseno de sistemas API",
+    "Menciona transparencia, trazabilidad o evaluacion de impacto algoritmico cuando corresponde"
   ],
   "penaltyIndicators": [
     "Propone usar GPT-4/APIs externas con datos sensibles sin considerar privacidad",
@@ -72,6 +74,8 @@
     "Metrica vaga ('medir si funciona') sin definir contra que se compara",
     "Baseline irrealizable ('etiquetar todo manualmente')",
     "Respuesta que podria aplicar a cualquier caso sin modificacion",
-    "Ignora restricciones de datos sensibles en el sector publico"
+    "Ignora restricciones de datos sensibles en el sector publico",
+    "Propone solucion de IA donde bastaria algo mas simple sin justificar el valor agregado",
+    "No identifica actividad institucional ni actor/usuario afectado"
   ]
 }

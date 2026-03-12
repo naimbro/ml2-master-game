@@ -7,31 +7,34 @@
     "difficulty": "medium",
     "ranked": true,
     "durationSeconds": 300,
-    "judgeFocus": "Prioriza justificacion del trade-off API vs local basada en datos/privacidad y costo, no en preferencia personal. Si el estudiante elige sin considerar la naturaleza de los datos (sensibles), baja Realismo. Si no estima costo ni siquiera en orden de magnitud, baja Estructuracion.",
-    "context": "La Subsecretaria de Prevision Social necesita clasificar automaticamente 50,000 consultas ciudadanas anuales (via web, email y telefono) en 12 categorias (pension, licencia medica, seguro de cesantia, etc.) para derivarlas al area correcta. Hoy un equipo de 4 funcionarios lo hace manualmente. Las consultas contienen datos personales: RUT, situacion laboral, antecedentes de salud.",
-    "question": "Responde en el siguiente formato EXACTO:\n\n[OPCION] API comercial (ej. OpenAI) o modelo local/open source? (elige UNA)\n[RAZON PRINCIPAL] 1 argumento decisivo para tu eleccion (2 lineas max).\n[RIESGO] 1 riesgo critico de la opcion elegida y como lo mitigas.\n[COSTO] Como estimarias el costo mensual? (muestra el razonamiento, no necesitas numeros exactos).\n\nRegla: NO respondas 'depende' sin elegir. Elige y justifica.",
-    "conceptTags": ["api_vs_local", "privacidad_datos", "estimacion_costos"],
+    "judgeFocus": "Prioriza que el estudiante identifique la ACTIVIDAD concreta que se modifica y el actor que la ejecuta, ANTES de elegir arquitectura. La eleccion API vs local debe estar justificada por la naturaleza de los datos y las restricciones institucionales, no por preferencia personal. Si elige sin considerar datos sensibles, tope 60 en Realismo. Si no identifica actividad ni actor, tope 60 en Estructuracion.",
+    "context": "La Subsecretaria de Prevision Social necesita clasificar automaticamente 50,000 consultas ciudadanas anuales (via web, email y telefono) en 12 categorias (pension, licencia medica, seguro de cesantia, etc.) para derivarlas al area correcta. Hoy un equipo de 4 funcionarios lo hace manualmente, leyendo cada consulta y asignando categoria. Las consultas contienen datos personales: RUT, situacion laboral, antecedentes de salud.",
+    "question": "Responde en el siguiente formato EXACTO:\n\n[ACTIVIDAD] Que actividad concreta del proceso se automatiza o apoya, y quien la ejecuta hoy?\n[OPCION] API comercial (ej. OpenAI) o modelo local/open-source? 1 argumento decisivo para tu eleccion.\n[RIESGO PESTL] 1 riesgo clave no tecnico (politico, economico, social, tecnologico o normativo). Nombra la categoria.\n[MITIGACION] 1 mecanismo operativo concreto para reducir ese riesgo.\n[COSTO] Como estimarias el costo mensual? (muestra razonamiento con tokens).\n[TRANSPARENCIA] 1 dato que deberia quedar registrado antes de implementar (ficha de transparencia).\n\nRegla: NO respondas 'depende' sin elegir. Elige y justifica.",
+    "conceptTags": ["api_vs_local", "privacidad_datos", "estimacion_costos", "actividad_institucional", "PESTL"],
     "idealAnswer": {
       "keyPoints": [
-        "[OPCION]: Modelo local/open source es la opcion mas defensible. Los datos contienen RUT, situacion laboral y antecedentes de salud — datos personales sensibles bajo la ley chilena.",
-        "[RAZON PRINCIPAL]: Los datos de salud y situacion laboral son sensibles. Enviarlos a una API externa (servidores de OpenAI en EEUU) genera riesgo de incumplimiento normativo y exposicion de datos ciudadanos.",
-        "[RIESGO]: Se necesita un equipo tecnico para desplegar y mantener el modelo. Mitigacion: usar un modelo liviano (ej. Mistral o Phi-3) que corra en un servidor cloud en la region, con soporte externo para el setup inicial.",
-        "[COSTO]: ~50,000 consultas/ano = ~4,200/mes. Si cada consulta tiene ~500 tokens → 2.1M tokens/mes. API: ~$5-20/mes (GPT-4o-mini). Local: ~$200-500/mes (servidor GPU cloud). La diferencia de costo es real pero se justifica por privacidad."
+        "[ACTIVIDAD]: La clasificacion/triaje de consultas ciudadanas para derivacion. Hoy la ejecutan 4 funcionarios que leen cada consulta y asignan categoria manualmente.",
+        "[OPCION]: Modelo local/open source. Los datos contienen RUT, situacion laboral y antecedentes de salud — datos personales sensibles. Enviarlos a servidores de OpenAI en EEUU genera riesgo normativo. Alternativa: API seria viable SI se anonimizan los datos primero (reemplazar RUT, nombres, datos de salud).",
+        "[RIESGO PESTL]: Normativo — incumplimiento de la ley de proteccion de datos personales al enviar datos de salud y RUT a servidores externos sin consentimiento explicito del ciudadano.",
+        "[MITIGACION]: Anonimizar automaticamente antes del envio (reemplazar RUT por [ID], datos de salud por [DATO_SENSIBLE]), manteniendo el mapeo interno. O bien, desplegar modelo local que nunca expone datos fuera de la red institucional.",
+        "[COSTO]: ~50,000 consultas/ano = ~4,200/mes. Si cada consulta tiene ~500 tokens input + ~100 output → API: 2.1M input + 420K output tokens/mes ≈ $5-20/mes con GPT-4o-mini. Local: ~$200-500/mes (servidor GPU cloud). Diferencia de costo real pero justificada por privacidad.",
+        "[TRANSPARENCIA]: Que datos personales procesa el sistema, que datos salen de la red institucional (si los hay), y quien es responsable de la decision de clasificacion final (humano o automatica)."
       ],
-      "expectedConcepts": ["datos_sensibles", "trade_off_costo_privacidad", "estimacion_tokens", "modelo_liviano"],
+      "expectedConcepts": ["actividad_concreta", "actor_actual", "datos_sensibles", "trade_off_costo_privacidad", "estimacion_tokens", "riesgo_normativo"],
       "commonMistakes": [
+        "No identificar la actividad concreta ni quien la ejecuta hoy",
         "Elegir API sin considerar que los datos contienen RUT y antecedentes de salud",
         "Elegir modelo local sin mencionar el costo o la complejidad de mantenimiento",
         "Decir 'depende' sin tomar una posicion",
         "No estimar costo ni siquiera en orden de magnitud",
-        "Asumir que API = caro y local = barato sin calcular"
+        "Riesgo PESTL generico ('podria haber problemas legales') sin especificar cual"
       ],
       "excellentResponseIndicators": [
-        "Identifica los datos de salud/RUT como factor decisivo",
-        "Menciona regulacion chilena de datos personales",
+        "Identifica la actividad de triaje y los funcionarios que la hacen hoy",
+        "Menciona regulacion chilena de datos personales como riesgo normativo",
         "Estima costo con razonamiento basado en tokens",
-        "Reconoce que el trade-off no es solo tecnico sino institucional",
-        "Menciona que API seria viable SI los datos se anonimizan primero"
+        "Reconoce que API seria viable SI se anonimiza primero",
+        "Transparencia que menciona quien es responsable de la decision final"
       ]
     }
   },
@@ -43,31 +46,34 @@
     "difficulty": "medium",
     "ranked": true,
     "durationSeconds": 300,
-    "judgeFocus": "Prioriza diseno concreto de input/output, no teoria. El output JSON debe tener campos con tipos de dato plausibles. El ejemplo debe ser coherente con el esquema. La validacion debe ser especifica, no generica. Si el output JSON no tiene campos cerrados (allowlist de categorias), baja Estructuracion.",
-    "context": "SERNAC (Servicio Nacional del Consumidor) recibe ~300,000 reclamos anuales en texto libre. Los consumidores describen su problema en sus propias palabras. Hoy, funcionarios leen cada reclamo y lo clasifican manualmente. Quieren usar un LLM via API para extraer informacion estructurada de cada reclamo y alimentar un dashboard de seguimiento.",
-    "question": "Responde en el siguiente formato EXACTO:\n\n[INPUT] Que le pasas al LLM como input? (describe el prompt, no el reclamo)\n[OUTPUT] Define el JSON que esperas de vuelta (4-5 campos con tipo de dato).\n[EJEMPLO] Escribe 1 reclamo inventado (2 lineas) y el JSON que deberia producir.\n[VALIDACION] 1 regla concreta para verificar que el output es correcto.",
-    "conceptTags": ["structured_io", "json_output", "prompt_design", "validacion"],
+    "judgeFocus": "Prioriza diseno concreto de input/output SITUADO en el proceso: quien genera el texto que entra, y quien usa el JSON que sale y para que decision. El output JSON debe tener campos con tipos de dato plausibles y listas cerradas. La validacion debe incluir una regla sintactica Y una de negocio. Si el output no tiene campos cerrados (allowlist), baja Estructuracion. Si no dice quien usa el JSON despues, baja Estructuracion.",
+    "context": "SERNAC (Servicio Nacional del Consumidor) recibe ~300,000 reclamos anuales en texto libre. Los consumidores describen su problema en sus propias palabras por formulario web, email o telefono. Hoy, funcionarios leen cada reclamo, lo clasifican y lo derivan al area correspondiente. Quieren usar un LLM via API para extraer informacion estructurada de cada reclamo y alimentar un dashboard de seguimiento.",
+    "question": "Responde en el siguiente formato EXACTO:\n\n[ACTIVIDAD] Que actividad del proceso se modifica y quien genera el texto que entra al sistema?\n[INPUT] Que le pasas al LLM como prompt? (describe la estructura del prompt, no el reclamo).\n[OUTPUT] Define el JSON que esperas de vuelta (4-5 campos con tipo de dato).\n[EJEMPLO] Escribe 1 reclamo inventado (2 lineas) y el JSON que deberia producir.\n[VALIDACION] 2 reglas concretas: una sintactica (formato) y una de negocio (coherencia).\n[USO] Que actor usa ese JSON despues, y para que decision o accion?",
+    "conceptTags": ["structured_io", "json_output", "prompt_design", "validacion", "actividad_institucional"],
     "idealAnswer": {
       "keyPoints": [
-        "[INPUT]: Un prompt con: (1) instruccion de rol ('Eres un clasificador de reclamos de consumo'), (2) la lista cerrada de categorias validas, (3) el texto del reclamo, (4) instruccion de responder SOLO en JSON.",
+        "[ACTIVIDAD]: La clasificacion y derivacion de reclamos. El texto lo genera el ciudadano (consumidor) al escribir su reclamo en texto libre via web/email/telefono.",
+        "[INPUT]: Un prompt con: (1) rol ('Eres un clasificador de reclamos de consumo del SERNAC'), (2) lista cerrada de categorias validas (garantia_legal, publicidad_enganosa, cobro_indebido, etc.), (3) texto del reclamo, (4) instruccion de responder SOLO en JSON con el esquema definido.",
         "[OUTPUT]: {\"categoria\": string (de lista cerrada), \"urgencia\": \"alta\"|\"media\"|\"baja\", \"empresa_mencionada\": string, \"producto_servicio\": string, \"accion_solicitada\": string}",
         "[EJEMPLO]: Reclamo: 'Compre un celular en Falabella hace 3 dias y no prende. Fui a la tienda y no me quieren devolver la plata.' → {\"categoria\": \"garantia_legal\", \"urgencia\": \"alta\", \"empresa_mencionada\": \"Falabella\", \"producto_servicio\": \"celular\", \"accion_solicitada\": \"devolucion_dinero\"}",
-        "[VALIDACION]: Verificar que 'categoria' es un valor de la lista cerrada de categorias permitidas. Si el LLM retorna una categoria que no esta en la lista, rechazar y reintentar (o asignar 'otro')."
+        "[VALIDACION]: Sintactica: verificar que el output es JSON valido y que 'categoria' es un valor de la lista cerrada (allowlist). De negocio: si urgencia es 'alta', verificar que accion_solicitada no este vacia (un reclamo urgente debe tener accion concreta).",
+        "[USO]: El funcionario de derivacion del SERNAC usa el JSON para asignar el reclamo al area correspondiente (legal, mediacion, fiscalizacion) sin tener que leer el texto completo. El dashboard agrega los JSON para detectar tendencias (empresas con mas reclamos, categorias en alza)."
       ],
-      "expectedConcepts": ["prompt_con_rol", "lista_cerrada", "json_schema", "validacion_output"],
+      "expectedConcepts": ["prompt_con_rol", "lista_cerrada", "json_schema", "validacion_sintactica", "validacion_negocio", "actor_aguas_abajo"],
       "commonMistakes": [
+        "No identificar quien genera el texto ni quien usa el output",
         "No definir lista cerrada de categorias (dejar que el LLM invente categorias)",
         "Output sin tipos de dato claros (solo nombres de campos)",
         "Ejemplo que no corresponde al esquema definido",
-        "Validacion generica ('verificar que esta bien') en vez de regla concreta",
-        "Olvidar incluir en el prompt la instruccion de formato JSON"
+        "Validacion solo sintactica o solo de negocio, no ambas",
+        "No decir para que decision sirve el JSON despues"
       ],
       "excellentResponseIndicators": [
+        "Identifica ciudadano como generador del input y funcionario como usuario del output",
         "Lista cerrada de categorias en el prompt (allowlist)",
         "Campo de confianza o score en el output",
-        "Validacion que menciona parsing JSON + chequeo de campos",
-        "Ejemplo realista y coherente con el contexto SERNAC",
-        "Prompt incluye instruccion de 'si no estas seguro, clasifica como otro'"
+        "Validacion que distingue formato (JSON valido) de coherencia (regla de negocio)",
+        "Uso aguas abajo concreto: derivacion, dashboard, priorizacion"
       ]
     }
   },
@@ -79,32 +85,35 @@
     "difficulty": "hard",
     "ranked": true,
     "durationSeconds": 300,
-    "judgeFocus": "Prioriza que cada paso tenga input/output claros y que la conexion entre pasos sea explicita. Si los 3 pasos son variaciones de 'pedirle al LLM que haga algo' sin diferenciacion, baja Estructuracion. Si no menciona que pasa cuando falla un paso, baja Realismo.",
-    "context": "La Biblioteca del Congreso Nacional quiere un sistema que: (1) detecte proyectos de ley nuevos relevantes para el Ministerio de Educacion, (2) genere un resumen ejecutivo de cada proyecto relevante, y (3) identifique que programas vigentes del ministerio podrian verse afectados. Cada semana se publican 10-20 proyectos de ley nuevos. El ministerio tiene una lista de 45 programas vigentes con sus descripciones.",
-    "question": "Disena un pipeline de 3 pasos. Responde en formato:\n\n[PASO 1] Nombre + que input recibe + que output produce.\n[PASO 2] Nombre + que input recibe + que output produce.\n[PASO 3] Nombre + que input recibe + que output produce.\n[CONEXION] Como se conecta el output de un paso con el input del siguiente?\n[FALLA] Que pasa si el Paso 2 falla para un proyecto?",
-    "conceptTags": ["pipeline_llm", "cadena_pasos", "manejo_errores", "arquitectura"],
+    "judgeFocus": "Prioriza que cada paso tenga input/output claros, un actor que recibe el output, y que la conexion entre pasos sea explicita. Si los 3 pasos son variaciones de 'pedirle al LLM que haga algo' sin diferenciacion, baja Estructuracion. Si no menciona que pasa cuando falla un paso, baja Realismo. Premiar si muestra como cambia la actividad institucional gracias al pipeline.",
+    "context": "La Biblioteca del Congreso Nacional quiere un sistema que: (1) detecte proyectos de ley nuevos relevantes para el Ministerio de Educacion, (2) genere un resumen ejecutivo de cada proyecto relevante, y (3) identifique que programas vigentes del ministerio podrian verse afectados. Cada semana se publican 10-20 proyectos de ley nuevos. El ministerio tiene una lista de 45 programas vigentes con sus descripciones. Hoy, un asesor legislativo del ministerio lee todos los proyectos manualmente y escribe memos ad-hoc.",
+    "question": "Disena un pipeline de 3 pasos. Responde en formato:\n\n[ACTIVIDAD ACTUAL] Describe en 1 linea la actividad que hoy se hace manualmente.\n[PASO 1] Nombre + input + output + quien usa ese output.\n[PASO 2] Nombre + input + output + quien usa ese output.\n[PASO 3] Nombre + input + output + quien usa ese output.\n[FALLA] Que pasa si el Paso 2 falla para un proyecto?\n[IMPACTO] Como cambia la actividad del asesor legislativo gracias a este pipeline?",
+    "conceptTags": ["pipeline_llm", "cadena_pasos", "manejo_errores", "arquitectura", "actividad_institucional"],
     "idealAnswer": {
       "keyPoints": [
-        "[PASO 1] Filtrado por relevancia: Input = texto del proyecto de ley + lista de temas del Ministerio de Educacion. Output = {relevante: si/no, confianza: 0-1, temas_relacionados: [...]}. Modelo barato (gpt-4o-mini) porque es clasificacion binaria.",
-        "[PASO 2] Resumen ejecutivo: Input = texto completo del proyecto (solo los marcados como relevantes). Output = {titulo, resumen_3_lineas, cambios_principales: [...], fecha_ingreso}. Modelo mas capaz (gpt-4o) porque requiere comprension profunda.",
-        "[PASO 3] Mapeo de impacto: Input = resumen del proyecto + lista de 45 programas vigentes con descripciones. Output = [{programa, tipo_impacto: 'directo'|'indirecto', explicacion}]. Puede usar embeddings para pre-filtrar programas candidatos.",
-        "[CONEXION]: Paso 1 filtra (20 proyectos → 3-5 relevantes). Paso 2 recibe solo los relevantes. Paso 3 recibe el resumen (no el texto completo) + la lista de programas.",
-        "[FALLA]: Si Paso 2 falla para un proyecto: (1) reintentar 1 vez, (2) si falla de nuevo, marcarlo como 'pendiente de revision manual' y continuar con los demas. No detener todo el pipeline por un caso."
+        "[ACTIVIDAD ACTUAL]: El asesor legislativo del ministerio lee manualmente 10-20 proyectos de ley semanales, filtra los relevantes y escribe memos ad-hoc sobre impacto en programas.",
+        "[PASO 1] Filtrado por relevancia: Input = texto del proyecto de ley + lista de temas del Ministerio de Educacion. Output = {relevante: si/no, confianza: 0-1, temas_relacionados: [...]}. Modelo barato (gpt-4o-mini). El output lo usa el sistema para decidir que proyectos pasan al Paso 2.",
+        "[PASO 2] Resumen ejecutivo: Input = texto completo del proyecto (solo los relevantes). Output = {titulo, resumen_3_lineas, cambios_principales: [...], fecha_ingreso}. Modelo capaz (gpt-4o). El output lo usa el asesor legislativo como base para su memo.",
+        "[PASO 3] Mapeo de impacto: Input = resumen del proyecto + lista de 45 programas vigentes. Output = [{programa, tipo_impacto: 'directo'|'indirecto', explicacion}]. Puede usar embeddings para pre-filtrar programas candidatos. El output lo usa el jefe de division para priorizar respuesta institucional.",
+        "[FALLA]: Si Paso 2 falla: (1) reintentar 1 vez, (2) si falla de nuevo, marcar como 'pendiente de revision manual' y continuar con los demas. No detener todo el pipeline por un caso.",
+        "[IMPACTO]: El asesor pasa de leer 20 proyectos semanales (2-3 horas) a revisar solo 3-5 relevantes con resumen y mapeo de impacto pre-generado. Su rol cambia de lectura exhaustiva a validacion y profundizacion de los casos importantes."
       ],
-      "expectedConcepts": ["filtrado_previo", "modelo_diferenciado", "output_intermedio", "fallback"],
+      "expectedConcepts": ["actividad_manual_actual", "filtrado_previo", "modelo_diferenciado", "actor_receptor", "fallback", "cambio_actividad"],
       "commonMistakes": [
+        "No describir la actividad actual del asesor",
         "Los 3 pasos hacen lo mismo (todo es 'resumir')",
-        "No especificar input/output concreto de cada paso",
+        "No especificar quien usa el output de cada paso",
         "Pasar el texto completo a todos los pasos (sin filtrar)",
-        "No mencionar que modelo usar en cada paso (o usar el mismo para todo)",
-        "Falla: 'se detiene el pipeline' sin alternativa"
+        "No mencionar que modelo usar en cada paso",
+        "Falla: 'se detiene el pipeline' sin alternativa",
+        "No explicar como cambia la actividad institucional"
       ],
       "excellentResponseIndicators": [
+        "Describe la actividad actual con actor concreto (asesor legislativo)",
         "Usa modelo barato para filtrado y modelo capaz para generacion",
-        "El output de cada paso es verificable independientemente",
+        "Cada paso tiene un receptor diferente (sistema, asesor, jefe de division)",
         "Menciona embeddings para pre-filtrar programas en Paso 3",
-        "Fallback que no detiene el pipeline completo",
-        "Estima volumen: 20 proyectos → filtro → 3-5 relevantes (reduce costos)"
+        "Impacto muestra cambio cualitativo en la actividad (de lectura exhaustiva a validacion)"
       ]
     }
   },
@@ -116,67 +125,73 @@
     "difficulty": "medium",
     "ranked": true,
     "durationSeconds": 300,
-    "judgeFocus": "Prioriza comprension de QUE hacen los embeddings (representar significado como vectores, buscar por similitud) y sus limitaciones. No se espera codigo. Si el estudiante confunde embeddings con busqueda por palabras clave, baja Estructuracion. Si no identifica un limite concreto, baja Realismo.",
-    "context": "El Servicio Civil tiene una base de 8,000 descripciones de cargo del sector publico (DFL 29, Codigo del Trabajo, contratas, honorarios). Cuando se crea un cargo nuevo, necesitan encontrar cargos similares existentes para definir perfil, grado, renta y requisitos. Hoy lo hacen buscando por titulo exacto en una planilla Excel, lo que falla cuando cargos similares tienen nombres distintos (ej: 'Analista de datos' vs 'Especialista en ciencia de datos' vs 'Profesional de Business Intelligence').",
-    "question": "Responde en formato:\n\n[SOLUCION] Describe en 3-4 lineas como usarias embeddings para resolver esto.\n[SIMILITUD] Que metrica usarias para medir similitud entre cargos? Por que?\n[LIMITE] 1 caso concreto donde los embeddings fallarian (falso positivo o falso negativo).\n[ACTUALIZACION] Cuando se agrega un cargo nuevo, como se actualiza el sistema?",
-    "conceptTags": ["embeddings", "similitud_semantica", "busqueda_vectorial", "limitaciones"],
+    "judgeFocus": "Prioriza comprension de QUE hacen los embeddings y sus limitaciones, PERO tambien exige que el estudiante considere madurez de datos (la base de 8,000 descripciones debe cumplir condiciones minimas para que embeddings funcionen). Si no identifica la actividad ni condiciones de datos, baja Estructuracion. Si no identifica un limite concreto ni quien revisa los resultados, baja Realismo.",
+    "context": "El Servicio Civil tiene una base de 8,000 descripciones de cargo del sector publico (DFL 29, Codigo del Trabajo, contratas, honorarios). Cuando se crea un cargo nuevo, el analista de clasificacion necesita encontrar cargos similares existentes para definir perfil, grado, renta y requisitos. Hoy lo hace buscando por titulo exacto en una planilla Excel, lo que falla cuando cargos similares tienen nombres distintos (ej: 'Analista de datos' vs 'Especialista en ciencia de datos' vs 'Profesional de Business Intelligence').",
+    "question": "Responde en formato:\n\n[ACTIVIDAD] En que actividad del proceso se usa esta busqueda y quien la ejecuta?\n[SOLUCION] Describe en 3-4 lineas como usarias embeddings para resolver esto.\n[MADUREZ DE DATOS] Nombra 2 condiciones minimas que la base de descripciones debe cumplir para que esto funcione.\n[SIMILITUD] Que metrica usarias y por que? (1 linea)\n[LIMITE] 1 caso concreto donde los embeddings fallarian (falso positivo o falso negativo).\n[HUMANO] Quien revisa los resultados y en que casos se necesita revision?",
+    "conceptTags": ["embeddings", "similitud_semantica", "busqueda_vectorial", "madurez_datos", "actividad_institucional"],
     "idealAnswer": {
       "keyPoints": [
-        "[SOLUCION]: Convertir cada descripcion de cargo a un vector (embedding) usando una API (ej. OpenAI text-embedding-3-small). Guardar los 8,000 vectores en una base vectorial. Cuando se crea un cargo nuevo, convertir su descripcion a embedding y buscar los K cargos mas cercanos por similitud.",
-        "[SIMILITUD]: Cosine similarity. Porque mide la similitud de direccion (significado) independiente de la longitud del texto. Una descripcion larga y una corta del mismo cargo tendran cosine similarity alto.",
-        "[LIMITE]: Falso positivo: 'Analista de datos en salud publica' y 'Analista de datos en mineria' tendrian embeddings cercanos (ambos son analistas de datos) pero las rentas, requisitos y contexto son muy distintos. Los embeddings capturan similitud semantica general, no especificidad sectorial.",
-        "[ACTUALIZACION]: Calcular el embedding del cargo nuevo (1 llamada a la API) y agregarlo a la base vectorial. No hay que recalcular los embeddings existentes. Costo minimo (~$0.00001 por embedding)."
+        "[ACTIVIDAD]: La clasificacion de cargos nuevos (definir perfil, grado, renta). La ejecuta el analista de clasificacion del Servicio Civil cuando se crea un cargo nuevo.",
+        "[SOLUCION]: Convertir cada descripcion de cargo a un vector (embedding) usando una API (ej. OpenAI text-embedding-3-small). Guardar los 8,000 vectores en una base vectorial. Cuando se crea un cargo nuevo, convertir su descripcion a embedding y buscar los K cargos mas cercanos por similitud. Mostrar los 5-10 mas similares al analista para que decida.",
+        "[MADUREZ DE DATOS]: (1) Las descripciones deben estar en texto accesible y con calidad consistente (no PDFs escaneados, no campos vacios, no descripciones de 2 palabras). (2) Debe haber metadatos estructurados asociados (estamento, grado, area/sector) para poder filtrar y validar los resultados.",
+        "[SIMILITUD]: Cosine similarity. Mide similitud de significado independiente de la longitud del texto — una descripcion larga y una corta del mismo cargo tendran cosine alto.",
+        "[LIMITE]: Falso positivo: 'Analista de datos en salud publica' y 'Analista de datos en mineria' tendrian embeddings cercanos (ambos son analistas de datos) pero las rentas, requisitos y contexto institucional son muy distintos.",
+        "[HUMANO]: El analista de clasificacion revisa los resultados siempre — el sistema sugiere, no decide. Revision critica cuando: los top-5 tienen similarity scores muy parejos (zona ambigua), o cuando el cargo nuevo no tiene ningun match por encima de un umbral minimo."
       ],
-      "expectedConcepts": ["vector_embeddings", "cosine_similarity", "base_vectorial", "actualizacion_incremental"],
+      "expectedConcepts": ["actividad_clasificacion", "vector_embeddings", "cosine_similarity", "madurez_datos", "limite_concreto", "validacion_humana"],
       "commonMistakes": [
+        "No identificar la actividad ni el analista que la ejecuta",
         "Describir busqueda por keywords en vez de busqueda semantica",
-        "No mencionar donde se guardan los vectores (base vectorial / vector store)",
+        "No considerar condiciones de calidad de los datos existentes",
         "Limite generico ('a veces falla') en vez de caso concreto",
-        "Pensar que hay que reentrenar algo cuando se agrega un cargo nuevo",
-        "Confundir embeddings con fine-tuning del modelo"
+        "Confundir embeddings con fine-tuning del modelo",
+        "No mencionar quien revisa ni cuando"
       ],
       "excellentResponseIndicators": [
-        "Menciona modelo de embeddings especifico (text-embedding-3-small, etc.)",
-        "Explica por que cosine similarity es mejor que distancia euclidiana para textos",
-        "Limite concreto que muestra comprension de que embeddings capturan similitud pero no identidad",
-        "Menciona que podria combinar embeddings con filtros estructurados (grado, estamento)",
-        "Nota que el costo de embeddings es muy bajo comparado con generacion"
+        "Identifica al analista de clasificacion como actor y la actividad especifica",
+        "Condiciones de madurez mencionan calidad textual Y metadatos estructurados",
+        "Limite concreto que muestra comprension de similitud semantica vs identidad de contexto",
+        "Menciona combinar embeddings con filtros estructurados (grado, estamento)",
+        "Revision humana con criterio claro (umbral de similarity, zona ambigua)"
       ]
     }
   },
   {
-    "id": "s2api_r5_privacidad_costos",
+    "id": "s2api_r5_ia_responsable",
     "order": 5,
-    "title": "Privacidad, costos y gobernanza de APIs",
-    "category": "Gobernanza de Datos",
+    "title": "Privacidad, riesgos y gobernanza de APIs",
+    "category": "IA Responsable y Gobernanza",
     "difficulty": "hard",
     "ranked": true,
     "durationSeconds": 300,
-    "judgeFocus": "Prioriza riesgos CONCRETOS de privacidad (no genericos), mitigacion tecnica especifica, y estimacion de costos con razonamiento. Si el riesgo es generico ('se pueden filtrar datos') sin especificar QUE datos y QUE dano causa, baja Realismo. Si el costo no tiene calculo basico, baja Estructuracion.",
-    "context": "El Ministerio de Salud quiere usar GPT-4o via API para generar resumenes clinicos a partir de fichas de ingreso hospitalario. Cada ficha tiene: nombre del paciente, RUT, diagnostico, medicamentos actuales, antecedentes familiares, y notas del medico tratante. El sistema procesaria ~2,000 fichas diarias en 15 hospitales publicos.",
-    "question": "Responde en formato:\n\n[RIESGO PRIVACIDAD] 1 riesgo concreto de enviar estos datos a la API de OpenAI.\n[MITIGACION] 1 mecanismo tecnico especifico para reducir ese riesgo.\n[COSTO] Estima el costo mensual (muestra el razonamiento con tokens).\n[GOBERNANZA] 1 regla de gobernanza que el ministerio debe establecer ANTES de implementar.\n\nRegla: maximo 10 lineas.",
-    "conceptTags": ["privacidad_api", "datos_sensibles_salud", "estimacion_costos", "gobernanza_datos"],
+    "judgeFocus": "Esta es la ronda de IA responsable. Prioriza riesgos CONCRETOS (privacidad + un riesgo etico/social distinto), mitigacion tecnica Y de gobernanza, y CRITERIO DE FRENO (condicion bajo la cual NO se deberia implementar todavia). Si el riesgo es generico ('se pueden filtrar datos') sin especificar QUE datos y QUE dano causa, baja Realismo. Si no muestra criterio de 'cuando no avanzar', baja Realismo. Si el costo no tiene calculo basico, baja Estructuracion.",
+    "context": "El Ministerio de Salud quiere usar GPT-4o via API para generar resumenes clinicos a partir de fichas de ingreso hospitalario. Cada ficha tiene: nombre del paciente, RUT, diagnostico, medicamentos actuales, antecedentes familiares, y notas del medico tratante. El sistema procesaria ~2,000 fichas diarias en 15 hospitales publicos. El objetivo es que los medicos de urgencia puedan leer un resumen rapido en vez de la ficha completa.",
+    "question": "Responde en formato:\n\n[ACTIVIDAD] Que actividad clinica se quiere apoyar y quien se beneficia?\n[RIESGO PRIVACIDAD] 1 riesgo concreto de enviar estos datos a la API de OpenAI.\n[RIESGO ETICO] 1 riesgo social o etico DISTINTO de privacidad.\n[MITIGACION] 1 mecanismo tecnico + 1 regla de gobernanza para reducir estos riesgos.\n[COSTO] Estima el costo mensual (muestra razonamiento con tokens).\n[NO-GO] 1 condicion bajo la cual NO se deberia implementar todavia.",
+    "conceptTags": ["privacidad_api", "datos_sensibles_salud", "estimacion_costos", "gobernanza_datos", "ia_responsable", "criterio_freno"],
     "idealAnswer": {
       "keyPoints": [
-        "[RIESGO PRIVACIDAD]: Los datos de salud (diagnosticos, medicamentos, antecedentes familiares) vinculados a RUT son datos personales sensibles. Al enviarlos a la API de OpenAI, viajan a servidores en EEUU. Si hay una brecha de seguridad en OpenAI, se exponen datos clinicos de miles de pacientes chilenos — riesgo legal (ley de datos personales) y de dano directo a pacientes.",
-        "[MITIGACION]: Anonimizar las fichas ANTES de enviarlas a la API: reemplazar nombre por [PACIENTE], RUT por [ID_ANONIMO], y cualquier dato identificable. El mapeo ID_ANONIMO → RUT se guarda internamente. El LLM recibe la ficha sin datos identificables y genera el resumen anonimizado, que luego se re-asocia internamente.",
-        "[COSTO]: 2,000 fichas/dia * 30 dias = 60,000 fichas/mes. Cada ficha ~2,000 tokens input + ~500 tokens output. Input: 120M tokens * $2.50/1M = $300. Output: 30M tokens * $10/1M = $300. Total: ~$600/mes con GPT-4o. Con GPT-4o-mini: ~$30/mes.",
-        "[GOBERNANZA]: Politica de anonimizacion obligatoria: ningun dato personal identificable puede enviarse a APIs externas. Debe existir un paso automatizado de anonimizacion verificable antes de cada llamada API, y un log auditable de que datos se enviaron."
+        "[ACTIVIDAD]: Generacion de resumenes clinicos para triaje de urgencia. Se benefician los medicos de urgencia que necesitan leer la informacion del paciente rapidamente al recibir un caso.",
+        "[RIESGO PRIVACIDAD]: Los datos de salud (diagnosticos, medicamentos, antecedentes familiares) vinculados a RUT son datos personales sensibles. Al enviarlos a la API de OpenAI, viajan a servidores en EEUU. Una brecha expone datos clinicos de miles de pacientes chilenos — riesgo legal y dano directo.",
+        "[RIESGO ETICO]: Un resumen que omita o distorsione informacion clinica critica (ej: alergia a un medicamento, antecedente de enfermedad) podria llevar a una decision medica erronea. El medico de urgencia confia en el resumen y no lee la ficha completa — el error del LLM se traduce en dano al paciente.",
+        "[MITIGACION]: Tecnica: anonimizar fichas antes del envio (nombre → [PACIENTE], RUT → [ID], datos identificables eliminados). Gobernanza: protocolo obligatorio de validacion clinica — ningun resumen generado por IA se usa como unica fuente; el medico debe poder acceder a la ficha completa con 1 click.",
+        "[COSTO]: 2,000 fichas/dia * 30 dias = 60,000/mes. ~2,000 tokens input + ~500 output por ficha. Input: 120M tokens * $2.50/1M = $300. Output: 30M tokens * $10/1M = $300. Total: ~$600/mes con GPT-4o, ~$30/mes con GPT-4o-mini.",
+        "[NO-GO]: No implementar si no existe un protocolo validado de anonimizacion automatica con verificacion (no manual). Si los datos salen identificables a la API externa, el riesgo legal y etico es inaceptable sin importar el beneficio operativo."
       ],
-      "expectedConcepts": ["datos_sensibles_salud", "anonimizacion", "calculo_tokens_costo", "politica_gobernanza"],
+      "expectedConcepts": ["actividad_clinica", "datos_sensibles_salud", "riesgo_etico_no_privacidad", "anonimizacion", "gobernanza_clinica", "calculo_tokens_costo", "criterio_freno"],
       "commonMistakes": [
-        "Riesgo generico ('se podrian filtrar datos') sin especificar QUE datos y QUE consecuencia",
-        "Mitigacion generica ('encriptar los datos') que no aborda el problema real (el LLM necesita leer el texto)",
+        "No identificar la actividad clinica ni quien se beneficia",
+        "Riesgo generico ('se podrian filtrar datos') sin especificar QUE datos y QUE dano",
+        "Riesgo etico que es solo reformulacion del riesgo de privacidad",
+        "Mitigacion generica ('encriptar los datos') que no aborda el problema real",
         "No estimar costo o estimar sin basarse en tokens",
-        "Gobernanza vaga ('tener una politica de datos') sin especificar QUE politica",
-        "Ignorar que datos de salud son una categoria especial de datos sensibles"
+        "No dar condicion de NO-GO (asumir que siempre se debe implementar)"
       ],
       "excellentResponseIndicators": [
-        "Identifica datos de salud + RUT como combinacion especialmente sensible",
-        "Mitigacion tecnica que preserva la utilidad del sistema (anonimizacion, no encriptacion)",
-        "Calculo de costo con tokens que muestra comprension del modelo de precios",
-        "Compara costo GPT-4o vs GPT-4o-mini para mostrar que el modelo importa",
-        "Gobernanza que incluye verificacion automatica, no solo politica escrita"
+        "Identifica la actividad de triaje y el medico de urgencia como beneficiario",
+        "Riesgo etico concreto: error en resumen que afecta decision medica",
+        "Mitigacion que combina componente tecnico (anonimizacion) Y gobernanza (protocolo clinico)",
+        "Calculo de costo con tokens y comparacion GPT-4o vs GPT-4o-mini",
+        "NO-GO que muestra criterio de 'freno' responsable — a veces la respuesta es 'todavia no'"
       ]
     }
   },
@@ -188,31 +203,35 @@
     "difficulty": "hard",
     "ranked": true,
     "durationSeconds": 300,
-    "judgeFocus": "Prioriza metricas CONCRETAS y medibles, baseline que se pueda construir en la practica, y monitoreo que no dependa de revision manual de cada caso. Si la metrica es vaga ('medir si funciona bien') o el baseline es irrealizable ('etiquetar todas las denuncias'), baja Estructuracion y Realismo.",
-    "context": "Una superintendencia implemento hace 3 meses un sistema basado en GPT-4o (via API) que clasifica denuncias ciudadanas en 8 categorias y asigna nivel de urgencia (alta/media/baja). Procesa ~500 denuncias semanales. Los funcionarios reportan que 'a veces clasifica mal', pero no hay datos sistematicos. No se hizo evaluacion formal antes del despliegue.",
-    "question": "Responde en formato:\n\n[METRICA] 1 metrica concreta para medir la calidad de la clasificacion.\n[BASELINE] Como obtendrias un gold standard para comparar? (metodo + tamano minimo)\n[MONITOREO] 1 mecanismo de monitoreo continuo que no requiera revisar cada caso.\n[ACCION] Que haces concretamente cuando detectas que la calidad bajo?",
-    "conceptTags": ["evaluacion_llm", "baseline_gold_standard", "monitoreo_drift", "metricas_clasificacion"],
+    "judgeFocus": "Prioriza que el estudiante distinga TRES niveles de metrica: (1) desempeno del modelo, (2) desempeno del proceso, (3) impacto en servicio. El baseline/gold standard debe ser construible en la practica. El monitoreo no debe requerir revision manual de cada caso. Premiar si formula un objetivo concreto y medible (SMART) y si identifica quien es responsable de la evaluacion periodica.",
+    "context": "Una superintendencia implemento hace 3 meses un sistema basado en GPT-4o (via API) que clasifica denuncias ciudadanas en 8 categorias y asigna nivel de urgencia (alta/media/baja). Procesa ~500 denuncias semanales. Los funcionarios reportan que 'a veces clasifica mal', pero no hay datos sistematicos. No se hizo evaluacion formal antes del despliegue. Antes del sistema, 3 funcionarios leian y clasificaban cada denuncia manualmente.",
+    "question": "Responde en formato:\n\n[OBJETIVO] Formula en 1 linea que mejora busca este sistema (concreto y medible).\n[METRICA MODELO] 1 metrica concreta para medir la calidad del modelo de clasificacion.\n[METRICA PROCESO] 1 metrica operativa o de servicio (no del modelo, sino del proceso).\n[BASELINE] Como obtendrias un gold standard para comparar? (metodo + tamano minimo)\n[MONITOREO] 1 mecanismo continuo escalable (no revisar cada caso).\n[ACCION + RESPONSABLE] Que haces cuando baja la calidad, y que actor institucional lo revisa periodicamente?",
+    "conceptTags": ["evaluacion_llm", "baseline_gold_standard", "monitoreo_drift", "metricas_clasificacion", "objetivo_SMART", "responsable_institucional"],
     "idealAnswer": {
       "keyPoints": [
-        "[METRICA]: Accuracy (o F1 macro si las categorias estan desbalanceadas): porcentaje de denuncias clasificadas correctamente por el LLM comparado con la clasificacion humana de referencia.",
-        "[BASELINE]: Tomar una muestra aleatoria de 200 denuncias de las ultimas semanas. Que 2 funcionarios expertos las clasifiquen independientemente (para medir acuerdo inter-anotador). Las clasificaciones consensuadas son el gold standard. 200 es suficiente para 8 categorias (~25 por categoria).",
-        "[MONITOREO]: Sampling semanal automatico: tomar 5% de las denuncias clasificadas por el LLM (~25/semana), enviarlas a un funcionario para revision. Calcular accuracy sobre esa muestra. Si baja de un umbral (ej: 85%), activar alerta.",
-        "[ACCION]: (1) Analizar los errores de la ultima semana (que categorias confunde?). (2) Ajustar el prompt (agregar ejemplos de los casos que fallan, clarificar definiciones de categorias ambiguas). (3) Re-evaluar con el gold standard. (4) Si no mejora, considerar cambiar modelo o agregar paso de validacion humana para categorias problematicas."
+        "[OBJETIVO]: Reducir el tiempo de clasificacion y derivacion de denuncias de 24h (manual) a <2h (automatizado), manteniendo una accuracy de clasificacion ≥85% vs la clasificacion humana.",
+        "[METRICA MODELO]: Macro F1 (o accuracy si las categorias estan balanceadas): porcentaje de denuncias clasificadas correctamente por el LLM comparado con la clasificacion humana de referencia. Macro F1 si las categorias estan desbalanceadas.",
+        "[METRICA PROCESO]: Tiempo promedio entre recepcion de denuncia y derivacion al area correcta. O bien: porcentaje de denuncias que requieren reclasificacion manual despues de la asignacion automatica.",
+        "[BASELINE]: Tomar una muestra aleatoria de 200 denuncias recientes. Que 2 funcionarios expertos las clasifiquen independientemente (para medir acuerdo inter-anotador). Las clasificaciones consensuadas son el gold standard. 200 es suficiente para 8 categorias (~25 por categoria).",
+        "[MONITOREO]: Sampling semanal automatico: tomar 5% de las denuncias clasificadas por el LLM (~25/semana), enviarlas a un funcionario para revision. Calcular accuracy sobre esa muestra. Si baja de un umbral (ej: 85%), activar alerta. Dashboard con tendencia semanal.",
+        "[ACCION + RESPONSABLE]: (1) Analizar patrones de error (que categorias confunde?). (2) Ajustar el prompt con ejemplos de los casos que fallan. (3) Re-evaluar con el gold standard. Responsable: jefatura del area de denuncias + un analista designado, no solo el equipo tecnico. Revision mensual minima."
       ],
-      "expectedConcepts": ["accuracy_f1", "gold_standard_muestral", "sampling_monitoreo", "ajuste_prompt"],
+      "expectedConcepts": ["objetivo_medible", "metrica_modelo_vs_proceso", "gold_standard_muestral", "acuerdo_inter_anotador", "sampling_monitoreo", "responsable_no_solo_tecnico"],
       "commonMistakes": [
-        "Metrica vaga ('medir si funciona bien', 'porcentaje de errores') sin definir contra que se compara",
+        "Objetivo vago ('mejorar la clasificacion') sin metrica ni plazo",
+        "Solo metrica de modelo sin metrica de proceso/servicio",
+        "Metrica vaga ('medir si funciona bien') sin definir contra que se compara",
         "Baseline irrealizable ('etiquetar las 500 denuncias semanales manualmente')",
         "Monitoreo que requiere revisar cada caso (no escala)",
         "Accion generica ('mejorar el sistema') sin pasos concretos",
-        "No mencionar acuerdo inter-anotador (2 personas pueden clasificar distinto)"
+        "Responsable: solo 'el equipo de TI' sin involucrar al area usuaria"
       ],
       "excellentResponseIndicators": [
-        "Distingue accuracy de F1 y menciona cuando usar cada una",
+        "Objetivo concreto con metrica y horizonte temporal (SMART)",
+        "Distingue metrica del modelo (F1/accuracy) de metrica del proceso (tiempo, reclasificacion)",
         "Gold standard con tamano justificado y acuerdo inter-anotador",
         "Monitoreo por sampling con porcentaje y umbral definidos",
-        "Accion que empieza por diagnostico (que falla?) antes de solucion",
-        "Menciona que el prompt se puede ajustar sin cambiar el modelo"
+        "Responsable que incluye area usuaria + tecnica, no solo 'el desarrollador'"
       ]
     }
   }

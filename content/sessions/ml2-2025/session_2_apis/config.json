@@ -10,6 +10,8 @@
     "api_vs_local",
     "privacidad_datos",
     "estimacion_costos",
+    "actividad_institucional",
+    "PESTL",
     "structured_io",
     "json_output",
     "prompt_design",
@@ -20,10 +22,15 @@
     "embeddings",
     "similitud_semantica",
     "busqueda_vectorial",
+    "madurez_datos",
     "gobernanza_datos",
+    "ia_responsable",
+    "criterio_freno",
     "evaluacion_llm",
     "metricas_clasificacion",
-    "monitoreo_drift"
+    "monitoreo_drift",
+    "objetivo_SMART",
+    "responsable_institucional"
   ],
   "judges": [
     { "judgeId": "technical_expert", "weight": 0.35 },

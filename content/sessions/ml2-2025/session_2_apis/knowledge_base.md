@@ -12,6 +12,12 @@ Pasar de "usar un LLM" a **disenar sistemas basados en LLM** para el sector publ
 ### Principio fundamental
 **Un LLM via API no es una solucion, es un componente.** La diferencia entre un prototipo y un sistema operacional esta en el diseno del pipeline completo: que datos entran, como se transforman, que sale, como se valida, y que pasa cuando falla.
 
+### Conexion con la clase anterior
+Los estudiantes ya conocen la guia de innovacion publica, que organiza un proyecto en fases: problema (que afecta a personas usuarias), equipo multidisciplinario, prefactibilidad PESTL, mapeo de actores y actividades, evaluacion de madurez de datos, y objetivos SMART con linea base. Esta sesion agrega la capa tecnica de LLMs/APIs, pero cada solucion debe seguir anclada a una **actividad institucional concreta**, un **actor/usuario**, y una **mejora medible**.
+
+### Regla madre
+Cada pregunta del juego evalua una capacidad tecnica de LLMs via API, pero obliga al estudiante a situarla dentro de una actividad institucional concreta, un actor/usuario, un riesgo de implementacion y una mejora esperada.
+
 ---
 
 ## 1. LLMs via API: Conceptos Clave
@@ -268,7 +274,103 @@ Para evaluar, se necesita un **baseline** (linea base):
 
 ---
 
-## 8. Function Calling y Herramientas
+## 8. Analisis de Prefactibilidad PESTL
+
+### Que es PESTL
+Antes de implementar una solucion de IA, la guia de innovacion publica pide evaluar riesgos en 5 dimensiones:
+
+- **Politico**: Cambio de autoridades, falta de prioridad politica, oposicion de actores internos o externos
+- **Economico**: Presupuesto insuficiente, costo de operacion post-piloto, dependencia de financiamiento externo
+- **Social**: Resistencia de funcionarios, impacto en empleo, aceptacion ciudadana, equidad en el acceso
+- **Tecnologico**: Capacidad tecnica del equipo, infraestructura disponible, dependencia de proveedores, obsolescencia
+- **Legal/Normativo**: Proteccion de datos personales, regulacion sectorial, responsabilidad legal por decisiones automatizadas
+
+### Aplicacion a LLMs via API
+Al elegir entre API comercial y modelo local, el analisis PESTL es clave:
+- **Legal**: Datos sensibles (salud, RUT, judiciales) enviados a APIs externas pueden violar normativa
+- **Economico**: Costo de API crece linealmente vs costo fijo de modelo local
+- **Tecnologico**: API no requiere equipo tecnico; modelo local si
+- **Social**: Transparencia sobre que datos se procesan y como
+
+---
+
+## 9. IA Responsable en el Sector Publico
+
+### Principios
+- **Transparencia**: Los ciudadanos y funcionarios deben saber cuando una decision fue apoyada por IA
+- **Trazabilidad**: Cada decision del sistema debe ser auditable (input, output, modelo, fecha)
+- **Evaluacion de impacto algoritmico**: Antes de implementar, evaluar posibles danos (sesgos, errores, exclusion)
+- **Ficha de transparencia**: Documento publico que describe que hace el sistema, que datos usa, sus limitaciones conocidas, y quien es responsable
+
+### Criterio de "freno" (no-go)
+La guia de innovacion publica es clara: **no avanzar si faltan condiciones minimas**. Condiciones tipicas de no-go:
+- No hay protocolo de anonimizacion para datos sensibles
+- No hay gold standard para evaluar el sistema
+- No hay responsable institucional designado
+- Los datos disponibles no tienen calidad suficiente
+- No hay presupuesto para operacion post-piloto
+
+### Riesgos eticos mas alla de privacidad
+- **Sesgo**: El sistema puede reproducir sesgos de datos historicos
+- **Opacidad**: Decisiones automatizadas sin explicacion para el ciudadano
+- **Dependencia cognitiva**: Funcionarios que dejan de pensar criticamente y solo siguen al sistema
+- **Errores con consecuencias**: En salud, justicia o beneficios sociales, un error del LLM puede causar dano directo
+
+---
+
+## 10. Madurez de Datos
+
+### Por que importa
+Los embeddings, pipelines y clasificadores solo funcionan si los datos subyacentes tienen calidad suficiente. La guia de innovacion publica evalua madurez en varias dimensiones:
+
+### Dimensiones de madurez
+- **Accesibilidad**: Los datos estan en formato digital legible? O son PDFs escaneados, archivos fisicos?
+- **Calidad**: Los registros estan completos? Hay campos vacios, duplicados, inconsistencias?
+- **Granularidad**: Los datos tienen el nivel de detalle necesario? (ej: "reclamo" vs "tipo de reclamo + empresa + fecha + monto")
+- **Integracion**: Los datos estan en un solo sistema o dispersos en multiples planillas/bases?
+- **Historia**: Hay datos historicos suficientes para establecer linea base y evaluar mejora?
+- **Documentacion**: Hay diccionario de datos, metadata, descripcion de campos?
+- **Privacidad**: Los datos requieren anonimizacion? Hay consentimiento para su uso?
+
+### Aplicacion a proyectos LLM
+- Para embeddings: las descripciones deben ser texto accesible, con calidad consistente y metadatos asociados
+- Para clasificacion: necesitas suficientes ejemplos de cada categoria (no solo las mas frecuentes)
+- Para RAG: los documentos fuente deben estar en formato procesable, actualizados, y con autoria clara
+
+---
+
+## 11. Objetivos SMART y Linea Base
+
+### Que es un objetivo SMART
+- **Specific**: Que mejora concreta se busca
+- **Measurable**: Con que metrica se mide
+- **Achievable**: Es realista con los recursos disponibles
+- **Relevant**: Esta alineado con la mision institucional
+- **Time-bound**: En que plazo se espera ver resultados
+
+### Ejemplo
+- Malo: "Mejorar la atencion ciudadana con IA"
+- Bueno: "Reducir el tiempo promedio de clasificacion de reclamos de 24h a 2h, manteniendo accuracy ≥85%, en 3 meses"
+
+### Linea base
+Antes de implementar, medir el estado actual:
+- Tiempo promedio actual de la actividad manual
+- Tasa de error actual (si se conoce)
+- Volumen de casos procesados
+- Satisfaccion de usuarios (si se mide)
+
+Sin linea base, no se puede demostrar que el sistema mejoro algo.
+
+### Metricas de modelo vs metricas de proceso vs metricas de impacto
+- **Modelo**: Accuracy, F1, precision, recall (mide si el LLM clasifica bien)
+- **Proceso**: Tiempo de procesamiento, tasa de reclasificacion manual, backlog (mide si el proceso mejoro)
+- **Impacto**: Satisfaccion ciudadana, cobertura de atencion, tiempo de resolucion (mide si el servicio mejoro)
+
+Un buen sistema debe mejorar las tres, pero al minimo las metricas de modelo y proceso.
+
+---
+
+## 12. Function Calling y Herramientas
 
 ### Que es function calling
 Capacidad de los LLMs modernos de "llamar funciones" definidas por el desarrollador. El LLM no ejecuta la funcion — solo genera los argumentos correctos, y el sistema los ejecuta.
@@ -297,9 +399,15 @@ Esta es la segunda clase. Se espera:
 - Nocion basica de embeddings y su uso para busqueda semantica
 - Pensamiento sobre evaluacion y validacion de outputs de LLM
 - Aplicacion de estos conceptos a problemas del sector publico chileno
+- Capacidad de situar cada herramienta tecnica dentro de una actividad institucional con actor concreto
+- Conciencia de riesgos PESTL y criterio de "freno" (cuando NO implementar)
+- Nocion de IA responsable: transparencia, trazabilidad, evaluacion de impacto
+- Comprension de madurez de datos como precondicion para cualquier solucion
+- Formulacion de objetivos medibles con linea base
 
 No se espera aun:
 - Saber escribir codigo para llamar APIs
 - Conocimiento profundo de arquitecturas de modelos
 - Experiencia con despliegue de modelos
 - Dominio de herramientas especificas (LangChain, DSPy, etc.)
+- Conocimiento detallado de normativa chilena de datos personales (pero si conciencia de su existencia)
