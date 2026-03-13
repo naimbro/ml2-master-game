@@ -1,415 +1,234 @@
-# Sesion 2: LLMs via API - Del Texto al Sistema - Base de Conocimiento
+# Sesion 2: LLMs via API - Base de Conocimiento para Jueces
 
-Este documento contiene el material de referencia que los jueces AI deben usar para evaluar las respuestas de los estudiantes. Los estudiantes han recibido este marco conceptual como parte de la segunda clase.
+Este documento contiene el material de referencia que los jueces AI deben usar para evaluar las respuestas de los estudiantes. Solo incluye conceptos efectivamente ensenados en clase.
 
 ---
 
 ## Marco de la Sesion
 
-### Objetivo
-Pasar de "usar un LLM" a **disenar sistemas basados en LLM** para el sector publico. La clase cubre como interactuar con LLMs via API, disenar inputs y outputs estructurados, estimar costos, manejar riesgos de privacidad, y construir pipelines multi-paso.
+### Que se enseno hoy
 
-### Principio fundamental
-**Un LLM via API no es una solucion, es un componente.** La diferencia entre un prototipo y un sistema operacional esta en el diseno del pipeline completo: que datos entran, como se transforman, que sale, como se valida, y que pasa cuando falla.
+1. **Uso basico de LLM via API**: Los estudiantes usaron Gemini (google.generativeai) en un notebook. Aprendieron a llamar model.generate_content() con un prompt, iterar sobre un dataset de noticias usando un loop, y obtener clasificaciones simples desde texto.
+
+2. **Guia de innovacion publica**: Aplicacion de los 6 pasos de la guia a proyectos de IA en el sector publico (problema, prefactibilidad, actores/actividades, datos, objetivos).
+
+3. **Riesgos y etica de IA generativa**: Privacidad, justicia, transparencia, evaluacion de impacto algoritmico, criterio de freno (cuando NO implementar).
+
+4. **IA en seguridad**: Pipeline ingesta-procesamiento-accion, riesgos democraticos (opacidad, rezago legal, asimetria de poder, efecto inhibidor/autocensura).
+
+### Que NO se enseno (no premiar si aparece como si fuera obvio)
+
+- Embeddings, cosine similarity, busqueda vectorial
+- Pipelines multi-paso complejos (cadenas de LLM)
+- Estimacion detallada de costos por tokens
+- Comparacion sistematica API vs modelo local/open-source
+- Fine-tuning, RAG, function calling
+- Despliegue de modelos en produccion
+- Monitoreo post-despliegue avanzado (drift, sampling, F1)
+- Frameworks como LangChain, DSPy, etc.
+
+### Principio de evaluacion
+
+**Una respuesta simple pero bien encuadrada puede puntuar mas alto que una sofisticada pero desconectada de la clase.** No premiar al alumno mas chamullento; premiar al que entendio donde entra la IA, donde no, y que riesgos trae cuando entra.
 
 ### Conexion con la clase anterior
-Los estudiantes ya conocen la guia de innovacion publica, que organiza un proyecto en 6 pasos: conformar equipo, describir el problema (personas usuarias, contexto, indicadores), analizar prefactibilidad (riesgos politicos, economicos, sociales, tecnologicos, normativos), identificar actores y actividades clave, mapear datos (evaluar madurez), y definir objetivos medibles con linea base. Esta sesion agrega la capa tecnica de LLMs/APIs, pero cada solucion debe seguir anclada a una **actividad institucional concreta**, un **actor/usuario**, y una **mejora medible**.
 
-### Regla madre
-Cada pregunta del juego evalua una capacidad tecnica de LLMs via API, pero obliga al estudiante a situarla dentro de una actividad institucional concreta, un actor/usuario, un riesgo de implementacion y una mejora esperada.
+Los estudiantes ya conocen la guia de innovacion publica, que organiza un proyecto en 6 pasos: conformar equipo, describir el problema (personas usuarias, contexto), analizar prefactibilidad (riesgos en multiples ambitos), identificar actores y actividades clave, mapear datos (evaluar madurez), y definir objetivos medibles con linea base. Tambien vieron: procesos de decision, TRL (Technology Readiness Level), limites y guardrails de los LLMs.
 
 ---
 
-## 1. LLMs via API: Conceptos Clave
+## 1. LLM via API: Lo Basico (Lo que Vieron en Clase)
 
 ### Que es una API de LLM
-Una API (Application Programming Interface) permite enviar texto a un modelo de lenguaje alojado en la nube y recibir una respuesta generada. Los principales proveedores son:
-- **OpenAI** (GPT-4o, GPT-4o-mini): API REST con autenticacion por API key
-- **Google** (Gemini): Similar, con integracion a Google Cloud
-- **Anthropic** (Claude): Similar, enfocado en seguridad
-- **Open source via hosting** (Llama, Mistral): Se despliegan en servidores propios o cloud
 
-### Anatomia de una llamada API
-```
-Input: prompt (texto) + parametros (temperature, max_tokens, model)
-   ↓
-API del LLM (procesamiento en servidores del proveedor)
-   ↓
-Output: texto generado (completion)
-```
+Una API permite enviar texto a un modelo de lenguaje alojado en la nube y recibir una respuesta generada. En clase usaron Gemini de Google.
 
-### Parametros clave
-- **model**: Que modelo usar (gpt-4o, gpt-4o-mini, etc.)
-- **temperature**: Control de aleatoriedad (0 = determinista, 1 = creativo). Para tareas estructuradas, usar 0-0.3.
-- **max_tokens**: Limite de longitud de respuesta
-- **response_format**: JSON mode para outputs estructurados
-- **system prompt**: Instrucciones de comportamiento persistentes
+### Patron basico del notebook
 
-### Tokens y costos
-- Los LLMs procesan texto en **tokens** (fragmentos de ~4 caracteres en ingles, ~3 en espanol)
-- **Input tokens**: Lo que envias (prompt + contexto)
-- **Output tokens**: Lo que el modelo genera
-- Los output tokens son mas caros que los input tokens (tipicamente 2-4x)
-- **Ejemplo de precios** (GPT-4o, 2025):
-  - Input: ~$2.50 por millon de tokens
-  - Output: ~$10.00 por millon de tokens
-- **GPT-4o-mini** es ~20x mas barato que GPT-4o, suficiente para clasificacion y extraccion
+```python
+import google.generativeai as genai
 
-### Estimacion de costos
-Para estimar el costo de un proyecto:
-1. Estimar numero de documentos/consultas por mes
-2. Estimar tokens promedio por documento (input)
-3. Estimar tokens de respuesta (output)
-4. Multiplicar por precio por token del modelo elegido
-5. Agregar margen (buffer de 30-50% por reintentos y errores)
+genai.configure(api_key="...")
+model = genai.GenerativeModel("gemini-pro")
 
-**Ejemplo**: 50,000 consultas/mes * 500 tokens input * 200 tokens output
-- Input: 25M tokens * $2.50/1M = $62.50
-- Output: 10M tokens * $10/1M = $100.00
-- Total: ~$162.50/mes con GPT-4o (~$8/mes con GPT-4o-mini)
+# Clasificar UNA noticia
+response = model.generate_content(f"Clasifica esta noticia: {texto}")
+print(response.text)
 
----
-
-## 2. API Comercial vs Modelo Local (Open Source)
-
-### Cuando usar API comercial
-- Volumen bajo-medio (< 100,000 consultas/mes)
-- No hay datos sensibles o se pueden anonimizar
-- Se necesita el mejor modelo disponible (GPT-4o, Claude)
-- No hay equipo tecnico para mantener infraestructura
-- Prototipado rapido
-
-### Cuando usar modelo local/open source
-- Datos altamente sensibles (salud, RUT, datos judiciales)
-- Volumen muy alto (costo de API se vuelve prohibitivo)
-- Se necesita control total sobre el modelo y los datos
-- Regulacion prohibe enviar datos a servidores externos
-- Latencia critica (API agrega ~0.5-2 segundos por llamada)
-
-### Modelos open source relevantes
-- **Llama 3** (Meta): Excelente rendimiento general, licencia permisiva
-- **Mistral/Mixtral**: Buenos para tareas en espanol
-- **Phi-3** (Microsoft): Pequenos pero capaces, corren en hardware modesto
-- Despliegue: vLLM, Ollama, AWS SageMaker, Google Cloud Vertex AI
-
-### Trade-offs clave
-
-| Dimension | API Comercial | Modelo Local |
-|-----------|--------------|-------------|
-| Costo inicial | Bajo (pago por uso) | Alto (servidor GPU) |
-| Costo a escala | Crece linealmente | Se aplana |
-| Privacidad | Datos salen de la organizacion | Datos quedan internos |
-| Mantenimiento | Proveedor actualiza | Equipo propio mantiene |
-| Rendimiento | Estado del arte | Menor (pero mejorando) |
-| Dependencia | Lock-in con proveedor | Autonomia total |
-| Latencia | Variable (~1-5s) | Controlable |
-
----
-
-## 3. Inputs y Outputs Estructurados
-
-### El LLM como funcion
-En vez de pensar en el LLM como "un chatbot", pensarlo como una **funcion** que transforma datos:
-```
-f(input_estructurado) → output_estructurado
+# Clasificar MUCHAS noticias (loop)
+for noticia in noticias:
+    response = model.generate_content(f"Clasifica: {noticia}")
+    resultados.append(response.text)
 ```
 
-### Diseno de prompts como ingenieria de sistemas
-Un buen prompt para el sector publico incluye:
-1. **Rol**: Quien es el LLM en este contexto
-2. **Tarea**: Que debe hacer exactamente
-3. **Input**: Que datos recibe (con formato)
-4. **Output**: Que debe producir (con esquema JSON)
-5. **Restricciones**: Que NO debe hacer
-6. **Ejemplo**: Un caso resuelto correctamente
+### Conceptos clave que los estudiantes deben manejar
 
-### JSON como formato de output
-Para tareas de extraccion, clasificacion y scoring, el output debe ser JSON estructurado:
-```json
-{
-  "categoria": "pension_vejez",
-  "urgencia": "alta",
-  "entidad_mencionada": "AFP Habitat",
-  "accion_solicitada": "revision_de_monto",
-  "confianza": 0.85
-}
-```
+- **Prompt**: La instruccion que se le da al modelo. Debe ser clara y acotada.
+- **Output estructurado**: El resultado util no es "una respuesta bonita", sino campos concretos y usables (tema, categoria, relevancia, etc.).
+- **Loop sobre datos**: Aplicar el mismo prompt a muchos textos usando un ciclo. Es el patron basico para escalar de 1 ejemplo a N.
+- **El LLM como clasificador/extractor**: En el ejercicio practico, el LLM actua como una funcion que toma texto y devuelve una clasificacion o extraccion.
 
-### Validacion de output
-Siempre validar que el output del LLM:
-- Tiene el formato esperado (JSON valido)
-- Los campos obligatorios estan presentes
-- Los valores estan dentro de rangos permitidos (ej: confianza entre 0 y 1)
-- Las categorias son de una lista cerrada (allowlist)
-- No contiene alucinaciones verificables
+### Lo que NO necesitan saber aun
+
+- Parametros avanzados (temperature, max_tokens, JSON mode)
+- Diferencias de costo entre modelos (GPT-4o vs GPT-4o-mini)
+- Anatomia detallada de tokens
+- Validacion programatica de outputs (JSON parsing, allowlists)
 
 ---
 
-## 4. Embeddings y Representacion Semantica
+## 2. Guia de Innovacion Publica: Los 6 Pasos
 
-### Que son los embeddings
-Un embedding es un **vector numerico** (lista de numeros) que representa el significado de un texto. Textos con significado similar tendran vectores cercanos en el espacio vectorial.
+### Paso 1: Conformar el equipo
 
-### Para que sirven en el sector publico
-- **Busqueda semantica**: Encontrar documentos por significado, no solo por palabras exactas
-- **Clasificacion**: Agrupar documentos similares automaticamente
-- **Deteccion de duplicados**: Encontrar reclamos o solicitudes repetidas
-- **Recomendacion**: Sugerir documentos relevantes basados en similitud
+Reunir personas con roles complementarios (tecnico, de negocio, de atencion).
 
-### Metricas de similitud
-- **Cosine similarity**: La mas usada. Mide angulo entre vectores. Rango: -1 a 1 (1 = identicos)
-- **Distancia euclidiana**: Distancia geometrica directa
-- Cosine similarity es preferible porque es independiente de la longitud del texto
+### Paso 2: Describir el problema
 
-### APIs de embeddings
-- **OpenAI** text-embedding-3-small: Barato, rapido, buena calidad
-- **OpenAI** text-embedding-3-large: Mejor calidad, mas caro
-- Costo tipico: ~$0.02 por millon de tokens (muy barato comparado con generacion)
+- El problema debe formularse **desde la experiencia de la persona usuaria**, no desde la institucion.
+- **No confundir problema con solucion**: "No tenemos chatbot" no es un problema. "Las personas no entienden los requisitos del subsidio" si lo es.
+- Identificar: quienes son las personas usuarias, en que contexto estan, que friccion enfrentan.
+- La guia da el ejemplo de que a veces no corresponde hacer un chatbot, sino arreglar el servicio o la informacion.
 
-### Flujo tipico de busqueda semantica
-1. **Indexacion**: Convertir todos los documentos a embeddings y guardarlos en una base vectorial
-2. **Consulta**: Convertir la pregunta del usuario a embedding
-3. **Busqueda**: Encontrar los K documentos mas cercanos (nearest neighbors)
-4. **Presentacion**: Mostrar resultados ordenados por similitud
+### Paso 3: Analizar la prefactibilidad
 
-### Limitaciones de embeddings
-- No capturan logica o razonamiento, solo similitud semantica
-- Pueden dar falsos positivos con textos que usan las mismas palabras pero significan cosas distintas
-- Pueden dar falsos negativos con textos que significan lo mismo pero usan palabras muy distintas
-- Calidad depende del idioma (modelos entrenados principalmente en ingles)
-- Necesitan actualizarse cuando cambia el corpus
+Antes de implementar, evaluar riesgos en multiples ambitos:
+- **Politico**: Alineamiento con autoridades, prioridad institucional
+- **Economico**: Recursos para desarrollo Y para operacion posterior
+- **Social**: Aprobacion ciudadana, riesgos eticos (privacidad, justicia, transparencia)
+- **Tecnologico**: Datos existentes, capacidad humana, infraestructura
+- **Normativo**: Competencias legales, restricciones de datos
 
----
+Cada ambito donde la respuesta sea "no" indica un tema que debe resolverse antes de seguir.
 
-## 5. Pipelines Multi-Paso con LLMs
+### Paso 4: Identificar actores y actividades clave
 
-### Que es un pipeline LLM
-Un pipeline es una **cadena de pasos** donde el output de un paso alimenta el input del siguiente. Cada paso puede ser una llamada a un LLM, una consulta a base de datos, o una transformacion de datos.
+- **Actores**: Personas o roles que participan en el proceso (funcionario de atencion, ciudadano, jefe de area, equipo de contenidos, etc.)
+- **Actividades**: Que hace cada actor concretamente (leer reclamos, derivar solicitudes, actualizar informacion, etc.)
+- Situar la solucion en UNA actividad especifica de UN actor concreto.
 
-### Patron tipico
-```
-Documento crudo → [Paso 1: Extraccion] → datos estructurados
-                → [Paso 2: Enriquecimiento] → datos enriquecidos
-                → [Paso 3: Generacion] → resumen/reporte
-```
+### Paso 5: Mapear datos y evaluar madurez
 
-### Principios de diseno
-1. **Cada paso hace una sola cosa**: No pedirle al LLM que haga todo en una sola llamada
-2. **Outputs verificables**: Cada paso produce un output que se puede validar
-3. **Fallback definido**: Que pasa si un paso falla (reintentar, escalar a humano, usar default)
-4. **Costos controlados**: Usar modelos baratos para pasos simples (clasificacion), caros para pasos complejos (generacion)
+Los datos son la materia prima. Su madurez debe ser suficiente para realizar el proyecto:
+- **Accesibilidad**: Estan en formato digital legible? O son PDFs escaneados, archivos fisicos?
+- **Calidad**: Registros completos? Campos vacios, duplicados, inconsistencias?
+- **Privacidad**: Requieren anonimizacion? Hay consentimiento para su uso?
+- **Documentacion**: Hay descripcion de campos, diccionario de datos?
 
-### Manejo de errores en pipelines
-- **Reintentos**: Reintentar con backoff exponencial si la API falla
-- **Timeout**: Definir tiempo maximo por paso
-- **Validacion intermedia**: Verificar output de cada paso antes de pasar al siguiente
-- **Logging**: Registrar input/output de cada paso para debugging
-- **Circuit breaker**: Si un paso falla N veces seguidas, detener el pipeline
+Si los datos no tienen calidad suficiente, **no partir** — primero limpiar/estandarizar.
+
+### Paso 6: Definir objetivos medibles
+
+- **Objetivo SMART**: Especifico (que mejora concreta), Medible (con que indicador), Alcanzable (realista), Relevante (alineado con mision), Temporal (en que plazo).
+- **Linea base**: Medir el estado actual ANTES de implementar. Sin linea base no se puede demostrar mejora.
+- Ejemplo malo: "Mejorar la atencion ciudadana con IA"
+- Ejemplo bueno: "Reducir el tiempo promedio de derivacion de reclamos de 5 dias a 2 dias en 6 meses"
 
 ---
 
-## 6. Privacidad y Gobernanza de Datos con APIs
+## 3. IA Responsable en el Sector Publico
 
-### Riesgos de enviar datos a APIs externas
-- **Datos viajan fuera de la organizacion**: El proveedor puede almacenar o usar los datos
-- **Ley de Proteccion de Datos Personales (Chile)**: Datos personales requieren consentimiento y medidas de seguridad
-- **Datos sensibles**: Informacion de salud, datos judiciales, RUT, situacion economica
-- **Riesgo de filtracion**: Si la API key se compromete, un atacante accede al servicio
+### Principios transversales (de la guia y la clase)
 
-### Mitigaciones tecnicas
-- **Anonimizacion**: Reemplazar datos personales antes de enviar (RUT → [RUT_ANONIMO])
-- **Pseudonimizacion**: Reemplazar identificadores con codigos reversibles
-- **API con data residency**: Usar APIs que garanticen que los datos no salen de la region
-- **On-premises**: Desplegar modelo localmente (elimina el riesgo)
-- **Encriptacion en transito**: Siempre usar HTTPS (las APIs comerciales lo hacen por defecto)
+- **Privacidad**: Proteger datos personales. No enviar datos sensibles a APIs externas sin resguardo.
+- **Justicia**: El sistema no debe tratar de forma desigual a personas en situaciones similares. Atencion a sesgos en datos historicos.
+- **Transparencia**: Ciudadanos y funcionarios deben saber cuando una decision fue apoyada por IA.
 
-### Gobernanza
-- **Politica de uso de IA**: Documento que define que datos se pueden enviar a APIs externas
-- **Registro de procesamiento**: Mantener log de que datos se enviaron, cuando, y a que proveedor
-- **Evaluacion de impacto**: Antes de implementar, evaluar riesgos de privacidad
-- **Acuerdos de procesamiento**: Contrato con el proveedor que especifique tratamiento de datos
-- **Auditoria periodica**: Revisar que la politica se cumple
+### Ficha de transparencia algoritmica
 
----
+Documento publico que explica de forma comprensible:
+- **Que hace** el sistema (proposito, alcance)
+- **Que NO hace** (limites, que no decide)
+- **Que datos usa** (tipo de informacion, fuentes)
+- **Quien revisa** la salida antes de que llegue al ciudadano
+- **Quien es responsable** institucionalmente (no "la IA")
+- **Que limitaciones tiene** (puede equivocarse, puede desactualizarse)
 
-## 7. Evaluacion y Monitoreo de Sistemas LLM
+Transparencia NO es "publicar el codigo fuente". Es explicar en lenguaje claro para la ciudadania.
 
-### Por que evaluar
-Un LLM puede funcionar bien en demos y mal en produccion. La evaluacion sistematica es la unica forma de saber si el sistema realmente sirve.
+### Evaluacion de impacto algoritmico
 
-### Metricas de evaluacion
-Para **clasificacion**:
-- **Precision**: De los que clasifica como X, cuantos realmente son X
-- **Recall**: De los que realmente son X, cuantos clasifica correctamente
-- **F1**: Media armonica de precision y recall
-- **Accuracy**: Porcentaje total de clasificaciones correctas
-
-Para **extraccion**:
-- **Tasa de campos correctos**: Porcentaje de campos extraidos correctamente
-- **Tasa de JSON valido**: Porcentaje de respuestas que producen JSON parseable
-
-Para **generacion** (resumenes, respuestas):
-- **Fidelidad**: El resumen dice cosas que estan en la fuente original?
-- **Cobertura**: El resumen incluye los puntos principales?
-- **Coherencia**: El texto generado es legible y logico?
-
-### Baseline
-Para evaluar, se necesita un **baseline** (linea base):
-- **Gold standard**: Conjunto de ejemplos etiquetados manualmente por expertos
-- **Tamaño minimo**: 50-200 ejemplos para clasificacion, 20-50 para extraccion
-- **Representatividad**: Los ejemplos deben cubrir la variedad real de casos
-
-### Monitoreo continuo
-- **Sampling aleatorio**: Revisar manualmente N% de los outputs semanalmente
-- **Deteccion de drift**: Comparar distribucion de categorias actual vs historica
-- **Alertas**: Si la tasa de errores sube de un umbral, notificar
-- **Feedback loop**: Los usuarios finales (funcionarios) pueden marcar errores
-
-### Que hacer cuando baja la calidad
-1. Analizar los casos de error (que tipo de inputs fallan?)
-2. Ajustar el prompt (agregar ejemplos, restricciones)
-3. Cambiar el modelo (subir de gpt-4o-mini a gpt-4o)
-4. Agregar paso de validacion (post-procesamiento)
-5. Escalar a revision humana los casos de baja confianza
-
----
-
-## 8. Analizar la Prefactibilidad del Proyecto (Paso 3 de la Guia)
-
-### En que consiste
-Antes de implementar una solucion de IA, la guia de innovacion publica (Paso 3) pide analizar riesgos en 5 ambitos para anticipar inconvenientes que pueden surgir a lo largo del ciclo de vida del proyecto:
-
-- **Politico**: Alineamiento con autoridades, prioridad institucional, areas que veran cambios en su quehacer, patrocinio del equipo directivo
-- **Economico**: Recursos financieros para el desarrollo Y para la operacion/mantencion posterior, balance costo-beneficio, sostenibilidad presupuestaria
-- **Social**: Aprobacion ciudadana, beneficios y riesgos sociales, externalidades, riesgos eticos (privacidad, justicia, transparencia)
-- **Tecnologico**: Existencia de los datos necesarios, capacidad humana para procesar/modelar, infraestructura tecnologica, software disponible
-- **Normativo**: Competencias institucionales, convenios de colaboracion para datos de otras instituciones, restricciones legales de implementacion
-
-Cada ambito donde la respuesta sea "no" indica un tema que debe resolverse antes de seguir avanzando.
-
-### Aplicacion a LLMs via API
-Al elegir entre API comercial y modelo local, este analisis de prefactibilidad es clave:
-- **Normativo**: Datos sensibles (salud, RUT, judiciales) enviados a APIs externas pueden violar normativa
-- **Economico**: Costo de API crece linealmente vs costo fijo de modelo local; considerar operacion post-piloto
-- **Tecnologico**: API no requiere equipo tecnico; modelo local si — evaluar capacidad humana disponible
-- **Social**: Transparencia sobre que datos se procesan y como; riesgo de opacidad en decisiones automatizadas
-
----
-
-## 9. IA Responsable en el Sector Publico
-
-### Principios
-- **Transparencia**: Los ciudadanos y funcionarios deben saber cuando una decision fue apoyada por IA
-- **Trazabilidad**: Cada decision del sistema debe ser auditable (input, output, modelo, fecha)
-- **Evaluacion de impacto algoritmico**: Antes de implementar, evaluar posibles danos (sesgos, errores, exclusion)
-- **Ficha de transparencia**: Documento publico que describe que hace el sistema, que datos usa, sus limitaciones conocidas, y quien es responsable
+Antes de pilotear un sistema de IA, preguntar:
+- Que pasa si el sistema se equivoca? Que consecuencias tiene para las personas?
+- Hay grupos que podrian ser afectados desproporcionadamente?
+- Hay revision humana efectiva?
+- Los borradores/sugerencias podrian afectar derechos o decisiones sobre beneficios?
 
 ### Criterio de "freno" (no-go)
-La guia de innovacion publica es clara: **no avanzar si faltan condiciones minimas**. Condiciones tipicas de no-go:
-- No hay protocolo de anonimizacion para datos sensibles
-- No hay gold standard para evaluar el sistema
-- No hay responsable institucional designado
+
+La guia es clara: **no avanzar si faltan condiciones minimas**. Condiciones tipicas de no-go:
+- No hay protocolo de resguardo para datos sensibles
+- No hay revision humana antes de que la salida llegue al ciudadano
 - Los datos disponibles no tienen calidad suficiente
-- No hay presupuesto para operacion post-piloto
+- El sistema pasa a decidir sin supervision
+- No hay responsable institucional designado
 
-### Riesgos eticos mas alla de privacidad
+### Riesgos mas alla de privacidad
+
 - **Sesgo**: El sistema puede reproducir sesgos de datos historicos
-- **Opacidad**: Decisiones automatizadas sin explicacion para el ciudadano
-- **Dependencia cognitiva**: Funcionarios que dejan de pensar criticamente y solo siguen al sistema
-- **Errores con consecuencias**: En salud, justicia o beneficios sociales, un error del LLM puede causar dano directo
+- **Opacidad**: Decisiones automatizadas sin explicacion
+- **Dependencia cognitiva**: Funcionarios que dejan de pensar criticamente
+- **Errores con consecuencias**: En beneficios sociales, salud o justicia, un error afecta directamente a personas
 
 ---
 
-## 10. Mapear Datos y Evaluar su Madurez (Paso 5 de la Guia)
+## 4. IA en el Aparato de Seguridad
 
-### Por que importa
-Los embeddings, pipelines y clasificadores solo funcionan si los datos subyacentes tienen calidad suficiente. La guia (Paso 5) establece que la materia prima de un proyecto de ciencia de datos son los datos, y que su madurez debe ser suficiente: que su almacenaje, contenido, calidad, privacidad y documentacion permitan realizar el proyecto.
+### Pipeline de tres etapas
 
-### Dimensiones de madurez
-- **Accesibilidad**: Los datos estan en formato digital legible? O son PDFs escaneados, archivos fisicos?
-- **Calidad**: Los registros estan completos? Hay campos vacios, duplicados, inconsistencias?
-- **Granularidad**: Los datos tienen el nivel de detalle necesario? (ej: "reclamo" vs "tipo de reclamo + empresa + fecha + monto")
-- **Integracion**: Los datos estan en un solo sistema o dispersos en multiples planillas/bases?
-- **Historia**: Hay datos historicos suficientes para establecer linea base y evaluar mejora?
-- **Documentacion**: Hay diccionario de datos, metadata, descripcion de campos?
-- **Privacidad**: Los datos requieren anonimizacion? Hay consentimiento para su uso?
+1. **Ingesta**: Recoleccion de datos (reportes, registros, comunicaciones, fuentes abiertas)
+2. **Procesamiento**: Analisis, clasificacion, cruce de informacion — aqui entra el LLM como herramienta de apoyo, no como decisor
+3. **Accion**: Decisiones basadas en el analisis — aqui es donde hay mayor riesgo
 
-### Aplicacion a proyectos LLM
-- Para embeddings: las descripciones deben ser texto accesible, con calidad consistente y metadatos asociados
-- Para clasificacion: necesitas suficientes ejemplos de cada categoria (no solo las mas frecuentes)
-- Para RAG: los documentos fuente deben estar en formato procesable, actualizados, y con autoria clara
+### El salto critico
 
----
+La presentacion de clase subraya que la IA no solo permite almacenar mas datos, sino **comprender a escala**. Esto cambia cualitativamente la capacidad del aparato de seguridad: de revisar documentos uno a uno a analizar volumenes que antes eran inabarcables.
 
-## 11. Definir los Objetivos del Proyecto (Paso 6 de la Guia)
+### Riesgos democraticos
 
-### Que es un objetivo SMART
-- **Specific**: Que mejora concreta se busca
-- **Measurable**: Con que metrica se mide
-- **Achievable**: Es realista con los recursos disponibles
-- **Relevant**: Esta alineado con la mision institucional
-- **Time-bound**: En que plazo se espera ver resultados
+- **Opacidad**: Criterios de clasificacion no transparentes, no auditables
+- **Rezago legal**: La tecnologia avanza mas rapido que la regulacion
+- **Asimetria de poder**: El Estado tiene capacidad de analisis que los ciudadanos no pueden verificar ni impugnar
+- **Efecto inhibidor (autocensura)**: Si la ciudadania sabe que hay vigilancia con IA, se autocensura — dano a la libertad de expresion incluso sin accion directa
 
-### Ejemplo
-- Malo: "Mejorar la atencion ciudadana con IA"
-- Bueno: "Reducir el tiempo promedio de clasificacion de reclamos de 24h a 2h, manteniendo accuracy ≥85%, en 3 meses"
+### Controles necesarios
 
-### Linea base
-Antes de implementar, medir el estado actual:
-- Tiempo promedio actual de la actividad manual
-- Tasa de error actual (si se conoce)
-- Volumen de casos procesados
-- Satisfaccion de usuarios (si se mide)
-
-Sin linea base, no se puede demostrar que el sistema mejoro algo.
-
-### Metricas de modelo vs metricas de proceso vs metricas de impacto
-- **Modelo**: Accuracy, F1, precision, recall (mide si el LLM clasifica bien)
-- **Proceso**: Tiempo de procesamiento, tasa de reclasificacion manual, backlog (mide si el proceso mejoro)
-- **Impacto**: Satisfaccion ciudadana, cobertura de atencion, tiempo de resolucion (mide si el servicio mejoro)
-
-Un buen sistema debe mejorar las tres, pero al minimo las metricas de modelo y proceso.
+- Revision humana obligatoria antes de cualquier accion sobre una persona
+- Trazabilidad completa (que datos se analizaron, que criterios, quien decidio)
+- Autorizacion formal antes de pasar de analisis a accion
+- No automatizar la cadena completa ingesta-procesamiento-accion
+- El LLM prioriza y sugiere; el humano decide y responde
 
 ---
 
-## 12. Function Calling y Herramientas
+## 5. Nivel de Exigencia - Clase 2
 
-### Que es function calling
-Capacidad de los LLMs modernos de "llamar funciones" definidas por el desarrollador. El LLM no ejecuta la funcion — solo genera los argumentos correctos, y el sistema los ejecuta.
+### Lo que SI se espera
 
-### Uso en sector publico
-- Conectar el LLM a bases de datos internas (consultar estado de tramite)
-- Ejecutar busquedas en sistemas existentes (buscar en ChileCompra)
-- Invocar APIs de terceros (verificar RUT en SII)
-- Calcular costos, fechas, plazos
+- Entender que un LLM via API sirve como clasificador/extractor sobre texto
+- Saber que el patron basico es: prompt + generate_content + loop para escalar
+- Formular un problema desde la persona usuaria, no desde la institucion
+- Distinguir problema de solucion (no confundir "no tenemos IA" con el problema)
+- Identificar actores concretos y sus actividades en un proceso
+- Evaluar si los datos disponibles son suficientes (madurez)
+- Formular un objetivo medible con linea base
+- Identificar riesgos concretos con grupo afectado
+- Proponer revision humana como parte de la solucion
+- Entender transparencia como explicacion comprensible, no como jerga tecnica
+- Mostrar criterio de "freno" (cuando NO implementar)
+- En seguridad: entender el pipeline ingesta-procesamiento-accion y sus riesgos democraticos
 
-### Patron
-```
-Usuario pregunta → LLM decide que funcion llamar → Sistema ejecuta funcion
-→ Resultado vuelve al LLM → LLM genera respuesta final
-```
+### Lo que NO se espera
 
----
+- Conocimiento detallado de costos por tokens
+- Saber comparar modelos (GPT-4o vs GPT-4o-mini vs Llama)
+- Disenar pipelines multi-paso complejos
+- Conocer embeddings, RAG, fine-tuning, function calling
+- Saber desplegar modelos en produccion
+- Dominar metricas de evaluacion (F1, precision, recall)
+- Conocimiento detallado de normativa chilena de datos personales
+- Escribir codigo funcional (solo entender el patron conceptual)
 
-## Nivel de Exigencia - Clase 2
+### Heuristica para jueces
 
-Esta es la segunda clase. Se espera:
-- Comprension de que un LLM via API es un componente de un sistema, no una solucion completa
-- Capacidad de disenar inputs y outputs estructurados para tareas concretas
-- Conciencia de costos y como estimarlos (orden de magnitud)
-- Comprension de trade-offs API vs modelo local, especialmente por privacidad
-- Nocion basica de embeddings y su uso para busqueda semantica
-- Pensamiento sobre evaluacion y validacion de outputs de LLM
-- Aplicacion de estos conceptos a problemas del sector publico chileno
-- Capacidad de situar cada herramienta tecnica dentro de una actividad institucional con actor concreto
-- Conciencia de riesgos de prefactibilidad (politicos, economicos, sociales, tecnologicos, normativos) y criterio de "freno" (cuando NO implementar)
-- Nocion de IA responsable: transparencia, trazabilidad, evaluacion de impacto
-- Comprension de madurez de datos como precondicion para cualquier solucion
-- Formulacion de objetivos medibles con linea base
-
-No se espera aun:
-- Saber escribir codigo para llamar APIs
-- Conocimiento profundo de arquitecturas de modelos
-- Experiencia con despliegue de modelos
-- Dominio de herramientas especificas (LangChain, DSPy, etc.)
-- Conocimiento detallado de normativa chilena de datos personales (pero si conciencia de su existencia)
+Si un estudiante usa tecnicismos no ensenados (embeddings, cosine similarity, pipeline multi-paso, RAG, fine-tuning) como si fueran evidentes, **no premiar** — preguntar si realmente entiende el concepto o lo esta usando como humo. Una respuesta sobria y bien encuadrada en lo visto en clase vale mas que una llena de jargon impresionante pero desconectado.
