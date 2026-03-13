@@ -1,6 +1,6 @@
 {
   "sessionId": "session_2_apis",
-  "globalInstructions": "Evalua SOLO lo que esta escrito. No asumas informacion faltante. Premia estructura y especificidad. Penaliza vaguedad. El principio rector de esta sesion es: cada respuesta debe demostrar (1) comprension de la herramienta tecnica, (2) ubicacion dentro de una actividad institucional concreta con actor/usuario, y (3) anticipacion de riesgos, restricciones y condiciones de implementacion responsable. No premiar 'usar GPT para X' sino 'usar GPT/API para modificar una actividad especifica de un proceso publico, con datos y restricciones reales'. Los estudiantes son profesionales del sector publico chileno en su segunda clase. Ya vieron en la clase 1: procesos de decision, TRL, limites y guardrails. Conocen la guia de innovacion publica (problema, personas usuarias, actores, actividades, prefactibilidad PESTL, madurez de datos, objetivos SMART). Usa el campo 'judgeFocus' del escenario como ancla principal para cada ronda.",
+  "globalInstructions": "Evalua SOLO lo que esta escrito. No asumas informacion faltante. Premia estructura y especificidad. Penaliza vaguedad. El principio rector de esta sesion es: cada respuesta debe demostrar (1) comprension de la herramienta tecnica, (2) ubicacion dentro de una actividad institucional concreta con actor/usuario, y (3) anticipacion de riesgos, restricciones y condiciones de implementacion responsable. No premiar 'usar GPT para X' sino 'usar GPT/API para modificar una actividad especifica de un proceso publico, con datos y restricciones reales'. Los estudiantes son profesionales del sector publico chileno en su segunda clase. Ya vieron en la clase 1: procesos de decision, TRL, limites y guardrails. Conocen la guia de innovacion publica (6 pasos: equipo, problema, prefactibilidad, actores y actividades, mapeo de datos, objetivos). Usa el campo 'judgeFocus' del escenario como ancla principal para cada ronda.",
   "scoring": {
     "scaleLevels": [100, 80, 60, 40, 20, 0],
     "instructions": "Evalua SOLO lo que esta escrito. No asumas informacion faltante. Premia estructura y especificidad. Penaliza vaguedad. La respuesta debe conectar herramienta tecnica con actividad institucional y riesgos de implementacion. Usa el campo 'judgeFocus' del escenario como ancla principal para esta ronda."
@@ -22,8 +22,8 @@
       "id": "institutional_realism",
       "name": "Realismo Institucional + IA Responsable",
       "weight": 0.40,
-      "description": "Comprension de restricciones reales (PESTL: politicas, economicas, sociales, tecnologicas, normativas), riesgos no tecnicos, privacidad, justicia, transparencia, gobernanza, evaluacion de impacto, capacidades humanas, sostenibilidad operativa, y criterio de 'freno' (no avanzar si faltan condiciones minimas).",
-      "level_100": "Reconoce restricciones PESTL relevantes para el caso. Identifica al menos 1 riesgo no tecnico concreto y propone mitigacion operativa. Cuando aplica, incorpora transparencia, evaluacion de impacto o gobernanza. Considera acceso a datos, privacidad, sostenibilidad y capacidades humanas. Muestra criterio de 'cuando NO avanzar'.",
+      "description": "Comprension de restricciones reales (politicas, economicas, sociales, tecnologicas, normativas — Paso 3 de la guia), riesgos no tecnicos, privacidad, justicia, transparencia, gobernanza, evaluacion de impacto, capacidades humanas, sostenibilidad operativa, y criterio de 'freno' (no avanzar si faltan condiciones minimas).",
+      "level_100": "Reconoce restricciones relevantes para el caso (politicas, economicas, sociales, tecnologicas o normativas). Identifica al menos 1 riesgo no tecnico concreto y propone mitigacion operativa. Cuando aplica, incorpora transparencia, evaluacion de impacto o gobernanza. Considera acceso a datos, privacidad, sostenibilidad y capacidades humanas. Muestra criterio de 'cuando NO avanzar'.",
       "level_80": "Menciona restricciones/riesgos plausibles pero sin priorizacion o con mitigacion algo generica.",
       "level_60": "Enumera riesgos pero sin priorizacion ni mitigacion operativa. No conecta con restricciones institucionales reales.",
       "level_40": "Casi no considera restricciones reales. Supone implementacion trivial de APIs.",
@@ -53,7 +53,7 @@
   ],
   "bonusIndicators": [
     "Conecta herramienta tecnica con actividad institucional concreta y actor/usuario",
-    "Identifica restricciones PESTL especificas al caso (no genericas)",
+    "Identifica restricciones especificas al caso en ambitos politico, economico, social, tecnologico o normativo (no genericas)",
     "Compara alternativas con trade-offs explicitos (costo vs privacidad vs rendimiento)",
     "Estima costos con razonamiento basado en tokens y modelo especifico",
     "Distingue entre modelos caros (GPT-4o) y baratos (GPT-4o-mini) segun la tarea",

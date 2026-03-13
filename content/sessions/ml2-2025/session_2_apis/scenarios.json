@@ -9,13 +9,13 @@
     "durationSeconds": 300,
     "judgeFocus": "Prioriza que el estudiante identifique la ACTIVIDAD concreta que se modifica y el actor que la ejecuta, ANTES de elegir arquitectura. La eleccion API vs local debe estar justificada por la naturaleza de los datos y las restricciones institucionales, no por preferencia personal. Si elige sin considerar datos sensibles, tope 60 en Realismo. Si no identifica actividad ni actor, tope 60 en Estructuracion.",
     "context": "La Subsecretaria de Prevision Social necesita clasificar automaticamente 50,000 consultas ciudadanas anuales (via web, email y telefono) en 12 categorias (pension, licencia medica, seguro de cesantia, etc.) para derivarlas al area correcta. Hoy un equipo de 4 funcionarios lo hace manualmente, leyendo cada consulta y asignando categoria. Las consultas contienen datos personales: RUT, situacion laboral, antecedentes de salud.",
-    "question": "Responde en el siguiente formato EXACTO:\n\n[ACTIVIDAD] Que actividad concreta del proceso se automatiza o apoya, y quien la ejecuta hoy?\n[OPCION] API comercial (ej. OpenAI) o modelo local/open-source? 1 argumento decisivo para tu eleccion.\n[RIESGO PESTL] 1 riesgo clave no tecnico (politico, economico, social, tecnologico o normativo). Nombra la categoria.\n[MITIGACION] 1 mecanismo operativo concreto para reducir ese riesgo.\n[COSTO] Como estimarias el costo mensual? (muestra razonamiento con tokens).\n[TRANSPARENCIA] 1 dato que deberia quedar registrado antes de implementar (ficha de transparencia).\n\nRegla: NO respondas 'depende' sin elegir. Elige y justifica.",
-    "conceptTags": ["api_vs_local", "privacidad_datos", "estimacion_costos", "actividad_institucional", "PESTL"],
+    "question": "Responde en el siguiente formato EXACTO:\n\n[ACTIVIDAD] Que actividad concreta del proceso se automatiza o apoya, y quien la ejecuta hoy?\n[OPCION] API comercial (ej. OpenAI) o modelo local/open-source? 1 argumento decisivo para tu eleccion.\n[RIESGO] 1 riesgo clave no tecnico (politico, economico, social, tecnologico o normativo). Nombra el ambito.\n[MITIGACION] 1 mecanismo operativo concreto para reducir ese riesgo.\n[COSTO] Como estimarias el costo mensual? (muestra razonamiento con tokens).\n[TRANSPARENCIA] 1 dato que deberia quedar registrado antes de implementar (ficha de transparencia).\n\nRegla: NO respondas 'depende' sin elegir. Elige y justifica.",
+    "conceptTags": ["api_vs_local", "privacidad_datos", "estimacion_costos", "actividad_institucional", "prefactibilidad"],
     "idealAnswer": {
       "keyPoints": [
         "[ACTIVIDAD]: La clasificacion/triaje de consultas ciudadanas para derivacion. Hoy la ejecutan 4 funcionarios que leen cada consulta y asignan categoria manualmente.",
         "[OPCION]: Modelo local/open source. Los datos contienen RUT, situacion laboral y antecedentes de salud — datos personales sensibles. Enviarlos a servidores de OpenAI en EEUU genera riesgo normativo. Alternativa: API seria viable SI se anonimizan los datos primero (reemplazar RUT, nombres, datos de salud).",
-        "[RIESGO PESTL]: Normativo — incumplimiento de la ley de proteccion de datos personales al enviar datos de salud y RUT a servidores externos sin consentimiento explicito del ciudadano.",
+        "[RIESGO]: Normativo — incumplimiento de la ley de proteccion de datos personales al enviar datos de salud y RUT a servidores externos sin consentimiento explicito del ciudadano.",
         "[MITIGACION]: Anonimizar automaticamente antes del envio (reemplazar RUT por [ID], datos de salud por [DATO_SENSIBLE]), manteniendo el mapeo interno. O bien, desplegar modelo local que nunca expone datos fuera de la red institucional.",
         "[COSTO]: ~50,000 consultas/ano = ~4,200/mes. Si cada consulta tiene ~500 tokens input + ~100 output → API: 2.1M input + 420K output tokens/mes ≈ $5-20/mes con GPT-4o-mini. Local: ~$200-500/mes (servidor GPU cloud). Diferencia de costo real pero justificada por privacidad.",
         "[TRANSPARENCIA]: Que datos personales procesa el sistema, que datos salen de la red institucional (si los hay), y quien es responsable de la decision de clasificacion final (humano o automatica)."
@@ -27,7 +27,7 @@
         "Elegir modelo local sin mencionar el costo o la complejidad de mantenimiento",
         "Decir 'depende' sin tomar una posicion",
         "No estimar costo ni siquiera en orden de magnitud",
-        "Riesgo PESTL generico ('podria haber problemas legales') sin especificar cual"
+        "Riesgo generico ('podria haber problemas legales') sin especificar cual"
       ],
       "excellentResponseIndicators": [
         "Identifica la actividad de triaje y los funcionarios que la hacen hoy",

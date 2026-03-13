@@ -13,7 +13,7 @@ Pasar de "usar un LLM" a **disenar sistemas basados en LLM** para el sector publ
 **Un LLM via API no es una solucion, es un componente.** La diferencia entre un prototipo y un sistema operacional esta en el diseno del pipeline completo: que datos entran, como se transforman, que sale, como se valida, y que pasa cuando falla.
 
 ### Conexion con la clase anterior
-Los estudiantes ya conocen la guia de innovacion publica, que organiza un proyecto en fases: problema (que afecta a personas usuarias), equipo multidisciplinario, prefactibilidad PESTL, mapeo de actores y actividades, evaluacion de madurez de datos, y objetivos SMART con linea base. Esta sesion agrega la capa tecnica de LLMs/APIs, pero cada solucion debe seguir anclada a una **actividad institucional concreta**, un **actor/usuario**, y una **mejora medible**.
+Los estudiantes ya conocen la guia de innovacion publica, que organiza un proyecto en 6 pasos: conformar equipo, describir el problema (personas usuarias, contexto, indicadores), analizar prefactibilidad (riesgos politicos, economicos, sociales, tecnologicos, normativos), identificar actores y actividades clave, mapear datos (evaluar madurez), y definir objetivos medibles con linea base. Esta sesion agrega la capa tecnica de LLMs/APIs, pero cada solucion debe seguir anclada a una **actividad institucional concreta**, un **actor/usuario**, y una **mejora medible**.
 
 ### Regla madre
 Cada pregunta del juego evalua una capacidad tecnica de LLMs via API, pero obliga al estudiante a situarla dentro de una actividad institucional concreta, un actor/usuario, un riesgo de implementacion y una mejora esperada.
@@ -274,23 +274,25 @@ Para evaluar, se necesita un **baseline** (linea base):
 
 ---
 
-## 8. Analisis de Prefactibilidad PESTL
+## 8. Analizar la Prefactibilidad del Proyecto (Paso 3 de la Guia)
 
-### Que es PESTL
-Antes de implementar una solucion de IA, la guia de innovacion publica pide evaluar riesgos en 5 dimensiones:
+### En que consiste
+Antes de implementar una solucion de IA, la guia de innovacion publica (Paso 3) pide analizar riesgos en 5 ambitos para anticipar inconvenientes que pueden surgir a lo largo del ciclo de vida del proyecto:
 
-- **Politico**: Cambio de autoridades, falta de prioridad politica, oposicion de actores internos o externos
-- **Economico**: Presupuesto insuficiente, costo de operacion post-piloto, dependencia de financiamiento externo
-- **Social**: Resistencia de funcionarios, impacto en empleo, aceptacion ciudadana, equidad en el acceso
-- **Tecnologico**: Capacidad tecnica del equipo, infraestructura disponible, dependencia de proveedores, obsolescencia
-- **Legal/Normativo**: Proteccion de datos personales, regulacion sectorial, responsabilidad legal por decisiones automatizadas
+- **Politico**: Alineamiento con autoridades, prioridad institucional, areas que veran cambios en su quehacer, patrocinio del equipo directivo
+- **Economico**: Recursos financieros para el desarrollo Y para la operacion/mantencion posterior, balance costo-beneficio, sostenibilidad presupuestaria
+- **Social**: Aprobacion ciudadana, beneficios y riesgos sociales, externalidades, riesgos eticos (privacidad, justicia, transparencia)
+- **Tecnologico**: Existencia de los datos necesarios, capacidad humana para procesar/modelar, infraestructura tecnologica, software disponible
+- **Normativo**: Competencias institucionales, convenios de colaboracion para datos de otras instituciones, restricciones legales de implementacion
+
+Cada ambito donde la respuesta sea "no" indica un tema que debe resolverse antes de seguir avanzando.
 
 ### Aplicacion a LLMs via API
-Al elegir entre API comercial y modelo local, el analisis PESTL es clave:
-- **Legal**: Datos sensibles (salud, RUT, judiciales) enviados a APIs externas pueden violar normativa
-- **Economico**: Costo de API crece linealmente vs costo fijo de modelo local
-- **Tecnologico**: API no requiere equipo tecnico; modelo local si
-- **Social**: Transparencia sobre que datos se procesan y como
+Al elegir entre API comercial y modelo local, este analisis de prefactibilidad es clave:
+- **Normativo**: Datos sensibles (salud, RUT, judiciales) enviados a APIs externas pueden violar normativa
+- **Economico**: Costo de API crece linealmente vs costo fijo de modelo local; considerar operacion post-piloto
+- **Tecnologico**: API no requiere equipo tecnico; modelo local si — evaluar capacidad humana disponible
+- **Social**: Transparencia sobre que datos se procesan y como; riesgo de opacidad en decisiones automatizadas
 
 ---
 
@@ -318,10 +320,10 @@ La guia de innovacion publica es clara: **no avanzar si faltan condiciones minim
 
 ---
 
-## 10. Madurez de Datos
+## 10. Mapear Datos y Evaluar su Madurez (Paso 5 de la Guia)
 
 ### Por que importa
-Los embeddings, pipelines y clasificadores solo funcionan si los datos subyacentes tienen calidad suficiente. La guia de innovacion publica evalua madurez en varias dimensiones:
+Los embeddings, pipelines y clasificadores solo funcionan si los datos subyacentes tienen calidad suficiente. La guia (Paso 5) establece que la materia prima de un proyecto de ciencia de datos son los datos, y que su madurez debe ser suficiente: que su almacenaje, contenido, calidad, privacidad y documentacion permitan realizar el proyecto.
 
 ### Dimensiones de madurez
 - **Accesibilidad**: Los datos estan en formato digital legible? O son PDFs escaneados, archivos fisicos?
@@ -339,7 +341,7 @@ Los embeddings, pipelines y clasificadores solo funcionan si los datos subyacent
 
 ---
 
-## 11. Objetivos SMART y Linea Base
+## 11. Definir los Objetivos del Proyecto (Paso 6 de la Guia)
 
 ### Que es un objetivo SMART
 - **Specific**: Que mejora concreta se busca
@@ -400,7 +402,7 @@ Esta es la segunda clase. Se espera:
 - Pensamiento sobre evaluacion y validacion de outputs de LLM
 - Aplicacion de estos conceptos a problemas del sector publico chileno
 - Capacidad de situar cada herramienta tecnica dentro de una actividad institucional con actor concreto
-- Conciencia de riesgos PESTL y criterio de "freno" (cuando NO implementar)
+- Conciencia de riesgos de prefactibilidad (politicos, economicos, sociales, tecnologicos, normativos) y criterio de "freno" (cuando NO implementar)
 - Nocion de IA responsable: transparencia, trazabilidad, evaluacion de impacto
 - Comprension de madurez de datos como precondicion para cualquier solucion
 - Formulacion de objetivos medibles con linea base
