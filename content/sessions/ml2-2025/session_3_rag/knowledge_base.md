@@ -1,8 +1,5 @@
-# Sesion 3: RAG — Primero Recuperar, Despues Generar - Base de Conocimiento para Jueces
-
-Este documento contiene el material de referencia que los jueces AI deben usar para evaluar las respuestas de los estudiantes. Solo incluye conceptos efectivamente ensenados en clase.
-
----
+<!-- section: _always -->
+# Base de Conocimiento - Sesion 3: RAG
 
 ## Marco de la Sesion
 
@@ -47,8 +44,7 @@ Este documento contiene el material de referencia que los jueces AI deben usar p
 
 La clase 3 construye sobre la clase 2: la API que usaron para clasificar texto ahora se usa dentro de un pipeline mas complejo donde el LLM no inventa — responde a partir de documentos recuperados. El concepto clave es que RAG separa la "memoria" (corpus indexado) del "razonamiento" (LLM).
 
----
-
+<!-- section: chat_vs_api -->
 ## 1. Del Chat al Sistema (Puente con Clase 2)
 
 ### Chat vs API: la diferencia operativa
@@ -73,8 +69,7 @@ RAG requiere procesamiento sistematico (convertir documentos a embeddings, almac
 
 Enviar documentos a una API externa implica que salen del perimetro institucional. Para documentos sensibles (contratos, normativa interna, datos personales), hay que evaluar: anonimizacion, acuerdos de confidencialidad con el proveedor, o uso de modelos locales.
 
----
-
+<!-- section: corpus_preparacion, metadata_documental, vigencia_normativa -->
 ## 2. Corpus y Metadata
 
 ### Seleccion del corpus
@@ -98,8 +93,7 @@ Cada fragmento indexado debe llevar metadata que permita filtrar y dar contexto:
 
 En contexto normativo, una respuesta basada en norma derogada puede tener consecuencias legales. El funcionario que actua basandose en ella comete un error que puede ser impugnado. La metadata de vigencia permite filtrar documentos derogados en la etapa de retrieval.
 
----
-
+<!-- section: chunking, overlap -->
 ## 3. Chunking
 
 ### Que es y por que importa
@@ -131,8 +125,7 @@ Chunking es partir documentos largos en fragmentos mas pequenos para indexar. El
 - Valores optimos de tokens por chunk
 - Herramientas especificas de chunking (LangChain text splitters, etc.)
 
----
-
+<!-- section: embeddings, retrieval_semantico, keyword_search -->
 ## 4. Embeddings y Retrieval Semantico
 
 ### Que son los embeddings
@@ -164,8 +157,7 @@ Un sistema bien disenado combina ambos metodos:
 
 Si un estudiante dice que busqueda semantica es siempre mejor, no entiende el concepto. Cada metodo tiene fortalezas y debilidades. Reconocer cuando cada uno es apropiado demuestra comprension real.
 
----
-
+<!-- section: pipeline_rag, indexacion_offline, consulta_online -->
 ## 5. Pipeline RAG Clasico
 
 ### La distincion fundamental: indexacion vs consulta
@@ -191,8 +183,7 @@ La indexacion es costosa pero se hace una vez. La consulta es rapida y se hace m
 
 El LLM NO busca informacion — recibe fragmentos ya recuperados y genera una respuesta a partir de ellos. Su rol es sintetizar y redactar, no buscar.
 
----
-
+<!-- section: instruccion_llm_rag, trazabilidad -->
 ## 6. Instrucciones al LLM en RAG
 
 ### Por que importan
@@ -219,8 +210,7 @@ Sin instruccion adecuada, el LLM puede:
 
 "Responde la pregunta usando UNICAMENTE los fragmentos proporcionados. Cita el documento fuente de cada afirmacion. Si los fragmentos no contienen informacion suficiente, indica que no encontraste respuesta en la base documental."
 
----
-
+<!-- section: diagnostico_rag -->
 ## 7. Errores Comunes en RAG
 
 ### En la preparacion del corpus
@@ -248,9 +238,8 @@ Sin instruccion adecuada, el LLM puede:
 - **No mantener vigencia**: normas derogadas siguen en el sistema sin marcarse
 - **Sin verificacion humana**: el usuario toma la respuesta RAG como verdad absoluta
 
----
-
-## 8. Nivel de Exigencia - Clase 3
+<!-- section: _always -->
+## 8. Nivel de Exigencia
 
 ### Lo que SI se espera
 

@@ -1,108 +1,82 @@
 {
   "sessionId": "session_3_rag",
-  "globalInstructions": "Evalua SOLO lo que esta escrito. No asumas informacion faltante. Premia respuestas sobrias y bien encuadradas. Penaliza vaguedad y entusiasmo acritico. El principio rector de esta sesion es: una respuesta que conecta cada concepto RAG con una consecuencia concreta para el caso vale mas que una llena de terminologia correcta pero abstracta. Los estudiantes son profesionales del sector publico chileno en su tercera clase. En clase 1 vieron: procesos de decision, TRL, limites y guardrails. En clase 2 vieron: uso de Gemini via API (generate_content, loop, clasificacion), guia de innovacion publica, riesgos y etica de IA generativa, IA en seguridad. En clase 3 vieron: preparacion de corpus (seleccion, limpieza, metadata), chunking (trade-offs tamano, overlap, estructura documental), embeddings como representacion semantica (vs keyword), retrieval por similitud, pipeline RAG clasico (indexacion offline → consulta online), instrucciones al LLM en RAG (limitar a fragmentos, citar fuente), y diagnostico de problemas RAG. NO se ensenaron: implementacion de bases vectoriales especificas (Pinecone, ChromaDB, FAISS, Weaviate), cosine similarity como formula, fine-tuning de embeddings, reranking, query expansion, HyDE, agentic RAG, GraphRAG, frameworks (LangChain, LlamaIndex, DSPy). No premiar tecnicismos no ensenados usados como humo. Usa el campo 'judgeFocus' del escenario como ancla principal para cada ronda.",
-  "scoring": {
-    "scaleLevels": [100, 80, 60, 40, 20, 0],
-    "instructions": "Evalua SOLO lo que esta escrito. No asumas informacion faltante. Premia sobriedad, conexion con el caso concreto, y coherencia tecnica. Penaliza vaguedad, buzzwords sin contenido, y tecnicismos no ensenados. Una respuesta corta pero que conecta concepto con consecuencia vale mas que una larga y abstracta. Usa el campo 'judgeFocus' del escenario como ancla principal para esta ronda."
-  },
+  "globalInstructions": "Evalua SOLO lo que esta escrito. Premia conexion concepto-consecuencia sobre terminologia. Penaliza vaguedad y tecnicismos no ensenados. Usa 'judgeFocus' del escenario como ancla. Ver material de referencia para contenido ensenado/no ensenado.",
   "dimensions": [
     {
       "id": "technical_pipeline",
       "name": "Comprension Tecnica del Pipeline",
       "weight": 0.35,
-      "description": "Comprension del pipeline RAG y sus componentes: orden correcto de indexacion y consulta, trade-offs de chunking, diferencia entre keyword y semantico, rol de embeddings, instrucciones al LLM. No se requiere conocimiento de implementacion especifica — se evalua comprension conceptual aplicada al caso.",
-      "level_100": "Demuestra comprension clara del pipeline: distingue indexacion de consulta, entiende trade-offs de chunking con ejemplo concreto, diferencia keyword de semantico correctamente, y conecta cada componente con su efecto en el caso. Orden correcto.",
-      "level_80": "Casi todo correcto, pero 1 elemento es parcialmente impreciso (ej: orden ligeramente confuso, o trade-off mencionado pero sin ejemplo concreto).",
-      "level_60": "Tiene la idea general correcta, pero confunde algun orden, mezcla indexacion con consulta, o los trade-offs son teoricos sin aplicar al caso.",
-      "level_40": "Menciona conceptos RAG pero desordenados o mal aplicados. No distingue etapas del pipeline.",
-      "level_20": "Solo menciona que RAG 'busca y genera' sin entender las partes ni el orden.",
-      "level_0": "No responde, dice 'no se', o escribe texto completamente irrelevante."
+      "description": "Pipeline RAG: orden indexacion/consulta, trade-offs chunking, keyword vs semantico, embeddings, instrucciones LLM. Comprension conceptual aplicada, no implementacion.",
+      "level_100": "Comprension clara del pipeline: distingue indexacion de consulta, trade-offs con ejemplo concreto, keyword vs semantico correcto, conecta cada componente con su efecto en el caso.",
+      "level_60": "Idea general correcta pero confunde algun orden, mezcla indexacion con consulta, o trade-offs teoricos sin aplicar al caso.",
+      "level_20": "Solo menciona que RAG 'busca y genera' sin entender las partes ni el orden."
     },
     {
       "id": "institutional_criteria",
       "name": "Criterio Practico e Institucional",
       "weight": 0.35,
-      "description": "Capacidad de aplicar conceptos RAG a contextos institucionales reales: vigencia documental, trazabilidad de fuentes, consecuencias de errores para el servicio publico, seleccion y curacion de corpus, priorizacion por riesgo. No basta con saber la teoria — hay que conectarla con las consecuencias concretas para la institucion y sus usuarios.",
-      "level_100": "Conecta cada decision tecnica con su consecuencia institucional. Considera vigencia, trazabilidad y riesgo. Identifica quien se afecta y como. Prioriza por impacto real, no por facilidad tecnica.",
-      "level_80": "Buena conexion caso-concepto, pero falta profundidad en un aspecto (ej: menciona vigencia pero no la consecuencia de ignorarla).",
-      "level_60": "Reconoce que hay implicaciones institucionales pero no las desarrolla. Vigencia o trazabilidad mencionadas de pasada.",
-      "level_40": "Respuesta generica que podria aplicar a cualquier caso. No conecta con el contexto institucional especifico.",
-      "level_20": "Ignora completamente el contexto institucional. Respuesta puramente teorica o tecnica.",
-      "level_0": "No responde, dice 'no se', o escribe texto completamente irrelevante."
+      "description": "Aplicacion de RAG a contextos institucionales: vigencia documental, trazabilidad, consecuencias de errores, seleccion de corpus, priorizacion por riesgo.",
+      "level_100": "Conecta cada decision tecnica con consecuencia institucional. Vigencia, trazabilidad, riesgo. Prioriza por impacto real.",
+      "level_60": "Reconoce implicaciones institucionales pero no las desarrolla. Vigencia o trazabilidad de pasada.",
+      "level_20": "Ignora contexto institucional. Respuesta puramente teorica."
     },
     {
       "id": "clarity_critical_thinking",
       "name": "Claridad y Pensamiento Critico",
       "weight": 0.30,
-      "description": "Respuestas concretas, estructuradas, con logica causa-efecto clara. Capacidad de tomar decisiones justificadas en vez de evadir. Uso correcto de conceptos vistos en clase sin inventar tecnicismos. Sobriedad: una decision bien justificada vale mas que enumerar todas las opciones sin elegir.",
-      "level_100": "Logica causa-efecto impecable. Toma decisiones claras y las justifica. Lenguaje concreto, alineado con la clase. No usa buzzwords ni tecnicismos no ensenados. Facil de evaluar.",
-      "level_80": "Mayormente claro; 1-2 frases vagas o una justificacion incompleta.",
-      "level_60": "Mezcla partes claras con vaguedad. Algunas decisiones sin justificar o evasivas.",
-      "level_40": "Prosa amplia o confusa. Buzzwords sin contenido. No toma posiciones claras.",
-      "level_20": "Dificil de entender o puro humo. Respuesta generica aplicable a cualquier caso.",
-      "level_0": "No responde, dice 'no se', o escribe texto completamente irrelevante."
+      "description": "Logica causa-efecto, decisiones justificadas, sobriedad. Una decision bien justificada vale mas que enumerar opciones sin elegir.",
+      "level_100": "Causa-efecto impecable. Decisiones claras y justificadas. Sin buzzwords. Facil de evaluar.",
+      "level_60": "Mezcla partes claras con vaguedad. Algunas decisiones sin justificar.",
+      "level_20": "Puro humo o generica aplicable a cualquier caso."
     }
   ],
   "hardPenalties": [
     {
-      "condition": "Confunde el orden de indexacion (offline, una vez) y consulta (online, cada pregunta), o los presenta como una sola etapa",
+      "condition": "Confunde indexacion (offline, una vez) con consulta (online, cada pregunta)",
       "cap": 60,
       "dimension": "technical_pipeline"
     },
     {
-      "condition": "No considera vigencia documental en casos que involucran normativa (R2, R5, R6)",
+      "condition": "No considera vigencia documental en casos normativos (R2, R5, R6)",
       "cap": 60,
       "dimension": "institutional_criteria"
     },
     {
-      "condition": "Instruccion al LLM que no limita al modelo a usar solo fragmentos recuperados, cuando eso es el punto central de la ronda (R5, R6)",
+      "condition": "Instruccion al LLM sin limitar a fragmentos recuperados (R5, R6)",
       "cap": 60,
       "dimension": "technical_pipeline"
     }
   ],
   "softPenalties": [
     {
-      "condition": "Usa tecnicismos no ensenados (LangChain, Pinecone, ChromaDB, FAISS, cosine similarity, BM25, reranking, HyDE) como si fueran evidentes",
+      "condition": "Tecnicismos no ensenados (LangChain, Pinecone, FAISS, cosine similarity, BM25, reranking, HyDE) usados como evidentes",
       "deduction": -15,
       "dimension": "technical_pipeline"
     },
     {
-      "condition": "No menciona trazabilidad (citar fuente, verificar contra documento original) cuando el caso lo requiere",
+      "condition": "Falta trazabilidad (citar fuente) cuando el caso lo requiere",
       "deduction": -15,
       "dimension": "institutional_criteria"
     },
     {
-      "condition": "Respuesta generica aplicable a cualquier caso RAG sin modificacion",
+      "condition": "Respuesta generica aplicable a cualquier caso RAG",
       "deduction": -15,
       "dimensions": ["institutional_criteria", "technical_pipeline"]
     },
     {
-      "condition": "Entusiasmo acritico: celebra RAG sin reconocer riesgos o limitaciones",
+      "condition": "Entusiasmo acritico: celebra RAG sin reconocer riesgos",
       "deduction": -10,
       "dimension": "institutional_criteria"
     },
     {
-      "condition": "Pensamiento binario: presenta keyword y semantico como mutuamente excluyentes (uno siempre mejor)",
+      "condition": "Pensamiento binario: keyword y semantico como mutuamente excluyentes",
       "deduction": -15,
       "dimension": "technical_pipeline"
     },
     {
-      "condition": "No usa el formato de tags solicitado en la pregunta",
+      "condition": "No usa formato de tags solicitado",
       "deduction": -10,
-      "dimension": "clarity_critical_thinking",
-      "note": "Penalidad menor — evaluar fondo sobre forma"
+      "dimension": "clarity_critical_thinking"
     }
-  ],
-  "bonusIndicators": [
-    "Conecta cada componente RAG con una consecuencia concreta para el caso",
-    "Distingue claramente indexacion (offline, una vez) de consulta (online, cada pregunta)",
-    "Trade-off de chunking con ejemplo especifico del caso, no generico",
-    "Entiende que keyword y semantico son complementarios, no rivales",
-    "Instruccion al LLM que limita a fragmentos recuperados y pide citar fuente",
-    "Identifica vigencia documental como campo de metadata critico",
-    "Consecuencia institucional concreta de un error RAG (no 'podria haber problemas')",
-    "Priorizacion de soluciones por riesgo institucional, no por facilidad tecnica",
-    "Conecta con conceptos de clases anteriores (API, loop, clasificacion) donde corresponde",
-    "Diagnostico con causa distinta para cada sintoma, conectada logicamente"
   ]
 }

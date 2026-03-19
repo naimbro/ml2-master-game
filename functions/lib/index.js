@@ -55,26 +55,66 @@ async function getOpenAI() {
     const { default: OpenAI } = await getOpenAIModule();
     return new OpenAI({ apiKey });
 }
+// Helper: select only relevant KB sections for a given round's conceptTags
+// KB uses HTML comment markers: <!-- section: tag1, tag2 -->
+// Sections tagged _always are always included. Others included if any tag matches.
+function selectKBSections(knowledgeBase, conceptTags) {
+    if (!knowledgeBase || !(conceptTags === null || conceptTags === void 0 ? void 0 : conceptTags.length))
+        return knowledgeBase || '';
+    const parts = knowledgeBase.split(/<!--\s*section:\s*(.*?)\s*-->/);
+    // parts[0] = preamble (before first marker), parts[1] = tags, parts[2] = content, ...
+    if (parts.length < 3)
+        return knowledgeBase; // no markers found, return full KB
+    let result = parts[0].trim(); // preamble (usually empty or title)
+    for (let i = 1; i < parts.length; i += 2) {
+        const sectionTags = parts[i].split(',').map((t) => t.trim());
+        const sectionContent = parts[i + 1] || '';
+        if (sectionTags.includes('_always') || sectionTags.some((t) => conceptTags.includes(t))) {
+            result += '\n' + sectionContent.trim();
+        }
+    }
+    return result.trim();
+}
+// Helper: build compact rubric for prompt (drops verbose fields)
+function buildCompactRubric(rubric) {
+    const dimensions = (rubric.dimensions || []);
+    return {
+        globalInstructions: rubric.globalInstructions,
+        dimensions: dimensions.map(d => ({
+            id: d.id, name: d.name, weight: d.weight, description: d.description,
+            level_100: d.level_100, level_60: d.level_60, level_20: d.level_20,
+        })),
+        hardPenalties: rubric.hardPenalties || rubric.globalPenalties,
+        softPenalties: rubric.softPenalties,
+    };
+}
 // Helper function to evaluate with a single judge
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function evaluateWithJudge(openai, judge, scenario, studentResponse, sessionConfig, knowledgeBase, referenceDocs, isRanked = true) {
     var _a, _b;
-    // Strip evaluation data from scenario to avoid redundancy in prompt
+    // Strip evaluation data and non-essential fields from scenario for prompt
     const scenarioForPrompt = { ...scenario };
     delete scenarioForPrompt.idealAnswer;
     delete scenarioForPrompt.evaluationGuide;
+    delete scenarioForPrompt.conceptTags;
+    delete scenarioForPrompt.nice_to_have;
+    // Select only relevant KB sections for this round
+    const conceptTags = (scenario.conceptTags || []);
+    const relevantKB = selectKBSections(knowledgeBase, conceptTags);
+    // Build compact rubric (3 anchor levels, no bonusIndicators)
+    const rubricConfig = (sessionConfig.rubric || {});
+    const compactRubric = buildCompactRubric(rubricConfig);
     let prompt = judge.promptTemplate
         .replace('{{name}}', judge.name)
         .replace('{{personality}}', judge.personality)
         .replace('{{evaluationStyle}}', judge.evaluationStyle)
-        .replace('{{knowledgeBase}}', knowledgeBase || 'No knowledge base provided')
-        .replace('{{referenceDocs}}', referenceDocs || 'No reference documents provided')
-        .replace('{{rubric}}', JSON.stringify(sessionConfig.rubric || {}, null, 2))
+        .replace('{{knowledgeBase}}', relevantKB || 'No knowledge base provided')
+        .replace('{{referenceDocs}}', referenceDocs || '')
+        .replace('{{rubric}}', JSON.stringify(compactRubric, null, 2))
         .replace('{{scenario}}', JSON.stringify(scenarioForPrompt, null, 2))
         .replace('{{idealAnswer}}', JSON.stringify(scenario.idealAnswer || {}, null, 2))
         .replace('{{studentResponse}}', studentResponse);
     // Dynamic session-aware replacements for dimension names, formulas, and session lens
-    const rubricConfig = (sessionConfig.rubric || {});
     const rubricDimensions = (rubricConfig.dimensions || []);
     const dimensionIds = rubricDimensions.map(d => d.id);
     const dimensionScoresJson = dimensionIds.length > 0
@@ -895,16 +935,12 @@ exports.seedJudges = functions
         }
         // Shared rubric scoring instructions injected into every judge prompt
         const rubricInstructions = `
-COMO USAR LA RUBRICA:
-1. Lee el campo "judgeFocus" del escenario — es tu PRIORIDAD para esta ronda.
-2. Evalua la respuesta en CADA dimension de la rubrica (ver "dimensions").
-3. Para cada dimension, identifica en que nivel cae (100/80/60/40/20) usando los descriptores level_100...level_20.
-4. Si la respuesta no intenta responder (ej: "no se", "ni idea", "paso", texto irrelevante), asigna 0 en TODAS las dimensiones.
-5. Revisa penalidades: "hardPenalties" imponen un TECHO en la dimension indicada. "softPenalties" restan puntos. Si la rubrica usa "globalPenalties" (formato antiguo), tratarlas como topes.
-6. Usa la GUIA DE EVALUACION para verificar conceptos clave y errores fatales, pero NO la trates como solucionario unico — respuestas alternativas correctas deben recibir credito completo.
-7. Para calcular tu score final, usa la FORMULA DE PESOS de tus instrucciones finales (cada juez tiene pesos distintos).
-8. En tu feedback, MENCIONA por nombre la dimension mas debil y el nivel en que cayo.
-9. NO repitas la pregunta. NO des feedback generico. Se ESPECIFICO sobre que falta o que esta mal.`;
+INSTRUCCIONES DE SCORING:
+1. "judgeFocus" del escenario es tu PRIORIDAD.
+2. Puntua CADA dimension (ver rubrica). "hardPenalties" = TECHO en esa dimension. "softPenalties" = deduccion.
+3. GUIA DE EVALUACION: verifica must_hit/fatal_errors, pero acepta respuestas alternativas correctas.
+4. Calcula score final con la FORMULA DE PESOS de tus instrucciones finales.
+5. Feedback: nombra la dimension mas debil. Se ESPECIFICO. No repitas la pregunta.`;
         const defaultJudges = {
             judges: [
                 {
@@ -914,19 +950,16 @@ COMO USAR LA RUBRICA:
                     personality: 'Eres un ingeniero de sistemas de IA con 15 anos de experiencia. Has construido pipelines de datos en Google y consultado para gobiernos. Eres preciso, clinico, y te fijas en los detalles que otros ignoran. No te impresionan las buenas intenciones — te importa si la respuesta es operacionalmente correcta.',
                     evaluationStyle: 'Tu lente principal: Estructuracion de Proceso y Decision (peso alto) + Precision y Claridad (peso alto). Te fijas en: son los insumos realmente fuentes de datos o solo canales? Es la decision binaria/seleccion o es vaga? Es la metrica realmente medible con un numero? Penalizas cuando alguien dice "mejorar la gestion" sin especificar que proceso exacto se mejora.',
                     focusDimensions: ['process_structuring', 'precision_clarity'],
-                    promptTemplate: `MATERIAL DE REFERENCIA DEL CURSO:
+                    promptTemplate: `MATERIAL DE REFERENCIA:
 {{knowledgeBase}}
 
-DOCUMENTOS DE REFERENCIA:
-{{referenceDocs}}
-
-RUBRICA DE EVALUACION:
+RUBRICA:
 {{rubric}}
 
-ESCENARIO (incluye "judgeFocus" con la prioridad de esta ronda):
+ESCENARIO:
 {{scenario}}
 
-GUIA DE EVALUACION (conceptos clave y errores fatales — NO revelar al estudiante):
+GUIA DE EVALUACION:
 {{evaluationGuide}}
 
 RESPUESTA DEL ESTUDIANTE:
@@ -972,19 +1005,16 @@ Responde SOLO con JSON valido:
                     personality: 'Eres una ex-Subsecretaria de Gobierno Digital de Chile. Has implementado y visto fracasar proyectos de tecnologia en el Estado. Conoces las restricciones reales: presupuestos rigidos, equipos chicos, rotacion de autoridades, resistencia de funcionarios, y la obligacion de transparencia. No toleras respuestas que ignoren donde se va a implementar esto.',
                     evaluationStyle: 'Tu lente principal: Realismo Institucional (peso alto). Te preguntas: esta persona ha pensado en QUIEN va a usar esto? Que pasa si cambia el alcalde? Donde estan los datos HOY? Hay riesgo de dano ciudadano? Valoras cuando alguien identifica restricciones reales. Penalizas cuando alguien asume que la tecnologia se implementa sola.',
                     focusDimensions: ['institutional_realism'],
-                    promptTemplate: `MATERIAL DE REFERENCIA DEL CURSO:
+                    promptTemplate: `MATERIAL DE REFERENCIA:
 {{knowledgeBase}}
 
-DOCUMENTOS DE REFERENCIA:
-{{referenceDocs}}
-
-RUBRICA DE EVALUACION:
+RUBRICA:
 {{rubric}}
 
-ESCENARIO (incluye "judgeFocus" con la prioridad de esta ronda):
+ESCENARIO:
 {{scenario}}
 
-GUIA DE EVALUACION (conceptos clave y errores fatales — NO revelar al estudiante):
+GUIA DE EVALUACION:
 {{evaluationGuide}}
 
 RESPUESTA DEL ESTUDIANTE:
@@ -1029,19 +1059,16 @@ Responde SOLO con JSON valido:
                     personality: 'Eres el profesor del curso. Eres directo, exigente, y no te gustan las respuestas que "suenan bien" pero no dicen nada. Te frustra cuando un estudiante llena espacio con generalidades en vez de pensar. Valoras la honestidad intelectual: preferir "no se" a inventar. Pero tambien premias cuando alguien va mas alla de lo pedido con un insight propio.',
                     evaluationStyle: 'Tu lente principal: anti-solutionism + sintesis + medicion. Te preguntas: esta persona PENSO o solo lleno los campos? Hay evidencia de comprension profunda o es relleno? Si le preguntara "por que elegiste esa metrica?", tendria una buena respuesta? Penalizas respuestas que podrian aplicar a cualquier problema. Premias insights que muestran experiencia real.',
                     focusDimensions: ['critical_thinking', 'synthesis'],
-                    promptTemplate: `MATERIAL DE REFERENCIA DEL CURSO (esto es lo que ensenaste):
+                    promptTemplate: `MATERIAL DE REFERENCIA:
 {{knowledgeBase}}
 
-DOCUMENTOS DE REFERENCIA (lecturas asignadas):
-{{referenceDocs}}
-
-RUBRICA DE EVALUACION:
+RUBRICA:
 {{rubric}}
 
-ESCENARIO (incluye "judgeFocus" con la prioridad de esta ronda):
+ESCENARIO:
 {{scenario}}
 
-GUIA DE EVALUACION (lo que esperabas — conceptos clave y errores fatales):
+GUIA DE EVALUACION:
 {{evaluationGuide}}
 
 RESPUESTA DEL ESTUDIANTE:
