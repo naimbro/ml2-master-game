@@ -59,6 +59,10 @@ async function getOpenAI() {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function evaluateWithJudge(openai, judge, scenario, studentResponse, sessionConfig, knowledgeBase, referenceDocs, isRanked = true) {
     var _a, _b;
+    // Strip evaluation data from scenario to avoid redundancy in prompt
+    const scenarioForPrompt = { ...scenario };
+    delete scenarioForPrompt.idealAnswer;
+    delete scenarioForPrompt.evaluationGuide;
     let prompt = judge.promptTemplate
         .replace('{{name}}', judge.name)
         .replace('{{personality}}', judge.personality)
@@ -66,9 +70,36 @@ async function evaluateWithJudge(openai, judge, scenario, studentResponse, sessi
         .replace('{{knowledgeBase}}', knowledgeBase || 'No knowledge base provided')
         .replace('{{referenceDocs}}', referenceDocs || 'No reference documents provided')
         .replace('{{rubric}}', JSON.stringify(sessionConfig.rubric || {}, null, 2))
-        .replace('{{scenario}}', JSON.stringify(scenario, null, 2))
+        .replace('{{scenario}}', JSON.stringify(scenarioForPrompt, null, 2))
         .replace('{{idealAnswer}}', JSON.stringify(scenario.idealAnswer || {}, null, 2))
         .replace('{{studentResponse}}', studentResponse);
+    // Dynamic session-aware replacements for dimension names, formulas, and session lens
+    const rubricConfig = (sessionConfig.rubric || {});
+    const rubricDimensions = (rubricConfig.dimensions || []);
+    const dimensionIds = rubricDimensions.map(d => d.id);
+    const dimensionScoresJson = dimensionIds.length > 0
+        ? dimensionIds.map(id => `    "${id}": "<0-100>"`).join(',\n')
+        : '    "dimension_1": "<0-100>",\n    "dimension_2": "<0-100>",\n    "dimension_3": "<0-100>"';
+    const judgeSessionConfig = (sessionConfig.judgeConfig || {})[judge.judgeId] || {};
+    const sessionLens = judgeSessionConfig.sessionLens
+        ? `\nFOCO ESPECIFICO PARA ESTA SESION:\n${judgeSessionConfig.sessionLens}`
+        : '';
+    const defaultFormulas = {
+        'technical_expert': `score = 0.50 * ${dimensionIds[0] || 'process_structuring'} + 0.10 * ${dimensionIds[1] || 'institutional_realism'} + 0.40 * ${dimensionIds[2] || 'precision_clarity'}`,
+        'public_sector': `score = 0.15 * ${dimensionIds[0] || 'process_structuring'} + 0.65 * ${dimensionIds[1] || 'institutional_realism'} + 0.20 * ${dimensionIds[2] || 'precision_clarity'}`,
+        'professor_twin': `score = 0.35 * ${dimensionIds[0] || 'process_structuring'} + 0.30 * ${dimensionIds[1] || 'institutional_realism'} + 0.35 * ${dimensionIds[2] || 'precision_clarity'}`,
+    };
+    const weightFormula = judgeSessionConfig.weightFormula
+        || defaultFormulas[judge.judgeId]
+        || 'score = weighted average of dimensions';
+    const evalGuide = scenario.evaluationGuide
+        ? JSON.stringify(scenario.evaluationGuide, null, 2)
+        : JSON.stringify(scenario.idealAnswer || {}, null, 2);
+    prompt = prompt
+        .replace('{{dimensionScoresJson}}', dimensionScoresJson)
+        .replace('{{weightFormula}}', weightFormula)
+        .replace('{{sessionLens}}', sessionLens)
+        .replace('{{evaluationGuide}}', evalGuide);
     // For non-ranked rounds, add signal extraction instructions
     if (!isRanked) {
         const scenarioId = scenario.id || '';
@@ -866,13 +897,14 @@ exports.seedJudges = functions
         const rubricInstructions = `
 COMO USAR LA RUBRICA:
 1. Lee el campo "judgeFocus" del escenario — es tu PRIORIDAD para esta ronda.
-2. Evalua la respuesta en CADA dimension de la rubrica (ver "dimensions" abajo).
+2. Evalua la respuesta en CADA dimension de la rubrica (ver "dimensions").
 3. Para cada dimension, identifica en que nivel cae (100/80/60/40/20) usando los descriptores level_100...level_20.
-4. Si la respuesta no intenta responder la pregunta (ej: "no se", "ni idea", "paso", texto irrelevante), asigna 0 en TODAS las dimensiones. Score final = 0.
-5. Revisa "globalPenalties" — si alguna aplica, el puntaje en esa dimension NO puede superar el techo indicado.
-6. Para calcular tu score final, usa la FORMULA DE PESOS especifica que aparece en tus instrucciones finales (cada juez tiene pesos distintos).
-7. En tu feedback, MENCIONA por nombre la dimension mas debil y el nivel en que cayo.
-8. NO repitas la pregunta. NO des feedback generico. Se ESPECIFICO sobre que falta o que esta mal.`;
+4. Si la respuesta no intenta responder (ej: "no se", "ni idea", "paso", texto irrelevante), asigna 0 en TODAS las dimensiones.
+5. Revisa penalidades: "hardPenalties" imponen un TECHO en la dimension indicada. "softPenalties" restan puntos. Si la rubrica usa "globalPenalties" (formato antiguo), tratarlas como topes.
+6. Usa la GUIA DE EVALUACION para verificar conceptos clave y errores fatales, pero NO la trates como solucionario unico — respuestas alternativas correctas deben recibir credito completo.
+7. Para calcular tu score final, usa la FORMULA DE PESOS de tus instrucciones finales (cada juez tiene pesos distintos).
+8. En tu feedback, MENCIONA por nombre la dimension mas debil y el nivel en que cayo.
+9. NO repitas la pregunta. NO des feedback generico. Se ESPECIFICO sobre que falta o que esta mal.`;
         const defaultJudges = {
             judges: [
                 {
@@ -894,8 +926,8 @@ RUBRICA DE EVALUACION:
 ESCENARIO (incluye "judgeFocus" con la prioridad de esta ronda):
 {{scenario}}
 
-RESPUESTA IDEAL (para calibracion, NO revelar al estudiante):
-{{idealAnswer}}
+GUIA DE EVALUACION (conceptos clave y errores fatales — NO revelar al estudiante):
+{{evaluationGuide}}
 
 RESPUESTA DEL ESTUDIANTE:
 {{studentResponse}}
@@ -910,21 +942,20 @@ AHORA EVALUA COMO {{name}}.
 
 TU LENTE DE EVALUACION:
 {{evaluationStyle}}
+{{sessionLens}}
 
 INSTRUCCIONES FINALES PARA Dr. Tech:
 - Tu feedback debe ser CLINICO y TECNICO. Senala errores de especificacion como un ingeniero revisando requerimientos.
 - Haz UNA pregunta tecnica que el estudiante no podria responder con su formulacion actual (ej: "los reclamos de RRSS tienen geolocalizacion?" o "esa metrica se puede calcular con los datos que mencionas?").
 - NO uses lenguaje motivacional. NO digas "buen intento". Se directo.
 - Incluye la pregunta en el campo "feedback".
-- FORMULA DE PESOS: score = 0.50 * process_structuring + 0.10 * institutional_realism + 0.40 * precision_clarity
+- FORMULA DE PESOS: {{weightFormula}}
 
 Responde SOLO con JSON valido:
 {
-  "score": <0-100, calcula con formula: 0.50*structuring + 0.10*realism + 0.40*precision>,
+  "score": "<0-100, calcula con la formula de pesos indicada>",
   "dimensionScores": {
-    "process_structuring": <0-100>,
-    "institutional_realism": <0-100>,
-    "precision_clarity": <0-100>
+{{dimensionScoresJson}}
   },
   "feedback": "<2-3 oraciones tecnicas + 1 pregunta probing>",
   "strengths": ["<fortaleza concreta>"],
@@ -953,8 +984,8 @@ RUBRICA DE EVALUACION:
 ESCENARIO (incluye "judgeFocus" con la prioridad de esta ronda):
 {{scenario}}
 
-RESPUESTA IDEAL (para calibracion, NO revelar al estudiante):
-{{idealAnswer}}
+GUIA DE EVALUACION (conceptos clave y errores fatales — NO revelar al estudiante):
+{{evaluationGuide}}
 
 RESPUESTA DEL ESTUDIANTE:
 {{studentResponse}}
@@ -969,21 +1000,20 @@ AHORA EVALUA COMO {{name}}.
 
 TU LENTE DE EVALUACION:
 {{evaluationStyle}}
+{{sessionLens}}
 
 INSTRUCCIONES FINALES PARA Ministra Digital:
 - Tu feedback debe sonar como una ex-autoridad publica que ha VIVIDO los problemas de implementar tecnologia en el Estado.
 - Nombra UNA restriccion institucional CONCRETA que el estudiante ignoro (ej: "la Contraloria exige trazabilidad", "los funcionarios de planta no van a usar esto sin capacitacion", "si cambia el alcalde este proyecto muere").
 - Usa lenguaje institucional real: "licitacion", "convenio", "dotacion", "PMGD", "decreto", "protocolo".
 - NO repitas lo que diria un evaluador tecnico. Tu valor es la perspectiva POLITICA e INSTITUCIONAL.
-- FORMULA DE PESOS: score = 0.15 * process_structuring + 0.65 * institutional_realism + 0.20 * precision_clarity
+- FORMULA DE PESOS: {{weightFormula}}
 
 Responde SOLO con JSON valido:
 {
-  "score": <0-100, calcula con formula: 0.15*structuring + 0.65*realism + 0.20*precision>,
+  "score": "<0-100, calcula con la formula de pesos indicada>",
   "dimensionScores": {
-    "process_structuring": <0-100>,
-    "institutional_realism": <0-100>,
-    "precision_clarity": <0-100>
+{{dimensionScoresJson}}
   },
   "feedback": "<2-3 oraciones desde perspectiva institucional, nombra restriccion concreta>",
   "strengths": ["<fortaleza concreta>"],
@@ -1011,8 +1041,8 @@ RUBRICA DE EVALUACION:
 ESCENARIO (incluye "judgeFocus" con la prioridad de esta ronda):
 {{scenario}}
 
-RESPUESTA IDEAL (lo que esperabas):
-{{idealAnswer}}
+GUIA DE EVALUACION (lo que esperabas — conceptos clave y errores fatales):
+{{evaluationGuide}}
 
 RESPUESTA DEL ESTUDIANTE:
 {{studentResponse}}
@@ -1027,6 +1057,7 @@ AHORA EVALUA COMO {{name}}.
 
 TU LENTE DE EVALUACION:
 {{evaluationStyle}}
+{{sessionLens}}
 
 INSTRUCCIONES FINALES PARA Profe Naim:
 - Habla en PRIMERA PERSONA. Di "yo habria..." o "a mi me falta ver..." — como si estuvieras dando feedback cara a cara.
@@ -1034,15 +1065,14 @@ INSTRUCCIONES FINALES PARA Profe Naim:
 - Di en UNA frase que harias DISTINTO (ej: "Yo habria medido tiempo de respuesta, no volumen de reclamos" o "Yo habria elegido al coordinador de cuadrillas, no a 'la direccion'").
 - NO seas diplomatico. Se justo pero directo. Los estudiantes son profesionales, no ninos.
 - Si la respuesta es realmente buena, di por que con la misma especificidad.
-- FORMULA DE PESOS: score = 0.35 * process_structuring + 0.30 * institutional_realism + 0.35 * precision_clarity. PERO si la respuesta es generica (podria aplicar a cualquier caso), aplica un multiplicador de 0.7 al score final.
+- FORMULA DE PESOS: {{weightFormula}}
+- Si la respuesta es generica (podria aplicar a cualquier caso sin modificacion), aplica un tope de 50 en la tercera dimension (claridad/pensamiento critico). Dilo explicitamente en el feedback.
 
 Responde SOLO con JSON valido:
 {
-  "score": <0-100, calcula con formula: 0.35*structuring + 0.30*realism + 0.35*precision, luego *0.7 si es generica>,
+  "score": "<0-100, calcula con la formula de pesos indicada>",
   "dimensionScores": {
-    "process_structuring": <0-100>,
-    "institutional_realism": <0-100>,
-    "precision_clarity": <0-100>
+{{dimensionScoresJson}}
   },
   "feedback": "<2-3 oraciones en primera persona, incluye 'yo habria...' con alternativa concreta>",
   "strengths": ["<fortaleza concreta>"],

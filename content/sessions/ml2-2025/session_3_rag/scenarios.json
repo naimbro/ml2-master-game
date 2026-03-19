@@ -1,0 +1,213 @@
+[
+  {
+    "id": "s3rag_r1_chat_vs_api",
+    "order": 1,
+    "title": "Del chat al sistema",
+    "category": "Chat vs API",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 300,
+    "judgeFocus": "El juez tecnico debe valorar especialmente la distincion entre copiar-pegar en chat y usar API programaticamente. Prioriza que el estudiante entienda que la diferencia no es solo de comodidad, sino de control, repetibilidad y escala. Si no identifica problemas concretos de copiar-pegar, baja Comprension Tecnica. Si no conecta la ventaja de la API con el caso especifico (contratos), baja Criterio Practico. El juez profesor debe verificar conexion con clase 2 (patron loop + generate_content). El juez debe distinguir entre: (a) uso manual del chat, (b) uso programatico via API, y (c) salida estructurada y auditable.",
+    "context": "La unidad juridica de un ministerio revisa 200 contratos al mes para verificar que cumplan clausulas obligatorias. Hoy, un abogado lee cada contrato manualmente. Un funcionario propone copiar cada contrato en ChatGPT para que revise las clausulas. Otro propone usar la API de Gemini en un script de Python, como vieron en la clase anterior (loop + generate_content).",
+    "question": "Responde en el siguiente formato EXACTO:\n\n[LIMITACION CHAT] Menciona 2 problemas concretos de copiar-pegar contratos en ChatGPT.\n[VENTAJA API] Menciona 2 ventajas operacionales de usar la API en un script.\n[PATRON] Como aplicarias el patron loop + generate_content a este caso?\n[RIESGO] Un riesgo de enviar contratos a una API externa.",
+    "conceptTags": ["chat_vs_api", "corpus_preparacion", "pipeline_rag"],
+    "evaluationGuide": {
+      "must_hit": [
+        "Al menos 1 limitacion del chat que sea sobre auditabilidad, repetibilidad o falta de registro (no solo velocidad)",
+        "Al menos 1 ventaja de API que sea sobre consistencia o registro (no solo 'es mas rapido')",
+        "Mencion del patron loop + generate_content o equivalente conceptual",
+        "Riesgo que conecte con confidencialidad/sensibilidad de los contratos (no solo 'el modelo se equivoca')"
+      ],
+      "fatal_errors": [
+        "No distinguir chat de API en absoluto (tratarlos como equivalentes con distinta interfaz)",
+        "No identificar ningun riesgo de enviar documentos a API externa"
+      ],
+      "partial_credit": {
+        "60": "Identifica limitaciones del chat y ventajas de API, pero en terminos genericos (velocidad, eficiencia) sin conectar con auditabilidad, repetibilidad o el caso especifico de contratos.",
+        "80": "Buena distincion chat/API con al menos 1 punto sobre auditabilidad o registro. Patron mencionado pero algo vago. Riesgo correcto pero poco desarrollado.",
+        "100": "Limitaciones del chat incluyen falta de registro/auditabilidad Y no escala. Ventajas de API incluyen consistencia Y registro. Patron concreto (loop sobre contratos, mismo prompt, guardar resultados). Riesgo que conecta confidencialidad de contratos con API externa."
+      },
+      "nice_to_have": [
+        "Conecta con el patron de codigo de clase 2 (generate_content, loop sobre dataset)",
+        "Menciona que el output deberia ser estructurado (campos, no prosa)",
+        "Identifica que el resultado API se puede integrar en otros sistemas"
+      ]
+    }
+  },
+  {
+    "id": "s3rag_r2_corpus_metadata",
+    "order": 2,
+    "title": "Corpus y metadata",
+    "category": "Preparacion del Corpus",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 300,
+    "judgeFocus": "El juez sector publico debe valorar especialmente la comprension de vigencia documental y trazabilidad. Prioriza que el estudiante entienda que indexar todo sin curar es peligroso en contexto normativo. Si no explica por que indexar todo es problematico en terminos de mezclar vigente con derogado, baja Comprension Tecnica. Si no identifica vigencia como campo de metadata critico, baja Criterio Practico. Si la consecuencia es generica ('podria haber problemas'), baja Criterio Practico.",
+    "context": "Una Superintendencia quiere construir un sistema RAG para que sus fiscalizadores consulten normativa en lenguaje natural. Tienen 4 tipos de documentos: circulares vigentes, circulares derogadas, oficios internos, resoluciones y manuales de procedimiento. Un consultor propone: 'Indexemos todo junto para tener la base mas completa posible.'",
+    "question": "Responde en el siguiente formato EXACTO:\n\n[PROBLEMA INDEXAR TODO] Por que es peligroso indexar todos los documentos sin curar?\n[SELECCION] Que fuente incluirias primero y cual dejarias fuera? Justifica.\n[METADATA] Nombra 3 campos de metadata necesarios para cada documento.\n[VIGENCIA] Como manejar las circulares derogadas?\n[CONSECUENCIA] Que pasa si un fiscalizador recibe una respuesta basada en una norma derogada?",
+    "conceptTags": ["corpus_preparacion", "metadata_documental", "vigencia_normativa"],
+    "evaluationGuide": {
+      "must_hit": [
+        "Problema de indexar todo conectado con mezclar vigente y derogado (no solo tamano o velocidad)",
+        "Vigencia como campo de metadata (ya sea 'vigente/derogado', 'estado', o equivalente)",
+        "Consecuencia institucional concreta: fiscalizacion invalida, impugnacion, error legal"
+      ],
+      "fatal_errors": [
+        "No mencionar vigencia ni como concepto en toda la respuesta",
+        "Consecuencia generica ('podria haber problemas') sin describir dano concreto"
+      ],
+      "partial_credit": {
+        "60": "Identifica que indexar todo es malo y da una seleccion razonable, pero el problema es sobre tamano/velocidad, no vigencia. Metadata no incluye vigencia. Consecuencia vaga.",
+        "80": "Problema correcto (mezcla vigente/derogado). Seleccion con justificacion. Metadata incluye vigencia. Consecuencia algo generica pero en la direccion correcta.",
+        "100": "Todo conectado: problema de vigencia → seleccion justificada por uso operativo → metadata con vigencia como campo critico → solucion concreta para derogadas (excluir o filtrar) → consecuencia institucional especifica (impugnacion, error legal, perdida de confianza)."
+      },
+      "nice_to_have": [
+        "Propone filtrar por metadata de vigencia en la etapa de retrieval",
+        "Distingue entre excluir derogadas vs marcarlas con metadata",
+        "Identifica que los oficios no son normativos y deben tratarse distinto"
+      ]
+    }
+  },
+  {
+    "id": "s3rag_r3_chunking",
+    "order": 3,
+    "title": "Chunking como decision de diseno",
+    "category": "Chunking",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 300,
+    "judgeFocus": "El juez tecnico debe valorar especialmente que el trade-off sea concreto y aplicado al caso (leyes para ciudadanos), no una enumeracion teorica. El juez profesor debe valorar que el estudiante tome una decision concreta y la justifique — no basta con evadir diciendo solo 'depende' sin comprometerse. Si reconoce que hay condiciones distintas pero elige una estrategia base y explica cuando la ajustaria, eso es valido y bueno. Si la justificacion no conecta con el tipo de usuario (ciudadano, no abogado), baja Criterio Practico. Si el riesgo de mal chunking es generico ('la respuesta sera mala'), baja Comprension Tecnica.",
+    "context": "Una biblioteca legislativa quiere crear un sistema RAG para que ciudadanos puedan hacer preguntas sobre leyes en lenguaje natural. Los documentos son leyes completas organizadas en articulos, secciones y capitulos. El equipo debate entre dos estrategias de chunking: partir por articulo individual o por capitulo completo.",
+    "question": "Responde en el siguiente formato EXACTO:\n\n[CHUNK CHICO] Un problema concreto de hacer chunks por articulo aislado.\n[CHUNK GRANDE] Un problema concreto de hacer chunks por capitulo completo.\n[TU DECISION] Que estrategia base elegir y bajo que condicion la ajustarias?\n[JUSTIFICACION] Por que es mejor para ESTE caso (leyes + ciudadanos).\n[RIESGO] Un error concreto que puede cometer el sistema si el chunking es inadecuado.",
+    "conceptTags": ["chunking", "overlap", "corpus_preparacion"],
+    "evaluationGuide": {
+      "must_hit": [
+        "Problema de chunk chico con ejemplo concreto del caso de leyes (ej: articulo que referencia otro, pierde contexto)",
+        "Problema de chunk grande con ejemplo concreto (ej: temas mezclados, dilusion, excede contexto)",
+        "Decision que elige una estrategia base (puede reconocer matices, pero debe comprometerse con una opcion principal)",
+        "Justificacion que conecta con el usuario final (ciudadano, no experto legal)"
+      ],
+      "fatal_errors": [
+        "Solo decir 'depende' sin elegir ninguna estrategia base ni comprometerse",
+        "Trade-offs puramente genericos sin ejemplo del caso (leyes, articulos, capitulos)"
+      ],
+      "partial_credit": {
+        "60": "Trade-offs mencionados pero genericos ('pierde contexto' / 'es muy grande'). Elige una estrategia pero justificacion teorica, no conectada con ciudadanos. Riesgo generico.",
+        "80": "Al menos 1 trade-off con ejemplo concreto del caso. Elige estrategia con justificacion que menciona al usuario. Riesgo razonable pero podria ser mas especifico.",
+        "100": "Ambos trade-offs con ejemplo concreto de leyes. Elige estrategia base (ej: articulo con contexto o seccion tematica) y reconoce cuando la ajustaria. Justificacion centrada en que ciudadanos necesitan respuestas acotadas. Riesgo con escenario especifico (ej: respuesta incompleta por articulo que referencia otro)."
+      },
+      "nice_to_have": [
+        "Menciona overlap como tecnica para preservar contexto en los bordes",
+        "Propone agregar titulo de seccion/capitulo a cada chunk",
+        "Reconoce que la estructura natural del documento (articulos, secciones) importa para el chunking"
+      ]
+    }
+  },
+  {
+    "id": "s3rag_r4_keyword_vs_semantico",
+    "order": 4,
+    "title": "Keyword vs retrieval semantico",
+    "category": "Retrieval",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 300,
+    "judgeFocus": "El juez tecnico debe valorar comprension de la diferencia fundamental entre keyword y semantico. R4 es una trampa anti-pensamiento binario: si el estudiante NO puede dar un caso donde keyword sirve, baja Comprension Tecnica — porque demuestra que no entiende que son herramientas complementarias, no que una es 'mejor'. REGLA DE CREDITO PARCIAL: si explica bien por que keyword falla y como embeddings resuelven, parte desde 60 minimo en Comprension Tecnica. Si ademas reconoce un caso util de keyword, sube a 80+. Si cae en pensamiento binario, queda capado en 60. Esto vuelve mas robusta la ronda.",
+    "context": "Un servicio publico tiene un buscador por keyword en su base de documentos normativos. Cuando un funcionario busca 'licencia postnatal', encuentra resultados correctos. Pero cuando busca 'permiso para madre despues del parto', no encuentra nada — aunque los documentos relevantes existen. El equipo esta evaluando si reemplazar o complementar la busqueda actual.",
+    "question": "Responde en el siguiente formato EXACTO:\n\n[POR QUE FALLA] Por que la busqueda por keyword no encuentra 'permiso para madre despues del parto'?\n[SEMANTICO] Como resuelven este problema los embeddings?\n[KEYWORD UTIL] Describe 1 caso concreto donde busqueda por keyword SI es mejor que semantica.\n[COMBINACION] Como combinarias ambos metodos para este servicio publico?",
+    "conceptTags": ["keyword_search", "embeddings", "retrieval_semantico"],
+    "evaluationGuide": {
+      "must_hit": [
+        "Keyword falla por coincidencia de palabras exactas, no de significado",
+        "Embeddings capturan significado: textos similares quedan cerca aunque usen palabras distintas",
+        "Al menos 1 caso donde keyword es mejor (codigos, identificadores, numeros de circular)"
+      ],
+      "fatal_errors": [
+        "No entender por que keyword falla (explicacion incorrecta)",
+        "No entender como embeddings resuelven el problema"
+      ],
+      "partial_credit": {
+        "60": "Explica correctamente por que keyword falla y como embeddings resuelven. Pero NO puede dar caso donde keyword es mejor (pensamiento binario). Propone solo semantico. Base solida pero comprension incompleta.",
+        "80": "Todo lo anterior MAS reconoce un caso util de keyword (codigos, IDs). Combinacion razonable aunque no muy desarrollada.",
+        "100": "Distincion keyword/semantico impecable con ejemplo del caso. Caso concreto de keyword util (ej: 'Circular 847/2024'). Combinacion con logica clara de cuando usar cada metodo (semantico para lenguaje natural, keyword para identificadores exactos)."
+      },
+      "nice_to_have": [
+        "Menciona busqueda hibrida como concepto",
+        "Conecta con el problema de R6 (buscar circulares por codigo)",
+        "Reconoce que keyword es mas predecible/auditable para busquedas exactas"
+      ]
+    }
+  },
+  {
+    "id": "s3rag_r5_pipeline_completo",
+    "order": 5,
+    "title": "RAG clasico: pipeline completo",
+    "category": "Pipeline RAG",
+    "difficulty": "medium-hard",
+    "ranked": true,
+    "durationSeconds": 300,
+    "judgeFocus": "El juez tecnico debe valorar especialmente el orden correcto del pipeline y la distincion clara entre indexacion (offline, se hace una vez) y consulta (online, cada vez que alguien pregunta). Si confunde el orden o mezcla indexacion con consulta (ej: dice que se generan embeddings de los documentos cada vez que alguien pregunta), eso activa penalidad dura. El juez sector publico debe valorar trazabilidad (que la respuesta cite documento real) y vigencia (que hacer cuando cambia la normativa). Si la instruccion al LLM no limita al modelo a usar solo fragmentos recuperados, baja Comprension Tecnica. ESTA RONDA ES EL TEST DE VALIDACION: si los jueces no penalizan confusion de orden, la rubrica esta rota.",
+    "context": "Un organismo regulador tiene 500 documentos normativos (reglamentos, circulares, guias). Los analistas necesitan hacer preguntas en lenguaje natural y recibir respuestas con citas al documento fuente. El equipo tecnico debe disenar el sistema RAG.",
+    "question": "Responde en el siguiente formato EXACTO:\n\n[INDEXACION] Que se hace UNA VEZ con los 500 documentos? (2-3 pasos)\n[CONSULTA] Que pasa paso a paso cuando alguien hace una pregunta? (3-4 pasos)\n[INSTRUCCION LLM] Escribe en 2 lineas la instruccion que le darias al LLM para que use SOLO los fragmentos recuperados.\n[TRAZABILIDAD] Como asegurar que la respuesta viene de un documento real y no es inventada?\n[ACTUALIZACION] Que hacer cuando se publica una nueva norma?",
+    "conceptTags": ["pipeline_rag", "indexacion_offline", "consulta_online", "instruccion_llm_rag", "trazabilidad"],
+    "evaluationGuide": {
+      "must_hit": [
+        "Indexacion incluye generar embeddings (no solo 'guardar en base de datos')",
+        "Consulta NO incluye generar embeddings de los documentos (solo de la pregunta)",
+        "Distincion explicita entre indexacion (offline/una vez) y consulta (online/cada pregunta)",
+        "Instruccion al LLM que limita a fragmentos recuperados (no 'informacion disponible')",
+        "Trazabilidad: citar documento fuente en la respuesta"
+      ],
+      "fatal_errors": [
+        "Poner generacion de embeddings de documentos en la etapa de consulta (confusion de orden)",
+        "Instruccion al LLM que NO limita a fragmentos recuperados (ej: 'responde con la informacion disponible')"
+      ],
+      "partial_credit": {
+        "60": "Indexacion y consulta como etapas separadas, pero omite embeddings en indexacion o confunde parcialmente cuando se generan. Instruccion vaga. Trazabilidad mencionada.",
+        "80": "Pipeline correcto con embeddings en el lugar correcto. Instruccion limita a fragmentos pero le falta algun elemento (citar fuente, manejar 'no se'). Trazabilidad y actualizacion razonables.",
+        "100": "Pipeline impecable: indexacion (preparar → embeddings → almacenar) y consulta (pregunta → embedding pregunta → retrieval → LLM con contexto) claramente separados. Instruccion limita a fragmentos Y pide citas Y maneja incertidumbre. Trazabilidad con verificacion posible. Actualizacion incluye re-indexar y manejar vigencia de normas reemplazadas."
+      },
+      "nice_to_have": [
+        "Menciona que la pregunta se convierte en embedding con la misma tecnica que los documentos",
+        "Instruccion que maneja vigencia (no usar fragmentos derogados)",
+        "Actualizacion que menciona marcar norma anterior como derogada"
+      ]
+    }
+  },
+  {
+    "id": "s3rag_r6_diagnostico",
+    "order": 6,
+    "title": "Diagnostico de un mal diseno",
+    "category": "Diagnostico RAG",
+    "difficulty": "hard",
+    "ranked": true,
+    "durationSeconds": 300,
+    "judgeFocus": "El juez tecnico debe valorar que las 3 causas sean DISTINTAS y cada una conecte con su sintoma especifico — no respuestas genericas que apliquen a cualquier problema. El juez profesor debe valorar logica causa-efecto clara: cada sintoma tiene una causa identificable en el diseno descrito (chunks 3000 tokens, sin metadata vigencia, instruccion vaga). El juez sector publico debe valorar la priorizacion por riesgo institucional (cual arreglar primero y por que — normas derogadas es riesgo legal, los otros son riesgo de utilidad). Si las causas son repetitivas o no conectan con los sintomas, baja Comprension Tecnica. Si la priorizacion es por facilidad y no por riesgo, baja Criterio Practico.",
+    "context": "Un servicio publico implemento un sistema RAG hace 2 meses para consultar normativa interna. Los usuarios reportan 3 problemas:\n\n1. A veces devuelve normas derogadas mezcladas con las vigentes.\n2. Las respuestas son largas y mezclan temas que no tienen relacion entre si.\n3. Cuando buscan 'Circular 847/2024', el sistema no la encuentra, aunque esta indexada.\n\nDatos del diseno actual: los documentos se indexaron con chunks de 3000 tokens, sin metadata de vigencia ni tipo de documento. La instruccion al LLM dice: 'Responde la pregunta del usuario con la informacion disponible.'",
+    "question": "Responde en el siguiente formato EXACTO:\n\n[PROBLEMA 1] Cual es la causa del sintoma 1 (devuelve normas derogadas)?\n[PROBLEMA 2] Cual es la causa del sintoma 2 (respuestas largas con temas mezclados)?\n[PROBLEMA 3] Cual es la causa del sintoma 3 (no encuentra por codigo)?\n[SOLUCION PRIORITARIA] Cual arreglarias primero y por que?\n[INSTRUCCION MEJORADA] Reescribe la instruccion al LLM en 2-3 lineas.",
+    "conceptTags": ["diagnostico_rag", "chunking", "metadata_documental", "keyword_search", "instruccion_llm_rag", "vigencia_normativa"],
+    "evaluationGuide": {
+      "must_hit": [
+        "P1: causa = falta metadata de vigencia (no puede filtrar derogadas)",
+        "P2: causa = chunks demasiado grandes (3000 tokens mezclan temas)",
+        "P3: causa = busqueda semantica no sirve para codigos/identificadores exactos (necesita keyword)",
+        "3 causas DISTINTAS, cada una conectada con su sintoma (no repetir 'mal configurado')",
+        "Priorizacion por riesgo institucional: normas derogadas primero por riesgo legal"
+      ],
+      "fatal_errors": [
+        "Dar la misma causa para 2 o mas sintomas ('el sistema esta mal configurado')",
+        "No identificar que P3 es un problema de keyword vs semantico (ej: decir 'el documento no esta indexado')",
+        "Priorizar por facilidad tecnica sin considerar riesgo institucional"
+      ],
+      "partial_credit": {
+        "60": "Acierta P1 (metadata vigencia). P2 o P3 incorrectos o vagos. Priorizacion razonable pero sin justificacion por riesgo. Instruccion mejorada pero incompleta.",
+        "80": "Acierta P1 y P2 (metadata + chunks grandes). P3 parcialmente correcto. Priorizacion por riesgo con justificacion. Instruccion que limita a fragmentos.",
+        "100": "3 causas correctas Y distintas. P1=metadata, P2=chunks, P3=keyword vs semantico. Priorizacion por riesgo institucional (norma derogada = error legal). Instruccion mejorada que limita a fragmentos, maneja vigencia y pide citas."
+      },
+      "nice_to_have": [
+        "Conecta cada causa con el dato del diseno que la produce (3000 tokens, sin metadata, instruccion vaga)",
+        "Instruccion mejorada que maneja el caso 'no se' (si no hay fragmentos suficientes)",
+        "Reconoce que la instruccion actual es la del ejemplo malo de la clase"
+      ]
+    }
+  }
+]

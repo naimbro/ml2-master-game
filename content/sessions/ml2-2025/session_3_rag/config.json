@@ -1,0 +1,45 @@
+{
+  "sessionId": "session_3_rag",
+  "title": "RAG: Primero Recuperar, Despues Generar",
+  "description": "6 rondas: chat vs API, corpus y metadata, chunking, keyword vs semantico, pipeline RAG completo, diagnostico de mal diseno",
+  "date": "2026-03-20",
+  "roundCount": 6,
+  "roundDurationSeconds": 300,
+  "bufferSeconds": 120,
+  "conceptTags": [
+    "chat_vs_api",
+    "corpus_preparacion",
+    "metadata_documental",
+    "vigencia_normativa",
+    "chunking",
+    "overlap",
+    "embeddings",
+    "retrieval_semantico",
+    "keyword_search",
+    "pipeline_rag",
+    "indexacion_offline",
+    "consulta_online",
+    "instruccion_llm_rag",
+    "trazabilidad",
+    "diagnostico_rag"
+  ],
+  "judges": [
+    { "judgeId": "technical_expert", "weight": 0.35 },
+    { "judgeId": "public_sector", "weight": 0.35 },
+    { "judgeId": "professor_twin", "weight": 0.30 }
+  ],
+  "judgeConfig": {
+    "technical_expert": {
+      "sessionLens": "En esta sesion tu obsesion es el pipeline RAG: orden correcto de indexacion vs consulta, trade-offs de chunking aplicados al caso, diferencia entre retrieval y generacion, diferencia entre keyword y semantico. Te fijas en si el estudiante sabe QUE pasa cuando un paso del pipeline esta mal disenado — no basta enumerar pasos, hay que entender las consecuencias. Si alguien confunde cuando se generan embeddings (indexacion) con cuando se busca (consulta), eso es un error grave. Si alguien dice que busqueda semantica es siempre mejor que keyword, no entiende el concepto.",
+      "weightFormula": "score = 0.50 * technical_pipeline + 0.10 * institutional_criteria + 0.40 * clarity_critical_thinking"
+    },
+    "public_sector": {
+      "sessionLens": "En esta sesion tu obsesion es vigencia documental, trazabilidad y consecuencias de errores normativos. Un sistema RAG mal disenado en el sector publico puede producir respuestas basadas en normas derogadas — eso es un riesgo legal real. Te fijas en: identifica el estudiante que pasa si un fiscalizador actua con norma derogada? Propone metadata de vigencia? Exige que la respuesta cite el documento fuente? Piensa en que pasa cuando se publica nueva normativa? Prioriza por riesgo institucional, no por facilidad tecnica?",
+      "weightFormula": "score = 0.15 * technical_pipeline + 0.65 * institutional_criteria + 0.20 * clarity_critical_thinking"
+    },
+    "professor_twin": {
+      "sessionLens": "En esta sesion tu obsesion es si la respuesta distingue lo decisivo de lo accesorio, si conecta causa con efecto, y si evita 'RAG-solutionism' (asumir que RAG resuelve todo sin pensar en las consecuencias de un mal diseno). Te fijas en: tomo una decision concreta o se refugio en 'depende'? Conecto la decision tecnica con la consecuencia para el usuario? Entendio que hay errores que importan mas que otros? Una respuesta que dice 'falta metadata de vigencia' Y explica por que eso es grave vale mas que una que enumera 10 pasos del pipeline de memoria.",
+      "weightFormula": "score = 0.35 * technical_pipeline + 0.30 * institutional_criteria + 0.35 * clarity_critical_thinking"
+    }
+  }
+}

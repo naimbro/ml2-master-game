@@ -17,15 +17,21 @@ import session2Scenarios from '../../../content/sessions/ml2-2025/session_2_apis
 import session2Rubric from '../../../content/sessions/ml2-2025/session_2_apis/rubric.json';
 import session2KnowledgeBase from '../../../content/sessions/ml2-2025/session_2_apis/knowledge_base.md?raw';
 
+import session3Config from '../../../content/sessions/ml2-2025/session_3_rag/config.json';
+import session3Scenarios from '../../../content/sessions/ml2-2025/session_3_rag/scenarios.json';
+import session3Rubric from '../../../content/sessions/ml2-2025/session_3_rag/rubric.json';
+import session3KnowledgeBase from '../../../content/sessions/ml2-2025/session_3_rag/knowledge_base.md?raw';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface SessionOption {
   id: string;
   title: string;
   description: string;
   rounds: number;
   duration: number;
-  config: typeof session1Config;
-  scenarios: typeof session1Scenarios;
-  rubric: typeof session1Rubric;
+  config: any;
+  scenarios: any;
+  rubric: any;
   knowledgeBase: string;
 }
 
@@ -38,7 +44,7 @@ const availableSessions: SessionOption[] = [
     rounds: 6,
     duration: 5,
     config: session1Config,
-    scenarios: session1Scenarios as typeof session1Scenarios,
+    scenarios: session1Scenarios,
     rubric: session1Rubric,
     knowledgeBase: session1KnowledgeBase,
   },
@@ -49,9 +55,20 @@ const availableSessions: SessionOption[] = [
     rounds: session2Scenarios.length,
     duration: Math.round(session2Config.roundDurationSeconds / 60),
     config: session2Config,
-    scenarios: session2Scenarios as typeof session1Scenarios,
+    scenarios: session2Scenarios,
     rubric: session2Rubric,
     knowledgeBase: session2KnowledgeBase,
+  },
+  {
+    id: 'session_3_rag',
+    title: session3Config.title,
+    description: session3Config.description,
+    rounds: session3Scenarios.length,
+    duration: Math.round(session3Config.roundDurationSeconds / 60),
+    config: session3Config,
+    scenarios: session3Scenarios,
+    rubric: session3Rubric,
+    knowledgeBase: session3KnowledgeBase,
   },
 ];
 
@@ -272,7 +289,7 @@ export default function CreateGame() {
                 <div>
                   <h3 className="text-lg font-bold text-white/50">Mas sesiones proximamente</h3>
                   <p className="text-white/30 text-sm">
-                    Prompting, RAG, y mas...
+                    Prompting, agentes, y mas...
                   </p>
                 </div>
               </div>
