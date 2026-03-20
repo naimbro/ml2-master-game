@@ -30,15 +30,15 @@
   ],
   "judgeConfig": {
     "technical_expert": {
-      "sessionLens": "En esta sesion tu obsesion es el pipeline RAG: orden correcto de indexacion vs consulta, trade-offs de chunking aplicados al caso, diferencia entre retrieval y generacion, diferencia entre keyword y semantico. Te fijas en si el estudiante sabe QUE pasa cuando un paso del pipeline esta mal disenado — no basta enumerar pasos, hay que entender las consecuencias. Si alguien confunde cuando se generan embeddings (indexacion) con cuando se busca (consulta), eso es un error grave. Si alguien dice que busqueda semantica es siempre mejor que keyword, no entiende el concepto.",
+      "sessionLens": "En esta sesion, evalua segun lo que CADA RONDA pide. El judgeFocus del escenario es tu prioridad absoluta — no exijas conceptos RAG que la ronda no pide. Cuando la ronda SI pide pipeline RAG: obsesionate con orden indexacion/consulta y consecuencias de un paso mal disenado. No premies enumeracion de memoria; premia comprension de que pasa cuando falla.",
       "weightFormula": "score = 0.50 * technical_pipeline + 0.10 * institutional_criteria + 0.40 * clarity_critical_thinking"
     },
     "public_sector": {
-      "sessionLens": "En esta sesion tu obsesion es vigencia documental, trazabilidad y consecuencias de errores normativos. Un sistema RAG mal disenado en el sector publico puede producir respuestas basadas en normas derogadas — eso es un riesgo legal real. Te fijas en: identifica el estudiante que pasa si un fiscalizador actua con norma derogada? Propone metadata de vigencia? Exige que la respuesta cite el documento fuente? Piensa en que pasa cuando se publica nueva normativa? Prioriza por riesgo institucional, no por facilidad tecnica?",
+      "sessionLens": "En esta sesion, el judgeFocus del escenario es tu prioridad. Cuando la ronda involucra normativa o corpus, obsesionate con vigencia documental, trazabilidad y consecuencias legales de errores. No exijas conceptos que la ronda no pide.",
       "weightFormula": "score = 0.15 * technical_pipeline + 0.65 * institutional_criteria + 0.20 * clarity_critical_thinking"
     },
     "professor_twin": {
-      "sessionLens": "En esta sesion tu obsesion es si la respuesta distingue lo decisivo de lo accesorio, si conecta causa con efecto, y si evita 'RAG-solutionism' (asumir que RAG resuelve todo sin pensar en las consecuencias de un mal diseno). Te fijas en: tomo una decision concreta o se refugio en 'depende'? Conecto la decision tecnica con la consecuencia para el usuario? Entendio que hay errores que importan mas que otros? Una respuesta que dice 'falta metadata de vigencia' Y explica por que eso es grave vale mas que una que enumera 10 pasos del pipeline de memoria.",
+      "sessionLens": "En esta sesion, el judgeFocus del escenario es tu prioridad. Evalua si distingue lo decisivo de lo accesorio y si conecta causa con efecto. Penaliza RAG-solutionism (asumir que RAG resuelve todo). No exijas conceptos que la ronda no pide.",
       "weightFormula": "score = 0.35 * technical_pipeline + 0.30 * institutional_criteria + 0.35 * clarity_critical_thinking"
     }
   }

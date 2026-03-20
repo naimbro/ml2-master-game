@@ -10,7 +10,7 @@
     "judgeFocus": "El juez tecnico debe valorar especialmente la distincion entre copiar-pegar en chat y usar API programaticamente. Prioriza que el estudiante entienda que la diferencia no es solo de comodidad, sino de control, repetibilidad y escala. Si no identifica problemas concretos de copiar-pegar, baja Comprension Tecnica. Si no conecta la ventaja de la API con el caso especifico (contratos), baja Criterio Practico. El juez profesor debe verificar conexion con clase 2 (patron loop + generate_content). El juez debe distinguir entre: (a) uso manual del chat, (b) uso programatico via API, y (c) salida estructurada y auditable.",
     "context": "La unidad juridica de un ministerio revisa 200 contratos al mes para verificar que cumplan clausulas obligatorias. Hoy, un abogado lee cada contrato manualmente. Un funcionario propone copiar cada contrato en ChatGPT para que revise las clausulas. Otro propone usar la API de Gemini en un script de Python, como vieron en la clase anterior (loop + generate_content).",
     "question": "Responde en el siguiente formato EXACTO:\n\n[LIMITACION CHAT] Menciona 2 problemas concretos de copiar-pegar contratos en ChatGPT.\n[VENTAJA API] Menciona 2 ventajas operacionales de usar la API en un script.\n[PATRON] Como aplicarias el patron loop + generate_content a este caso?\n[RIESGO] Un riesgo de enviar contratos a una API externa.",
-    "conceptTags": ["chat_vs_api", "corpus_preparacion", "pipeline_rag"],
+    "conceptTags": ["chat_vs_api"],
     "evaluationGuide": {
       "must_hit": [
         "Al menos 1 limitacion del chat que sea sobre auditabilidad, repetibilidad o falta de registro (no solo velocidad)",
