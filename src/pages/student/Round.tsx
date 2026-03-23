@@ -1,13 +1,14 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Clock, Send, AlertCircle, StopCircle, Info, MessageSquare } from 'lucide-react';
+import { Clock, Send, AlertCircle, StopCircle, Info, MessageSquare, Code } from 'lucide-react';
 import { useGame } from '../../hooks/useGame';
 import { useAuth } from '../../hooks/useAuth';
 import { doc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
-import { playCountdownTick, playCriticalTick, playSubmitSuccess, playScoreReveal, playGoodScore, playBadScore, startBackgroundMusic, stopBackgroundMusic, getMuted } from '../../lib/sounds';
+import { playCountdownTick, playCriticalTick, playSubmitSuccess, playScoreReveal, playGoodScore, playBadScore, startBackgroundMusic, stopBackgroundMusic, getMuted, getCurrentMusicStyle } from '../../lib/sounds';
 import { confettiBurst, confettiCannons, confettiPop } from '../../lib/confetti';
+import MusicSelector from '../../components/MusicSelector';
 
 export default function Round() {
   const { gameCode } = useParams<{ gameCode: string }>();
@@ -43,6 +44,7 @@ export default function Round() {
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
   const [screenFlash, setScreenFlash] = useState(false);
+  const [expandedPrompts, setExpandedPrompts] = useState<Record<number, boolean>>({});
   const prevEvaluated = useRef(false);
 
   // Check if current user has already submitted
@@ -98,7 +100,7 @@ export default function Round() {
   useEffect(() => {
     if (!isHost || game?.status !== 'active') return;
     if (getMuted()) return;
-    startBackgroundMusic();
+    startBackgroundMusic(getCurrentMusicStyle());
     return () => { stopBackgroundMusic(); };
   }, [isHost, game?.status]);
 
@@ -234,7 +236,8 @@ export default function Round() {
 
           {/* Host Controls */}
           {isHost && (
-            <div className="mt-3 flex justify-end">
+            <div className="mt-3 flex justify-end gap-2">
+              <MusicSelector />
               <button
                 onClick={handleEndRound}
                 disabled={endingRound}
@@ -391,7 +394,15 @@ export default function Round() {
                       </div>
                     </div>
 
-                    {evaluation.evaluations?.map((ev: { judgeName: string; score: number; feedback: string; strengths: string[]; improvements: string[] }, i: number) => (
+                    {/* Student's submitted response */}
+                    {userSub?.response && (
+                      <div className="mb-4 p-4 bg-white/5 rounded-xl">
+                        <p className="text-sm text-white/50 mb-2 font-bold uppercase tracking-wider text-xs">Tu respuesta:</p>
+                        <p className="text-white/80 text-sm whitespace-pre-wrap font-medium">{userSub.response}</p>
+                      </div>
+                    )}
+
+                    {evaluation.evaluations?.map((ev: { judgeName: string; score: number; feedback: string; strengths: string[]; improvements: string[]; promptUsed?: string }, i: number) => (
                       <div key={i} className="mb-4 p-4 bg-white/5 rounded-xl">
                         <div className="flex items-center gap-2 mb-2">
                           <MessageSquare className={`w-4 h-4 ${
@@ -420,6 +431,23 @@ export default function Round() {
                                 <li key={j}>• {s}</li>
                               ))}
                             </ul>
+                          </div>
+                        )}
+
+                        {ev.promptUsed && (
+                          <div className="mt-3 pt-3 border-t border-white/10">
+                            <button
+                              onClick={() => setExpandedPrompts(prev => ({ ...prev, [i]: !prev[i] }))}
+                              className="flex items-center gap-1.5 text-xs text-white/40 hover:text-white/70 transition-colors font-semibold"
+                            >
+                              <Code className="w-3 h-3" />
+                              {expandedPrompts[i] ? 'Ocultar Prompt' : 'Ver Prompt'}
+                            </button>
+                            {expandedPrompts[i] && (
+                              <pre className="mt-2 p-3 bg-black/30 rounded-lg text-[10px] text-white/50 overflow-x-auto max-h-64 overflow-y-auto whitespace-pre-wrap break-words font-mono">
+                                {ev.promptUsed}
+                              </pre>
+                            )}
                           </div>
                         )}
                       </div>

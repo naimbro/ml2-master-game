@@ -224,6 +224,14 @@ export default function Results() {
               </div>
             </div>
 
+            {/* Student's submitted response */}
+            {userSubmission?.response && (
+              <div className="mb-4 p-4 bg-white/5 rounded-xl">
+                <p className="text-sm text-white/50 mb-2 font-bold uppercase tracking-wider text-xs">Tu respuesta:</p>
+                <p className="text-white/80 text-sm whitespace-pre-wrap font-medium">{userSubmission.response}</p>
+              </div>
+            )}
+
             {/* Feedback */}
             {userEvaluation.evaluations?.map((evaluation: JudgeEvaluation, i: number) => (
               <div key={i} className="mb-4 p-4 bg-white/5 rounded-xl">
@@ -258,7 +266,7 @@ export default function Results() {
                 )}
 
                 {/* Prompt viewer (host only) */}
-                {isHost && evaluation.promptUsed && (
+                {evaluation.promptUsed && (
                   <div className="mt-3 pt-3 border-t border-white/10">
                     <button
                       onClick={() => setExpandedPrompts(prev => ({ ...prev, [i]: !prev[i] }))}

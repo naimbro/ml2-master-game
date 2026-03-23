@@ -204,35 +204,46 @@ export function playClick() {
 }
 
 // ========================================
-// BACKGROUND MUSIC (Host only, Kahoot-style tension loop)
+// BACKGROUND MUSIC — Multiple styles
 // ========================================
+
+export type MusicStyle = 'kahoot' | 'chill' | 'retro' | 'ambient';
+
+export const MUSIC_OPTIONS: { id: MusicStyle; name: string }[] = [
+  { id: 'kahoot', name: 'Kahoot Energy' },
+  { id: 'chill', name: 'Lo-fi Focus' },
+  { id: 'retro', name: 'Retro Arcade' },
+  { id: 'ambient', name: 'Tension Ambiental' },
+];
 
 let musicIntervalId: ReturnType<typeof setInterval> | null = null;
 let musicGainNode: GainNode | null = null;
+let currentMusicStyle: MusicStyle = 'kahoot';
 
-/** Start a looping background music track. Call stopBackgroundMusic() to end. */
-export function startBackgroundMusic() {
-  if (isMuted || musicIntervalId) return;
-  const ctx = getCtx();
+export function getCurrentMusicStyle(): MusicStyle {
+  return currentMusicStyle;
+}
 
-  // Master gain for music
-  const masterGain = ctx.createGain();
-  masterGain.gain.setValueAtTime(0.12, ctx.currentTime);
-  masterGain.connect(ctx.destination);
-  musicGainNode = masterGain;
+export function switchMusic(style: MusicStyle) {
+  currentMusicStyle = style;
+  if (musicIntervalId) {
+    stopBackgroundMusic();
+    startBackgroundMusic(style);
+  }
+}
 
-  // ~140 BPM = beat every ~0.4286s. 4 bars of 4 beats = 16 beats per loop
+// --- Kahoot (original) ---
+function scheduleKahoot(masterGain: GainNode) {
   const BPM = 140;
-  const beatDur = 60 / BPM; // ~0.4286s
-  const loopDur = beatDur * 16; // ~6.857s per loop
+  const beatDur = 60 / BPM;
+  const loopDur = beatDur * 16;
 
   function scheduleLoop() {
     if (isMuted || !musicGainNode) return;
     const ctx = getCtx();
     const now = ctx.currentTime;
 
-    // Bass line (triangle wave, low octave) — plays on beats 1,3,5,7... (half notes feel)
-    const bassNotes = [131, 131, 147, 147, 165, 165, 147, 147]; // C3, D3, E3, D3 pattern
+    const bassNotes = [131, 131, 147, 147, 165, 165, 147, 147];
     bassNotes.forEach((freq, i) => {
       const t = now + i * beatDur * 2;
       const osc = ctx.createOscillator();
@@ -240,7 +251,7 @@ export function startBackgroundMusic() {
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(freq, t);
       osc.connect(gain);
-      gain.connect(musicGainNode!);
+      gain.connect(masterGain);
       gain.gain.setValueAtTime(0.001, t);
       gain.gain.exponentialRampToValueAtTime(0.5, t + 0.02);
       gain.gain.exponentialRampToValueAtTime(0.001, t + beatDur * 1.8);
@@ -248,9 +259,8 @@ export function startBackgroundMusic() {
       osc.stop(t + beatDur * 2);
     });
 
-    // Arpeggio (square wave, mid octave) — 16th note feel on off-beats
     const arpNotes = [523, 659, 784, 659, 523, 587, 698, 587,
-                      523, 659, 784, 1047, 784, 659, 523, 587]; // C5-E5-G5 arpeggio variants
+                      523, 659, 784, 1047, 784, 659, 523, 587];
     arpNotes.forEach((freq, i) => {
       const t = now + i * beatDur;
       const osc = ctx.createOscillator();
@@ -258,7 +268,7 @@ export function startBackgroundMusic() {
       osc.type = 'square';
       osc.frequency.setValueAtTime(freq, t);
       osc.connect(gain);
-      gain.connect(musicGainNode!);
+      gain.connect(masterGain);
       gain.gain.setValueAtTime(0.001, t);
       gain.gain.exponentialRampToValueAtTime(0.15, t + 0.01);
       gain.gain.exponentialRampToValueAtTime(0.001, t + beatDur * 0.7);
@@ -266,7 +276,6 @@ export function startBackgroundMusic() {
       osc.stop(t + beatDur);
     });
 
-    // Hi-hat style ticks (noise) on every beat
     for (let i = 0; i < 16; i++) {
       const t = now + i * beatDur;
       const bufferSize = Math.floor(ctx.sampleRate * 0.03);
@@ -285,15 +294,225 @@ export function startBackgroundMusic() {
       filter.frequency.value = 8000;
       source.connect(filter);
       filter.connect(gain);
-      gain.connect(musicGainNode!);
+      gain.connect(masterGain);
       source.start(t);
       source.stop(t + 0.05);
     }
   }
 
-  // Schedule first loop immediately, then repeat
   scheduleLoop();
   musicIntervalId = setInterval(scheduleLoop, loopDur * 1000);
+}
+
+// --- Lo-fi Focus (chill) ---
+function scheduleChill(masterGain: GainNode) {
+  const BPM = 85;
+  const beatDur = 60 / BPM;
+  const loopDur = beatDur * 16;
+
+  // Jazzy minor 7th chords: Dm7 → G7 → Cmaj7 → Am7
+  const chords = [
+    [294, 349, 440, 523],  // Dm7: D4 F4 A4 C5
+    [392, 494, 587, 698],  // G7: G4 B4 D5 F5
+    [330, 392, 494, 587],  // Cmaj7: E4 G4 B4 D5
+    [440, 523, 659, 784],  // Am7: A4 C5 E5 G5
+  ];
+
+  function scheduleLoop() {
+    if (isMuted || !musicGainNode) return;
+    const ctx = getCtx();
+    const now = ctx.currentTime;
+
+    // Pad chords — each chord lasts 4 beats
+    chords.forEach((chord, ci) => {
+      const chordStart = now + ci * beatDur * 4;
+      chord.forEach((freq) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, chordStart);
+        osc.connect(gain);
+        gain.connect(masterGain);
+        gain.gain.setValueAtTime(0.001, chordStart);
+        gain.gain.linearRampToValueAtTime(0.12, chordStart + beatDur);
+        gain.gain.linearRampToValueAtTime(0.08, chordStart + beatDur * 3);
+        gain.gain.linearRampToValueAtTime(0.001, chordStart + beatDur * 4);
+        osc.start(chordStart);
+        osc.stop(chordStart + beatDur * 4 + 0.1);
+      });
+    });
+
+    // Soft bass — root notes, triangle wave
+    const bassRoots = [147, 196, 131, 220]; // D3 G3 C3 A3
+    bassRoots.forEach((freq, i) => {
+      const t = now + i * beatDur * 4;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, t);
+      osc.connect(gain);
+      gain.connect(masterGain);
+      gain.gain.setValueAtTime(0.001, t);
+      gain.gain.exponentialRampToValueAtTime(0.3, t + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + beatDur * 3.5);
+      osc.start(t);
+      osc.stop(t + beatDur * 4);
+    });
+  }
+
+  scheduleLoop();
+  musicIntervalId = setInterval(scheduleLoop, loopDur * 1000);
+}
+
+// --- Retro Arcade ---
+function scheduleRetro(masterGain: GainNode) {
+  const BPM = 120;
+  const beatDur = 60 / BPM;
+  const loopDur = beatDur * 16;
+
+  function scheduleLoop() {
+    if (isMuted || !musicGainNode) return;
+    const ctx = getCtx();
+    const now = ctx.currentTime;
+
+    // 8-bit arpeggio (sawtooth lead) — fast 16th notes
+    const arpNotes = [
+      523, 659, 784, 1047, 880, 784, 659, 523,
+      587, 698, 880, 1047, 880, 698, 587, 440,
+    ];
+    arpNotes.forEach((freq, i) => {
+      const t = now + i * beatDur;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(freq, t);
+      osc.connect(gain);
+      gain.connect(masterGain);
+      gain.gain.setValueAtTime(0.001, t);
+      gain.gain.exponentialRampToValueAtTime(0.1, t + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + beatDur * 0.6);
+      osc.start(t);
+      osc.stop(t + beatDur);
+    });
+
+    // Square bass — half notes
+    const bassNotes = [131, 131, 147, 110, 131, 131, 147, 110];
+    bassNotes.forEach((freq, i) => {
+      const t = now + i * beatDur * 2;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(freq, t);
+      osc.connect(gain);
+      gain.connect(masterGain);
+      gain.gain.setValueAtTime(0.001, t);
+      gain.gain.exponentialRampToValueAtTime(0.25, t + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + beatDur * 1.5);
+      osc.start(t);
+      osc.stop(t + beatDur * 2);
+    });
+
+    // Kick-style pulse on beats 1,5,9,13
+    for (let i = 0; i < 4; i++) {
+      const t = now + i * beatDur * 4;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(150, t);
+      osc.frequency.exponentialRampToValueAtTime(40, t + 0.1);
+      osc.connect(gain);
+      gain.connect(masterGain);
+      gain.gain.setValueAtTime(0.4, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
+      osc.start(t);
+      osc.stop(t + 0.2);
+    }
+  }
+
+  scheduleLoop();
+  musicIntervalId = setInterval(scheduleLoop, loopDur * 1000);
+}
+
+// --- Tension Ambiental ---
+function scheduleAmbient(masterGain: GainNode) {
+  const loopDur = 8; // 8 seconds per cycle
+
+  function scheduleLoop() {
+    if (isMuted || !musicGainNode) return;
+    const ctx = getCtx();
+    const now = ctx.currentTime;
+
+    // Slowly evolving sine pads — two detuned oscillators per voice
+    const padFreqs = [220, 277, 330]; // A3 C#4 E4 (A major triad, dreamy)
+    padFreqs.forEach((freq, i) => {
+      const startOffset = i * 1.5;
+      // Main oscillator
+      const osc1 = ctx.createOscillator();
+      const osc2 = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc1.type = 'sine';
+      osc2.type = 'sine';
+      osc1.frequency.setValueAtTime(freq, now + startOffset);
+      osc2.frequency.setValueAtTime(freq * 1.003, now + startOffset); // slight detune
+      osc1.connect(gain);
+      osc2.connect(gain);
+      gain.connect(masterGain);
+      gain.gain.setValueAtTime(0.001, now + startOffset);
+      gain.gain.linearRampToValueAtTime(0.1, now + startOffset + 2);
+      gain.gain.linearRampToValueAtTime(0.06, now + startOffset + 5);
+      gain.gain.linearRampToValueAtTime(0.001, now + startOffset + 7.5);
+      osc1.start(now + startOffset);
+      osc2.start(now + startOffset);
+      osc1.stop(now + startOffset + 8);
+      osc2.stop(now + startOffset + 8);
+    });
+
+    // Subtle high shimmer — filtered noise
+    const bufferSize = Math.floor(ctx.sampleRate * 4);
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let j = 0; j < bufferSize; j++) {
+      data[j] = (Math.random() * 2 - 1);
+    }
+    const source = ctx.createBufferSource();
+    source.buffer = buffer;
+    const noiseGain = ctx.createGain();
+    noiseGain.gain.setValueAtTime(0.001, now);
+    noiseGain.gain.linearRampToValueAtTime(0.015, now + 2);
+    noiseGain.gain.linearRampToValueAtTime(0.01, now + 6);
+    noiseGain.gain.linearRampToValueAtTime(0.001, now + 7.8);
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.value = 3000;
+    filter.Q.value = 2;
+    source.connect(filter);
+    filter.connect(noiseGain);
+    noiseGain.connect(masterGain);
+    source.start(now);
+    source.stop(now + 8);
+  }
+
+  scheduleLoop();
+  musicIntervalId = setInterval(scheduleLoop, loopDur * 1000);
+}
+
+/** Start a looping background music track. Call stopBackgroundMusic() to end. */
+export function startBackgroundMusic(style: MusicStyle = 'kahoot') {
+  if (isMuted || musicIntervalId) return;
+  currentMusicStyle = style;
+  const ctx = getCtx();
+
+  const masterGain = ctx.createGain();
+  masterGain.gain.setValueAtTime(0.12, ctx.currentTime);
+  masterGain.connect(ctx.destination);
+  musicGainNode = masterGain;
+
+  switch (style) {
+    case 'kahoot': scheduleKahoot(masterGain); break;
+    case 'chill': scheduleChill(masterGain); break;
+    case 'retro': scheduleRetro(masterGain); break;
+    case 'ambient': scheduleAmbient(masterGain); break;
+  }
 }
 
 /** Stop background music */
