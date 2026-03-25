@@ -92,39 +92,9 @@ export default function Results() {
     await endGame();
   };
 
-  if (loading || isProcessing) {
-    return (
-      <div className="min-h-screen bg-gradient-main flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-20 h-20 border-4 border-kahoot-green border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-white/80 text-lg font-bold">
-            {isProcessing ? 'Evaluando respuestas con IA...' : 'Cargando resultados...'}
-          </p>
-          <p className="text-white/50 text-sm mt-2 font-medium">
-            3 jueces AI estan analizando cada respuesta
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error || !game) {
-    return (
-      <div className="min-h-screen bg-gradient-main flex items-center justify-center p-4">
-        <div className="text-center">
-          <p className="text-red-400 font-semibold">{error || 'Error al cargar resultados'}</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Find current user's submission and evaluation
-  const userSubmission = submissions.find(s => s.playerId === user?.uid);
-  const userEvaluation = userSubmission?.evaluation;
-  const userRank = roundResults?.rankings.find(r => r.playerId === user?.uid);
-  const currentScenario = game?.scenarios?.[game.currentRound - 1];
+  // Compute values needed by hooks (must be before early returns)
+  const currentScenario = game?.scenarios?.[game?.currentRound ? game.currentRound - 1 : 0];
   const isRankedRound = currentScenario?.ranked !== false;
-  const isMCRound = currentScenario?.type === 'multiple_choice';
 
   // Cumulative leaderboard rankings
   const { cumulativeRankings, rankedRoundsPlayed } = useMemo(() => {
@@ -183,6 +153,38 @@ export default function Results() {
   }, [cumulativeRankings]);
 
   const displayRankings = leaderboardRevealed ? cumulativeRankings : initialRankings;
+
+  if (loading || isProcessing) {
+    return (
+      <div className="min-h-screen bg-gradient-main flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-20 h-20 border-4 border-kahoot-green border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-white/80 text-lg font-bold">
+            {isProcessing ? 'Evaluando respuestas con IA...' : 'Cargando resultados...'}
+          </p>
+          <p className="text-white/50 text-sm mt-2 font-medium">
+            3 jueces AI estan analizando cada respuesta
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !game) {
+    return (
+      <div className="min-h-screen bg-gradient-main flex items-center justify-center p-4">
+        <div className="text-center">
+          <p className="text-red-400 font-semibold">{error || 'Error al cargar resultados'}</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Find current user's submission and evaluation
+  const userSubmission = submissions.find(s => s.playerId === user?.uid);
+  const userEvaluation = userSubmission?.evaluation;
+  const userRank = roundResults?.rankings.find(r => r.playerId === user?.uid);
+  const isMCRound = currentScenario?.type === 'multiple_choice';
 
   // Judge bar colors (Kahoot answer colors)
   const JUDGE_COLORS = ['bg-kahoot-red', 'bg-kahoot-blue', 'bg-kahoot-green'];
