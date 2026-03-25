@@ -149,35 +149,35 @@ export default function Results() {
     return [...cumulativeRankings].sort((a, b) => b.prevAvg - a.prevAvg);
   }, [cumulativeRankings, rankedRoundsPlayed]);
 
-  // Leaderboard reveal: show previous order → DRAMATIC position swap → cascade details
+  // Leaderboard: animated top 10 + user position, full list after
   // No cleanup — timers must survive dependency ref changes from Firestore updates
+  const TOP_N = 10;
   useEffect(() => {
     if (cumulativeRankings.length > 0 && !leaderboardSoundPlayed.current) {
       leaderboardSoundPlayed.current = true;
-      const n = cumulativeRankings.length;
+      const showN = Math.min(cumulativeRankings.length, TOP_N);
 
-      // Phase 1 "show": previous order visible with old ranks/avgs (1.5s)
+      // Phase 1 "show": previous order visible (2s)
       setTimeout(() => playDrumRoll(), 500);
 
-      // Phase 2 "swap": THE MAIN EVENT — names physically move to new positions
-      // Slow spring animation (~2.5s settle), tension sweep plays
+      // Phase 2 "swap": names MOVE — fast bouncy spring makes it unmissable
       setTimeout(() => {
         setLbPhase('swap');
         playTensionSweep();
-      }, 2500);
+      }, 2200);
 
-      // Phase 3 "reveal": after swap settles, quick cascade reveals new details
-      let t = 5500; // 2.5s show + 3s for swap to settle
+      // Phase 3 "reveal": cascade top N from bottom
+      let t = 4200; // swap + spring settle time (~2s)
       setTimeout(() => setLbPhase('reveal'), t);
-      for (let step = 1; step <= n; step++) {
-        const rank = n - step + 1;
+      for (let step = 1; step <= showN; step++) {
+        const rank = showN - step + 1;
         const isPodium = rank <= 3;
         setTimeout(() => {
           setRevealedCount(step);
-          playRankReveal(rank, n);
+          playRankReveal(rank, showN);
         }, t);
-        t += isPodium ? 1000 : 350;
-        if (rank === 2) t += 600; // extra beat before #1
+        t += isPodium ? 800 : 200;
+        if (rank === 2) t += 500;
       }
 
       // Phase 4 "done"
@@ -186,11 +186,20 @@ export default function Results() {
   }, [cumulativeRankings]);
 
   const numPlayers = cumulativeRankings.length;
-  const displayRankings = lbPhase === 'show' ? initialRankings : cumulativeRankings;
   const hasPrevData = rankedRoundsPlayed > 1;
-  const isDetailRevealed = (rank: number) => revealedCount > 0 && rank > numPlayers - revealedCount;
-  const lastRevealedRank = numPlayers > 0 ? numPlayers - revealedCount + 1 : 0;
+  const topN = Math.min(numPlayers, TOP_N);
+
+  // Top N for animated leaderboard
+  const topRankings = cumulativeRankings.slice(0, topN);
+  const topInitial = initialRankings.filter(p =>
+    topRankings.some(t => t.playerId === p.playerId)
+  );
+  const displayTop = lbPhase === 'show' ? topInitial : topRankings;
+  const isDetailRevealed = (rank: number) => revealedCount > 0 && rank > topN - revealedCount;
+  const lastRevealedRank = topN > 0 ? topN - revealedCount + 1 : 0;
   const allRevealed = lbPhase === 'done';
+  const userInTop = topRankings.some(p => p.playerId === user?.uid);
+  const userRankingEntry = cumulativeRankings.find(p => p.playerId === user?.uid);
 
   if (loading || isProcessing) {
     return (
@@ -255,7 +264,7 @@ export default function Results() {
           >
             <h2 className="text-3xl font-black mb-2 text-center flex items-center justify-center gap-3">
               <TrendingUp className="w-8 h-8 text-kahoot-green" />
-              Ranking
+              {numPlayers > TOP_N ? `Top ${TOP_N}` : 'Ranking'}
             </h2>
             <p className="text-white/40 text-sm font-bold text-center mb-8 uppercase tracking-widest">
               {allRevealed ? 'Posiciones actualizadas'
@@ -272,9 +281,10 @@ export default function Results() {
               <span className="w-16 text-right">Prom</span>
             </div>
 
+            {/* Animated Top N */}
             <LayoutGroup>
               <div className="space-y-2 max-w-2xl mx-auto">
-                {displayRankings.map((player) => {
+                {displayTop.map((player) => {
                   const revealed = isDetailRevealed(player.rank) || allRevealed;
                   const isSpotlight = player.rank === lastRevealedRank && revealedCount > 0 && !allRevealed;
                   const prevRank = hasPrevData
@@ -283,7 +293,6 @@ export default function Results() {
                   const delta = prevRank > 0 ? prevRank - player.rank : 0;
                   const showDelta = revealed && delta !== 0;
 
-                  // During "show" phase: display previous data if available
                   const showingPrev = lbPhase === 'show' && hasPrevData;
                   const displayRank = revealed ? player.rank : showingPrev ? prevRank : '?';
                   const displayAvg = revealed ? player.avgScore : showingPrev ? Math.round(player.prevAvg * 10) / 10 : '?';
@@ -292,7 +301,7 @@ export default function Results() {
                     <motion.div
                       key={player.playerId}
                       layout
-                      transition={{ layout: { type: 'spring', duration: 2.5, bounce: 0.08 } }}
+                      transition={{ layout: { type: 'spring', duration: 1.2, bounce: 0.25 } }}
                       className={`flex items-center gap-4 p-4 rounded-xl transition-all duration-500 ${
                         isSpotlight
                           ? 'bg-kahoot-green/25 border-2 border-kahoot-green/50 shadow-lg shadow-kahoot-green/20 scale-[1.02]'
@@ -388,6 +397,36 @@ export default function Results() {
                 })}
               </div>
             </LayoutGroup>
+
+            {/* User position card if outside top N */}
+            {allRevealed && !userInTop && userRankingEntry && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="max-w-2xl mx-auto mt-4"
+              >
+                <div className="text-center text-white/30 text-xs font-bold my-1">· · ·</div>
+                <div className="flex items-center gap-4 p-4 rounded-xl bg-kahoot-green/15 border-2 border-kahoot-green/30">
+                  <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center font-black text-lg">
+                    {userRankingEntry.rank}
+                  </div>
+                  <span className="flex-1 font-bold text-lg truncate">
+                    {userRankingEntry.playerName}
+                    <span className="text-kahoot-green text-sm ml-2 font-bold">(Tu)</span>
+                  </span>
+                  <span className={`w-16 text-right font-mono font-bold ${
+                    userRankingEntry.roundScore >= 80 ? 'text-kahoot-green' :
+                    userRankingEntry.roundScore >= 60 ? 'text-kahoot-yellow' : 'text-kahoot-red'
+                  }`}>
+                    +{userRankingEntry.roundScore}
+                  </span>
+                  <span className="w-16 text-right font-mono font-black text-xl">
+                    {userRankingEntry.avgScore}
+                  </span>
+                </div>
+              </motion.div>
+            )}
           </motion.div>
         </div>
       )}
