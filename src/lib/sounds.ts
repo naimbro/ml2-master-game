@@ -635,6 +635,69 @@ export function playApplause(intensity: 1 | 2 | 3 = 2) {
 }
 
 // ========================================
+// LEADERBOARD REVEAL SOUNDS
+// ========================================
+
+/** Rising tension sweep — dissonant interval that builds suspense */
+export function playTensionSweep() {
+  if (isMuted) return;
+  const ctx = getCtx();
+  const now = ctx.currentTime;
+  const duration = 1.8;
+
+  const osc1 = ctx.createOscillator();
+  const osc2 = ctx.createOscillator();
+  const gain = ctx.createGain();
+
+  osc1.type = 'sine';
+  osc2.type = 'sine';
+  // Start at tritone (dissonant), sweep up
+  osc1.frequency.setValueAtTime(300, now);
+  osc1.frequency.exponentialRampToValueAtTime(600, now + duration);
+  osc2.frequency.setValueAtTime(424, now);
+  osc2.frequency.exponentialRampToValueAtTime(900, now + duration);
+
+  gain.gain.setValueAtTime(0.001, now);
+  gain.gain.exponentialRampToValueAtTime(0.12, now + duration * 0.85);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+  osc1.connect(gain);
+  osc2.connect(gain);
+  gain.connect(ctx.destination);
+
+  osc1.start(now);
+  osc2.start(now);
+  osc1.stop(now + duration + 0.01);
+  osc2.stop(now + duration + 0.01);
+}
+
+/** Position-specific reveal sound — increasingly dramatic for top ranks */
+export function playRankReveal(rank: number, totalPlayers: number) {
+  if (isMuted) return;
+  if (rank <= 3) {
+    // Podium positions get ascending chord
+    const chords: Record<number, number[]> = {
+      3: [440, 554, 659],      // A major
+      2: [494, 622, 740],      // B major
+      1: [523, 659, 784, 1047], // C major + octave
+    };
+    const notes = chords[rank] || chords[3];
+    notes.forEach((freq, i) => {
+      playTone(freq, 0.5, 'triangle', 0.15 - i * 0.02, i * 0.06);
+    });
+    if (rank === 1) {
+      playNoise(0.6, 0.12, 0.2); // cymbal crash for #1
+    } else {
+      playNoise(0.2, 0.06, 0.1);
+    }
+  } else {
+    // Non-podium: rising pitch tick
+    const freq = 300 + (totalPlayers - rank) * 60;
+    playTone(freq, 0.12, 'triangle', 0.12);
+  }
+}
+
+// ========================================
 // MUTE CONTROLS
 // ========================================
 

@@ -107,6 +107,7 @@ export interface RoundRanking {
   playerName: string;
   score: number;
   rank: number;
+  totalScore?: number; // cumulative total (avoids race condition with game doc)
 }
 
 export interface RoundResults {

@@ -421,10 +421,14 @@ exports.processRoundEnd = functions
         scores.sort((a, b) => b.score - a.score);
         let currentRank = 1;
         const rankings = scores.map((s, index) => {
+            var _a, _b;
             if (index > 0 && s.score < scores[index - 1].score) {
                 currentRank = index + 1;
             }
-            return { ...s, rank: currentRank };
+            // Include cumulative totalScore so frontend doesn't depend on game doc race
+            const prevTotal = ((_b = (_a = game.players) === null || _a === void 0 ? void 0 : _a[s.playerId]) === null || _b === void 0 ? void 0 : _b.totalScore) || 0;
+            const cumulativeTotal = isRanked ? prevTotal + s.score : prevTotal;
+            return { ...s, rank: currentRank, totalScore: cumulativeTotal };
         });
         await db.collection('games').doc(gameCode)
             .collection('rounds').doc(`round_${round}`).set({

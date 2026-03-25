@@ -6,7 +6,7 @@ import { useGame } from '../../hooks/useGame';
 import { useAuth } from '../../hooks/useAuth';
 import { httpsCallable } from 'firebase/functions';
 import { functions } from '../../lib/firebase';
-import { playScoreReveal, playGoodScore, playBadScore, playLeaderboardTick, playDrumRoll } from '../../lib/sounds';
+import { playScoreReveal, playGoodScore, playBadScore, playDrumRoll, playTensionSweep, playRankReveal } from '../../lib/sounds';
 import { confettiBurst, confettiCannons } from '../../lib/confetti';
 
 interface JudgeEvaluation {
@@ -27,7 +27,8 @@ export default function Results() {
   const [, setEvaluationComplete] = useState(false);
   const scoreSoundPlayed = useRef(false);
   const [expandedPrompts, setExpandedPrompts] = useState<Record<number, boolean>>({});
-  const [leaderboardRevealed, setLeaderboardRevealed] = useState(false);
+  const [positionsSorted, setPositionsSorted] = useState(false);
+  const [revealedCount, setRevealedCount] = useState(0); // positions revealed from bottom
   const leaderboardSoundPlayed = useRef(false);
 
   // Navigate based on game status
@@ -103,6 +104,7 @@ export default function Results() {
   const isRankedRound = currentScenario?.ranked !== false;
 
   // Cumulative leaderboard rankings
+  // Uses totalScore from round doc (race-condition-proof) with game doc fallback
   const { cumulativeRankings, rankedRoundsPlayed } = useMemo(() => {
     if (!roundResults || !game?.players || !isRankedRound) {
       return { cumulativeRankings: [] as Array<{ playerId: string; playerName: string; roundScore: number; totalScore: number; avgScore: number; prevAvg: number; rank: number }>, rankedRoundsPlayed: 0 };
@@ -114,8 +116,11 @@ export default function Results() {
 
     const rankings = Object.entries(game.players)
       .map(([playerId, player]) => {
-        const roundScore = roundResults.rankings.find(r => r.playerId === playerId)?.score || 0;
-        const totalScore = player.totalScore || 0;
+        const roundRanking = roundResults.rankings.find((r: { playerId: string }) => r.playerId === playerId);
+        const roundScore = roundRanking?.score || 0;
+        // Prefer totalScore from round doc (written atomically with rankings)
+        // Fall back to game doc's player.totalScore for backward compat
+        const totalScore = roundRanking?.totalScore ?? (player.totalScore || 0);
         const avgScore = played > 0 ? totalScore / played : 0;
         const prevTotal = totalScore - roundScore;
         const prevAvg = played > 1 ? prevTotal / (played - 1) : 0;
@@ -143,23 +148,45 @@ export default function Results() {
     return [...cumulativeRankings].sort((a, b) => b.prevAvg - a.prevAvg);
   }, [cumulativeRankings, rankedRoundsPlayed]);
 
-  // Leaderboard reveal animation timer
-  // No cleanup — timeout must survive dependency ref changes from Firestore updates
+  // Leaderboard cascade reveal: positions sort → bottom-to-top detail cascade
+  // No cleanup — timers must survive dependency ref changes from Firestore updates
   useEffect(() => {
     if (cumulativeRankings.length > 0 && !leaderboardSoundPlayed.current) {
       leaderboardSoundPlayed.current = true;
-      playDrumRoll();
       const numPlayers = cumulativeRankings.length;
+
+      // Phase 1: Drum roll
+      setTimeout(() => playDrumRoll(), 300);
+
+      // Phase 2: Positions sort into final order (LayoutGroup animation)
       setTimeout(() => {
-        setLeaderboardRevealed(true);
-        for (let i = 0; i < numPlayers; i++) {
-          setTimeout(() => playLeaderboardTick(i), i * 100);
-        }
-      }, 2500);
+        setPositionsSorted(true);
+        playTensionSweep();
+      }, 2200);
+
+      // Phase 3: Bottom-to-top cascade reveal of details
+      let t = 4000; // start cascade after positions settle
+      for (let step = 1; step <= numPlayers; step++) {
+        const rank = numPlayers - step + 1; // revealing this rank
+        const isPodium = rank <= 3;
+
+        setTimeout(() => {
+          setRevealedCount(step);
+          playRankReveal(rank, numPlayers);
+        }, t);
+
+        // Slower for podium, extra pause before #1
+        t += isPodium ? 1200 : 500;
+        if (rank === 2) t += 800; // extra suspense before #1
+      }
     }
   }, [cumulativeRankings]);
 
-  const displayRankings = leaderboardRevealed ? cumulativeRankings : initialRankings;
+  const numPlayers = cumulativeRankings.length;
+  const displayRankings = positionsSorted ? cumulativeRankings : initialRankings;
+  const isDetailRevealed = (rank: number) => revealedCount > 0 && rank > numPlayers - revealedCount;
+  const lastRevealedRank = numPlayers > 0 ? numPlayers - revealedCount + 1 : 0;
+  const allRevealed = revealedCount >= numPlayers;
 
   if (loading || isProcessing) {
     return (
@@ -227,7 +254,7 @@ export default function Results() {
               Ranking
             </h2>
             <p className="text-white/40 text-sm font-bold text-center mb-8 uppercase tracking-widest">
-              {leaderboardRevealed ? 'Posiciones actualizadas' : 'Actualizando posiciones...'}
+              {allRevealed ? 'Posiciones actualizadas' : positionsSorted ? 'Revelando posiciones...' : 'Calculando ranking...'}
             </p>
 
             {/* Column Headers */}
@@ -241,29 +268,35 @@ export default function Results() {
             <LayoutGroup>
               <div className="space-y-2 max-w-2xl mx-auto">
                 {displayRankings.map((player) => {
+                  const revealed = isDetailRevealed(player.rank);
+                  const isSpotlight = player.rank === lastRevealedRank && revealedCount > 0 && !allRevealed;
                   const prevRank = rankedRoundsPlayed > 1
                     ? initialRankings.findIndex(p => p.playerId === player.playerId) + 1
                     : 0;
                   const delta = prevRank > 0 ? prevRank - player.rank : 0;
-                  const showDelta = leaderboardRevealed && delta !== 0;
+                  const showDelta = revealed && delta !== 0;
 
                   return (
                     <motion.div
                       key={player.playerId}
                       layout
-                      transition={{ layout: { type: 'spring', stiffness: 200, damping: 25 } }}
-                      className={`flex items-center gap-4 p-4 rounded-xl ${
-                        player.playerId === user?.uid
+                      transition={{ layout: { type: 'spring', stiffness: 180, damping: 22, duration: 0.8 } }}
+                      className={`flex items-center gap-4 p-4 rounded-xl transition-all duration-300 ${
+                        isSpotlight
+                          ? 'bg-kahoot-green/25 border-2 border-kahoot-green/50 shadow-lg shadow-kahoot-green/20 scale-[1.02]'
+                          : player.playerId === user?.uid && revealed
                           ? 'bg-kahoot-green/15 border-2 border-kahoot-green/30'
-                          : 'bg-white/5 border-2 border-transparent'
+                          : revealed
+                          ? 'bg-white/5 border-2 border-transparent'
+                          : 'bg-white/[0.02] border-2 border-transparent opacity-40'
                       }`}
                     >
                       <div className="flex items-center gap-2">
                         <motion.div
                           layout
-                          className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-lg ${
-                            !leaderboardRevealed
-                              ? 'bg-white/20'
+                          className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-lg transition-colors duration-300 ${
+                            !revealed
+                              ? 'bg-white/10'
                               : player.rank === 1
                               ? 'bg-yellow-500 text-black'
                               : player.rank === 2
@@ -273,13 +306,21 @@ export default function Results() {
                               : 'bg-white/20'
                           }`}
                         >
-                          {leaderboardRevealed ? player.rank : '?'}
+                          {revealed ? (
+                            <motion.span
+                              initial={{ rotateX: 90, opacity: 0 }}
+                              animate={{ rotateX: 0, opacity: 1 }}
+                              transition={{ duration: 0.3, ease: 'easeOut' }}
+                            >
+                              {player.rank}
+                            </motion.span>
+                          ) : '?'}
                         </motion.div>
                         {showDelta && (
                           <motion.span
                             initial={{ scale: 0, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
-                            transition={{ delay: 0.3, type: 'spring', stiffness: 400 }}
+                            transition={{ delay: 0.2, type: 'spring', stiffness: 400 }}
                             className={`text-xs font-black ${delta > 0 ? 'text-kahoot-green' : 'text-kahoot-red'}`}
                           >
                             {delta > 0 ? `↑${delta}` : `↓${Math.abs(delta)}`}
@@ -287,27 +328,43 @@ export default function Results() {
                         )}
                       </div>
 
-                      <span className="flex-1 font-bold text-lg truncate">
+                      <span className={`flex-1 font-bold text-lg truncate transition-opacity duration-300 ${revealed ? 'opacity-100' : 'opacity-40'}`}>
                         {player.playerName}
                         {player.playerId === user?.uid && (
                           <span className="text-kahoot-green text-sm ml-2 font-bold">(Tu)</span>
                         )}
                       </span>
 
-                      <span className={`w-16 text-right font-mono font-bold ${
-                        leaderboardRevealed
+                      <span className={`w-16 text-right font-mono font-bold transition-all duration-300 ${
+                        revealed
                           ? player.roundScore >= 80 ? 'text-kahoot-green' :
                             player.roundScore >= 60 ? 'text-kahoot-yellow' : 'text-kahoot-red'
-                          : 'text-white/30'
+                          : 'text-white/20'
                       }`}>
-                        {leaderboardRevealed ? `+${player.roundScore}` : '...'}
+                        {revealed ? (
+                          <motion.span
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3 }}
+                          >
+                            +{player.roundScore}
+                          </motion.span>
+                        ) : '...'}
                       </span>
 
                       <motion.span
                         layout
-                        className="w-16 text-right font-mono font-black text-xl"
+                        className={`w-16 text-right font-mono font-black text-xl transition-opacity duration-300 ${revealed ? 'opacity-100' : 'opacity-20'}`}
                       >
-                        {leaderboardRevealed ? player.avgScore : '?'}
+                        {revealed ? (
+                          <motion.span
+                            initial={{ opacity: 0, scale: 0.5 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                          >
+                            {player.avgScore}
+                          </motion.span>
+                        ) : '?'}
                       </motion.span>
                     </motion.div>
                   );

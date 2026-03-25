@@ -497,7 +497,10 @@ export const processRoundEnd = functions
         if (index > 0 && s.score < scores[index - 1].score) {
           currentRank = index + 1;
         }
-        return { ...s, rank: currentRank };
+        // Include cumulative totalScore so frontend doesn't depend on game doc race
+        const prevTotal = game.players?.[s.playerId]?.totalScore || 0;
+        const cumulativeTotal = isRanked ? prevTotal + s.score : prevTotal;
+        return { ...s, rank: currentRank, totalScore: cumulativeTotal };
       });
 
       await db.collection('games').doc(gameCode)
