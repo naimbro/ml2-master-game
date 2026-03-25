@@ -160,14 +160,14 @@ export default function Results() {
       // Phase 1 "show": previous order visible (2s)
       setTimeout(() => playDrumRoll(), 500);
 
-      // Phase 2 "swap": names MOVE — fast bouncy spring makes it unmissable
+      // Phase 2 "swap": names MOVE — slow spring for maximum suspense
       setTimeout(() => {
         setLbPhase('swap');
         playTensionSweep();
       }, 2200);
 
-      // Phase 3 "reveal": cascade top N from bottom
-      let t = 4200; // swap + spring settle time (~2s)
+      // Phase 3 "reveal": cascade top N from bottom (after spring settles + pause)
+      let t = 7000; // 2.2s show + 3.5s spring + 1.3s pause to absorb
       setTimeout(() => setLbPhase('reveal'), t);
       for (let step = 1; step <= showN; step++) {
         const rank = showN - step + 1;
@@ -301,7 +301,7 @@ export default function Results() {
                     <motion.div
                       key={player.playerId}
                       layout
-                      transition={{ layout: { type: 'spring', duration: 1.2, bounce: 0.25 } }}
+                      transition={{ layout: { type: 'spring', duration: 3.5, bounce: 0.15 } }}
                       className={`flex items-center gap-4 p-4 rounded-xl transition-all duration-500 ${
                         isSpotlight
                           ? 'bg-kahoot-green/25 border-2 border-kahoot-green/50 shadow-lg shadow-kahoot-green/20 scale-[1.02]'
