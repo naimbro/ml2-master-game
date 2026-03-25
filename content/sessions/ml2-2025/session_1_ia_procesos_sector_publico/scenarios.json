@@ -11,6 +11,7 @@
     "context": "La Municipalidad de Santiago recibe miles de reclamos ciudadanos al ano por basura y microbasurales. Llegan por multiples canales (web, telefono, RRSS) y se derivan manualmente. No hay priorizacion estandarizada ni medicion clara de efectividad. El alcalde quiere usar IA para mejorar el proceso.",
     "question": "Responde en el siguiente formato EXACTO (con titulos):\n\n[PROCESO] Que proceso concreto se mejora? (1 frase)\n[ACTOR] Quien toma la decision clave? (rol, no persona)\n[DECISION] Que decide ese actor? (accion binaria o seleccion entre opciones)\n[INSUMOS] 2 fuentes de informacion que usa hoy (aunque sean malas)\n[METRICA] 1 resultado medible (KPI) que muestre mejora en 4-8 semanas\n\nRegla: NO describas modelos. Describe decision, insumos y medicion.",
     "conceptTags": ["procesos_publicos", "decision_unit"],
+    "referenceAnswer": "[PROCESO] Priorizacion y asignacion de cuadrillas de limpieza ante reclamos de microbasurales.\n[ACTOR] Coordinador de operaciones de Aseo y Ornato.\n[DECISION] A que reclamos despachar cuadrilla primero: urgencia alta, media o baja.\n[INSUMOS] (1) Planilla de reclamos del sistema municipal con fecha y ubicacion. (2) Fotos de fiscalizadores en terreno.\n[METRICA] Tiempo promedio entre ingreso del reclamo y limpieza completada — bajar de 5 a 3 dias en 8 semanas.",
     "idealAnswer": {
       "keyPoints": [
         "[PROCESO]: Triaje y priorizacion de reclamos de basura/microbasurales para asignar cuadrillas de limpieza",
@@ -47,6 +48,7 @@
     "context": "El INE esta construyendo un chatbot: el usuario pregunta en lenguaje natural (ej: \"desempleo en mujeres 2022-2024 por region\"), el sistema traduce a una consulta estructurada, recupera series oficiales y responde con tabla + explicacion. Hoy existe un prototipo interno: funciona en algunos indicadores, pero falla cuando la pregunta es ambigua o cuando hay muchas filas.",
     "question": "Responde en el siguiente formato:\n\n[TRL] Estima TRL (1-9) y justifica en 2 bullets.\n[PARA TRL 7+] Nombra 2 requisitos CONCRETOS para subir a TRL 7+ (ej: validacion, monitoreo, integracion, gobernanza).\n[RIESGO NO TECNICO] 1 riesgo no tecnico que lo puede matar aunque el modelo funcione.\n[ANTI-ALUCINACION] 1 regla de diseno para evitar respuestas inventadas.\n\nRegla: maximo 10 lineas.",
     "conceptTags": ["TRL", "riesgo_implementacion", "anti_alucinacion"],
+    "referenceAnswer": "[TRL] 4. Prototipo funciona con indicadores simples en ambiente controlado, pero no esta integrado al sitio publico ni validado con usuarios reales. GPT existe como producto (TRL 9), pero este chatbot especifico del INE no.\n[PARA TRL 7+] (1) Benchmark con 200+ consultas reales y respuestas gold-standard validadas por el equipo INE. (2) Monitoreo en produccion de queries sin respuesta y tasa de error.\n[RIESGO NO TECNICO] Si entrega un dato incorrecto que aparece en prensa, el INE pierde credibilidad como fuente oficial. Eso no se arregla con un parche tecnico.\n[ANTI-ALUCINACION] Solo responder con series que existan en la base oficial. Si la consulta no matchea ninguna serie exacta, devolver \"no encontre esa serie\" en vez de interpolar.",
     "idealAnswer": {
       "keyPoints": [
         "[TRL]: 3-4. El prototipo funciona en casos simples (TRL 3), con datos reales en ambiente controlado llega a TRL 4. Pero no esta integrado al sitio publico ni probado con usuarios reales.",
@@ -81,6 +83,7 @@
     "context": "Elige UNO de estos 2 casos:\n(A) Chat ciudadano: un chatbot orienta a personas sobre beneficios/programas publicos segun su situacion.\n(B) Triage institucional: un sistema prioriza casos/reclamos y sugiere derivacion interna.\n\nAmbos usan IA generativa y retrieval (RAG).",
     "question": "Indica si respondes (A) o (B) y luego:\n\n[LIMITE 1] 1 cosa concreta que el sistema NO debe hacer nunca (operacional, no moral).\n[CONSECUENCIA 1] Que dano institucional causa si lo hace?\n[GUARDRAIL 1] 1 mecanismo concreto para prevenirlo.\n\n[LIMITE 2] Otra cosa concreta que NO debe hacer.\n[CONSECUENCIA 2] Que dano institucional causa?\n[GUARDRAIL 2] 1 mecanismo concreto para prevenirlo.\n\nEjemplos de guardrails: pedir aclaracion, citar fuente, umbral de confianza, fallback a humano, listas permitidas, logging + auditoria.",
     "conceptTags": ["limites_sistema", "riesgo_implementacion", "guardrails"],
+    "referenceAnswer": "(A) Chat ciudadano.\n\n[LIMITE 1] No recomendar un beneficio especifico sin verificar elegibilidad contra criterios oficiales.\n[CONSECUENCIA 1] Ciudadano postula, es rechazado, pierde tiempo y confianza en el canal digital.\n[GUARDRAIL 1] Lista permitida de beneficios + matching contra criterios verificados. Si no hay match claro, responde \"consulte en oficina\" con link.\n\n[LIMITE 2] No inventar requisitos ni plazos que no esten en la normativa vigente.\n[CONSECUENCIA 2] Desinformacion oficial — el Estado dice algo incorrecto por escrito, con responsabilidad legal.\n[GUARDRAIL 2] Solo citar texto literal de la fuente normativa. Cada dato con referencia al documento origen.",
     "idealAnswer": {
       "keyPoints": [
         "Caso elegido claramente ((A) o (B))",
@@ -115,6 +118,7 @@
     "context": "Elige 1 familia de proyecto:\n(1) Monitoreo de entorno publico\n(2) Voz ciudadana & OIRS\n(3) Chat ciudadano (RAG)\n(4) Conocimiento institucional (RAG)\n(5) Compliance & procesos internos\n(6) Triage / priorizacion de casos",
     "question": "Responde en formato:\n\n[FAMILIA] <numero>\n[DECISION] 1 decision concreta que ayuda a tomar\n[NO HACER] 1 cosa que NO debe hacer\n[METRICA] 1 metrica de exito\n[OUTPUT] Reporte / Chatbot / Ambos",
     "conceptTags": ["feria_proyectos", "decision_unit", "limites_sistema"],
+    "referenceAnswer": "[FAMILIA] 6\n[DECISION] Que reclamos escalar a atencion presencial vs. resolver por canal digital.\n[NO HACER] No descartar automaticamente reclamos sin revision humana — un falso negativo deja un caso urgente sin atender.\n[METRICA] % de reclamos correctamente derivados al area correspondiente en el primer intento (objetivo: >85% en 6 semanas).\n[OUTPUT] Reporte",
     "idealAnswer": {
       "keyPoints": [
         "Familia claramente elegida con numero",

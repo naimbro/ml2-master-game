@@ -98,6 +98,7 @@ async function evaluateWithJudge(openai, judge, scenario, studentResponse, sessi
     delete scenarioForPrompt.evaluationGuide;
     delete scenarioForPrompt.conceptTags;
     delete scenarioForPrompt.nice_to_have;
+    delete scenarioForPrompt.referenceAnswer;
     // Select only relevant KB sections for this round
     const conceptTags = (scenario.conceptTags || []);
     const relevantKB = selectKBSections(knowledgeBase, conceptTags);
@@ -135,11 +136,13 @@ async function evaluateWithJudge(openai, judge, scenario, studentResponse, sessi
     const evalGuide = scenario.evaluationGuide
         ? JSON.stringify(scenario.evaluationGuide, null, 2)
         : JSON.stringify(scenario.idealAnswer || {}, null, 2);
+    const refAnswer = scenario.referenceAnswer || '';
     prompt = prompt
         .replace('{{dimensionScoresJson}}', dimensionScoresJson)
         .replace('{{weightFormula}}', weightFormula)
         .replace('{{sessionLens}}', sessionLens)
-        .replace('{{evaluationGuide}}', evalGuide);
+        .replace('{{evaluationGuide}}', evalGuide)
+        .replace('{{referenceAnswer}}', refAnswer ? `${refAnswer}\n\nCALIBRACION: La respuesta de referencia muestra el nivel de detalle y extension ESPERADO para una buena respuesta (~80 pts). NO penalices brevedad si los puntos clave estan cubiertos. Respuestas mas cortas que la referencia pero que cubren lo esencial pueden obtener 80+.` : '');
     // For non-ranked rounds, add signal extraction instructions
     if (!isRanked) {
         const scenarioId = scenario.id || '';
@@ -966,6 +969,9 @@ ESCENARIO:
 GUIA DE EVALUACION:
 {{evaluationGuide}}
 
+RESPUESTA DE REFERENCIA (tono y extension esperados):
+{{referenceAnswer}}
+
 RESPUESTA DEL ESTUDIANTE:
 {{studentResponse}}
 
@@ -1017,6 +1023,9 @@ ESCENARIO:
 
 GUIA DE EVALUACION:
 {{evaluationGuide}}
+
+RESPUESTA DE REFERENCIA (tono y extension esperados):
+{{referenceAnswer}}
 
 RESPUESTA DEL ESTUDIANTE:
 {{studentResponse}}
@@ -1070,6 +1079,9 @@ ESCENARIO:
 
 GUIA DE EVALUACION:
 {{evaluationGuide}}
+
+RESPUESTA DE REFERENCIA (tono y extension esperados):
+{{referenceAnswer}}
 
 RESPUESTA DEL ESTUDIANTE:
 {{studentResponse}}

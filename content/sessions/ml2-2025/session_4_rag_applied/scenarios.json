@@ -11,6 +11,7 @@
     "context": "Tienes este fragmento de un reglamento municipal:\n\n\"Articulo 12. Los beneficiarios del programa de conectividad deberan presentar RSH vigente.\nArticulo 13. El plazo de postulacion es entre el 1 de marzo y el 30 de abril de cada ano.\nArticulo 14. La cobertura del beneficio es de 12 meses contados desde la fecha de aprobacion.\"\n\nDos practicantes proponen estrategias de chunking distintas:\n\nConfig A: Chunk por articulo (cada articulo = 1 chunk), sin overlap.\nConfig B: Chunks de 200 caracteres con overlap de 50 caracteres, ignorando la estructura de articulos.",
     "question": "Cual config es mejor para un RAG de consultas legales? Justifica tu eleccion. Que problema concreto tiene la config que NO elegiste?",
     "conceptTags": ["chunking", "overlap", "corpus_preparacion"],
+    "referenceAnswer": "Config A es mejor. Los articulos son la unidad natural del documento legal — cada uno trata un tema (requisitos, plazos, cobertura). Cortarlos por la mitad no tiene sentido.\n\nEl problema de Config B: con chunks de 200 caracteres, el Art. 12 queda cortado a la mitad. Un chunk puede tener el final de \"...RSH vigente\" pegado con \"Articulo 13. El plazo...\". Si alguien pregunta por plazos, el chunk recuperado mezcla requisitos con plazos y confunde al LLM.\n\nConfig A podria mejorarse agregando overlap entre articulos consecutivos, para que si el Art. 14 referencia al Art. 13, no se pierda esa conexion.",
     "evaluationGuide": {
       "must_hit": [
         "Elige Config A (o variante con overlap) Y justifica: la estructura natural del documento (articulos) es el mejor criterio de corte para consultas legales",
@@ -81,6 +82,7 @@
     "context": "Un sistema RAG municipal devuelve resultados irrelevantes para la query 'apoyo para jovenes sin empleo'. Los chunks recuperados hablan de 'becas de conectividad' y 'subsidios de arriendo' pero no del programa de intermediacion laboral que SI esta indexado.",
     "question": "Diagnostica por que falla este retrieval. Propone al menos 2 mejoras concretas (una en chunking/indexacion y una en retrieval) que podrian arreglar este problema.",
     "conceptTags": ["retrieval_semantico", "keyword_search", "embeddings", "diagnostico_rag"],
+    "referenceAnswer": "El embedding de \"apoyo para jovenes sin empleo\" queda cerca de \"becas\" y \"subsidios\" porque comparten el campo semantico de apoyo social. \"Intermediacion laboral\" usa vocabulario distinto aunque sea lo relevante.\n\nMejora en indexacion: enriquecer el text_for_embedding del programa de intermediacion laboral con keywords como \"empleo\", \"jovenes\", \"trabajo\" — que son las palabras que usarian los funcionarios al buscar.\n\nMejora en retrieval: complementar con keyword search. Si la query incluye \"empleo\", buscar tambien por keyword ademas de semantico. Busqueda hibrida cubre ambos casos.",
     "evaluationGuide": {
       "must_hit": [
         "Diagnostico causal: el embedding de 'apoyo para jovenes sin empleo' esta mas cerca de 'becas' y 'subsidios' que de 'intermediacion laboral' porque comparten campo semantico de 'apoyo social'",
@@ -151,6 +153,7 @@
     "context": "Tu RAG usa este system prompt:\n\n\"Eres un asistente util. Responde las preguntas del usuario con la informacion disponible. Se amable y completo.\"\n\nCon este prompt, el RAG devolvio: \"El subsidio cubre hasta $200.000 mensuales y requiere formulario F-420 firmado ante notario.\" El chunk recuperado solo decia: \"El subsidio tiene cobertura mensual.\"\n\nEl monto y el formulario son inventados.",
     "question": "Que falla en estas instrucciones que permite la alucinacion? Reescribe el prompt en max 5 lineas para prevenir este problema.",
     "conceptTags": ["instruccion_llm_rag", "trazabilidad", "pipeline_rag"],
+    "referenceAnswer": "El problema es \"informacion disponible\" — no restringe al contexto recuperado. El LLM interpreta que puede usar su conocimiento general, y como el prompt dice \"se completo\", llena los vacios inventando ($200.000, formulario F-420).\n\nPrompt mejorado:\n\"Responde UNICAMENTE usando los fragmentos proporcionados abajo. No agregues datos, montos, codigos ni requisitos que no aparezcan textualmente en los fragmentos. Si los fragmentos no contienen la respuesta, di 'no tengo informacion suficiente sobre eso'. Cita el documento fuente de cada dato.\"",
     "evaluationGuide": {
       "must_hit": [
         "Diagnostica POR QUE falla el prompt: 'informacion disponible' es demasiado vago, no restringe explicitamente al contexto/chunks recuperados",
@@ -185,6 +188,7 @@
     "context": "Para la query \"requisitos beca de conectividad\", tu RAG recupero estos 5 chunks:\n\n| # | Score | Contenido (resumido) |\n|---|-------|---------------------|\n| 1 | 0.92  | \"Requisitos: RSH vigente, certificado de matricula...\" |\n| 2 | 0.85  | \"Plazo de postulacion: marzo a abril...\" |\n| 3 | 0.71  | \"Otros programas de conectividad en la region...\" |\n| 4 | 0.43  | \"Subsidio de arriendo para jovenes...\" |\n| 5 | 0.31  | \"Politica nacional de ciberseguridad...\" |",
     "question": "Con cuales chunks responderia mejor el LLM? Donde pondrias el corte y por que? Que pasa si le pasas los 5?",
     "conceptTags": ["retrieval_semantico", "diagnostico_rag", "pipeline_rag"],
+    "referenceAnswer": "Chunks 1-2 son directamente relevantes (requisitos y plazos de la beca). Chunk 3 es marginal (otros programas de conectividad, no la beca especifica). Chunks 4-5 son off-topic (arriendo, ciberseguridad).\n\nCorte en top-k=2 o 3. El salto de score de 0.71 a 0.43 es el gap mas grande (0.28 puntos) — indica la frontera entre contenido relevante e irrelevante.\n\nSi le paso los 5 al LLM, los chunks de arriendo y ciberseguridad son ruido. El modelo podria mezclar informacion de subsidio de arriendo con la beca de conectividad, generando una respuesta confusa o con datos cruzados.",
     "evaluationGuide": {
       "must_hit": [
         "Identifica el salto de score entre chunk 3 (0.71) y chunk 4 (0.43) como evidencia para el corte — es un gap de 0.28 puntos, el mas grande entre chunks consecutivos",
@@ -255,6 +259,7 @@
     "context": "Tu RAG devolvio esta respuesta a un ciudadano:\n\n\"Para solicitar beca de conectividad, debe presentar RSH actualizado, certificado de matricula y formulario municipal. La beca cubre hasta 12 meses de internet de 100 Mbps.\"\n\nEl chunk recuperado decia: \"Se requiere RSH vigente y certificado de matricula. La cobertura es de 12 meses.\" No mencionaba formulario municipal ni 100 Mbps.",
     "question": "Evalua esta respuesta: (1) que parte se apoya en evidencia del chunk, (2) que parte es alucinacion, (3) que informacion del chunk omitio o altero, (4) que harias para evitar esto.",
     "conceptTags": ["diagnostico_rag", "instruccion_llm_rag", "trazabilidad"],
+    "referenceAnswer": "(1) Evidencia: RSH y certificado de matricula estan en el chunk. \"12 meses\" tambien. Nota: el chunk dice \"RSH vigente\" y la respuesta dice \"RSH actualizado\" — alteracion menor pero potencialmente significativa en contexto legal.\n(2) Alucinacion: \"formulario municipal\" no esta en ningun chunk — inventado. \"100 Mbps\" tampoco — inventado.\n(3) Omision: el chunk no menciona formulario ni velocidad, pero la respuesta los agrega como si fueran requisitos reales.\n(4) Solucion: mejorar la instruccion al LLM para que no agregue datos no presentes en los fragmentos. Algo como: \"no menciones requisitos, montos ni codigos que no aparezcan textualmente en el contexto.\" Pedir cita de fuente para cada dato.",
     "evaluationGuide": {
       "must_hit": [
         "Identifica evidencia: RSH y certificado de matricula estan en el chunk (aunque 'RSH actualizado' vs 'RSH vigente' es alteration menor)",
@@ -290,6 +295,7 @@
     "context": "Una municipalidad quiere que sus funcionarios puedan consultar los 30 protocolos internos (emergencias, tramites, programas sociales). Hoy usan un Google Drive compartido y nadie encuentra nada.",
     "question": "Disena las 4 decisiones clave de este RAG: (1) como preparar el corpus, (2) estrategia de chunking, (3) tipo de retrieval, (4) que instrucciones darle al LLM. Para cada una, justifica brevemente.",
     "conceptTags": ["pipeline_rag", "chunking", "retrieval_semantico", "instruccion_llm_rag", "corpus_preparacion", "trazabilidad"],
+    "referenceAnswer": "(1) Corpus: seleccionar los 30 protocolos vigentes del Drive. Agregar metadata a cada uno: tipo (emergencia/tramite/programa social), fecha de ultima actualizacion, area responsable. Descartar versiones antiguas.\n(2) Chunking: por seccion de protocolo (cada protocolo tiene secciones naturales: objetivo, procedimiento, responsables). 30 documentos es un corpus chico, no necesita chunks ultra-pequenos.\n(3) Retrieval: semantico — los funcionarios van a preguntar en lenguaje natural (\"que hago si hay una emergencia de gas\"), no con codigos exactos.\n(4) Instrucciones LLM: \"Responde solo con informacion de los fragmentos proporcionados. Cita el protocolo y seccion fuente. Si no hay fragmentos relevantes, di 'no encontre un protocolo sobre eso'.\"",
     "evaluationGuide": {
       "must_hit": [
         "Corpus: mencion de seleccionar/curar documentos y agregar metadata (al menos vigencia o tipo de protocolo)",

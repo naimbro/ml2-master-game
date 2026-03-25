@@ -226,9 +226,22 @@ export function getCurrentMusicStyle(): MusicStyle {
 
 export function switchMusic(style: MusicStyle) {
   currentMusicStyle = style;
+  // Always hard-stop then restart — even if music died (musicIntervalId is null)
+  stopBackgroundMusicImmediate();
+  startBackgroundMusic(style);
+}
+
+/** Hard stop with no fade — prevents race condition where a delayed disconnect kills the new gain node */
+function stopBackgroundMusicImmediate() {
   if (musicIntervalId) {
-    stopBackgroundMusic();
-    startBackgroundMusic(style);
+    clearInterval(musicIntervalId);
+    musicIntervalId = null;
+  }
+  if (musicGainNode) {
+    try {
+      musicGainNode.disconnect();
+    } catch { /* already disconnected */ }
+    musicGainNode = null;
   }
 }
 
@@ -533,6 +546,92 @@ export function stopBackgroundMusic() {
       musicGainNode = null;
     }
   }
+}
+
+// ========================================
+// PODIUM REVEAL SOUNDS
+// ========================================
+
+/** Drum roll — filtered noise with crescendo envelope for suspense */
+export function playDrumRoll() {
+  if (isMuted) return;
+  const ctx = getCtx();
+  const now = ctx.currentTime;
+  const duration = 1.5;
+
+  // Create noise buffer
+  const bufferSize = Math.floor(ctx.sampleRate * duration);
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = Math.random() * 2 - 1;
+  }
+
+  const source = ctx.createBufferSource();
+  source.buffer = buffer;
+
+  // Bandpass filter to sound like snare roll
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'bandpass';
+  filter.frequency.value = 1200;
+  filter.Q.value = 0.8;
+
+  // Crescendo envelope
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(0.02, now);
+  gain.gain.linearRampToValueAtTime(0.18, now + duration * 0.85);
+  gain.gain.linearRampToValueAtTime(0.001, now + duration);
+
+  source.connect(filter);
+  filter.connect(gain);
+  gain.connect(ctx.destination);
+
+  source.start(now);
+  source.stop(now + duration + 0.01);
+}
+
+/** Applause — filtered noise bursts simulating crowd. Intensity 1-3 controls duration and volume. */
+export function playApplause(intensity: 1 | 2 | 3 = 2) {
+  if (isMuted) return;
+  const ctx = getCtx();
+  const now = ctx.currentTime;
+  const durations = { 1: 0.8, 2: 1.2, 3: 2.0 };
+  const volumes = { 1: 0.08, 2: 0.12, 3: 0.18 };
+  const duration = durations[intensity];
+  const volume = volumes[intensity];
+
+  // Create noise buffer
+  const bufferSize = Math.floor(ctx.sampleRate * duration);
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  // Modulate noise to sound like clapping (irregular amplitude)
+  for (let i = 0; i < bufferSize; i++) {
+    const t = i / ctx.sampleRate;
+    const modulation = 0.5 + 0.5 * Math.sin(t * 25) * Math.sin(t * 37);
+    data[i] = (Math.random() * 2 - 1) * modulation;
+  }
+
+  const source = ctx.createBufferSource();
+  source.buffer = buffer;
+
+  // Bandpass to simulate crowd frequency range
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'bandpass';
+  filter.frequency.value = 2500;
+  filter.Q.value = 0.4;
+
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(0.001, now);
+  gain.gain.linearRampToValueAtTime(volume, now + 0.1);
+  gain.gain.setValueAtTime(volume, now + duration * 0.6);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+  source.connect(filter);
+  filter.connect(gain);
+  gain.connect(ctx.destination);
+
+  source.start(now);
+  source.stop(now + duration + 0.01);
 }
 
 // ========================================

@@ -1,12 +1,12 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, LayoutGroup } from 'framer-motion';
 import { Trophy, TrendingUp, ArrowRight, MessageSquare, Info, Code, CheckCircle, XCircle, Zap } from 'lucide-react';
 import { useGame } from '../../hooks/useGame';
 import { useAuth } from '../../hooks/useAuth';
 import { httpsCallable } from 'firebase/functions';
 import { functions } from '../../lib/firebase';
-import { playScoreReveal, playGoodScore, playBadScore, playLeaderboardTick } from '../../lib/sounds';
+import { playScoreReveal, playGoodScore, playBadScore, playLeaderboardTick, playDrumRoll } from '../../lib/sounds';
 import { confettiBurst, confettiCannons } from '../../lib/confetti';
 
 interface JudgeEvaluation {
@@ -27,6 +27,8 @@ export default function Results() {
   const [, setEvaluationComplete] = useState(false);
   const scoreSoundPlayed = useRef(false);
   const [expandedPrompts, setExpandedPrompts] = useState<Record<number, boolean>>({});
+  const [leaderboardRevealed, setLeaderboardRevealed] = useState(false);
+  const leaderboardSoundPlayed = useRef(false);
 
   // Navigate based on game status
   useEffect(() => {
@@ -123,6 +125,64 @@ export default function Results() {
   const currentScenario = game?.scenarios?.[game.currentRound - 1];
   const isRankedRound = currentScenario?.ranked !== false;
   const isMCRound = currentScenario?.type === 'multiple_choice';
+
+  // Cumulative leaderboard rankings
+  const { cumulativeRankings, rankedRoundsPlayed } = useMemo(() => {
+    if (!roundResults || !game?.players || !isRankedRound) {
+      return { cumulativeRankings: [] as Array<{ playerId: string; playerName: string; roundScore: number; totalScore: number; avgScore: number; prevAvg: number; rank: number }>, rankedRoundsPlayed: 0 };
+    }
+
+    const played = game.scenarios
+      ?.slice(0, game.currentRound)
+      .filter((s: { ranked?: boolean }) => s.ranked !== false).length || 1;
+
+    const rankings = Object.entries(game.players)
+      .map(([playerId, player]) => {
+        const roundScore = roundResults.rankings.find(r => r.playerId === playerId)?.score || 0;
+        const totalScore = player.totalScore || 0;
+        const avgScore = played > 0 ? totalScore / played : 0;
+        const prevTotal = totalScore - roundScore;
+        const prevAvg = played > 1 ? prevTotal / (played - 1) : 0;
+        return { playerId, playerName: player.name, roundScore, totalScore, avgScore: Math.round(avgScore * 10) / 10, prevAvg, rank: 0 };
+      })
+      .sort((a, b) => b.avgScore - a.avgScore)
+      .map((player, index) => ({ ...player, rank: index + 1 }));
+
+    return { cumulativeRankings: rankings, rankedRoundsPlayed: played };
+  }, [roundResults, game?.players, game?.currentRound, game?.scenarios, isRankedRound]);
+
+  // Initial display order before reveal animation
+  const initialRankings = useMemo(() => {
+    if (cumulativeRankings.length === 0) return cumulativeRankings;
+
+    if (rankedRoundsPlayed <= 1) {
+      // First ranked round: deterministic shuffle based on player IDs
+      return [...cumulativeRankings].sort((a, b) => {
+        const hashA = a.playerId.split('').reduce((h, c) => ((h << 5) - h + c.charCodeAt(0)) | 0, 0);
+        const hashB = b.playerId.split('').reduce((h, c) => ((h << 5) - h + c.charCodeAt(0)) | 0, 0);
+        return hashA - hashB;
+      });
+    }
+    // Subsequent rounds: previous rank order
+    return [...cumulativeRankings].sort((a, b) => b.prevAvg - a.prevAvg);
+  }, [cumulativeRankings, rankedRoundsPlayed]);
+
+  // Leaderboard reveal animation timer
+  useEffect(() => {
+    if (cumulativeRankings.length > 0 && !leaderboardSoundPlayed.current) {
+      leaderboardSoundPlayed.current = true;
+      playDrumRoll();
+      const timer = setTimeout(() => {
+        setLeaderboardRevealed(true);
+        cumulativeRankings.forEach((_, i) => {
+          setTimeout(() => playLeaderboardTick(i), i * 100);
+        });
+      }, 2500);
+      return () => clearTimeout(timer);
+    }
+  }, [cumulativeRankings]);
+
+  const displayRankings = leaderboardRevealed ? cumulativeRankings : initialRankings;
 
   // Judge bar colors (Kahoot answer colors)
   const JUDGE_COLORS = ['bg-kahoot-red', 'bg-kahoot-blue', 'bg-kahoot-green'];
@@ -305,6 +365,18 @@ export default function Results() {
               </div>
             )}
 
+            {/* Reference Answer */}
+            {currentScenario?.referenceAnswer && (
+              <details className="mb-4 p-4 bg-white/5 rounded-xl">
+                <summary className="text-white/50 font-bold uppercase tracking-wider text-xs cursor-pointer hover:text-white/70">
+                  Ver respuesta de referencia
+                </summary>
+                <p className="text-white/70 text-sm whitespace-pre-wrap font-medium mt-2">
+                  {currentScenario.referenceAnswer}
+                </p>
+              </details>
+            )}
+
             {/* Feedback */}
             {userEvaluation.evaluations?.map((evaluation: JudgeEvaluation, i: number) => (
               <div key={i} className="mb-4 p-4 bg-white/5 rounded-xl">
@@ -360,97 +432,108 @@ export default function Results() {
           </motion.div>
         )}
 
-        {/* Cumulative Leaderboard (ranked rounds only) */}
+        {/* Full-Screen Dramatic Leaderboard (ranked rounds only) */}
         {roundResults && game.players && isRankedRound && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="dramatic-card p-6"
-          >
-            <h2 className="text-xl font-black mb-4 flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-kahoot-green" />
-              Ranking Acumulado
-            </h2>
+          <div className="min-h-[70vh] flex flex-col justify-center py-8">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              <h2 className="text-3xl font-black mb-2 text-center flex items-center justify-center gap-3">
+                <TrendingUp className="w-8 h-8 text-kahoot-green" />
+                Ranking
+              </h2>
+              <p className="text-white/40 text-sm font-bold text-center mb-8 uppercase tracking-widest">
+                {leaderboardRevealed ? 'Posiciones actualizadas' : 'Actualizando posiciones...'}
+              </p>
 
-            {/* Column Headers */}
-            <div className="flex items-center gap-4 px-3 py-2 text-[10px] text-white/50 uppercase tracking-widest font-bold border-b border-white/10 mb-2">
-              <div className="w-8"></div>
-              <span className="flex-1">Jugador</span>
-              <span className="w-20 text-right">Esta Ronda</span>
-              <span className="w-20 text-right">Promedio</span>
-            </div>
+              {/* Column Headers */}
+              <div className="flex items-center gap-4 px-4 py-2 text-[10px] text-white/50 uppercase tracking-widest font-bold border-b border-white/10 mb-3 max-w-2xl mx-auto">
+                <div className="w-12"></div>
+                <span className="flex-1">Jugador</span>
+                <span className="w-16 text-right">Ronda</span>
+                <span className="w-16 text-right">Prom</span>
+              </div>
 
-            <div className="space-y-2">
-              {(() => {
-                const cumulativeRankings = Object.entries(game.players)
-                  .map(([playerId, player]) => {
-                    const roundScore = roundResults.rankings.find(r => r.playerId === playerId)?.score || 0;
-                    const totalScore = player.totalScore || 0;
-                    const rankedRoundsPlayed = game.scenarios
-                      ?.slice(0, game.currentRound)
-                      .filter((s: { ranked?: boolean }) => s.ranked !== false).length || 1;
-                    const avgScore = rankedRoundsPlayed > 0 ? totalScore / rankedRoundsPlayed : 0;
-                    return {
-                      playerId,
-                      playerName: player.name,
-                      roundScore,
-                      totalScore,
-                      avgScore: Math.round(avgScore * 10) / 10,
-                    };
-                  })
-                  .sort((a, b) => b.avgScore - a.avgScore)
-                  .map((player, index) => ({ ...player, rank: index + 1 }));
+              <LayoutGroup>
+                <div className="space-y-2 max-w-2xl mx-auto">
+                  {displayRankings.map((player) => {
+                    const prevRank = rankedRoundsPlayed > 1
+                      ? initialRankings.findIndex(p => p.playerId === player.playerId) + 1
+                      : 0;
+                    const delta = prevRank > 0 ? prevRank - player.rank : 0;
+                    const showDelta = leaderboardRevealed && delta !== 0;
 
-                return cumulativeRankings.map((player, index) => (
-                  <motion.div
-                    key={player.playerId}
-                    initial={{ opacity: 0, x: -30 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.3 + index * 0.06 }}
-                    onAnimationStart={() => setTimeout(() => playLeaderboardTick(index), (0.3 + index * 0.06) * 1000)}
-                    className={`flex items-center gap-4 p-3 rounded-xl ${
-                      player.playerId === user?.uid
-                        ? 'bg-kahoot-green/15 border-2 border-kahoot-green/30'
-                        : 'bg-white/5'
-                    }`}
-                  >
-                    <div
-                      className={`w-8 h-8 rounded-lg flex items-center justify-center font-black text-sm ${
-                        player.rank === 1
-                          ? 'bg-yellow-500 text-black'
-                          : player.rank === 2
-                          ? 'bg-gray-400 text-black'
-                          : player.rank === 3
-                          ? 'bg-amber-600 text-black'
-                          : 'bg-white/20'
-                      }`}
-                    >
-                      {player.rank}
-                    </div>
+                    return (
+                      <motion.div
+                        key={player.playerId}
+                        layout
+                        transition={{ layout: { type: 'spring', stiffness: 200, damping: 25 } }}
+                        className={`flex items-center gap-4 p-4 rounded-xl ${
+                          player.playerId === user?.uid
+                            ? 'bg-kahoot-green/15 border-2 border-kahoot-green/30'
+                            : 'bg-white/5 border-2 border-transparent'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <motion.div
+                            layout
+                            className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-lg ${
+                              !leaderboardRevealed
+                                ? 'bg-white/20'
+                                : player.rank === 1
+                                ? 'bg-yellow-500 text-black'
+                                : player.rank === 2
+                                ? 'bg-gray-400 text-black'
+                                : player.rank === 3
+                                ? 'bg-amber-600 text-black'
+                                : 'bg-white/20'
+                            }`}
+                          >
+                            {leaderboardRevealed ? player.rank : '?'}
+                          </motion.div>
+                          {showDelta && (
+                            <motion.span
+                              initial={{ scale: 0, opacity: 0 }}
+                              animate={{ scale: 1, opacity: 1 }}
+                              transition={{ delay: 0.3, type: 'spring', stiffness: 400 }}
+                              className={`text-xs font-black ${delta > 0 ? 'text-kahoot-green' : 'text-kahoot-red'}`}
+                            >
+                              {delta > 0 ? `↑${delta}` : `↓${Math.abs(delta)}`}
+                            </motion.span>
+                          )}
+                        </div>
 
-                    <span className="flex-1 font-bold truncate">
-                      {player.playerName}
-                      {player.playerId === user?.uid && (
-                        <span className="text-kahoot-green text-sm ml-2 font-bold">(Tu)</span>
-                      )}
-                    </span>
+                        <span className="flex-1 font-bold text-lg truncate">
+                          {player.playerName}
+                          {player.playerId === user?.uid && (
+                            <span className="text-kahoot-green text-sm ml-2 font-bold">(Tu)</span>
+                          )}
+                        </span>
 
-                    <span className={`w-20 text-right font-mono font-bold text-sm ${
-                      player.roundScore >= 80 ? 'text-kahoot-green' :
-                      player.roundScore >= 60 ? 'text-kahoot-yellow' : 'text-kahoot-red'
-                    }`}>
-                      +{player.roundScore}
-                    </span>
+                        <span className={`w-16 text-right font-mono font-bold ${
+                          leaderboardRevealed
+                            ? player.roundScore >= 80 ? 'text-kahoot-green' :
+                              player.roundScore >= 60 ? 'text-kahoot-yellow' : 'text-kahoot-red'
+                            : 'text-white/30'
+                        }`}>
+                          {leaderboardRevealed ? `+${player.roundScore}` : '...'}
+                        </span>
 
-                    <span className="w-20 text-right font-mono font-black text-lg">
-                      {player.avgScore}
-                    </span>
-                  </motion.div>
-                ));
-              })()}
-            </div>
-          </motion.div>
+                        <motion.span
+                          layout
+                          className="w-16 text-right font-mono font-black text-xl"
+                        >
+                          {leaderboardRevealed ? player.avgScore : '?'}
+                        </motion.span>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              </LayoutGroup>
+            </motion.div>
+          </div>
         )}
 
         {/* Diagnostic message for non-ranked rounds */}

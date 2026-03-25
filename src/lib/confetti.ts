@@ -7,6 +7,19 @@ import confetti from 'canvas-confetti';
 // Kahoot-inspired colors
 const KAHOOT_COLORS = ['#FF3355', '#45A3E5', '#66BF39', '#EB670F', '#FFC107', '#46178F'];
 
+/** Modest burst for 3rd place podium reveal */
+export function confettiSmallBurst() {
+  confetti({
+    particleCount: 40,
+    spread: 55,
+    origin: { y: 0.6 },
+    colors: KAHOOT_COLORS,
+    ticks: 150,
+    gravity: 1.3,
+    scalar: 0.9,
+  });
+}
+
 /** Small burst for good score (score >= 80) */
 export function confettiBurst() {
   confetti({

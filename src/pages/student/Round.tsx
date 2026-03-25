@@ -80,6 +80,12 @@ export default function Round() {
   // Navigate based on game status
   useEffect(() => {
     if (game?.status === 'round_end') {
+      // Auto-submit incomplete MC block before navigating away
+      if (currentScenarioRef.current?.type === 'multiple_choice' && !hasSubmitted && mcResponses.length > 0) {
+        const totalPoints = mcResponses.reduce((sum, r) => sum + r.pointsAwarded, 0);
+        const blockScore = Math.round(totalPoints / mcResponses.length);
+        submitMCBlock(mcResponses, blockScore);
+      }
       navigate(`/game/${gameCode}/results`);
     } else if (game?.status === 'finished') {
       navigate(`/game/${gameCode}/end`);
@@ -694,6 +700,18 @@ export default function Round() {
                           <p className="text-sm text-white/50 mb-2 font-bold uppercase tracking-wider text-xs">Tu respuesta:</p>
                           <p className="text-white/80 text-sm whitespace-pre-wrap font-medium">{userSub.response}</p>
                         </div>
+                      )}
+
+                      {/* Reference Answer */}
+                      {currentScenario?.referenceAnswer && (
+                        <details className="mb-4 p-4 bg-white/5 rounded-xl">
+                          <summary className="text-white/50 font-bold uppercase tracking-wider text-xs cursor-pointer hover:text-white/70">
+                            Ver respuesta de referencia
+                          </summary>
+                          <p className="text-white/70 text-sm whitespace-pre-wrap font-medium mt-2">
+                            {currentScenario.referenceAnswer}
+                          </p>
+                        </details>
                       )}
 
                       {evaluation.evaluations?.map((ev: { judgeName: string; score: number; feedback: string; strengths: string[]; improvements: string[]; promptUsed?: string }, i: number) => (

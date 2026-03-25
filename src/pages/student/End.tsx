@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, Medal, Star, Home, Download, FileText, FileJson } from 'lucide-react';
 import { useGame } from '../../hooks/useGame';
 import { useAuth } from '../../hooks/useAuth';
@@ -9,8 +9,8 @@ import { functions } from '../../lib/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import jsPDF from 'jspdf';
-import { playPodiumFanfare, playLeaderboardTick } from '../../lib/sounds';
-import { confettiPodium, confettiStars } from '../../lib/confetti';
+import { playPodiumFanfare, playLeaderboardTick, playDrumRoll, playApplause } from '../../lib/sounds';
+import { confettiPodium, confettiStars, confettiSmallBurst, confettiBurst } from '../../lib/confetti';
 
 interface PlayerFinalScore {
   playerId: string;
@@ -36,6 +36,8 @@ export default function End() {
   const [reportLoading, setReportLoading] = useState(false);
   const [signalsLoading, setSignalsLoading] = useState(false);
   const celebrationPlayed = useRef(false);
+  // revealStage: 0=suspense → 1=3rd → 2=2nd → 3=1st → 4=done (show everything)
+  const [revealStage, setRevealStage] = useState(0);
 
   // Calculate final rankings
   useEffect(() => {
@@ -96,19 +98,48 @@ export default function End() {
     calculateFinalRankings();
   }, [gameCode, game]);
 
-  // Play podium celebration when rankings appear
+  // Staged podium reveal — adapts to player count
   useEffect(() => {
     if (finalRankings.length > 0 && !loadingRankings && !celebrationPlayed.current) {
       celebrationPlayed.current = true;
-      // Podium fanfare with slight delay for the animation to start
-      setTimeout(() => {
+      const numPodium = Math.min(finalRankings.length, 3);
+      const timers: ReturnType<typeof setTimeout>[] = [];
+
+      // Drum roll
+      timers.push(setTimeout(() => { playDrumRoll(); }, 500));
+
+      if (numPodium >= 3) {
+        // 3rd place
+        timers.push(setTimeout(() => {
+          setRevealStage(1);
+          playApplause(1);
+          confettiSmallBurst();
+        }, 2000));
+      }
+
+      if (numPodium >= 2) {
+        // 2nd place
+        const t2nd = numPodium >= 3 ? 4000 : 2000;
+        timers.push(setTimeout(() => {
+          setRevealStage(2);
+          playApplause(2);
+          confettiBurst();
+        }, t2nd));
+      }
+
+      // 1st place
+      const t1st = numPodium >= 3 ? 6000 : numPodium >= 2 ? 4000 : 2000;
+      timers.push(setTimeout(() => {
+        setRevealStage(3);
         playPodiumFanfare();
         confettiPodium();
-      }, 400);
-      // Stars burst for user result reveal
-      setTimeout(() => {
         confettiStars();
-      }, 1200);
+      }, t1st));
+
+      // Show everything else
+      timers.push(setTimeout(() => { setRevealStage(4); }, t1st + 1500));
+
+      return () => { timers.forEach(clearTimeout); };
     }
   }, [finalRankings, loadingRankings]);
 
@@ -330,85 +361,86 @@ export default function End() {
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 py-6 space-y-8">
-        {/* Podium */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="flex justify-center items-end gap-3 md:gap-5 h-72 mb-8"
-        >
-          {/* Second Place */}
-          {topThree[1] && (
-            <motion.div
-              initial={{ opacity: 0, y: 60 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, type: 'spring', stiffness: 150 }}
-              className="flex flex-col items-center"
-            >
-              <div className={`w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br ${PODIUM_STYLES[2].bg} flex items-center justify-center mb-2 border-4 ${PODIUM_STYLES[2].border} shadow-lg ${PODIUM_STYLES[2].shadow}`}>
-                <span className={`text-2xl font-black ${PODIUM_STYLES[2].text}`}>2</span>
-              </div>
-              <p className="font-bold text-center text-sm mb-2 max-w-24 truncate">
-                {topThree[1].playerName}
-              </p>
-              <div className={`w-24 md:w-28 ${PODIUM_STYLES[2].h} bg-gradient-to-t ${PODIUM_STYLES[2].bg} rounded-t-xl flex items-center justify-center shadow-lg podium-grow`}>
-                <span className={`text-2xl font-black ${PODIUM_STYLES[2].text}`}>{topThree[1].totalScore}</span>
-              </div>
-            </motion.div>
-          )}
-
-          {/* First Place */}
-          {topThree[0] && (
-            <motion.div
-              initial={{ opacity: 0, y: 60 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, type: 'spring', stiffness: 150 }}
-              className="flex flex-col items-center"
-            >
+        {/* Podium — staged reveal */}
+        <div className="flex justify-center items-end gap-3 md:gap-5 h-72 mb-8">
+          <AnimatePresence>
+            {/* Second Place — revealStage >= 2 */}
+            {topThree[1] && revealStage >= 2 && (
               <motion.div
-                animate={{ rotate: [0, -5, 5, -5, 0] }}
-                transition={{ delay: 0.8, duration: 0.5 }}
+                key="podium-2"
+                initial={{ opacity: 0, y: 60, scale: 0.8 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ type: 'spring', stiffness: 150 }}
+                className="flex flex-col items-center"
               >
-                <Trophy className="w-10 h-10 text-yellow-400 mb-2" />
+                <div className={`w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br ${PODIUM_STYLES[2].bg} flex items-center justify-center mb-2 border-4 ${PODIUM_STYLES[2].border} shadow-lg ${PODIUM_STYLES[2].shadow}`}>
+                  <span className={`text-2xl font-black ${PODIUM_STYLES[2].text}`}>2</span>
+                </div>
+                <p className="font-bold text-center text-sm mb-2 max-w-24 truncate">
+                  {topThree[1].playerName}
+                </p>
+                <div className={`w-24 md:w-28 ${PODIUM_STYLES[2].h} bg-gradient-to-t ${PODIUM_STYLES[2].bg} rounded-t-xl flex items-center justify-center shadow-lg podium-grow`}>
+                  <span className={`text-2xl font-black ${PODIUM_STYLES[2].text}`}>{topThree[1].totalScore}</span>
+                </div>
               </motion.div>
-              <div className={`w-20 h-20 md:w-24 md:h-24 rounded-full bg-gradient-to-br ${PODIUM_STYLES[1].bg} flex items-center justify-center mb-2 border-4 ${PODIUM_STYLES[1].border} shadow-xl ${PODIUM_STYLES[1].shadow}`}>
-                <span className={`text-3xl font-black ${PODIUM_STYLES[1].text}`}>1</span>
-              </div>
-              <p className="font-black text-center mb-2 max-w-28 truncate text-lg">
-                {topThree[0].playerName}
-              </p>
-              <div className={`w-28 md:w-32 ${PODIUM_STYLES[1].h} bg-gradient-to-t ${PODIUM_STYLES[1].bg} rounded-t-xl flex items-center justify-center shadow-xl podium-grow`}>
-                <span className={`text-3xl font-black ${PODIUM_STYLES[1].text}`}>{topThree[0].totalScore}</span>
-              </div>
-            </motion.div>
-          )}
+            )}
 
-          {/* Third Place */}
-          {topThree[2] && (
-            <motion.div
-              initial={{ opacity: 0, y: 60 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7, type: 'spring', stiffness: 150 }}
-              className="flex flex-col items-center"
-            >
-              <div className={`w-14 h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-br ${PODIUM_STYLES[3].bg} flex items-center justify-center mb-2 border-4 ${PODIUM_STYLES[3].border} shadow-lg ${PODIUM_STYLES[3].shadow}`}>
-                <span className={`text-xl font-black ${PODIUM_STYLES[3].text}`}>3</span>
-              </div>
-              <p className="font-bold text-center text-sm mb-2 max-w-20 truncate">
-                {topThree[2].playerName}
-              </p>
-              <div className={`w-20 md:w-24 ${PODIUM_STYLES[3].h} bg-gradient-to-t ${PODIUM_STYLES[3].bg} rounded-t-xl flex items-center justify-center shadow-lg podium-grow`}>
-                <span className={`text-xl font-black ${PODIUM_STYLES[3].text}`}>{topThree[2].totalScore}</span>
-              </div>
-            </motion.div>
-          )}
-        </motion.div>
+            {/* First Place — revealStage >= 3 */}
+            {topThree[0] && revealStage >= 3 && (
+              <motion.div
+                key="podium-1"
+                initial={{ opacity: 0, y: 60, scale: 0.8 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ type: 'spring', stiffness: 150 }}
+                className="flex flex-col items-center"
+              >
+                <motion.div
+                  animate={{ rotate: [0, -5, 5, -5, 0] }}
+                  transition={{ delay: 0.3, duration: 0.5 }}
+                >
+                  <Trophy className="w-10 h-10 text-yellow-400 mb-2" />
+                </motion.div>
+                <div className={`w-20 h-20 md:w-24 md:h-24 rounded-full bg-gradient-to-br ${PODIUM_STYLES[1].bg} flex items-center justify-center mb-2 border-4 ${PODIUM_STYLES[1].border} shadow-xl ${PODIUM_STYLES[1].shadow}`}>
+                  <span className={`text-3xl font-black ${PODIUM_STYLES[1].text}`}>1</span>
+                </div>
+                <p className="font-black text-center mb-2 max-w-28 truncate text-lg">
+                  {topThree[0].playerName}
+                </p>
+                <div className={`w-28 md:w-32 ${PODIUM_STYLES[1].h} bg-gradient-to-t ${PODIUM_STYLES[1].bg} rounded-t-xl flex items-center justify-center shadow-xl podium-grow`}>
+                  <span className={`text-3xl font-black ${PODIUM_STYLES[1].text}`}>{topThree[0].totalScore}</span>
+                </div>
+              </motion.div>
+            )}
 
-        {/* User's Result */}
-        {userRanking && (
+            {/* Third Place — revealStage >= 1 */}
+            {topThree[2] && revealStage >= 1 && (
+              <motion.div
+                key="podium-3"
+                initial={{ opacity: 0, y: 60, scale: 0.8 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ type: 'spring', stiffness: 150 }}
+                className="flex flex-col items-center"
+              >
+                <div className={`w-14 h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-br ${PODIUM_STYLES[3].bg} flex items-center justify-center mb-2 border-4 ${PODIUM_STYLES[3].border} shadow-lg ${PODIUM_STYLES[3].shadow}`}>
+                  <span className={`text-xl font-black ${PODIUM_STYLES[3].text}`}>3</span>
+                </div>
+                <p className="font-bold text-center text-sm mb-2 max-w-20 truncate">
+                  {topThree[2].playerName}
+                </p>
+                <div className={`w-20 md:w-24 ${PODIUM_STYLES[3].h} bg-gradient-to-t ${PODIUM_STYLES[3].bg} rounded-t-xl flex items-center justify-center shadow-lg podium-grow`}>
+                  <span className={`text-xl font-black ${PODIUM_STYLES[3].text}`}>{topThree[2].totalScore}</span>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* User's Result — appears after full podium reveal */}
+        {revealStage >= 4 && userRanking && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8 }}
+            transition={{ duration: 0.5 }}
             className="dramatic-card p-6"
           >
             <h2 className="text-xl font-black mb-4 flex items-center gap-2">
@@ -501,83 +533,85 @@ export default function End() {
           </motion.div>
         )}
 
-        {/* Full Rankings */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9 }}
-          className="dramatic-card p-6"
-        >
-          <h2 className="text-xl font-black mb-4 flex items-center gap-2">
-            <Medal className="w-5 h-5 text-purple-400" />
-            Ranking Completo
-          </h2>
-
-          <div className="space-y-2">
-            {finalRankings.map((player, index) => (
-              <motion.div
-                key={player.playerId}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 1 + index * 0.04 }}
-                onAnimationStart={() => setTimeout(() => playLeaderboardTick(index), (1 + index * 0.04) * 1000)}
-                className={`flex items-center gap-4 p-3 rounded-xl ${
-                  player.playerId === user?.uid
-                    ? 'bg-kahoot-green/15 border-2 border-kahoot-green/30'
-                    : 'bg-white/5'
-                }`}
-              >
-                <div
-                  className={`w-8 h-8 rounded-lg flex items-center justify-center font-black text-sm ${
-                    player.rank === 1
-                      ? 'bg-yellow-500 text-black'
-                      : player.rank === 2
-                      ? 'bg-gray-400 text-black'
-                      : player.rank === 3
-                      ? 'bg-amber-600 text-black'
-                      : 'bg-white/20'
-                  }`}
-                >
-                  {player.rank}
-                </div>
-
-                <span className="flex-1 font-bold truncate">
-                  {player.playerName}
-                  {player.playerId === user?.uid && (
-                    <span className="text-kahoot-green text-sm ml-2 font-bold">(Tu)</span>
-                  )}
-                </span>
-
-                <div className="flex gap-1">
-                  {player.roundScores.map((score, i) => {
-                    const isRoundRanked = game?.scenarios?.[i]?.ranked !== false;
-                    return (
-                      <span
-                        key={i}
-                        className={`text-xs w-8 text-center font-semibold ${
-                          !isRoundRanked ? 'text-white/30 italic' : 'text-white/50'
-                        }`}
-                      >
-                        {score || '-'}{!isRoundRanked ? '*' : ''}
-                      </span>
-                    );
-                  })}
-                </div>
-
-                <span className="font-mono font-black text-lg w-12 text-right">
-                  {player.totalScore}
-                </span>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Professor Class Report Button */}
-        {isHost && (
+        {/* Full Rankings — appears after full podium reveal */}
+        {revealStage >= 4 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.1 }}
+            transition={{ delay: 0.2 }}
+            className="dramatic-card p-6"
+          >
+            <h2 className="text-xl font-black mb-4 flex items-center gap-2">
+              <Medal className="w-5 h-5 text-purple-400" />
+              Ranking Completo
+            </h2>
+
+            <div className="space-y-2">
+              {finalRankings.map((player, index) => (
+                <motion.div
+                  key={player.playerId}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.3 + index * 0.04 }}
+                  onAnimationStart={() => setTimeout(() => playLeaderboardTick(index), (0.3 + index * 0.04) * 1000)}
+                  className={`flex items-center gap-4 p-3 rounded-xl ${
+                    player.playerId === user?.uid
+                      ? 'bg-kahoot-green/15 border-2 border-kahoot-green/30'
+                      : 'bg-white/5'
+                  }`}
+                >
+                  <div
+                    className={`w-8 h-8 rounded-lg flex items-center justify-center font-black text-sm ${
+                      player.rank === 1
+                        ? 'bg-yellow-500 text-black'
+                        : player.rank === 2
+                        ? 'bg-gray-400 text-black'
+                        : player.rank === 3
+                        ? 'bg-amber-600 text-black'
+                        : 'bg-white/20'
+                    }`}
+                  >
+                    {player.rank}
+                  </div>
+
+                  <span className="flex-1 font-bold truncate">
+                    {player.playerName}
+                    {player.playerId === user?.uid && (
+                      <span className="text-kahoot-green text-sm ml-2 font-bold">(Tu)</span>
+                    )}
+                  </span>
+
+                  <div className="flex gap-1">
+                    {player.roundScores.map((score, i) => {
+                      const isRoundRanked = game?.scenarios?.[i]?.ranked !== false;
+                      return (
+                        <span
+                          key={i}
+                          className={`text-xs w-8 text-center font-semibold ${
+                            !isRoundRanked ? 'text-white/30 italic' : 'text-white/50'
+                          }`}
+                        >
+                          {score || '-'}{!isRoundRanked ? '*' : ''}
+                        </span>
+                      );
+                    })}
+                  </div>
+
+                  <span className="font-mono font-black text-lg w-12 text-right">
+                    {player.totalScore}
+                  </span>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {/* Professor Class Report Button */}
+        {revealStage >= 4 && isHost && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
             className="dramatic-card p-6"
           >
             <h2 className="text-xl font-black mb-4 flex items-center gap-2">
@@ -617,17 +651,19 @@ export default function End() {
         )}
 
         {/* Return Home Button */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2 }}
-          className="text-center pb-8"
-        >
-          <Link to="/" className="primary-button inline-flex items-center gap-2">
-            <Home className="w-5 h-5" />
-            Volver al Inicio
-          </Link>
-        </motion.div>
+        {revealStage >= 4 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="text-center pb-8"
+          >
+            <Link to="/" className="primary-button inline-flex items-center gap-2">
+              <Home className="w-5 h-5" />
+              Volver al Inicio
+            </Link>
+          </motion.div>
+        )}
       </main>
     </div>
   );

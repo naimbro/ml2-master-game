@@ -188,6 +188,7 @@ export interface Scenario {
   question: string;
   conceptTags: string[];
   idealAnswer?: IdealAnswer;
+  referenceAnswer?: string;
 }
 
 export interface IdealAnswer {
