@@ -138,17 +138,18 @@ export default function Results() {
   }, [cumulativeRankings, rankedRoundsPlayed]);
 
   // Leaderboard reveal animation timer
+  // No cleanup — timeout must survive dependency ref changes from Firestore updates
   useEffect(() => {
     if (cumulativeRankings.length > 0 && !leaderboardSoundPlayed.current) {
       leaderboardSoundPlayed.current = true;
       playDrumRoll();
-      const timer = setTimeout(() => {
+      const numPlayers = cumulativeRankings.length;
+      setTimeout(() => {
         setLeaderboardRevealed(true);
-        cumulativeRankings.forEach((_, i) => {
+        for (let i = 0; i < numPlayers; i++) {
           setTimeout(() => playLeaderboardTick(i), i * 100);
-        });
+        }
       }, 2500);
-      return () => clearTimeout(timer);
     }
   }, [cumulativeRankings]);
 
@@ -206,6 +207,110 @@ export default function Results() {
           </div>
         </div>
       </header>
+
+      {/* Full-Screen Dramatic Leaderboard (ranked rounds only) — shown first for impact */}
+      {roundResults && game.players && isRankedRound && (
+        <div className="min-h-[80vh] flex flex-col justify-center py-8 px-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2 className="text-3xl font-black mb-2 text-center flex items-center justify-center gap-3">
+              <TrendingUp className="w-8 h-8 text-kahoot-green" />
+              Ranking
+            </h2>
+            <p className="text-white/40 text-sm font-bold text-center mb-8 uppercase tracking-widest">
+              {leaderboardRevealed ? 'Posiciones actualizadas' : 'Actualizando posiciones...'}
+            </p>
+
+            {/* Column Headers */}
+            <div className="flex items-center gap-4 px-4 py-2 text-[10px] text-white/50 uppercase tracking-widest font-bold border-b border-white/10 mb-3 max-w-2xl mx-auto">
+              <div className="w-12"></div>
+              <span className="flex-1">Jugador</span>
+              <span className="w-16 text-right">Ronda</span>
+              <span className="w-16 text-right">Prom</span>
+            </div>
+
+            <LayoutGroup>
+              <div className="space-y-2 max-w-2xl mx-auto">
+                {displayRankings.map((player) => {
+                  const prevRank = rankedRoundsPlayed > 1
+                    ? initialRankings.findIndex(p => p.playerId === player.playerId) + 1
+                    : 0;
+                  const delta = prevRank > 0 ? prevRank - player.rank : 0;
+                  const showDelta = leaderboardRevealed && delta !== 0;
+
+                  return (
+                    <motion.div
+                      key={player.playerId}
+                      layout
+                      transition={{ layout: { type: 'spring', stiffness: 200, damping: 25 } }}
+                      className={`flex items-center gap-4 p-4 rounded-xl ${
+                        player.playerId === user?.uid
+                          ? 'bg-kahoot-green/15 border-2 border-kahoot-green/30'
+                          : 'bg-white/5 border-2 border-transparent'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <motion.div
+                          layout
+                          className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-lg ${
+                            !leaderboardRevealed
+                              ? 'bg-white/20'
+                              : player.rank === 1
+                              ? 'bg-yellow-500 text-black'
+                              : player.rank === 2
+                              ? 'bg-gray-400 text-black'
+                              : player.rank === 3
+                              ? 'bg-amber-600 text-black'
+                              : 'bg-white/20'
+                          }`}
+                        >
+                          {leaderboardRevealed ? player.rank : '?'}
+                        </motion.div>
+                        {showDelta && (
+                          <motion.span
+                            initial={{ scale: 0, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ delay: 0.3, type: 'spring', stiffness: 400 }}
+                            className={`text-xs font-black ${delta > 0 ? 'text-kahoot-green' : 'text-kahoot-red'}`}
+                          >
+                            {delta > 0 ? `↑${delta}` : `↓${Math.abs(delta)}`}
+                          </motion.span>
+                        )}
+                      </div>
+
+                      <span className="flex-1 font-bold text-lg truncate">
+                        {player.playerName}
+                        {player.playerId === user?.uid && (
+                          <span className="text-kahoot-green text-sm ml-2 font-bold">(Tu)</span>
+                        )}
+                      </span>
+
+                      <span className={`w-16 text-right font-mono font-bold ${
+                        leaderboardRevealed
+                          ? player.roundScore >= 80 ? 'text-kahoot-green' :
+                            player.roundScore >= 60 ? 'text-kahoot-yellow' : 'text-kahoot-red'
+                          : 'text-white/30'
+                      }`}>
+                        {leaderboardRevealed ? `+${player.roundScore}` : '...'}
+                      </span>
+
+                      <motion.span
+                        layout
+                        className="w-16 text-right font-mono font-black text-xl"
+                      >
+                        {leaderboardRevealed ? player.avgScore : '?'}
+                      </motion.span>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </LayoutGroup>
+          </motion.div>
+        </div>
+      )}
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 py-6 space-y-6">
@@ -432,110 +537,6 @@ export default function Results() {
               </div>
             ))}
           </motion.div>
-        )}
-
-        {/* Full-Screen Dramatic Leaderboard (ranked rounds only) */}
-        {roundResults && game.players && isRankedRound && (
-          <div className="min-h-[70vh] flex flex-col justify-center py-8">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
-            >
-              <h2 className="text-3xl font-black mb-2 text-center flex items-center justify-center gap-3">
-                <TrendingUp className="w-8 h-8 text-kahoot-green" />
-                Ranking
-              </h2>
-              <p className="text-white/40 text-sm font-bold text-center mb-8 uppercase tracking-widest">
-                {leaderboardRevealed ? 'Posiciones actualizadas' : 'Actualizando posiciones...'}
-              </p>
-
-              {/* Column Headers */}
-              <div className="flex items-center gap-4 px-4 py-2 text-[10px] text-white/50 uppercase tracking-widest font-bold border-b border-white/10 mb-3 max-w-2xl mx-auto">
-                <div className="w-12"></div>
-                <span className="flex-1">Jugador</span>
-                <span className="w-16 text-right">Ronda</span>
-                <span className="w-16 text-right">Prom</span>
-              </div>
-
-              <LayoutGroup>
-                <div className="space-y-2 max-w-2xl mx-auto">
-                  {displayRankings.map((player) => {
-                    const prevRank = rankedRoundsPlayed > 1
-                      ? initialRankings.findIndex(p => p.playerId === player.playerId) + 1
-                      : 0;
-                    const delta = prevRank > 0 ? prevRank - player.rank : 0;
-                    const showDelta = leaderboardRevealed && delta !== 0;
-
-                    return (
-                      <motion.div
-                        key={player.playerId}
-                        layout
-                        transition={{ layout: { type: 'spring', stiffness: 200, damping: 25 } }}
-                        className={`flex items-center gap-4 p-4 rounded-xl ${
-                          player.playerId === user?.uid
-                            ? 'bg-kahoot-green/15 border-2 border-kahoot-green/30'
-                            : 'bg-white/5 border-2 border-transparent'
-                        }`}
-                      >
-                        <div className="flex items-center gap-2">
-                          <motion.div
-                            layout
-                            className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-lg ${
-                              !leaderboardRevealed
-                                ? 'bg-white/20'
-                                : player.rank === 1
-                                ? 'bg-yellow-500 text-black'
-                                : player.rank === 2
-                                ? 'bg-gray-400 text-black'
-                                : player.rank === 3
-                                ? 'bg-amber-600 text-black'
-                                : 'bg-white/20'
-                            }`}
-                          >
-                            {leaderboardRevealed ? player.rank : '?'}
-                          </motion.div>
-                          {showDelta && (
-                            <motion.span
-                              initial={{ scale: 0, opacity: 0 }}
-                              animate={{ scale: 1, opacity: 1 }}
-                              transition={{ delay: 0.3, type: 'spring', stiffness: 400 }}
-                              className={`text-xs font-black ${delta > 0 ? 'text-kahoot-green' : 'text-kahoot-red'}`}
-                            >
-                              {delta > 0 ? `↑${delta}` : `↓${Math.abs(delta)}`}
-                            </motion.span>
-                          )}
-                        </div>
-
-                        <span className="flex-1 font-bold text-lg truncate">
-                          {player.playerName}
-                          {player.playerId === user?.uid && (
-                            <span className="text-kahoot-green text-sm ml-2 font-bold">(Tu)</span>
-                          )}
-                        </span>
-
-                        <span className={`w-16 text-right font-mono font-bold ${
-                          leaderboardRevealed
-                            ? player.roundScore >= 80 ? 'text-kahoot-green' :
-                              player.roundScore >= 60 ? 'text-kahoot-yellow' : 'text-kahoot-red'
-                            : 'text-white/30'
-                        }`}>
-                          {leaderboardRevealed ? `+${player.roundScore}` : '...'}
-                        </span>
-
-                        <motion.span
-                          layout
-                          className="w-16 text-right font-mono font-black text-xl"
-                        >
-                          {leaderboardRevealed ? player.avgScore : '?'}
-                        </motion.span>
-                      </motion.div>
-                    );
-                  })}
-                </div>
-              </LayoutGroup>
-            </motion.div>
-          </div>
         )}
 
         {/* Diagnostic message for non-ranked rounds */}
