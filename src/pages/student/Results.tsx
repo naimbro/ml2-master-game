@@ -76,11 +76,17 @@ export default function Results() {
       const processRoundEnd = httpsCallable(functions, 'processRoundEnd');
       await processRoundEnd({ gameCode, round: game.currentRound });
       setEvaluationComplete(true);
+
+      // Last round: skip leaderboard, go straight to podium
+      if (game.currentRound >= game.totalRounds) {
+        await endGame();
+        // Keep isProcessing=true to show spinner until navigation fires
+        return;
+      }
     } catch (err) {
       console.error('Process round error:', err);
-    } finally {
-      setIsProcessing(false);
     }
+    setIsProcessing(false);
   };
 
   const handleNextRound = async () => {

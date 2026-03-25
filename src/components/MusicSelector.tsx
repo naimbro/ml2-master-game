@@ -36,7 +36,7 @@ export default function MusicSelector() {
       </button>
 
       {open && (
-        <div className="absolute bottom-full mb-2 right-0 w-48 bg-[#1a0a3e] border-2 border-white/15 rounded-xl shadow-2xl overflow-hidden z-50">
+        <div className="absolute top-full mt-2 right-0 w-48 bg-[#1a0a3e] border-2 border-white/15 rounded-xl shadow-2xl overflow-hidden z-50">
           {MUSIC_OPTIONS.map((opt) => (
             <button
               key={opt.id}

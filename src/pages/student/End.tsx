@@ -36,12 +36,15 @@ export default function End() {
   const [reportLoading, setReportLoading] = useState(false);
   const [signalsLoading, setSignalsLoading] = useState(false);
   const celebrationPlayed = useRef(false);
+  const rankingsCalculated = useRef(false);
   // revealStage: 0=suspense → 1=3rd → 2=2nd → 3=1st → 4=done (show everything)
   const [revealStage, setRevealStage] = useState(0);
+  const [announcement, setAnnouncement] = useState<string | null>(null);
 
-  // Calculate final rankings
+  // Calculate final rankings (run once)
   useEffect(() => {
-    if (!gameCode || !game) return;
+    if (!gameCode || !game || rankingsCalculated.current) return;
+    rankingsCalculated.current = true;
 
     const calculateFinalRankings = async () => {
       try {
@@ -98,48 +101,61 @@ export default function End() {
     calculateFinalRankings();
   }, [gameCode, game]);
 
-  // Staged podium reveal — adapts to player count
+  // Staged podium reveal — adapts to player count, with suspense announcements
+  // No cleanup — timers must survive dependency ref changes from Firestore updates
   useEffect(() => {
     if (finalRankings.length > 0 && !loadingRankings && !celebrationPlayed.current) {
       celebrationPlayed.current = true;
       const numPodium = Math.min(finalRankings.length, 3);
-      const timers: ReturnType<typeof setTimeout>[] = [];
 
-      // Drum roll
-      timers.push(setTimeout(() => { playDrumRoll(); }, 500));
+      // Drum roll to build tension
+      setTimeout(() => { playDrumRoll(); }, 500);
+
+      let t = 3000; // current timeline position
 
       if (numPodium >= 3) {
-        // 3rd place
-        timers.push(setTimeout(() => {
+        // Announce 3rd
+        setTimeout(() => { setAnnouncement('En tercer lugar...'); }, t);
+        t += 2500;
+        // Reveal 3rd
+        setTimeout(() => {
+          setAnnouncement(null);
           setRevealStage(1);
           playApplause(1);
           confettiSmallBurst();
-        }, 2000));
+        }, t);
+        t += 3500;
       }
 
       if (numPodium >= 2) {
-        // 2nd place
-        const t2nd = numPodium >= 3 ? 4000 : 2000;
-        timers.push(setTimeout(() => {
+        // Announce 2nd
+        setTimeout(() => { setAnnouncement('En segundo lugar...'); }, t);
+        t += 2500;
+        // Reveal 2nd
+        setTimeout(() => {
+          setAnnouncement(null);
           setRevealStage(2);
           playApplause(2);
           confettiBurst();
-        }, t2nd));
+        }, t);
+        t += 3500;
       }
 
-      // 1st place
-      const t1st = numPodium >= 3 ? 6000 : numPodium >= 2 ? 4000 : 2000;
-      timers.push(setTimeout(() => {
+      // Announce 1st
+      setTimeout(() => { setAnnouncement('Y el primer lugar es...'); playDrumRoll(); }, t);
+      t += 3000;
+      // Reveal 1st
+      setTimeout(() => {
+        setAnnouncement(null);
         setRevealStage(3);
         playPodiumFanfare();
         confettiPodium();
         confettiStars();
-      }, t1st));
+      }, t);
+      t += 2000;
 
       // Show everything else
-      timers.push(setTimeout(() => { setRevealStage(4); }, t1st + 1500));
-
-      return () => { timers.forEach(clearTimeout); };
+      setTimeout(() => { setRevealStage(4); }, t);
     }
   }, [finalRankings, loadingRankings]);
 
@@ -361,6 +377,24 @@ export default function End() {
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 py-6 space-y-8">
+        {/* Suspense Announcement */}
+        <AnimatePresence>
+          {announcement && (
+            <motion.div
+              key="announcement"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 1.1 }}
+              transition={{ duration: 0.4 }}
+              className="text-center py-8"
+            >
+              <p className="text-3xl md:text-4xl font-black text-white/90 animate-pulse">
+                {announcement}
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Podium — staged reveal */}
         <div className="flex justify-center items-end gap-3 md:gap-5 h-72 mb-8">
           <AnimatePresence>
