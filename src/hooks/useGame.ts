@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { doc, onSnapshot, updateDoc, collection, query, where, addDoc, Timestamp, serverTimestamp } from 'firebase/firestore';
 import { httpsCallable } from 'firebase/functions';
 import { db, functions } from '../lib/firebase';
-import type { Game, Player, Submission, RoundResults, GameStatus } from '../types/game';
+import type { Game, Player, Submission, RoundResults, GameStatus, MCResponse } from '../types/game';
 import { useAuth } from './useAuth';
 
 interface UseGameReturn {
@@ -16,6 +16,7 @@ interface UseGameReturn {
   joinGame: (gameCode: string, playerName: string) => Promise<void>;
   startGame: () => Promise<void>;
   submitAnswer: (response: string) => Promise<void>;
+  submitMCBlock: (mcResponses: MCResponse[], blockScore: number) => Promise<void>;
   nextRound: () => Promise<void>;
   endGame: () => Promise<void>;
 
@@ -166,6 +167,33 @@ export function useGame(gameCode: string | undefined): UseGameReturn {
     });
   }, [gameCode, user, game, currentPlayer]);
 
+  const submitMCBlock = useCallback(async (mcResponses: MCResponse[], blockScore: number) => {
+    if (!gameCode || !user || !game) return;
+
+    const submissionsRef = collection(db, 'games', gameCode, 'submissions');
+
+    const submission: Omit<Submission, 'id'> = {
+      gameCode,
+      playerId: user.uid,
+      playerName: currentPlayer?.name || user.displayName || 'Anonimo',
+      round: game.currentRound,
+      response: '',  // empty for MC
+      submittedAt: Timestamp.now(),
+      evaluated: true,  // no AI eval needed
+      mcResponses,
+      mcBlockScore: blockScore,
+      evaluation: {
+        finalScore: blockScore,
+        evaluations: [],
+        conceptsIdentified: [],
+        processedAt: Timestamp.now(),
+      },
+    };
+
+    await addDoc(submissionsRef, submission);
+    // NO fire-and-forget evaluateSubmission call for MC blocks
+  }, [gameCode, user, game, currentPlayer]);
+
   const nextRound = useCallback(async () => {
     if (!gameCode || !isHost || !game) return;
 
@@ -248,6 +276,7 @@ export function useGame(gameCode: string | undefined): UseGameReturn {
     joinGame,
     startGame,
     submitAnswer,
+    submitMCBlock,
     nextRound,
     endGame,
     submissions,

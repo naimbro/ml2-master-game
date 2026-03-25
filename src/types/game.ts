@@ -64,6 +64,9 @@ export interface Submission {
   submittedAt: Timestamp;
   evaluated: boolean;
   evaluation?: SubmissionEvaluation;
+  // MC block fields
+  mcResponses?: MCResponse[];
+  mcBlockScore?: number;
 }
 
 export interface SubmissionEvaluation {
@@ -127,6 +130,30 @@ export interface LeaderboardEntry {
 }
 
 // =====================================
+// MULTIPLE CHOICE TYPES
+// =====================================
+
+export interface MCOption {
+  id: string;        // 'A', 'B', 'C', 'D'
+  text: string;
+}
+
+export interface MCQuestion {
+  question: string;
+  options: MCOption[];
+  correctOptionIndex: number;
+  timeLimitSeconds: number;
+}
+
+export interface MCResponse {
+  questionIndex: number;
+  selectedOptionId: string | null;  // null if timed out
+  responseTimeMs: number;
+  correct: boolean;
+  pointsAwarded: number;
+}
+
+// =====================================
 // CONTENT TYPES (imported during game creation)
 // =====================================
 
@@ -155,6 +182,8 @@ export interface Scenario {
   difficulty?: 'easy' | 'medium' | 'hard';
   ranked?: boolean;
   durationSeconds?: number;
+  type?: 'open' | 'multiple_choice';    // default 'open'
+  mcQuestions?: MCQuestion[];
   context: string;
   question: string;
   conceptTags: string[];

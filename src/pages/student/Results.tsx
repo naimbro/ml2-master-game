@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Trophy, TrendingUp, ArrowRight, MessageSquare, Info, Code } from 'lucide-react';
+import { Trophy, TrendingUp, ArrowRight, MessageSquare, Info, Code, CheckCircle, XCircle, Zap } from 'lucide-react';
 import { useGame } from '../../hooks/useGame';
 import { useAuth } from '../../hooks/useAuth';
 import { httpsCallable } from 'firebase/functions';
@@ -120,7 +120,9 @@ export default function Results() {
   const userSubmission = submissions.find(s => s.playerId === user?.uid);
   const userEvaluation = userSubmission?.evaluation;
   const userRank = roundResults?.rankings.find(r => r.playerId === user?.uid);
-  const isRankedRound = game?.scenarios?.[game.currentRound - 1]?.ranked !== false;
+  const currentScenario = game?.scenarios?.[game.currentRound - 1];
+  const isRankedRound = currentScenario?.ranked !== false;
+  const isMCRound = currentScenario?.type === 'multiple_choice';
 
   // Judge bar colors (Kahoot answer colors)
   const JUDGE_COLORS = ['bg-kahoot-red', 'bg-kahoot-blue', 'bg-kahoot-green'];
@@ -145,8 +147,79 @@ export default function Results() {
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 py-6 space-y-6">
-        {/* User Score Card */}
-        {userEvaluation && (
+        {/* MC Round Results (simplified) */}
+        {isMCRound && userSubmission && (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="dramatic-card p-6"
+          >
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <Zap className="w-5 h-5 text-kahoot-yellow" />
+                <h2 className="text-xl font-black">Resultado Kahoot</h2>
+              </div>
+              {userRank && (
+                <motion.div
+                  initial={{ scale: 0, rotate: -180 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={{ type: 'spring', stiffness: 200, delay: 0.3 }}
+                  className="flex items-center gap-2"
+                >
+                  <Trophy
+                    className={`w-6 h-6 ${
+                      userRank.rank === 1 ? 'text-yellow-400'
+                        : userRank.rank === 2 ? 'text-gray-300'
+                        : userRank.rank === 3 ? 'text-amber-600'
+                        : 'text-white/50'
+                    }`}
+                  />
+                  <span className="text-lg font-black">#{userRank.rank}</span>
+                </motion.div>
+              )}
+            </div>
+
+            <div className="text-center mb-6">
+              <motion.div
+                initial={{ scale: 0.3, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ type: 'spring', stiffness: 200, delay: 0.2 }}
+                className={`text-6xl font-black ${
+                  (userSubmission.mcBlockScore || 0) >= 80 ? 'text-kahoot-green'
+                    : (userSubmission.mcBlockScore || 0) >= 40 ? 'text-kahoot-yellow'
+                    : 'text-kahoot-red'
+                }`}
+              >
+                {userSubmission.mcBlockScore || 0}
+              </motion.div>
+              <p className="text-white/50 text-sm font-bold">Puntaje del Bloque</p>
+            </div>
+
+            {userSubmission.mcResponses && currentScenario?.mcQuestions && (
+              <div className="space-y-3 max-w-md mx-auto">
+                {userSubmission.mcResponses.map((r: { questionIndex: number; correct: boolean; pointsAwarded: number; selectedOptionId: string | null }, i: number) => (
+                  <div key={i} className="flex items-center gap-3 p-3 bg-white/5 rounded-xl">
+                    {r.correct ? (
+                      <CheckCircle className="w-6 h-6 text-kahoot-green shrink-0" />
+                    ) : (
+                      <XCircle className="w-6 h-6 text-kahoot-red shrink-0" />
+                    )}
+                    <span className="text-sm text-white/80 font-medium flex-1 text-left">
+                      {currentScenario.mcQuestions![i]?.question?.slice(0, 80)}...
+                    </span>
+                    <span className="font-mono font-bold text-sm">
+                      {r.pointsAwarded}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </motion.div>
+        )}
+
+        {/* User Score Card (open rounds only) */}
+        {!isMCRound && userEvaluation && (
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}

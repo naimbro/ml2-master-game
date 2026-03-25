@@ -1,0 +1,77 @@
+{
+  "sessionId": "session_4_rag_applied",
+  "globalInstructions": "Evalua SOLO lo que esta escrito. Los alumnos YA CONSTRUYERON un RAG en notebooks — espera razonamiento de practicante, no definiciones de tutorial. Premia causa-efecto sobre terminologia. Penaliza vaguedad y tecnicismos no ensenados. Usa 'judgeFocus' del escenario como ancla. Rondas de 3 minutos: premia densidad, no extension.",
+  "dimensions": [
+    {
+      "id": "pipeline_design",
+      "name": "Diseno de Pipeline",
+      "weight": 0.40,
+      "description": "Decisiones de diseno en cada etapa del pipeline RAG: chunking (parametros, criterio de corte), retrieval (tipo, top-k), prompt construction (instrucciones al LLM). Espera RAZONAMIENTO sobre por que cada decision, no solo listar pasos.",
+      "level_100": "Decisiones concretas, justificadas con causa-efecto, adaptadas al caso. Conecta parametros con consecuencias. En 3 minutos: nails the 3 most important things concisely.",
+      "level_60": "Decisiones presentes pero genericas o sin justificacion. Sabe los pasos pero no por que cada uno. Le falta conectar con el caso especifico.",
+      "level_20": "Solo enumera pasos del pipeline sin tomar decisiones ni justificar. Respuesta de tutorial, no de practicante."
+    },
+    {
+      "id": "diagnostic_evaluation",
+      "name": "Diagnostico y Evaluacion",
+      "weight": 0.35,
+      "description": "Capacidad de identificar fallas, evaluar calidad de output, distinguir problemas de retrieval vs generacion. Espera CAUSA-EFECTO, no vago 'podria fallar'.",
+      "level_100": "Diagnostico preciso con causa-efecto. Distingue retrieval de generacion. Identifica alucinacion vs evidencia. Soluciones operacionales, no 'usar mejor modelo'.",
+      "level_60": "Identifica que algo falla pero no precisa la causa o confunde la etapa. Soluciones vagas o genericas.",
+      "level_20": "No puede diagnosticar. Respuesta generica tipo 'hay que mejorar el sistema'."
+    },
+    {
+      "id": "applied_precision",
+      "name": "Precision Aplicada",
+      "weight": 0.25,
+      "description": "Conciso, especifico, sin filler. Penaliza buzzwords no ensenados (LangChain, FAISS, etc. sin justificacion). Premia lenguaje operacional (que HACER, no que SABER).",
+      "level_100": "Cada oracion aporta. Lenguaje operacional. Sin buzzwords. Va directo al punto en 3 minutos.",
+      "level_60": "Mezcla contenido util con filler o buzzwords. Algunas partes operacionales, otras genericas.",
+      "level_20": "Puro filler, buzzwords, o repeticion de la pregunta. No dice nada accionable."
+    }
+  ],
+  "hardPenalties": [
+    {
+      "condition": "Confunde indexacion (offline, una vez) con consulta (online, cada query)",
+      "cap": 60,
+      "dimension": "pipeline_design"
+    },
+    {
+      "condition": "Propone 'usar IA' o 'usar mejor modelo' para mejorar RAG sin especificar QUE paso del pipeline cambiar",
+      "cap": 60,
+      "dimension": "pipeline_design"
+    },
+    {
+      "condition": "En la ronda de evaluacion de calidad (donde se presenta output RAG con chunk fuente): no puede identificar que partes de la respuesta son evidencia y cuales son alucinacion",
+      "cap": 60,
+      "dimension": "diagnostic_evaluation"
+    }
+  ],
+  "softPenalties": [
+    {
+      "condition": "Tecnicismos no ensenados sin justificacion (FAISS, LangChain, cosine similarity, HyDE, reranking)",
+      "deduction": -15,
+      "dimension": "applied_precision"
+    },
+    {
+      "condition": "Respuesta generica aplicable a cualquier caso RAG sin conectar con el caso especifico",
+      "deduction": -15,
+      "dimension": "diagnostic_evaluation"
+    },
+    {
+      "condition": "Filler/padding (repetir la pregunta, frases vacias, introduccion innecesaria)",
+      "deduction": -10,
+      "dimension": "applied_precision"
+    },
+    {
+      "condition": "No mencionar trazabilidad/fuentes cuando la ronda lo requiere (R3, R5, R6)",
+      "deduction": -10,
+      "dimension": "diagnostic_evaluation"
+    },
+    {
+      "condition": "Solucionismo RAG: asumir que RAG resuelve todo sin mencionar limitaciones",
+      "deduction": -10,
+      "dimension": "diagnostic_evaluation"
+    }
+  ]
+}

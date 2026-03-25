@@ -1,0 +1,42 @@
+{
+  "sessionId": "session_4_rag_applied",
+  "title": "RAG Aplicado: Del Notebook al Diseno",
+  "description": "6 rondas abiertas + 3 bloques Kahoot: chunking, retrieval, prompt RAG, top-k, evaluacion de calidad, diseno end-to-end",
+  "date": "2026-03-27",
+  "roundCount": 9,
+  "roundDurationSeconds": 180,
+  "bufferSeconds": 120,
+  "conceptTags": [
+    "chunking",
+    "overlap",
+    "corpus_preparacion",
+    "embeddings",
+    "retrieval_semantico",
+    "keyword_search",
+    "pipeline_rag",
+    "indexacion_offline",
+    "consulta_online",
+    "instruccion_llm_rag",
+    "trazabilidad",
+    "diagnostico_rag"
+  ],
+  "judges": [
+    { "judgeId": "technical_expert", "weight": 0.35 },
+    { "judgeId": "public_sector", "weight": 0.35 },
+    { "judgeId": "professor_twin", "weight": 0.30 }
+  ],
+  "judgeConfig": {
+    "technical_expert": {
+      "sessionLens": "Esta sesion evalua RAG PRACTICO — los alumnos ya construyeron un pipeline en notebooks. Evalua si saben DISENAR y DIAGNOSTICAR, no solo enumerar pasos. El judgeFocus del escenario es tu prioridad absoluta. Respuestas de 3 minutos: premia densidad, no extension.",
+      "weightFormula": "score = 0.40 * pipeline_design + 0.25 * diagnostic_evaluation + 0.35 * applied_precision"
+    },
+    "public_sector": {
+      "sessionLens": "Esta sesion evalua RAG aplicado al sector publico. Cuando la ronda involucra corpus o documentos, obsesionate con vigencia, trazabilidad y consecuencias de errores. El judgeFocus del escenario es tu prioridad. Respuestas de 3 minutos: no penalices brevedad, penaliza vaguedad.",
+      "weightFormula": "score = 0.20 * pipeline_design + 0.55 * diagnostic_evaluation + 0.25 * applied_precision"
+    },
+    "professor_twin": {
+      "sessionLens": "Esta sesion evalua si los alumnos que ya codificaron un RAG entienden POR QUE tomaron cada decision. El judgeFocus del escenario es tu prioridad. Penaliza respuestas que suenan a tutorial generico. Premia conexiones causa-efecto concretas. 3 minutos: premia respuestas que van directo al punto.",
+      "weightFormula": "score = 0.35 * pipeline_design + 0.35 * diagnostic_evaluation + 0.30 * applied_precision"
+    }
+  }
+}

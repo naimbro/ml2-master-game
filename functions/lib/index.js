@@ -264,6 +264,10 @@ exports.evaluateSubmission = functions
         if (!scenario) {
             throw new functions.https.HttpsError('not-found', 'Scenario not found');
         }
+        // MC blocks are scored client-side — skip AI evaluation
+        if (scenario.type === 'multiple_choice') {
+            return { success: true, skipped: 'multiple_choice' };
+        }
         const judgesDoc = await db.collection('config').doc('judges').get();
         const judgesConfig = judgesDoc.exists ? judgesDoc.data() : null;
         const judgeWeights = sessionConfig.judges || [

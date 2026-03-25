@@ -22,6 +22,11 @@ import session3Scenarios from '../../../content/sessions/ml2-2025/session_3_rag/
 import session3Rubric from '../../../content/sessions/ml2-2025/session_3_rag/rubric.json';
 import session3KnowledgeBase from '../../../content/sessions/ml2-2025/session_3_rag/knowledge_base.md?raw';
 
+import session4Config from '../../../content/sessions/ml2-2025/session_4_rag_applied/config.json';
+import session4Scenarios from '../../../content/sessions/ml2-2025/session_4_rag_applied/scenarios.json';
+import session4Rubric from '../../../content/sessions/ml2-2025/session_4_rag_applied/rubric.json';
+import session4KnowledgeBase from '../../../content/sessions/ml2-2025/session_4_rag_applied/knowledge_base.md?raw';
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface SessionOption {
   id: string;
@@ -69,6 +74,17 @@ const availableSessions: SessionOption[] = [
     scenarios: session3Scenarios,
     rubric: session3Rubric,
     knowledgeBase: session3KnowledgeBase,
+  },
+  {
+    id: 'session_4_rag_applied',
+    title: session4Config.title,
+    description: session4Config.description,
+    rounds: session4Scenarios.length,
+    duration: Math.round(session4Config.roundDurationSeconds / 60),
+    config: session4Config,
+    scenarios: session4Scenarios,
+    rubric: session4Rubric,
+    knowledgeBase: session4KnowledgeBase,
   },
 ];
 
