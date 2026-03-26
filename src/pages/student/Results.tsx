@@ -166,8 +166,8 @@ export default function Results() {
         playTensionSweep();
       }, 2200);
 
-      // Phase 3 "reveal": cascade top N from bottom (after spring settles + pause)
-      let t = 7000; // 2.2s show + 3.5s spring + 1.3s pause to absorb
+      // Phase 3 "reveal": cascade top N from bottom (after tween + pause)
+      let t = 6500; // 2.2s show + 3s tween + 1.3s pause to absorb
       setTimeout(() => setLbPhase('reveal'), t);
       for (let step = 1; step <= showN; step++) {
         const rank = showN - step + 1;
@@ -301,7 +301,7 @@ export default function Results() {
                     <motion.div
                       key={player.playerId}
                       layout
-                      transition={{ layout: { type: 'spring', duration: 3.5, bounce: 0.15 } }}
+                      transition={{ layout: { type: 'tween', duration: 3, ease: [0.4, 0, 0.2, 1] } }}
                       className={`flex items-center gap-4 p-4 rounded-xl transition-all duration-500 ${
                         isSpotlight
                           ? 'bg-kahoot-green/25 border-2 border-kahoot-green/50 shadow-lg shadow-kahoot-green/20 scale-[1.02]'
