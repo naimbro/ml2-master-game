@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { motion, LayoutGroup } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, TrendingUp, ArrowRight, MessageSquare, Info, Code, CheckCircle, XCircle, Zap } from 'lucide-react';
 import { useGame } from '../../hooks/useGame';
 import { useAuth } from '../../hooks/useAuth';
@@ -189,12 +189,12 @@ export default function Results() {
   const hasPrevData = rankedRoundsPlayed > 1;
   const topN = Math.min(numPlayers, TOP_N);
 
-  // Top N for animated leaderboard
+  // Top N for animated leaderboard — always in FINAL order, use y-offset for initial positions
+  const ROW_H = 64; // row height (p-4 = 32px padding + ~24px text + space-y-2 = 8px gap)
   const topRankings = cumulativeRankings.slice(0, topN);
   const topInitial = initialRankings.filter(p =>
     topRankings.some(t => t.playerId === p.playerId)
   );
-  const displayTop = lbPhase === 'show' ? topInitial : topRankings;
   const isDetailRevealed = (rank: number) => revealedCount > 0 && rank > topN - revealedCount;
   const lastRevealedRank = topN > 0 ? topN - revealedCount + 1 : 0;
   const allRevealed = lbPhase === 'done';
@@ -281,122 +281,130 @@ export default function Results() {
               <span className="w-16 text-right">Prom</span>
             </div>
 
-            {/* Animated Top N */}
-            <LayoutGroup>
-              <div className="space-y-2 max-w-2xl mx-auto">
-                {displayTop.map((player) => {
-                  const revealed = isDetailRevealed(player.rank) || allRevealed;
-                  const isSpotlight = player.rank === lastRevealedRank && revealedCount > 0 && !allRevealed;
-                  const prevRank = hasPrevData
-                    ? initialRankings.findIndex(p => p.playerId === player.playerId) + 1
-                    : 0;
-                  const delta = prevRank > 0 ? prevRank - player.rank : 0;
-                  const showDelta = revealed && delta !== 0;
+            {/* Animated Top N — explicit y-offset animation (no LayoutGroup) */}
+            <div className="space-y-2 max-w-2xl mx-auto">
+              {topRankings.map((player, finalIdx) => {
+                // Calculate y-offset to show element at its INITIAL position
+                const initialIdx = topInitial.findIndex(p => p.playerId === player.playerId);
+                const yOffset = initialIdx >= 0 ? (initialIdx - finalIdx) * ROW_H : 0;
+                const isSwapping = lbPhase === 'swap';
+                const settled = lbPhase === 'reveal' || lbPhase === 'done';
 
-                  const showingPrev = lbPhase === 'show' && hasPrevData;
-                  const displayRank = revealed ? player.rank : showingPrev ? prevRank : '?';
-                  const displayAvg = revealed ? player.avgScore : showingPrev ? Math.round(player.prevAvg * 10) / 10 : '?';
+                const revealed = isDetailRevealed(player.rank) || allRevealed;
+                const isSpotlight = player.rank === lastRevealedRank && revealedCount > 0 && !allRevealed;
+                const prevRank = hasPrevData
+                  ? initialRankings.findIndex(p => p.playerId === player.playerId) + 1
+                  : 0;
+                const delta = prevRank > 0 ? prevRank - player.rank : 0;
+                const showDelta = revealed && delta !== 0;
 
-                  return (
-                    <motion.div
-                      key={player.playerId}
-                      layout
-                      transition={{ layout: { type: 'tween', duration: 3, ease: [0.4, 0, 0.2, 1] } }}
-                      className={`flex items-center gap-4 p-4 rounded-xl transition-all duration-500 ${
-                        isSpotlight
-                          ? 'bg-kahoot-green/25 border-2 border-kahoot-green/50 shadow-lg shadow-kahoot-green/20 scale-[1.02]'
-                          : player.playerId === user?.uid
-                          ? 'bg-kahoot-green/15 border-2 border-kahoot-green/30'
-                          : 'bg-white/5 border-2 border-transparent'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2">
-                        <motion.div
-                          layout
-                          className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-lg transition-colors duration-500 ${
-                            !revealed
-                              ? showingPrev ? 'bg-white/15' : 'bg-white/10'
-                              : player.rank === 1
-                              ? 'bg-yellow-500 text-black'
-                              : player.rank === 2
-                              ? 'bg-gray-400 text-black'
-                              : player.rank === 3
-                              ? 'bg-amber-600 text-black'
-                              : 'bg-white/20'
-                          }`}
-                        >
-                          {revealed ? (
-                            <motion.span
-                              initial={{ rotateX: 90, opacity: 0 }}
-                              animate={{ rotateX: 0, opacity: 1 }}
-                              transition={{ duration: 0.3, ease: 'easeOut' }}
-                            >
-                              {displayRank}
-                            </motion.span>
-                          ) : (
-                            <span className={showingPrev ? 'text-white/60' : ''}>
-                              {displayRank}
-                            </span>
-                          )}
-                        </motion.div>
+                const showingPrev = lbPhase === 'show' && hasPrevData;
+                const displayRank = revealed ? player.rank : showingPrev ? prevRank : '?';
+                const displayAvg = revealed ? player.avgScore : showingPrev ? Math.round(player.prevAvg * 10) / 10 : '?';
+
+                return (
+                  <motion.div
+                    key={player.playerId}
+                    animate={{ y: (isSwapping || settled) ? 0 : yOffset }}
+                    transition={isSwapping
+                      ? { type: 'tween', duration: 3, ease: [0.25, 0.1, 0.25, 1] }
+                      : { duration: 0 }
+                    }
+                    className={`flex items-center gap-4 p-4 rounded-xl transition-colors duration-500 ${
+                      isSpotlight
+                        ? 'bg-kahoot-green/25 border-2 border-kahoot-green/50 shadow-lg shadow-kahoot-green/20'
+                        : player.playerId === user?.uid
+                        ? 'bg-kahoot-green/15 border-2 border-kahoot-green/30'
+                        : 'bg-white/5 border-2 border-transparent'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <div
+                        className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-lg transition-colors duration-500 ${
+                          !revealed
+                            ? showingPrev ? 'bg-white/15' : 'bg-white/10'
+                            : player.rank === 1
+                            ? 'bg-yellow-500 text-black'
+                            : player.rank === 2
+                            ? 'bg-gray-400 text-black'
+                            : player.rank === 3
+                            ? 'bg-amber-600 text-black'
+                            : 'bg-white/20'
+                        }`}
+                      >
+                        {revealed ? (
+                          <motion.span
+                            initial={{ rotateX: 90, opacity: 0 }}
+                            animate={{ rotateX: 0, opacity: 1 }}
+                            transition={{ duration: 0.3, ease: 'easeOut' }}
+                          >
+                            {displayRank}
+                          </motion.span>
+                        ) : (
+                          <span className={showingPrev ? 'text-white/60' : ''}>
+                            {displayRank}
+                          </span>
+                        )}
+                      </div>
+                      <AnimatePresence>
                         {showDelta && (
                           <motion.span
                             initial={{ scale: 0, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0, opacity: 0 }}
                             transition={{ delay: 0.2, type: 'spring', stiffness: 400 }}
                             className={`text-xs font-black ${delta > 0 ? 'text-kahoot-green' : 'text-kahoot-red'}`}
                           >
                             {delta > 0 ? `↑${delta}` : `↓${Math.abs(delta)}`}
                           </motion.span>
                         )}
-                      </div>
+                      </AnimatePresence>
+                    </div>
 
-                      {/* Names ALWAYS fully visible — watching them move is the drama */}
-                      <span className="flex-1 font-bold text-lg truncate">
-                        {player.playerName}
-                        {player.playerId === user?.uid && (
-                          <span className="text-kahoot-green text-sm ml-2 font-bold">(Tu)</span>
-                        )}
-                      </span>
+                    {/* Names ALWAYS fully visible — watching them move is the drama */}
+                    <span className="flex-1 font-bold text-lg truncate">
+                      {player.playerName}
+                      {player.playerId === user?.uid && (
+                        <span className="text-kahoot-green text-sm ml-2 font-bold">(Tu)</span>
+                      )}
+                    </span>
 
-                      <span className={`w-16 text-right font-mono font-bold transition-all duration-300 ${
-                        revealed
-                          ? player.roundScore >= 80 ? 'text-kahoot-green' :
-                            player.roundScore >= 60 ? 'text-kahoot-yellow' : 'text-kahoot-red'
-                          : 'text-white/20'
-                      }`}>
-                        {revealed ? (
-                          <motion.span
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.3 }}
-                          >
-                            +{player.roundScore}
-                          </motion.span>
-                        ) : '...'}
-                      </span>
+                    <span className={`w-16 text-right font-mono font-bold transition-all duration-300 ${
+                      revealed
+                        ? player.roundScore >= 80 ? 'text-kahoot-green' :
+                          player.roundScore >= 60 ? 'text-kahoot-yellow' : 'text-kahoot-red'
+                        : 'text-white/20'
+                    }`}>
+                      {revealed ? (
+                        <motion.span
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          +{player.roundScore}
+                        </motion.span>
+                      ) : '...'}
+                    </span>
 
-                      <motion.span
-                        layout
-                        className={`w-16 text-right font-mono font-black text-xl transition-all duration-500 ${
-                          revealed ? 'opacity-100' : showingPrev ? 'opacity-50' : 'opacity-20'
-                        }`}
-                      >
-                        {revealed ? (
-                          <motion.span
-                            initial={{ opacity: 0, scale: 0.5 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                          >
-                            {player.avgScore}
-                          </motion.span>
-                        ) : displayAvg}
-                      </motion.span>
-                    </motion.div>
-                  );
-                })}
-              </div>
-            </LayoutGroup>
+                    <span
+                      className={`w-16 text-right font-mono font-black text-xl transition-all duration-500 ${
+                        revealed ? 'opacity-100' : showingPrev ? 'opacity-50' : 'opacity-20'
+                      }`}
+                    >
+                      {revealed ? (
+                        <motion.span
+                          initial={{ opacity: 0, scale: 0.5 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                        >
+                          {player.avgScore}
+                        </motion.span>
+                      ) : displayAvg}
+                    </span>
+                  </motion.div>
+                );
+              })}
+            </div>
 
             {/* User position card if outside top N */}
             {allRevealed && !userInTop && userRankingEntry && (
