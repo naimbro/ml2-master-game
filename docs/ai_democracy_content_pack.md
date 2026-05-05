@@ -247,7 +247,7 @@ Si modificaste `content/judges/default_judges.json` (ej: ajustaste la
 personalidad de un juez), corre:
 
 ```bash
-node scripts/seed-firestore.js
+node scripts/seed-firestore.cjs
 ```
 
 Esto sube el archivo a Firestore. Solo necesario si cambias
@@ -393,7 +393,7 @@ npm run dev
 node scripts/scaffold-ai-democracy-units.cjs
 
 # Subir jueces a Firestore (despues de editar default_judges.json)
-node scripts/seed-firestore.js
+node scripts/seed-firestore.cjs
 
 # Build de produccion
 npm run build
