@@ -1,0 +1,21 @@
+{
+  "courseId": "ai_democracy_2026",
+  "name": "Inteligencia Artificial y Democracia",
+  "code": "AID-2026-1",
+  "description": "Curso del Minor en IA de la Universidad Adolfo Ibanez (UAI). Edicion 2026. Aborda el cruce entre IA y democracia en seis unidades narrativas: diagnostico inicial (backlash), tres unidades de amenazas (populismo de IA, sociedad de bots, sociedad orwelliana), y dos unidades de respuestas (democracia deliberativa y regulacion).",
+  "professorEmail": "naim.bro@gmail.com",
+  "university": "Universidad Adolfo Ibanez",
+  "program": "Minor en Inteligencia Artificial",
+  "syllabusUrl": "https://naimbro.github.io/teaching/2026_AI_democracy",
+  "startDate": "2026-08-01",
+  "endDate": "2026-11-30",
+  "sessions": [
+    "unidad_00_demo",
+    "unidad_01_backlash",
+    "unidad_02_populismo_ia",
+    "unidad_03_sociedad_bots",
+    "unidad_04_orwell",
+    "unidad_05_democracia_deliberativa",
+    "unidad_06_regulacion"
+  ]
+}

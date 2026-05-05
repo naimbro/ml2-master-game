@@ -27,9 +27,17 @@ import session4Scenarios from '../../../content/sessions/ml2-2025/session_4_rag_
 import session4Rubric from '../../../content/sessions/ml2-2025/session_4_rag_applied/rubric.json';
 import session4KnowledgeBase from '../../../content/sessions/ml2-2025/session_4_rag_applied/knowledge_base.md?raw';
 
+// AI y Democracia 2026 — sesion demo (las unidades 1-6 son placeholders, se importaran cuando tengan contenido real)
+import aydDemoConfig from '../../../content/sessions/ai_democracy_2026/unidad_00_demo/config.json';
+import aydDemoScenarios from '../../../content/sessions/ai_democracy_2026/unidad_00_demo/scenarios.json';
+import aydDemoRubric from '../../../content/sessions/ai_democracy_2026/unidad_00_demo/rubric.json';
+import aydDemoKnowledgeBase from '../../../content/sessions/ai_democracy_2026/unidad_00_demo/knowledge_base.md?raw';
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface SessionOption {
   id: string;
+  courseId: string;
+  courseName: string;
   title: string;
   description: string;
   rounds: number;
@@ -40,10 +48,17 @@ interface SessionOption {
   knowledgeBase: string;
 }
 
+const ML2_COURSE_ID = 'ml2-2025';
+const ML2_COURSE_NAME = 'Machine Learning II';
+const AYD_COURSE_ID = 'ai_democracy_2026';
+const AYD_COURSE_NAME = 'IA y Democracia';
+
 // Available sessions - would be dynamically loaded in production
 const availableSessions: SessionOption[] = [
   {
     id: 'session_1_ia_procesos_sector_publico',
+    courseId: ML2_COURSE_ID,
+    courseName: ML2_COURSE_NAME,
     title: 'Sesion 1: IA, Procesos y Sector Publico',
     description: '6 rondas: estructuracion de procesos, TRL, limites de IA, feria de familias, preferencias y estilo de trabajo',
     rounds: 6,
@@ -55,6 +70,8 @@ const availableSessions: SessionOption[] = [
   },
   {
     id: 'session_2_apis',
+    courseId: ML2_COURSE_ID,
+    courseName: ML2_COURSE_NAME,
     title: session2Config.title,
     description: session2Config.description,
     rounds: session2Scenarios.length,
@@ -66,6 +83,8 @@ const availableSessions: SessionOption[] = [
   },
   {
     id: 'session_3_rag',
+    courseId: ML2_COURSE_ID,
+    courseName: ML2_COURSE_NAME,
     title: session3Config.title,
     description: session3Config.description,
     rounds: session3Scenarios.length,
@@ -77,6 +96,8 @@ const availableSessions: SessionOption[] = [
   },
   {
     id: 'session_4_rag_applied',
+    courseId: ML2_COURSE_ID,
+    courseName: ML2_COURSE_NAME,
     title: session4Config.title,
     description: session4Config.description,
     rounds: session4Scenarios.length,
@@ -85,6 +106,19 @@ const availableSessions: SessionOption[] = [
     scenarios: session4Scenarios,
     rubric: session4Rubric,
     knowledgeBase: session4KnowledgeBase,
+  },
+  {
+    id: 'unidad_00_demo',
+    courseId: AYD_COURSE_ID,
+    courseName: AYD_COURSE_NAME,
+    title: aydDemoConfig.title,
+    description: aydDemoConfig.description,
+    rounds: aydDemoScenarios.length,
+    duration: Math.round(aydDemoConfig.roundDurationSeconds / 60),
+    config: aydDemoConfig,
+    scenarios: aydDemoScenarios,
+    rubric: aydDemoRubric,
+    knowledgeBase: aydDemoKnowledgeBase,
   },
 ];
 
@@ -116,7 +150,7 @@ export default function CreateGame() {
 
       await setDoc(gameRef, {
         gameCode,
-        courseId: 'ml2-2025',
+        courseId: selectedSession.courseId,
         sessionId: selectedSession.id,
         hostId: user.uid,
         hostName: user.displayName || user.email || 'Profesor',
@@ -242,74 +276,70 @@ export default function CreateGame() {
             Selecciona una sesion para comenzar
           </p>
 
-          {/* Session Selection */}
-          <div className="space-y-4 mb-8">
-            {availableSessions.map((session) => (
-              <div
-                key={session.id}
-                onClick={() => setSelectedSession(session)}
-                className={`dramatic-card p-6 cursor-pointer transition-all ${
-                  selectedSession?.id === session.id
-                    ? 'ring-2 ring-cyan-400 bg-cyan-500/10'
-                    : 'hover:bg-white/5'
-                }`}
-              >
-                <div className="flex items-start gap-4">
-                  <div
-                    className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                      selectedSession?.id === session.id
-                        ? 'bg-cyan-500'
-                        : 'bg-white/10'
-                    }`}
-                  >
-                    <BookOpen className="w-6 h-6" />
-                  </div>
+          {/* Session Selection - grouped by course */}
+          <div className="space-y-8 mb-8">
+            {Array.from(
+              availableSessions.reduce((acc, s) => {
+                if (!acc.has(s.courseId)) acc.set(s.courseId, { name: s.courseName, sessions: [] as SessionOption[] });
+                acc.get(s.courseId)!.sessions.push(s);
+                return acc;
+              }, new Map<string, { name: string; sessions: SessionOption[] }>()).entries()
+            ).map(([courseId, group]) => (
+              <div key={courseId}>
+                <h2 className="text-sm font-semibold uppercase tracking-wider text-white/50 mb-3 px-1">
+                  {group.name}
+                </h2>
+                <div className="space-y-4">
+                  {group.sessions.map((session) => (
+                    <div
+                      key={session.id}
+                      onClick={() => setSelectedSession(session)}
+                      className={`dramatic-card p-6 cursor-pointer transition-all ${
+                        selectedSession?.id === session.id
+                          ? 'ring-2 ring-cyan-400 bg-cyan-500/10'
+                          : 'hover:bg-white/5'
+                      }`}
+                    >
+                      <div className="flex items-start gap-4">
+                        <div
+                          className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                            selectedSession?.id === session.id ? 'bg-cyan-500' : 'bg-white/10'
+                          }`}
+                        >
+                          <BookOpen className="w-6 h-6" />
+                        </div>
 
-                  <div className="flex-1">
-                    <h3 className="text-lg font-bold mb-1">{session.title}</h3>
-                    <p className="text-white/60 text-sm mb-3">{session.description}</p>
+                        <div className="flex-1">
+                          <h3 className="text-lg font-bold mb-1">{session.title}</h3>
+                          <p className="text-white/60 text-sm mb-3">{session.description}</p>
 
-                    <div className="flex gap-4 text-sm text-white/50">
-                      <span className="flex items-center gap-1">
-                        <BookOpen className="w-4 h-4" />
-                        {session.rounds} rondas
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Clock className="w-4 h-4" />
-                        {session.duration} min/ronda
-                      </span>
+                          <div className="flex gap-4 text-sm text-white/50">
+                            <span className="flex items-center gap-1">
+                              <BookOpen className="w-4 h-4" />
+                              {session.rounds} rondas
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <Clock className="w-4 h-4" />
+                              {session.duration} min/ronda
+                            </span>
+                          </div>
+                        </div>
+
+                        <div
+                          className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
+                            selectedSession?.id === session.id ? 'border-cyan-400 bg-cyan-400' : 'border-white/30'
+                          }`}
+                        >
+                          {selectedSession?.id === session.id && (
+                            <Check className="w-4 h-4 text-black" />
+                          )}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-
-                  <div
-                    className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                      selectedSession?.id === session.id
-                        ? 'border-cyan-400 bg-cyan-400'
-                        : 'border-white/30'
-                    }`}
-                  >
-                    {selectedSession?.id === session.id && (
-                      <Check className="w-4 h-4 text-black" />
-                    )}
-                  </div>
+                  ))}
                 </div>
               </div>
             ))}
-
-            {/* Placeholder for more sessions */}
-            <div className="dramatic-card p-6 opacity-50 cursor-not-allowed">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center">
-                  <BookOpen className="w-6 h-6 text-white/30" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-white/50">Mas sesiones proximamente</h3>
-                  <p className="text-white/30 text-sm">
-                    Prompting, agentes, y mas...
-                  </p>
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* Create Button */}

@@ -1,0 +1,44 @@
+{
+  "_TODO": "Sesion en construccion. Reemplazar este config y los demas archivos antes de la primera clase de la unidad.",
+  "sessionId": "unidad_04_orwell",
+  "title": "Unidad 4: Amenazas — La IA en una sociedad orwelliana",
+  "description": "Vigilancia masiva, scoring social, predictive policing. La IA como herramienta de control biopolitico. Por completar.",
+  "date": "2026-09-26",
+  "roundCount": 1,
+  "roundDurationSeconds": 240,
+  "bufferSeconds": 90,
+  "conceptTags": [
+    "vigilancia_masiva",
+    "scoring_social",
+    "predictive_policing",
+    "biopolitica"
+  ],
+  "judges": [
+    {
+      "judgeId": "democracy_scholar",
+      "weight": 0.4
+    },
+    {
+      "judgeId": "policy_lawyer",
+      "weight": 0.3
+    },
+    {
+      "judgeId": "professor_twin_ayd",
+      "weight": 0.3
+    }
+  ],
+  "judgeConfig": {
+    "democracy_scholar": {
+      "sessionLens": "TODO: ajustar al foco final de la unidad. Por defecto: foco en si el estudiante identifica la tension democratica concreta y distingue legalidad de legitimidad.",
+      "weightFormula": "score = 0.50 * process_structuring + 0.30 * institutional_realism + 0.20 * precision_clarity"
+    },
+    "policy_lawyer": {
+      "sessionLens": "TODO: ajustar al foco final. Por defecto: foco en mecanismos de rendicion de cuentas operacionales y mapeo de actores con potestad concreta vs afectados sin voz.",
+      "weightFormula": "score = 0.20 * process_structuring + 0.65 * institutional_realism + 0.15 * precision_clarity"
+    },
+    "professor_twin_ayd": {
+      "sessionLens": "TODO: ajustar al foco final. Por defecto: foco en uso de tags solicitados, claridad y capacidad de tomar posicion bajo incertidumbre.",
+      "weightFormula": "score = 0.30 * process_structuring + 0.30 * institutional_realism + 0.40 * precision_clarity"
+    }
+  }
+}

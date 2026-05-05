@@ -1,0 +1,120 @@
+[
+  {
+    "id": "demo_r1_deepfake_electoral",
+    "order": 1,
+    "title": "Deepfake en periodo electoral",
+    "category": "Amenazas",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 240,
+    "requiredTags": ["DERECHO_EN_TENSION", "ACTOR_AFECTADO", "MECANISMO_RENDICION_CUENTAS", "REVERSIBILIDAD"],
+    "judgeFocus": "Prioriza identificacion de la tension entre libertad de expresion y proteccion del proceso electoral. Penaliza fuerte el solucionismo ('detectar deepfakes con IA') si no especifica quien decide y bajo que estandar. Si el estudiante propone bloqueo automatizado sin debido proceso, baja Identificacion del Dilema. Si trata a 'los votantes' como agente homogeneo, baja Mapeo de Actores.",
+    "context": "Faltan dos semanas para una eleccion presidencial en Chile. En redes sociales se viraliza un video manipulado por IA generativa que muestra a un candidato afirmando algo que nunca dijo, en un tono comprometedor. La plataforma X (Twitter) recibe una solicitud del Servel para retirar el video. La plataforma argumenta que (a) tecnicamente no puede verificar la manipulacion en menos de 24 horas, (b) hacerlo sentaria precedente para censura politica, (c) el Servel no es la autoridad competente segun sus terminos de servicio. El video acumula 4 millones de vistas en 48 horas.",
+    "question": "Responde en formato EXACTO con los siguientes tags. Maximo 12 lineas en total.\n\n[DERECHO_EN_TENSION] Nombra los dos derechos/valores en tension concreta (no abstractos).\n[ACTOR_AFECTADO] Identifica al menos 2 actores afectados, incluyendo uno sin voz organizada en este caso.\n[MECANISMO_RENDICION_CUENTAS] Propon un mecanismo concreto: quien decide, ante quien rinde cuentas, en que plazo, con que consecuencia si decide mal. NO basta con 'que sea transparente'.\n[REVERSIBILIDAD] Si la decision (retirar o no retirar) resulta equivocada, en que plazo y a que costo se puede revertir? Cual de las dos decisiones es mas reversible?",
+    "conceptTags": ["dilema_democratico", "deepfakes_electorales", "rendicion_de_cuentas"],
+    "referenceAnswer": "[DERECHO_EN_TENSION] Libertad de expresion (incluida la del autor del contenido y el derecho de los votantes a recibir informacion incluso falsa) vs. integridad del proceso electoral en periodo critico de campana.\n[ACTOR_AFECTADO] Candidato difamado (con voz organizada y abogados); votantes que ya vieron el video y no veran la rectificacion (sin voz, dispersos); plataforma X (con poder de decision pero sin mandato democratico para arbitrar).\n[MECANISMO_RENDICION_CUENTAS] Servel ordena bajada provisoria con plazo de 12h al titular para descargo; si la plataforma se niega, Tribunal Calificador de Elecciones resuelve en 24h; sancion es multa proporcional al tamano de la plataforma y publicacion obligatoria de la rectificacion en el mismo formato. Sin TCE, no hay accountability — el Servel solo no basta.\n[REVERSIBILIDAD] Retirar es reversible en horas (re-publicar). No retirar es irreversible: las 4M de vistas ya influyeron percepciones a 14 dias de la eleccion. La asimetria favorece bajada provisoria con derecho a apelacion, no espera.",
+    "idealAnswer": {
+      "keyPoints": [
+        "Identifica la tension entre libertad de expresion y proteccion del proceso electoral SIN reducirla a una sola.",
+        "Reconoce que 'los votantes' no es un actor unitario: los que vieron el video no son los mismos que veran la rectificacion.",
+        "Mecanismo concreto que separa actor decisor (Servel) de actor revisor (TCE) con plazos.",
+        "Reconoce la asimetria temporal: el dano del video se acumula en horas, la reversion judicial demora.",
+        "Distingue entre lo legal (terminos de servicio de la plataforma) y lo legitimo (autoridad democratica)."
+      ],
+      "expectedConcepts": ["tension_de_derechos", "actores_con_y_sin_voz", "mecanismo_operacional", "asimetria_temporal", "legitimidad_vs_legalidad"],
+      "commonMistakes": [
+        "Resolver el dilema con 'que la IA detecte los deepfakes automaticamente' (solucionismo).",
+        "Tratar a 'la ciudadania' o 'los votantes' como actor homogeneo.",
+        "Proponer transparencia o auditoria sin nombrar quien rinde cuentas y con que consecuencia.",
+        "Asumir que la solucion legal es automaticamente legitima.",
+        "Ignorar la asimetria temporal entre dano (horas) y proceso de revision (dias).",
+        "Confundir libertad de expresion del autor con derecho del publico a recibir informacion."
+      ],
+      "excellentResponseIndicators": [
+        "Distingue la libertad de expresion del autor del derecho del publico a recibir informacion.",
+        "Reconoce que la plataforma decide sin mandato democratico — y propone como suplir esa falta.",
+        "Mecanismo de accountability incluye plazo y consecuencia, no solo proceso.",
+        "Reconoce que la decision 'no retirar' es de hecho una decision con efectos politicos, no neutralidad.",
+        "Identifica al menos un actor afectado sin voz organizada (votantes dispersos, no-votantes con interes en la legitimidad)."
+      ]
+    }
+  },
+  {
+    "id": "demo_r2_chatbot_servicio_publico",
+    "order": 2,
+    "title": "Chatbot que filtra solicitudes ciudadanas",
+    "category": "Diseno Institucional",
+    "difficulty": "hard",
+    "ranked": true,
+    "durationSeconds": 300,
+    "requiredTags": ["ASIMETRIA_DE_PODER", "MECANISMO_RENDICION_CUENTAS", "RIESGO_DE_CAPTURA", "SUPUESTO_CRITICO"],
+    "judgeFocus": "Prioriza identificacion de asimetrias de poder no obvias y propuesta de mecanismo de rendicion de cuentas operacional. Penaliza accountability decorativa (mencionar transparencia sin operacionalizar). Si el estudiante asume que el chatbot es neutral o que basta con 'auditoria', baja fuerte. Si nombra un riesgo de captura concreto, premia. Si hace explicito un supuesto critico que sostiene su argumento, premia.",
+    "context": "Un servicio publico (ej: SENADIS, FONASA, IPS) implementa un chatbot que es ahora el primer punto de contacto para todas las solicitudes ciudadanas digitales. El chatbot, basado en un LLM comercial (provisto por una empresa estadounidense), responde dudas simples y, en casos mas complejos, decide a que area derivar la solicitud o si declararla 'fuera del ambito del servicio'. Esto ultimo equivale a un rechazo inicial: la persona puede insistir presencialmente, pero solo el 30% lo hace. El servicio reporta haber bajado el tiempo de respuesta de 12 a 2 dias y reducido la carga del call center en 60%. La empresa proveedora actualiza el modelo cada 3 meses sin que el servicio pueda inspeccionarlo. El director del servicio considera el proyecto un exito.",
+    "question": "Responde en el formato EXACTO con los siguientes tags. Maximo 14 lineas.\n\n[ASIMETRIA_DE_PODER] Identifica al menos 2 asimetrias de poder concretas en este caso (no obvias). Una de ellas debe involucrar a la empresa proveedora.\n[MECANISMO_RENDICION_CUENTAS] Propon un mecanismo operacional para que esta automatizacion rinda cuentas. Especifica: quien rinde, ante quien, con que frecuencia, con que consecuencia si falla. NO acepto 'transparencia' o 'auditoria' como respuesta sin operacionalizar.\n[RIESGO_DE_CAPTURA] Identifica un riesgo concreto de captura del diseno institucional por algun actor (la empresa proveedora, la jefatura del servicio, otro). Nombra al actor capturador y como capturaria.\n[SUPUESTO_CRITICO] Cual es el supuesto critico del director del servicio al declarar el proyecto un exito? Que tendria que ser falso para que el 'exito' sea aparente?",
+    "conceptTags": ["dilema_democratico", "accountability_algoritmica", "actores_y_asimetrias", "rendicion_de_cuentas"],
+    "referenceAnswer": "[ASIMETRIA_DE_PODER] (1) Empresa proveedora extranjera vs. servicio publico chileno: la empresa controla el modelo, el servicio no puede inspeccionarlo, y la empresa actualiza unilateralmente. (2) Servicio vs. ciudadanos rechazados: el 70% que recibe 'fuera del ambito' no insiste, lo que invisibiliza errores del sistema; los que insisten son selectivamente quienes tienen tiempo, redes o capital cultural.\n[MECANISMO_RENDICION_CUENTAS] El servicio rinde cuentas cada 6 meses ante la Contraloria y al Consejo Para la Transparencia con: (a) tasa de derivaciones a 'fuera de ambito', (b) muestra aleatoria 200 de esos casos revisada por funcionario humano para detectar falsos rechazos, (c) tasa de insistencia presencial. Si la tasa de falsos rechazos en la muestra supera 5%, suspension automatica del filtrado y revision externa. Sin sancion automatica, el reporte es decorativo.\n[RIESGO_DE_CAPTURA] La empresa proveedora puede capturar el diseno: si el servicio depende del chatbot para sus metricas internas (60% menos call center), bajarlo costaria politicamente al director, lo que da a la empresa poder asimetrico para imponer condiciones contractuales y bloquear inspeccion. Tambien la jefatura del servicio puede capturar la metrica: 'tiempo de respuesta' baja porque rechazos rapidos cuentan como respuesta.\n[SUPUESTO_CRITICO] Que el 70% que no insiste lo hace porque la respuesta del chatbot fue correcta. Si en realidad no insiste por desconfianza, falta de tiempo, o por no entender la respuesta, el 'exito' es captura del 70% mas vulnerable de los usuarios.",
+    "idealAnswer": {
+      "keyPoints": [
+        "Identifica asimetria empresa/Estado y asimetria Estado/ciudadanos vulnerables.",
+        "Reconoce que 'tiempo de respuesta' como metrica puede ser capturada por rechazos rapidos.",
+        "Mecanismo de rendicion de cuentas tiene los 4 elementos: quien-ante-quien-cuando-consecuencia.",
+        "Riesgo de captura nombra al actor concreto (empresa o director del servicio).",
+        "El supuesto critico identifica que la inferencia 'no insiste = correcto' es la falla logica del 'exito' reportado."
+      ],
+      "expectedConcepts": ["asimetria_no_obvia", "captura_institucional", "metrica_capturada", "accountability_operacional", "supuesto_implicito"],
+      "commonMistakes": [
+        "Mencionar 'transparencia' como mecanismo sin operacionalizar (accountability decorativa).",
+        "Tratar al 'ciudadano' como actor homogeneo sin distinguir quien insiste vs quien no.",
+        "Proponer auditoria sin sancion ni consecuencia.",
+        "Ignorar que la empresa proveedora es un actor con poder.",
+        "Asumir que el supuesto critico del director es correcto y solo 'matizarlo'.",
+        "Confundir baja del tiempo de respuesta con mejor servicio."
+      ],
+      "excellentResponseIndicators": [
+        "Identifica que el 30% que insiste esta selectivamente compuesto (capital cultural).",
+        "Mecanismo de accountability incluye muestra aleatoria y umbral con accion automatica.",
+        "Reconoce que la dependencia tecnica del proveedor extranjero es una asimetria estructural, no incidental.",
+        "Distingue 'metrica de exito' de 'evidencia de exito'.",
+        "Reconoce que la jefatura del servicio puede capturar internamente la metrica.",
+        "El supuesto critico es identificable y revisable empiricamente."
+      ]
+    }
+  },
+  {
+    "id": "demo_r3_perfil_estudiante",
+    "order": 3,
+    "title": "Perfil de entrada al curso (diagnostico)",
+    "category": "Diagnostico",
+    "difficulty": "easy",
+    "ranked": false,
+    "durationSeconds": 180,
+    "judgeFocus": "Esta ronda no afecta ranking. Evalua si el estudiante respeta el formato y aporta diferenciacion real (no todo 3 ni todo 5). Extrae senales para que el profesor entienda la cohorte. Penaliza respuestas decorativas que solo dicen 'me interesa todo'.",
+    "context": "Esta es una ronda diagnostica para que el profesor entienda quienes son ustedes al inicio del curso. No hay respuesta correcta. Las 6 unidades del semestre son:\n\n1. Diagnostico — Backlash contra la IA\n2. Amenazas — Populismo de IA y control tecnologico\n3. Amenazas — Sociedad de bots\n4. Amenazas — IA en sociedad orwelliana\n5. Respuestas — IA generativa y democracia deliberativa\n6. Respuestas — Regulacion de la IA\n\nNo hay roles fijos en este curso, pero algunos estudiantes se ubican mas como builders (les interesa lo tecnico), analysts (les interesa lo empirico), thinkers (les interesa lo conceptual/normativo) o communicators (les interesa lo publico/divulgativo).",
+    "question": "Pega un bloque EXACTO asi:\n\n[SENALES]\nPREFERENCIAS_UNIDADES: 1) __ 2) __ 3) __\nCONFIANZA_TECNICA(1-5): __\nCONFIANZA_NORMATIVA(1-5): __\nCONFIANZA_EMPIRICA(1-5): __\nCONFIANZA_PUBLICA(1-5): __\nROL_PREFERIDO: (builder / analyst / thinker / communicator)\nPOSTURA_INICIAL: (mas optimista / mas pesimista / ambivalente) sobre IA y democracia\nDISPONIBILIDAD_HORAS_SEMANA: __\n[/SENALES]\n\nDonde 1=muy bajo, 5=muy alto. PREFERENCIAS_UNIDADES son 3 numeros distintos del 1-6, en orden de preferencia. Puedes agregar 2-3 lineas de justificacion despues del bloque si quieres.",
+    "conceptTags": ["perfil_estudiante"],
+    "idealAnswer": {
+      "keyPoints": [
+        "Formato [SENALES]...[/SENALES] respetado correctamente.",
+        "Valores numericos entre 1-5 para cada confianza.",
+        "PREFERENCIAS_UNIDADES tiene 3 numeros distintos entre 1-6.",
+        "ROL_PREFERIDO es uno de los 4 roles validos.",
+        "POSTURA_INICIAL es una de las 3 opciones validas.",
+        "Respuestas diferenciadas (no todas las confianzas iguales)."
+      ],
+      "expectedConcepts": ["auto_evaluacion", "preferencias", "postura_normativa"],
+      "commonMistakes": [
+        "No respetar el formato.",
+        "Dar todos los valores iguales.",
+        "Repetir el mismo numero en PREFERENCIAS_UNIDADES.",
+        "Dejar campos sin llenar.",
+        "Justificacion que dice 'me interesa todo'."
+      ],
+      "excellentResponseIndicators": [
+        "Valores diferenciados que muestran autoreflexion genuina.",
+        "Justificacion breve que muestra comprension de las unidades.",
+        "Coherencia entre confianzas reportadas y rol preferido.",
+        "Postura inicial declarada con un argumento minimo en la justificacion."
+      ]
+    }
+  }
+]

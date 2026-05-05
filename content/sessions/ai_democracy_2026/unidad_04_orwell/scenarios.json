@@ -1,0 +1,44 @@
+[
+  {
+    "_TODO": "Escenario placeholder. Reemplazar antes de la clase. Mantener estructura de campos.",
+    "id": "u04_orwell_placeholder_01",
+    "order": 1,
+    "title": "[PLACEHOLDER] Donde esta la frontera entre seguridad legitima y vigilancia autoritaria?",
+    "category": "Por definir",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 240,
+    "requiredTags": [
+      "ACTOR_AFECTADO",
+      "ASIMETRIA_DE_PODER",
+      "MECANISMO_RENDICION_CUENTAS"
+    ],
+    "judgeFocus": "Identifica el dilema entre seguridad y libertades. Penaliza autoritarismo eficiente. (PLACEHOLDER — ajustar al escenario final.)",
+    "context": "TODO: reemplazar por una vineta concreta y especifica al tema de la unidad. Una buena vineta es: caso, decision en juego, actor con potestad, plazo. NO usar generalidades.",
+    "question": "Responde con los siguientes tags (placeholder, ajustar al contenido final):\n\n[ACTOR_AFECTADO] Identifica al menos 2 actores afectados, incluyendo uno sin voz organizada.\n[ASIMETRIA_DE_PODER] Identifica una asimetria de poder no obvia presente en el caso.\n[MECANISMO_RENDICION_CUENTAS] Propon mecanismo concreto: quien rinde, ante quien, cuando, con que consecuencia.\n\nMaximo 12 lineas.",
+    "conceptTags": [
+      "vigilancia_masiva",
+      "scoring_social"
+    ],
+    "referenceAnswer": "TODO: completar con respuesta de referencia que ejemplifique nivel ~80. Servira al juez para calibrar la extension y el detalle esperados.",
+    "idealAnswer": {
+      "keyPoints": [
+        "TODO: punto clave 1",
+        "TODO: punto clave 2",
+        "TODO: punto clave 3"
+      ],
+      "expectedConcepts": [
+        "TODO_concepto_1",
+        "TODO_concepto_2"
+      ],
+      "commonMistakes": [
+        "TODO: error tipico 1",
+        "TODO: error tipico 2"
+      ],
+      "excellentResponseIndicators": [
+        "TODO: indicador de excelencia 1",
+        "TODO: indicador de excelencia 2"
+      ]
+    }
+  }
+]

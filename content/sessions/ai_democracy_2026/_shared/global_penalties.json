@@ -1,0 +1,33 @@
+{
+  "_doc": "Penalizaciones globales reusables para todo el curso IA y Democracia 2026. Cada penalizacion impone un techo en una dimension (hard) o resta puntos (soft). El motor las consume via el campo 'globalPenalties' o 'hardPenalties' del rubric.json de cada sesion. Para reusar, copia la lista 'hardPenalties' al rubric de cada unidad y ajusta segun el foco de la sesion.",
+  "_calibration_note": "Estas penalizaciones son fragiles para un juez LLM porque algunas son interpretativas (legitimidad vs legalidad, accountability decorativa). Calibra con respuestas sinteticas antes de usar en clase. Si un patron es muy frecuente y no se castiga, conviertelo en hard penalty (techo). Si rara vez ocurre y el LLM lo confunde con una respuesta ok, conviertelo en soft penalty.",
+  "hardPenalties": [
+    "Solucionismo tecnologico: si el estudiante propone una herramienta de IA como si por si sola resolviera un problema politico o institucional, sin nombrar actor, mecanismo de adopcion, ni condiciones para que la herramienta cambie algo, no puede superar 60 en la dimension de Diseno Institucional ni en Realismo Democratico.",
+    "Neutralidad tecnica ingenua: si el estudiante trata el sistema de IA como si fuera neutral, sin valores incorporados, sin sesgos en datos, sin intereses en su despliegue, no puede superar 60 en Mapeo de Actores y Asimetrias.",
+    "Legalidad equivale a legitimidad: si el estudiante asume que algo es democraticamente legitimo solo porque es legal, sin preguntar a quien beneficia ni si los afectados tuvieron voz, no puede superar 60 en Identificacion del Dilema Democratico.",
+    "Ignorar afectados no presentes: si el estudiante no considera grupos vulnerables, minorias, ciudadania no organizada o actores sin voz cuando el escenario los implica, no puede superar 60 en Mapeo de Actores y Asimetrias.",
+    "Falsa precision: si el estudiante inventa cifras, porcentajes, capacidades tecnicas o efectos empiricos que no estan en el escenario ni son hechos publicos verificables, baja 20 puntos en Claridad y Estructura, y no puede superar 60 en Realismo Democratico.",
+    "Autoritarismo eficiente: si el estudiante justifica vigilancia masiva, censura algoritmica o automatizacion coercitiva con el solo argumento de que 'funciona' o 'es mas eficiente', no puede superar 60 en Identificacion del Dilema Democratico ni en Diseno Institucional.",
+    "Accountability decorativa: si el estudiante menciona transparencia, auditoria, supervision o gobernanza sin nombrar quien rinde cuentas, ante quien, con que frecuencia y con que consecuencia si falla, no puede superar 60 en Mecanismo de Rendicion de Cuentas.",
+    "Tags solicitados ausentes: si el escenario solicita tags forzados explicitos en la pregunta y la respuesta no los usa o los reemplaza por estructura propia, baja Claridad y Estructura."
+  ],
+  "softPenalties": [
+    "Argumentos de pendiente resbaladiza sin pasos intermedios identificados.",
+    "Citar autores o teorias para revestir el argumento sin que la cita haga trabajo argumentativo real.",
+    "Confundir 'consenso' con 'unanimidad' o 'mayoria parlamentaria' con 'voluntad popular'.",
+    "Trasladar la decision a un actor abstracto ('el Estado', 'la sociedad', 'los algoritmos') en vez de nombrar al actor con potestad concreta.",
+    "Aplicar criterios de eficiencia tecnocratica (rapidez, escala) a problemas que la unidad encuadra como politicos.",
+    "Respuesta valida pero generica que aplicaria igual a cualquier escenario de la unidad."
+  ],
+  "bonusIndicators": [
+    "Identifica una asimetria de poder no obvia (ej: regulador vs. gigante tecnologico, mayoria informada vs. minoria afectada).",
+    "Distingue legalidad de legitimidad sin que el escenario lo pida explicitamente.",
+    "Nombra un actor afectado sin voz organizada y propone como darle representacion.",
+    "Hace explicito un supuesto critico y discute que pasaria si el supuesto colapsa.",
+    "Propone un mecanismo de rendicion de cuentas con quien-ante-quien-cuando-consecuencia.",
+    "Reconoce un riesgo de captura institucional concreto.",
+    "Compara la propuesta contra el contrafactual (que pasaria sin intervencion) en vez de contra un ideal.",
+    "Reconoce trade-offs entre derechos sin sobre-resolverlos retoricamente.",
+    "Distingue dano agudo de dano estructural y los cuantifica cualitativamente."
+  ]
+}

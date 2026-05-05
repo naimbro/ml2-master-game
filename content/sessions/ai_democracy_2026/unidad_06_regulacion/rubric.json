@@ -1,0 +1,81 @@
+{
+  "_TODO": "Rubrica placeholder. Es una copia de _shared/base_rubric.json con sessionId actualizado. Si quieres ajustar pesos o criterios para esta unidad especifica, hazlo aqui sin tocar _shared/.",
+  "sessionId": "unidad_06_regulacion",
+  "globalInstructions": "Evalua SOLO lo que esta escrito. Curso 'IA y Democracia' (UAI Minor IA, 2026), Unidad: Unidad 6: Respuestas — Regulacion de la IA. Premia identificacion de tensiones democraticas concretas, mapeo de actores con asimetrias, y mecanismos operacionales. Penaliza solucionismo, neutralidad ingenua, y accountability decorativa. Usa 'judgeFocus' del escenario como ancla principal.",
+  "scoring": {
+    "scaleLevels": [
+      100,
+      80,
+      60,
+      40,
+      20,
+      0
+    ],
+    "instructions": "Respuestas concretas con tags solicitados pesan mas que respuestas largas y vagas."
+  },
+  "dimensions": [
+    {
+      "id": "process_structuring",
+      "name": "Identificacion del Dilema Democratico y Diseno Institucional",
+      "weight": 0.45,
+      "description": "Capacidad de nombrar la tension democratica concreta, distinguir legalidad de legitimidad, identificar dilema entre derechos, y proponer diseno con compromisos asumidos.",
+      "level_100": "Nombra explicitamente la tension democratica concreta. Distingue derechos en juego. Propone diseno con compromisos asumidos. Reconoce que el dilema no se resuelve en un paso.",
+      "level_80": "Identifica la tension pero deja un elemento parcialmente vago.",
+      "level_60": "Hay intencion pero queda formulada como problema tecnico o dilema generico.",
+      "level_40": "Habla del tema pero no llega a nombrar la tension.",
+      "level_20": "Respuesta tecnologica que ignora la dimension democratica.",
+      "level_0": "No responde o texto irrelevante."
+    },
+    {
+      "id": "institutional_realism",
+      "name": "Mapeo de Actores, Asimetrias y Mecanismo de Rendicion de Cuentas",
+      "weight": 0.35,
+      "description": "Identifica quien decide, quien se ve afectado (especialmente sin voz), asimetrias de poder, y mecanismos concretos de rendicion de cuentas.",
+      "level_100": "Actor decisor con potestad concreta + afectado sin voz organizada. Asimetria no obvia. Mecanismo con quien-ante-quien-cuando-consecuencia. Reconoce riesgo de captura.",
+      "level_80": "Casi todo presente, un elemento incompleto.",
+      "level_60": "Actores formulados como abstracciones. Accountability decorativa.",
+      "level_40": "Casi no considera actores ni mecanismos.",
+      "level_20": "Trata el problema sin actores con intereses divergentes.",
+      "level_0": "No responde o texto irrelevante."
+    },
+    {
+      "id": "precision_clarity",
+      "name": "Claridad, Estructura, Uso de Tags y Anti-vaguedad",
+      "weight": 0.2,
+      "description": "Concrecion, uso de tags, posicion clara, sin falsa precision.",
+      "level_100": "Lenguaje concreto. Tags literales. Cabe en limite de lineas. Toma posicion. No inventa datos.",
+      "level_80": "Mayormente claro; 1-2 frases vagas o tag faltante.",
+      "level_60": "Mezcla claridad con vaguedad. Tags parcialmente usados.",
+      "level_40": "Prosa amplia o confusa. Tags ausentes.",
+      "level_20": "Puro humo. Generica.",
+      "level_0": "No responde o texto irrelevante."
+    }
+  ],
+  "globalPenalties": [
+    "Solucionismo tecnologico: si propone IA como si por si sola resolviera el problema, sin actor ni mecanismo, no puede superar 60 en Identificacion del Dilema ni en Mapeo de Actores.",
+    "Neutralidad tecnica ingenua: si trata la IA como neutral sin valores ni sesgos, no puede superar 60 en Mapeo de Actores.",
+    "Legalidad equivale a legitimidad: si asume legitimidad por legalidad, no puede superar 60 en Identificacion del Dilema.",
+    "Ignorar afectados no presentes: si no considera grupos vulnerables o sin voz, no puede superar 60 en Mapeo de Actores.",
+    "Falsa precision: si inventa cifras o capacidades no entregadas, baja 20 en Claridad y no puede superar 60 en Mapeo de Actores.",
+    "Autoritarismo eficiente: si justifica vigilancia o coercion solo por eficiencia, no puede superar 60 en Identificacion del Dilema ni en Mapeo de Actores.",
+    "Accountability decorativa: transparencia sin quien-ante-quien-cuando-consecuencia, no puede superar 60 en Mapeo de Actores.",
+    "Tags solicitados ausentes: si requiredTags no aparecen literalmente, baja Claridad."
+  ],
+  "bonusIndicators": [
+    "Identifica asimetria no obvia.",
+    "Distingue legalidad de legitimidad sin pedirselo.",
+    "Nombra actor sin voz y propone representacion.",
+    "Hace explicito un supuesto critico.",
+    "Mecanismo de accountability con los 4 elementos.",
+    "Reconoce riesgo de captura concreto.",
+    "Compara contra contrafactual.",
+    "Reconoce trade-offs entre derechos."
+  ],
+  "penaltyIndicators": [
+    "Salta a solucion tecnica sin nombrar tension.",
+    "Trata \"la sociedad\" como agente unitario.",
+    "Metricas tecnicas para problemas politicos.",
+    "Confunde anonimato con privacidad o transparencia con accountability.",
+    "Citas como ornamento sin argumentacion."
+  ]
+}
