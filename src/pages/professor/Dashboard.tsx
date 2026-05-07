@@ -3,18 +3,18 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   Gamepad2,
-  Plus,
   Users,
   BookOpen,
-  BarChart3,
   Clock,
   ChevronRight,
   LogOut,
   FileText,
+  GraduationCap,
 } from 'lucide-react';
 import { collection, query, where, orderBy, getDocs, limit } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { useAuth } from '../../hooks/useAuth';
+import { COURSES, getSessionsForCourse } from '../../lib/courses';
 
 interface RecentGame {
   gameCode: string;
@@ -104,7 +104,7 @@ export default function Dashboard() {
           <div className="flex items-center gap-3">
             <Link to="/" className="flex items-center gap-2">
               <Gamepad2 className="w-8 h-8 text-cyan-400" />
-              <span className="text-xl font-bold gradient-text">ML2 Master</span>
+              <span className="text-xl font-bold gradient-text">Aula Maestra</span>
             </Link>
             <span className="text-white/30">|</span>
             <span className="text-white/70">Panel del Profesor</span>
@@ -127,43 +127,42 @@ export default function Dashboard() {
 
       {/* Main Content */}
       <main className="max-w-6xl mx-auto px-4 py-8">
-        {/* Quick Actions */}
+        {/* Courses */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="grid md:grid-cols-3 gap-6 mb-8"
+          className="mb-10"
         >
-          <Link
-            to="/professor/create"
-            className="dramatic-card p-6 hover:scale-105 transition-transform cursor-pointer group"
-          >
-            <div className="w-14 h-14 bg-gradient-to-br from-cyan-500 to-purple-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <Plus className="w-7 h-7 text-white" />
-            </div>
-            <h3 className="text-xl font-bold mb-2">Crear Juego</h3>
-            <p className="text-white/60 text-sm">
-              Inicia una nueva sesion de juego para tu clase
-            </p>
-          </Link>
-
-          <div className="dramatic-card p-6 opacity-70 cursor-not-allowed">
-            <div className="w-14 h-14 bg-white/10 rounded-xl flex items-center justify-center mb-4">
-              <BarChart3 className="w-7 h-7 text-white/50" />
-            </div>
-            <h3 className="text-xl font-bold mb-2">Analiticas</h3>
-            <p className="text-white/60 text-sm">
-              Reportes de clase (proximamente)
-            </p>
-          </div>
-
-          <div className="dramatic-card p-6 opacity-70 cursor-not-allowed">
-            <div className="w-14 h-14 bg-white/10 rounded-xl flex items-center justify-center mb-4">
-              <Users className="w-7 h-7 text-white/50" />
-            </div>
-            <h3 className="text-xl font-bold mb-2">Estudiantes</h3>
-            <p className="text-white/60 text-sm">
-              Gestion de matricula (proximamente)
-            </p>
+          <h2 className="text-xl font-bold flex items-center gap-2 mb-4">
+            <GraduationCap className="w-5 h-5 text-cyan-400" />
+            Mis Cursos
+          </h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            {COURSES.map((course) => {
+              const sessionCount = getSessionsForCourse(course.id).length;
+              return (
+                <Link
+                  key={course.id}
+                  to={`/professor/courses/${course.id}/create`}
+                  className="dramatic-card p-6 hover:scale-[1.02] transition-transform cursor-pointer group"
+                >
+                  <div className={`w-14 h-14 ${course.iconClass} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
+                    <BookOpen className="w-7 h-7 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-1">{course.name}</h3>
+                  <p className="text-white/60 text-sm mb-4">{course.tagline}</p>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-white/50">
+                      {sessionCount} {sessionCount === 1 ? 'sesion' : 'sesiones'}
+                    </span>
+                    <span className="text-cyan-400 flex items-center gap-1 font-semibold">
+                      Crear juego
+                      <ChevronRight className="w-4 h-4" />
+                    </span>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </motion.div>
 
@@ -190,12 +189,9 @@ export default function Dashboard() {
             <div className="text-center py-8">
               <BookOpen className="w-12 h-12 text-white/20 mx-auto mb-4" />
               <p className="text-white/50">No has creado ningun juego todavia</p>
-              <Link
-                to="/professor/create"
-                className="text-cyan-400 hover:underline text-sm mt-2 inline-block"
-              >
-                Crear tu primer juego
-              </Link>
+              <p className="text-white/40 text-sm mt-2">
+                Selecciona un curso arriba para comenzar
+              </p>
             </div>
           ) : (
             <div className="space-y-3">

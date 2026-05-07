@@ -46,7 +46,7 @@ export default function Home() {
           <div className="w-9 h-9 bg-kahoot-green rounded-lg flex items-center justify-center shadow-md">
             <Zap className="w-5 h-5 text-white" />
           </div>
-          <span className="text-xl font-extrabold tracking-tight">ML2 Master</span>
+          <span className="text-xl font-extrabold tracking-tight">Aula Maestra</span>
         </div>
 
         {user ? (
@@ -96,13 +96,13 @@ export default function Home() {
           </motion.div>
 
           <h1 className="text-5xl md:text-7xl font-black mb-4 tracking-tight">
-            ML2 Master
+            Aula Maestra
           </h1>
           <p className="text-xl md:text-2xl text-white/80 max-w-2xl mx-auto font-semibold">
-            IA Generativa y Procesos Publicos
+            Aprende jugando
           </p>
           <p className="text-white/50 mt-3 font-medium">
-            Pon a prueba tus conocimientos en escenarios reales del sector publico
+            Pon a prueba tus conocimientos en escenarios reales de tu curso
           </p>
         </motion.div>
 
@@ -117,7 +117,7 @@ export default function Home() {
             {
               icon: Brain,
               title: 'Escenarios Reales',
-              desc: 'Casos del sector publico chileno para aplicar conceptos de IA',
+              desc: 'Casos relevantes para aplicar lo aprendido en clase',
               color: 'bg-kahoot-blue',
               shadow: 'shadow-kahoot-blue/20',
             },
@@ -131,7 +131,7 @@ export default function Home() {
             {
               icon: Trophy,
               title: 'Feedback AI',
-              desc: '3 jueces AI evaluan tus respuestas con retroalimentacion detallada',
+              desc: 'Jueces AI evaluan tus respuestas con retroalimentacion detallada',
               color: 'bg-kahoot-green',
               shadow: 'shadow-kahoot-green/20',
             },

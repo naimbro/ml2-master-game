@@ -210,7 +210,7 @@ export default function End() {
 
       doc.setFontSize(14);
       doc.setTextColor(100, 100, 100);
-      doc.text(report.sessionTitle || 'ML2 Master Game', margin, y);
+      doc.text(report.sessionTitle || 'Aula Maestra', margin, y);
       y += 15;
 
       doc.setFontSize(12);
@@ -294,7 +294,7 @@ export default function End() {
       doc.setTextColor(150, 150, 150);
       doc.text(`Generado el ${new Date().toLocaleDateString('es-CL')}`, margin, 285);
 
-      const fileName = `reporte_${(user.displayName || 'estudiante').replace(/\s+/g, '_')}_ML2.pdf`;
+      const fileName = `reporte_${(user.displayName || 'estudiante').replace(/\s+/g, '_')}.pdf`;
       doc.save(fileName);
 
     } catch (err) {

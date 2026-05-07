@@ -68,6 +68,10 @@ function AppRoutes() {
         element={user ? <CreateGame /> : <Navigate to="/" replace />}
       />
       <Route
+        path="/professor/courses/:courseId/create"
+        element={user ? <CreateGame /> : <Navigate to="/" replace />}
+      />
+      <Route
         path="/professor/report/:gameCode"
         element={user ? <ClassReport /> : <Navigate to="/" replace />}
       />

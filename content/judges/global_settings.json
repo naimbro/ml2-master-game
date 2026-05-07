@@ -1,0 +1,8 @@
+{
+  "evaluationSettings": {
+    "model": "gpt-4o",
+    "temperature": 0.3,
+    "maxTokens": 1000,
+    "parallelEvaluation": true
+  }
+}

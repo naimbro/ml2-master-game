@@ -224,7 +224,7 @@ export default function ClassReport() {
       for (let i = 1; i <= pageCount; i++) {
         doc.setPage(i);
         doc.text(
-          `ML2 Master Game - Pagina ${i} de ${pageCount}`,
+          `Aula Maestra - Pagina ${i} de ${pageCount}`,
           pageWidth / 2,
           290,
           { align: 'center' }

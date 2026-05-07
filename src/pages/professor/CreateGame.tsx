@@ -1,126 +1,17 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Play, BookOpen, Clock, Copy, Check } from 'lucide-react';
 import { doc, setDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { useAuth } from '../../hooks/useAuth';
-
-// Import session content - in production this would be loaded dynamically
-import session1Config from '../../../content/sessions/ml2-2025/session_1_ia_procesos_sector_publico/config.json';
-import session1Scenarios from '../../../content/sessions/ml2-2025/session_1_ia_procesos_sector_publico/scenarios.json';
-import session1Rubric from '../../../content/sessions/ml2-2025/session_1_ia_procesos_sector_publico/rubric.json';
-import session1KnowledgeBase from '../../../content/sessions/ml2-2025/session_1_ia_procesos_sector_publico/knowledge_base.md?raw';
-
-import session2Config from '../../../content/sessions/ml2-2025/session_2_apis/config.json';
-import session2Scenarios from '../../../content/sessions/ml2-2025/session_2_apis/scenarios.json';
-import session2Rubric from '../../../content/sessions/ml2-2025/session_2_apis/rubric.json';
-import session2KnowledgeBase from '../../../content/sessions/ml2-2025/session_2_apis/knowledge_base.md?raw';
-
-import session3Config from '../../../content/sessions/ml2-2025/session_3_rag/config.json';
-import session3Scenarios from '../../../content/sessions/ml2-2025/session_3_rag/scenarios.json';
-import session3Rubric from '../../../content/sessions/ml2-2025/session_3_rag/rubric.json';
-import session3KnowledgeBase from '../../../content/sessions/ml2-2025/session_3_rag/knowledge_base.md?raw';
-
-import session4Config from '../../../content/sessions/ml2-2025/session_4_rag_applied/config.json';
-import session4Scenarios from '../../../content/sessions/ml2-2025/session_4_rag_applied/scenarios.json';
-import session4Rubric from '../../../content/sessions/ml2-2025/session_4_rag_applied/rubric.json';
-import session4KnowledgeBase from '../../../content/sessions/ml2-2025/session_4_rag_applied/knowledge_base.md?raw';
-
-// AI y Democracia 2026 — sesion demo (las unidades 1-6 son placeholders, se importaran cuando tengan contenido real)
-import aydDemoConfig from '../../../content/sessions/ai_democracy_2026/unidad_00_demo/config.json';
-import aydDemoScenarios from '../../../content/sessions/ai_democracy_2026/unidad_00_demo/scenarios.json';
-import aydDemoRubric from '../../../content/sessions/ai_democracy_2026/unidad_00_demo/rubric.json';
-import aydDemoKnowledgeBase from '../../../content/sessions/ai_democracy_2026/unidad_00_demo/knowledge_base.md?raw';
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-interface SessionOption {
-  id: string;
-  courseId: string;
-  courseName: string;
-  title: string;
-  description: string;
-  rounds: number;
-  duration: number;
-  config: any;
-  scenarios: any;
-  rubric: any;
-  knowledgeBase: string;
-}
-
-const ML2_COURSE_ID = 'ml2-2025';
-const ML2_COURSE_NAME = 'Machine Learning II';
-const AYD_COURSE_ID = 'ai_democracy_2026';
-const AYD_COURSE_NAME = 'IA y Democracia';
-
-// Available sessions - would be dynamically loaded in production
-const availableSessions: SessionOption[] = [
-  {
-    id: 'session_1_ia_procesos_sector_publico',
-    courseId: ML2_COURSE_ID,
-    courseName: ML2_COURSE_NAME,
-    title: 'Sesion 1: IA, Procesos y Sector Publico',
-    description: '6 rondas: estructuracion de procesos, TRL, limites de IA, feria de familias, preferencias y estilo de trabajo',
-    rounds: 6,
-    duration: 5,
-    config: session1Config,
-    scenarios: session1Scenarios,
-    rubric: session1Rubric,
-    knowledgeBase: session1KnowledgeBase,
-  },
-  {
-    id: 'session_2_apis',
-    courseId: ML2_COURSE_ID,
-    courseName: ML2_COURSE_NAME,
-    title: session2Config.title,
-    description: session2Config.description,
-    rounds: session2Scenarios.length,
-    duration: Math.round(session2Config.roundDurationSeconds / 60),
-    config: session2Config,
-    scenarios: session2Scenarios,
-    rubric: session2Rubric,
-    knowledgeBase: session2KnowledgeBase,
-  },
-  {
-    id: 'session_3_rag',
-    courseId: ML2_COURSE_ID,
-    courseName: ML2_COURSE_NAME,
-    title: session3Config.title,
-    description: session3Config.description,
-    rounds: session3Scenarios.length,
-    duration: Math.round(session3Config.roundDurationSeconds / 60),
-    config: session3Config,
-    scenarios: session3Scenarios,
-    rubric: session3Rubric,
-    knowledgeBase: session3KnowledgeBase,
-  },
-  {
-    id: 'session_4_rag_applied',
-    courseId: ML2_COURSE_ID,
-    courseName: ML2_COURSE_NAME,
-    title: session4Config.title,
-    description: session4Config.description,
-    rounds: session4Scenarios.length,
-    duration: Math.round(session4Config.roundDurationSeconds / 60),
-    config: session4Config,
-    scenarios: session4Scenarios,
-    rubric: session4Rubric,
-    knowledgeBase: session4KnowledgeBase,
-  },
-  {
-    id: 'unidad_00_demo',
-    courseId: AYD_COURSE_ID,
-    courseName: AYD_COURSE_NAME,
-    title: aydDemoConfig.title,
-    description: aydDemoConfig.description,
-    rounds: aydDemoScenarios.length,
-    duration: Math.round(aydDemoConfig.roundDurationSeconds / 60),
-    config: aydDemoConfig,
-    scenarios: aydDemoScenarios,
-    rubric: aydDemoRubric,
-    knowledgeBase: aydDemoKnowledgeBase,
-  },
-];
+import {
+  COURSES,
+  SESSIONS,
+  getCourse,
+  getSessionsForCourse,
+  type SessionOption,
+} from '../../lib/courses';
 
 function generateGameCode(): string {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -134,10 +25,14 @@ function generateGameCode(): string {
 export default function CreateGame() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { courseId } = useParams<{ courseId?: string }>();
   const [selectedSession, setSelectedSession] = useState<SessionOption | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [createdGame, setCreatedGame] = useState<{ code: string } | null>(null);
   const [copied, setCopied] = useState(false);
+
+  const course = courseId ? getCourse(courseId) : null;
+  const sessionsForCourse = courseId ? getSessionsForCourse(courseId) : SESSIONS;
 
   const handleCreateGame = async () => {
     if (!selectedSession || !user) return;
@@ -252,6 +147,20 @@ export default function CreateGame() {
     );
   }
 
+  // If a courseId was given but doesn't match any course, show error
+  if (courseId && !course) {
+    return (
+      <div className="min-h-screen bg-gradient-main flex items-center justify-center p-4">
+        <div className="text-center">
+          <p className="text-white/70 mb-4">Curso no encontrado: {courseId}</p>
+          <Link to="/professor" className="text-cyan-400 hover:underline">
+            Volver al panel
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-main">
       {/* Header */}
@@ -271,76 +180,64 @@ export default function CreateGame() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <h1 className="text-3xl font-bold mb-2">Crear Nuevo Juego</h1>
-          <p className="text-white/60 mb-8">
-            Selecciona una sesion para comenzar
-          </p>
+          {course ? (
+            <>
+              <p className="text-cyan-400 text-sm font-semibold uppercase tracking-wider mb-2">
+                {course.name}
+              </p>
+              <h1 className="text-3xl font-bold mb-2">Crear Nuevo Juego</h1>
+              <p className="text-white/60 mb-8">
+                Selecciona una sesion de este curso
+              </p>
+            </>
+          ) : (
+            <>
+              <h1 className="text-3xl font-bold mb-2">Crear Nuevo Juego</h1>
+              <p className="text-white/60 mb-8">
+                Selecciona una sesion para comenzar
+              </p>
+            </>
+          )}
 
-          {/* Session Selection - grouped by course */}
-          <div className="space-y-8 mb-8">
-            {Array.from(
-              availableSessions.reduce((acc, s) => {
-                if (!acc.has(s.courseId)) acc.set(s.courseId, { name: s.courseName, sessions: [] as SessionOption[] });
-                acc.get(s.courseId)!.sessions.push(s);
-                return acc;
-              }, new Map<string, { name: string; sessions: SessionOption[] }>()).entries()
-            ).map(([courseId, group]) => (
-              <div key={courseId}>
-                <h2 className="text-sm font-semibold uppercase tracking-wider text-white/50 mb-3 px-1">
-                  {group.name}
-                </h2>
-                <div className="space-y-4">
-                  {group.sessions.map((session) => (
-                    <div
-                      key={session.id}
-                      onClick={() => setSelectedSession(session)}
-                      className={`dramatic-card p-6 cursor-pointer transition-all ${
-                        selectedSession?.id === session.id
-                          ? 'ring-2 ring-cyan-400 bg-cyan-500/10'
-                          : 'hover:bg-white/5'
-                      }`}
-                    >
-                      <div className="flex items-start gap-4">
-                        <div
-                          className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                            selectedSession?.id === session.id ? 'bg-cyan-500' : 'bg-white/10'
-                          }`}
-                        >
-                          <BookOpen className="w-6 h-6" />
-                        </div>
-
-                        <div className="flex-1">
-                          <h3 className="text-lg font-bold mb-1">{session.title}</h3>
-                          <p className="text-white/60 text-sm mb-3">{session.description}</p>
-
-                          <div className="flex gap-4 text-sm text-white/50">
-                            <span className="flex items-center gap-1">
-                              <BookOpen className="w-4 h-4" />
-                              {session.rounds} rondas
-                            </span>
-                            <span className="flex items-center gap-1">
-                              <Clock className="w-4 h-4" />
-                              {session.duration} min/ronda
-                            </span>
-                          </div>
-                        </div>
-
-                        <div
-                          className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                            selectedSession?.id === session.id ? 'border-cyan-400 bg-cyan-400' : 'border-white/30'
-                          }`}
-                        >
-                          {selectedSession?.id === session.id && (
-                            <Check className="w-4 h-4 text-black" />
-                          )}
-                        </div>
-                      </div>
+          {/* Session Selection */}
+          {course ? (
+            // Course-scoped: just list sessions
+            <div className="space-y-4 mb-8">
+              {sessionsForCourse.map((session) => (
+                <SessionCard
+                  key={session.id}
+                  session={session}
+                  selected={selectedSession?.id === session.id}
+                  onSelect={() => setSelectedSession(session)}
+                />
+              ))}
+            </div>
+          ) : (
+            // Fallback: no course in route, group by course
+            <div className="space-y-8 mb-8">
+              {COURSES.map((c) => {
+                const list = getSessionsForCourse(c.id);
+                if (list.length === 0) return null;
+                return (
+                  <div key={c.id}>
+                    <h2 className="text-sm font-semibold uppercase tracking-wider text-white/50 mb-3 px-1">
+                      {c.name}
+                    </h2>
+                    <div className="space-y-4">
+                      {list.map((session) => (
+                        <SessionCard
+                          key={session.id}
+                          session={session}
+                          selected={selectedSession?.id === session.id}
+                          onSelect={() => setSelectedSession(session)}
+                        />
+                      ))}
                     </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
 
           {/* Create Button */}
           <button
@@ -362,6 +259,59 @@ export default function CreateGame() {
           </button>
         </motion.div>
       </main>
+    </div>
+  );
+}
+
+function SessionCard({
+  session,
+  selected,
+  onSelect,
+}: {
+  session: SessionOption;
+  selected: boolean;
+  onSelect: () => void;
+}) {
+  return (
+    <div
+      onClick={onSelect}
+      className={`dramatic-card p-6 cursor-pointer transition-all ${
+        selected ? 'ring-2 ring-cyan-400 bg-cyan-500/10' : 'hover:bg-white/5'
+      }`}
+    >
+      <div className="flex items-start gap-4">
+        <div
+          className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+            selected ? 'bg-cyan-500' : 'bg-white/10'
+          }`}
+        >
+          <BookOpen className="w-6 h-6" />
+        </div>
+
+        <div className="flex-1">
+          <h3 className="text-lg font-bold mb-1">{session.title}</h3>
+          <p className="text-white/60 text-sm mb-3">{session.description}</p>
+
+          <div className="flex gap-4 text-sm text-white/50">
+            <span className="flex items-center gap-1">
+              <BookOpen className="w-4 h-4" />
+              {session.rounds} rondas
+            </span>
+            <span className="flex items-center gap-1">
+              <Clock className="w-4 h-4" />
+              {session.duration} min/ronda
+            </span>
+          </div>
+        </div>
+
+        <div
+          className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
+            selected ? 'border-cyan-400 bg-cyan-400' : 'border-white/30'
+          }`}
+        >
+          {selected && <Check className="w-4 h-4 text-black" />}
+        </div>
+      </div>
     </div>
   );
 }
