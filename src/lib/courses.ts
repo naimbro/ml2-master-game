@@ -68,6 +68,14 @@ export const COURSES: Course[] = [
     accentClass: 'from-rose-500 to-amber-500',
     iconClass: 'bg-gradient-to-br from-rose-500 to-amber-500',
   },
+  {
+    id: 'temas_emergentes_2026',
+    name: 'Temas Emergentes',
+    shortName: 'TE',
+    tagline: 'Magister en Economia y Politicas Publicas (UAI)',
+    accentClass: 'from-emerald-500 to-teal-600',
+    iconClass: 'bg-gradient-to-br from-emerald-500 to-teal-600',
+  },
 ];
 
 export const SESSIONS: SessionOption[] = [

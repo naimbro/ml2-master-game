@@ -1,0 +1,5 @@
+{
+  "_notes": "Sin jueces aun. Cuando se disenen las sesiones del curso, agregar los jueces aqui siguiendo el patron de otros cursos. La logica de seed-firestore.cjs soporta un array vacio sin error.",
+  "judges": [],
+  "defaultWeights": {}
+}

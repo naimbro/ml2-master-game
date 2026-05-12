@@ -1,0 +1,4 @@
+{
+  "_TODO": "Lista de estudiantes matriculados. Agregar aqui cada estudiante antes de la primera clase. El campo 'studentId' (Firebase UID) se llena automaticamente cuando el estudiante hace login por primera vez.",
+  "students": []
+}
