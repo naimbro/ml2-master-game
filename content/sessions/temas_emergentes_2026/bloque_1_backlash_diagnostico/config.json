@@ -1,0 +1,36 @@
+{
+  "sessionId": "bloque_1_backlash_diagnostico",
+  "courseId": "temas_emergentes_2026",
+  "title": "Bloque 1 — Backlash: ¿crítica orgánica o pánico moral?",
+  "description": "Primer bloque de la Sesión 2 del curso Temas Emergentes (28 mayo 2026). Diagnóstico del backlash político contra la IA: ¿quién lo articula, sobre qué evidencia, y a quién beneficia la narrativa? Anclado en The Economist ('Prepare for an AI jobs apocalypse', 'A (very) short history') y The National ('Why is no one talking of the backlash').",
+  "date": "2026-05-28",
+  "roundCount": 1,
+  "roundDurationSeconds": 240,
+  "bufferSeconds": 90,
+  "conceptTags": [
+    "backlash",
+    "panico_moral",
+    "diagnostico_inicial",
+    "actores_y_asimetrias",
+    "legitimidad_vs_legalidad"
+  ],
+  "judges": [
+    { "judgeId": "democracy_scholar", "weight": 0.50 },
+    { "judgeId": "policy_lawyer", "weight": 0.25 },
+    { "judgeId": "professor_twin_ayd", "weight": 0.25 }
+  ],
+  "judgeConfig": {
+    "democracy_scholar": {
+      "sessionLens": " FOCO DE ESTA RONDA: distinguir crítica orgánica (actores afectados articulando agravios materiales reales) de pánico moral (narrativa amplificada por actores que se benefician de la alarma). Premia que el estudiante NO compre ninguna de las dos lecturas como obvia, y nombre quién articula qué a costa de qué. Penaliza fuerte: (a) tratar 'la ciudadanía' como agente unitario, (b) asumir que el backlash es siempre legítimo por venir 'de abajo', (c) asumir que es siempre pánico por venir 'amplificado por medios'.",
+      "weightFormula": "score = 0.55 * process_structuring + 0.25 * institutional_realism + 0.20 * precision_clarity"
+    },
+    "policy_lawyer": {
+      "sessionLens": " FOCO DE ESTA RONDA: mecanismo institucional que tome en serio el agravio material sin ceder a la captura simétrica del otro lado (ni captura por la industria, ni captura por el movimiento de moratoria total). Premia mapeo de actores con potestad concreta (Subtel, municipalidad, ministerio). Penaliza accountability decorativa ('hacer una consulta ciudadana') sin operacionalizar.",
+      "weightFormula": "score = 0.25 * process_structuring + 0.60 * institutional_realism + 0.15 * precision_clarity"
+    },
+    "professor_twin_ayd": {
+      "sessionLens": " FOCO DE ESTA RONDA: uso literal de los tags solicitados. Capacidad de tomar posición concreta sobre si esto es backlash o pánico (o ambos, con argumento). Penaliza equidistancia retórica ('depende de la perspectiva') y respuestas que aplicarían igual a cualquier conflicto socio-tecnológico genérico.",
+      "weightFormula": "score = 0.30 * process_structuring + 0.30 * institutional_realism + 0.40 * precision_clarity"
+    }
+  }
+}

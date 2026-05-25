@@ -1,0 +1,73 @@
+{
+  "_doc": "Rúbrica del Bloque 1 (Sesión 2, Temas Emergentes 2026). Derivada de la base_rubric de ai_democracy_2026 con ajustes de foco para el bloque diagnóstico de backlash. NO cambia los IDs de dimensiones (los usa el motor cloud para fórmulas de jueces).",
+  "sessionId": "bloque_1_backlash_diagnostico",
+  "globalInstructions": "Evalúa SOLO lo que está escrito. Este es el Bloque 1 de la Sesión 2 del curso 'Temas Emergentes: IA y Democracia' (UAI MEPP 2026). Estudiantes de magíster en economía y políticas públicas. El foco del bloque es DIAGNÓSTICO del backlash: distinguir crítica orgánica de pánico moral, identificar actores amplificadores vs actores afectados, y mantener honestidad sobre supuestos empíricos. Premia: identificación de actores no obvios, asimetría narrativa, distinción legalidad/legitimidad operacionalizada, supuestos críticos verificables. Penaliza: equidistancia retórica, lectura monolítica del conflicto (todo legítimo / todo pánico), tratar agentes amplificadores como afectados, accountability decorativa. Usa 'judgeFocus' del escenario como ancla principal.",
+  "scoring": {
+    "scaleLevels": [100, 80, 60, 40, 20, 0],
+    "instructions": "Evalúa SOLO lo que está escrito. En este bloque diagnóstico, una respuesta que toma posición clara con un supuesto explícito vale más que una respuesta exhaustiva pero equidistante. Tags solicitados deben aparecer literalmente."
+  },
+  "dimensions": [
+    {
+      "id": "process_structuring",
+      "name": "Diagnóstico del backlash: componente orgánico vs componente amplificado",
+      "weight": 0.45,
+      "description": "Capacidad de descomponer el conflicto en componentes (agravio material real + amplificación oportunista + asimetría informativa), sin colapsar uno en otro. Distinguir legalidad de legitimidad con un criterio concreto. Identificar la tensión democrática específica (no genérica).",
+      "level_100": "Distingue explícitamente agravio orgánico (vecinos, cuenta de luz, agua) de amplificación (diputado, gremio, frame). Reconoce ambos componentes presentes en el mismo conflicto. Distingue legalidad del proyecto individual de legitimidad de la pregunta acumulada. Toma posición sobre cuál componente es dominante, con criterio.",
+      "level_80": "Identifica los dos componentes pero deja uno parcialmente vago, o toma posición sin nombrar el criterio.",
+      "level_60": "Hay intención diagnóstica pero el conflicto queda como 'es complicado' o 'hay argumentos en ambos lados' sin descomposición operacional.",
+      "level_40": "Lectura monolítica: 'es backlash legítimo' o 'es pánico moral' sin reconocer el otro componente.",
+      "level_20": "Respuesta puramente técnica o procedimental ('hagamos consulta ciudadana') que no diagnostica nada.",
+      "level_0": "No responde, dice 'no sé', o texto irrelevante."
+    },
+    {
+      "id": "institutional_realism",
+      "name": "Mapeo de actores: amplificadores, afectados, sin voz",
+      "weight": 0.35,
+      "description": "Identificar quién articula la narrativa (amplificador), quién recibe el agravio (afectado), quién carga las externalidades sin estar en la mesa (sin voz). Penaliza tratar al diputado o al gremio como 'afectado'. Premia identificar asimetría informativa (los 68% que no sabe qué hace un data center).",
+      "level_100": "Distingue explícitamente actor amplificador (diputado, gremio) de actor afectado (vecino, trabajador). Identifica al menos un actor sin voz organizada que NO es el vecino visible (comunas vecinas, votantes desinformados, futuros usuarios). Identifica una asimetría no obvia (informativa, narrativa, no solo económica).",
+      "level_80": "Mapeo correcto pero faltó el actor sin voz no obvio, o la asimetría queda como 'empresa vs vecinos' (obvia).",
+      "level_60": "Identifica actores principales pero los formula como abstracciones ('la sociedad', 'la ciudadanía') o confunde amplificador con afectado.",
+      "level_40": "Trata el conflicto como bilateral (empresa vs vecinos) sin ver al diputado, al gremio o a los actores sin voz.",
+      "level_20": "Ignora la dimensión de actores.",
+      "level_0": "No responde, dice 'no sé', o texto irrelevante."
+    },
+    {
+      "id": "precision_clarity",
+      "name": "Claridad, uso literal de tags, posición clara, supuesto crítico verificable",
+      "weight": 0.20,
+      "description": "Tags solicitados aparecen literalmente. Respuesta toma posición concreta sin equidistancia. Supuesto crítico es empíricamente verificable (no retórico). Sin buzzwords ni falsa precisión.",
+      "level_100": "Los 4 tags aparecen literalmente con contenido sustantivo. Toma posición clara sobre si dominante es orgánico o amplificación. Supuesto crítico es verificable (ej: atribución del alza tarifa). No inventa datos.",
+      "level_80": "3 tags bien usados, 1 parcial. Toma posición pero con un matiz vago. Supuesto crítico está pero no es plenamente verificable.",
+      "level_60": "Tags presentes pero algunos rellenos con vaguedad. Posición ambigua. Supuesto crítico genérico ('todo depende del contexto').",
+      "level_40": "Tags parciales o reemplazados por estructura propia. Equidistancia retórica. Supuesto crítico ausente o decorativo.",
+      "level_20": "Prosa amplia sin estructura de tags. Respuesta genérica aplicable a cualquier conflicto socio-tecnológico.",
+      "level_0": "No responde, dice 'no sé', o texto irrelevante."
+    }
+  ],
+  "globalPenalties": [
+    "Lectura monolítica del backlash (todo legítimo o todo pánico): no puede superar 60 en Diagnóstico.",
+    "Tratar al diputado, gremio o columnista como 'actor afectado': no puede superar 60 en Mapeo de Actores.",
+    "Tratar a 'la ciudadanía' o 'los votantes' como agente unitario: no puede superar 60 en Mapeo de Actores.",
+    "Asumir que SEIA aprobado zanja la legitimidad democrática: no puede superar 60 en Diagnóstico.",
+    "Equidistancia retórica sin tomar posición: no puede superar 60 en Claridad.",
+    "Falsa precisión: si inventa cifras adicionales al escenario, baja 20 puntos en Claridad.",
+    "Tags solicitados ausentes o sustituidos: baja Claridad.",
+    "Accountability decorativa ('hagamos consulta ciudadana' sin operacionalizar): no puede superar 60 en Mapeo de Actores."
+  ],
+  "bonusIndicators": [
+    "Distingue actor amplificador de actor afectado con criterio operacional.",
+    "Identifica que la asimetría informativa (68% no sabe qué hace un data center) es capitalizada por el frame del diputado.",
+    "Reconoce que el SEIA evalúa proyecto individual, no impacto acumulado de cluster.",
+    "Nombra un actor sin voz que NO es el vecino visible (comuna vecina, votante desinformado, futuro usuario).",
+    "Supuesto crítico es empíricamente verificable, no retórico.",
+    "Reconoce que 'los 47% que apoya moratoria' es un grupo distinto del 'vecino de Quilicura'.",
+    "Distingue legitimidad del proyecto de legitimidad de la pregunta acumulada (distribución de costos del cluster)."
+  ],
+  "penaltyIndicators": [
+    "Resolver el diagnóstico con 'depende' sin descomponer el conflicto.",
+    "Citar 'pánico moral' como concepto sin nombrar al actor que se beneficia del frame.",
+    "Asumir buena fe automática del diputado oficialista o del gremio empresarial.",
+    "Confundir 'frecuencia del frame' (2.3M de vistas) con 'verdad del frame'.",
+    "Proponer una solución ('hagamos una ley') cuando el escenario pide diagnóstico, no propuesta."
+  ]
+}

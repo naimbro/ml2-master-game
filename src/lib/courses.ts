@@ -26,6 +26,21 @@ import aydDemoScenarios from '../../content/sessions/ai_democracy_2026/unidad_00
 import aydDemoRubric from '../../content/sessions/ai_democracy_2026/unidad_00_demo/rubric.json';
 import aydDemoKnowledgeBase from '../../content/sessions/ai_democracy_2026/unidad_00_demo/knowledge_base.md?raw';
 
+import teB1Config from '../../content/sessions/temas_emergentes_2026/bloque_1_backlash_diagnostico/config.json';
+import teB1Scenarios from '../../content/sessions/temas_emergentes_2026/bloque_1_backlash_diagnostico/scenarios.json';
+import teB1Rubric from '../../content/sessions/temas_emergentes_2026/bloque_1_backlash_diagnostico/rubric.json';
+import teB1KnowledgeBase from '../../content/sessions/temas_emergentes_2026/bloque_1_backlash_diagnostico/knowledge_base.md?raw';
+
+import teB2Config from '../../content/sessions/temas_emergentes_2026/bloque_2_concentracion_frontera/config.json';
+import teB2Scenarios from '../../content/sessions/temas_emergentes_2026/bloque_2_concentracion_frontera/scenarios.json';
+import teB2Rubric from '../../content/sessions/temas_emergentes_2026/bloque_2_concentracion_frontera/rubric.json';
+import teB2KnowledgeBase from '../../content/sessions/temas_emergentes_2026/bloque_2_concentracion_frontera/knowledge_base.md?raw';
+
+import teB3Config from '../../content/sessions/temas_emergentes_2026/bloque_3_captura_populismo/config.json';
+import teB3Scenarios from '../../content/sessions/temas_emergentes_2026/bloque_3_captura_populismo/scenarios.json';
+import teB3Rubric from '../../content/sessions/temas_emergentes_2026/bloque_3_captura_populismo/rubric.json';
+import teB3KnowledgeBase from '../../content/sessions/temas_emergentes_2026/bloque_3_captura_populismo/knowledge_base.md?raw';
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyJson = any;
 
@@ -138,6 +153,42 @@ export const SESSIONS: SessionOption[] = [
     scenarios: aydDemoScenarios,
     rubric: aydDemoRubric,
     knowledgeBase: aydDemoKnowledgeBase,
+  },
+  {
+    id: 'bloque_1_backlash_diagnostico',
+    courseId: 'temas_emergentes_2026',
+    title: teB1Config.title,
+    description: teB1Config.description,
+    rounds: teB1Scenarios.length,
+    duration: Math.round(teB1Config.roundDurationSeconds / 60),
+    config: teB1Config,
+    scenarios: teB1Scenarios,
+    rubric: teB1Rubric,
+    knowledgeBase: teB1KnowledgeBase,
+  },
+  {
+    id: 'bloque_2_concentracion_frontera',
+    courseId: 'temas_emergentes_2026',
+    title: teB2Config.title,
+    description: teB2Config.description,
+    rounds: teB2Scenarios.length,
+    duration: Math.round(teB2Config.roundDurationSeconds / 60),
+    config: teB2Config,
+    scenarios: teB2Scenarios,
+    rubric: teB2Rubric,
+    knowledgeBase: teB2KnowledgeBase,
+  },
+  {
+    id: 'bloque_3_captura_populismo',
+    courseId: 'temas_emergentes_2026',
+    title: teB3Config.title,
+    description: teB3Config.description,
+    rounds: teB3Scenarios.length,
+    duration: Math.round(teB3Config.roundDurationSeconds / 60),
+    config: teB3Config,
+    scenarios: teB3Scenarios,
+    rubric: teB3Rubric,
+    knowledgeBase: teB3KnowledgeBase,
   },
 ];
 

@@ -1,13 +1,17 @@
 {
   "courseId": "temas_emergentes_2026",
-  "name": "Temas Emergentes",
+  "name": "Temas Emergentes: IA y Democracia",
   "code": "MEPP-TE-2026",
-  "description": "Curso del Magister en Economia y Politicas Publicas (MEPP) de la Universidad Adolfo Ibanez. Edicion 2026. Aborda temas emergentes en la frontera entre economia, politicas publicas, tecnologia y sociedad.",
+  "description": "Curso intensivo del Magister en Economia y Politicas Publicas (MEPP) de la Universidad Adolfo Ibanez. Edicion 2026. Aborda IA bajo lente democratica: diagnostico (backlash), poder (concentracion), y amenazas/respuestas. Formato intensivo en 3 sesiones extendidas.",
   "professorEmail": "naim.bro@gmail.com",
   "university": "Universidad Adolfo Ibanez",
   "program": "Magister en Economia y Politicas Publicas",
-  "syllabusUrl": "",
-  "startDate": "2026-08-01",
-  "endDate": "2026-12-15",
-  "sessions": []
+  "syllabusUrl": "https://naimbro.github.io/teaching/2026_temas_emergentes.html",
+  "startDate": "2026-05-14",
+  "endDate": "2026-06-04",
+  "sessions": [
+    "bloque_1_backlash_diagnostico",
+    "bloque_2_concentracion_frontera",
+    "bloque_3_captura_populismo"
+  ]
 }

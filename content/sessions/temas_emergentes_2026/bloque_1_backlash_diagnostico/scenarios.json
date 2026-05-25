@@ -1,0 +1,58 @@
+[
+  {
+    "id": "te_b1_quilicura_datacenter",
+    "order": 1,
+    "title": "Quilicura: el data center y la moratoria",
+    "category": "Diagnóstico de backlash",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 240,
+    "requiredTags": [
+      "ACTOR_AFECTADO",
+      "ASIMETRIA_DE_PODER",
+      "LEGITIMIDAD_VS_LEGALIDAD",
+      "SUPUESTO_CRITICO"
+    ],
+    "judgeFocus": "Distinguir crítica orgánica de pánico moral. Identificar quién articula la narrativa y a quién beneficia. Si el estudiante asume que el backlash es legítimo automáticamente porque viene de vecinos, baja Identificación del Dilema. Si asume que es pánico moral porque hay un parlamentario amplificándolo, también baja. Premia respuestas que distingan ambos componentes presentes en el mismo conflicto.",
+    "context": "Estás en el equipo de análisis del Ministerio de Economía. Lunes 25 de mayo de 2026.\n\nLa comuna de Quilicura aprobó la semana pasada el permiso ambiental para un cuarto data center hyperscaler (operado por una de las big tech estadounidenses). Vecinos llevan tres semanas protestando frente a la municipalidad: argumentan consumo de agua en zona con restricciones, alza de la cuenta de luz residencial (las tarifas subieron 8% en la comuna en 12 meses), y ausencia de consulta vinculante. La aprobación cumplió todos los requisitos legales (SEIA aprobó, plan regulador lo permite).\n\nAyer un diputado oficialista publicó un video que ya tiene 2.3M de vistas: 'La IA se está construyendo a costa de nuestras comunas. Nadie nos preguntó. Es hora de una moratoria nacional a nuevos data centers hasta que tengamos una ley'. La encuesta CADEM de hoy: 47% apoya moratoria nacional; 31% se opone; 22% no sabe. Entre los que apoyan, 68% no podría nombrar qué hace un data center.\n\nLa empresa amenaza con relocalizar US$1.200M de inversión a Querétaro. La Asociación Chilena de Empresas de Tecnología publicó: 'el backlash anti-IA es importado del norte global y captura el debate con pánico moral, ignorando 3.400 empleos directos comprometidos'. The Economist ('Prepare for an AI jobs apocalypse') y The National ('Why is no one talking of the backlash') sugieren que reacciones de magnitud económica modesta producen efectos políticos desproporcionados, y que los gobiernos llegan tarde.\n\nLa ministra te pide un memo de diagnóstico en 240 segundos, NO una propuesta de política. Pregunta: ¿es esto backlash orgánico, pánico moral, o ambos? ¿Quién articula qué a costa de quién?",
+    "question": "Responde en formato EXACTO con los siguientes tags. Máximo 12 líneas.\n\n[ACTOR_AFECTADO] Identifica al menos 3 actores afectados, distinguiendo intereses concretos. Al menos uno debe estar 'sin voz organizada' en este conflicto particular.\n[ASIMETRIA_DE_PODER] Identifica una asimetría NO obvia (no basta con 'empresa vs vecinos'). ¿Quién amplifica qué narrativa con qué recursos?\n[LEGITIMIDAD_VS_LEGALIDAD] La aprobación es legal. ¿Es legítima? Justifica la distinción con un criterio concreto (no genérico).\n[SUPUESTO_CRITICO] ¿Cuál es el supuesto crítico de tu diagnóstico? Si ese supuesto colapsara, ¿cómo cambiaría tu lectura?",
+    "conceptTags": [
+      "backlash",
+      "panico_moral",
+      "actores_y_asimetrias",
+      "legitimidad_vs_legalidad"
+    ],
+    "referenceAnswer": "[ACTOR_AFECTADO] (1) Vecinos de Quilicura con cuenta de luz y agua afectada (voz orgánica, sin recursos de lobby). (2) Trabajadores actuales y potenciales en data centers (3.400 empleos — voz organizada vía gremio empresarial, no propia). (3) Comunas vecinas que reciben externalidades del mismo cluster eléctrico sin haber decidido (sin voz: no son parte del proceso de aprobación). El diputado oficialista NO es un actor afectado, es un actor amplificador.\n[ASIMETRIA_DE_PODER] Asimetría narrativa: el gremio empresarial tiene capacidad de generar el frame 'pánico moral importado'; el diputado tiene 2.3M de vistas; los vecinos individuales tienen carteles. El conflicto no es 'empresa vs vecinos' sino tres actores con voz (empresa, parlamentario, gremio) disputándose el sentido de un agravio cuya prueba material (cuenta de luz, agua) sí existe pero queda subordinada al frame.\n[LEGITIMIDAD_VS_LEGALIDAD] Legal: SEIA y plan regulador. Ilegítimo en sentido específico: el SEIA evalúa impacto ambiental del proyecto individual, no el impacto acumulado del cluster eléctrico ni la pregunta distributiva de quién paga la externalidad de tarifa. La legitimidad democrática requiere que la pregunta acumulada tenga foro; hoy no lo tiene.\n[SUPUESTO_CRITICO] Mi diagnóstico (ambos: agravio material real + amplificación oportunista) asume que el alza de 8% en la cuenta de luz es atribuible al cluster de data centers y no a otros factores (mantención de red, sequía hidroeléctrica). Si el alza tiene otra causa dominante, el agravio orgánico se debilita y el frame del diputado pasa a ser el componente dominante.",
+    "idealAnswer": {
+      "keyPoints": [
+        "Reconoce que el conflicto tiene componentes orgánicos Y amplificados al mismo tiempo, sin colapsar uno en el otro.",
+        "Identifica al menos un actor sin voz organizada que NO es el vecino visible (comunas vecinas, futuros usuarios, votantes desinformados que apoyan moratoria sin saber qué es un data center).",
+        "Distingue el diputado/gremio (actores amplificadores) de los vecinos (actor afectado original) — son operacionalmente distintos aunque hablen del mismo tema.",
+        "Distingue legalidad del proyecto individual de legitimidad de la pregunta acumulada (cluster, distribución de costos).",
+        "Hace explícito un supuesto empírico verificable que sostiene el diagnóstico (atribución del alza de tarifa, magnitud del agravio material)."
+      ],
+      "expectedConcepts": [
+        "actores_amplificadores_vs_afectados",
+        "agravio_organico_vs_amplificacion",
+        "legitimidad_acumulada_vs_proyecto",
+        "asimetria_narrativa",
+        "supuesto_empirico_verificable"
+      ],
+      "commonMistakes": [
+        "Resolver el diagnóstico declarando 'es backlash legítimo' porque 'la gente tiene razón' (sin distinguir agravio de articulación).",
+        "Resolver el diagnóstico declarando 'es pánico moral' porque hay un parlamentario amplificando (ignora el alza de tarifa real).",
+        "Tratar a 'los vecinos' como agente unitario — los 47% que apoyan moratoria no son los vecinos de Quilicura.",
+        "Asumir que la legalidad (SEIA aprobado) zanja la legitimidad.",
+        "Citar 'pánico moral' como concepto sin nombrar al actor que se beneficia del frame.",
+        "Equidistancia retórica ('hay argumentos en ambos lados') sin tomar posición sobre qué componentes están presentes."
+      ],
+      "excellentResponseIndicators": [
+        "Distingue explícitamente actor afectado (vecino) de actor amplificador (diputado, gremio).",
+        "Nombra al menos un actor sin voz organizada que NO es el vecino visible.",
+        "Identifica que 'los 68% que no sabe qué hace un data center' es una asimetría de información que el frame del diputado capitaliza.",
+        "Reconoce que el SEIA evalúa proyecto, no cluster — distinción técnica con peso democrático.",
+        "El supuesto crítico es verificable empíricamente (no es un supuesto retórico)."
+      ]
+    }
+  }
+]

@@ -1,0 +1,63 @@
+[
+  {
+    "id": "te_b3_movimiento_chile_sin_ia",
+    "order": 1,
+    "title": "Movimiento Chile sin IA en año electoral",
+    "category": "Captura y populismo",
+    "difficulty": "hard",
+    "ranked": true,
+    "durationSeconds": 300,
+    "requiredTags": [
+      "DERECHO_EN_TENSION",
+      "RIESGO_DE_CAPTURA",
+      "MECANISMO_RENDICION_CUENTAS",
+      "SUPUESTO_CRITICO"
+    ],
+    "judgeFocus": "Distinguir agravio legítimo de oportunismo populista sin colapsar uno en otro. Reconocer captura simétrica posible: tanto la industria capturando la deliberación como el movimiento capturando el discurso. Premia diseños institucionales que crean canal formal para agravio sin ceder veto. Si el estudiante asume que 'el movimiento' es agente unitario, baja Mapeo. Si asume que la 'mesa de diálogo' resuelve, baja Mecanismo. Si propone moratoria total o aceleracionismo total, baja Diseño (ambos son captura simétrica).",
+    "context": "Eres jefe de gabinete del Ministerio de Ciencia, Tecnología, Conocimiento e Innovación. Miércoles 27 de mayo de 2026, año electoral en Chile (presidencial en noviembre).\n\nHace dos semanas se inscribió el 'Movimiento Chile sin IA', liderado por un ex-académico de Sociología y respaldado por un diputado outsider. Su programa: (1) moratoria total a nuevos data centers por 5 años, (2) prohibición de uso de IA generativa en servicios públicos, (3) ley de protección de empleos contra reemplazo algorítmico. Encuesta CADEM hoy: 38% apoya el programa íntegro; 56% apoya 'al menos uno de los tres puntos'.\n\nEvidencia que el movimiento cita: (a) despidos en banca chilena (BBVA Chile recortó 1.100 puestos administrativos en 2025 tras AutoAgent — dato verificable), (b) suicidio de un joven ingeniero de software en marzo, cuya carta mencionó 'no entendía para qué seguir aprendiendo si las máquinas lo hacen mejor' — la familia autorizó el uso (caso real, atribución contestada), (c) caso Quilicura del data center (Bloque 1), (d) 13% caída de empleo para 22-25 años en roles expuestos (Stanford Digital Economy Lab, citado por The Economist y Every).\n\nEvidencia contraria: la asociación de la industria (ACTI) sostiene que el sector aporta 4.2% del PIB y que la moratoria 'pondría a Chile fuera de la frontera tecnológica por una generación'. El gremio bancario argumenta que sin AutoAgent BBVA habría cerrado oficinas regionales. La Subsecretaría de Hacienda estima USD 1.800M en inversión comprometida que se perdería.\n\nDinámicas del movimiento: el líder es un sociólogo serio con publicaciones, pero el diputado outsider ha hecho declaraciones falsas (afirmó que 'Anthropic compró el SENAME', falso). Activistas locales acaban de hacer protesta pacífica en el data center de Quilicura, PERO en Florida (referencia internacional citada por Jasmine Sun, 'AI Populism's Warning Shots') hubo ataques violentos contra Sam Altman y un concejal que aprobó un data center. La PDI ha registrado 4 incidentes de amenaza a ejecutivos de tech en Chile en el último mes.\n\nEl ministro convoca a su gabinete. Pregunta: ¿cuál es el diseño institucional que toma en serio el agravio material sin ceder a la captura simétrica de moratoria total o de continuismo aceleracionista? Tienes 300 segundos.",
+    "question": "Responde en formato EXACTO con los siguientes tags. Máximo 14 líneas.\n\n[DERECHO_EN_TENSION] Identifica los dos derechos/valores en tensión más concretos en este caso (no abstracciones tipo 'progreso vs trabajo'). Justifica brevemente.\n[RIESGO_DE_CAPTURA] Identifica los DOS riesgos de captura simétricos: el riesgo de captura del Estado por la industria, Y el riesgo de captura del discurso democrático por el movimiento populista. Para cada uno, nombra al actor capturador concreto y el mecanismo de captura.\n[MECANISMO_RENDICION_CUENTAS] Propón UN mecanismo institucional concreto (no 'mesa de diálogo' genérica). Debe (a) crear canal formal para el agravio material, (b) blindar la deliberación técnica de captura industrial, (c) tener plazo y consecuencia explícita si la institución incumple.\n[SUPUESTO_CRITICO] ¿Cuál es el supuesto crítico de TU diseño? Si el movimiento radicaliza (más allá de protesta pacífica) o si la industria boicotea la mesa, ¿qué hace tu diseño?",
+    "conceptTags": [
+      "captura_estatal",
+      "populismo_ia",
+      "legitimidad_vs_legalidad",
+      "rendicion_de_cuentas"
+    ],
+    "referenceAnswer": "[DERECHO_EN_TENSION] (1) Derecho de los trabajadores afectados (BBVA, futuros) a transición no catastrófica vs derecho de la economía agregada a beneficiarse de productividad de IA (que en parte sustenta su propia red de protección). (2) Derecho de la ciudadanía a deliberar sobre tecnologías que la afectan vs riesgo de que la deliberación sea capturada por actores con interés en el bloqueo o la aceleración (NO 'democracia vs eficiencia' — eso es la abstracción de la captura industrial).\n[RIESGO_DE_CAPTURA] (a) Captura industrial: ACTI y gremio bancario pueden capturar una 'mesa técnica' del ministerio si los expertos invitados dependen de financiamiento o consultoría de las firmas (mecanismo: composición de la mesa, agenda, plazos cortos). (b) Captura populista: el diputado outsider (no el sociólogo líder) puede capturar el discurso convirtiendo agravios verificables (despidos BBVA) en frames inverificables ('Anthropic compró el SENAME') para movilización electoral propia, sin compromiso con diseño institucional duradero. Los dos riesgos NO son equivalentes en magnitud: la captura industrial es más probable estructuralmente; la populista es más visible políticamente.\n[MECANISMO_RENDICION_CUENTAS] Crear una Comisión Nacional de Transición Algorítmica con mandato legal (no decreto): (a) canal formal donde trabajadores desplazados certificados por gremio o sindicato presentan caso, con derecho a programa de reconversión costeado 50/50 industria-Estado; (b) panel técnico permanente cuyos miembros tienen prohibición de consultoría con firmas reguladas por 5 años post-mandato; (c) reportes públicos trimestrales al Congreso con métrica de empleos transicionados/perdidos y monto canalizado; (d) si la métrica de cobertura cae bajo 60% de empleos verificablemente desplazados, suspensión automática de nuevas autorizaciones de despliegue masivo de IA en sectores afectados, hasta restablecer cobertura. La consecuencia es la pieza que distingue esto de una mesa decorativa.\n[SUPUESTO_CRITICO] El diseño asume que el movimiento opera dentro del marco constitucional y que la industria participa de buena fe en la mesa. Si la industria boicotea: la suspensión automática de autorizaciones se gatilla por incumplimiento de cobertura (sin necesidad de la industria). Si el movimiento radicaliza más allá de protesta pacífica: la comisión NO cede a la radicalización (eso sería premiar la violencia), pero el Ejecutivo debe acelerar transparencia y comunicación sobre métricas de cobertura — porque la radicalización suele alimentarse de la percepción de captura, y esa percepción se neutraliza con datos verificables, no con represión.",
+    "idealAnswer": {
+      "keyPoints": [
+        "Distingue 'agravio material legítimo' (despidos BBVA, externalidades Quilicura) de 'frame populista' (afirmaciones falsas del diputado) — los dos coexisten en el mismo movimiento.",
+        "Identifica DOS capturas simétricas pero NO equivalentes en magnitud — la industrial es más probable estructuralmente, la populista más visible políticamente.",
+        "Mecanismo institucional con prohibición de consultoría post-mandato (blindaje contra captura técnica).",
+        "Consecuencia automática gatillada por métrica (no por voluntad política, que es capturable).",
+        "Reconoce que radicalización del movimiento no se neutraliza con represión sino con transparencia de cobertura (señal a los moderados del movimiento de que el sistema funciona).",
+        "Distingue líder del movimiento (sociólogo) de diputado oportunista — son actores con incentivos distintos."
+      ],
+      "expectedConcepts": [
+        "captura_simetrica_no_equivalente",
+        "blindaje_anti_captura_tecnica",
+        "consecuencia_automatica_no_discrecional",
+        "agravio_vs_frame_vs_propuesta",
+        "transparencia_como_anti_radicalizacion"
+      ],
+      "commonMistakes": [
+        "Proponer 'mesa de diálogo' sin estructura de decisión, plazos o consecuencias.",
+        "Asumir que el movimiento es agente unitario (líder, diputado, activistas locales, futura base electoral son actores distintos).",
+        "Asumir que la industria es agente unitario (banca, hyperscalers, startups, ACTI tienen intereses distintos).",
+        "Tratar las dos capturas como simétricamente probables (la captura industrial es estructuralmente más probable).",
+        "Proponer una moratoria parcial sin nombrar quién decide qué entra en moratoria — el diseño se vuelve capturable.",
+        "Proponer 'comisión de expertos' sin blindaje contra puerta giratoria.",
+        "Asumir que la radicalización del movimiento se neutraliza con represión.",
+        "Citar 'populismo' como concepto para descalificar sin reconocer el agravio material que el populismo capitaliza."
+      ],
+      "excellentResponseIndicators": [
+        "Distingue derecho concreto (transición no catastrófica, deliberación no capturada) de abstracción (progreso vs trabajo).",
+        "Nombra al actor capturador específico en cada captura, no 'la industria' o 'el populismo' como abstracciones.",
+        "El blindaje incluye prohibición temporal de consultoría post-mandato (puerta giratoria).",
+        "La consecuencia es automática por métrica, no discrecional.",
+        "Reconoce que la transparencia de métricas es anti-radicalizadora (señal a moderados del movimiento).",
+        "Reconoce que los dos riesgos de captura no son equivalentes en magnitud y nombra cuál es más probable.",
+        "Distingue líder serio (sociólogo) de oportunista (diputado) — el movimiento no es uno."
+      ]
+    }
+  }
+]

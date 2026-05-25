@@ -1,0 +1,77 @@
+{
+  "_doc": "Rúbrica del Bloque 3 (Sesión 2, Temas Emergentes 2026). Foco: captura simétrica y respuesta institucional al populismo de IA. Equilibra process_structuring e institutional_realism porque el bloque exige tanto diagnóstico fino del fenómeno populista como diseño concreto.",
+  "sessionId": "bloque_3_captura_populismo",
+  "globalInstructions": "Evalúa SOLO lo que está escrito. Este es el Bloque 3 de la Sesión 2 del curso 'Temas Emergentes: IA y Democracia' (UAI MEPP 2026). El foco del bloque es CAPTURA y POPULISMO: cuando emerge un movimiento anti-IA que mezcla agravios materiales legítimos con frames populistas, ¿cómo diseñar respuesta institucional que tome en serio el agravio sin ceder a la captura simétrica? Premia: distinguir agravio de frame de propuesta; identificar capturas simétricas pero NO equivalentes en magnitud; mecanismos con blindaje anti-puerta giratoria y consecuencias automáticas; reconocer que radicalización se neutraliza con transparencia, no con represión. Penaliza: tratar al movimiento como agente unitario; tratar la industria como agente unitario; equidistancia retórica entre 'industria captura' y 'populismo captura'; 'mesa de diálogo' sin estructura; descalificación moralizante del populismo sin reconocer el agravio que capitaliza.",
+  "scoring": {
+    "scaleLevels": [100, 80, 60, 40, 20, 0],
+    "instructions": "Evalúa SOLO lo que está escrito. Una respuesta que reconoce las dos capturas simétricas Y nombra cuál es más probable estructuralmente vale más que una respuesta que las trata como equivalentes. Una consecuencia automática por métrica vale más que una consecuencia discrecional. Tags solicitados deben aparecer literalmente."
+  },
+  "dimensions": [
+    {
+      "id": "process_structuring",
+      "name": "Diagnóstico del populismo: agravio, frame, propuesta — y capturas simétricas",
+      "weight": 0.40,
+      "description": "Capacidad de descomponer el movimiento populista en componentes (agravio material verificable + frame interpretativo + propuesta concreta), reconocer actores diversos dentro del 'movimiento' (líder serio vs oportunista vs activistas), y nombrar dos capturas simétricas no equivalentes (industrial y populista) con criterio sobre cuál es más probable.",
+      "level_100": "Distingue agravio (despidos BBVA, Quilicura) de frame (afirmaciones falsas del diputado) de propuesta (moratoria total). Reconoce que los tres coexisten en el mismo movimiento. Identifica dos capturas simétricas y nombra cuál es estructuralmente más probable (la industrial). Distingue líder del movimiento de oportunista. Reconoce que la radicalización se neutraliza con transparencia de cobertura, no con represión.",
+      "level_80": "Identifica los componentes pero deja una distinción parcial (ej: trata las dos capturas como equivalentes en magnitud).",
+      "level_60": "Reconoce que hay agravio y hay populismo, pero los trata como un bloque indivisible.",
+      "level_40": "Lectura monolítica: 'el movimiento tiene razón' o 'es solo populismo'.",
+      "level_20": "Moraliza (descalifica el populismo o adopta su frame) sin descomponer.",
+      "level_0": "No responde, dice 'no sé', o texto irrelevante."
+    },
+    {
+      "id": "institutional_realism",
+      "name": "Mecanismo institucional: canal formal + blindaje + consecuencia automática",
+      "weight": 0.40,
+      "description": "Capacidad de proponer un mecanismo concreto que (a) crea canal formal para el agravio material, (b) blinda la deliberación técnica de captura industrial (puerta giratoria), (c) tiene plazo y consecuencia automática gatillada por métrica, no por voluntad política. Identificar el supuesto crítico del propio diseño.",
+      "level_100": "Mecanismo con los 3 elementos: canal formal (con derecho a programa de reconversión), blindaje técnico (prohibición de consultoría post-mandato), consecuencia automática (gatillada por métrica de cobertura, suspende autorizaciones). Reconoce supuesto crítico del diseño y qué hace si colapsa (radicalización del movimiento, boicot de industria).",
+      "level_80": "Mecanismo con 2 de 3 elementos completos. Supuesto crítico mencionado sin desarrollar consecuencia.",
+      "level_60": "Mecanismo presente pero faltan elementos clave (sin blindaje, o sin consecuencia automática). 'Mesa de diálogo' con algo más de estructura.",
+      "level_40": "Propone 'comisión asesora' o 'mesa de diálogo' sin mandato vinculante ni blindaje.",
+      "level_20": "Sin mecanismo concreto. Apela a 'transparencia' o 'gobernanza' como abstracciones.",
+      "level_0": "No responde, dice 'no sé', o texto irrelevante."
+    },
+    {
+      "id": "precision_clarity",
+      "name": "Claridad, tags literales, posición sin equidistancia",
+      "weight": 0.20,
+      "description": "Tags solicitados aparecen literalmente. Toma posición concreta sobre cuál captura es más probable, sobre cuál es la consecuencia del diseño, y sobre qué hacer si el supuesto colapsa. No inventa datos. Sin equidistancia moralizante.",
+      "level_100": "Los 4 tags aparecen literalmente con contenido sustantivo. Toma posición clara en cada uno. No inventa datos. Supuesto crítico desarrollado con respuesta a colapso.",
+      "level_80": "3 tags bien usados, 1 parcial. Posición clara pero un elemento vago.",
+      "level_60": "Tags presentes pero algunos rellenos con vaguedad. Equidistancia parcial.",
+      "level_40": "Tags parciales o reemplazados por prosa. Equidistancia.",
+      "level_20": "Sin estructura de tags. Respuesta genérica.",
+      "level_0": "No responde, dice 'no sé', o texto irrelevante."
+    }
+  ],
+  "globalPenalties": [
+    "Tratar al 'movimiento' como agente unitario (líder, diputado, activistas, base electoral son distintos): no puede superar 60 en Diagnóstico.",
+    "Tratar a 'la industria' como agente unitario: no puede superar 60 en Mecanismo.",
+    "Equidistancia retórica entre 'industria captura' y 'populismo captura' sin nombrar magnitud: no puede superar 60 en Diagnóstico.",
+    "'Mesa de diálogo' sin estructura ni consecuencia: no puede superar 60 en Mecanismo.",
+    "Comisión de expertos sin blindaje contra puerta giratoria: no puede superar 60 en Mecanismo.",
+    "Consecuencia discrecional (depende del ministro) en lugar de automática (gatillada por métrica): no puede superar 60 en Mecanismo.",
+    "Asumir que radicalización del movimiento se neutraliza con represión: no puede superar 60 en Diagnóstico.",
+    "Descalificación moralizante del populismo sin reconocer el agravio material que capitaliza: no puede superar 60 en Diagnóstico.",
+    "Falsa precisión: si inventa cifras adicionales al escenario, baja 20 puntos en Claridad.",
+    "Tags solicitados ausentes o sustituidos: baja Claridad."
+  ],
+  "bonusIndicators": [
+    "Distingue agravio material (despidos BBVA, Quilicura) de frame populista (afirmaciones falsas) de propuesta (moratoria) como tres planos distintos.",
+    "Nombra que la captura industrial es estructuralmente más probable que la populista (asimetría de recursos y persistencia).",
+    "Blindaje anti-puerta giratoria con plazo concreto (5 años post-mandato).",
+    "Consecuencia automática gatillada por métrica de cobertura, no por voluntad política.",
+    "Reconoce que transparencia de cobertura es anti-radicalizadora (señal a moderados).",
+    "Distingue líder serio (sociólogo) de oportunista (diputado) — tienen incentivos distintos.",
+    "Reconoce que la asociación de industria también incluye actores con intereses divergentes (banca vs hyperscalers vs startups).",
+    "Reconoce que un diseño con consecuencia automática reduce la dependencia del ministro de turno (resistente a alternancia política)."
+  ],
+  "penaltyIndicators": [
+    "Apelar a 'gobernanza' o 'transparencia' como soluciones sin operacionalizar.",
+    "Tratar el caso del joven ingeniero (atribución contestada) como prueba causal sin matizar.",
+    "Tratar los 38% de apoyo al programa íntegro como prueba de legitimidad sin distinguir del 56% que apoya 'al menos uno de los tres puntos'.",
+    "Asumir que el ministerio puede negociar bilateral con el movimiento sin mecanismo institucional.",
+    "Confundir 'tomar en serio el agravio' con 'aceptar la propuesta del movimiento'.",
+    "Citar Jasmine Sun como apoyo del frame populista (la lectura es analítica, no normativa)."
+  ]
+}

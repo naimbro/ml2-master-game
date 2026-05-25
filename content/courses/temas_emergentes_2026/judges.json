@@ -1,5 +1,9 @@
 {
-  "_notes": "Sin jueces aun. Cuando se disenen las sesiones del curso, agregar los jueces aqui siguiendo el patron de otros cursos. La logica de seed-firestore.cjs soporta un array vacio sin error.",
+  "_notes": "Temas Emergentes reutiliza los tres jueces de ai_democracy_2026 (democracy_scholar, policy_lawyer, professor_twin_ayd) por referencia: viven en content/courses/ai_democracy_2026/judges.json y se cargan al doc global config/judges en Firestore via seed-firestore.cjs. Cada sesion declara los pesos en su propio config.json bajo judges[] y judgeConfig.{judgeId}.weightFormula. defaultWeights aqui es solo fallback.",
   "judges": [],
-  "defaultWeights": {}
+  "defaultWeights": {
+    "democracy_scholar": 0.40,
+    "policy_lawyer": 0.35,
+    "professor_twin_ayd": 0.25
+  }
 }

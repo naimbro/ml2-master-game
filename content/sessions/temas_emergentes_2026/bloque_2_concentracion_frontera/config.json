@@ -1,0 +1,36 @@
+{
+  "sessionId": "bloque_2_concentracion_frontera",
+  "courseId": "temas_emergentes_2026",
+  "title": "Bloque 2 — Concentración: ¿quién controla la frontera de la IA?",
+  "description": "Segundo bloque de la Sesión 2 del curso Temas Emergentes (28 mayo 2026). Concentración de poder en cinco actores que controlan los modelos frontera (Altman/OpenAI, Amodei/Anthropic, Hassabis/Google, Musk/xAI, Zuckerberg/Meta) y sus implicancias para la soberanía democrática de países como Chile. Anclado en The Economist 'Five men control AI. Who should control them?' (abril 2026).",
+  "date": "2026-05-28",
+  "roundCount": 1,
+  "roundDurationSeconds": 300,
+  "bufferSeconds": 90,
+  "conceptTags": [
+    "concentracion_de_poder",
+    "soberania_tecnologica",
+    "actores_y_asimetrias",
+    "rendicion_de_cuentas",
+    "captura_estatal"
+  ],
+  "judges": [
+    { "judgeId": "democracy_scholar", "weight": 0.30 },
+    { "judgeId": "policy_lawyer", "weight": 0.45 },
+    { "judgeId": "professor_twin_ayd", "weight": 0.25 }
+  ],
+  "judgeConfig": {
+    "democracy_scholar": {
+      "sessionLens": " FOCO DE ESTA RONDA: identificar la asimetría estructural entre cinco firmas frontera (capacidad técnica, escala, recursos) y un Estado periférico (Chile) que es tomador de tecnología. Premia distinguir 'soberanía nominal' (Chile decide a quién contratar) de 'soberanía efectiva' (Chile no puede inspeccionar, modificar ni dejar de depender). Penaliza solucionismo soberanista vacío ('hagamos un LLM chileno') sin asumir el costo.",
+      "weightFormula": "score = 0.40 * process_structuring + 0.40 * institutional_realism + 0.20 * precision_clarity"
+    },
+    "policy_lawyer": {
+      "sessionLens": " FOCO DE ESTA RONDA: mecanismo institucional concreto para gobernar la dependencia. Premia propuestas que reconozcan que (a) las opciones tienen costos asimétricos, (b) la capacidad institucional chilena es limitada, (c) el riesgo de captura existe tanto en la dependencia como en el 'soberanismo nacional'. Penaliza accountability decorativa ('hagamos transparencia') sin operacionalizar quién, ante quién, cuándo, consecuencia.",
+      "weightFormula": "score = 0.20 * process_structuring + 0.65 * institutional_realism + 0.15 * precision_clarity"
+    },
+    "professor_twin_ayd": {
+      "sessionLens": " FOCO DE ESTA RONDA: uso literal de los 4 tags solicitados. Premia tomar posición concreta sobre la opción dominante (A, B o C, o ninguna con justificación). Penaliza listar opciones sin elegir, equidistancia ('depende de los costos'), y exposición teórica sin aterrizar al caso.",
+      "weightFormula": "score = 0.30 * process_structuring + 0.30 * institutional_realism + 0.40 * precision_clarity"
+    }
+  }
+}
