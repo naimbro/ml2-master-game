@@ -86,6 +86,23 @@ Un buen mecanismo institucional debe distinguir las dos capas y exigir diversifi
 
 ### Lecturas y fuentes ancla del bloque
 
-1. **The Economist, "Five men control AI. Who should control them?" (abril 2026).** Argumento central: cinco personas (Altman, Amodei, Hassabis, Musk, Zuckerberg) toman decisiones que afectan a miles de millones, sin mandato democrático. El gobierno estadounidense empieza a involucrarse después de años de laissez-faire. Implica una pregunta institucional: ¿qué gobierna a los gobernadores de facto de una tecnología de propósito general?
+1. **The Economist, "Five men control AI. Who should control them?" (abril 2026).** Cinco personas (Altman, Amodei, Hassabis, Musk, Zuckerberg) toman decisiones que afectan a miles de millones, sin mandato democrático.
 
-2. **Contextualización chilena**: Chile NO está en la frontera. Es tomador. Esto cambia el menú de respuesta: las opciones realistas son governance de la dependencia, no liderazgo de la frontera. Las opciones discutidas en esta sesión (Plan Nacional, multi-proveedor, alianza latinoamericana) son las que aparecen en el debate público chileno actual.
+2. **The Economist, "Could AI's leading men become as powerful as Ford or Rockefeller?" (18 abr 2026, sección Business — "Tycoon capitalism").** Ranking compuesto de 11 olas tecnológicas en EE.UU. en 150 años, evaluando 5 magnates por ola según revenue, employment, market cap, control corporativo y riqueza personal. Resultados:
+   - **#1: Henry Ford** — el magnate más poderoso que ha visto EE.UU. Riqueza >1% del GDP, Ford Motor empleaba 0,15% de la población americana en 1925, control corporativo casi total (compró a minoritarios en 1919, familia dueña entera), 40% de los autos en EE.UU. eran Model T en 1917. "$5-a-day wage" para que sus trabajadores compraran sus autos.
+   - **#2: John D. Rockefeller** — Standard Oil, riqueza ~1,5% del GDP estadounidense en su peak.
+   - **#4: Jeff Bezos** (Amazon, $2,7T market cap, >1M empleados americanos).
+   - **#8: Elon Musk** — pero mayoritariamente por Tesla/SpaceX, no por xAI.
+   - **#11: Mark Zuckerberg** — mayoritariamente por Meta/redes sociales, no por IA.
+   - **Altman, Amodei, Hassabis: mitad BAJA del ranking** porque (a) model-making requiere pocos clever people + cómputo, los labs tienen pocos workers; (b) ninguno tiene el control corporativo de Ford o Vanderbilt: Altman corre OpenAI "at the pleasure of his board" (lo echaron en nov 2023), Amodei tiene una participación pequeña en el lab que cofundó, Hassabis no es ni el empleado más senior de Google.
+   - **Tres patrones históricos**:
+     1. Muchos magnates fueron deeply strange (Ford con su Dearborn Independent antisemita; Vanderbilt hablaba con espíritus; Morgan consultaba astrólogos; Edison fanáticamente opuesto al sueño; Jobs con dietas extremas). → Musk con conspiraciones y Zuckerberg con su demeanor robótico "no son tan fuera de lo común".
+     2. Las tecnologías introdujeron nuevos peligros: railways crashes financieros; aviación insegura; cars matando peatones; Edison vs Westinghouse (los hombres de Edison hicieron electrocuciones públicas de animales para asustar al público); banking magnificó crisis financieras; railways y cars **automatizaron empleo** (locomoción a caballo desaparece).
+     3. Relación magnate-Estado: en el s. XIX magnates tuvieron más latitud (Carnegie reprimió violentamente disturbios laborales; J.P. Morgan funcionó como banco central de facto en el crash de 1907; Andrew Mellon fue Secretario del Tesoro mientras dirigía un imperio industrial).
+   - **Tres momentos en que el Estado de EE.UU. frenó a magnates tecnológicos**:
+     - **1911**: Corte Suprema disuelve Standard Oil por monopolización (antitrust estructural).
+     - **1913**: Congreso crea Federal Reserve para que ningún Morgan vuelva a funcionar de hecho como banco central.
+     - **2000**: juez ordena breakup de Microsoft; escapó en apelación pero "chastened" (efecto disciplinante sin breakup).
+   - Cierre del artículo: "as AI transforms the economy and society, the people behind it may likewise encounter governments that wish to curb their power... if history is any guide, a Rockefeller or Ford is likely to emerge soon enough".
+
+3. **Contextualización chilena**: Chile NO está en la frontera. Es tomador. Esto cambia el menú de respuesta: las opciones realistas son governance de la dependencia, no liderazgo de la frontera. Y la traducción de los precedentes antitrust de EE.UU. a Chile NO es directa — Chile no tiene la FNE con capacidad para abrir investigaciones de esa escala ni jurisdicción sobre comportamiento global de OpenAI/Anthropic. El camino realista es coalición multilateral (Brasil, México, UE) para que el efecto disciplinante venga de mercados con peso institucional; Chile aporta vocería ética y casos concretos.

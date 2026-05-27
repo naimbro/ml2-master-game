@@ -61,5 +61,123 @@
         "No menciona 'mesa de diálogo' ni 'marco institucional' — está hablando con un primo."
       ]
     }
+  },
+  {
+    "id": "te_b3_video_viral_timeline",
+    "order": 2,
+    "title": "El video viral en tu timeline",
+    "category": "Frames populistas y respuesta en redes",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 180,
+    "requiredTags": [
+      "[ACCIÓN]",
+      "[DATO]"
+    ],
+    "judgeFocus": "Premia tomar UNA acción específica (repostear / responder con cita / responder con pregunta / ignorar / capturar y subir versión propia / etc.) y justificarla con UN dato concreto de las lecturas (4,1→8,5% peak power demand, China shock 2M empleos = realineamiento político, 13% Stanford cierre de entrada, 70% americanos creen IA va a dificultar empleo, redes de seguridad insuficientes según Gamble). Penaliza 'cuidado con la desinformación' como justificación — es lo que todos dicen y no aporta. Penaliza también respuestas paternalistas tipo 'hay que educar'. Premia respuestas que distinguen el núcleo verdadero del video (concentración, presión energética, redes insuficientes) de su exageración (intencionalidad, colapso ya en curso).",
+    "context": "Hoy estás en el metro. Abres X y ves un video con 2,4M vistas: una mujer joven, casa modesta, dice mirando a cámara: 'La IA me va a quitar el trabajo, el agua y la luz para que cinco empresas se hagan ricas. ¿Y qué hace el gobierno? Nada. Compartan'. Tienes 90 segundos antes de bajarte.\n\nSabes que el video exagera. Pero sabes (Gamble; The Economist) que el shock económico puede ser modesto y el shock político enorme, que data centers van a pasar de 4,1% a 8,5% del peak power demand en EE.UU. entre 2025 y 2027, y que las redes de seguridad social no alcanzan para los millones que la IA podría desplazar.",
+    "question": "¿Lo reposteas, le respondes, lo capturas para discutirlo con argumentos, o lo ignoras? Decide UNA acción y justifícala con UN dato concreto de las lecturas.\n\n'Cuidado con la desinformación' no es justificación.\n\n[ACCIÓN] Qué haces, una sola opción.\n[DATO] El dato que sostiene tu decisión. Tiene que ser cita o paráfrasis cercana, no opinión.",
+    "conceptTags": [
+      "frame_populista",
+      "asimetria_narrativa",
+      "respuesta_publica_a_desinformacion_parcial",
+      "comportamiento_en_redes",
+      "evidencia_empirica"
+    ],
+    "referenceAnswer": "[ACCIÓN] Lo capturo, lo guardo, y cuando llegue a la casa subo un thread con cita al estudio de Goldman Sachs sobre demanda eléctrica de data centers. No reposteo (amplifica el frame intencional 'cinco empresas') ni lo ignoro (el agravio material es real y dejarlo correr sin contraste premia al peor argumento). Tampoco respondo en el momento con un tweet — 90 segundos no alcanzan para hacer la distinción entre lo que el video acierta y lo que distorsiona.\n[DATO] Goldman Sachs proyecta que los data centers pasarán de 4,1% del peak power demand estadounidense en 2025 a 8,5% en 2027 — más del doble en dos años. Esto sostiene la mitad verdadera del video (presión energética real, costos públicos que alguien va a pagar). Lo que se separa en el thread: las cinco empresas no 'deciden activamente' quitarte la luz; la dinámica es estructural (concentración de rentas + barreras de entrada en cómputo + red eléctrica como cuello de botella). La pelea legítima no es contra las cinco personas; es por quién paga la externalidad — esa pelea sí se da, y el video tiene razón en pedirla.",
+    "idealAnswer": {
+      "keyPoints": [
+        "Elige UNA acción (no las cuatro, no 'depende').",
+        "Cita un dato concreto de las lecturas (4,1→8,5%, 22% chance subjective, China shock, redes de seguridad insuficientes, etc.).",
+        "El dato sostiene argumentativamente la decisión — no es decoración.",
+        "Reconoce que el video tiene núcleo verdadero (presión estructural) y exageración (intencionalidad de cinco empresas).",
+        "Acción coherente con el tiempo disponible (90 segundos en metro no alcanza para thread con citas).",
+        "No paternalismo ('hay que educar a la gente') — la gente ya sabe que su cuenta de luz subió."
+      ],
+      "expectedConcepts": [
+        "amplificacion_vs_contraste",
+        "frame_intencional_vs_dinamica_estructural",
+        "respuesta_proporcional_al_tiempo_disponible",
+        "evidencia_como_argumento_no_como_decoracion",
+        "distincion_entre_acertar_y_distorsionar"
+      ],
+      "commonMistakes": [
+        "Repostear sin matiz (amplifica el frame intencional).",
+        "Ignorar (deja correr el peor argumento sin contraste).",
+        "Responder en el metro con tweet vacío ('mucho cuidado con esto').",
+        "Justificar con 'es desinformación' — no es justificación, es etiqueta.",
+        "Citar un dato sin conectar con la acción.",
+        "Paternalismo: 'hay que educar a la gente que cree esto'.",
+        "Negar el agravio material (la cuenta de luz subió, es verificable).",
+        "Tomar dos acciones a la vez (responder + repostear) sin elegir."
+      ],
+      "excellentResponseIndicators": [
+        "Reconoce que 'capturar para discutir después' es una acción legítima distinta de las otras tres.",
+        "Distingue el componente verdadero del video del componente distorsionado en una frase.",
+        "Identifica que el tiempo disponible (90 segundos) determina qué tipo de respuesta es coherente.",
+        "Reconoce que NO responder no es lo mismo que ignorar — guardar y responder bien después es opción.",
+        "Cita el dato con cifra Y con fuente (no solo 'va a subir mucho').",
+        "Pelea por la distinción correcta: dinámica estructural de rentas vs intencionalidad atribuida."
+      ]
+    }
+  },
+  {
+    "id": "te_b3_agravio_a_violencia",
+    "order": 3,
+    "title": "Cuando el agravio cruza a violencia",
+    "category": "Radicalización, seguridad y respuesta política",
+    "difficulty": "hard",
+    "ranked": true,
+    "durationSeconds": 180,
+    "requiredTags": [
+      "[POSICIÓN]",
+      "[PRIORIDAD]"
+    ],
+    "judgeFocus": "Premia tomar UNA posición clara entre las tres opciones (más seguridad / respuesta política rápida / ambas con prioridad nombrada). Si dice 'ambas', tiene que nombrar cuál es MÁS urgente y por qué — la equidistancia 'las dos importan' no es respuesta. Premia reconocer que la represión sin canal político alimenta la radicalización (la transparencia como anti-radicalizadora). Penaliza fuerte tres errores: (a) 'más seguridad para ejecutivos' solo, sin canal político, (b) 'respuesta política al agravio' como si bastara, ignorando incidentes registrados, (c) 'esto se resuelve con educación cívica' — no, no se resuelve así. Premia distinguir el actor que ejerce violencia (minoría desconectada de la dirigencia formal del movimiento) del agravio material del movimiento amplio.",
+    "context": "2026. Un concejal de Indiana recibe 13 disparos contra su casa por aprobar un data center. A Sam Altman le tiran un Molotov y le disparan. La PDI chilena registra 4 amenazas contra ejecutivos tech en el último mes. El Movimiento Chile sin IA todavía protesta pacíficamente — pero el precedente está ahí.\n\nJasmine Sun (Every) advierte: 'the only way this conflict resolves peacefully is some kind of grand bargain'.",
+    "question": "¿Esto se previene con más seguridad para ejecutivos tech, con respuesta política rápida al agravio material, o ambos?\n\nSi dices 'ambos', nombra cuál es MÁS urgente y por qué. La equidistancia 'las dos importan' no es respuesta.\n\n[POSICIÓN] Tu opción.\n[PRIORIDAD] Si elegiste 'ambos', cuál es más urgente y por qué. Si elegiste uno solo, por qué el otro NO basta.",
+    "conceptTags": [
+      "radicalizacion_y_violencia_politica",
+      "seguridad_vs_respuesta_politica",
+      "transparencia_como_antiradicalizadora",
+      "grand_bargain",
+      "actores_violentos_vs_dirigencia"
+    ],
+    "referenceAnswer": "[POSICIÓN] Ambos, pero respuesta política rápida al agravio material es estructuralmente más urgente.\n[PRIORIDAD] La seguridad para ejecutivos es necesaria a corto plazo (4 amenazas registradas no es ruido), pero como única respuesta es contraproducente: hace que la dirigencia tech viva en un búnker, se aísle de la deliberación pública, y aparezca confirmada la tesis del movimiento de que 'son una élite que se protege a sí misma'. Eso ALIMENTA radicalización.\n\nLa respuesta política rápida importa más porque (a) la mayoría del movimiento no es violenta — protesta pacífica + base electoral simpatizante. Si esa mayoría ve que el sistema responde al agravio (cobertura de empleos en transición, regulación de externalidades de data centers, canal formal de presentación de daño), los radicales pierden base. (b) Los actores violentos son minoría desconectada de la dirigencia formal — la represión policial los persigue, sí, pero no los neutraliza políticamente. Lo que los neutraliza políticamente es quitarles la audiencia simpatizante, y eso solo lo da la transparencia operacional sobre lo que el Estado SÍ está haciendo. Sun lo dice claro: sin grand bargain, esto escala. La seguridad sin respuesta política es jugar a la defensiva en un terreno que se erosiona solo.",
+    "idealAnswer": {
+      "keyPoints": [
+        "Toma posición clara — no equidistancia 'las dos importan'.",
+        "Si elige 'ambos', nombra cuál es más urgente Y por qué — con argumento.",
+        "Reconoce que represión sin canal político alimenta radicalización.",
+        "Distingue actores violentos (minoría desconectada) de movimiento amplio (mayoría pacífica + base simpatizante).",
+        "Reconoce que la respuesta política funciona por quitar audiencia, no por convencer a los violentos.",
+        "Cita o parafrasea a Sun ('grand bargain', 'only way this conflict resolves peacefully')."
+      ],
+      "expectedConcepts": [
+        "represion_sin_canal_alimenta_radicalizacion",
+        "actores_violentos_vs_base_simpatizante",
+        "transparencia_como_anti_radicalizadora",
+        "grand_bargain_jasmine_sun",
+        "seguridad_como_respuesta_defensiva_insuficiente"
+      ],
+      "commonMistakes": [
+        "Equidistancia: 'las dos son importantes y van juntas' sin nombrar prioridad.",
+        "'Más seguridad para ejecutivos' como respuesta principal, sin canal político.",
+        "'Respuesta política al agravio' como si bastara, ignorando los incidentes registrados.",
+        "'Esto se resuelve con educación cívica' — no.",
+        "Tratar a 'el movimiento' como agente unitario.",
+        "Asumir que la represión policial neutraliza políticamente.",
+        "Confundir 'tomar en serio el agravio' con 'aceptar la propuesta del movimiento'.",
+        "Reducir la respuesta a Chile sin reconocer que el patrón internacional importa."
+      ],
+      "excellentResponseIndicators": [
+        "Reconoce que la transparencia operacional es herramienta de seguridad pública además de democrática.",
+        "Distingue actores violentos de dirigencia formal del movimiento.",
+        "Reconoce que la seguridad sin canal político erosiona el terreno por sí mismo.",
+        "Cita el 'grand bargain' de Sun con uso argumentativo, no decorativo.",
+        "Identifica que neutralizar políticamente a los radicales se hace quitándoles audiencia, no persiguiéndolos.",
+        "Reconoce que ambas medidas a corto plazo pueden coexistir si la política tiene prioridad estructural."
+      ]
+    }
   }
 ]

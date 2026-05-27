@@ -1,10 +1,10 @@
 {
   "sessionId": "bloque_2_concentracion_frontera",
   "courseId": "temas_emergentes_2026",
-  "title": "Bloque 2 — La dependencia invisible: ¿qué pelea sí se puede dar?",
-  "description": "Segundo bloque de la Sesión 2 del curso Temas Emergentes (28 mayo 2026). El estudiante elige una dependencia (modelo, nube, datos, expertise, narrativa) y propone una regla mínima realista para reducirla — sin fingir soberanía total. Anclado en The Economist 'Five men control AI. Who should control them?' (abril 2026).",
+  "title": "Bloque 2 — Concentración: 5 hombres, 1 Ford y la pelea que sí se puede dar (28 mayo 2026)",
+  "description": "Segundo bloque de la Sesión 2 del curso Temas Emergentes (28 mayo 2026). Tres rondas: (1) elegir UNA dependencia y proponer regla mínima realista; (2) ¿es buena o mala noticia que Altman/Amodei/Hassabis estén en la mitad baja del ranking histórico de magnates del The Economist?; (3) ¿qué precedente antitrust (1911 Standard Oil / 1913 Fed / 2000 Microsoft) sí se traduce al caso IA chileno? Anclado en The Economist 'Five men control AI' (abr 2026) y 'Could AI's leading men become as powerful as Ford or Rockefeller?' (abr 2026).",
   "date": "2026-05-28",
-  "roundCount": 1,
+  "roundCount": 3,
   "roundDurationSeconds": 240,
   "bufferSeconds": 60,
   "conceptTags": [

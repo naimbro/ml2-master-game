@@ -56,5 +56,116 @@
         "No menciona la palabra 'soberanía algorítmica' sin operacionalizar costos."
       ]
     }
+  },
+  {
+    "id": "te_b2_ford_todavia_no_nace",
+    "order": 2,
+    "title": "El Ford de la IA todavía no nace",
+    "category": "Concentración histórica vs concentración actual",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 180,
+    "requiredTags": [
+      "[LECTURA]",
+      "[CAMBIO_CRÍTICO]"
+    ],
+    "judgeFocus": "Premia tomar posición clara (buena O mala noticia, no equidistancia). Premia citar UN dato concreto del artículo de Ford/Rockefeller (Ford #1, Rockefeller 1.5% del GDP, Altman/Amodei/Hassabis en mitad baja, board echó a Altman nov 2023, Amodei participación pequeña, Hassabis no es el empleado más senior). Premia UN cambio estructural concreto y verificable que invierta el ranking en 10 años (consolidación de cómputo bajo una firma, captura regulatoria estilo Mellon, vertical integration cloud+modelo+chip, acumulación de market cap vía agentes autónomos, etc.). Penaliza listar cambios genéricos ('si se vuelven monopolio') sin mecanismo concreto, y respuestas que se quedan en la opinión sin dato.",
+    "context": "The Economist analizó 11 olas tecnológicas en EE.UU. de los últimos 150 años. En su ranking compuesto de magnates, Henry Ford queda número uno; John D. Rockefeller, número dos (su riqueza valió 1,5% del GDP estadounidense). Los tres AI bosses cuya riqueza viene de la IA — Altman, Amodei, Hassabis — caen todos en la mitad BAJA del ranking. Razón: el board de OpenAI echó brevemente a Altman en noviembre 2023; Amodei tiene una participación pequeña en Anthropic; Hassabis no es ni el empleado más senior de Google. El artículo cierra: 'si la historia es guía, un Rockefeller o Ford emergerá pronto'.",
+    "question": "¿Esto es buena o mala noticia para la democracia? Toma posición. Y nombra UN cambio estructural concreto que podría hacer que un 'Ford de la IA' emerja en 10 años — no 'si los modelos se vuelven monopolio', algo nombrable.\n\n[LECTURA] Tu posición + UN dato del artículo que la sostiene.\n[CAMBIO_CRÍTICO] El cambio estructural concreto. Si es 'concentración del cómputo', dime cuál y por qué.",
+    "conceptTags": [
+      "tycoon_capitalism",
+      "control_corporativo",
+      "concentracion_de_poder",
+      "comparacion_historica",
+      "frontera_tecnologica"
+    ],
+    "referenceAnswer": "[LECTURA] Es buena noticia para la democracia — frágilmente. El dato clave: ninguno de los tres AI bosses tiene control corporativo a la Ford. Altman corre OpenAI 'at the pleasure of his board' (lo echaron en nov 2023 y volvió porque el board cedió, no porque tuviera mandato propio). Amodei tiene una participación pequeña en el lab que cofundó. Hassabis ni siquiera es el empleado más senior de Google DeepMind. Ford, en cambio, compró a todos sus minoritarios en 1919 — la familia era dueña entera. El poder de los AI bosses hoy es discursivo y reputacional, no estructural; eso lo hace contestable. Pero es frágil porque la condición puede cambiar.\n[CAMBIO_CRÍTICO] Integración vertical cómputo-modelo-distribución bajo un solo dueño con control corporativo familiar/cerrado. Hoy OpenAI depende de Azure (Microsoft), Anthropic de AWS+Google. Si Musk consolida xAI + Tesla + SpaceX + Starlink + chip propio en una sola entidad de la que sea dueño mayoritario (cosa que ya está construyendo), el ranking se invierte: tendría revenue, employment, control corporativo Y mercado consumidor (Tesla) — todos los criterios del ranking The Economist. Es el camino más corto al Ford de la IA, y está a la vista.",
+    "idealAnswer": {
+      "keyPoints": [
+        "Toma posición (buena noticia / mala noticia / mixta con criterio) — no equidistancia.",
+        "Cita un dato concreto del artículo (Altman/board, Amodei/participación pequeña, Hassabis/no senior, Ford/100% control, Rockefeller/1.5% GDP).",
+        "Distingue poder discursivo/reputacional (que tienen los 5) de poder estructural/corporativo (que tenía Ford).",
+        "Nombra UN cambio estructural verificable y concreto, no 'si se vuelven monopolio'.",
+        "El cambio nombrado debe tener un mecanismo identificable (integración vertical, captura regulatoria, consolidación de cómputo, etc.)."
+      ],
+      "expectedConcepts": [
+        "control_corporativo_vs_poder_discursivo",
+        "integracion_vertical_computo_modelo_distribucion",
+        "fragilidad_del_poder_actual_de_AI_bosses",
+        "comparacion_estructural_Ford_vs_Altman",
+        "ranking_revenue_employment_market_cap_control"
+      ],
+      "commonMistakes": [
+        "Equidistancia: 'depende, hay cosas buenas y malas'.",
+        "No citar ningún dato del artículo — solo opinión.",
+        "Confundir riqueza personal (Musk es el más rico) con control corporativo (Ford lo tenía, Altman no).",
+        "Proponer 'si se vuelven más poderosos' como cambio estructural — no es mecanismo.",
+        "Saltar a juicio moral ('son malos') sin tocar la pregunta estructural.",
+        "Asumir que el board de OpenAI es garantía permanente — el board cambió de composición post-noviembre 2023."
+      ],
+      "excellentResponseIndicators": [
+        "Nombra a Musk como candidato más probable a 'Ford de la IA' por integración vertical en curso (xAI + Tesla + SpaceX + chip).",
+        "Distingue control corporativo de market cap — Musk tiene ambos en construcción.",
+        "Reconoce que 'el board echó a Altman' fue derrota del board, no victoria.",
+        "Cita la dimensión employment del ranking — los labs frontera tienen pocos workers, Ford empleaba 0.15% de la población americana.",
+        "Reconoce que el cambio puede venir desde adentro (consolidación) o desde afuera (Estado capturado)."
+      ]
+    }
+  },
+  {
+    "id": "te_b2_precedente_standard_oil",
+    "order": 3,
+    "title": "El precedente que sí frenó a un magnate",
+    "category": "Antitrust y traducción regulatoria",
+    "difficulty": "hard",
+    "ranked": true,
+    "durationSeconds": 180,
+    "requiredTags": [
+      "[PRECEDENTE]",
+      "[TRADUCE_Y_NO]"
+    ],
+    "judgeFocus": "Premia elegir UNO de los tres precedentes (1911 Standard Oil, 1913 Federal Reserve, 2000 Microsoft) y argumentar honestamente qué SÍ se traduce y qué NO al caso chileno y/o IA. Premia reconocer que Chile no es EE.UU. — no tiene el peso de mercado, ni la jurisdicción, ni la capacidad antitrust comparable. Penaliza fuerte respuestas tipo 'hagamos un antitrust como en EE.UU.' sin asumir el gap institucional. Premia pista útil concreta (no 'que regulen mejor'). Si el estudiante elige Microsoft 2000, premia que reconozca que Microsoft escapó en apelación pero quedó 'chastened' — efecto disciplinante sin breakup.",
+    "context": "The Economist recuerda tres veces que el Estado estadounidense le puso freno al poder de magnates tecnológicos:\n\n• **1911** — la Corte Suprema disuelve Standard Oil por monopolización ilegal (Rockefeller).\n• **1913** — el Congreso crea la Federal Reserve para que ningún J.P. Morgan vuelva a funcionar de hecho como banco central (como pasó en el crash de 1907).\n• **2000** — un juez ordena el desmembramiento de Microsoft por monopolización. Microsoft escapó en apelación, pero quedó 'chastened'.\n\nEl artículo cierra: 'a medida que la IA transforma la economía, los hombres detrás de ella probablemente encontrarán gobiernos que quieran frenar su poder'.",
+    "question": "Elige UNO de los tres precedentes. ¿Qué de él SÍ se traduce al caso IA, y qué NO se traduce — especialmente para un país como Chile que no es el mercado de origen?\n\nCierra con una pista útil concreta para un legislador chileno que esté pensando regular IA hoy. 'Que se regule bien' no es pista.\n\n[PRECEDENTE] Cuál eliges y por qué.\n[TRADUCE_Y_NO] Lo que sí se traduce + lo que NO se traduce + tu pista para el legislador chileno.",
+    "conceptTags": [
+      "antitrust",
+      "regulacion_tecnologica",
+      "traduccion_regulatoria",
+      "capacidad_institucional",
+      "efecto_chastening"
+    ],
+    "referenceAnswer": "[PRECEDENTE] Microsoft 2000. No fue el breakup más exitoso (escapó en apelación) pero es el más cercano al caso IA: software, propósito general, ecosistema dependiente, ganador estructural de un mercado en formación.\n[TRADUCE_Y_NO] **Sí se traduce**: la posibilidad de litigar conducta (no estructura) — la pregunta no es 'es muy grande' sino 'usa su posición para cerrar mercados emergentes'. OpenAI ya está acusado de prácticas tipo 'compra de productividad' similares al bundling de Internet Explorer. Además: el efecto 'chastening' importa más que el breakup en sí — Microsoft cambió comportamiento aun habiendo ganado la apelación.\n**No se traduce**: (a) Chile no tiene FNE (Fiscalía Nacional Económica) con capacidad para abrir una investigación de esta escala, ni jurisdicción sobre el comportamiento global de OpenAI/Anthropic. (b) El mercado chileno es demasiado pequeño para que un breakup judicial chileno tenga efecto disciplinante. (c) 2000 fue caso doméstico EE.UU. con Microsoft sede en EE.UU. Aquí Chile sería forum-shopping en jurisdicción ajena.\n**Pista para el legislador chileno**: NO intentar antitrust frente a OpenAI o Anthropic — perderías la batalla y quedaría sentado precedente de impotencia. Intentar coalición con Brasil, México y la UE para que el efecto chastening venga de mercados de tamaño relevante. Chile aporta vocería ética y casos concretos; el peso institucional viene de otros.",
+    "idealAnswer": {
+      "keyPoints": [
+        "Elige UN precedente (no los tres) y justifica brevemente la elección.",
+        "Identifica qué del precedente SÍ se traduce al caso IA con base en algún paralelo concreto.",
+        "Identifica qué NO se traduce — especialmente reconoce el gap entre EE.UU. y Chile en capacidad antitrust.",
+        "La pista para el legislador chileno es accionable y no es 'que se regule bien'.",
+        "Reconoce que el efecto disciplinante puede valer más que el breakup formal (Microsoft post-2000)."
+      ],
+      "expectedConcepts": [
+        "efecto_chastening_vs_breakup_formal",
+        "antitrust_de_conducta_vs_antitrust_estructural",
+        "gap_de_capacidad_institucional_EEUU_Chile",
+        "coalicion_multilateral_para_efecto_disciplinante",
+        "forum_shopping_y_jurisdiccion"
+      ],
+      "commonMistakes": [
+        "Proponer 'antitrust chileno contra OpenAI' sin asumir gap de capacidad.",
+        "Tratar los 3 precedentes en el mismo nivel sin elegir uno.",
+        "'Que se regule mejor' como pista (no es pista).",
+        "Asumir que Standard Oil 1911 fue limpio — fue una década de litigio en plena Era Progresista, con condiciones políticas únicas.",
+        "Olvidar la Federal Reserve es regulación de sistema, no de magnate — eligiendo 1913 hay que justificar la analogía a IA.",
+        "Confundir 'Microsoft escapó en apelación' con 'Microsoft ganó' — perdió comportamiento aun ganando jurídicamente.",
+        "Citar el precedente sin explicar el mecanismo (Standard Oil disuelto en 34 firmas separadas, etc.)."
+      ],
+      "excellentResponseIndicators": [
+        "Reconoce que el efecto chastening (cambio de comportamiento por miedo a próxima batalla) puede ser el resultado más realista.",
+        "Propone coalición con Brasil/México/UE en lugar de antitrust unilateral chileno.",
+        "Distingue antitrust de conducta (lo que pasó con Microsoft) de antitrust estructural (Standard Oil).",
+        "Reconoce que la Federal Reserve fue creación de regulador nuevo, no breakup de magnate — analogía a IA implicaría 'agencia reguladora de IA' tipo SEC, no breakup.",
+        "Reconoce que Chile gana credibilidad como segunda voz en una coalición, no como protagonista solitario."
+      ]
+    }
   }
 ]

@@ -1,10 +1,10 @@
 {
   "sessionId": "bloque_3_captura_populismo",
   "courseId": "temas_emergentes_2026",
-  "title": "Bloque 3 — Qué le dices al primo de 23: respuesta individual + colectiva",
-  "description": "Tercer bloque de la Sesión 2 del curso Temas Emergentes (28 mayo 2026). En vez de diseñar arquitectura institucional desde el ministerio, el estudiante le habla a un primo de 23 que pregunta '¿para qué estudié si la IA va a hacer mi pega?' — combinando honestidad empírica, sensibilidad generacional y reconocimiento de que la respuesta no se agota en consejo individual. Anclado en Parrott (Every), The Economist y Gamble.",
+  "title": "Bloque 3 — Populismo: del primo de 23 a la violencia política (28 mayo 2026)",
+  "description": "Tercer bloque de la Sesión 2 del curso Temas Emergentes (28 mayo 2026). Tres rondas: (1) qué le dices a un primo de 23 sobre su futuro laboral con IA; (2) cómo respondes en redes a un video viral anti-IA con 2,4M views; (3) cuando el agravio cruza a violencia política (concejal Indiana baleado, Altman atacado), ¿qué es más urgente — seguridad para ejecutivos o respuesta política rápida? Anclado en Parrott (Every), The Economist, Gamble (The National) y Jasmine Sun ('AI Populism's Warning Shots').",
   "date": "2026-05-28",
-  "roundCount": 1,
+  "roundCount": 3,
   "roundDurationSeconds": 240,
   "bufferSeconds": 60,
   "conceptTags": [
