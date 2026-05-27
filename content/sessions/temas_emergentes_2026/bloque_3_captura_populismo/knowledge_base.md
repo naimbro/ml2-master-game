@@ -78,6 +78,20 @@ Una mesa puede ser componente de un diseño robusto, pero no es el diseño. Si l
 
 ### Lecturas y fuentes ancla del bloque
 
+0. **Brynjolfsson, Chandar y Chen, "Canaries in the Coal Mine? Six Facts about the Recent Employment Effects of Artificial Intelligence" (Stanford Digital Economy Lab, 13 nov 2025).** Paper-fuente del que el discurso público sacó el "caída de empleo joven por IA". Resultados anclados en datos ADP de millones de trabajadores con records mensuales de payroll hasta sep 2025:
+
+   - **Hecho 1**: 22-25 en ocupaciones expuestas a IA tienen 16% MENOS empleo relativo a los mayores en los MISMOS roles, controlando por shocks firm-level. Los mayores en esos mismos roles se mantienen estables o crecen.
+   - **Hecho 2**: el empleo agregado crece robustamente. El estancamiento es SOLO del segmento joven en ocupaciones expuestas.
+   - **Hecho 3 (clave de B3 R2)**: distinguen empíricamente **automatización vs augmentación** mirando queries reales a Claude. El empleo joven cae SOLO en ocupaciones donde el uso dominante es automatización. Donde es augmentación, crece.
+   - **Hecho 4**: el efecto sobrevive controles firm-time (no es shock industrial).
+   - **Hecho 5 (clave para política)**: el ajuste pasa por CANTIDAD (a quién no contratan) y NO por PRECIO (cuánto pagan). Wage stickiness: los salarios se mantienen, el efecto se esconde en hiring.
+   - **Hecho 6**: robusto a excluir tech, a excluir ocupaciones remotables, a controlar por COVID. Se ve desde fines 2022 (lanzamiento ChatGPT). En ocupaciones de bajo retorno a educación formal, la asimetría se extiende hasta los 40 (no solo 22-25).
+   - **Mecanismo teórico**: la IA sustituye **conocimiento codificado** (libro de texto, lo digitalizable — lo que un junior tiene) y complementa **conocimiento tácito** (los trucos del oficio que no están escritos en ningún lado — lo que un veterano tiene). Por eso el efecto es asimétrico por edad. Implicación: la apprenticeship pipeline se rompe cuando las tareas codificables — las que históricamente justificaban el headcount junior — se automatizan.
+   - **Implicación para política**:
+     - Indicadores agregados (PIB, salario promedio, productividad nacional) NO detectan el problema — el ajuste es por cantidad y desagregado por edad.
+     - Indicadores correctos: tasa de ingreso al primer empleo formal por sector y por tramo etario (22-29), composición del crecimiento neto de empleo joven.
+     - Palancas de política viables actúan al diseño del producto/proceso (antes o durante adopción), no después.
+
 1. **Jasmine Sun, "AI Populism's Warning Shots" (mayo 2026).** Argumento central: el backlash anti-IA se está convirtiendo en populismo político que escapa al campo wonkish de regulación tecnológica. Define populismo de IA como "worldview in which AI is viewed not only as a normal technology but as an elite political project to be resisted". Cita Bernie Sanders (videos virales), Hawley/Blumenthal (GUARD Act), Ron DeSantis (mesa con Max Tegmark). Advierte: "the only way this conflict resolves peacefully is some kind of grand bargain". Documenta violencia: Altman (Molotov + tiroteo, abril 2026), concejal Ron Gibson (Indiana, 13 disparos por aprobar data center).
 
 2. **Jasmine Sun, "My week with the AI populists: A DC report" (mayo 2026).** Profila la coalición fracturada anti-IA: Bernie Sanders, conservadores sociales, progresistas, AI safety. Identifica división geográfica: SF tech vs DC policy. Quote clave: "All the money is on one side and all the people are on the other". Documenta: 60+ bills en Virginia legislatura sobre data centers, 6 estados con moratorias, GUARD Act sobre chatbots compañeros con minores.

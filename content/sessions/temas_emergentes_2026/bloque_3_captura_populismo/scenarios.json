@@ -13,7 +13,7 @@
       "[RESPUESTA_COLECTIVA]"
     ],
     "judgeFocus": "Premia respuestas que combinan tres cosas que NO son fáciles de combinar: (a) honestidad empírica sobre lo que sí y lo que no muestran los datos, (b) sensibilidad generacional sin paternalismo, (c) reconocimiento de que la respuesta a un primo joven incluye consejo individual pero NO se agota ahí — hay una dimensión política y colectiva que no se resuelve con un buen portafolio en GitHub. Penaliza fuerte el fatalismo individualista ('aprende prompts, adáptate, haz portafolio') sin reconocer dimensión colectiva. Penaliza también minimizar el miedo ('tranquilo, históricamente siempre se crearon empleos nuevos'). El [CONSEJO] no puede ser solo 'chase problems not professions' — eso es Parrott textual y vacío sin contexto.",
-    "context": "En una comida familiar, un primo de 23 años acaba de terminar su carrera y te dice, medio en broma medio en serio: '¿Para qué estudié tanto si la IA va a hacer mi pega?'. Otro primo, ingeniero, responde rápido: 'Eso es puro populismo anti-tecnología, no te metas en esa onda'.\n\nTú leíste a Parrott (Every), a The Economist y a Hadley Gamble. Sabes que no hay evidencia clara de desempleo masivo en agregado, pero también sabes que en ciertos roles ya hay señales tempranas (Stanford: 13% caída en empleo 22-25 en roles expuestos a IA), que 70% de americanos cree que la IA hará más difícil encontrar trabajo, y que el miedo no salió de la nada.",
+    "context": "En una comida familiar, un primo de 23 años acaba de terminar su carrera y te dice, medio en broma medio en serio: '¿Para qué estudié tanto si la IA va a hacer mi pega?'. Otro primo, ingeniero, responde rápido: 'Eso es puro populismo anti-tecnología, no te metas en esa onda'.\n\nTú leíste a Brynjolfsson, Chandar y Chen (Stanford Digital Economy Lab, nov 2025), a The Economist y a Parrott. En EE.UU. NO hay desempleo agregado por IA. Pero los 22-25 en ocupaciones expuestas tienen 16% MENOS empleo relativo a los mayores en los MISMOS roles, después de controlar por shocks de la firma. La IA está cerrando la puerta de entrada, no botando a los que ya están adentro.",
     "question": "¿Qué le dices al primo? No le mientas con tranquilidad falsa. Tampoco lo conviertas en militante anti-IA. Tampoco lo dejes en el 'sálvate solo con prompts y portafolio'.\n\nUsa estos tres tags:\n\n[DATO] Un dato concreto de las lecturas — uno que sea ÚTIL para él específicamente (no name-dropping ornamental).\n[CONSEJO] Algo que él pueda hacer mañana. NO puede ser 'aprende a usar IA' o 'haz portafolio' sin contexto — eso es Parrott reducido. Tiene que conectar con el dato.\n[RESPUESTA_COLECTIVA] La parte de la respuesta que NO depende de él: qué sería razonable exigir colectivamente para que su decisión individual no sea jugarse el destino en solitario. Puede ser de Estado, de gremio, de generación.",
     "conceptTags": [
       "captura_estatal",
@@ -22,102 +22,109 @@
       "respuesta_colectiva",
       "honestidad_empirica"
     ],
-    "referenceAnswer": "[DATO] Stanford Digital Economy Lab encontró que el empleo cayó 13% para jóvenes de 22-25 años en roles más expuestos a IA desde fines de 2022 — pero en los MISMOS roles, los trabajadores mayores no perdieron empleo. No es 'la IA está reemplazando empleos en general', es 'la IA está cerrando la entrada a los puestos de práctica donde la gente joven aprende el oficio'. Eso es lo que te tiene que importar, no la cifra grande.\n[CONSEJO] No optimices por título — 'data analyst' puede no existir en 24 meses. Optimiza por una práctica que quieras hacer bien: escribir, vender, investigar, construir algo. Hazla mal 50 veces SIN la IA primero — esa es la parte que Parrott dice que casi nadie tiene la disciplina de hacer. Después usa la IA, pero como crítico, no como ghostwriter. Lo que un empleador quiere comprar en 2027 no es 'prompting' — es juicio. El juicio solo se construye haciendo cosas mal varias veces.\n[RESPUESTA_COLECTIVA] Pero esto no es solo problema tuyo. Si Chile va a tener una generación cuyo punto de entrada al trabajo es lo primero que la IA automatiza, eso es un problema de política pública, no un test de carácter individual. Lo razonable de exigir colectivamente: seguro de desempleo extendido para jóvenes en transición (modelo danés, lo cita The Economist), programas de reconversión costeados industria-Estado, y reglas que obliguen a las empresas grandes a mantener cuotas de aprendizaje pagado — no para frenar la IA, sino para no romper la escalera por la que tú y yo subimos. Lo que NO va a ayudar es decirte 'tranquilo, históricamente siempre se crearon empleos nuevos' — porque históricamente la transición también tardó décadas, y a tu generación le toca AHORA.",
+    "referenceAnswer": "[DATO] El paper Brynjolfsson, Chandar y Chen (Stanford, nov 2025) lo dice así de directo: 22-25 en ocupaciones expuestas a IA tienen 16% MENOS empleo relativo a los mayores en los MISMOS roles, después de controlar por shocks de la firma. Y la teoría que ellos plantean es la pieza clave para ti: la IA está sustituyendo el tipo de conocimiento que tú ofreces — codificado, libro de texto, lo que se digitaliza fácil — y complementando el tipo de conocimiento que un veterano ofrece — tácito, los trucos que se aprenden en el oficio y que no están escritos en ningún lado. Por eso el efecto es asimétrico por edad. La pregunta correcta no es '¿estoy cooked?'. Es: ¿cómo construyo conocimiento tácito si las firmas no me dejan entrar a aprenderlo?\n[CONSEJO] No optimices por título — los títulos cambian en 18 meses. Optimiza por una práctica que quieras hacer bien: escribir, vender, investigar, construir algo. Hazla mal 50 veces SIN la IA primero — eso es lo que construye conocimiento tácito, lo que la IA NO puede leer porque no está digitalizado. Después usa la IA, pero como crítico, no como ghostwriter. Lo que un empleador quiere comprar en 2027 no es 'prompting'; es juicio acumulado en errores propios. Y ojo: la asimetría puede extenderse hasta los 40 si tu carrera es de bajo retorno a experiencia formal — entonces más urgencia, no menos.\n[RESPUESTA_COLECTIVA] Esto no es solo problema tuyo. El ajuste de mercado a la IA está pasando por CANTIDAD (a quién no contratan) y no por PRECIO (cuánto pagan) — así que es invisible en estadísticas de salarios y se descubre tarde. Lo razonable de exigir colectivamente: (a) seguro de desempleo extendido para jóvenes en transición a la danesa (lo cita The Economist), (b) subsidio CORFO condicional a empresas que adopten IA manteniendo cuotas de aprendizaje pagado — no para frenar la IA, para no romper la escalera por la que sus dueños subieron, (c) monitoreo trimestral de la tasa de ingreso al primer empleo de 22-25 en sectores expuestos. Lo que NO va a ayudar es 'tranquilo, históricamente siempre se crearon empleos' — porque históricamente la transición también tardó décadas y a tu generación le toca AHORA.",
     "idealAnswer": {
       "keyPoints": [
         "Habla como persona, no como funcionario: hay un primo escuchando.",
-        "[DATO] usa el 13% Stanford con la lectura correcta (no es desempleo agregado, es cierre de entrada en ciertos roles).",
-        "[CONSEJO] no es 'aprende prompts': es algo que conecta el dato con una acción real (proteger una práctica, hacer cosas mal primero, juicio > prompting).",
-        "[RESPUESTA_COLECTIVA] reconoce que el problema NO se resuelve solo con esfuerzo individual y nombra al menos una respuesta política/colectiva concreta (seguro extendido, reconversión costeada, cuotas de aprendizaje, política industrial).",
+        "[DATO] usa el 16% Brynjolfsson et al. (2025) con la lectura correcta: es caída RELATIVA en empleo joven en ocupaciones expuestas, NO desempleo agregado.",
+        "Nombra explícitamente la distinción conocimiento codificado (lo que la IA sustituye) vs conocimiento tácito (lo que la IA complementa) como mecanismo de por qué el efecto es asimétrico por edad.",
+        "[CONSEJO] no es 'aprende prompts': conecta el dato con una acción real (construir conocimiento tácito haciendo cosas mal primero, juicio > prompting).",
+        "[RESPUESTA_COLECTIVA] reconoce que el problema NO se resuelve solo con esfuerzo individual y nombra al menos una respuesta política/colectiva concreta (seguro extendido danés, subsidio CORFO condicional, cuotas de aprendizaje, monitoreo de tasa de ingreso).",
+        "Reconoce que el ajuste pasa por CANTIDAD (no contratan) y no por PRECIO (no bajan salarios) — eso lo hace invisible en estadísticas tradicionales.",
         "No minimiza el miedo ('tranquilo, históricamente...') ni lo radicaliza ('estás cooked').",
-        "No descarta a Parrott — la usa pero no la repite textualmente.",
         "Reconoce la asimetría generacional: la transición tarda décadas, su generación recibe el shock ahora."
       ],
       "expectedConcepts": [
         "respuesta_colectiva_vs_respuesta_individual",
         "asimetria_generacional_de_transicion",
         "cierre_de_entrada_no_es_desempleo_agregado",
-        "juicio_no_se_construye_con_prompts",
-        "honestidad_empirica_sin_minimizacion"
+        "conocimiento_codificado_vs_conocimiento_tacito",
+        "ajuste_por_cantidad_no_por_precio",
+        "juicio_no_se_construye_con_prompts"
       ],
       "commonMistakes": [
         "Fatalismo individualista: 'aprende prompts, haz portafolio, adáptate' y nada más.",
         "Tranquilizar con historiografía: 'históricamente siempre se crearon empleos, no te preocupes'.",
         "Radicalizar al primo: convertirlo en militante anti-IA cuando la evidencia no lo sostiene.",
-        "Confundir 13% Stanford con desempleo agregado.",
+        "Confundir 16% relativo con desempleo absoluto agregado.",
         "Hablar como funcionario público a un primo de 23.",
         "Repetir Parrott textualmente ('chase problems not professions') sin reflexión propia.",
         "Tratar el suicidio del joven ingeniero como prueba causal (atribución contestada).",
         "Ignorar la dimensión política — quedarse 100% en consejo personal.",
-        "Ignorar el consejo personal — quedarse 100% en denuncia política."
+        "Ignorar el consejo personal — quedarse 100% en denuncia política.",
+        "No nombrar la distinción codificado/tácito — es el mecanismo, no decorativo."
       ],
       "excellentResponseIndicators": [
-        "Distingue 'cierre de entrada' de 'desempleo agregado' usando bien el 13% Stanford.",
-        "El [CONSEJO] menciona 'juicio' o 'práctica deliberada' o 'hacerlo mal primero' como diferencia frente a prompting.",
-        "El [RESPUESTA_COLECTIVA] nombra una política concreta (seguro extendido, modelo danés, cuotas de aprendizaje, reconversión costeada) — no abstracciones tipo 'el Estado debería hacer algo'.",
+        "Nombra explícitamente la distinción conocimiento codificado vs tácito y la usa para conectar [DATO] con [CONSEJO].",
+        "Distingue 'cierre de entrada' de 'desempleo agregado' usando bien el 16% del paper.",
+        "Reconoce que el ajuste pasa por cantidad (no contratan) y no por precio (salarios estables), por lo que el efecto es invisible en estadísticas tradicionales de salario.",
+        "El [CONSEJO] menciona 'juicio', 'práctica deliberada', o 'hacerlo mal primero' como ruta para construir el tipo de conocimiento que la IA no sustituye.",
+        "El [RESPUESTA_COLECTIVA] nombra una política concreta (modelo danés, subsidio CORFO condicional, cuotas de aprendizaje, monitoreo trimestral de tasa de ingreso) — no abstracciones tipo 'el Estado debería hacer algo'.",
         "Reconoce la asimetría generacional: la transición tarda décadas, le toca al primo ahora.",
         "Lenguaje natural, como hablándole a alguien de la familia. No prosa de consultor.",
-        "Critica el frame del segundo primo ('eso es populismo') sin descalificarlo.",
-        "No menciona 'mesa de diálogo' ni 'marco institucional' — está hablando con un primo."
+        "Critica el frame del segundo primo ('eso es populismo') sin descalificarlo."
       ]
     }
   },
   {
-    "id": "te_b3_video_viral_timeline",
+    "id": "te_b3_automatizacion_o_augmentacion",
     "order": 2,
-    "title": "El video viral en tu timeline",
-    "category": "Frames populistas y respuesta en redes",
-    "difficulty": "medium",
+    "title": "Las dos IAs: automatización o augmentación",
+    "category": "Política de empleo y diseño de adopción",
+    "difficulty": "hard",
     "ranked": true,
     "durationSeconds": 180,
     "requiredTags": [
-      "[ACCIÓN]",
-      "[DATO]"
+      "[PALANCA]",
+      "[INDICADOR]"
     ],
-    "judgeFocus": "Premia tomar UNA acción específica (repostear / responder con cita / responder con pregunta / ignorar / capturar y subir versión propia / etc.) y justificarla con UN dato concreto de las lecturas (4,1→8,5% peak power demand, China shock 2M empleos = realineamiento político, 13% Stanford cierre de entrada, 70% americanos creen IA va a dificultar empleo, redes de seguridad insuficientes según Gamble). Penaliza 'cuidado con la desinformación' como justificación — es lo que todos dicen y no aporta. Penaliza también respuestas paternalistas tipo 'hay que educar'. Premia respuestas que distinguen el núcleo verdadero del video (concentración, presión energética, redes insuficientes) de su exageración (intencionalidad, colapso ya en curso).",
-    "context": "Hoy estás en el metro. Abres X y ves un video con 2,4M vistas: una mujer joven, casa modesta, dice mirando a cámara: 'La IA me va a quitar el trabajo, el agua y la luz para que cinco empresas se hagan ricas. ¿Y qué hace el gobierno? Nada. Compartan'. Tienes 90 segundos antes de bajarte.\n\nSabes que el video exagera. Pero sabes (Gamble; The Economist) que el shock económico puede ser modesto y el shock político enorme, que data centers van a pasar de 4,1% a 8,5% del peak power demand en EE.UU. entre 2025 y 2027, y que las redes de seguridad social no alcanzan para los millones que la IA podría desplazar.",
-    "question": "¿Lo reposteas, le respondes, lo capturas para discutirlo con argumentos, o lo ignoras? Decide UNA acción y justifícala con UN dato concreto de las lecturas.\n\n'Cuidado con la desinformación' no es justificación.\n\n[ACCIÓN] Qué haces, una sola opción.\n[DATO] El dato que sostiene tu decisión. Tiene que ser cita o paráfrasis cercana, no opinión.",
+    "judgeFocus": "Premia tratar 'automatización vs augmentación' como palanca de política, no como dicotomía conceptual. Premia UNA palanca concreta — plata, reglamento, condición contractual, requisito de transparencia — proporcional a la capacidad institucional chilena. Y UN indicador medible en 12-18 meses que permita evaluar si la palanca funcionó. Penaliza fuerte (a) 'incentivos a la augmentación' sin instrumento (no es palanca, es deseo), (b) 'educación digital' como respuesta principal (no mueve la frontera), (c) reglamentar 'usos malos de la IA' sin definirlos operacionalmente, (d) indicadores agregados (PIB, productividad nacional) que esconden el efecto en jóvenes. Premia respuestas que reconocen que la frontera se define al diseñar el producto/proceso, no al usarlo — así que la palanca debe actuar antes o durante adopción.",
+    "context": "El paper de Brynjolfsson, Chandar y Chen (Stanford Digital Economy Lab, nov 2025) hizo algo poco común: no separó el efecto de la IA por sector, sino por CÓMO se usa la IA dentro de cada tarea. Construyeron dos categorías mirando queries reales que la gente le hace a Claude — automatización (la IA sustituye al trabajador en esa tarea) vs augmentación (la IA lo amplifica). Resultado: el empleo de los 22-25 cayó SOLO en ocupaciones donde el uso dominante es automatización. En las augmentadas, creció.",
+    "question": "La frontera entre automatización y augmentación no es estable — depende de cómo se diseña el producto y cómo se entrena al equipo que lo adopta. Si tuvieras UNA palanca para correr esa frontera en Chile hacia más augmentación — solo una, plata o reglamento — ¿cuál sería? Y nombra el indicador que te diría que está funcionando en 18 meses.\n\n[PALANCA] La intervención concreta. 'Incentivos a la augmentación' no es palanca; el subsidio o reglamento específico sí lo es.\n[INDICADOR] Cómo medirías si está funcionando. PIB no sirve — esconde el efecto en jóvenes.",
     "conceptTags": [
-      "frame_populista",
-      "asimetria_narrativa",
-      "respuesta_publica_a_desinformacion_parcial",
-      "comportamiento_en_redes",
-      "evidencia_empirica"
+      "automatizacion_vs_augmentacion",
+      "diseno_de_adopcion",
+      "palanca_de_politica_industrial",
+      "indicador_anti_invisibilidad",
+      "ajuste_por_cantidad"
     ],
-    "referenceAnswer": "[ACCIÓN] Lo capturo, lo guardo, y cuando llegue a la casa subo un thread con cita al estudio de Goldman Sachs sobre demanda eléctrica de data centers. No reposteo (amplifica el frame intencional 'cinco empresas') ni lo ignoro (el agravio material es real y dejarlo correr sin contraste premia al peor argumento). Tampoco respondo en el momento con un tweet — 90 segundos no alcanzan para hacer la distinción entre lo que el video acierta y lo que distorsiona.\n[DATO] Goldman Sachs proyecta que los data centers pasarán de 4,1% del peak power demand estadounidense en 2025 a 8,5% en 2027 — más del doble en dos años. Esto sostiene la mitad verdadera del video (presión energética real, costos públicos que alguien va a pagar). Lo que se separa en el thread: las cinco empresas no 'deciden activamente' quitarte la luz; la dinámica es estructural (concentración de rentas + barreras de entrada en cómputo + red eléctrica como cuello de botella). La pelea legítima no es contra las cinco personas; es por quién paga la externalidad — esa pelea sí se da, y el video tiene razón en pedirla.",
+    "referenceAnswer": "[PALANCA] Subsidio CORFO condicional: cualquier empresa que reciba crédito o exención tributaria por adoptar IA generativa en tareas de back-office tiene que comprometer contractualmente, antes del desembolso, (a) mantener el headcount del equipo afectado por al menos 18 meses, (b) presentar un plan de re-deployment de tareas — qué fracción del tiempo del trabajador se libera y para qué se usa, (c) un audit operacional anual. Si en el audit el headcount cae más allá del compromiso, devuelve el subsidio + interés. La palanca usa plata existente (CORFO), no inventa institucionalidad nueva; mueve la frontera al hacer que el diseño 'augmentación' tenga retorno financiero antes del despliegue, no después.\n[INDICADOR] Tasa de ingreso al primer empleo formal (no contratos a honorarios) de 22-29 en los sectores que recibieron subsidio condicional vs sectores comparables que adoptaron IA sin él. Frecuencia trimestral, fuente AFC/SII. Si después de 18 meses la diferencia es < 2 puntos porcentuales, la palanca no funcionó — y se elimina (sunset clause obligatorio). PIB, productividad agregada y salarios promedio NO sirven: la teoría del paper es que el ajuste pasa por cantidad (a quién no contratan), no por precio.",
     "idealAnswer": {
       "keyPoints": [
-        "Elige UNA acción (no las cuatro, no 'depende').",
-        "Cita un dato concreto de las lecturas (4,1→8,5%, 22% chance subjective, China shock, redes de seguridad insuficientes, etc.).",
-        "El dato sostiene argumentativamente la decisión — no es decoración.",
-        "Reconoce que el video tiene núcleo verdadero (presión estructural) y exageración (intencionalidad de cinco empresas).",
-        "Acción coherente con el tiempo disponible (90 segundos en metro no alcanza para thread con citas).",
-        "No paternalismo ('hay que educar a la gente') — la gente ya sabe que su cuenta de luz subió."
+        "La palanca es UNA — no una lista de tres medidas complementarias.",
+        "La palanca actúa antes o durante adopción, no después — porque la frontera se define al diseñar el producto.",
+        "La palanca usa potestad institucional chilena existente (CORFO, SII, Ministerio del Trabajo) — no inventa agencia nueva.",
+        "La palanca tiene mecanismo de devolución/sanción si falla — no es solo un subsidio entregado sin condición.",
+        "El indicador es desagregado por edad joven (22-29 o similar) — porque el efecto agregado lo esconde.",
+        "El indicador es de cantidad (tasa de ingreso, headcount), no de precio (salario, productividad) — coherente con el hallazgo del paper.",
+        "Reconoce sunset clause: si en 18 meses no funciona, la palanca se elimina."
       ],
       "expectedConcepts": [
-        "amplificacion_vs_contraste",
-        "frame_intencional_vs_dinamica_estructural",
-        "respuesta_proporcional_al_tiempo_disponible",
-        "evidencia_como_argumento_no_como_decoracion",
-        "distincion_entre_acertar_y_distorsionar"
+        "diseno_de_producto_define_la_frontera",
+        "condicionalidad_ex_ante_vs_evaluacion_ex_post",
+        "ajuste_por_cantidad_no_por_precio",
+        "potestad_institucional_existente_vs_agencia_nueva",
+        "indicador_desagregado_por_edad",
+        "sunset_clause_anti_captura"
       ],
       "commonMistakes": [
-        "Repostear sin matiz (amplifica el frame intencional).",
-        "Ignorar (deja correr el peor argumento sin contraste).",
-        "Responder en el metro con tweet vacío ('mucho cuidado con esto').",
-        "Justificar con 'es desinformación' — no es justificación, es etiqueta.",
-        "Citar un dato sin conectar con la acción.",
-        "Paternalismo: 'hay que educar a la gente que cree esto'.",
-        "Negar el agravio material (la cuenta de luz subió, es verificable).",
-        "Tomar dos acciones a la vez (responder + repostear) sin elegir."
+        "'Incentivos a la augmentación' sin instrumento — no es palanca.",
+        "'Educación digital' o 'capacitación' como palanca principal — no mueve la frontera de diseño.",
+        "Lista de tres medidas en vez de UNA con su indicador.",
+        "Indicador agregado (PIB, productividad nacional) que esconde el efecto en jóvenes.",
+        "Indicador de precio (salario promedio) cuando el paper muestra que el ajuste es de cantidad.",
+        "'Reglamentar usos malos de la IA' sin definir operacionalmente qué es malo.",
+        "Crear agencia nueva sin razón institucional.",
+        "Reglamento sin sunset — vuelve a ser captura permanente."
       ],
       "excellentResponseIndicators": [
-        "Reconoce que 'capturar para discutir después' es una acción legítima distinta de las otras tres.",
-        "Distingue el componente verdadero del video del componente distorsionado en una frase.",
-        "Identifica que el tiempo disponible (90 segundos) determina qué tipo de respuesta es coherente.",
-        "Reconoce que NO responder no es lo mismo que ignorar — guardar y responder bien después es opción.",
-        "Cita el dato con cifra Y con fuente (no solo 'va a subir mucho').",
-        "Pelea por la distinción correcta: dinámica estructural de rentas vs intencionalidad atribuida."
+        "Reconoce explícitamente que la frontera automatización/augmentación se define al diseñar producto y proceso, no al usarlo.",
+        "Usa una potestad CORFO/SII/DIPRES existente y la condiciona en vez de inventar institucionalidad.",
+        "El indicador es tasa de ingreso al primer empleo formal de 22-29 (desagregado y de cantidad).",
+        "Reconoce que el subsidio sin condición de devolución es transferencia decorativa.",
+        "Incluye sunset clause con criterio operacional (si en 18 meses < X, se elimina).",
+        "Distingue entre quién diseña el producto (firma) y quién adopta (cliente) y mueve la palanca al primer momento.",
+        "Reconoce que augmentación no significa 'mantener headcount inflado' — significa que las tareas re-asignadas suben en complejidad medible."
       ]
     }
   },
