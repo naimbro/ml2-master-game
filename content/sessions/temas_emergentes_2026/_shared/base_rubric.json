@@ -1,7 +1,7 @@
 {
   "_doc": "Rubrica base reusable para todas las unidades de IA y Democracia 2026. Cada sesion DEBE copiar esta rubrica a su propio rubric.json y ajustar (1) sessionId, (2) globalInstructions con foco de la unidad, (3) opcionalmente los pesos por dimension si la unidad enfatiza distinto. NO redefinir las dimensiones — el motor cloud reusa los IDs (process_structuring, institutional_realism, precision_clarity) en sus formulas de jueces, asi que conservamos esos IDs aunque renombramos a la semantica democratica.",
   "_calibration_warning": "El juez LLM tiene dificultad calibrando: (a) la frontera entre 60 y 80 en 'Identificacion del Dilema Democratico' cuando el dilema esta presente pero no nombrado; (b) distinguir mecanismos reales de accountability decorativa cuando el estudiante usa lenguaje sofisticado pero vago; (c) la dimension 'Mapeo de Actores' cuando el estudiante nombra muchos actores pero ninguna asimetria. Calibrar con 3-4 respuestas sinteticas por unidad antes de usar en clase.",
-  "_id_mapping_note": "Mantenemos los dimension IDs originales del motor (process_structuring, institutional_realism, precision_clarity) para no tocar las formulas hardcoded en functions/src/index.ts. Cada ID se mapea aqui a la semantica democratica del curso AyD: process_structuring -> Identificacion del Dilema + Diseno Institucional; institutional_realism -> Mapeo de Actores + Asimetrias + Trade-offs; precision_clarity -> Claridad, Tags y Anti-vaguedad. Si en algun momento se quieren IDs propios (democratic_dilemma, actor_mapping, etc), hay que actualizar functions/src/index.ts:148-152 con nuevas formulas y redeployar.",
+  "_id_mapping_note": "Mantenemos los dimension IDs originales del motor (process_structuring, institutional_realism, precision_clarity) para no tocar las formulas hardcoded en functions/src/index.ts. Tras la reescritura de 2026-05-27, los IDs siguen iguales pero la semantica se generaliza para acomodar preguntas no-funcionariales: process_structuring -> Encuadre del dilema, tension democratica y calidad del juicio; institutional_realism -> Realismo politico, actores, asimetrias, consecuencias y factibilidad (no SIEMPRE mecanismo de rendicion de cuentas); precision_clarity -> Claridad, uso de evidencia verificable, estructura, lenguaje natural y ausencia de vaguedad. Si en algun momento se quieren IDs propios, hay que actualizar functions/src/index.ts:148-152 con nuevas formulas y redeployar.",
   "sessionId": "REPLACE_WITH_SESSION_ID",
   "globalInstructions": "Evalua SOLO lo que esta escrito. No asumas informacion faltante. Este es el curso 'IA y Democracia' del Minor en IA de la UAI, edicion 2026. Los estudiantes son universitarios de pregrado avanzado en su primera incursion sistematica al cruce IA/democracia. La evaluacion premia: identificacion de tensiones reales, mapeo concreto de actores y asimetrias, propuesta de mecanismos institucionales operacionales, y claridad anti-vaga. Penaliza: solucionismo tecnologico, neutralidad tecnica ingenua, confundir legalidad con legitimidad, accountability decorativa, autoritarismo eficiente, y falsa precision. Usa el campo 'judgeFocus' del escenario como ancla principal para esta ronda. Para escenarios con 'requiredTags' declarados, verifica que la respuesta los use literalmente.",
   "scoring": {
@@ -47,32 +47,42 @@
     }
   ],
   "globalPenalties": [
-    "Solucionismo tecnologico: si propone una herramienta de IA como si por si sola resolviera un problema politico o institucional, sin actor, mecanismo de adopcion ni condiciones, no puede superar 60 en Identificacion del Dilema ni en Mapeo de Actores.",
-    "Neutralidad tecnica ingenua: si trata el sistema de IA como neutral, sin valores ni sesgos ni intereses, no puede superar 60 en Mapeo de Actores.",
-    "Legalidad equivale a legitimidad: si asume que algo es legitimo solo porque es legal, sin preguntar a quien beneficia ni si los afectados tuvieron voz, no puede superar 60 en Identificacion del Dilema.",
-    "Ignorar afectados no presentes: si no considera grupos vulnerables o sin voz cuando el escenario los implica, no puede superar 60 en Mapeo de Actores.",
-    "Falsa precision: si inventa cifras, porcentajes o capacidades tecnicas no entregadas en el escenario, baja 20 puntos en Claridad y no puede superar 60 en Mapeo de Actores.",
-    "Autoritarismo eficiente: si justifica vigilancia, censura o automatizacion coercitiva solo con el argumento de que 'funciona', no puede superar 60 en Identificacion del Dilema ni en Mapeo de Actores.",
-    "Accountability decorativa: si menciona transparencia o supervision sin nombrar quien-ante-quien-cuando-consecuencia, no puede superar 60 en Mapeo de Actores.",
-    "Tags solicitados ausentes: si el escenario lista 'requiredTags' y la respuesta no los usa o los reemplaza por estructura propia, baja Claridad."
+    "Solucionismo tecnologico: si propone una herramienta de IA como si por si sola resolviera un problema politico o institucional, sin actor, mecanismo de adopcion ni condiciones, no puede superar 60.",
+    "Neutralidad tecnica ingenua: si trata el sistema de IA como neutral, sin valores ni sesgos ni intereses, no puede superar 60.",
+    "Legalidad equivale a legitimidad: si asume que algo es legitimo solo porque es legal, sin preguntar a quien beneficia ni si los afectados tuvieron voz, no puede superar 60.",
+    "Falsa precision: si inventa cifras, porcentajes o capacidades tecnicas no entregadas en el escenario o las lecturas, baja 20 puntos en Claridad y no puede superar 60.",
+    "Autoritarismo eficiente: si justifica vigilancia, censura o automatizacion coercitiva solo con el argumento de que 'funciona', no puede superar 60.",
+    "Tags solicitados ausentes (CONDICIONAL): aplicar SOLO si el escenario declara requiredTags no vacio. Si requiredTags: [], no penalizar ausencia de tags.",
+    "Accountability decorativa (CONDICIONAL): aplicar SOLO cuando la pregunta pide regla, mecanismo, linea roja o consecuencia institucional. NO usar en respuestas narrativas, personales o conversacionales.",
+    "Ignorar afectados no presentes (CONDICIONAL): aplicar cuando el escenario los implica institucionalmente. En preguntas personales/conversacionales, evaluar en su lugar si la respuesta conecta experiencia individual con consecuencias colectivas.",
+    "Sin ancla empirica: si la respuesta no usa ningun dato, evento, porcentaje o argumento reconocible de las lecturas asignadas, no puede superar 70 en precision_clarity.",
+    "Dato sin argumento: si la respuesta cita datos pero no los conecta con tesis (name-dropping de cifras), no puede superar 75 en process_structuring.",
+    "Caricaturizacion del adversario: si ridiculiza una posicion sin reconstruir su mejor version (steelman), no puede superar 70 en process_structuring.",
+    "Fatalismo individualista: si reduce la respuesta a 'aprende prompts, adaptate, haz portafolio' sin reconocer dimension colectiva o institucional cuando corresponde, no puede superar 70 en institutional_realism.",
+    "Soberanismo magico: si propone 'crear un LLM chileno' o 'nube nacional' como solucion total sin costos, capacidades ni dependencias, no puede superar 60 en institutional_realism.",
+    "Populismo higienizado: si trata amenazas, hostigamiento o violencia como simple 'malestar ciudadano' sin distinguir, no puede superar 65 en process_structuring."
   ],
   "bonusIndicators": [
-    "Identifica una asimetria de poder no obvia (regulador vs. gigante tecnologico, mayoria informada vs. minoria afectada).",
+    "Usa un dato verificable de las lecturas y lo conecta con una tesis (no name-dropping).",
+    "Reconstruye la mejor version de una posicion con la que probablemente no esta de acuerdo (steelman).",
+    "Distingue miedo legitimo de manipulacion politica.",
+    "Identifica una asimetria de poder no obvia.",
+    "Propone una regla minima o linea roja concreta cuando corresponde.",
+    "Evita tanto tecnosolucionismo como rechazo total de la IA.",
+    "Conecta experiencia individual con estructura economica o institucional.",
+    "Escribe en lenguaje natural, sin relleno burocratico ni prosa de IA.",
     "Distingue legalidad de legitimidad sin que el escenario lo pida explicitamente.",
-    "Nombra un actor sin voz organizada y propone como darle representacion.",
-    "Hace explicito un supuesto critico y discute que pasaria si colapsa.",
-    "Mecanismo de rendicion de cuentas con los 4 elementos (quien-ante-quien-cuando-consecuencia).",
-    "Reconoce un riesgo de captura institucional concreto.",
-    "Compara contra el contrafactual (que pasaria sin intervencion) en vez de contra un ideal.",
-    "Reconoce trade-offs entre derechos sin sobre-resolverlos retoricamente.",
-    "Distingue dano agudo de dano estructural."
+    "Reconoce un riesgo de captura institucional concreto (industrial, populista o ambos).",
+    "Compara contra el contrafactual (que pasaria sin intervencion) en vez de contra un ideal."
   ],
   "penaltyIndicators": [
     "Salta directo a la solucion tecnica sin nombrar la tension democratica primero.",
-    "Trata 'la sociedad' o 'los ciudadanos' como agente unitario.",
+    "Trata 'la sociedad', 'los ciudadanos' o 'la industria' como agente unitario.",
     "Da metricas de exito puramente tecnicas para problemas politicos.",
     "Propone regulacion sin considerar capacidad institucional para implementarla ni riesgo de captura.",
     "Confunde anonimato con privacidad, transparencia con accountability, o consulta con deliberacion.",
-    "Cita autores como ornamento sin que la cita aporte argumentativamente."
+    "Cita autores como ornamento sin que la cita aporte argumentativamente.",
+    "Usa tags como decoracion en vez de como ayuda estructural.",
+    "Suena a chatbot o consultor en contextos que piden lenguaje natural."
   ]
 }

@@ -1,74 +1,75 @@
 {
-  "_doc": "Rúbrica del Bloque 2 (Sesión 2, Temas Emergentes 2026). Foco: concentración de poder en frontera de IA y mecanismos institucionales para gobernar la dependencia. Pesa más institutional_realism porque el bloque es sobre arquitectura institucional concreta.",
+  "_doc": "Rúbrica del Bloque 2 (Sesión 2, Temas Emergentes 2026). Reescrita 2026-05-27: la pregunta pasó de elegir entre 3 opciones de política a elegir UNA dependencia y proponer UNA regla mínima. Foco: realismo institucional chileno, no imitación europea decorativa.",
   "sessionId": "bloque_2_concentracion_frontera",
-  "globalInstructions": "Evalúa SOLO lo que está escrito. Este es el Bloque 2 de la Sesión 2 del curso 'Temas Emergentes: IA y Democracia' (UAI MEPP 2026). El foco del bloque es CONCENTRACIÓN: cinco actores controlan los modelos frontera, y el Estado chileno debe gobernar una dependencia estructural. Premia: distinguir soberanía nominal de efectiva, distinguir capa de modelo de capa de cómputo, identificar al actor capturador concreto, mecanismo institucional proporcional a la capacidad real del Estado. Penaliza: solucionismo soberanista vacío (LLM chileno sin asumir costo), tratar diversificación contractual como si fuera diversificación de poder, accountability decorativa, no tomar posición sobre la opción dominante.",
+  "globalInstructions": "Evalúa SOLO lo que está escrito. Este es el Bloque 2 de la Sesión 2 del curso 'Temas Emergentes: IA y Democracia' (UAI MEPP 2026). El estudiante elige UNA dependencia (modelo, nube, datos, expertise, narrativa de inevitabilidad) y propone UNA regla mínima realista. Premia: posición clara sobre cuál dependencia es estructuralmente más peligrosa, regla con actor de potestad existente + plazo + consecuencia, distinción capa de modelo vs capa de cómputo. Penaliza: listar las cinco sin elegir, soberanía algorítmica sin operacionalizar costos, 'crear una agencia' sin existir potestad, 'que sea transparente' como regla, LLM chileno como solución mágica.",
   "scoring": {
     "scaleLevels": [100, 80, 60, 40, 20, 0],
-    "instructions": "Evalúa SOLO lo que está escrito. En este bloque sobre concentración, una respuesta que toma posición concreta sobre una opción (con su trade-off asumido) vale más que una respuesta que lista las 3 opciones sin elegir. Tags solicitados deben aparecer literalmente."
+    "instructions": "Evalúa SOLO lo que está escrito. Una respuesta corta con UNA dependencia bien elegida y UNA regla operacional vale más que una lista de cinco con cinco reglas decorativas. La regla tiene que ser ejecutable con potestad existente — no aspiracional."
   },
   "dimensions": [
     {
       "id": "process_structuring",
-      "name": "Diagnóstico de la concentración: soberanía nominal vs efectiva",
+      "name": "Diagnóstico estructural: qué dependencia es la más peligrosa y por qué",
       "weight": 0.35,
-      "description": "Capacidad de nombrar la asimetría estructural (no operacional) entre Estado periférico y firmas frontera. Distinguir dependencia de software tradicional de dependencia de modelo frontera (capacidad cognitiva de propósito general). Reconocer que diversificación contractual no es diversificación de poder.",
-      "level_100": "Distingue explícitamente capa de modelo de capa de cómputo. Reconoce que los 3 proveedores se reducen a 5 personas. Distingue dependencia tradicional (SAP) de dependencia frontera (propósito general, oligopolio estructural). Nombra la asimetría temporal (modelos discontinuados unilateralmente).",
-      "level_80": "Identifica la asimetría estructural pero deja un nivel parcial (ej: distingue capa de modelo pero no de cómputo).",
-      "level_60": "Reconoce la asimetría pero la trata como cuestión de 'tamaño' o 'dependencia tecnológica genérica' sin nombrar lo específico de modelos frontera.",
-      "level_40": "Trata el problema como dependencia de software clásica, sin reconocer la naturaleza distinta de capacidad cognitiva de propósito general.",
-      "level_20": "Ignora la dimensión de concentración estructural.",
+      "description": "Capacidad de elegir UNA dependencia y justificar por qué es estructuralmente la más peligrosa (no la más visible). Distinguir capa de modelo de capa de cómputo. Distinguir dependencia tradicional (SAP) de dependencia de modelo frontera (propósito general, oligopolio estructural).",
+      "level_100": "Elige UNA dependencia y justifica por qué es estructuralmente la más peligrosa. Distingue capa de modelo de capa de cómputo. Reconoce naturaleza específica de modelos frontera (propósito general, oligopolio auto-sostenible por barreras de cómputo/dato/talento).",
+      "level_80": "Elige una dependencia con buena justificación, pero deja un nivel parcial (ej: distingue capa de modelo de cloud pero sin nombrar la asimetría temporal).",
+      "level_60": "Elige una dependencia pero la justifica superficialmente, o lista varias antes de elegir.",
+      "level_40": "Lista las cinco dependencias sin elegir.",
+      "level_20": "Trata el problema como dependencia de software clásica, sin reconocer la naturaleza distinta de IA frontera.",
       "level_0": "No responde, dice 'no sé', o texto irrelevante."
     },
     {
       "id": "institutional_realism",
-      "name": "Mecanismo institucional: opción elegida, actores, captura, accountability operacional",
+      "name": "Regla mínima: factibilidad chilena, potestad existente, consecuencia operacional",
       "weight": 0.45,
-      "description": "Capacidad de elegir entre las opciones (o construir un híbrido justificado), proponer mecanismo de rendición de cuentas con quien-ante-quien-cuando-consecuencia, identificar el riesgo de captura específico a la opción elegida, y mapear actores afectados sin colapsarlos en 'los ciudadanos'.",
-      "level_100": "Toma posición clara sobre una opción (o híbrido). Mecanismo de accountability con los 4 elementos. Riesgo de captura específico a la opción elegida, con actor capturador nombrado. Identifica al menos un actor afectado sin voz organizada que NO sea 'la ciudadanía' (funcionarios, investigadores, beneficiarios atomizados).",
-      "level_80": "Toma posición y propone mecanismo, pero un elemento queda incompleto (ej: actor capturador genérico, falta una consecuencia).",
-      "level_60": "Lista opciones sin elegir, o elige pero propone accountability decorativa (transparencia sin operacionalizar).",
-      "level_40": "No toma posición. Trata 'el Estado' o 'los ciudadanos' como abstracciones. Sin mecanismo concreto.",
-      "level_20": "Ignora actores y mecanismos. Propone una solución técnica como si bastara.",
+      "description": "La regla propuesta tiene actor con potestad existente (DIPRES, Contraloría, ministerio sectorial), plazo, prueba operacional concreta y consecuencia si falla. NO inventa institucionalidad nueva sin razón. Reconoce capacidad institucional chilena REAL — no copia decorativa de la regulación europea.",
+      "level_100": "Regla con actor de potestad existente nombrado. Plazo y prueba operacional concreta (prueba de migración cloud anual, simulacro, auditoría). Consecuencia explícita si la institución incumple (no autorización de gasto, suspensión, sanción). NO inventa agencia nueva.",
+      "level_80": "Regla con la mayoría de los elementos, pero uno parcial (ej: actor identificado pero consecuencia genérica).",
+      "level_60": "Regla decorativa: 'crear una agencia', 'observatorio', 'principios', 'que sea transparente'. Sin actor concreto ni consecuencia.",
+      "level_40": "Sin regla — solo diagnóstico. O regla aspiracional ('hagamos un LLM chileno') sin asumir costo ni capacidad.",
+      "level_20": "Ignora la pregunta sobre regla. Solo opina sobre dependencia.",
       "level_0": "No responde, dice 'no sé', o texto irrelevante."
     },
     {
       "id": "precision_clarity",
-      "name": "Claridad, tags literales, posición sin equidistancia",
+      "name": "Evidencia, tags, posición sin equidistancia",
       "weight": 0.20,
-      "description": "Tags solicitados aparecen literalmente. Respuesta toma posición concreta (no 'depende'). No inventa datos. Lenguaje sin buzzwords.",
-      "level_100": "Los 4 tags aparecen literalmente con contenido sustantivo. Toma posición clara sobre la opción y el riesgo de captura. No inventa datos adicionales al escenario.",
-      "level_80": "3 tags bien usados, 1 parcial. Toma posición con un matiz vago.",
-      "level_60": "Tags presentes pero algunos rellenos con vaguedad. Posición ambigua entre 2 opciones.",
-      "level_40": "Tags parciales o reemplazados por prosa propia. Equidistancia ('hay que evaluar cada caso').",
-      "level_20": "Prosa amplia sin estructura. Respuesta genérica.",
+      "description": "Tags [DEPENDENCIA] y [REGLA] aparecen literalmente con contenido sustantivo. Toma posición concreta. Cita al menos un dato/concepto reconocible de las lecturas (cinco hombres frontera, capa de cómputo, asimetría temporal, etc.). No inventa cifras.",
+      "level_100": "Tags literales con sustancia. Posición clara sin equidistancia. Lenguaje sobrio sin grandilocuencia (no menciona 'soberanía algorítmica' sin operacionalizar). Cita un concepto/dato verificable.",
+      "level_80": "Tags presentes, uno desarrollado mejor que el otro. Posición clara con un matiz vago.",
+      "level_60": "Tags rellenados con vaguedad. Posición ambigua entre dos dependencias.",
+      "level_40": "Tags parciales o reemplazados por prosa propia. Equidistancia ('depende de los costos').",
+      "level_20": "Prosa amplia sin estructura. Sin posición.",
       "level_0": "No responde, dice 'no sé', o texto irrelevante."
     }
   ],
   "globalPenalties": [
-    "Solucionismo soberanista vacío: proponer LLM chileno sin asumir costo, horizonte ni captura presupuestaria → no puede superar 60 en Mecanismo Institucional.",
-    "Confundir diversificación contractual con diversificación de poder: si propone multi-proveedor sin notar que la capa cloud es cuello de botella → no puede superar 60 en Diagnóstico.",
-    "Tratar el problema como dependencia de software clásica: no puede superar 60 en Diagnóstico.",
-    "Listar las opciones (A, B, C) sin elegir ni justificar: no puede superar 60 en Mecanismo Institucional.",
-    "Tratar a 'los ciudadanos' o 'los chilenos' como actor único: no puede superar 60 en Mecanismo Institucional.",
-    "Accountability decorativa: si menciona transparencia sin operacionalizar → no puede superar 60 en Mecanismo.",
-    "Falsa precisión: si inventa cifras adicionales al escenario, baja 20 puntos en Claridad.",
-    "Tags solicitados ausentes o sustituidos: baja Claridad."
+    "Soberanismo mágico: proponer LLM chileno o nube nacional como solución total sin asumir costo, horizonte ni capacidad → no puede superar 60 en Regla mínima.",
+    "Listar las cinco dependencias sin elegir una: no puede superar 60 en Diagnóstico estructural.",
+    "Confundir diversificación contractual con diversificación de poder: si propone multi-proveedor sin notar que la capa cloud es cuello de botella → no puede superar 70 en Diagnóstico estructural.",
+    "Tratar la dependencia frontera como dependencia de software clásica (SAP/Oracle): no puede superar 60 en Diagnóstico.",
+    "Crear una agencia decorativa: si propone 'agencia nueva' sin razón institucional concreta → no puede superar 60 en Regla mínima.",
+    "Regla decorativa: 'principios', 'observatorios', 'mesas', 'que sea transparente' → no puede superar 60 en Regla mínima.",
+    "Imitación europea sin asumir capacidad: si copia AI Act sin asumir diferencia de capacidad institucional chilena → no puede superar 65 en Regla mínima.",
+    "Falsa precisión: si inventa cifras o capacidades no presentes en las lecturas, baja 20 puntos en Evidencia y techo 60.",
+    "Tags solicitados ausentes: baja Claridad."
   ],
   "bonusIndicators": [
     "Distingue capa de modelo de capa de cómputo y reconoce que la captura más estructural está en la segunda.",
-    "Reconoce la asimetría temporal: proveedores discontinúan modelos unilateralmente.",
-    "Reconoce que costos de cambio se trasladan al Tesoro sin que el contribuyente tenga voz.",
-    "Reconoce que USD 280M en 4 años llegan tarde a una frontera que se mueve cada 6 meses.",
-    "Mecanismo de accountability incluye test anual de cambio forzoso de proveedor.",
-    "Nombra una asimetría que NO sea 'tamaño' sino 'naturaleza del bien' (propósito general).",
-    "Reconoce que los 3 proveedores se reducen a 5 personas que se conocen — diversificación contractual no es diversificación de poder.",
-    "Identifica que la alianza latinoamericana (C) no escapa la asimetría porque sigue dependiendo de cómputo big tech."
+    "Elige 'narrativa de inevitabilidad' como dependencia — interpretación válida y poco común.",
+    "La regla nombra actor con potestad existente concreta (DIPRES, Contraloría, ministerio sectorial) en vez de crear institucionalidad.",
+    "La regla incluye prueba operacional (prueba de migración anual, simulacro, auditoría con plazo).",
+    "Reconoce explícitamente que la 'pelea ideal' y la 'pelea que sí se puede dar' son distintas.",
+    "Reconoce asimetría temporal: proveedores discontinúan modelos unilateralmente.",
+    "Reconoce que los 3 proveedores se reducen a 5 personas que se conocen entre sí.",
+    "Usa lenguaje sobrio sin grandilocuencia ('soberanía algorítmica' aparece solo si va operacionalizado)."
   ],
   "penaltyIndicators": [
-    "Citar 'soberanía' como concepto sin operacionalizar qué se gana y qué se pierde.",
-    "Asumir que la regulación europea (AI Act) se traslada al caso chileno sin asumir la capacidad institucional diferencial.",
-    "Proponer 'crear una agencia' sin nombrar a qué organismo existente reemplaza ni a quién rinde.",
-    "Confundir 'opción A es mejor porque es soberana' con 'opción A es viable dado el costo y horizonte'.",
-    "Tratar las 3 opciones como excluyentes sin considerar híbridos."
+    "Cita 'soberanía' como concepto sin operacionalizar qué se gana y qué se pierde.",
+    "Asume que el AI Act europeo se traslada a Chile sin asumir la capacidad institucional diferencial.",
+    "Propone 'crear una agencia' sin nombrar a qué organismo existente reemplaza ni a quién rinde.",
+    "Confunde 'opción más soberana' con 'opción más viable dado el costo y horizonte'.",
+    "Lista los cinco tipos de dependencia sin elegir uno (es lo más fácil y lo más débil)."
   ]
 }

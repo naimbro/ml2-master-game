@@ -1,36 +1,36 @@
 {
   "sessionId": "bloque_3_captura_populismo",
   "courseId": "temas_emergentes_2026",
-  "title": "Bloque 3 — Captura y populismo: ¿cómo responder al backlash político?",
-  "description": "Tercer bloque de la Sesión 2 del curso Temas Emergentes (28 mayo 2026). Cuando emerge un movimiento anti-IA mezclando agravios materiales legítimos con oportunismo populista, ¿qué diseño institucional toma en serio el malestar sin ceder a la captura simétrica? Anclado en Jasmine Sun 'AI Populism's Warning Shots' y 'My week with the AI populists: A DC report' (mayo 2026).",
+  "title": "Bloque 3 — Qué le dices al primo de 23: respuesta individual + colectiva",
+  "description": "Tercer bloque de la Sesión 2 del curso Temas Emergentes (28 mayo 2026). En vez de diseñar arquitectura institucional desde el ministerio, el estudiante le habla a un primo de 23 que pregunta '¿para qué estudié si la IA va a hacer mi pega?' — combinando honestidad empírica, sensibilidad generacional y reconocimiento de que la respuesta no se agota en consejo individual. Anclado en Parrott (Every), The Economist y Gamble.",
   "date": "2026-05-28",
   "roundCount": 1,
-  "roundDurationSeconds": 300,
-  "bufferSeconds": 90,
+  "roundDurationSeconds": 240,
+  "bufferSeconds": 60,
   "conceptTags": [
     "captura_estatal",
     "populismo_ia",
-    "rendicion_de_cuentas",
-    "legitimidad_vs_legalidad",
-    "actores_y_asimetrias"
+    "fatalismo_individualista",
+    "respuesta_colectiva",
+    "honestidad_empirica"
   ],
   "judges": [
     { "judgeId": "democracy_scholar", "weight": 0.40 },
-    { "judgeId": "policy_lawyer", "weight": 0.40 },
-    { "judgeId": "professor_twin_ayd", "weight": 0.20 }
+    { "judgeId": "policy_lawyer", "weight": 0.20 },
+    { "judgeId": "professor_twin_ayd", "weight": 0.40 }
   ],
   "judgeConfig": {
     "democracy_scholar": {
-      "sessionLens": " FOCO DE ESTA RONDA: distinguir crítica legítima de oportunismo populista, sin caer en la trampa simétrica de tratar todo populismo como ilegítimo. Premia reconocer que el movimiento anti-IA tiene actores diversos (afectados reales + emprendedores políticos + actores de safety) con intereses no alineados. Premia distinguir 'la legitimidad del agravio' de 'la legitimidad del frame' de 'la legitimidad de la propuesta'. Penaliza tratar a 'el movimiento' como agente unitario o moralizar (a favor o en contra) sin operacionalizar.",
-      "weightFormula": "score = 0.50 * process_structuring + 0.35 * institutional_realism + 0.15 * precision_clarity"
+      "sessionLens": " FOCO DE ESTA RONDA: la respuesta tiene que distinguir agravio legítimo de oportunismo populista SIN convertir el miedo del primo en verdad política automática. Premia reconocer la asimetría generacional (la transición tarda décadas, al primo le toca ahora) y la diferencia entre 'cierre de entrada' a empleo (13% Stanford en roles expuestos) y 'desempleo agregado'. Penaliza tanto minimizar el miedo ('tranquilo, históricamente...') como radicalizar al primo (anti-IA militante sin evidencia que lo sostenga). Premia respuestas que critican el frame del 'es puro populismo' del segundo primo sin descalificarlo.",
+      "weightFormula": "score = 0.50 * process_structuring + 0.30 * institutional_realism + 0.20 * precision_clarity"
     },
     "policy_lawyer": {
-      "sessionLens": " FOCO DE ESTA RONDA: mecanismo institucional concreto que reconozca el agravio sin ceder a la captura de ninguno de los dos polos. Premia diseños que: (a) crean canales formales para el agravio material, (b) blindan a la deliberación técnica de captura industrial, (c) tienen plazos y consecuencias explícitas. Penaliza fuerte 'comisión asesora' sin mandato vinculante y 'mesa de diálogo' sin estructura de decisión.",
-      "weightFormula": "score = 0.20 * process_structuring + 0.65 * institutional_realism + 0.15 * precision_clarity"
+      "sessionLens": " FOCO DE ESTA RONDA: peso bajo porque la pregunta NO pide arquitectura institucional desde el ministerio. Pero SÍ pide [RESPUESTA_COLECTIVA] concreta — una política nombrable (seguro de desempleo extendido modelo danés, reconversión costeada industria-Estado, cuotas de aprendizaje pagado, política industrial). Premia política nombrada con concreción. Penaliza abstracciones tipo 'el Estado debería hacer algo' o 'mesa de diálogo'. NO castigues por ausencia de mecanismo institucional formal — está hablando con un primo.",
+      "weightFormula": "score = 0.25 * process_structuring + 0.55 * institutional_realism + 0.20 * precision_clarity"
     },
     "professor_twin_ayd": {
-      "sessionLens": " FOCO DE ESTA RONDA: uso literal de los 4 tags. Toma posición concreta. Reconoce el supuesto crítico del propio diseño institucional. Penaliza equidistancia entre 'industria captura' e 'movimiento captura' sin nombrar cuál es más probable en el caso concreto.",
-      "weightFormula": "score = 0.30 * process_structuring + 0.30 * institutional_realism + 0.40 * precision_clarity"
+      "sessionLens": " FOCO DE ESTA RONDA: humanidad + evidencia + respuesta NO individualista. Premia: lenguaje natural (le habla a un primo, no a un ministro), uso útil del 13% Stanford (cierre de entrada, no desempleo), [CONSEJO] que conecta con dato (no Parrott textual), [RESPUESTA_COLECTIVA] que nombra una política concreta. Penaliza: fatalismo individualista ('aprende prompts y portafolio') sin dimensión colectiva, prosa de consultor en una comida familiar, repetir Parrott textualmente, tratar el suicidio (atribución contestada) como prueba causal. Sé directo: 'esto suena a consultor', 'aquí estás siendo paternalista', etc.",
+      "weightFormula": "score = 0.35 * process_structuring + 0.25 * institutional_realism + 0.40 * precision_clarity"
     }
   }
 }

@@ -1,73 +1,73 @@
 {
-  "_doc": "Rúbrica del Bloque 1 (Sesión 2, Temas Emergentes 2026). Derivada de la base_rubric de ai_democracy_2026 con ajustes de foco para el bloque diagnóstico de backlash. NO cambia los IDs de dimensiones (los usa el motor cloud para fórmulas de jueces).",
+  "_doc": "Rúbrica del Bloque 1 (Sesión 2, Temas Emergentes 2026). Reescrita 2026-05-27 tras consulta pedagógica externa: la pregunta dejó de ser un memo ministerial y pasó a ser un ejercicio de steelman + límite del argumento contrario. NO cambia los IDs de dimensiones (los usa el motor cloud para fórmulas de jueces).",
   "sessionId": "bloque_1_backlash_diagnostico",
-  "globalInstructions": "Evalúa SOLO lo que está escrito. Este es el Bloque 1 de la Sesión 2 del curso 'Temas Emergentes: IA y Democracia' (UAI MEPP 2026). Estudiantes de magíster en economía y políticas públicas. El foco del bloque es DIAGNÓSTICO del backlash: distinguir crítica orgánica de pánico moral, identificar actores amplificadores vs actores afectados, y mantener honestidad sobre supuestos empíricos. Premia: identificación de actores no obvios, asimetría narrativa, distinción legalidad/legitimidad operacionalizada, supuestos críticos verificables. Penaliza: equidistancia retórica, lectura monolítica del conflicto (todo legítimo / todo pánico), tratar agentes amplificadores como afectados, accountability decorativa. Usa 'judgeFocus' del escenario como ancla principal.",
+  "globalInstructions": "Evalúa SOLO lo que está escrito. Este es el Bloque 1 de la Sesión 2 del curso 'Temas Emergentes: IA y Democracia' (UAI MEPP 2026). El estudiante construye el steelman del argumento de un video viral anti-IA usando datos de las lecturas, y marca dónde ese argumento cruza a manipulación. La pregunta NO pide diseñar política pública. Premia: reconstrucción honesta del argumento contrario, uso de al menos un dato verificable de The Economist o Gamble, distinción entre dinámica estructural y atribución intencional, [LÍMITE] específico (no vago). Penaliza: ridiculizar a los simpatizantes del video, endorsar el video íntegro, equidistancia retórica, opinión sin evidencia, name-dropping de cifras sin tesis.",
   "scoring": {
     "scaleLevels": [100, 80, 60, 40, 20, 0],
-    "instructions": "Evalúa SOLO lo que está escrito. En este bloque diagnóstico, una respuesta que toma posición clara con un supuesto explícito vale más que una respuesta exhaustiva pero equidistante. Tags solicitados deben aparecer literalmente."
+    "instructions": "Evalúa SOLO lo que está escrito. Una respuesta corta con steelman fuerte + dato concreto + límite específico vale más que una respuesta larga sin tesis o sin datos. Tags solicitados ([VERSIÓN_FUERTE], [LÍMITE]) deben aparecer literalmente; sin embargo, prioriza la sustancia: una respuesta con los tags pero sin tesis vale menos que una con tesis fuerte y un tag parcialmente integrado."
   },
   "dimensions": [
     {
       "id": "process_structuring",
-      "name": "Diagnóstico del backlash: componente orgánico vs componente amplificado",
+      "name": "Calidad del steelman + nitidez del límite",
       "weight": 0.45,
-      "description": "Capacidad de descomponer el conflicto en componentes (agravio material real + amplificación oportunista + asimetría informativa), sin colapsar uno en otro. Distinguir legalidad de legitimidad con un criterio concreto. Identificar la tensión democrática específica (no genérica).",
-      "level_100": "Distingue explícitamente agravio orgánico (vecinos, cuenta de luz, agua) de amplificación (diputado, gremio, frame). Reconoce ambos componentes presentes en el mismo conflicto. Distingue legalidad del proyecto individual de legitimidad de la pregunta acumulada. Toma posición sobre cuál componente es dominante, con criterio.",
-      "level_80": "Identifica los dos componentes pero deja uno parcialmente vago, o toma posición sin nombrar el criterio.",
-      "level_60": "Hay intención diagnóstica pero el conflicto queda como 'es complicado' o 'hay argumentos en ambos lados' sin descomposición operacional.",
-      "level_40": "Lectura monolítica: 'es backlash legítimo' o 'es pánico moral' sin reconocer el otro componente.",
-      "level_20": "Respuesta puramente técnica o procedimental ('hagamos consulta ciudadana') que no diagnostica nada.",
+      "description": "Capacidad de reconstruir el argumento contrario en su versión más sólida (no la caricaturesca) y luego marcar un límite específico donde ese argumento cruza a manipulación. La 'tesis' aquí es la decisión sobre qué parte del argumento es defendible y qué parte no.",
+      "level_100": "Reconstruye el argumento del video con su versión más fuerte (no la fácil), usando datos verificables. Distingue dinámica estructural (concentración auto-sostenible) de atribución intencional. El [LÍMITE] nombra un paso lógico específico (ej: 'cuando colapsa concentración de rentas con conspiración intencional'). No ridiculiza, no endorsa.",
+      "level_80": "Steelman sólido pero deja un elemento parcialmente vago; o el [LÍMITE] es bueno pero no nombra el paso lógico específico que cruza la línea.",
+      "level_60": "Hay intención de steelman pero la versión reconstruida sigue siendo caricatura suave; o el [LÍMITE] es genérico ('cuando exagera', 'cuando es propaganda').",
+      "level_40": "Ridiculiza al video sin reconstruirlo, o endorsa el video sin matiz, o equidistancia retórica ('hay argumentos en ambos lados').",
+      "level_20": "Habla del tema pero no hace steelman ni marca límite. Solo opina.",
       "level_0": "No responde, dice 'no sé', o texto irrelevante."
     },
     {
       "id": "institutional_realism",
-      "name": "Mapeo de actores: amplificadores, afectados, sin voz",
-      "weight": 0.35,
-      "description": "Identificar quién articula la narrativa (amplificador), quién recibe el agravio (afectado), quién carga las externalidades sin estar en la mesa (sin voz). Penaliza tratar al diputado o al gremio como 'afectado'. Premia identificar asimetría informativa (los 68% que no sabe qué hace un data center).",
-      "level_100": "Distingue explícitamente actor amplificador (diputado, gremio) de actor afectado (vecino, trabajador). Identifica al menos un actor sin voz organizada que NO es el vecino visible (comunas vecinas, votantes desinformados, futuros usuarios). Identifica una asimetría no obvia (informativa, narrativa, no solo económica).",
-      "level_80": "Mapeo correcto pero faltó el actor sin voz no obvio, o la asimetría queda como 'empresa vs vecinos' (obvia).",
-      "level_60": "Identifica actores principales pero los formula como abstracciones ('la sociedad', 'la ciudadanía') o confunde amplificador con afectado.",
-      "level_40": "Trata el conflicto como bilateral (empresa vs vecinos) sin ver al diputado, al gremio o a los actores sin voz.",
-      "level_20": "Ignora la dimensión de actores.",
+      "name": "Reconocimiento de asimetrías y dinámicas estructurales",
+      "weight": 0.20,
+      "description": "Reconocimiento de la asimetría distributiva (costos públicos difusos vs ganancias privadas concentradas), de la dinámica estructural de concentración de rentas, y de las redes de seguridad social insuficientes. NO exige proponer mecanismo institucional — la pregunta es diagnóstica.",
+      "level_100": "Nombra al menos una asimetría estructural concreta (concentración de cómputo + capital, presión energética sobre tarifas residenciales, redes de seguridad insuficientes ante posible desplazamiento) y la conecta con su steelman o con su límite.",
+      "level_80": "Reconoce la asimetría pero la formula superficialmente ('la IA beneficia a pocos') sin operacionalizar.",
+      "level_60": "Menciona conceptos relacionados (concentración, externalidades) pero como abstracciones, sin anclar al caso.",
+      "level_40": "Ignora la dimensión estructural; responde como si fuera solo un debate de opiniones.",
+      "level_20": "Trata el conflicto como si los actores fueran simétricos en recursos y poder.",
       "level_0": "No responde, dice 'no sé', o texto irrelevante."
     },
     {
       "id": "precision_clarity",
-      "name": "Claridad, uso literal de tags, posición clara, supuesto crítico verificable",
-      "weight": 0.20,
-      "description": "Tags solicitados aparecen literalmente. Respuesta toma posición concreta sin equidistancia. Supuesto crítico es empíricamente verificable (no retórico). Sin buzzwords ni falsa precisión.",
-      "level_100": "Los 4 tags aparecen literalmente con contenido sustantivo. Toma posición clara sobre si dominante es orgánico o amplificación. Supuesto crítico es verificable (ej: atribución del alza tarifa). No inventa datos.",
-      "level_80": "3 tags bien usados, 1 parcial. Toma posición pero con un matiz vago. Supuesto crítico está pero no es plenamente verificable.",
-      "level_60": "Tags presentes pero algunos rellenos con vaguedad. Posición ambigua. Supuesto crítico genérico ('todo depende del contexto').",
-      "level_40": "Tags parciales o reemplazados por estructura propia. Equidistancia retórica. Supuesto crítico ausente o decorativo.",
-      "level_20": "Prosa amplia sin estructura de tags. Respuesta genérica aplicable a cualquier conflicto socio-tecnológico.",
+      "name": "Evidencia, claridad y uso de tags",
+      "weight": 0.35,
+      "description": "Uso de al menos un dato verificable de las lecturas (peak power demand 4,1%→8,5%, China shock político vs económico, redes de seguridad insuficientes, OECD employment rate en máximos, etc.). Tags [VERSIÓN_FUERTE] y [LÍMITE] usados con sustancia. Claridad y ausencia de prosa de chatbot.",
+      "level_100": "Cita al menos un dato concreto de las lecturas, conectado argumentativamente con la tesis (no name-dropping). Tags aparecen literalmente con contenido sustantivo. Lenguaje natural, no relleno burocrático. Toma posición clara.",
+      "level_80": "Cita un dato pero la conexión con la tesis está parcialmente implícita; o un tag está mejor desarrollado que el otro.",
+      "level_60": "Cifras citadas pero como decoración; o tags presentes pero rellenados con vaguedad.",
+      "level_40": "Sin citar ningún dato verificable, o tags reemplazados por estructura propia.",
+      "level_20": "Prosa sin estructura, sin datos, sin tesis. Suena a borrador genérico de IA.",
       "level_0": "No responde, dice 'no sé', o texto irrelevante."
     }
   ],
   "globalPenalties": [
-    "Lectura monolítica del backlash (todo legítimo o todo pánico): no puede superar 60 en Diagnóstico.",
-    "Tratar al diputado, gremio o columnista como 'actor afectado': no puede superar 60 en Mapeo de Actores.",
-    "Tratar a 'la ciudadanía' o 'los votantes' como agente unitario: no puede superar 60 en Mapeo de Actores.",
-    "Asumir que SEIA aprobado zanja la legitimidad democrática: no puede superar 60 en Diagnóstico.",
-    "Equidistancia retórica sin tomar posición: no puede superar 60 en Claridad.",
-    "Falsa precisión: si inventa cifras adicionales al escenario, baja 20 puntos en Claridad.",
-    "Tags solicitados ausentes o sustituidos: baja Claridad.",
-    "Accountability decorativa ('hagamos consulta ciudadana' sin operacionalizar): no puede superar 60 en Mapeo de Actores."
+    "Caricaturización del adversario: si ridiculiza la posición del video sin reconstruir su mejor versión, no puede superar 70 en Calidad del steelman.",
+    "Endorso ingenuo: si suscribe el video íntegro como 'la voz del pueblo' sin marcar límite real, no puede superar 60 en Calidad del steelman.",
+    "Equidistancia retórica: si concluye 'hay argumentos en ambos lados' sin tomar posición sobre qué parte es defendible y qué no, no puede superar 60 en Calidad del steelman.",
+    "Sin ancla empírica: si no cita ningún dato, evento o argumento reconocible de las lecturas, no puede superar 70 en Evidencia, claridad y tags.",
+    "Dato sin argumento: si cita cifras pero no las conecta con tesis (name-dropping), no puede superar 75 en Calidad del steelman.",
+    "Falsa precisión: si inventa cifras adicionales no presentes en las lecturas o el escenario, baja 20 puntos en Evidencia y techo 60.",
+    "Atribución intencional sin evidencia: si trata 'concentración estructural de rentas' como sinónimo de 'cinco empresas deciden quitarte el trabajo', no puede superar 60 en Reconocimiento estructural.",
+    "Solucionismo prematuro: si propone política pública detallada cuando la pregunta pide diagnóstico, baja Claridad (la pregunta no lo pide)."
   ],
   "bonusIndicators": [
-    "Distingue actor amplificador de actor afectado con criterio operacional.",
-    "Identifica que la asimetría informativa (68% no sabe qué hace un data center) es capitalizada por el frame del diputado.",
-    "Reconoce que el SEIA evalúa proyecto individual, no impacto acumulado de cluster.",
-    "Nombra un actor sin voz que NO es el vecino visible (comuna vecina, votante desinformado, futuro usuario).",
-    "Supuesto crítico es empíricamente verificable, no retórico.",
-    "Reconoce que 'los 47% que apoya moratoria' es un grupo distinto del 'vecino de Quilicura'.",
-    "Distingue legitimidad del proyecto de legitimidad de la pregunta acumulada (distribución de costos del cluster)."
+    "Reconstruye la versión más fuerte de una posición con la que probablemente no está de acuerdo.",
+    "Usa un dato verificable de las lecturas y lo conecta con una tesis (no ornamento).",
+    "Distingue dinámica estructural (concentración auto-sostenible) de atribución intencional ('deciden quitarte el trabajo') sin negar el problema estructural.",
+    "El [LÍMITE] nombra un paso lógico específico que el video da y no debería dar.",
+    "Reconoce que 'todavía no hay colapso laboral' y 'el miedo es legítimo' pueden coexistir.",
+    "Identifica la asimetría distributiva (costos difusos públicos vs ganancias concentradas privadas).",
+    "Escribe en lenguaje natural, sin sonar a borrador de IA."
   ],
   "penaltyIndicators": [
-    "Resolver el diagnóstico con 'depende' sin descomponer el conflicto.",
-    "Citar 'pánico moral' como concepto sin nombrar al actor que se beneficia del frame.",
-    "Asumir buena fe automática del diputado oficialista o del gremio empresarial.",
-    "Confundir 'frecuencia del frame' (2.3M de vistas) con 'verdad del frame'.",
-    "Proponer una solución ('hagamos una ley') cuando el escenario pide diagnóstico, no propuesta."
+    "Ridiculiza a los simpatizantes del video por 'ignorantes' sin reconstruir el agravio material.",
+    "Suscribe el video íntegro como 'la voz del pueblo'.",
+    "Resuelve con 'depende' sin marcar límite concreto.",
+    "Cita autores como ornamento ('como dice The Economist') sin que la cita aporte argumentativamente.",
+    "Propone una arquitectura de política pública detallada cuando la pregunta pide diagnóstico."
   ]
 }

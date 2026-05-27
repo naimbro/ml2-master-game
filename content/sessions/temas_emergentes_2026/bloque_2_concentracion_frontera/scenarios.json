@@ -1,60 +1,59 @@
 [
   {
-    "id": "te_b2_dependencia_lai_chile",
+    "id": "te_b2_dependencia_invisible",
     "order": 1,
-    "title": "El Estado depende de tres laboratorios",
+    "title": "La dependencia invisible",
     "category": "Concentración y soberanía",
-    "difficulty": "hard",
+    "difficulty": "medium",
     "ranked": true,
-    "durationSeconds": 300,
+    "durationSeconds": 240,
     "requiredTags": [
-      "ACTOR_AFECTADO",
-      "ASIMETRIA_DE_PODER",
-      "MECANISMO_RENDICION_CUENTAS",
-      "RIESGO_DE_CAPTURA"
+      "[DEPENDENCIA]",
+      "[REGLA]"
     ],
-    "judgeFocus": "Identificar la asimetría estructural entre Estado periférico y firmas frontera. Distinguir soberanía nominal de soberanía efectiva. Premia mecanismo institucional que sea proporcional a la capacidad real del Estado chileno, NO una versión decorativa de la regulación europea. Penaliza fuerte 'desarrollemos nuestro propio LLM' sin asumir el costo y el horizonte. Si el estudiante asume que la diversificación entre proveedores resuelve la asimetría, baja Mapeo de Actores: los 3 proveedores se reducen a 5 personas que se conocen entre sí.",
-    "context": "Eres asesor del Ministerio de Ciencia, Tecnología, Conocimiento e Innovación. Lunes 25 de mayo de 2026.\n\nLa Contraloría acaba de entregar un informe: el Estado chileno tiene contratos vigentes que usan 4 LLMs distintos en 17 servicios públicos (SENADIS para clasificar solicitudes, FONASA para resúmenes médicos, IPS para triaje de pensiones, Servicio de Impuestos Internos para resolución de consultas, entre otros). Los 4 LLMs son: ChatGPT (OpenAI/Microsoft), Claude (Anthropic/AWS), Gemini (Google), y un Llama derivado (auto-hospedado).\n\nDato crítico: los 4 dependen de infraestructura controlada por 3 laboratorios estadounidenses (OpenAI, Anthropic, Google) más Microsoft, Amazon y Meta como capas de cómputo. La auditoría de The Economist ('Five men control AI. Who should control them?', abril 2026) identifica a Sam Altman, Dario Amodei, Demis Hassabis, Elon Musk y Mark Zuckerberg como los cinco actores que controlan los modelos frontera del planeta. Ninguno responde al Estado chileno.\n\nEn los últimos 18 meses: Anthropic modificó unilateralmente los términos de uso de Claude para limitar uso en 'sistemas de decisión que afecten beneficios públicos sin supervisión humana documentada'. SENADIS tuvo que parar 3 semanas mientras renegociaba. OpenAI subió 35% el precio del API empresarial. Google retiró Gemini 1.5 sin migración asistida; el SII perdió capacidad por 6 semanas.\n\nEl ministro convoca una mesa con 3 opciones sobre la mesa:\n\n(A) **Plan Nacional de Soberanía Algorítmica**: invertir USD 280M en 4 años para desarrollar un modelo chileno de capacidad media, con consorcio universidades + CORFO + Ministerio.\n\n(B) **Cláusula multi-proveedor obligatoria**: cualquier servicio público que use LLM debe mantener contratos simultáneos con al menos 2 proveedores con APIs intercambiables, con cláusulas de salida sin penalidad.\n\n(C) **Alianza Latinoamericana de Cómputo**: tratado con México, Brasil, Colombia para compartir infraestructura de cómputo (no modelo propio), con marco regulatorio común.\n\nEl ministro te pide un memo en 300 segundos: ¿cuál es la asimetría real, qué opción la enfrenta mejor, y qué riesgo de captura introduce esa opción?",
-    "question": "Responde en formato EXACTO con los siguientes tags. Máximo 14 líneas.\n\n[ACTOR_AFECTADO] Identifica al menos 3 actores afectados por la dependencia actual, incluyendo uno sin voz organizada. Los 'usuarios de servicios públicos' no cuenta como respuesta — desagrega.\n[ASIMETRIA_DE_PODER] Nombra la asimetría más estructural (no operacional). ¿Qué hace que esta sea distinta a la dependencia tradicional de software (ej: SAP, Oracle)?\n[MECANISMO_RENDICION_CUENTAS] Elige una opción (A, B o C, o un híbrido justificado) y propón el mecanismo de rendición de cuentas operacional: quién rinde, ante quién, en qué plazo, con qué consecuencia si falla. NO basta con 'que sea transparente'.\n[RIESGO_DE_CAPTURA] Identifica el riesgo de captura concreto que introduce TU opción elegida. Nombra al actor capturador. Si propones (A), considera captura nacional; si (B), captura del proveedor dominante; si (C), captura del país más grande del bloque.",
+    "judgeFocus": "Premia identificar UNA dependencia concreta (modelo, nube, datos, expertise o narrativa de inevitabilidad) y derivar UNA regla mínima realista para Chile. Penaliza fuerte el soberanismo mágico ('hagamos un LLM chileno') sin asumir costos ni capacidades, y el listado de cinco dependencias sin elegir una. Premia respuestas que distinguen capa de modelo de capa de cómputo y reconocen que multi-proveedor a nivel API puede ser ilusoria si el cómputo cloud está concentrado. La 'regla' debe ser proporcional a la capacidad institucional chilena, no una imitación decorativa de la regulación europea.",
+    "context": "The Economist habla de cinco hombres que controlan buena parte de la frontera de la IA (Altman, Amodei, Hassabis, Musk, Zuckerberg). Para Chile, el problema no es solo 'usar tecnología extranjera'. Es que modelos, nube, precios, términos de uso, capacidades y actualizaciones pueden cambiar desde fuera, sin aviso, sin negociación. A diferencia de comprar software tradicional (SAP, Oracle), aquí el proveedor puede modificar el terreno mientras el Estado ya está jugando el partido.",
+    "question": "¿Cuál es la dependencia más peligrosa para un Estado periférico como Chile: la del modelo, la de la nube, la de los datos, la del expertise técnico, o la de la narrativa de inevitabilidad que dice que toda regulación frena el progreso?\n\nElige UNA dependencia y propone UNA regla mínima — realista para la capacidad institucional chilena, no aspiracional — para reducirla. No tienes que fingir soberanía total: tienes que decidir qué pelea es la que sí se puede dar.\n\nUsa estos dos tags:\n\n[DEPENDENCIA] La que eliges y por qué es la más peligrosa (no la más visible, la más peligrosa estructuralmente).\n[REGLA] Una regla mínima concreta y proporcional a la capacidad chilena. Si la regla se parece a 'crear una agencia' o 'que sea transparente', no es regla, es decoración.",
     "conceptTags": [
       "concentracion_de_poder",
       "soberania_tecnologica",
       "actores_y_asimetrias",
-      "captura_estatal"
+      "captura_estatal",
+      "dependencia_estructural"
     ],
-    "referenceAnswer": "[ACTOR_AFECTADO] (1) Funcionarios públicos que dependen del LLM para procesar volumen (sin voz organizada respecto a la decisión arquitectónica: deciden los jefes de servicio). (2) Beneficiarios cuyo trámite depende del SLA del proveedor extranjero (la pensionada que esperó 3 semanas en SENADIS no tiene canal para pedir cuentas a Anthropic). (3) Investigadores chilenos en IA que pierden capacidad acumulativa cada vez que un modelo se discontinúa (sin voz: su pérdida es ilegible para el debate político). (4) Contribuyentes que pagan los costos de cambio (subió 35% el API y la cuenta es del Tesoro).\n[ASIMETRIA_DE_PODER] La asimetría estructural NO es la dependencia de software (eso existió con SAP). Es que (a) los modelos frontera concentran poder cognitivo de propósito general — no hacen una cosa, hacen muchas — , (b) sus dueños son cinco personas con visiones públicas sobre cómo debe ser gobernada la sociedad, (c) no hay mercado competitivo con baja barrera de entrada: 3 firmas tienen el cómputo, el dato y el talento. Cambiar de SAP era caro; cambiar de proveedor frontera reorganiza la frontera tecnológica del Estado.\n[MECANISMO_RENDICION_CUENTAS] Opción B híbrida con elementos de C, NO A (USD 280M para un modelo de capacidad media en 4 años llega tarde y captura presupuesto científico). Mecanismo concreto: el Ministerio rinde cuentas semestralmente a Comisión Mixta de Hacienda con (a) número de servicios con multi-proveedor cumpliendo cláusula intercambiable, (b) tiempo de respuesta a un cambio forzoso de proveedor (test obligatorio anual), (c) costo total acumulado de cambios forzados. Si más de 30% de servicios no cumple multi-proveedor a 18 meses, suspensión de nuevas autorizaciones de contratación y revisión por Contraloría.\n[RIESGO_DE_CAPTURA] Captura del proveedor dominante: si Microsoft Azure ya provee la infraestructura cloud a la mayoría de servicios, la 'multi-proveedor' a nivel de modelo es ilusoria porque dependemos de un mismo cloud. El actor capturador no es OpenAI (un modelo) sino Azure (la capa de cómputo). El mecanismo debe exigir multi-proveedor a nivel de infraestructura cloud, no solo de API, o la cláusula es decorativa.",
+    "referenceAnswer": "[DEPENDENCIA] La dependencia más peligrosa para Chile no es la de modelo (hay 4-5 LLMs intercambiables), es la de la **capa de cómputo cloud**. Tres firmas (Microsoft Azure, AWS, Google Cloud) corren la mayoría de los modelos frontera. Si el Estado chileno tiene contratos con 3 LLMs distintos pero los 3 corren sobre Azure, la 'multi-proveedor' a nivel API es ilusoria. La dependencia cloud es más peligrosa que la de modelo porque (a) cambiar de modelo cuesta semanas, cambiar de cloud cuesta años, (b) el cómputo es el cuello de botella estructural — concentración auto-sostenible por barreras de entrada altísimas, (c) el proveedor cloud puede modificar términos, precios o capacidades sin que el ente público tenga capacidad técnica de migrar.\n[REGLA] Regla mínima realista para Chile: cualquier sistema de IA usado para decisiones que afecten beneficios públicos o sancionatorias debe contratualmente garantizar (a) portabilidad de datos y prompts al menos a un cloud distinto del usado en producción, (b) prueba de migración cloud anual obligatoria con plazo de ejecución no mayor a 60 días, (c) sin estos dos elementos, el contrato no puede ser autorizado por DIPRES. La regla NO crea una agencia nueva; usa la potestad existente de DIPRES sobre autorización de gasto público. Es la pelea que sí se puede dar con la capacidad institucional chilena hoy.",
     "idealAnswer": {
       "keyPoints": [
-        "Distingue dependencia de software tradicional (SAP) de dependencia de modelo frontera (asimetría cognitiva de propósito general, oligopolio estructural, no solo contractual).",
-        "Identifica al menos un actor sin voz organizada que NO sea 'los ciudadanos' (funcionarios, investigadores en IA chilena, beneficiarios atomizados).",
-        "Reconoce que los 3 proveedores se reducen a 5 personas que se conocen — la diversificación contractual no es diversificación de poder.",
-        "Toma posición sobre una opción (o híbrido justificado) y NO lista las 3 sin elegir.",
-        "Identifica el riesgo de captura específico a su opción (no captura genérica), y nombra al actor capturador concreto.",
-        "Reconoce que la multi-proveedor a nivel API es ilusoria si dependemos de un solo proveedor cloud — la capa de cómputo es el cuello de botella real."
+        "Elige UNA dependencia (no lista las cinco) y justifica por qué esa es la estructuralmente más peligrosa, no la más visible.",
+        "Reconoce que la capa cloud es típicamente más peligrosa que la capa modelo (modelo intercambiable, cloud lock-in).",
+        "Propone una regla mínima proporcional a la capacidad institucional chilena.",
+        "La regla nombra un actor con potestad existente (DIPRES, Contraloría, ministerio sectorial) NO una agencia nueva.",
+        "La regla tiene plazo, prueba operacional y consecuencia (no es 'que sea transparente').",
+        "NO propone 'hagamos un LLM chileno' como solución mágica."
       ],
       "expectedConcepts": [
-        "soberania_nominal_vs_efectiva",
-        "asimetria_cognitiva_propositos_generales",
-        "oligopolio_estructural_no_contractual",
-        "captura_de_la_capa_de_computo",
-        "diversificacion_contractual_no_es_diversificacion_de_poder"
+        "capa_de_computo_como_cuello_de_botella",
+        "diversificacion_contractual_no_es_diversificacion_de_poder",
+        "soberania_efectiva_vs_nominal",
+        "regla_minima_realista_vs_agencia_decorativa",
+        "potestad_institucional_existente"
       ],
       "commonMistakes": [
-        "Proponer 'hagamos un LLM chileno' sin asumir el costo ni el horizonte (USD 280M en 4 años llegan tarde a una frontera que se mueve cada 6 meses).",
-        "Asumir que la cláusula multi-proveedor (opción B) resuelve la asimetría sin notar que la capa cloud es el cuello de botella.",
-        "Tratar a 'los ciudadanos' como actor único.",
-        "Confundir dependencia tradicional (SAP) con dependencia de modelo frontera.",
-        "Proponer accountability sin operacionalizar quién-ante-quién-cuándo-consecuencia.",
-        "Listar las 3 opciones sin tomar posición.",
-        "Asumir que la alianza latinoamericana (C) escapa la asimetría — sigue dependiendo de cómputo controlado por las big tech."
+        "Listar las cinco dependencias sin elegir una.",
+        "Elegir 'modelo' como la más peligrosa sin notar que es la más intercambiable.",
+        "Proponer 'crear una agencia' o 'establecer una política nacional' sin nombrar potestad existente.",
+        "Proponer 'que sea transparente' como regla.",
+        "Proponer un LLM chileno como regla (no es regla, es proyecto de USD 280M sin horizonte realista).",
+        "Confundir 'soberanía nominal' (Chile firma contratos) con 'soberanía efectiva' (Chile puede ejecutar autonomía).",
+        "Proponer regla aspiracional al estilo europeo sin asumir la diferencia de capacidad institucional."
       ],
       "excellentResponseIndicators": [
         "Distingue capa de modelo de capa de cómputo y reconoce que la captura más estructural está en la segunda.",
-        "Reconoce que los modelos son discontinuados unilateralmente (Gemini 1.5 caso real) — la asimetría temporal favorece al proveedor.",
-        "Identifica que los costos de cambio (35% más caro API) se trasladan al Tesoro sin que el contribuyente tenga voz.",
-        "Reconoce que el Plan Nacional (A) captura presupuesto científico que podría tener mayor retorno en otros usos.",
-        "Mecanismo de accountability incluye test anual de cambio forzoso de proveedor (no solo reporte de papel).",
-        "Nombra una asimetría que NO sea 'tamaño' sino 'naturaleza del bien' (modelo frontera = capacidad cognitiva de propósito general controlada por pocos)."
+        "Elige 'narrativa de inevitabilidad' como [DEPENDENCIA] y la conecta con asimetría discursiva — interpretación válida y poco común.",
+        "La regla nombra el actor con potestad concreta (DIPRES, Contraloría) en vez de inventar institucionalidad.",
+        "La regla incluye prueba operacional (prueba de migración anual, simulacro, auditoría con plazo).",
+        "Reconoce que la 'pelea que sí se puede dar' es distinta de la 'pelea ideal' y elige conscientemente.",
+        "No menciona la palabra 'soberanía algorítmica' sin operacionalizar costos."
       ]
     }
   }

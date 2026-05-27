@@ -1,18 +1,18 @@
 {
   "sessionId": "bloque_2_concentracion_frontera",
   "courseId": "temas_emergentes_2026",
-  "title": "Bloque 2 — Concentración: ¿quién controla la frontera de la IA?",
-  "description": "Segundo bloque de la Sesión 2 del curso Temas Emergentes (28 mayo 2026). Concentración de poder en cinco actores que controlan los modelos frontera (Altman/OpenAI, Amodei/Anthropic, Hassabis/Google, Musk/xAI, Zuckerberg/Meta) y sus implicancias para la soberanía democrática de países como Chile. Anclado en The Economist 'Five men control AI. Who should control them?' (abril 2026).",
+  "title": "Bloque 2 — La dependencia invisible: ¿qué pelea sí se puede dar?",
+  "description": "Segundo bloque de la Sesión 2 del curso Temas Emergentes (28 mayo 2026). El estudiante elige una dependencia (modelo, nube, datos, expertise, narrativa) y propone una regla mínima realista para reducirla — sin fingir soberanía total. Anclado en The Economist 'Five men control AI. Who should control them?' (abril 2026).",
   "date": "2026-05-28",
   "roundCount": 1,
-  "roundDurationSeconds": 300,
-  "bufferSeconds": 90,
+  "roundDurationSeconds": 240,
+  "bufferSeconds": 60,
   "conceptTags": [
     "concentracion_de_poder",
     "soberania_tecnologica",
     "actores_y_asimetrias",
-    "rendicion_de_cuentas",
-    "captura_estatal"
+    "captura_estatal",
+    "dependencia_estructural"
   ],
   "judges": [
     { "judgeId": "democracy_scholar", "weight": 0.30 },
@@ -21,15 +21,15 @@
   ],
   "judgeConfig": {
     "democracy_scholar": {
-      "sessionLens": " FOCO DE ESTA RONDA: identificar la asimetría estructural entre cinco firmas frontera (capacidad técnica, escala, recursos) y un Estado periférico (Chile) que es tomador de tecnología. Premia distinguir 'soberanía nominal' (Chile decide a quién contratar) de 'soberanía efectiva' (Chile no puede inspeccionar, modificar ni dejar de depender). Penaliza solucionismo soberanista vacío ('hagamos un LLM chileno') sin asumir el costo.",
-      "weightFormula": "score = 0.40 * process_structuring + 0.40 * institutional_realism + 0.20 * precision_clarity"
+      "sessionLens": " FOCO DE ESTA RONDA: soberanía efectiva vs nominal. Premia identificar concentración de poder en pocos proveedores de frontera como problema estructural, no solo contractual. Penaliza tanto tecnofilia ingenua ('mercado se ajustará') como soberanismo performático ('hagamos un LLM chileno'). Premia respuestas que reconocen que Chile es tomador, no líder, y que la pregunta no es liderar la frontera sino gobernar la dependencia.",
+      "weightFormula": "score = 0.45 * process_structuring + 0.35 * institutional_realism + 0.20 * precision_clarity"
     },
     "policy_lawyer": {
-      "sessionLens": " FOCO DE ESTA RONDA: mecanismo institucional concreto para gobernar la dependencia. Premia propuestas que reconozcan que (a) las opciones tienen costos asimétricos, (b) la capacidad institucional chilena es limitada, (c) el riesgo de captura existe tanto en la dependencia como en el 'soberanismo nacional'. Penaliza accountability decorativa ('hagamos transparencia') sin operacionalizar quién, ante quién, cuándo, consecuencia.",
+      "sessionLens": " FOCO DE ESTA RONDA: la regla mínima tiene que ser ejecutable con la capacidad institucional chilena REAL. Premia reglas que (a) nombran actor con potestad existente (DIPRES, Contraloría, ministerio sectorial) — NO 'crear una agencia nueva', (b) tienen prueba operacional concreta (prueba de migración cloud anual, simulacro, auditoría con plazo), (c) tienen consecuencia explícita (no autorización de gasto, sanción, etc.). Penaliza fuerte: 'principios', 'observatorios', 'mesas', 'crear una agencia', 'que sea transparente'. Premia factibilidad chilena, no imitación europea decorativa.",
       "weightFormula": "score = 0.20 * process_structuring + 0.65 * institutional_realism + 0.15 * precision_clarity"
     },
     "professor_twin_ayd": {
-      "sessionLens": " FOCO DE ESTA RONDA: uso literal de los 4 tags solicitados. Premia tomar posición concreta sobre la opción dominante (A, B o C, o ninguna con justificación). Penaliza listar opciones sin elegir, equidistancia ('depende de los costos'), y exposición teórica sin aterrizar al caso.",
+      "sessionLens": " FOCO DE ESTA RONDA: el estudiante eligió UNA dependencia o las listó todas. La diferencia es total. Premia: posición concreta sobre cuál dependencia es ESTRUCTURALMENTE más peligrosa (típicamente la capa cloud, no la capa modelo), regla con plazo + actor + consecuencia, lenguaje sobrio sin grandilocuencia. Penaliza: listar las cinco sin elegir, 'soberanía algorítmica' sin operacionalizar costos, tags como decoración.",
       "weightFormula": "score = 0.30 * process_structuring + 0.30 * institutional_realism + 0.40 * precision_clarity"
     }
   }

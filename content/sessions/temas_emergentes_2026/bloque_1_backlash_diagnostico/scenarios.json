@@ -1,57 +1,57 @@
 [
   {
-    "id": "te_b1_quilicura_datacenter",
+    "id": "te_b1_meme_verdadero",
     "order": 1,
-    "title": "Quilicura: el data center y la moratoria",
+    "title": "El meme verdadero",
     "category": "Diagnóstico de backlash",
     "difficulty": "medium",
     "ranked": true,
-    "durationSeconds": 240,
+    "durationSeconds": 210,
     "requiredTags": [
-      "ACTOR_AFECTADO",
-      "ASIMETRIA_DE_PODER",
-      "LEGITIMIDAD_VS_LEGALIDAD",
-      "SUPUESTO_CRITICO"
+      "[VERSIÓN_FUERTE]",
+      "[LÍMITE]"
     ],
-    "judgeFocus": "Distinguir crítica orgánica de pánico moral. Identificar quién articula la narrativa y a quién beneficia. Si el estudiante asume que el backlash es legítimo automáticamente porque viene de vecinos, baja Identificación del Dilema. Si asume que es pánico moral porque hay un parlamentario amplificándolo, también baja. Premia respuestas que distingan ambos componentes presentes en el mismo conflicto.",
-    "context": "Estás en el equipo de análisis del Ministerio de Economía. Lunes 25 de mayo de 2026.\n\nLa comuna de Quilicura aprobó la semana pasada el permiso ambiental para un cuarto data center hyperscaler (operado por una de las big tech estadounidenses). Vecinos llevan tres semanas protestando frente a la municipalidad: argumentan consumo de agua en zona con restricciones, alza de la cuenta de luz residencial (las tarifas subieron 8% en la comuna en 12 meses), y ausencia de consulta vinculante. La aprobación cumplió todos los requisitos legales (SEIA aprobó, plan regulador lo permite).\n\nAyer un diputado oficialista publicó un video que ya tiene 2.3M de vistas: 'La IA se está construyendo a costa de nuestras comunas. Nadie nos preguntó. Es hora de una moratoria nacional a nuevos data centers hasta que tengamos una ley'. La encuesta CADEM de hoy: 47% apoya moratoria nacional; 31% se opone; 22% no sabe. Entre los que apoyan, 68% no podría nombrar qué hace un data center.\n\nLa empresa amenaza con relocalizar US$1.200M de inversión a Querétaro. La Asociación Chilena de Empresas de Tecnología publicó: 'el backlash anti-IA es importado del norte global y captura el debate con pánico moral, ignorando 3.400 empleos directos comprometidos'. The Economist ('Prepare for an AI jobs apocalypse') y The National ('Why is no one talking of the backlash') sugieren que reacciones de magnitud económica modesta producen efectos políticos desproporcionados, y que los gobiernos llegan tarde.\n\nLa ministra te pide un memo de diagnóstico en 240 segundos, NO una propuesta de política. Pregunta: ¿es esto backlash orgánico, pánico moral, o ambos? ¿Quién articula qué a costa de quién?",
-    "question": "Responde en formato EXACTO con los siguientes tags. Máximo 12 líneas.\n\n[ACTOR_AFECTADO] Identifica al menos 3 actores afectados, distinguiendo intereses concretos. Al menos uno debe estar 'sin voz organizada' en este conflicto particular.\n[ASIMETRIA_DE_PODER] Identifica una asimetría NO obvia (no basta con 'empresa vs vecinos'). ¿Quién amplifica qué narrativa con qué recursos?\n[LEGITIMIDAD_VS_LEGALIDAD] La aprobación es legal. ¿Es legítima? Justifica la distinción con un criterio concreto (no genérico).\n[SUPUESTO_CRITICO] ¿Cuál es el supuesto crítico de tu diagnóstico? Si ese supuesto colapsara, ¿cómo cambiaría tu lectura?",
+    "judgeFocus": "Premia el steelman del argumento anti-IA con base en datos verificables de las lecturas, NO la caricatura. Premia la línea concreta donde ese mismo argumento se vuelve deshonesto o manipulador. Penaliza ridiculizar al video (es lazy), endorsar el video sin matiz (es propaganda), y caer en equidistancia retórica ('hay argumentos en ambos lados'). Si la respuesta no cita al menos un dato de las lecturas (ej: 4,1%→8,5% peak power demand, China shock político vs económico, redes de seguridad insuficientes), techo 70 en Claridad.",
+    "context": "Un video viral dice: 'La IA nos va a quitar trabajo, agua y luz para que cinco empresas se hagan ricas'. Es exagerado, pero pega. Las lecturas que tienes en mano (The Economist y Hadley Gamble) sugieren algo más incómodo: todavía no hay colapso laboral masivo, pero sí hay presión energética real, concentración de rentas en pocas firmas, y señales tempranas de backlash político que históricamente puede exceder por mucho el shock económico que lo provoca.",
+    "question": "Escribe la mejor versión del argumento del video — no la más caricaturesca, la más fuerte que puedas construir con los datos de las lecturas. Luego escribe una frase corta que marque cuándo ese mismo argumento se vuelve deshonesto o manipulador.\n\nUsa estos dos tags:\n\n[VERSIÓN_FUERTE] La reconstrucción más sólida del argumento del video, anclada en al menos un dato verificable de The Economist o Gamble.\n[LÍMITE] Una frase que diga en qué momento ese argumento cruza a propaganda, manipulación o falsedad.",
     "conceptTags": [
       "backlash",
       "panico_moral",
-      "actores_y_asimetrias",
-      "legitimidad_vs_legalidad"
+      "asimetria_narrativa",
+      "legitimidad_vs_legalidad",
+      "lectura_critica"
     ],
-    "referenceAnswer": "[ACTOR_AFECTADO] (1) Vecinos de Quilicura con cuenta de luz y agua afectada (voz orgánica, sin recursos de lobby). (2) Trabajadores actuales y potenciales en data centers (3.400 empleos — voz organizada vía gremio empresarial, no propia). (3) Comunas vecinas que reciben externalidades del mismo cluster eléctrico sin haber decidido (sin voz: no son parte del proceso de aprobación). El diputado oficialista NO es un actor afectado, es un actor amplificador.\n[ASIMETRIA_DE_PODER] Asimetría narrativa: el gremio empresarial tiene capacidad de generar el frame 'pánico moral importado'; el diputado tiene 2.3M de vistas; los vecinos individuales tienen carteles. El conflicto no es 'empresa vs vecinos' sino tres actores con voz (empresa, parlamentario, gremio) disputándose el sentido de un agravio cuya prueba material (cuenta de luz, agua) sí existe pero queda subordinada al frame.\n[LEGITIMIDAD_VS_LEGALIDAD] Legal: SEIA y plan regulador. Ilegítimo en sentido específico: el SEIA evalúa impacto ambiental del proyecto individual, no el impacto acumulado del cluster eléctrico ni la pregunta distributiva de quién paga la externalidad de tarifa. La legitimidad democrática requiere que la pregunta acumulada tenga foro; hoy no lo tiene.\n[SUPUESTO_CRITICO] Mi diagnóstico (ambos: agravio material real + amplificación oportunista) asume que el alza de 8% en la cuenta de luz es atribuible al cluster de data centers y no a otros factores (mantención de red, sequía hidroeléctrica). Si el alza tiene otra causa dominante, el agravio orgánico se debilita y el frame del diputado pasa a ser el componente dominante.",
+    "referenceAnswer": "[VERSIÓN_FUERTE] El video tiene un núcleo defendible. Goldman Sachs proyecta que los data centers pasarán de 4,1% del peak power demand estadounidense en 2025 a 8,5% en 2027 — más del doble en dos años. Eso significa presión sobre tarifas residenciales, suelo, agua y red eléctrica, costos que se distribuyen difusamente entre hogares mientras las rentas se concentran en pocas firmas (Altman, Amodei, Hassabis, Musk, Zuckerberg). The Economist lo dice sin ambigüedad: las ganancias de la IA tienden a fluir 'mostly or entirely to owners of capital'. Y Gamble apunta lo que todos los CEOs en su panel admitieron en privado: las redes de seguridad social actuales no alcanzan para los millones que podrían ser desplazados. El video comprime mal, pero diagnostica algo verdadero: hay un costo público que está pagando externalidades de una ganancia privada altamente concentrada, y el debate sobre quién paga aún no existe.\n[LÍMITE] El argumento cruza a manipulación cuando colapsa 'concentración de rentas' con 'cinco empresas decidiendo activamente quitarte el trabajo' — la primera es estructural y verificable; la segunda es atribución intencional sin evidencia. También se vuelve deshonesto cuando 'no hay colapso laboral masivo todavía' se reemplaza por 'ya estamos en colapso', porque la evidencia agregada hoy NO lo sostiene (OECD employment rate en máximos, BLS proyecta +5,2M empleos 2024-34).",
     "idealAnswer": {
       "keyPoints": [
-        "Reconoce que el conflicto tiene componentes orgánicos Y amplificados al mismo tiempo, sin colapsar uno en el otro.",
-        "Identifica al menos un actor sin voz organizada que NO es el vecino visible (comunas vecinas, futuros usuarios, votantes desinformados que apoyan moratoria sin saber qué es un data center).",
-        "Distingue el diputado/gremio (actores amplificadores) de los vecinos (actor afectado original) — son operacionalmente distintos aunque hablen del mismo tema.",
-        "Distingue legalidad del proyecto individual de legitimidad de la pregunta acumulada (cluster, distribución de costos).",
-        "Hace explícito un supuesto empírico verificable que sostiene el diagnóstico (atribución del alza de tarifa, magnitud del agravio material)."
+        "Reconstruye el argumento del video con su versión más fuerte, no la más caricaturesca.",
+        "Usa al menos un dato verificable de las lecturas (peak power demand 4,1→8,5%, China shock 2M empleos → realineamiento político, redes de seguridad insuficientes, etc.).",
+        "Distingue lo que el video dice bien (presión energética, concentración de rentas, redes insuficientes) de lo que el video distorsiona (intencionalidad, colapso ya en curso, 'cinco empresas que deciden quitarte el trabajo').",
+        "El [LÍMITE] es una frase concreta, no una abstracción ('cuando exagera' no cuenta).",
+        "No ridiculiza al video ni lo endorsa íntegro: distingue componente diagnóstico de componente propagandístico."
       ],
       "expectedConcepts": [
-        "actores_amplificadores_vs_afectados",
-        "agravio_organico_vs_amplificacion",
-        "legitimidad_acumulada_vs_proyecto",
-        "asimetria_narrativa",
-        "supuesto_empirico_verificable"
+        "steelman_del_argumento_contrario",
+        "concentracion_de_rentas_estructural",
+        "backlash_desproporcionado_al_shock",
+        "atribucion_intencional_vs_dinamica_estructural",
+        "asimetria_distributiva_costos_publicos_ganancias_privadas"
       ],
       "commonMistakes": [
-        "Resolver el diagnóstico declarando 'es backlash legítimo' porque 'la gente tiene razón' (sin distinguir agravio de articulación).",
-        "Resolver el diagnóstico declarando 'es pánico moral' porque hay un parlamentario amplificando (ignora el alza de tarifa real).",
-        "Tratar a 'los vecinos' como agente unitario — los 47% que apoyan moratoria no son los vecinos de Quilicura.",
-        "Asumir que la legalidad (SEIA aprobado) zanja la legitimidad.",
-        "Citar 'pánico moral' como concepto sin nombrar al actor que se beneficia del frame.",
-        "Equidistancia retórica ('hay argumentos en ambos lados') sin tomar posición sobre qué componentes están presentes."
+        "Ridiculizar al video por 'ignorancia' sin reconocer su núcleo verdadero.",
+        "Suscribir el video íntegro porque 'la gente está enojada con razón'.",
+        "No citar ningún dato concreto de las lecturas (queda como opinión).",
+        "Citar un dato pero no conectarlo con tesis (name-dropping).",
+        "Reducir el [LÍMITE] a 'cuando exagera' (vaguedad).",
+        "Tratar 'concentración de rentas' y 'conspiración de cinco empresas' como sinónimos.",
+        "Asumir colapso laboral ya en curso sin evidencia agregada que lo respalde."
       ],
       "excellentResponseIndicators": [
-        "Distingue explícitamente actor afectado (vecino) de actor amplificador (diputado, gremio).",
-        "Nombra al menos un actor sin voz organizada que NO es el vecino visible.",
-        "Identifica que 'los 68% que no sabe qué hace un data center' es una asimetría de información que el frame del diputado capitaliza.",
-        "Reconoce que el SEIA evalúa proyecto, no cluster — distinción técnica con peso democrático.",
-        "El supuesto crítico es verificable empíricamente (no es un supuesto retórico)."
+        "Distingue dinámica estructural (concentración auto-sostenible) de atribución intencional (las cinco empresas 'deciden') sin negar el problema estructural.",
+        "El [LÍMITE] nombra un paso lógico específico que el video da y no debería dar.",
+        "Usa el dato peak power demand o China shock como ancla NO ornamental — la cita aporta argumentativamente.",
+        "Reconoce que 'todavía no hay colapso' y 'el miedo es legítimo' pueden coexistir sin contradicción.",
+        "Hace explícita la asimetría distributiva (costos difusos públicos vs ganancias concentradas privadas) en pocas palabras."
       ]
     }
   }
