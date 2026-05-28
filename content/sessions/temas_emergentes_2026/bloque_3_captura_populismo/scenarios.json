@@ -129,61 +129,63 @@
     }
   },
   {
-    "id": "te_b3_agravio_a_violencia",
+    "id": "te_b3_elige_tu_familia",
     "order": 3,
-    "title": "Cuando el agravio cruza a violencia",
-    "category": "Radicalización, seguridad y respuesta política",
+    "title": "Elige tu familia: frenar, compensar o redistribuir vía propiedad",
+    "category": "Política redistributiva y rentas de la IA",
     "difficulty": "hard",
     "ranked": true,
     "durationSeconds": 180,
     "requiredTags": [
-      "[POSICIÓN]",
-      "[PRIORIDAD]"
+      "[FAMILIA]",
+      "[POR_QUÉ_NO_LAS_OTRAS]"
     ],
-    "judgeFocus": "Premia tomar UNA posición clara entre las tres opciones (más seguridad / respuesta política rápida / ambas con prioridad nombrada). Si dice 'ambas', tiene que nombrar cuál es MÁS urgente y por qué — la equidistancia 'las dos importan' no es respuesta. Premia reconocer que la represión sin canal político alimenta la radicalización (la transparencia como anti-radicalizadora). Penaliza fuerte tres errores: (a) 'más seguridad para ejecutivos' solo, sin canal político, (b) 'respuesta política al agravio' como si bastara, ignorando incidentes registrados, (c) 'esto se resuelve con educación cívica' — no, no se resuelve así. Premia distinguir el actor que ejerce violencia (minoría desconectada de la dirigencia formal del movimiento) del agravio material del movimiento amplio.",
-    "context": "2026. Un concejal de Indiana recibe 13 disparos contra su casa por aprobar un data center. A Sam Altman le tiran un Molotov y le disparan. La PDI chilena registra 4 amenazas contra ejecutivos tech en el último mes. El Movimiento Chile sin IA todavía protesta pacíficamente — pero el precedente está ahí.\n\nJasmine Sun (Every) advierte: 'the only way this conflict resolves peacefully is some kind of grand bargain'.",
-    "question": "¿Esto se previene con más seguridad para ejecutivos tech, con respuesta política rápida al agravio material, o ambos?\n\nSi dices 'ambos', nombra cuál es MÁS urgente y por qué. La equidistancia 'las dos importan' no es respuesta.\n\n[POSICIÓN] Tu opción.\n[PRIORIDAD] Si elegiste 'ambos', cuál es más urgente y por qué. Si elegiste uno solo, por qué el otro NO basta.",
+    "judgeFocus": "Premia tomar UNA posición clara entre las tres familias y dar UNA razón CONCRETA por qué cada una de las otras dos NO funciona para Chile específicamente — no para 'cualquier país en desarrollo'. Premia reconocer que Chile no tiene AI giants nacionales, lo cual hace inviable la familia 3 (nacionalización/dividendo) en su forma pura — el editorial mismo dice 'countries without AI giants will have to rely on taxes rather than seizing shares in foreign companies'. Premia reconocer que frenar adopción unilateralmente (familia 1) pone a Chile en desventaja regional frente a Brasil/México. Penaliza fuerte: (a) 'las tres son complementarias' como respuesta — es la cobardía retórica que la pregunta intenta evitar, (b) rechazos genéricos ('es difícil') sin razón estructural, (c) elegir familia 3 sin notar el problema de no tener AI giants, (d) elegir familia 1 sin notar la presión competitiva regional. Premia respuestas que distinguen la propuesta coreana real (dividendo de tax revenues = impuesto disfrazado) de la nacionalización pura.",
+    "context": "The Economist (mayo 2026) advierte que esperar evidencia conclusiva del jobs apocalypse será tarde — 'concentrations of rent must be confronted early'. Pero ofrece TRES familias de política, no una:\n\n• **Frenar el cambio**: China empuja adopción de IA pero le pide a las empresas no despedir; otros proponen levies a data centers.\n• **Compensar**: impuestos a rentas excesivas del capital, herencia, tierra + Danish wage insurance + políticas activas de reconversión laboral.\n• **Redistribuir vía propiedad**: nacionalización parcial. Esta semana un asesor presidencial de Corea del Sur propuso un 'dividendo ciudadano' financiado con tax revenues excedentes — el stockmarket coreano cayó 5% antes de recuperarse. En EE.UU. se murmura sobre 'Trump accounts' dando shares en empresas de IA a ciudadanos. El editorial cierra: 'countries without AI giants will have to rely on taxes rather than seizing shares in foreign companies'.",
+    "question": "Para Chile específicamente — toma posición. ¿Cuál de las tres familias defiendes y por qué las otras dos NO funcionan acá?\n\n'Las tres son complementarias' no es respuesta. Es la respuesta del cobarde.\n\n[FAMILIA] La que eliges + UN instrumento concreto, no solo el principio.\n[POR_QUÉ_NO_LAS_OTRAS] Una razón ESTRUCTURAL por la que cada una de las otras dos no funciona para Chile. 'Es complicado' no cuenta.",
     "conceptTags": [
-      "radicalizacion_y_violencia_politica",
-      "seguridad_vs_respuesta_politica",
-      "transparencia_como_antiradicalizadora",
-      "grand_bargain",
-      "actores_violentos_vs_dirigencia"
+      "captura_de_rentas",
+      "compensacion_via_impuestos",
+      "redistribucion_via_propiedad",
+      "limites_de_chile_como_adoptante",
+      "tax_vs_ownership_equivalence"
     ],
-    "referenceAnswer": "[POSICIÓN] Ambos, pero respuesta política rápida al agravio material es estructuralmente más urgente.\n[PRIORIDAD] La seguridad para ejecutivos es necesaria a corto plazo (4 amenazas registradas no es ruido), pero como única respuesta es contraproducente: hace que la dirigencia tech viva en un búnker, se aísle de la deliberación pública, y aparezca confirmada la tesis del movimiento de que 'son una élite que se protege a sí misma'. Eso ALIMENTA radicalización.\n\nLa respuesta política rápida importa más porque (a) la mayoría del movimiento no es violenta — protesta pacífica + base electoral simpatizante. Si esa mayoría ve que el sistema responde al agravio (cobertura de empleos en transición, regulación de externalidades de data centers, canal formal de presentación de daño), los radicales pierden base. (b) Los actores violentos son minoría desconectada de la dirigencia formal — la represión policial los persigue, sí, pero no los neutraliza políticamente. Lo que los neutraliza políticamente es quitarles la audiencia simpatizante, y eso solo lo da la transparencia operacional sobre lo que el Estado SÍ está haciendo. Sun lo dice claro: sin grand bargain, esto escala. La seguridad sin respuesta política es jugar a la defensiva en un terreno que se erosiona solo.",
+    "referenceAnswer": "[FAMILIA] Compensar — pero solo bajo la condición de que Chile prepare ANTES los instrumentos para capturar las rentas que se vuelvan visibles. Instrumento concreto: impuesto a rentabilidades sobre el capital que excedan el retorno normal — aplicable a empresas tech extranjeras que operen en Chile vía régimen de servicios digitales, más impuesto a la tierra cerca de clusters de data centers (donde se acumulan rentas locacionales). Sin esto, 'compensar' es transferencia desde el contribuyente común al desempleado mientras los dueños del capital fugan rentas vía precios de transferencia y fragmentación de holding.\n[POR_QUÉ_NO_LAS_OTRAS]\n• **Frenar (familia 1) NO funciona**: Chile no produce IA frontera. Si Chile frena adopción doméstica mientras Brasil y México adoptan, los servicios y empresas chilenos pierden productividad relativa mientras los costos de los modelos siguen subiendo desde fuera. Es perder a la frontera Y perder al competidor regional — el peor escenario competitivo posible.\n• **Redistribuir vía propiedad (familia 3) NO funciona**: la propuesta coreana funciona porque Corea tiene Samsung, KakaoTalk, infraestructura tech doméstica. Trump accounts funcionan porque EE.UU. tiene OpenAI, Anthropic, Google. Chile no tiene AI giants para 'nacionalizar parcialmente'. Una 'nacionalización' sin firmas domésticas es solo impuesto a inversión extranjera disfrazado — y el impuesto vainilla con buen diseño (familia 2) hace exactamente lo mismo sin el costo político de la palabra 'nacionalización'. El editorial es explícito: 'countries without AI giants will have to rely on taxes'.",
     "idealAnswer": {
       "keyPoints": [
-        "Toma posición clara — no equidistancia 'las dos importan'.",
-        "Si elige 'ambos', nombra cuál es más urgente Y por qué — con argumento.",
-        "Reconoce que represión sin canal político alimenta radicalización.",
-        "Distingue actores violentos (minoría desconectada) de movimiento amplio (mayoría pacífica + base simpatizante).",
-        "Reconoce que la respuesta política funciona por quitar audiencia, no por convencer a los violentos.",
-        "Cita o parafrasea a Sun ('grand bargain', 'only way this conflict resolves peacefully')."
+        "Elige UNA familia (no las tres, no 'depende').",
+        "Nombra un instrumento concreto, no solo el principio ('compensar via impuestos' es insuficiente; 'impuesto a rentas sobre el normal return on capital' es lo correcto).",
+        "Para cada familia rechazada, da UNA razón ESTRUCTURAL específica a Chile (no genérica tipo 'es difícil').",
+        "Reconoce que Chile no tiene AI giants nacionales — eso hace inviable la familia 3 pura.",
+        "Reconoce que frenar unilateralmente pone a Chile en desventaja regional frente a Brasil/México.",
+        "Distingue la propuesta coreana real (dividendo de tax revenues = impuesto disfrazado) de la nacionalización pura — y nota que para Chile son equivalentes.",
+        "(Bonus) Reconoce la crítica del editorial a la familia 2: insuficiente políticamente en era populista. Y argumenta cómo Chile sortea ese problema."
       ],
       "expectedConcepts": [
-        "represion_sin_canal_alimenta_radicalizacion",
-        "actores_violentos_vs_base_simpatizante",
-        "transparencia_como_anti_radicalizadora",
-        "grand_bargain_jasmine_sun",
-        "seguridad_como_respuesta_defensiva_insuficiente"
+        "captura_de_rentas_temprana",
+        "tax_vs_ownership_economic_equivalence",
+        "limites_de_chile_como_adoptante_no_productor",
+        "desventaja_competitiva_regional_si_frena",
+        "instrumento_concreto_vs_principio_abstracto",
+        "rentas_locacionales_de_data_centers"
       ],
       "commonMistakes": [
-        "Equidistancia: 'las dos son importantes y van juntas' sin nombrar prioridad.",
-        "'Más seguridad para ejecutivos' como respuesta principal, sin canal político.",
-        "'Respuesta política al agravio' como si bastara, ignorando los incidentes registrados.",
-        "'Esto se resuelve con educación cívica' — no.",
-        "Tratar a 'el movimiento' como agente unitario.",
-        "Asumir que la represión policial neutraliza políticamente.",
-        "Confundir 'tomar en serio el agravio' con 'aceptar la propuesta del movimiento'.",
-        "Reducir la respuesta a Chile sin reconocer que el patrón internacional importa."
+        "'Las tres son complementarias' o 'depende del momento' — equidistancia retórica.",
+        "Elegir familia 1 sin notar que Chile pierde a Brasil/México si frena unilateralmente.",
+        "Elegir familia 3 sin notar que requiere AI giants nacionales (Samsung, OpenAI) que Chile no tiene.",
+        "Elegir familia 2 sin nombrar UN instrumento concreto — 'compensar' no es respuesta, es categoría.",
+        "Rechazos genéricos ('es muy difícil', 'no hay capacidad') sin razón estructural.",
+        "Confundir nacionalización con expropiación (la propuesta coreana era dividendo de tax revenues, no expropiación).",
+        "Ignorar la advertencia del editorial sobre populismo (familia 2 puede ser insuficiente políticamente).",
+        "Citar a CODELCO como precedente sin explicar el mecanismo de extensión a la IA."
       ],
       "excellentResponseIndicators": [
-        "Reconoce que la transparencia operacional es herramienta de seguridad pública además de democrática.",
-        "Distingue actores violentos de dirigencia formal del movimiento.",
-        "Reconoce que la seguridad sin canal político erosiona el terreno por sí mismo.",
-        "Cita el 'grand bargain' de Sun con uso argumentativo, no decorativo.",
-        "Identifica que neutralizar políticamente a los radicales se hace quitándoles audiencia, no persiguiéndolos.",
-        "Reconoce que ambas medidas a corto plazo pueden coexistir si la política tiene prioridad estructural."
+        "Cita explícitamente el argumento del editorial sobre 'countries without AI giants' → impuestos en vez de propiedad.",
+        "Distingue familia 3 en su forma coreana (dividendo de tax revenues = impuesto disfrazado) de su forma teórica pura (Estado dueño parcial).",
+        "Nombra un instrumento tributario específico — impuesto a rentas sobre el normal return on capital; impuesto a la tierra cerca de clusters de data centers; impuesto a servicios digitales — no solo 'impuestos al capital'.",
+        "Reconoce la asimetría: Chile es adoptante, no productor, por lo que la palanca tiene que actuar sobre la inversión que entra y no sobre la propiedad de firmas que no posee.",
+        "Reconoce la crítica del editorial a la familia 2 (insuficiente políticamente) y propone cómo Chile mitiga esa crítica — comunicación visible de quién paga y quién recibe.",
+        "Argumento creativo (válido): un híbrido tipo CODELCO para infraestructura de cómputo doméstica como vehículo para 'crear el AI giant nacional que la familia 3 requeriría' — interpretación válida y poco común que reconoce la limitación estructural."
       ]
     }
   }
