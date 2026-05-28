@@ -86,23 +86,27 @@ Un buen mecanismo institucional debe distinguir las dos capas y exigir diversifi
 
 ### Lecturas y fuentes ancla del bloque
 
-1. **The Economist, "Five men control AI. Who should control them?" (abril 2026).** Cinco personas (Altman, Amodei, Hassabis, Musk, Zuckerberg) toman decisiones que afectan a miles de millones, sin mandato democrático.
+1. **The Economist (Leader), "Prepare for an AI jobs apocalypse" (14 mayo 2026).** Editorial-ancla del R2 (argumento de los caballos) y R3 (Chile shock). Argumentos clave:
 
-2. **The Economist, "Could AI's leading men become as powerful as Ford or Rockefeller?" (18 abr 2026, sección Business — "Tycoon capitalism").** Ranking compuesto de 11 olas tecnológicas en EE.UU. en 150 años, evaluando 5 magnates por ola según revenue, employment, market cap, control corporativo y riqueza personal. Resultados:
-   - **#1: Henry Ford** — el magnate más poderoso que ha visto EE.UU. Riqueza >1% del GDP, Ford Motor empleaba 0,15% de la población americana en 1925, control corporativo casi total (compró a minoritarios en 1919, familia dueña entera), 40% de los autos en EE.UU. eran Model T en 1917. "$5-a-day wage" para que sus trabajadores compraran sus autos.
-   - **#2: John D. Rockefeller** — Standard Oil, riqueza ~1,5% del GDP estadounidense en su peak.
-   - **#4: Jeff Bezos** (Amazon, $2,7T market cap, >1M empleados americanos).
-   - **#8: Elon Musk** — pero mayoritariamente por Tesla/SpaceX, no por xAI.
-   - **#11: Mark Zuckerberg** — mayoritariamente por Meta/redes sociales, no por IA.
-   - **Altman, Amodei, Hassabis: mitad BAJA del ranking** porque (a) model-making requiere pocos clever people + cómputo, los labs tienen pocos workers; (b) ninguno tiene el control corporativo de Ford o Vanderbilt: Altman corre OpenAI "at the pleasure of his board" (lo echaron en nov 2023), Amodei tiene una participación pequeña en el lab que cofundó, Hassabis no es ni el empleado más senior de Google.
-   - **Tres patrones históricos**:
-     1. Muchos magnates fueron deeply strange (Ford con su Dearborn Independent antisemita; Vanderbilt hablaba con espíritus; Morgan consultaba astrólogos; Edison fanáticamente opuesto al sueño; Jobs con dietas extremas). → Musk con conspiraciones y Zuckerberg con su demeanor robótico "no son tan fuera de lo común".
-     2. Las tecnologías introdujeron nuevos peligros: railways crashes financieros; aviación insegura; cars matando peatones; Edison vs Westinghouse (los hombres de Edison hicieron electrocuciones públicas de animales para asustar al público); banking magnificó crisis financieras; railways y cars **automatizaron empleo** (locomoción a caballo desaparece).
-     3. Relación magnate-Estado: en el s. XIX magnates tuvieron más latitud (Carnegie reprimió violentamente disturbios laborales; J.P. Morgan funcionó como banco central de facto en el crash de 1907; Andrew Mellon fue Secretario del Tesoro mientras dirigía un imperio industrial).
-   - **Tres momentos en que el Estado de EE.UU. frenó a magnates tecnológicos**:
-     - **1911**: Corte Suprema disuelve Standard Oil por monopolización (antitrust estructural).
-     - **1913**: Congreso crea Federal Reserve para que ningún Morgan vuelva a funcionar de hecho como banco central.
-     - **2000**: juez ordena breakup de Microsoft; escapó en apelación pero "chastened" (efecto disciplinante sin breakup).
-   - Cierre del artículo: "as AI transforms the economy and society, the people behind it may likewise encounter governments that wish to curb their power... if history is any guide, a Rockefeller or Ford is likely to emerge soon enough".
+   - **El argumento de los caballos** (R2): incluso si el empleo agregado se mantiene, los humanos podrían volverse "uneconómicos como los caballos en la era del auto". Mecanismo: las firmas de IA suben el precio de la tierra y la energía → los salarios pierden poder de compra → el ingreso fluye eventualmente a los dueños del capital → quienes lo gastan en bienes producidos por IA sobre recursos naturales que ellos monopolizan. El argumento es sobre RENTAS, no empleo agregado — la rebuttal histórica estándar ("siempre se crearon empleos nuevos") no responde esto.
+   - **Dato concreto**: Goldman Sachs proyecta que los data centers pasarán de **4,1% del peak power demand estadounidense en 2025 a 8,5% en 2027** — más del doble en dos años.
+   - **El argumento del Chile shock / China shock** (R3): "Perhaps 2m Americans lost their jobs between 1999 and 2011 owing to China's entry into the global trading system. That is no worse than a typical month's lay-offs in America's churning labour market. Yet the 'China shock' helped propel Donald Trump to office and led to the highest tariffs since the 1930s." Es decir: el shock económico puede ser modesto pero el shock político enorme — la magnitud económica NO predice la magnitud política.
+   - **Asimetría white-collar vs blue-collar**: "The white-collar employees threatened by AI have more political and social clout than factory workers hurt by Chinese competition. Even a small number of lay-offs could provoke a backlash against the technology; furious opposition to new data centres is a hint of what may be to come."
+   - **Polling**: 7 de cada 10 americanos creen que la IA hará más difícil encontrar trabajo; casi 1 de cada 3 teme por su propio empleo.
+   - **Tres familias de política** (cubiertas en R3 del Bloque 3, NO en este bloque): frenar / compensar / redistribuir vía propiedad. Sentencia central para países como Chile: "countries without AI giants will have to rely on taxes rather than seizing shares in foreign companies."
+   - **Cierre operacional**: "Concentrations of rent must be confronted early, before the power of rentiers is too great... If governments wait for conclusive evidence before creating a safety-net, it will be too late. Better to start now."
 
-3. **Contextualización chilena**: Chile NO está en la frontera. Es tomador. Esto cambia el menú de respuesta: las opciones realistas son governance de la dependencia, no liderazgo de la frontera. Y la traducción de los precedentes antitrust de EE.UU. a Chile NO es directa — Chile no tiene la FNE con capacidad para abrir investigaciones de esa escala ni jurisdicción sobre comportamiento global de OpenAI/Anthropic. El camino realista es coalición multilateral (Brasil, México, UE) para que el efecto disciplinante venga de mercados con peso institucional; Chile aporta vocería ética y casos concretos.
+   **Implicaciones para R2 (argumento de los caballos aplicado a Chile)**:
+   - El editorial asume implícitamente que las rentas que se acumulan permanecen en la economía doméstica y son capturables por impuestos nacionales. En EE.UU. esto es cierto: AI firms están constituidas allá, el Tesoro EE.UU. puede gravar profits, land taxes, natural resources.
+   - Para Chile las rentas son EXTRANJERAS: el royalty de API a OpenAI/Anthropic sale del país; el peso fiscal chileno captura, a lo más, IVA sobre el servicio. El argumento de los caballos para Chile NO es "los humanos chilenos se vuelven uneconómicos" sino "Chile entero se vuelve uneconómico relativo a la frontera, porque exporta valor sin contraparte".
+   - Las externalidades locales (energía, agua, suelo en clusters de data centers chilenos) sí se pagan acá. Las rentas no se capturan acá. Esa es la asimetría país-adoptante.
+
+   **Implicaciones para R3 (Chile shock)**:
+   - El editorial sugiere que el estamento más amplificador políticamente NO es el más expuesto técnicamente — los white-collar tienen MÁS clout que los factory workers aun con menos masa.
+   - En Chile, el voto profesional urbano (Las Condes, Providencia, Ñuñoa) es decisivo en elecciones presidenciales. Año electoral 2026 (presidencial nov).
+   - Los gremios profesionales tradicionales (Colegios) tienen acceso institucional al Congreso. Los medios formadores de opinión están manejados por periodistas que son parte del mismo estamento expuesto.
+   - El frame se instala antes que las cifras — pelea por la narrativa es más temprana que pelea por estímulo.
+
+2. **The Economist, "Five men control AI. Who should control them?" (abril 2026).** Referencia de contexto para R1: cinco personas (Altman, Amodei, Hassabis, Musk, Zuckerberg) toman decisiones que afectan a miles de millones, sin mandato democrático. Los modelos frontera dependen de tres capas de cómputo concentradas (Microsoft Azure, AWS, Google Cloud). NOTA: la lectura completa de este artículo es para sesiones posteriores; en R1 los estudiantes solo necesitan el headline factual de la concentración.
+
+3. **Contextualización chilena**: Chile NO está en la frontera. Es tomador. Esto cambia el menú de respuesta: las opciones realistas son governance de la dependencia (R1), análisis honesto de qué rentas se pueden capturar y qué supuestos del debate global no aplican (R2), y anticipación política del shock antes de que se materialice (R3). Año electoral 2026 (presidencial noviembre).

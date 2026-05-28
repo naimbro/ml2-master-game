@@ -58,113 +58,122 @@
     }
   },
   {
-    "id": "te_b2_ford_todavia_no_nace",
+    "id": "te_b2_argumento_caballos",
     "order": 2,
-    "title": "El Ford de la IA todavía no nace",
-    "category": "Concentración histórica vs concentración actual",
-    "difficulty": "medium",
-    "ranked": true,
-    "durationSeconds": 180,
-    "requiredTags": [
-      "[LECTURA]",
-      "[CAMBIO_CRÍTICO]"
-    ],
-    "judgeFocus": "Premia tomar posición clara (buena O mala noticia, no equidistancia). Premia citar UN dato concreto del artículo de Ford/Rockefeller (Ford #1, Rockefeller 1.5% del GDP, Altman/Amodei/Hassabis en mitad baja, board echó a Altman nov 2023, Amodei participación pequeña, Hassabis no es el empleado más senior). Premia UN cambio estructural concreto y verificable que invierta el ranking en 10 años (consolidación de cómputo bajo una firma, captura regulatoria estilo Mellon, vertical integration cloud+modelo+chip, acumulación de market cap vía agentes autónomos, etc.). Penaliza listar cambios genéricos ('si se vuelven monopolio') sin mecanismo concreto, y respuestas que se quedan en la opinión sin dato.",
-    "context": "The Economist analizó 11 olas tecnológicas en EE.UU. de los últimos 150 años. En su ranking compuesto de magnates, Henry Ford queda número uno; John D. Rockefeller, número dos (su riqueza valió 1,5% del GDP estadounidense). Los tres AI bosses cuya riqueza viene de la IA — Altman, Amodei, Hassabis — caen todos en la mitad BAJA del ranking. Razón: el board de OpenAI echó brevemente a Altman en noviembre 2023; Amodei tiene una participación pequeña en Anthropic; Hassabis no es ni el empleado más senior de Google. El artículo cierra: 'si la historia es guía, un Rockefeller o Ford emergerá pronto'.",
-    "question": "¿Esto es buena o mala noticia para la democracia? Toma posición. Y nombra UN cambio estructural concreto que podría hacer que un 'Ford de la IA' emerja en 10 años — no 'si los modelos se vuelven monopolio', algo nombrable.\n\n[LECTURA] Tu posición + UN dato del artículo que la sostiene.\n[CAMBIO_CRÍTICO] El cambio estructural concreto. Si es 'concentración del cómputo', dime cuál y por qué.",
-    "conceptTags": [
-      "tycoon_capitalism",
-      "control_corporativo",
-      "concentracion_de_poder",
-      "comparacion_historica",
-      "frontera_tecnologica"
-    ],
-    "referenceAnswer": "[LECTURA] Es buena noticia para la democracia — frágilmente. El dato clave: ninguno de los tres AI bosses tiene control corporativo a la Ford. Altman corre OpenAI 'at the pleasure of his board' (lo echaron en nov 2023 y volvió porque el board cedió, no porque tuviera mandato propio). Amodei tiene una participación pequeña en el lab que cofundó. Hassabis ni siquiera es el empleado más senior de Google DeepMind. Ford, en cambio, compró a todos sus minoritarios en 1919 — la familia era dueña entera. El poder de los AI bosses hoy es discursivo y reputacional, no estructural; eso lo hace contestable. Pero es frágil porque la condición puede cambiar.\n[CAMBIO_CRÍTICO] Integración vertical cómputo-modelo-distribución bajo un solo dueño con control corporativo familiar/cerrado. Hoy OpenAI depende de Azure (Microsoft), Anthropic de AWS+Google. Si Musk consolida xAI + Tesla + SpaceX + Starlink + chip propio en una sola entidad de la que sea dueño mayoritario (cosa que ya está construyendo), el ranking se invierte: tendría revenue, employment, control corporativo Y mercado consumidor (Tesla) — todos los criterios del ranking The Economist. Es el camino más corto al Ford de la IA, y está a la vista.",
-    "idealAnswer": {
-      "keyPoints": [
-        "Toma posición (buena noticia / mala noticia / mixta con criterio) — no equidistancia.",
-        "Cita un dato concreto del artículo (Altman/board, Amodei/participación pequeña, Hassabis/no senior, Ford/100% control, Rockefeller/1.5% GDP).",
-        "Distingue poder discursivo/reputacional (que tienen los 5) de poder estructural/corporativo (que tenía Ford).",
-        "Nombra UN cambio estructural verificable y concreto, no 'si se vuelven monopolio'.",
-        "El cambio nombrado debe tener un mecanismo identificable (integración vertical, captura regulatoria, consolidación de cómputo, etc.)."
-      ],
-      "expectedConcepts": [
-        "control_corporativo_vs_poder_discursivo",
-        "integracion_vertical_computo_modelo_distribucion",
-        "fragilidad_del_poder_actual_de_AI_bosses",
-        "comparacion_estructural_Ford_vs_Altman",
-        "ranking_revenue_employment_market_cap_control"
-      ],
-      "commonMistakes": [
-        "Equidistancia: 'depende, hay cosas buenas y malas'.",
-        "No citar ningún dato del artículo — solo opinión.",
-        "Confundir riqueza personal (Musk es el más rico) con control corporativo (Ford lo tenía, Altman no).",
-        "Proponer 'si se vuelven más poderosos' como cambio estructural — no es mecanismo.",
-        "Saltar a juicio moral ('son malos') sin tocar la pregunta estructural.",
-        "Asumir que el board de OpenAI es garantía permanente — el board cambió de composición post-noviembre 2023."
-      ],
-      "excellentResponseIndicators": [
-        "Nombra a Musk como candidato más probable a 'Ford de la IA' por integración vertical en curso (xAI + Tesla + SpaceX + chip).",
-        "Distingue control corporativo de market cap — Musk tiene ambos en construcción.",
-        "Reconoce que 'el board echó a Altman' fue derrota del board, no victoria.",
-        "Cita la dimensión employment del ranking — los labs frontera tienen pocos workers, Ford empleaba 0.15% de la población americana.",
-        "Reconoce que el cambio puede venir desde adentro (consolidación) o desde afuera (Estado capturado)."
-      ]
-    }
-  },
-  {
-    "id": "te_b2_precedente_standard_oil",
-    "order": 3,
-    "title": "El precedente que sí frenó a un magnate",
-    "category": "Antitrust y traducción regulatoria",
+    "title": "El argumento de los caballos",
+    "category": "Concentración de rentas y demanda de trabajo",
     "difficulty": "hard",
     "ranked": true,
     "durationSeconds": 180,
     "requiredTags": [
-      "[PRECEDENTE]",
-      "[TRADUCE_Y_NO]"
+      "[TESIS_FUERTE]",
+      "[DONDE_SE_ROMPE]"
     ],
-    "judgeFocus": "Premia elegir UNO de los tres precedentes (1911 Standard Oil, 1913 Federal Reserve, 2000 Microsoft) y argumentar honestamente qué SÍ se traduce y qué NO al caso chileno y/o IA. Premia reconocer que Chile no es EE.UU. — no tiene el peso de mercado, ni la jurisdicción, ni la capacidad antitrust comparable. Penaliza fuerte respuestas tipo 'hagamos un antitrust como en EE.UU.' sin asumir el gap institucional. Premia pista útil concreta (no 'que regulen mejor'). Si el estudiante elige Microsoft 2000, premia que reconozca que Microsoft escapó en apelación pero quedó 'chastened' — efecto disciplinante sin breakup.",
-    "context": "The Economist recuerda tres veces que el Estado estadounidense le puso freno al poder de magnates tecnológicos:\n\n• **1911** — la Corte Suprema disuelve Standard Oil por monopolización ilegal (Rockefeller).\n• **1913** — el Congreso crea la Federal Reserve para que ningún J.P. Morgan vuelva a funcionar de hecho como banco central (como pasó en el crash de 1907).\n• **2000** — un juez ordena el desmembramiento de Microsoft por monopolización. Microsoft escapó en apelación, pero quedó 'chastened'.\n\nEl artículo cierra: 'a medida que la IA transforma la economía, los hombres detrás de ella probablemente encontrarán gobiernos que quieran frenar su poder'.",
-    "question": "Elige UNO de los tres precedentes. ¿Qué de él SÍ se traduce al caso IA, y qué NO se traduce — especialmente para un país como Chile que no es el mercado de origen?\n\nCierra con una pista útil concreta para un legislador chileno que esté pensando regular IA hoy. 'Que se regule bien' no es pista.\n\n[PRECEDENTE] Cuál eliges y por qué.\n[TRADUCE_Y_NO] Lo que sí se traduce + lo que NO se traduce + tu pista para el legislador chileno.",
+    "judgeFocus": "Premia construir el argumento en su versión MÁS fuerte (steelman) usando elementos verificables del editorial: data centers 8,5% del peak power demand en 2027 vs 4,1% en 2025, rentas que fluyen al capital, AI firms bid up land y energy. Penaliza fuerte la caricaturización ('eso es exagerado') sin reconstruir el argumento, y la ratificación automática ('claro que sí, los humanos están cooked') sin steelman. El [DONDE_SE_ROMPE] tiene que ser un supuesto ESPECÍFICO que NO se sostiene para Chile como adoptante (no productor) — no genérico ('es complicado'). Premia identificar la asimetría clave: el argumento del editorial presupone una economía DENTRO de la frontera de IA (EE.UU.) donde las rentas se acumulan domésticamente. Chile NO acumula esas rentas; las paga. Eso cambia el problema cualitativamente.",
+    "context": "The Economist (mayo 2026) hace un argumento poco común sobre la IA. Aún si el empleo agregado se mantiene, los humanos podrían volverse 'uneconómicos como los caballos en la era del auto' — porque las firmas de IA suben el precio de la tierra y la energía (data centers: 4,1% del peak power demand en EE.UU. en 2025 → 8,5% en 2027, Goldman Sachs), los salarios pierden poder de compra, y el ingreso fluye eventualmente a los dueños del capital — quienes lo gastan en bienes producidos por IA sobre recursos naturales que ellos monopolizan. La rebuttal estándar ('siempre se crearon empleos nuevos') no responde esto: el argumento es sobre RENTAS, no sobre empleo agregado.",
+    "question": "Construye el argumento de los caballos en su versión MÁS fuerte aplicado a Chile — no la caricatura. Luego nombra el supuesto ESPECÍFICO del editorial que NO se sostiene para un país adoptante, no productor, de IA.\n\n[TESIS_FUERTE] La reconstrucción más sólida del argumento aplicado a Chile, con UN dato del editorial.\n[DONDE_SE_ROMPE] El supuesto que no aguanta — específico, no 'es complicado'.",
     "conceptTags": [
-      "antitrust",
-      "regulacion_tecnologica",
-      "traduccion_regulatoria",
-      "capacidad_institucional",
-      "efecto_chastening"
+      "rentas_vs_empleo_agregado",
+      "humanos_uneconomicos_horses_analogy",
+      "asimetria_pais_adoptante_vs_productor",
+      "concentracion_de_recursos_naturales",
+      "presion_sobre_precio_de_tierra_y_energia"
     ],
-    "referenceAnswer": "[PRECEDENTE] Microsoft 2000. No fue el breakup más exitoso (escapó en apelación) pero es el más cercano al caso IA: software, propósito general, ecosistema dependiente, ganador estructural de un mercado en formación.\n[TRADUCE_Y_NO] **Sí se traduce**: la posibilidad de litigar conducta (no estructura) — la pregunta no es 'es muy grande' sino 'usa su posición para cerrar mercados emergentes'. OpenAI ya está acusado de prácticas tipo 'compra de productividad' similares al bundling de Internet Explorer. Además: el efecto 'chastening' importa más que el breakup en sí — Microsoft cambió comportamiento aun habiendo ganado la apelación.\n**No se traduce**: (a) Chile no tiene FNE (Fiscalía Nacional Económica) con capacidad para abrir una investigación de esta escala, ni jurisdicción sobre el comportamiento global de OpenAI/Anthropic. (b) El mercado chileno es demasiado pequeño para que un breakup judicial chileno tenga efecto disciplinante. (c) 2000 fue caso doméstico EE.UU. con Microsoft sede en EE.UU. Aquí Chile sería forum-shopping en jurisdicción ajena.\n**Pista para el legislador chileno**: NO intentar antitrust frente a OpenAI o Anthropic — perderías la batalla y quedaría sentado precedente de impotencia. Intentar coalición con Brasil, México y la UE para que el efecto chastening venga de mercados de tamaño relevante. Chile aporta vocería ética y casos concretos; el peso institucional viene de otros.",
+    "referenceAnswer": "[TESIS_FUERTE] Aplicado a Chile: las firmas de IA están construyendo cluster de cómputo en zonas con energía y agua disponibles (Quilicura, próximamente Antofagasta). Esos clusters suben el precio local de electricidad, agua industrial y suelo industrial — costos que se trasladan a tarifas y rentas urbanas, pagadas por hogares y empresas locales. Paralelamente, los servicios chilenos que adoptan IA pagan API en dólares a 4 firmas extranjeras (todas con sede fuera). El ingreso doméstico que antes se asignaba a trabajadores chilenos (procesando, redactando, atendiendo) cada vez más fluye a (a) externalidades pagadas localmente sin contraparte, (b) royalty al proveedor extranjero. El editorial proyecta 8,5% del peak power demand para data centers EE.UU. en 2027 — en Chile la cifra como % del consumo nacional podría ser comparable o mayor en zonas específicas, porque el sistema eléctrico chileno es pequeño y los clusters son grandes relativos al sistema. El resultado es el mismo: Chile importa la tecnología, exporta las rentas y absorbe las externalidades locales.\n[DONDE_SE_ROMPE] El editorial asume implícitamente que las rentas que se acumulan permanecen en la economía doméstica donde los workers pueden capturarlas via impuestos sobre profits, dividendos ciudadanos o public ownership. En EE.UU. las rentas son nacionales: el Tesoro EE.UU. puede capturarlas, los AI firms están constituidas allá. Para Chile las rentas son EXTRANJERAS: salen del país. La política tributaria chilena no captura profits de OpenAI o Anthropic; captura, a lo más, IVA sobre la venta del servicio. El argumento de los caballos para Chile NO es 'los humanos chilenos se vuelven uneconómicos' — es 'Chile entero se vuelve uneconómico relativo a la frontera, porque exporta valor sin contraparte'. Es un problema de balanza estructural, no de demanda laboral interna.",
     "idealAnswer": {
       "keyPoints": [
-        "Elige UN precedente (no los tres) y justifica brevemente la elección.",
-        "Identifica qué del precedente SÍ se traduce al caso IA con base en algún paralelo concreto.",
-        "Identifica qué NO se traduce — especialmente reconoce el gap entre EE.UU. y Chile en capacidad antitrust.",
-        "La pista para el legislador chileno es accionable y no es 'que se regule bien'.",
-        "Reconoce que el efecto disciplinante puede valer más que el breakup formal (Microsoft post-2000)."
+        "Reconstruye el argumento en su versión fuerte, no caricatura, usando al menos UN dato verificable del editorial (8,5% peak power demand 2027 vs 4,1% 2025, rentas al capital, bid up land y energy).",
+        "Reconoce que el argumento es sobre RENTAS, no empleo agregado — la rebuttal histórica no aplica.",
+        "Identifica el supuesto específico que se rompe para Chile: las rentas que el editorial asume capturables localmente NO son capturables domésticamente cuando el país es adoptante, no productor.",
+        "Distingue 'humanos uneconómicos' (problema interno de demanda laboral) de 'país uneconómico relativo a la frontera' (problema de balanza estructural) — son diagnósticos distintos.",
+        "No descarta el argumento por 'exagerado' sin steelman, ni lo ratifica sin reconocer la asimetría país-adoptante.",
+        "(Bonus) Conecta el argumento con la cuestión de externalidades locales (energía, agua, suelo en clusters de data centers chilenos)."
       ],
       "expectedConcepts": [
-        "efecto_chastening_vs_breakup_formal",
-        "antitrust_de_conducta_vs_antitrust_estructural",
-        "gap_de_capacidad_institucional_EEUU_Chile",
-        "coalicion_multilateral_para_efecto_disciplinante",
-        "forum_shopping_y_jurisdiccion"
+        "rentas_que_fluyen_al_capital_vs_demanda_de_trabajo",
+        "humanos_uneconomicos_analogia_caballos",
+        "asimetria_pais_adoptante_no_productor",
+        "balanza_estructural_vs_demanda_laboral_interna",
+        "externalidades_locales_de_clusters_de_data_centers",
+        "captura_tributaria_doméstica_vs_extranjera"
       ],
       "commonMistakes": [
-        "Proponer 'antitrust chileno contra OpenAI' sin asumir gap de capacidad.",
-        "Tratar los 3 precedentes en el mismo nivel sin elegir uno.",
-        "'Que se regule mejor' como pista (no es pista).",
-        "Asumir que Standard Oil 1911 fue limpio — fue una década de litigio en plena Era Progresista, con condiciones políticas únicas.",
-        "Olvidar la Federal Reserve es regulación de sistema, no de magnate — eligiendo 1913 hay que justificar la analogía a IA.",
-        "Confundir 'Microsoft escapó en apelación' con 'Microsoft ganó' — perdió comportamiento aun ganando jurídicamente.",
-        "Citar el precedente sin explicar el mecanismo (Standard Oil disuelto en 34 firmas separadas, etc.)."
+        "Descartar el argumento como 'exagerado' sin reconstruir su versión fuerte.",
+        "Ratificarlo sin matiz ('claro que sí, estamos cooked').",
+        "No citar ningún dato del editorial — solo opinión.",
+        "Saltar al problema empleo y olvidar que el argumento es sobre rentas.",
+        "Decir 'el supuesto que se rompe es que la IA va a ser tan poderosa' — eso es genérico, no es el supuesto del editorial.",
+        "Confundir 'Chile no produce IA' con 'la IA no afecta a Chile' — sí afecta, pero por canal distinto al de EE.UU.",
+        "Proponer regulación sin completar el diagnóstico — la pregunta es analítica, no propositiva."
       ],
       "excellentResponseIndicators": [
-        "Reconoce que el efecto chastening (cambio de comportamiento por miedo a próxima batalla) puede ser el resultado más realista.",
-        "Propone coalición con Brasil/México/UE en lugar de antitrust unilateral chileno.",
-        "Distingue antitrust de conducta (lo que pasó con Microsoft) de antitrust estructural (Standard Oil).",
-        "Reconoce que la Federal Reserve fue creación de regulador nuevo, no breakup de magnate — analogía a IA implicaría 'agencia reguladora de IA' tipo SEC, no breakup.",
-        "Reconoce que Chile gana credibilidad como segunda voz en una coalición, no como protagonista solitario."
+        "Identifica que el editorial asume rentas DOMÉSTICAS — esa es la asimetría que se rompe para Chile.",
+        "Distingue empleo agregado (lo que se debate en EE.UU.) de balanza estructural (lo que importa para Chile).",
+        "Conecta el cluster de data centers chileno (Quilicura, Antofagasta) con el argumento del bid up land y energy del editorial.",
+        "Reconoce que la palanca de captura tributaria chilena es más débil que la palanca estadounidense porque las rentas salen del país.",
+        "Distingue externalidad local (energía, agua, suelo) de royalty extranjero (pago de API) — dos canales distintos de pérdida.",
+        "Reconoce que el ajuste laboral en Chile podría ser POR CANTIDAD también (Brynjolfsson), pero el problema más estructural es de balanza, no de empleo."
+      ]
+    }
+  },
+  {
+    "id": "te_b2_chile_shock",
+    "order": 3,
+    "title": "¿Hay un Chile shock en formación?",
+    "category": "Shock económico modesto, shock político grande",
+    "difficulty": "hard",
+    "ranked": true,
+    "durationSeconds": 180,
+    "requiredTags": [
+      "[ESTAMENTO]",
+      "[CANAL_DE_AMPLIFICACIÓN]"
+    ],
+    "judgeFocus": "Premia identificar UN estamento laboral chileno concreto con la combinación de (a) exposición real a la IA generativa, (b) clout político suficiente para convertir layoffs modestos en crisis política grande. NO 'los trabajadores en general'. Premia nombrar el canal específico de amplificación política (gremio profesional con presencia mediática, asociación con influencia legislativa, actor electoral organizado, líder con tribuna nacional). Penaliza estamentos genéricos ('los profesionales'), abstracciones ('la clase media'), y respuestas que confunden EXPOSICIÓN técnica con CLOUT político (no es el más expuesto el que amplifica más). Premia respuestas que reconocen una asimetría poco obvia: el estamento que más amplifica políticamente NO necesariamente es el que más sufre el shock económico — la analogía del editorial sobre white-collar > factory workers es exactamente eso.",
+    "context": "The Economist (mayo 2026) usa el 'China shock' como advertencia: aproximadamente 2 millones de empleos perdidos en EE.UU. entre 1999 y 2011 — el equivalente a UN mes típico de layoffs en EE.UU. — propulsó a Trump y los aranceles más altos desde los 1930s. Y agrega: los white-collar workers amenazados por IA tienen MÁS clout político y social que los factory workers afectados por la competencia china. 'Even a small number of lay-offs could provoke a backlash against the technology'. La oposición a nuevos data centers ya es 'a hint of what may be to come'.",
+    "question": "¿Existe un 'Chile shock' análogo en formación con la IA? Si existe, ¿qué ESTAMENTO laboral chileno tiene la combinación de (a) exposición real a IA + (b) clout político suficiente para convertir un shock económico modesto en una crisis política grande?\n\nNombra UNO concreto y di por qué canal va a amplificarse.\n\n[ESTAMENTO] El estamento específico. 'Los profesionales' no es estamento.\n[CANAL_DE_AMPLIFICACIÓN] Por dónde se va a expresar políticamente — qué gremio, qué medio, qué actor electoral.",
+    "conceptTags": [
+      "shock_economico_modesto_shock_politico_grande",
+      "exposicion_vs_clout_politico",
+      "asimetria_white_collar_vs_blue_collar",
+      "estamento_amplificador",
+      "anticipacion_politica_vs_economica"
+    ],
+    "referenceAnswer": "[ESTAMENTO] Ingenieros, abogados junior y periodistas/comunicadores con tribuna en medios — el segmento de profesionales urbanos universitarios con 5-15 años de carrera. NO los más expuestos (los más expuestos son ejecutivos de cuentas, asistentes ejecutivos, customer service, paralegals), pero SÍ los que combinan (a) exposición real (la IA ya está haciendo redacción, due diligence preliminar, generación de contenido), (b) presencia mediática institucionalizada, (c) ubicación geográfica concentrada (Las Condes, Providencia), (d) red de contactos con clase política. Cuando los layoffs lleguen a este segmento — incluso modestos — la disputa va a estar en titulares de medios cuyos propios periodistas son parte del estamento afectado.\n[CANAL_DE_AMPLIFICACIÓN] Tres canales que actúan juntos: (1) el Colegio de Periodistas y los gremios profesionales tradicionales (Colegio de Abogados, Colegio de Ingenieros) — tienen acceso institucional al Congreso vía indicaciones a proyectos de ley y comisiones de asesoría. (2) Columnas de opinión en El Mercurio, La Tercera, Ciper, y radios formadoras de opinión (Cooperativa, Bío-Bío) — el frame se instala antes que las cifras. (3) Candidatos electorales que necesitan capturar el voto profesional urbano (segmento decisivo en elecciones presidenciales chilenas) — uno de los dos finalistas en noviembre va a tomar el tema, agitando o moderando. El shock económico puede ser pequeño (1.000 layoffs en consultoras y estudios), pero la combinación gremio + medios + competencia electoral lo convierte en agenda nacional en semanas.",
+    "idealAnswer": {
+      "keyPoints": [
+        "Identifica UN estamento concreto, no 'los profesionales' ni 'los trabajadores'.",
+        "Distingue EXPOSICIÓN técnica (qué tareas la IA reemplaza) de CLOUT político (qué grupo amplifica el shock).",
+        "Reconoce que el estamento con más clout NO necesariamente es el más expuesto — la asimetría del editorial.",
+        "Nombra al menos UN canal específico de amplificación (gremio, medio, actor electoral) — no abstracciones tipo 'la opinión pública'.",
+        "El canal nombrado tiene mecanismo identificable (acceso al Congreso, formación de frame mediático, presión electoral).",
+        "Reconoce que el shock económico modesto puede convertirse en agenda nacional por dinámica institucional, no por magnitud.",
+        "(Bonus) Cita la línea del editorial: 'small number of lay-offs could provoke a backlash'."
+      ],
+      "expectedConcepts": [
+        "exposicion_tecnica_vs_clout_politico",
+        "estamento_amplificador_vs_estamento_afectado",
+        "canal_institucional_de_amplificacion",
+        "asimetria_magnitud_economica_magnitud_politica",
+        "voto_profesional_urbano_decisivo",
+        "frame_que_se_instala_antes_que_cifras"
+      ],
+      "commonMistakes": [
+        "Estamento genérico: 'los profesionales', 'los jóvenes', 'la clase media'.",
+        "Identificar el más expuesto (call center, paralegal) sin reconocer que ese segmento tiene poco clout amplificador.",
+        "'Las redes sociales' como canal — es el medio, no el actor.",
+        "Asumir que el shock político escala con el shock económico — el editorial dice exactamente lo contrario.",
+        "Listar tres canales sin profundizar uno — la pregunta pide concreción.",
+        "Confundir 'estamento más enojado' con 'estamento más amplificador'.",
+        "Olvidar la asimetría que distingue a Chile (acumulación urbana, voto profesional clave en elección presidencial) de EE.UU."
+      ],
+      "excellentResponseIndicators": [
+        "Distingue explícitamente exposición técnica de clout político y elige por la segunda dimensión.",
+        "Nombra a periodistas como categoría especialmente potente porque controlan el frame Y son parte del estamento expuesto.",
+        "Reconoce que Las Condes/Providencia como concentración geográfica importa para amplificación política en Chile.",
+        "Identifica el momento electoral (presidencial nov 2026, Chile año electoral) como ventana de amplificación.",
+        "Reconoce que los gremios profesionales tradicionales (Colegio de) tienen acceso institucional al Congreso que el call center no tiene.",
+        "Cita el dato del editorial '2M jobs = a typical month's layoffs in EE.UU.' para sostener el argumento de que magnitud económica no predice magnitud política.",
+        "Reconoce que el frame se instala antes que las cifras — la pelea por la narrativa es más temprana que la pelea por el estímulo."
       ]
     }
   }
