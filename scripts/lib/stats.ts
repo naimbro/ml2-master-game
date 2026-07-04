@@ -27,7 +27,7 @@ function pearson(x: number[], y: number[]): number {
     sxx += dx * dx;
     syy += dy * dy;
   }
-  if (sxx === 0 || syy === 0) return 0;
+  if (sxx === 0 || syy === 0) return NaN;
   return sxy / Math.sqrt(sxx * syy);
 }
 
@@ -60,7 +60,7 @@ export function kendallTau(a: Record<string, number>, b: Record<string, number>)
   }
   const n0 = (n * (n - 1)) / 2;
   const denom = Math.sqrt((n0 - tiesA) * (n0 - tiesB));
-  if (denom === 0) return 0;
+  if (denom === 0) return NaN;
   return (concordant - discordant) / denom;
 }
 

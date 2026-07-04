@@ -14,6 +14,8 @@ export interface RoundAnalysis {
   spearman: number;
   kendall: number;
   disagreement: number;
+  evaluatedCount: number;
+  submittedCount: number;
 }
 
 export interface OverallRow {
@@ -64,6 +66,9 @@ function roundTable(r: RoundAnalysis): string {
     <p class="stats">Spearman &rho; = <b>${fmt(r.spearman)}</b> ·
        Kendall &tau; = <b>${fmt(r.kendall)}</b> ·
        judge disagreement = <b>${fmt(r.disagreement * 100, 0)}%</b></p>
+    ${r.evaluatedCount < r.submittedCount
+      ? `<p class="warn">&#9888; Only ${r.evaluatedCount} of ${r.submittedCount} submissions were evaluated — ${r.submittedCount - r.evaluatedCount} excluded from this analysis.</p>`
+      : `<p class="stats">${r.evaluatedCount} of ${r.submittedCount} submissions evaluated.</p>`}
     <table>
       <thead><tr><th>Player</th><th>LLM score</th><th>LLM rank</th>
         <th>BT &theta;</th><th>BT rank</th><th>&Delta;rank</th></tr></thead>
@@ -108,6 +113,7 @@ export function renderHtml(report: GameReport): string {
   .verdict { background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 8px;
     padding: .75rem 1rem; font-size: 1.05rem; }
   .stats { color: #475569; }
+  .warn { color: #b45309; font-weight: 600; }
   table { border-collapse: collapse; width: 100%; margin-top: .5rem; }
   th, td { padding: .4rem .6rem; text-align: right; border-bottom: 1px solid #e2e8f0; }
   th:first-child, td:first-child { text-align: left; }
@@ -118,6 +124,7 @@ export function renderHtml(report: GameReport): string {
     body { background: #0f172a; color: #e2e8f0; }
     .verdict { background: #1e293b; border-color: #334155; }
     th, td { border-color: #334155; } .stats { color: #94a3b8; }
+    .warn { color: #f59e0b; }
   }
 </style></head><body>
 <h1>Bradley–Terry rescore — game ${esc(report.gameCode)}</h1>
@@ -145,6 +152,7 @@ export function renderConsole(report: GameReport): string {
   for (const round of report.rounds) {
     lines.push(`\nRound ${round.round} — ${round.scenarioTitle}`);
     lines.push(`  rho=${fmt(round.spearman)} tau=${fmt(round.kendall)} disagreement=${fmt(round.disagreement * 100, 0)}%`);
+    lines.push(`  ${round.evaluatedCount}/${round.submittedCount} submissions evaluated${round.evaluatedCount < round.submittedCount ? '  (some excluded)' : ''}`);
   }
   return lines.join('\n');
 }

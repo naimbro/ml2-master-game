@@ -15,6 +15,8 @@ const report: GameReport = {
       spearman: 0.5,
       kendall: 0.33,
       disagreement: 0.25,
+      evaluatedCount: 3,
+      submittedCount: 4,
     },
   ],
   overall: {
@@ -37,6 +39,7 @@ describe('renderHtml', () => {
     expect(html).toContain('De tema a decision');
     expect(html).toContain('0.50'); // overall spearman, formatted
     expect(html).not.toContain('undefined');
+    expect(html).toContain('3 of 4');
   });
 });
 
@@ -46,5 +49,6 @@ describe('renderConsole', () => {
     expect(out).toContain('rho');
     expect(out).toContain('0.50');
     expect(out).toContain('Ana');
+    expect(out).toContain('3/4');
   });
 });

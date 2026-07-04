@@ -19,6 +19,9 @@ describe('spearmanRho', () => {
     const b = { x: 10, y: 20, z: 30 };
     expect(spearmanRho(a, b)).toBeCloseTo(-1, 9);
   });
+  it('spearmanRho is NaN when one side has no variance', () => {
+    expect(Number.isNaN(spearmanRho({ a: 5, b: 5, c: 5 }, { a: 1, b: 2, c: 3 }))).toBe(true);
+  });
 });
 
 describe('kendallTau', () => {
@@ -34,6 +37,9 @@ describe('kendallTau', () => {
     const a = { A: 4, B: 3, C: 2, D: 1 };
     const b = { A: 4, B: 2, C: 3, D: 1 };
     expect(kendallTau(a, b)).toBeCloseTo(4 / 6, 9);
+  });
+  it('kendallTau is NaN when one side is all ties', () => {
+    expect(Number.isNaN(kendallTau({ a: 5, b: 5, c: 5 }, { a: 1, b: 2, c: 3 }))).toBe(true);
   });
 });
 

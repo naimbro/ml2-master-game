@@ -1,6 +1,6 @@
 import admin from 'firebase-admin';
 import { writeFileSync } from 'node:fs';
-import { fitBradleyTerry, type PlayerResponse, type JudgeWeights } from './lib/bradley-terry';
+import { fitBradleyTerry, type PlayerResponse, type JudgeWeights, type BTResult } from './lib/bradley-terry';
 import {
   spearmanRho,
   kendallTau,
@@ -42,20 +42,45 @@ interface Submission {
   playerName: string;
   round: number;
   evaluated?: boolean;
+  submittedAt?: { toMillis?: () => number };
   evaluation?: {
     finalScore: number;
     evaluations: { judgeId: string; judgeName?: string; score: number }[];
   };
 }
 
+/** Keep only the latest submission per (playerId, round), by submittedAt. */
+function dedupeLatest(subs: Submission[]): Submission[] {
+  const best = new Map<string, Submission>();
+  for (const s of subs) {
+    const key = `${s.playerId}__${s.round}`;
+    const cur = best.get(key);
+    if (!cur) {
+      best.set(key, s);
+      continue;
+    }
+    const t = s.submittedAt?.toMillis?.() ?? 0;
+    const tc = cur.submittedAt?.toMillis?.() ?? 0;
+    if (t >= tc) best.set(key, s);
+  }
+  return [...best.values()];
+}
+
 function toPlayerResponses(subs: Submission[]): PlayerResponse[] {
   return subs
-    .filter((s) => s.evaluation && Array.isArray(s.evaluation.evaluations))
+    .filter(
+      (s) =>
+        s.evaluation &&
+        Array.isArray(s.evaluation.evaluations) &&
+        Number.isFinite(s.evaluation.finalScore),
+    )
     .map((s) => ({
       playerId: s.playerId,
       playerName: s.playerName,
       llmScore: s.evaluation!.finalScore,
-      judgeScores: s.evaluation!.evaluations.map((e) => ({ judgeId: e.judgeId, score: e.score })),
+      judgeScores: s.evaluation!.evaluations
+        .filter((e) => Number.isFinite(e.score))
+        .map((e) => ({ judgeId: e.judgeId, score: e.score })),
     }));
 }
 
@@ -64,7 +89,8 @@ function analyzeRound(
   scenarioTitle: string,
   players: PlayerResponse[],
   weights: JudgeWeights,
-): RoundAnalysis | null {
+  submittedCount: number,
+): { analysis: RoundAnalysis; bt: BTResult } | null {
   if (players.length < 2) return null;
 
   const bt = fitBradleyTerry(players, weights);
@@ -85,14 +111,17 @@ function analyzeRound(
     }))
     .sort((a, b) => a.llmRank - b.llmRank);
 
-  return {
+  const analysis: RoundAnalysis = {
     round,
     scenarioTitle,
     rows,
     spearman: spearmanRho(llmScoreMap, bt.strength),
     kendall: kendallTau(llmScoreMap, bt.strength),
     disagreement: judgeDisagreementRate(players),
+    evaluatedCount: players.length,
+    submittedCount,
   };
+  return { analysis, bt };
 }
 
 async function run(gameCode: string): Promise<void> {
@@ -110,7 +139,7 @@ async function run(gameCode: string): Promise<void> {
   for (const j of judgeList) weights[j.judgeId] = j.weight;
 
   const subsSnap = await db.collection('games').doc(gameCode).collection('submissions').get();
-  const allSubs = subsSnap.docs.map((d) => d.data() as Submission);
+  const allSubs = dedupeLatest(subsSnap.docs.map((d) => d.data() as Submission));
 
   // Accumulators for the overall (cumulative) comparison.
   const llmTotal: Record<string, number> = {};
@@ -125,19 +154,21 @@ async function run(gameCode: string): Promise<void> {
     if (scenario?.ranked === false) continue;
     if (scenario?.type === 'multiple_choice') continue;
 
-    const players = toPlayerResponses(allSubs.filter((s) => s.round === round));
-    const analysis = analyzeRound(
+    const roundSubs = allSubs.filter((s) => s.round === round);
+    const players = toPlayerResponses(roundSubs);
+    const result = analyzeRound(
       round,
       scenario?.title || scenario?.id || `Round ${round}`,
       players,
       weights,
+      roundSubs.length,
     );
-    if (!analysis) continue;
+    if (!result) continue;
+    const { analysis, bt } = result;
     rounds.push(analysis);
 
     // Cumulative: LLM total = sum of finalScore; BT points = log-strengths
     // rescaled to this round's LLM score moments so they aggregate on the same scale.
-    const bt = fitBradleyTerry(players, weights);
     const thetas = players.map((p) => bt.logStrength[p.playerId]);
     const llmScores = players.map((p) => p.llmScore);
     const btPoints = linearMatchMoments(thetas, llmScores);
