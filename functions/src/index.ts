@@ -507,9 +507,18 @@ export const processRoundEnd = functions
         .collection('rounds').doc(`round_${round}`).set({
           round,
           ranked: isRanked,
+          phase: 'provisional',
           rankings,
           processedAt: admin.firestore.Timestamp.now(),
         });
+
+      // Non-ranked rounds are never recalibrated — mark them final so the client
+      // does not wait for a Phase 2 that will not come.
+      if (!isRanked) {
+        await db.collection('games').doc(gameCode)
+          .collection('rounds').doc(`round_${round}`)
+          .update({ phase: 'final' });
+      }
 
       // Only update player totalScores for ranked rounds
       if (isRanked) {
