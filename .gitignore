@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# BT-rescore generated reports (contain student data)
+bt-report-*.html
