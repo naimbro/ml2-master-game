@@ -19,6 +19,7 @@ interface UseGameReturn {
   submitMCBlock: (mcResponses: MCResponse[], blockScore: number) => Promise<void>;
   nextRound: () => Promise<void>;
   endGame: () => Promise<void>;
+  recalibrateRound: (round: number) => Promise<void>;
 
   // Round data
   submissions: Submission[];
@@ -240,6 +241,12 @@ export function useGame(gameCode: string | undefined): UseGameReturn {
     });
   }, [gameCode, isHost]);
 
+  const recalibrateRound = useCallback(async (round: number) => {
+    if (!gameCode) return;
+    const fn = httpsCallable(functions, 'recalibrateRound');
+    await fn({ gameCode, round });
+  }, [gameCode]);
+
   // End the current round (called when timer expires)
   const endRound = useCallback(async () => {
     if (!gameCode || !isHost) return;
@@ -279,6 +286,7 @@ export function useGame(gameCode: string | undefined): UseGameReturn {
     submitMCBlock,
     nextRound,
     endGame,
+    recalibrateRound,
     submissions,
     roundResults,
   };

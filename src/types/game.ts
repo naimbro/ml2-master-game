@@ -108,6 +108,8 @@ export interface RoundRanking {
   score: number;
   rank: number;
   totalScore?: number; // cumulative total (avoids race condition with game doc)
+  provScore?: number;
+  provRank?: number;
 }
 
 export interface RoundResults {
@@ -115,6 +117,7 @@ export interface RoundResults {
   ranked: boolean;
   rankings: RoundRanking[];
   processedAt: Timestamp;
+  phase?: 'provisional' | 'final';
 }
 
 // =====================================

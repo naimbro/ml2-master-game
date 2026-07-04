@@ -22,7 +22,7 @@ export default function Results() {
   const { gameCode } = useParams<{ gameCode: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { game, loading, error, roundResults, isHost, nextRound, endGame, submissions } = useGame(gameCode);
+  const { game, loading, error, roundResults, isHost, nextRound, endGame, submissions, recalibrateRound } = useGame(gameCode);
   const [isProcessing, setIsProcessing] = useState(false);
   const [, setEvaluationComplete] = useState(false);
   const scoreSoundPlayed = useRef(false);
@@ -31,6 +31,7 @@ export default function Results() {
   const [lbPhase, setLbPhase] = useState<'show' | 'swap' | 'reveal' | 'done'>('show');
   const [revealedCount, setRevealedCount] = useState(0);
   const leaderboardSoundPlayed = useRef(false);
+  const recalTriggered = useRef(false);
 
   // Navigate based on game status
   useEffect(() => {
@@ -185,6 +186,31 @@ export default function Results() {
     }
   }, [cumulativeRankings]);
 
+  // Trigger recalibration (pairwise tournament) after provisional board shows (host only)
+  useEffect(() => {
+    const phase = (roundResults as { phase?: string } | null)?.phase;
+    if (
+      isHost && roundResults && phase === 'provisional' && isRankedRound &&
+      game && game.currentRound < game.totalRounds && !recalTriggered.current
+    ) {
+      recalTriggered.current = true;
+      const t = setTimeout(() => { recalibrateRound(game.currentRound).catch(console.error); }, 3500);
+      return () => clearTimeout(t);
+    }
+  }, [isHost, roundResults, isRankedRound, game, recalibrateRound]);
+
+  // Replay the leaderboard reveal when phase flips provisional -> final
+  const prevPhaseRef = useRef<string | undefined>(undefined);
+  useEffect(() => {
+    const phase = (roundResults as { phase?: string } | null)?.phase;
+    if (prevPhaseRef.current === 'provisional' && phase === 'final') {
+      leaderboardSoundPlayed.current = false;
+      setLbPhase('show');
+      setRevealedCount(0);
+    }
+    prevPhaseRef.current = phase;
+  }, [roundResults]);
+
   const numPlayers = cumulativeRankings.length;
   const hasPrevData = rankedRoundsPlayed > 1;
   const topN = Math.min(numPlayers, TOP_N);
@@ -200,6 +226,9 @@ export default function Results() {
   const allRevealed = lbPhase === 'done';
   const userInTop = topRankings.some(p => p.playerId === user?.uid);
   const userRankingEntry = cumulativeRankings.find(p => p.playerId === user?.uid);
+  const roundPhase = (roundResults as { phase?: string } | null)?.phase;
+  const isRecalibrating = isRankedRound && roundPhase === 'provisional'
+    && !!game && game.currentRound < game.totalRounds;
 
   if (loading || isProcessing) {
     return (
@@ -253,6 +282,15 @@ export default function Results() {
           </div>
         </div>
       </header>
+
+      {isRecalibrating && (
+        <div className="text-center mb-4">
+          <span className="inline-flex items-center gap-2 text-white/80 font-bold">
+            <span className="w-3 h-3 rounded-full bg-kahoot-yellow animate-ping" />
+            Recalibrando por combate directo…
+          </span>
+        </div>
+      )}
 
       {/* Full-Screen Dramatic Leaderboard (ranked rounds only) — shown first for impact */}
       {roundResults && game.players && isRankedRound && (
