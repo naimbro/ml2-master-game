@@ -33,9 +33,13 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.seedJudges = exports.exportSignalsSummary = exports.generateClassReport = exports.generateOralTask = exports.generateStudentReport = exports.processRoundEnd = exports.evaluateSubmission = void 0;
+exports.seedJudges = exports.exportSignalsSummary = exports.generateClassReport = exports.generateOralTask = exports.generateStudentReport = exports.recalibrateRound = exports.processRoundEnd = exports.evaluateSubmission = void 0;
 const functions = __importStar(require("firebase-functions"));
 const admin = __importStar(require("firebase-admin"));
+const recalibration_1 = require("./lib/recalibration");
+const pairwise_1 = require("./pairwise");
+const stats_1 = require("./lib/stats");
+const parse_1 = require("./lib/parse");
 admin.initializeApp();
 const db = admin.firestore();
 // Lazy-load OpenAI to avoid initialization timeout
@@ -462,6 +466,132 @@ exports.processRoundEnd = functions
     catch (error) {
         console.error('Process round error:', error);
         throw new functions.https.HttpsError('internal', 'Failed to process round');
+    }
+});
+const RECAL_B = 4; // Swiss band width (calibrated)
+const RECAL_W_ANCHOR = 0.35; // anchor weight / λ≈3 (calibrated)
+const RECAL_CONCURRENCY = 10;
+exports.recalibrateRound = functions
+    .region('us-central1')
+    .runWith({ timeoutSeconds: 300, memory: '1GB', secrets: ['OPENAI_API_KEY'] })
+    .https.onCall(async (data, context) => {
+    var _a, _b, _c, _d;
+    if (!context.auth) {
+        throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
+    }
+    const { gameCode, round } = data;
+    if (!gameCode || round === undefined) {
+        throw new functions.https.HttpsError('invalid-argument', 'Missing gameCode or round');
+    }
+    const roundRef = db.collection('games').doc(gameCode).collection('rounds').doc(`round_${round}`);
+    const roundSnap = await roundRef.get();
+    if (!roundSnap.exists) {
+        throw new functions.https.HttpsError('not-found', 'Round not processed yet');
+    }
+    const roundData = roundSnap.data();
+    // Idempotency + only ranked rounds get recalibrated.
+    if (roundData.phase === 'final' || roundData.ranked === false) {
+        return { success: true, alreadyFinal: true };
+    }
+    try {
+        const gameDoc = await db.collection('games').doc(gameCode).get();
+        const game = gameDoc.data();
+        const scenario = (_a = game.scenarios) === null || _a === void 0 ? void 0 : _a[round - 1];
+        // Load evaluated submissions with answer text.
+        const subsSnap = await db.collection('games').doc(gameCode).collection('submissions')
+            .where('round', '==', round).get();
+        const players = subsSnap.docs
+            .map((d) => d.data())
+            .filter((s) => s.evaluation && typeof s.response === 'string' && s.response.trim()
+            && Number.isFinite((0, parse_1.coerceScore)(s.evaluation.finalScore)))
+            .map((s) => ({ id: s.playerId, prov: (0, parse_1.coerceScore)(s.evaluation.finalScore), response: s.response.trim() }));
+        // Fewer than 4 answers: nothing meaningful to recalibrate — mark final as-is.
+        if (players.length < 4) {
+            await roundRef.update({ phase: 'final', recalibratedAt: admin.firestore.Timestamp.now() });
+            return { success: true, skipped: 'too_few' };
+        }
+        // Build the round context (task + rubric) for the comparator.
+        const rubric = (((_c = (_b = game.sessionConfig) === null || _b === void 0 ? void 0 : _b.rubric) === null || _c === void 0 ? void 0 : _c.dimensions) || [])
+            .map((x) => `- ${x.name || x.id}: ${x.description || ''}`).join('\n');
+        const ideal = (scenario === null || scenario === void 0 ? void 0 : scenario.idealAnswer) ? JSON.stringify(scenario.idealAnswer).slice(0, 1200) : '';
+        const context = [
+            `TAREA: ${(scenario === null || scenario === void 0 ? void 0 : scenario.title) || ''}`,
+            (scenario === null || scenario === void 0 ? void 0 : scenario.context) ? `CONTEXTO: ${scenario.context}` : '',
+            (scenario === null || scenario === void 0 ? void 0 : scenario.question) ? `PREGUNTA: ${typeof scenario.question === 'string' ? scenario.question : JSON.stringify(scenario.question)}` : '',
+            rubric ? `CRITERIOS:\n${rubric}` : '',
+            ideal ? `REFERENCIA: ${ideal}` : '',
+        ].filter(Boolean).join('\n\n');
+        const system = (0, pairwise_1.buildComparePrompt)(context);
+        // Real comparator: one gpt-4o head-to-head.
+        const openai = await getOpenAI();
+        const compare = async (a, b) => {
+            var _a, _b;
+            try {
+                const c = await openai.chat.completions.create({
+                    model: 'gpt-4o', temperature: 0, max_tokens: 20,
+                    response_format: { type: 'json_object' },
+                    messages: [
+                        { role: 'system', content: system },
+                        { role: 'user', content: `RESPUESTA A:\n${a}\n\nRESPUESTA B:\n${b}` },
+                    ],
+                });
+                const w = JSON.parse(((_b = (_a = c.choices[0]) === null || _a === void 0 ? void 0 : _a.message) === null || _b === void 0 ? void 0 : _b.content) || '{}').winner;
+                return w === 'A' || w === 'B' ? w : 'tie';
+            }
+            catch (e) {
+                console.error('compare error', e);
+                return 'tie';
+            }
+        };
+        const duels = await (0, pairwise_1.runSwissComparisons)(players, context, RECAL_B, compare, RECAL_CONCURRENCY);
+        const recalPlayers = players.map((p) => ({ id: p.id, prov: p.prov }));
+        const recalScore = (0, recalibration_1.recalibrateScores)(recalPlayers, duels, RECAL_W_ANCHOR);
+        // prevTotal = cumulative through round N-1 (0 for round 1).
+        const prevTotal = {};
+        if (round > 1) {
+            const prevSnap = await db.collection('games').doc(gameCode).collection('rounds').doc(`round_${round - 1}`).get();
+            (((_d = prevSnap.data()) === null || _d === void 0 ? void 0 : _d.rankings) || []).forEach((r) => { prevTotal[r.playerId] = r.totalScore || 0; });
+        }
+        // Provisional ranks (from the existing provisional round doc) for the morph.
+        const provScoreMap = {};
+        players.forEach((p) => (provScoreMap[p.id] = Math.round(p.prov)));
+        const provRankMap = (0, stats_1.ranksDescending)(provScoreMap);
+        const recalRankMap = (0, stats_1.ranksDescending)(recalScore);
+        const nameById = {};
+        subsSnap.docs.forEach((d) => { const s = d.data(); nameById[s.playerId] = s.playerName; });
+        const rankings = players
+            .map((p) => {
+            const s = Math.round(recalScore[p.id]);
+            return {
+                playerId: p.id,
+                playerName: nameById[p.id],
+                score: s,
+                rank: recalRankMap[p.id],
+                totalScore: (prevTotal[p.id] || 0) + s,
+                provScore: provScoreMap[p.id],
+                provRank: provRankMap[p.id],
+            };
+        })
+            .sort((a, b) => a.rank - b.rank);
+        await roundRef.update({
+            phase: 'final',
+            rankings,
+            recalibratedAt: admin.firestore.Timestamp.now(),
+        });
+        // Update the game-doc cumulative cache to the recalibrated totals.
+        const playerUpdates = {};
+        for (const r of rankings)
+            playerUpdates[`players.${r.playerId}.totalScore`] = r.totalScore;
+        if (Object.keys(playerUpdates).length > 0) {
+            await db.collection('games').doc(gameCode).update(playerUpdates);
+        }
+        return { success: true, rankings };
+    }
+    catch (error) {
+        console.error('Recalibration error:', error);
+        // Graceful degradation: leave the round provisional (treated as final by clients).
+        await roundRef.update({ phase: 'final', recalibratedAt: admin.firestore.Timestamp.now() }).catch(() => { });
+        throw new functions.https.HttpsError('internal', 'Recalibration failed; provisional standings kept');
     }
 });
 // =====================================

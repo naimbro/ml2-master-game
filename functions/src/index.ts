@@ -1,5 +1,9 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
+import { recalibrateScores, type RecalPlayer } from './lib/recalibration';
+import { runSwissComparisons, buildComparePrompt, type PairwisePlayer } from './pairwise';
+import { ranksDescending } from './lib/stats';
+import { coerceScore } from './lib/parse';
 
 admin.initializeApp();
 const db = admin.firestore();
@@ -539,6 +543,143 @@ export const processRoundEnd = functions
     } catch (error) {
       console.error('Process round error:', error);
       throw new functions.https.HttpsError('internal', 'Failed to process round');
+    }
+  });
+
+const RECAL_B = 4;            // Swiss band width (calibrated)
+const RECAL_W_ANCHOR = 0.35;  // anchor weight / λ≈3 (calibrated)
+const RECAL_CONCURRENCY = 10;
+
+export const recalibrateRound = functions
+  .region('us-central1')
+  .runWith({ timeoutSeconds: 300, memory: '1GB', secrets: ['OPENAI_API_KEY'] })
+  .https.onCall(async (data, context) => {
+    if (!context.auth) {
+      throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
+    }
+    const { gameCode, round } = data;
+    if (!gameCode || round === undefined) {
+      throw new functions.https.HttpsError('invalid-argument', 'Missing gameCode or round');
+    }
+
+    const roundRef = db.collection('games').doc(gameCode).collection('rounds').doc(`round_${round}`);
+    const roundSnap = await roundRef.get();
+    if (!roundSnap.exists) {
+      throw new functions.https.HttpsError('not-found', 'Round not processed yet');
+    }
+    const roundData = roundSnap.data()!;
+    // Idempotency + only ranked rounds get recalibrated.
+    if (roundData.phase === 'final' || roundData.ranked === false) {
+      return { success: true, alreadyFinal: true };
+    }
+
+    try {
+      const gameDoc = await db.collection('games').doc(gameCode).get();
+      const game = gameDoc.data()!;
+      const scenario = game.scenarios?.[round - 1];
+
+      // Load evaluated submissions with answer text.
+      const subsSnap = await db.collection('games').doc(gameCode).collection('submissions')
+        .where('round', '==', round).get();
+      const players: PairwisePlayer[] = subsSnap.docs
+        .map((d) => d.data())
+        .filter((s) => s.evaluation && typeof s.response === 'string' && s.response.trim()
+          && Number.isFinite(coerceScore(s.evaluation.finalScore)))
+        .map((s) => ({ id: s.playerId, prov: coerceScore(s.evaluation.finalScore), response: s.response.trim() }));
+
+      // Fewer than 4 answers: nothing meaningful to recalibrate — mark final as-is.
+      if (players.length < 4) {
+        await roundRef.update({ phase: 'final', recalibratedAt: admin.firestore.Timestamp.now() });
+        return { success: true, skipped: 'too_few' };
+      }
+
+      // Build the round context (task + rubric) for the comparator.
+      const rubric = (game.sessionConfig?.rubric?.dimensions || [])
+        .map((x: any) => `- ${x.name || x.id}: ${x.description || ''}`).join('\n');
+      const ideal = scenario?.idealAnswer ? JSON.stringify(scenario.idealAnswer).slice(0, 1200) : '';
+      const context = [
+        `TAREA: ${scenario?.title || ''}`,
+        scenario?.context ? `CONTEXTO: ${scenario.context}` : '',
+        scenario?.question ? `PREGUNTA: ${typeof scenario.question === 'string' ? scenario.question : JSON.stringify(scenario.question)}` : '',
+        rubric ? `CRITERIOS:\n${rubric}` : '',
+        ideal ? `REFERENCIA: ${ideal}` : '',
+      ].filter(Boolean).join('\n\n');
+      const system = buildComparePrompt(context);
+
+      // Real comparator: one gpt-4o head-to-head.
+      const openai = await getOpenAI();
+      const compare = async (a: string, b: string): Promise<'A' | 'B' | 'tie'> => {
+        try {
+          const c = await openai.chat.completions.create({
+            model: 'gpt-4o', temperature: 0, max_tokens: 20,
+            response_format: { type: 'json_object' },
+            messages: [
+              { role: 'system', content: system },
+              { role: 'user', content: `RESPUESTA A:\n${a}\n\nRESPUESTA B:\n${b}` },
+            ],
+          });
+          const w = JSON.parse(c.choices[0]?.message?.content || '{}').winner;
+          return w === 'A' || w === 'B' ? w : 'tie';
+        } catch (e) {
+          console.error('compare error', e);
+          return 'tie';
+        }
+      };
+
+      const duels = await runSwissComparisons(players, context, RECAL_B, compare, RECAL_CONCURRENCY);
+      const recalPlayers: RecalPlayer[] = players.map((p) => ({ id: p.id, prov: p.prov }));
+      const recalScore = recalibrateScores(recalPlayers, duels, RECAL_W_ANCHOR);
+
+      // prevTotal = cumulative through round N-1 (0 for round 1).
+      const prevTotal: Record<string, number> = {};
+      if (round > 1) {
+        const prevSnap = await db.collection('games').doc(gameCode).collection('rounds').doc(`round_${round - 1}`).get();
+        (prevSnap.data()?.rankings || []).forEach((r: any) => { prevTotal[r.playerId] = r.totalScore || 0; });
+      }
+
+      // Provisional ranks (from the existing provisional round doc) for the morph.
+      const provScoreMap: Record<string, number> = {};
+      players.forEach((p) => (provScoreMap[p.id] = Math.round(p.prov)));
+      const provRankMap = ranksDescending(provScoreMap);
+      const recalRankMap = ranksDescending(recalScore);
+
+      const nameById: Record<string, string> = {};
+      subsSnap.docs.forEach((d) => { const s = d.data(); nameById[s.playerId] = s.playerName; });
+
+      const rankings = players
+        .map((p) => {
+          const s = Math.round(recalScore[p.id]);
+          return {
+            playerId: p.id,
+            playerName: nameById[p.id],
+            score: s,
+            rank: recalRankMap[p.id],
+            totalScore: (prevTotal[p.id] || 0) + s,
+            provScore: provScoreMap[p.id],
+            provRank: provRankMap[p.id],
+          };
+        })
+        .sort((a, b) => a.rank - b.rank);
+
+      await roundRef.update({
+        phase: 'final',
+        rankings,
+        recalibratedAt: admin.firestore.Timestamp.now(),
+      });
+
+      // Update the game-doc cumulative cache to the recalibrated totals.
+      const playerUpdates: Record<string, number> = {};
+      for (const r of rankings) playerUpdates[`players.${r.playerId}.totalScore`] = r.totalScore;
+      if (Object.keys(playerUpdates).length > 0) {
+        await db.collection('games').doc(gameCode).update(playerUpdates);
+      }
+
+      return { success: true, rankings };
+    } catch (error) {
+      console.error('Recalibration error:', error);
+      // Graceful degradation: leave the round provisional (treated as final by clients).
+      await roundRef.update({ phase: 'final', recalibratedAt: admin.firestore.Timestamp.now() }).catch(() => {});
+      throw new functions.https.HttpsError('internal', 'Recalibration failed; provisional standings kept');
     }
   });
 
