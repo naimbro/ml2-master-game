@@ -475,7 +475,7 @@ exports.recalibrateRound = functions
     .region('us-central1')
     .runWith({ timeoutSeconds: 300, memory: '1GB', secrets: ['OPENAI_API_KEY'] })
     .https.onCall(async (data, context) => {
-    var _a, _b, _c, _d;
+    var _a, _b, _c;
     if (!context.auth) {
         throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
     }
@@ -489,13 +489,21 @@ exports.recalibrateRound = functions
         throw new functions.https.HttpsError('not-found', 'Round not processed yet');
     }
     const roundData = roundSnap.data();
-    // Idempotency + only ranked rounds get recalibrated.
-    if (roundData.phase === 'final' || roundData.ranked === false) {
+    const gameDoc = await db.collection('games').doc(gameCode).get();
+    const game = gameDoc.data();
+    if (!game) {
+        throw new functions.https.HttpsError('not-found', 'Game not found');
+    }
+    if (game.hostId !== context.auth.uid) {
+        throw new functions.https.HttpsError('permission-denied', 'Only the host can recalibrate');
+    }
+    // Only a provisional ranked round can be recalibrated (idempotent; blocks concurrent runs).
+    if (roundData.phase !== 'provisional' || roundData.ranked === false) {
         return { success: true, alreadyFinal: true };
     }
+    // Claim the round so a concurrent invocation bails.
+    await roundRef.update({ phase: 'recalibrating' });
     try {
-        const gameDoc = await db.collection('games').doc(gameCode).get();
-        const game = gameDoc.data();
         const scenario = (_a = game.scenarios) === null || _a === void 0 ? void 0 : _a[round - 1];
         // Load evaluated submissions with answer text.
         const subsSnap = await db.collection('games').doc(gameCode).collection('submissions')
@@ -534,7 +542,7 @@ exports.recalibrateRound = functions
                         { role: 'system', content: system },
                         { role: 'user', content: `RESPUESTA A:\n${a}\n\nRESPUESTA B:\n${b}` },
                     ],
-                });
+                }, { timeout: 25000, maxRetries: 1 });
                 const w = JSON.parse(((_b = (_a = c.choices[0]) === null || _a === void 0 ? void 0 : _a.message) === null || _b === void 0 ? void 0 : _b.content) || '{}').winner;
                 return w === 'A' || w === 'B' ? w : 'tie';
             }
@@ -546,12 +554,15 @@ exports.recalibrateRound = functions
         const duels = await (0, pairwise_1.runSwissComparisons)(players, context, RECAL_B, compare, RECAL_CONCURRENCY);
         const recalPlayers = players.map((p) => ({ id: p.id, prov: p.prov }));
         const recalScore = (0, recalibration_1.recalibrateScores)(recalPlayers, duels, RECAL_W_ANCHOR);
-        // prevTotal = cumulative through round N-1 (0 for round 1).
+        // prevTotal = cumulative through round N-1. game.players[id].totalScore already
+        // includes THIS round's provisional score (written by processRoundEnd for ranked
+        // rounds), so subtract it back off. Robust to students absent in round N-1.
         const prevTotal = {};
-        if (round > 1) {
-            const prevSnap = await db.collection('games').doc(gameCode).collection('rounds').doc(`round_${round - 1}`).get();
-            (((_d = prevSnap.data()) === null || _d === void 0 ? void 0 : _d.rankings) || []).forEach((r) => { prevTotal[r.playerId] = r.totalScore || 0; });
-        }
+        players.forEach((p) => {
+            var _a, _b;
+            const cumThroughN = ((_b = (_a = game.players) === null || _a === void 0 ? void 0 : _a[p.id]) === null || _b === void 0 ? void 0 : _b.totalScore) || 0;
+            prevTotal[p.id] = cumThroughN - Math.round(p.prov);
+        });
         // Provisional ranks (from the existing provisional round doc) for the morph.
         const provScoreMap = {};
         players.forEach((p) => (provScoreMap[p.id] = Math.round(p.prov)));

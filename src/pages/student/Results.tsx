@@ -187,23 +187,27 @@ export default function Results() {
   }, [cumulativeRankings]);
 
   // Trigger recalibration (pairwise tournament) after provisional board shows (host only)
+  const currentRound = game?.currentRound;
+  const totalRounds = game?.totalRounds;
+  // reset the one-shot guard whenever the round changes
+  useEffect(() => { recalTriggered.current = false; }, [currentRound]);
   useEffect(() => {
     const phase = (roundResults as { phase?: string } | null)?.phase;
     if (
-      isHost && roundResults && phase === 'provisional' && isRankedRound &&
-      game && game.currentRound < game.totalRounds && !recalTriggered.current
+      isHost && phase === 'provisional' && isRankedRound &&
+      currentRound !== undefined && totalRounds !== undefined &&
+      currentRound < totalRounds && !recalTriggered.current
     ) {
       recalTriggered.current = true;
-      const t = setTimeout(() => { recalibrateRound(game.currentRound).catch(console.error); }, 3500);
-      return () => clearTimeout(t);
+      setTimeout(() => { recalibrateRound(currentRound).catch(console.error); }, 3500);
     }
-  }, [isHost, roundResults, isRankedRound, game, recalibrateRound]);
+  }, [isHost, roundResults, isRankedRound, currentRound, totalRounds, recalibrateRound]);
 
   // Replay the leaderboard reveal when phase flips provisional -> final
   const prevPhaseRef = useRef<string | undefined>(undefined);
   useEffect(() => {
     const phase = (roundResults as { phase?: string } | null)?.phase;
-    if (prevPhaseRef.current === 'provisional' && phase === 'final') {
+    if (phase === 'final' && prevPhaseRef.current && prevPhaseRef.current !== 'final') {
       leaderboardSoundPlayed.current = false;
       setLbPhase('show');
       setRevealedCount(0);
@@ -227,8 +231,8 @@ export default function Results() {
   const userInTop = topRankings.some(p => p.playerId === user?.uid);
   const userRankingEntry = cumulativeRankings.find(p => p.playerId === user?.uid);
   const roundPhase = (roundResults as { phase?: string } | null)?.phase;
-  const isRecalibrating = isRankedRound && roundPhase === 'provisional'
-    && !!game && game.currentRound < game.totalRounds;
+  const isRecalibrating = isRankedRound && (roundPhase === 'provisional' || roundPhase === 'recalibrating')
+    && currentRound !== undefined && totalRounds !== undefined && currentRound < totalRounds;
 
   if (loading || isProcessing) {
     return (

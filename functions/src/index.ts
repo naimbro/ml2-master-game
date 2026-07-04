@@ -568,14 +568,22 @@ export const recalibrateRound = functions
       throw new functions.https.HttpsError('not-found', 'Round not processed yet');
     }
     const roundData = roundSnap.data()!;
-    // Idempotency + only ranked rounds get recalibrated.
-    if (roundData.phase === 'final' || roundData.ranked === false) {
+    const gameDoc = await db.collection('games').doc(gameCode).get();
+    const game = gameDoc.data();
+    if (!game) {
+      throw new functions.https.HttpsError('not-found', 'Game not found');
+    }
+    if (game.hostId !== context.auth.uid) {
+      throw new functions.https.HttpsError('permission-denied', 'Only the host can recalibrate');
+    }
+    // Only a provisional ranked round can be recalibrated (idempotent; blocks concurrent runs).
+    if (roundData.phase !== 'provisional' || roundData.ranked === false) {
       return { success: true, alreadyFinal: true };
     }
+    // Claim the round so a concurrent invocation bails.
+    await roundRef.update({ phase: 'recalibrating' });
 
     try {
-      const gameDoc = await db.collection('games').doc(gameCode).get();
-      const game = gameDoc.data()!;
       const scenario = game.scenarios?.[round - 1];
 
       // Load evaluated submissions with answer text.
@@ -617,7 +625,7 @@ export const recalibrateRound = functions
               { role: 'system', content: system },
               { role: 'user', content: `RESPUESTA A:\n${a}\n\nRESPUESTA B:\n${b}` },
             ],
-          });
+          }, { timeout: 25000, maxRetries: 1 });
           const w = JSON.parse(c.choices[0]?.message?.content || '{}').winner;
           return w === 'A' || w === 'B' ? w : 'tie';
         } catch (e) {
@@ -630,12 +638,14 @@ export const recalibrateRound = functions
       const recalPlayers: RecalPlayer[] = players.map((p) => ({ id: p.id, prov: p.prov }));
       const recalScore = recalibrateScores(recalPlayers, duels, RECAL_W_ANCHOR);
 
-      // prevTotal = cumulative through round N-1 (0 for round 1).
+      // prevTotal = cumulative through round N-1. game.players[id].totalScore already
+      // includes THIS round's provisional score (written by processRoundEnd for ranked
+      // rounds), so subtract it back off. Robust to students absent in round N-1.
       const prevTotal: Record<string, number> = {};
-      if (round > 1) {
-        const prevSnap = await db.collection('games').doc(gameCode).collection('rounds').doc(`round_${round - 1}`).get();
-        (prevSnap.data()?.rankings || []).forEach((r: any) => { prevTotal[r.playerId] = r.totalScore || 0; });
-      }
+      players.forEach((p) => {
+        const cumThroughN = game.players?.[p.id]?.totalScore || 0;
+        prevTotal[p.id] = cumThroughN - Math.round(p.prov);
+      });
 
       // Provisional ranks (from the existing provisional round doc) for the morph.
       const provScoreMap: Record<string, number> = {};
