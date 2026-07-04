@@ -16,6 +16,7 @@ import {
   type RoundRow,
   type OverallRow,
 } from './lib/report';
+import { coerceScore } from './lib/parse';
 
 const PROJECT_ID = 'ml2-master-game';
 
@@ -44,8 +45,10 @@ interface Submission {
   evaluated?: boolean;
   submittedAt?: { toMillis?: () => number };
   evaluation?: {
-    finalScore: number;
-    evaluations: { judgeId: string; judgeName?: string; score: number }[];
+    // Stored score types vary by session: finalScore is a number, but per-judge
+    // scores are sometimes numeric strings (e.g. "60"). coerceScore() normalizes.
+    finalScore: number | string;
+    evaluations: { judgeId: string; judgeName?: string; score: number | string }[];
   };
 }
 
@@ -72,15 +75,15 @@ function toPlayerResponses(subs: Submission[]): PlayerResponse[] {
       (s) =>
         s.evaluation &&
         Array.isArray(s.evaluation.evaluations) &&
-        Number.isFinite(s.evaluation.finalScore),
+        Number.isFinite(coerceScore(s.evaluation.finalScore)),
     )
     .map((s) => ({
       playerId: s.playerId,
       playerName: s.playerName,
-      llmScore: s.evaluation!.finalScore,
+      llmScore: coerceScore(s.evaluation!.finalScore),
       judgeScores: s.evaluation!.evaluations
-        .filter((e) => Number.isFinite(e.score))
-        .map((e) => ({ judgeId: e.judgeId, score: e.score })),
+        .map((e) => ({ judgeId: e.judgeId, score: coerceScore(e.score) }))
+        .filter((e) => Number.isFinite(e.score)),
     }));
 }
 
