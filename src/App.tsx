@@ -14,6 +14,7 @@ import Dashboard from './pages/professor/Dashboard';
 import CreateGame from './pages/professor/CreateGame';
 import ClassReport from './pages/professor/ClassReport';
 import RequestAccess from './pages/professor/RequestAccess';
+import AdminPanel from './pages/professor/AdminPanel';
 
 // Dev/preview
 import RevealPreview from './pages/RevealPreview';
@@ -102,6 +103,10 @@ function AppRoutes() {
       <Route
         path="/professor/report/:gameCode"
         element={user ? <ProfessorGate><ClassReport /></ProfessorGate> : <Navigate to="/" replace />}
+      />
+      <Route
+        path="/professor/admin"
+        element={user ? <ProfessorGate><AdminPanel /></ProfessorGate> : <Navigate to="/" replace />}
       />
 
       {/* Fallback */}
