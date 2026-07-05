@@ -615,18 +615,20 @@ export default function Round() {
                     Contexto
                   </h3>
                   <p className="text-white/80 leading-relaxed whitespace-pre-wrap font-medium">
-                    {currentScenario.context}
+                    {currentScenario.context ?? currentScenario.prompt}
                   </p>
                 </div>
 
-                <div className="p-5 bg-kahoot-blue/15 border-2 border-kahoot-blue/30 rounded-xl">
-                  <h3 className="text-xs font-bold text-blue-300 uppercase tracking-widest mb-2">
-                    Pregunta
-                  </h3>
-                  <p className="text-white leading-relaxed font-semibold">
-                    {currentScenario.question}
-                  </p>
-                </div>
+                {currentScenario.question && (
+                  <div className="p-5 bg-kahoot-blue/15 border-2 border-kahoot-blue/30 rounded-xl">
+                    <h3 className="text-xs font-bold text-blue-300 uppercase tracking-widest mb-2">
+                      Pregunta
+                    </h3>
+                    <p className="text-white leading-relaxed font-semibold">
+                      {currentScenario.question}
+                    </p>
+                  </div>
+                )}
               </div>
 
               {/* Response Area */}

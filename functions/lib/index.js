@@ -476,7 +476,7 @@ exports.recalibrateRound = functions
     .region('us-central1')
     .runWith({ timeoutSeconds: 300, memory: '1GB', secrets: ['OPENAI_API_KEY'] })
     .https.onCall(async (data, context) => {
-    var _a, _b, _c;
+    var _a, _b, _c, _d, _e;
     if (!context.auth) {
         throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
     }
@@ -523,9 +523,13 @@ exports.recalibrateRound = functions
         const rubric = (((_c = (_b = game.sessionConfig) === null || _b === void 0 ? void 0 : _b.rubric) === null || _c === void 0 ? void 0 : _c.dimensions) || [])
             .map((x) => `- ${x.name || x.id}: ${x.description || ''}`).join('\n');
         const ideal = (scenario === null || scenario === void 0 ? void 0 : scenario.idealAnswer) ? JSON.stringify(scenario.idealAnswer).slice(0, 1200) : '';
+        // AI-generated scenarios carry their full case text in `prompt` instead of
+        // separate `context`/`question` fields — fall back so duel comparisons still
+        // get the case text for dynamic sessions.
+        const scenarioContext = (_e = (_d = scenario === null || scenario === void 0 ? void 0 : scenario.context) !== null && _d !== void 0 ? _d : scenario === null || scenario === void 0 ? void 0 : scenario.prompt) !== null && _e !== void 0 ? _e : '';
         const context = [
             `TAREA: ${(scenario === null || scenario === void 0 ? void 0 : scenario.title) || ''}`,
-            (scenario === null || scenario === void 0 ? void 0 : scenario.context) ? `CONTEXTO: ${scenario.context}` : '',
+            scenarioContext ? `CONTEXTO: ${scenarioContext}` : '',
             (scenario === null || scenario === void 0 ? void 0 : scenario.question) ? `PREGUNTA: ${typeof scenario.question === 'string' ? scenario.question : JSON.stringify(scenario.question)}` : '',
             rubric ? `CRITERIOS:\n${rubric}` : '',
             ideal ? `REFERENCIA: ${ideal}` : '',

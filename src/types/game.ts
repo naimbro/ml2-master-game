@@ -208,6 +208,10 @@ export interface Scenario {
   conceptTags: string[];
   idealAnswer?: IdealAnswer;
   referenceAnswer?: string;
+  // AI-generated scenarios carry their full case text in a single `prompt`
+  // field instead of separate `context`/`question`.
+  prompt?: string;
+  judgeFocus?: string;
 }
 
 export interface IdealAnswer {

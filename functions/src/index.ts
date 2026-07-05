@@ -611,9 +611,13 @@ export const recalibrateRound = functions
       const rubric = (game.sessionConfig?.rubric?.dimensions || [])
         .map((x: any) => `- ${x.name || x.id}: ${x.description || ''}`).join('\n');
       const ideal = scenario?.idealAnswer ? JSON.stringify(scenario.idealAnswer).slice(0, 1200) : '';
+      // AI-generated scenarios carry their full case text in `prompt` instead of
+      // separate `context`/`question` fields — fall back so duel comparisons still
+      // get the case text for dynamic sessions.
+      const scenarioContext = scenario?.context ?? scenario?.prompt ?? '';
       const context = [
         `TAREA: ${scenario?.title || ''}`,
-        scenario?.context ? `CONTEXTO: ${scenario.context}` : '',
+        scenarioContext ? `CONTEXTO: ${scenarioContext}` : '',
         scenario?.question ? `PREGUNTA: ${typeof scenario.question === 'string' ? scenario.question : JSON.stringify(scenario.question)}` : '',
         rubric ? `CRITERIOS:\n${rubric}` : '',
         ideal ? `REFERENCIA: ${ideal}` : '',
