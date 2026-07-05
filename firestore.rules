@@ -12,79 +12,87 @@ service cloud.firestore {
       return request.auth != null && request.auth.uid == userId;
     }
 
-    function isProfessor(courseId) {
+    // Must match ADMIN_EMAILS in src/lib/config.ts
+    function isAdmin() {
+      return request.auth != null && request.auth.token.email == 'naim.bro@gmail.com';
+    }
+
+    function isApprovedProfessor() {
+      return request.auth != null && (
+        isAdmin() ||
+        (exists(/databases/$(database)/documents/professors/$(request.auth.uid)) &&
+         get(/databases/$(database)/documents/professors/$(request.auth.uid)).data.status == 'approved')
+      );
+    }
+
+    function ownsCourse(courseId) {
       let course = get(/databases/$(database)/documents/courses/$(courseId)).data;
       return request.auth != null && request.auth.uid == course.professorId;
     }
 
-    function isEnrolledInCourse(courseId) {
-      let course = get(/databases/$(database)/documents/courses/$(courseId)).data;
-      return request.auth != null &&
-             (request.auth.token.email in course.enrolledEmails ||
-              request.auth.uid == course.professorId);
+    // Professor access requests + profiles
+    match /professors/{uid} {
+      // A user may create ONLY their own request, and only as 'pending'
+      allow create: if isOwner(uid) &&
+                    request.resource.data.status == 'pending' &&
+                    request.resource.data.uid == uid;
+      // Owner sees their own doc; admin sees (and lists) all
+      allow read: if isOwner(uid) || isAdmin();
+      // Only the admin changes status
+      allow update, delete: if isAdmin();
     }
 
-    // Courses collection
+    // Courses collection (dynamic, professor-authored)
     match /courses/{courseId} {
-      // Anyone authenticated can read course info
       allow read: if isAuthenticated();
-      // Only professor can write
-      allow write: if isProfessor(courseId);
+      allow create: if isApprovedProfessor() &&
+                    request.resource.data.professorId == request.auth.uid;
+      allow update, delete: if isAdmin() || ownsCourse(courseId);
 
-      // Course subcollections
       match /sessions/{sessionId} {
-        allow read: if isEnrolledInCourse(courseId);
-        allow write: if isProfessor(courseId);
+        allow read: if isAuthenticated();
+        allow write: if isAdmin() || ownsCourse(courseId);
       }
 
       match /analytics/{docId} {
-        allow read: if isProfessor(courseId);
+        allow read: if isAdmin() || ownsCourse(courseId);
         allow write: if false; // Only Cloud Functions write
       }
     }
 
     // Students collection - cross-course student profiles
     match /students/{studentId} {
-      // Users can read/write their own profile
       allow read, write: if isOwner(studentId);
 
-      // Course-specific data
       match /courseData/{courseId} {
-        allow read: if isOwner(studentId) || isProfessor(courseId);
+        allow read: if isOwner(studentId) || ownsCourse(courseId);
         allow write: if false; // Only Cloud Functions write
       }
     }
 
     // Games collection
     match /games/{gameCode} {
-      // Anyone authenticated can read game state
       allow read: if isAuthenticated();
 
-      // Creating games - must be enrolled (professor creates)
-      allow create: if isAuthenticated();
+      // Creating games consumes OpenAI budget downstream -> approved professors only
+      allow create: if isApprovedProfessor();
 
-      // Updating games - authenticated users can update (for joining/submitting)
+      // Students join/submit by updating the game doc
       allow update: if isAuthenticated();
 
-      // Delete - only professor
-      allow delete: if isAuthenticated();
+      allow delete: if isAdmin() || (isAuthenticated() && resource.data.hostId == request.auth.uid);
 
-      // Players subcollection
       match /players/{playerId} {
         allow read: if isAuthenticated();
         allow write: if isOwner(playerId);
       }
 
-      // Submissions subcollection
       match /submissions/{submissionId} {
         allow read: if isAuthenticated();
-        // Players can create their own submissions
         allow create: if isAuthenticated() && request.resource.data.playerId == request.auth.uid;
-        // Only Cloud Functions can update (for evaluation results)
-        allow update: if false;
+        allow update: if false; // Only Cloud Functions write evaluations
       }
 
-      // Round results
       match /rounds/{roundId} {
         allow read: if isAuthenticated();
         allow write: if false; // Only Cloud Functions write
@@ -94,7 +102,7 @@ service cloud.firestore {
     // Judges configuration (read-only for frontend)
     match /judges/{judgeId} {
       allow read: if isAuthenticated();
-      allow write: if false; // Admin only
+      allow write: if false;
     }
   }
 }
