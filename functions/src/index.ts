@@ -4,6 +4,12 @@ import { recalibrateScores, pickClimax, sortByProvisional, swissPairs, type Reca
 import { runSwissComparisons, buildComparePrompt, type PairwisePlayer } from './pairwise';
 import { ranksDescending } from './lib/stats';
 import { coerceScore } from './lib/parse';
+import {
+  validateDraftInput,
+  validateGeneratedDraft,
+  buildGenerationPrompt,
+  type SessionDraftInput,
+} from './lib/sessionDraft';
 
 admin.initializeApp();
 const db = admin.firestore();
@@ -1487,4 +1493,103 @@ Responde SOLO con JSON valido:
       console.error('Seed judges error:', error);
       res.status(500).json({ success: false, error: 'Failed to seed judges' });
     }
+  });
+
+// =====================================
+// GENERATE SESSION DRAFT (AI course builder)
+// =====================================
+const PLATFORM_ADMIN_EMAIL = 'naim.bro@gmail.com';
+
+export const generateSessionDraft = functions
+  .region('us-central1')
+  .runWith({ timeoutSeconds: 300, memory: '512MB', secrets: ['OPENAI_API_KEY'] })
+  .https.onCall(async (data, context) => {
+    if (!context.auth) {
+      throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
+    }
+
+    const inputError = validateDraftInput(data);
+    if (inputError) {
+      throw new functions.https.HttpsError('invalid-argument', inputError);
+    }
+    const input = data as SessionDraftInput;
+
+    // Only approved professors (or the admin) may burn OpenAI budget
+    const callerEmail = context.auth.token.email || '';
+    const isAdmin = callerEmail === PLATFORM_ADMIN_EMAIL;
+    if (!isAdmin) {
+      const profDoc = await db.collection('professors').doc(context.auth.uid).get();
+      if (!profDoc.exists || profDoc.data()!.status !== 'approved') {
+        throw new functions.https.HttpsError('permission-denied', 'Professor not approved');
+      }
+    }
+
+    // Caller must own the course
+    const courseDoc = await db.collection('courses').doc(input.courseId).get();
+    if (!courseDoc.exists) {
+      throw new functions.https.HttpsError('not-found', 'Course not found');
+    }
+    if (!isAdmin && courseDoc.data()!.professorId !== context.auth.uid) {
+      throw new functions.https.HttpsError('permission-denied', 'Not the course owner');
+    }
+
+    const openai = await getOpenAI();
+    const prompt = buildGenerationPrompt(input);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let draft: any = null;
+    let lastError = '';
+    for (let attempt = 0; attempt < 2 && !draft; attempt++) {
+      const completion = await openai.chat.completions.create({
+        model: 'gpt-4o',
+        temperature: 0.7,
+        max_tokens: 8000,
+        response_format: { type: 'json_object' },
+        messages: [
+          { role: 'user' as const, content: prompt },
+          ...(lastError
+            ? [{ role: 'user' as const, content: `Tu intento anterior falló la validación: ${lastError}. Corrige y responde de nuevo SOLO con el JSON.` }]
+            : []),
+        ],
+      });
+      try {
+        const parsed = JSON.parse(completion.choices[0]?.message?.content || '{}');
+        const validationError = validateGeneratedDraft(parsed, input);
+        if (validationError) {
+          lastError = validationError;
+          console.warn(`generateSessionDraft attempt ${attempt + 1} invalid: ${validationError}`);
+        } else {
+          draft = parsed;
+        }
+      } catch (err) {
+        lastError = 'JSON inválido';
+        console.warn(`generateSessionDraft attempt ${attempt + 1} parse error:`, err);
+      }
+    }
+
+    if (!draft) {
+      throw new functions.https.HttpsError('internal', `La generación falló: ${lastError}. Intenta de nuevo.`);
+    }
+
+    // Server-authoritative fields (never trust the model for these)
+    draft.config.roundCount = input.roundCount;
+    draft.config.roundDurationSeconds = input.roundMinutes * 60;
+    draft.config.title = input.title;
+
+    const sessionRef = await db
+      .collection('courses').doc(input.courseId)
+      .collection('sessions').add({
+        title: input.title,
+        description: draft.config.description || '',
+        status: 'draft',
+        generatedBy: 'ai',
+        config: draft.config,
+        scenarios: draft.scenarios,
+        rubric: draft.rubric,
+        knowledgeBase: draft.knowledgeBase,
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+      });
+
+    return { success: true, sessionId: sessionRef.id };
   });

@@ -33,13 +33,14 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.seedJudges = exports.exportSignalsSummary = exports.generateClassReport = exports.generateOralTask = exports.generateStudentReport = exports.recalibrateRound = exports.processRoundEnd = exports.evaluateSubmission = void 0;
+exports.generateSessionDraft = exports.seedJudges = exports.exportSignalsSummary = exports.generateClassReport = exports.generateOralTask = exports.generateStudentReport = exports.recalibrateRound = exports.processRoundEnd = exports.evaluateSubmission = void 0;
 const functions = __importStar(require("firebase-functions"));
 const admin = __importStar(require("firebase-admin"));
 const recalibration_1 = require("./lib/recalibration");
 const pairwise_1 = require("./pairwise");
 const stats_1 = require("./lib/stats");
 const parse_1 = require("./lib/parse");
+const sessionDraft_1 = require("./lib/sessionDraft");
 admin.initializeApp();
 const db = admin.firestore();
 // Lazy-load OpenAI to avoid initialization timeout
@@ -1321,5 +1322,96 @@ Responde SOLO con JSON valido:
         console.error('Seed judges error:', error);
         res.status(500).json({ success: false, error: 'Failed to seed judges' });
     }
+});
+// =====================================
+// GENERATE SESSION DRAFT (AI course builder)
+// =====================================
+const PLATFORM_ADMIN_EMAIL = 'naim.bro@gmail.com';
+exports.generateSessionDraft = functions
+    .region('us-central1')
+    .runWith({ timeoutSeconds: 300, memory: '512MB', secrets: ['OPENAI_API_KEY'] })
+    .https.onCall(async (data, context) => {
+    var _a, _b;
+    if (!context.auth) {
+        throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
+    }
+    const inputError = (0, sessionDraft_1.validateDraftInput)(data);
+    if (inputError) {
+        throw new functions.https.HttpsError('invalid-argument', inputError);
+    }
+    const input = data;
+    // Only approved professors (or the admin) may burn OpenAI budget
+    const callerEmail = context.auth.token.email || '';
+    const isAdmin = callerEmail === PLATFORM_ADMIN_EMAIL;
+    if (!isAdmin) {
+        const profDoc = await db.collection('professors').doc(context.auth.uid).get();
+        if (!profDoc.exists || profDoc.data().status !== 'approved') {
+            throw new functions.https.HttpsError('permission-denied', 'Professor not approved');
+        }
+    }
+    // Caller must own the course
+    const courseDoc = await db.collection('courses').doc(input.courseId).get();
+    if (!courseDoc.exists) {
+        throw new functions.https.HttpsError('not-found', 'Course not found');
+    }
+    if (!isAdmin && courseDoc.data().professorId !== context.auth.uid) {
+        throw new functions.https.HttpsError('permission-denied', 'Not the course owner');
+    }
+    const openai = await getOpenAI();
+    const prompt = (0, sessionDraft_1.buildGenerationPrompt)(input);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let draft = null;
+    let lastError = '';
+    for (let attempt = 0; attempt < 2 && !draft; attempt++) {
+        const completion = await openai.chat.completions.create({
+            model: 'gpt-4o',
+            temperature: 0.7,
+            max_tokens: 8000,
+            response_format: { type: 'json_object' },
+            messages: [
+                { role: 'user', content: prompt },
+                ...(lastError
+                    ? [{ role: 'user', content: `Tu intento anterior falló la validación: ${lastError}. Corrige y responde de nuevo SOLO con el JSON.` }]
+                    : []),
+            ],
+        });
+        try {
+            const parsed = JSON.parse(((_b = (_a = completion.choices[0]) === null || _a === void 0 ? void 0 : _a.message) === null || _b === void 0 ? void 0 : _b.content) || '{}');
+            const validationError = (0, sessionDraft_1.validateGeneratedDraft)(parsed, input);
+            if (validationError) {
+                lastError = validationError;
+                console.warn(`generateSessionDraft attempt ${attempt + 1} invalid: ${validationError}`);
+            }
+            else {
+                draft = parsed;
+            }
+        }
+        catch (err) {
+            lastError = 'JSON inválido';
+            console.warn(`generateSessionDraft attempt ${attempt + 1} parse error:`, err);
+        }
+    }
+    if (!draft) {
+        throw new functions.https.HttpsError('internal', `La generación falló: ${lastError}. Intenta de nuevo.`);
+    }
+    // Server-authoritative fields (never trust the model for these)
+    draft.config.roundCount = input.roundCount;
+    draft.config.roundDurationSeconds = input.roundMinutes * 60;
+    draft.config.title = input.title;
+    const sessionRef = await db
+        .collection('courses').doc(input.courseId)
+        .collection('sessions').add({
+        title: input.title,
+        description: draft.config.description || '',
+        status: 'draft',
+        generatedBy: 'ai',
+        config: draft.config,
+        scenarios: draft.scenarios,
+        rubric: draft.rubric,
+        knowledgeBase: draft.knowledgeBase,
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+    });
+    return { success: true, sessionId: sessionRef.id };
 });
 //# sourceMappingURL=index.js.map
