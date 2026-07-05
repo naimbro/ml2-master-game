@@ -14,7 +14,9 @@ service cloud.firestore {
 
     // Must match ADMIN_EMAILS in src/lib/config.ts
     function isAdmin() {
-      return request.auth != null && request.auth.token.email == 'naim.bro@gmail.com';
+      return request.auth != null &&
+             request.auth.token.email_verified == true &&
+             request.auth.token.email == 'naim.bro@gmail.com';
     }
 
     function isApprovedProfessor() {
