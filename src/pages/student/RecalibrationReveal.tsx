@@ -60,7 +60,10 @@ export default function RecalibrationReveal({ duels, duelTotal, finalReady, fina
 
   useEffect(() => {
     if (stage !== 'climax') return;
-    const climax = duels.find((d) => d.isClimax) || [...duels].reverse().find((d) => d.isUpset) || null;
+    // Prefer the flagged climax, else the last upset, else just the last duel — so
+    // even a tiny round (e.g. a 2-account test, one non-upset duel) still lingers on
+    // a card instead of only flashing past.
+    const climax = duels.find((d) => d.isClimax) || [...duels].reverse().find((d) => d.isUpset) || duels[duels.length - 1] || null;
     if (!climax) { setStage('board'); return; }
     setCurrent(climax); setVerdict(false);
     const t1 = setTimeout(() => setVerdict(true), 1400);

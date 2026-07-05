@@ -13,6 +13,9 @@ import Dashboard from './pages/professor/Dashboard';
 import CreateGame from './pages/professor/CreateGame';
 import ClassReport from './pages/professor/ClassReport';
 
+// Dev/preview
+import RevealPreview from './pages/RevealPreview';
+
 // Auth context
 import { AuthProvider, useAuth } from './hooks/useAuth';
 import SoundToggle from './components/SoundToggle';
@@ -35,6 +38,7 @@ function AppRoutes() {
     <Routes>
       {/* Public routes */}
       <Route path="/" element={<Home />} />
+      <Route path="/preview-reveal" element={<RevealPreview />} />
 
       {/* Student routes (require auth) */}
       <Route
