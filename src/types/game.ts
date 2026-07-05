@@ -118,6 +118,21 @@ export interface RoundResults {
   rankings: RoundRanking[];
   processedAt: Timestamp;
   phase?: 'provisional' | 'final';
+  duelTotal?: number;
+}
+
+// =====================================
+// LIVE RECALIBRATION DUELS
+// =====================================
+
+export interface DuelSide { name: string; provRank: number; provScore: number; }
+export interface RoundDuel {
+  seq: number;
+  a: DuelSide;
+  b: DuelSide;
+  winner: 'a' | 'b' | 'tie';
+  isUpset: boolean;
+  isClimax?: boolean;
 }
 
 // =====================================
