@@ -9,6 +9,9 @@ export interface PairwisePlayer {
 /** Verdict for one head-to-head: 'A' (first) wins, 'B' (second) wins, or 'tie'. */
 export type Comparator = (a: string, b: string) => Promise<'A' | 'B' | 'tie'>;
 
+export interface StreamDuel { seq: number; i: number; j: number; winner: 0 | 1 | -1; }
+export type OnDuel = (d: StreamDuel) => void | Promise<void>;
+
 const djb2 = (s: string) => {
   let h = 5381;
   for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) >>> 0;
@@ -26,6 +29,7 @@ export async function runSwissComparisons(
   B: number,
   compare: Comparator,
   concurrency: number,
+  onDuel?: OnDuel,
 ): Promise<DuelResult[]> {
   const order = sortByProvisional(players);
   const pairs = swissPairs(order, B);
@@ -44,6 +48,7 @@ export async function runSwissComparisons(
       if (verdict === 'A') winner = first.id === a.id ? 0 : 1;
       else if (verdict === 'B') winner = second.id === a.id ? 0 : 1;
       out[idx] = { i, j, winner };
+      if (onDuel) await onDuel({ seq: idx, i, j, winner });
     }
   }
   await Promise.all(Array.from({ length: Math.min(concurrency, pairs.length || 1) }, worker));

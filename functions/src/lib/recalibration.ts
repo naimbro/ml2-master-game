@@ -72,3 +72,27 @@ export function recalibrateScores(
   ids.forEach((id, i) => (out[id] = rescaled[i]));
   return out;
 }
+
+/**
+ * Pick the most dramatic upset: among duels where the winner had the WORSE
+ * (higher) provisional rank, the one with the largest rank gap (biggest
+ * giant-killing), tie-broken by the lower (better) loser rank. `provRank[k]` is
+ * the provisional rank of player index k. Returns the duel's array index, or null.
+ */
+export function pickClimax(
+  duels: { i: number; j: number; winner: 0 | 1 | -1 }[],
+  provRank: number[],
+): number | null {
+  let best = -1, bestGap = 0, bestLoserRank = Infinity;
+  duels.forEach((d, idx) => {
+    if (d.winner === -1) return;
+    const winIdx = d.winner === 0 ? d.i : d.j;
+    const loseIdx = d.winner === 0 ? d.j : d.i;
+    const gap = provRank[winIdx] - provRank[loseIdx];
+    if (gap <= 0) return;
+    if (gap > bestGap || (gap === bestGap && provRank[loseIdx] < bestLoserRank)) {
+      best = idx; bestGap = gap; bestLoserRank = provRank[loseIdx];
+    }
+  });
+  return best === -1 ? null : best;
+}

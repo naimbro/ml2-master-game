@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { sortByProvisional, swissPairs, recalibrateScores, type RecalPlayer, type DuelResult } from './recalibration';
+import { pickClimax } from './recalibration';
 
 const P = (id: string, prov: number): RecalPlayer => ({ id, prov });
 
@@ -52,5 +53,24 @@ describe('recalibrateScores', () => {
     const duels: DuelResult[] = [{i:0,j:1,winner:-1}];
     const r = recalibrateScores(even, duels, 0.35);
     expect(Math.abs(r['A'] - r['B'])).toBeLessThan(1e-6);
+  });
+});
+
+describe('pickClimax', () => {
+  const provRank = [1, 2, 3, 4]; // provRank[playerIndex]; higher = worse
+  it('returns null when there are no upsets', () => {
+    const duels = [{ i: 0, j: 1, winner: 0 as const }, { i: 2, j: 3, winner: 0 as const }];
+    expect(pickClimax(duels, provRank)).toBeNull();
+  });
+  it('picks the biggest giant-killing upset', () => {
+    const duels = [
+      { i: 0, j: 1, winner: 1 as const }, // rank2 beats rank1, gap1
+      { i: 0, j: 3, winner: 1 as const }, // rank4 beats rank1, gap3 -> climax (index 1)
+    ];
+    expect(pickClimax(duels, provRank)).toBe(1);
+  });
+  it('ignores ties', () => {
+    const duels = [{ i: 0, j: 3, winner: -1 as const }];
+    expect(pickClimax(duels, provRank)).toBeNull();
   });
 });

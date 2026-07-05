@@ -27,3 +27,13 @@ describe('runSwissComparisons', () => {
     expect(duels.every((d) => d.winner === -1)).toBe(true);
   });
 });
+
+describe('runSwissComparisons onDuel', () => {
+  it('fires onDuel once per resolved duel with seq and winner', async () => {
+    const compare = async (a: string, b: string) => (a < b ? 'A' : 'B') as 'A' | 'B';
+    const seen: number[] = [];
+    const duels = await runSwissComparisons(players, 'ctx', 2, compare, 4, (d) => { seen.push(d.seq); });
+    expect(seen.sort((x, y) => x - y)).toEqual([0, 1, 2, 3, 4]);
+    expect(seen.length).toBe(duels.length);
+  });
+});
