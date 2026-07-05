@@ -31,9 +31,9 @@ function validDraft() {
         { judgeId: 'professor_twin', weight: 0.3 },
       ],
       judgeConfig: {
-        technical_expert: { sessionLens: 'lens', weightFormula: 'score = 0.4 * a + 0.3 * b + 0.3 * c' },
-        public_sector: { sessionLens: 'lens', weightFormula: 'score = 0.4 * a + 0.3 * b + 0.3 * c' },
-        professor_twin: { sessionLens: 'lens', weightFormula: 'score = 0.4 * a + 0.3 * b + 0.3 * c' },
+        technical_expert: { sessionLens: 'lente de prueba para el juez en esta sesión', weightFormula: 'score = 0.4 * a + 0.3 * b + 0.3 * c' },
+        public_sector: { sessionLens: 'lente de prueba para el juez en esta sesión', weightFormula: 'score = 0.4 * a + 0.3 * b + 0.3 * c' },
+        professor_twin: { sessionLens: 'lente de prueba para el juez en esta sesión', weightFormula: 'score = 0.4 * a + 0.3 * b + 0.3 * c' },
       },
     },
     scenarios: [
@@ -95,6 +95,22 @@ describe('validateGeneratedDraft', () => {
     const d = validDraft();
     d.knowledgeBase = 'corta';
     expect(validateGeneratedDraft(d, validInput)).toMatch(/knowledge/i);
+  });
+  it('rejects missing judgeConfig', () => {
+    const d = validDraft();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    delete (d.config as any).judgeConfig;
+    expect(validateGeneratedDraft(d, validInput)).toMatch(/judgeConfig/i);
+  });
+  it('rejects judgeConfig with short sessionLens', () => {
+    const d = validDraft();
+    d.config.judgeConfig.public_sector.sessionLens = 'x';
+    expect(validateGeneratedDraft(d, validInput)).toMatch(/sessionLens/i);
+  });
+  it('rejects judgeConfig without weightFormula', () => {
+    const d = validDraft();
+    d.config.judgeConfig.professor_twin.weightFormula = '';
+    expect(validateGeneratedDraft(d, validInput)).toMatch(/weightFormula/i);
   });
 });
 

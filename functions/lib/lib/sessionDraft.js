@@ -69,6 +69,18 @@ function validateGeneratedDraft(draft, input) {
             return `Jueces inválidos: solo se permiten ${exports.ALLOWED_JUDGES.join(', ')}`;
         }
     }
+    const judgeConfig = config.judgeConfig;
+    if (!judgeConfig || typeof judgeConfig !== 'object')
+        return 'Falta judgeConfig en config';
+    for (const j of config.judges) {
+        const jc = judgeConfig[j.judgeId];
+        if (!jc || typeof jc.sessionLens !== 'string' || jc.sessionLens.trim().length < 20) {
+            return `Falta sessionLens (mínimo 20 caracteres) en judgeConfig para el juez ${j.judgeId}`;
+        }
+        if (typeof jc.weightFormula !== 'string' || !jc.weightFormula.includes('score')) {
+            return `Falta weightFormula válida en judgeConfig para el juez ${j.judgeId}`;
+        }
+    }
     if (typeof knowledgeBase !== 'string' || knowledgeBase.length < 500) {
         return 'La knowledge base es muy corta (mínimo 500 caracteres)';
     }

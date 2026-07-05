@@ -1516,7 +1516,7 @@ export const generateSessionDraft = functions
 
     // Only approved professors (or the admin) may burn OpenAI budget
     const callerEmail = context.auth.token.email || '';
-    const isAdmin = callerEmail === PLATFORM_ADMIN_EMAIL;
+    const isAdmin = callerEmail === PLATFORM_ADMIN_EMAIL && context.auth.token.email_verified === true;
     if (!isAdmin) {
       const profDoc = await db.collection('professors').doc(context.auth.uid).get();
       if (!profDoc.exists || profDoc.data()!.status !== 'approved') {
