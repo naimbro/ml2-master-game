@@ -70,7 +70,7 @@ export default function CreateGame() {
         status: 'waiting',
         currentRound: 0,
         totalRounds: selectedSession.scenarios.length,
-        roundDurationSeconds: selectedSession.config.roundDurationSeconds,
+        roundDurationSeconds: selectedSession.config.roundDurationSeconds ?? selectedSession.duration * 60,
 
         sessionConfig: { ...selectedSession.config, rubric: selectedSession.rubric },
         scenarios: selectedSession.scenarios,
