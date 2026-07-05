@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Play, BookOpen, Clock, Copy, Check } from 'lucide-react';
@@ -12,6 +12,8 @@ import {
   getSessionsForCourse,
   type SessionOption,
 } from '../../lib/courses';
+import { fetchCourse, fetchReadySessions } from '../../lib/dynamicCourses';
+import type { Course } from '../../lib/courses';
 
 function generateGameCode(): string {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -31,8 +33,23 @@ export default function CreateGame() {
   const [createdGame, setCreatedGame] = useState<{ code: string } | null>(null);
   const [copied, setCopied] = useState(false);
 
-  const course = courseId ? getCourse(courseId) : null;
-  const sessionsForCourse = courseId ? getSessionsForCourse(courseId) : SESSIONS;
+  const builtinCourse = courseId ? getCourse(courseId) : null;
+  const [dynCourse, setDynCourse] = useState<Course | null>(null);
+  const [dynSessions, setDynSessions] = useState<SessionOption[]>([]);
+  const [dynLoading, setDynLoading] = useState(Boolean(courseId && !builtinCourse));
+
+  useEffect(() => {
+    if (!courseId || builtinCourse) return;
+    Promise.all([fetchCourse(courseId), fetchReadySessions(courseId)])
+      .then(([c, s]) => { setDynCourse(c); setDynSessions(s); })
+      .catch((err) => console.error('Error loading dynamic course:', err))
+      .finally(() => setDynLoading(false));
+  }, [courseId, builtinCourse]);
+
+  const course = builtinCourse ?? dynCourse;
+  const sessionsForCourse = courseId
+    ? (builtinCourse ? getSessionsForCourse(courseId) : dynSessions)
+    : SESSIONS;
 
   const handleCreateGame = async () => {
     if (!selectedSession || !user) return;
@@ -143,6 +160,14 @@ export default function CreateGame() {
             Ir al Lobby
           </button>
         </motion.div>
+      </div>
+    );
+  }
+
+  if (dynLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-main flex items-center justify-center">
+        <div className="w-16 h-16 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
