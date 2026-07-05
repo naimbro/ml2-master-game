@@ -98,6 +98,12 @@ service cloud.firestore {
       match /rounds/{roundId} {
         allow read: if isAuthenticated();
         allow write: if false; // Only Cloud Functions write
+
+        // Streamed recalibration duels (read by useRoundDuels for the live reveal)
+        match /duels/{duelId} {
+          allow read: if isAuthenticated();
+          allow write: if false; // Only Cloud Functions write
+        }
       }
     }
 
