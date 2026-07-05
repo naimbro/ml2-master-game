@@ -11,6 +11,7 @@ import { db } from '../../lib/firebase';
 import jsPDF from 'jspdf';
 import { playPodiumFanfare, playLeaderboardTick, playDrumRoll, playApplause } from '../../lib/sounds';
 import { confettiPodium, confettiStars, confettiSmallBurst, confettiBurst } from '../../lib/confetti';
+import SupportLink from '../../components/SupportLink';
 
 interface PlayerFinalScore {
   playerId: string;
@@ -690,8 +691,9 @@ export default function End() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
-            className="text-center pb-8"
+            className="text-center pb-8 space-y-6"
           >
+            <SupportLink variant="card" />
             <Link to="/" className="primary-button inline-flex items-center gap-2">
               <Home className="w-5 h-5" />
               Volver al Inicio

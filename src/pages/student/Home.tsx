@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { LogIn, LogOut, User, Zap, Brain, Trophy } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { initAudio, playClick } from '../../lib/sounds';
+import SupportLink from '../../components/SupportLink';
 
 export default function Home() {
   const { user, login, logout } = useAuth();
@@ -203,6 +204,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="fixed bottom-0 left-0 right-0 p-4 text-center text-white/30 text-sm font-medium">
         <a href="https://naimbro.github.io/" target="_blank" rel="noopener noreferrer" className="hover:text-white/50 transition-colors">Naim Bro</a> — Escuela de Gobierno, Universidad Adolfo Ibanez
+        <SupportLink variant="footer" />
       </footer>
     </div>
   );
