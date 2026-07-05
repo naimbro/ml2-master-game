@@ -1,6 +1,6 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
-import { recalibrateScores, type RecalPlayer } from './lib/recalibration';
+import { recalibrateScores, pickClimax, sortByProvisional, swissPairs, type RecalPlayer } from './lib/recalibration';
 import { runSwissComparisons, buildComparePrompt, type PairwisePlayer } from './pairwise';
 import { ranksDescending } from './lib/stats';
 import { coerceScore } from './lib/parse';
@@ -595,8 +595,8 @@ export const recalibrateRound = functions
           && Number.isFinite(coerceScore(s.evaluation.finalScore)))
         .map((s) => ({ id: s.playerId, prov: coerceScore(s.evaluation.finalScore), response: s.response.trim() }));
 
-      // Fewer than 4 answers: nothing meaningful to recalibrate — mark final as-is.
-      if (players.length < 4) {
+      // Need at least 2 answers to form a single duel — otherwise mark final as-is.
+      if (players.length < 2) {
         await roundRef.update({ phase: 'final', recalibratedAt: admin.firestore.Timestamp.now() });
         return { success: true, skipped: 'too_few' };
       }
@@ -613,6 +613,33 @@ export const recalibrateRound = functions
         ideal ? `REFERENCIA: ${ideal}` : '',
       ].filter(Boolean).join('\n\n');
       const system = buildComparePrompt(context);
+
+      // Name / provisional-score / provisional-rank maps (needed up front for the stream).
+      const nameById: Record<string, string> = {};
+      subsSnap.docs.forEach((d) => { const s = d.data(); nameById[s.playerId] = s.playerName; });
+      const provScoreMap: Record<string, number> = {};
+      players.forEach((p) => (provScoreMap[p.id] = Math.round(p.prov)));
+      const provRankMap = ranksDescending(provScoreMap);
+
+      // Announce the total number of duels so the client can pace/progress.
+      const scheduleOrder = sortByProvisional(players.map((p) => ({ id: p.id, prov: p.prov })));
+      const duelTotal = swissPairs(scheduleOrder, RECAL_B).length;
+      await roundRef.update({ duelTotal });
+
+      // Stream each duel to rounds/round_N/duels/{seq} as it resolves.
+      const onDuel = async (d: { seq: number; i: number; j: number; winner: 0 | 1 | -1 }) => {
+        const pa = players[d.i], pb = players[d.j];
+        const aRank = provRankMap[pa.id], bRank = provRankMap[pb.id];
+        const winIdx = d.winner === 0 ? d.i : d.winner === 1 ? d.j : -1;
+        const isUpset = winIdx >= 0 && (winIdx === d.i ? aRank > bRank : bRank > aRank);
+        const winner = d.winner === 0 ? 'a' : d.winner === 1 ? 'b' : 'tie';
+        await roundRef.collection('duels').doc(String(d.seq).padStart(4, '0')).set({
+          seq: d.seq,
+          a: { name: nameById[pa.id], provRank: aRank, provScore: provScoreMap[pa.id] },
+          b: { name: nameById[pb.id], provRank: bRank, provScore: provScoreMap[pb.id] },
+          winner, isUpset,
+        });
+      };
 
       // Real comparator: one gpt-4o head-to-head.
       const openai = await getOpenAI();
@@ -634,9 +661,17 @@ export const recalibrateRound = functions
         }
       };
 
-      const duels = await runSwissComparisons(players, context, RECAL_B, compare, RECAL_CONCURRENCY);
+      const duels = await runSwissComparisons(players, context, RECAL_B, compare, RECAL_CONCURRENCY, onDuel);
       const recalPlayers: RecalPlayer[] = players.map((p) => ({ id: p.id, prov: p.prov }));
       const recalScore = recalibrateScores(recalPlayers, duels, RECAL_W_ANCHOR);
+
+      // Flag the most dramatic upset for the client's climax replay.
+      const provRankByIndex = players.map((p) => provRankMap[p.id]);
+      const climaxSeq = pickClimax(duels, provRankByIndex);
+      if (climaxSeq !== null) {
+        await roundRef.collection('duels').doc(String(climaxSeq).padStart(4, '0'))
+          .update({ isClimax: true }).catch(() => {});
+      }
 
       // prevTotal = cumulative through round N-1. game.players[id].totalScore already
       // includes THIS round's provisional score (written by processRoundEnd for ranked
@@ -647,14 +682,7 @@ export const recalibrateRound = functions
         prevTotal[p.id] = cumThroughN - Math.round(p.prov);
       });
 
-      // Provisional ranks (from the existing provisional round doc) for the morph.
-      const provScoreMap: Record<string, number> = {};
-      players.forEach((p) => (provScoreMap[p.id] = Math.round(p.prov)));
-      const provRankMap = ranksDescending(provScoreMap);
       const recalRankMap = ranksDescending(recalScore);
-
-      const nameById: Record<string, string> = {};
-      subsSnap.docs.forEach((d) => { const s = d.data(); nameById[s.playerId] = s.playerName; });
 
       const rankings = players
         .map((p) => {

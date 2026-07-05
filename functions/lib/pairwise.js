@@ -14,7 +14,7 @@ const djb2 = (s) => {
  * Presentation order per pair is deterministic (hash) to cancel position bias.
  * Returns DuelResults (indices into `players`, winner 0=i / 1=j / -1=tie).
  */
-async function runSwissComparisons(players, contextPrompt, B, compare, concurrency) {
+async function runSwissComparisons(players, contextPrompt, B, compare, concurrency, onDuel) {
     const order = (0, recalibration_1.sortByProvisional)(players);
     const pairs = (0, recalibration_1.swissPairs)(order, B);
     const out = new Array(pairs.length);
@@ -34,6 +34,8 @@ async function runSwissComparisons(players, contextPrompt, B, compare, concurren
             else if (verdict === 'B')
                 winner = second.id === a.id ? 0 : 1;
             out[idx] = { i, j, winner };
+            if (onDuel)
+                await onDuel({ seq: idx, i, j, winner });
         }
     }
     await Promise.all(Array.from({ length: Math.min(concurrency, pairs.length || 1) }, worker));
