@@ -8,6 +8,8 @@ import { httpsCallable } from 'firebase/functions';
 import { functions } from '../../lib/firebase';
 import { playScoreReveal, playGoodScore, playBadScore, playDrumRoll, playTensionSweep, playRankReveal } from '../../lib/sounds';
 import { confettiBurst, confettiCannons } from '../../lib/confetti';
+import RecalibrationReveal from './RecalibrationReveal';
+import { useRoundDuels } from '../../hooks/useRoundDuels';
 
 interface JudgeEvaluation {
   judgeName: string;
@@ -231,8 +233,16 @@ export default function Results() {
   const userInTop = topRankings.some(p => p.playerId === user?.uid);
   const userRankingEntry = cumulativeRankings.find(p => p.playerId === user?.uid);
   const roundPhase = (roundResults as { phase?: string } | null)?.phase;
-  const isRecalibrating = isRankedRound && (roundPhase === 'provisional' || roundPhase === 'recalibrating')
-    && currentRound !== undefined && totalRounds !== undefined && currentRound < totalRounds;
+
+  const roundDuels = useRoundDuels(gameCode, game?.currentRound);
+  const duelTotal = (roundResults as { duelTotal?: number } | null)?.duelTotal || 0;
+  const [revealDone, setRevealDone] = useState(false);
+  // reset the reveal when the round changes
+  useEffect(() => { setRevealDone(false); }, [currentRound]);
+  const showReveal = isRankedRound && !revealDone
+    && (roundPhase === 'recalibrating'
+      || (roundPhase === 'provisional' && roundDuels.length > 0)
+      || (roundPhase === 'final' && roundDuels.length > 0));
 
   if (loading || isProcessing) {
     return (
@@ -287,13 +297,14 @@ export default function Results() {
         </div>
       </header>
 
-      {isRecalibrating && (
-        <div className="text-center mb-4">
-          <span className="inline-flex items-center gap-2 text-white/80 font-bold">
-            <span className="w-3 h-3 rounded-full bg-kahoot-yellow animate-ping" />
-            Recalibrando por combate directo…
-          </span>
-        </div>
+      {showReveal && (
+        <RecalibrationReveal
+          duels={roundDuels}
+          duelTotal={duelTotal}
+          finalReady={roundPhase === 'final'}
+          finalRankings={(roundResults?.rankings || []) as unknown as { playerId: string; playerName: string; score: number; rank: number; provScore?: number; provRank?: number; }[]}
+          onDone={() => setRevealDone(true)}
+        />
       )}
 
       {/* Full-Screen Dramatic Leaderboard (ranked rounds only) — shown first for impact */}
