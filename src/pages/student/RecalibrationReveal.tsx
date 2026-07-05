@@ -18,28 +18,45 @@ export default function RecalibrationReveal({ duels, duelTotal, finalReady, fina
   const [current, setCurrent] = useState<RoundDuel | null>(null);
   const [verdict, setVerdict] = useState(false);
   const [stage, setStage] = useState<Stage>('montage');
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const doneCalled = useRef(false);
+  // Live state via refs so newly-streamed duels never restart the current card.
+  const duelsRef = useRef(duels);
+  duelsRef.current = duels;
+  const finalReadyRef = useRef(finalReady);
+  finalReadyRef.current = finalReady;
+  const cursorRef = useRef(0);
 
+  // Montage driver: a self-scheduling loop keyed ONLY on `stage`, so it does not
+  // re-run (and restart the current duel) each time a new duel snapshot arrives.
   useEffect(() => {
     if (stage !== 'montage') return;
-    if (timer.current) return;
-    if (cursor >= duels.length) {
-      if (finalReady) setStage('climax');
-      return;
-    }
-    const d = duels[cursor];
-    setCurrent(d); setVerdict(false);
-    const hold = d.isUpset ? 1200 : 260;
-    timer.current = setTimeout(() => {
-      setVerdict(true);
-      timer.current = setTimeout(() => {
-        timer.current = null;
-        setCursor((c) => c + 1);
-      }, d.isUpset ? 620 : 160);
-    }, hold);
-    return () => { if (timer.current) { clearTimeout(timer.current); timer.current = null; } };
-  }, [stage, cursor, duels, finalReady]);
+    let cancelled = false;
+    let t: ReturnType<typeof setTimeout>;
+    const playNext = () => {
+      if (cancelled) return;
+      const ds = duelsRef.current;
+      const c = cursorRef.current;
+      if (c >= ds.length) {
+        if (finalReadyRef.current) { setStage('climax'); return; }
+        t = setTimeout(playNext, 250); // caught up; wait for more duels to stream in
+        return;
+      }
+      const d = ds[c];
+      setCurrent(d); setVerdict(false);
+      t = setTimeout(() => {
+        if (cancelled) return;
+        setVerdict(true);
+        t = setTimeout(() => {
+          if (cancelled) return;
+          cursorRef.current = c + 1;
+          setCursor(c + 1);
+          playNext();
+        }, d.isUpset ? 620 : 160);
+      }, d.isUpset ? 1200 : 260);
+    };
+    playNext();
+    return () => { cancelled = true; clearTimeout(t); };
+  }, [stage]);
 
   useEffect(() => {
     if (stage !== 'climax') return;

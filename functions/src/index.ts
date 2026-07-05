@@ -628,17 +628,22 @@ export const recalibrateRound = functions
 
       // Stream each duel to rounds/round_N/duels/{seq} as it resolves.
       const onDuel = async (d: { seq: number; i: number; j: number; winner: 0 | 1 | -1 }) => {
-        const pa = players[d.i], pb = players[d.j];
-        const aRank = provRankMap[pa.id], bRank = provRankMap[pb.id];
-        const winIdx = d.winner === 0 ? d.i : d.winner === 1 ? d.j : -1;
-        const isUpset = winIdx >= 0 && (winIdx === d.i ? aRank > bRank : bRank > aRank);
-        const winner = d.winner === 0 ? 'a' : d.winner === 1 ? 'b' : 'tie';
-        await roundRef.collection('duels').doc(String(d.seq).padStart(4, '0')).set({
-          seq: d.seq,
-          a: { name: nameById[pa.id], provRank: aRank, provScore: provScoreMap[pa.id] },
-          b: { name: nameById[pb.id], provRank: bRank, provScore: provScoreMap[pb.id] },
-          winner, isUpset,
-        });
+        // Streaming the duel is cosmetic — never let a failed write abort the tournament.
+        try {
+          const pa = players[d.i], pb = players[d.j];
+          const aRank = provRankMap[pa.id], bRank = provRankMap[pb.id];
+          const winIdx = d.winner === 0 ? d.i : d.winner === 1 ? d.j : -1;
+          const isUpset = winIdx >= 0 && (winIdx === d.i ? aRank > bRank : bRank > aRank);
+          const winner = d.winner === 0 ? 'a' : d.winner === 1 ? 'b' : 'tie';
+          await roundRef.collection('duels').doc(String(d.seq).padStart(4, '0')).set({
+            seq: d.seq,
+            a: { name: nameById[pa.id], provRank: aRank, provScore: provScoreMap[pa.id] },
+            b: { name: nameById[pb.id], provRank: bRank, provScore: provScoreMap[pb.id] },
+            winner, isUpset,
+          });
+        } catch (e) {
+          console.error('duel stream write failed', e);
+        }
       };
 
       // Real comparator: one gpt-4o head-to-head.
