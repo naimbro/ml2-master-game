@@ -15,6 +15,7 @@ import CreateGame from './pages/professor/CreateGame';
 import ClassReport from './pages/professor/ClassReport';
 import RequestAccess from './pages/professor/RequestAccess';
 import AdminPanel from './pages/professor/AdminPanel';
+import CourseForm from './pages/professor/CourseForm';
 
 // Dev/preview
 import RevealPreview from './pages/RevealPreview';
@@ -95,6 +96,10 @@ function AppRoutes() {
       <Route
         path="/professor/create"
         element={user ? <ProfessorGate><CreateGame /></ProfessorGate> : <Navigate to="/" replace />}
+      />
+      <Route
+        path="/professor/courses/new"
+        element={user ? <ProfessorGate><CourseForm /></ProfessorGate> : <Navigate to="/" replace />}
       />
       <Route
         path="/professor/courses/:courseId/create"
