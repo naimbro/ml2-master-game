@@ -17,6 +17,7 @@ import RequestAccess from './pages/professor/RequestAccess';
 import AdminPanel from './pages/professor/AdminPanel';
 import CourseForm from './pages/professor/CourseForm';
 import CourseHome from './pages/professor/CourseHome';
+import SessionBuilder from './pages/professor/SessionBuilder';
 
 // Dev/preview
 import RevealPreview from './pages/RevealPreview';
@@ -109,6 +110,10 @@ function AppRoutes() {
       <Route
         path="/professor/courses/:courseId/create"
         element={user ? <ProfessorGate><CreateGame /></ProfessorGate> : <Navigate to="/" replace />}
+      />
+      <Route
+        path="/professor/courses/:courseId/sessions/new"
+        element={user ? <ProfessorGate><SessionBuilder /></ProfessorGate> : <Navigate to="/" replace />}
       />
       <Route
         path="/professor/report/:gameCode"
