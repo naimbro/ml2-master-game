@@ -673,10 +673,10 @@ export default function Round() {
                         </div>
 
                         <div className="flex-1 space-y-2">
-                          {evaluation.evaluations?.map((ev: { judgeName: string; score: number; feedback: string; strengths: string[]; improvements: string[] }, i: number) => (
+                          {evaluation.evaluations?.map((ev: { judgeName: string; judgeAvatar?: string; score: number; feedback: string; strengths: string[]; improvements: string[] }, i: number) => (
                             <div key={i} className="flex items-center gap-3">
                               <span className="text-sm text-white/70 w-32 truncate font-semibold">
-                                {ev.judgeName}
+                                {ev.judgeAvatar ? `${ev.judgeAvatar} ` : ''}{ev.judgeName}
                               </span>
                               <div className="flex-1 h-3 bg-white/10 rounded-full overflow-hidden">
                                 <motion.div
@@ -716,13 +716,13 @@ export default function Round() {
                         </details>
                       )}
 
-                      {evaluation.evaluations?.map((ev: { judgeName: string; score: number; feedback: string; strengths: string[]; improvements: string[]; promptUsed?: string }, i: number) => (
+                      {evaluation.evaluations?.map((ev: { judgeName: string; judgeAvatar?: string; score: number; feedback: string; strengths: string[]; improvements: string[]; promptUsed?: string }, i: number) => (
                         <div key={i} className="mb-4 p-4 bg-white/5 rounded-xl">
                           <div className="flex items-center gap-2 mb-2">
                             <MessageSquare className={`w-4 h-4 ${
                               i === 0 ? 'text-kahoot-red' : i === 1 ? 'text-kahoot-blue' : 'text-kahoot-green'
                             }`} />
-                            <span className="font-bold">{ev.judgeName}</span>
+                            <span className="font-bold">{ev.judgeAvatar ? `${ev.judgeAvatar} ` : ''}{ev.judgeName}</span>
                           </div>
                           <p className="text-white/80 text-sm mb-3 font-medium">{ev.feedback}</p>
 

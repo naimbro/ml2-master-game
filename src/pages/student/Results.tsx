@@ -13,6 +13,7 @@ import { useRoundDuels } from '../../hooks/useRoundDuels';
 
 interface JudgeEvaluation {
   judgeName: string;
+  judgeAvatar?: string;
   score: number;
   feedback: string;
   strengths: string[];
@@ -626,7 +627,7 @@ export default function Results() {
                 {userEvaluation.evaluations?.map((evaluation: JudgeEvaluation, i: number) => (
                   <div key={i} className="flex items-center gap-3">
                     <span className="text-sm text-white/70 w-32 truncate font-semibold">
-                      {evaluation.judgeName}
+                      {evaluation.judgeAvatar ? `${evaluation.judgeAvatar} ` : ''}{evaluation.judgeName}
                     </span>
                     <div className="flex-1 h-3 bg-white/10 rounded-full overflow-hidden">
                       <motion.div
@@ -671,7 +672,7 @@ export default function Results() {
                   <MessageSquare className={`w-4 h-4 ${
                     i === 0 ? 'text-kahoot-red' : i === 1 ? 'text-kahoot-blue' : 'text-kahoot-green'
                   }`} />
-                  <span className="font-bold">{evaluation.judgeName}</span>
+                  <span className="font-bold">{evaluation.judgeAvatar ? `${evaluation.judgeAvatar} ` : ''}{evaluation.judgeName}</span>
                 </div>
                 <p className="text-white/80 text-sm mb-3 font-medium">{evaluation.feedback}</p>
 

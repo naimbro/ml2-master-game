@@ -76,6 +76,7 @@ interface JudgeWeight {
 interface Evaluation {
   judgeId: string;
   judgeName: string;
+  judgeAvatar?: string;
   /** Computed in code from `dimensionScores` + penalties. Not emitted by the model. */
   score: number;
   feedback: string;
@@ -478,6 +479,7 @@ Manten tu respuesta concisa (max 120 palabras de feedback + bloque de senales).`
     const evaluation: Evaluation = {
       judgeId: judge.judgeId,
       judgeName: judge.name,
+      judgeAvatar: judge.avatar,
       score,
       failed,
       provider,
@@ -505,6 +507,7 @@ Manten tu respuesta concisa (max 120 palabras de feedback + bloque de senales).`
     return {
       judgeId: judge.judgeId,
       judgeName: judge.name,
+      judgeAvatar: judge.avatar,
       score: 0,
       failed: true,
       provider,

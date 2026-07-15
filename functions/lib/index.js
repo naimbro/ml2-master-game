@@ -388,6 +388,7 @@ Manten tu respuesta concisa (max 120 palabras de feedback + bloque de senales).`
         const evaluation = {
             judgeId: judge.judgeId,
             judgeName: judge.name,
+            judgeAvatar: judge.avatar,
             score,
             failed,
             provider,
@@ -414,6 +415,7 @@ Manten tu respuesta concisa (max 120 palabras de feedback + bloque de senales).`
         return {
             judgeId: judge.judgeId,
             judgeName: judge.name,
+            judgeAvatar: judge.avatar,
             score: 0,
             failed: true,
             provider,

@@ -79,6 +79,7 @@ export interface SubmissionEvaluation {
 export interface JudgeEvaluation {
   judgeId: string;
   judgeName: string;
+  judgeAvatar?: string;
   score: number;
   feedback: string;
   strengths: string[];
