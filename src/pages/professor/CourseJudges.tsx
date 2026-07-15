@@ -26,7 +26,9 @@ export default function CourseJudges() {
 
   useEffect(() => {
     if (!courseId) return;
-    if (!getCourse(courseId)) {
+    const builtin = getCourse(courseId);
+    setCourse(builtin ?? null);
+    if (!builtin) {
       fetchCourse(courseId).then(setCourse).catch((err) => console.error('Error loading course:', err));
     }
     Promise.all([fetchCourseJudges(courseId), fetchJudgeOverrides(courseId)])
@@ -141,16 +143,18 @@ export default function CourseJudges() {
                       </button>
                     </div>
 
-                    <label className="block text-sm text-white/50 mb-1">Personalidad</label>
+                    <label htmlFor={`personality-${j.judgeId}`} className="block text-sm text-white/50 mb-1">Personalidad</label>
                     <textarea
+                      id={`personality-${j.judgeId}`}
                       value={draft[j.judgeId]?.personality ?? ''}
                       onChange={(e) => setField(j.judgeId, 'personality', e.target.value)}
                       rows={4}
                       className="w-full bg-white/10 rounded-lg px-3 py-2 mb-4 text-sm focus:ring-2 focus:ring-cyan-400 outline-none resize-y"
                     />
 
-                    <label className="block text-sm text-white/50 mb-1">Estilo de evaluación</label>
+                    <label htmlFor={`evaluationStyle-${j.judgeId}`} className="block text-sm text-white/50 mb-1">Estilo de evaluación</label>
                     <textarea
+                      id={`evaluationStyle-${j.judgeId}`}
                       value={draft[j.judgeId]?.evaluationStyle ?? ''}
                       onChange={(e) => setField(j.judgeId, 'evaluationStyle', e.target.value)}
                       rows={4}
