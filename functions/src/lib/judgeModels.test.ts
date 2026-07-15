@@ -142,7 +142,32 @@ describe('callJudgeModel dispatch', () => {
     expect(arg.system).toBe('sys');
     expect(arg.temperature).toBeUndefined();
     expect('thinking' in arg).toBe(false);
-    expect(arg.messages).toEqual([{ role: 'user', content: 'usr' }]);
+    expect(arg.messages[0].role).toBe('user');
+    expect(arg.messages[0].content).toMatch(/^usr/); // user prompt + JSON-safety suffix
+  });
+
+  it('retries the Anthropic call once when the first response is invalid JSON', async () => {
+    // Claude has no forced-JSON mode; an unescaped quote can break the first reply.
+    const create = vi.fn()
+      .mockResolvedValueOnce({ content: [{ type: 'text', text: '{"analysis":"dijo "hola" sin"}' }] }) // invalid JSON
+      .mockResolvedValueOnce({ content: [{ type: 'text', text: '{"dimensionScores":{"d":80}}' }] }); // valid on retry
+    const out = await callJudgeModel(
+      { anthropic: { messages: { create } } },
+      { ...base, provider: 'anthropic', model: 'claude-sonnet-5' }
+    );
+    expect(out).toEqual({ dimensionScores: { d: 80 } });
+    expect(create).toHaveBeenCalledTimes(2);
+    // The repair prompt is only on the second call.
+    expect(create.mock.calls[0][0].messages[0].content).not.toMatch(/anterior NO era JSON/);
+    expect(create.mock.calls[1][0].messages[0].content).toMatch(/anterior NO era JSON/);
+  });
+
+  it('throws if Anthropic returns invalid JSON twice (judge then fails gracefully)', async () => {
+    const create = vi.fn().mockResolvedValue({ content: [{ type: 'text', text: 'not json' }] });
+    await expect(
+      callJudgeModel({ anthropic: { messages: { create } } }, { ...base, provider: 'anthropic', model: 'claude-sonnet-5' })
+    ).rejects.toThrow();
+    expect(create).toHaveBeenCalledTimes(2);
   });
 
   it('concatenates multiple Anthropic text blocks', async () => {

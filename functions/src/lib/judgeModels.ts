@@ -197,23 +197,36 @@ export async function callJudgeModel(
 
   if (provider === 'anthropic') {
     if (!clients.anthropic) throw new Error('anthropic client not provided');
-    // No `temperature` field: opus-4-8/4.7 reject it with a 400. No `thinking`
-    // either — the prompt already asks for analysis-first JSON, so a single
-    // forward pass keeps this judge comparable to the other two providers and
-    // fast enough for the live-game window.
-    const message = await clients.anthropic.messages.create({
-      model,
-      max_tokens: maxTokens,
-      system: systemPrompt,
-      messages: [{ role: 'user', content: userPrompt }],
-    });
-    const text = (message.content || [])
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .filter((b: any) => b.type === 'text')
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .map((b: any) => b.text)
-      .join('');
-    return parseJudgeJson(text);
+    // Unlike OpenAI (json_object) and Gemini (application/json), Claude has no
+    // forced-JSON response mode, so it can emit INVALID JSON — most often an
+    // unescaped double-quote when it quotes the student's text inside a string
+    // value (observed live: a valid answer failed at char 684). We instruct it to
+    // escape quotes, and retry once with an explicit repair prompt on a parse
+    // failure before giving up (the retry only fires on the rare bad response).
+    // No `temperature` (sonnet-5/opus reject it with 400) and no `thinking` — the
+    // analysis-first JSON already carries the reasoning, keeping this judge
+    // single-pass like the other two.
+    const JSON_SAFETY =
+      '\n\nIMPORTANTE: devuelve UN solo objeto JSON válido y parseable. Escapa toda comilla doble interna como \\" y no incluyas saltos de linea sin escapar dentro de los valores de texto.';
+    const runClaude = async (repair: boolean): Promise<string> => {
+      const message = await clients.anthropic.messages.create({
+        model,
+        max_tokens: maxTokens,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: userPrompt + JSON_SAFETY + (repair ? ' Tu respuesta anterior NO era JSON parseable; corrigela.' : '') }],
+      });
+      return (message.content || [])
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .filter((b: any) => b.type === 'text')
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .map((b: any) => b.text)
+        .join('');
+    };
+    try {
+      return parseJudgeJson(await runClaude(false));
+    } catch {
+      return parseJudgeJson(await runClaude(true));
+    }
   }
 
   if (provider === 'gemini') {
