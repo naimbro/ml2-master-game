@@ -55,6 +55,7 @@ export interface JudgesConfig {
 
 export interface Judge {
   judgeId: string;
+  courseId?: string;
   name: string;
   avatar: string;
   personality: string;
