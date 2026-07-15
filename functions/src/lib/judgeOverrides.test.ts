@@ -53,6 +53,22 @@ describe('applyJudgeOverrides', () => {
     expect(out[0].avatar).toBe('🔬');
   });
 
+  it('ignores non-string values on whitelisted fields (number/null/array)', () => {
+    const out = applyJudgeOverrides(baseline, {
+      technical_expert: { name: 42, avatar: null, personality: ['x'] } as never,
+    });
+    expect(out[0].name).toBe('Dr. Tech');
+    expect(out[0].avatar).toBe('🔬');
+    expect(out[0].personality).toBe('baseline personality');
+  });
+
+  it('does not mutate the input judges', () => {
+    const input = [{ ...baseline[0] }];
+    const snapshot = JSON.parse(JSON.stringify(input));
+    applyJudgeOverrides(input, { technical_expert: { name: 'Changed' } });
+    expect(input).toEqual(snapshot);
+  });
+
   it('ignores metadata keys like updatedAt/updatedBy without crashing', () => {
     const overrides = { updatedAt: 123, updatedBy: 'uid', technical_expert: { name: 'N' } } as never;
     const out = applyJudgeOverrides(baseline, overrides);

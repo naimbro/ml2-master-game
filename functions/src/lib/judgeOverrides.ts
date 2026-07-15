@@ -20,7 +20,7 @@ export function applyJudgeOverrides<T extends { judgeId: string }>(
     const ov = overrides[judge.judgeId];
     if (!ov || typeof ov !== 'object') return judge;
     const source = ov as Record<string, unknown>;
-    const picked: Partial<Record<JudgeOverrideField, string>> = {};
+    const picked: JudgeOverride = {};
     for (const field of JUDGE_OVERRIDE_FIELDS) {
       const value = source[field];
       if (typeof value === 'string' && value.trim() !== '') {
