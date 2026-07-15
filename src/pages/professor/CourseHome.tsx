@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Plus, Play, Pencil, FileText } from 'lucide-react';
+import { ArrowLeft, Plus, Play, Pencil, FileText, Users } from 'lucide-react';
 import type { Course } from '../../lib/courses';
 import { fetchCourse, fetchSessions, type SessionWithStatus } from '../../lib/dynamicCourses';
 
@@ -100,6 +100,13 @@ export default function CourseHome() {
             >
               <Plus className="w-5 h-5" />
               Nueva sesión con asistente IA
+            </Link>
+            <Link
+              to={`/professor/courses/${courseId}/judges`}
+              className="w-full py-4 text-lg flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 rounded-xl transition-colors font-semibold"
+            >
+              <Users className="w-5 h-5" />
+              Jueces del curso
             </Link>
             {readyCount > 0 && (
               <Link

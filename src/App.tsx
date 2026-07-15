@@ -17,6 +17,7 @@ import RequestAccess from './pages/professor/RequestAccess';
 import AdminPanel from './pages/professor/AdminPanel';
 import CourseForm from './pages/professor/CourseForm';
 import CourseHome from './pages/professor/CourseHome';
+import CourseJudges from './pages/professor/CourseJudges';
 import SessionBuilder from './pages/professor/SessionBuilder';
 import SessionEditor from './pages/professor/SessionEditor';
 
@@ -119,6 +120,10 @@ function AppRoutes() {
       <Route
         path="/professor/courses/:courseId/sessions/:sessionId/edit"
         element={user ? <ProfessorGate><SessionEditor /></ProfessorGate> : <Navigate to="/" replace />}
+      />
+      <Route
+        path="/professor/courses/:courseId/judges"
+        element={user ? <ProfessorGate><CourseJudges /></ProfessorGate> : <Navigate to="/" replace />}
       />
       <Route
         path="/professor/report/:gameCode"

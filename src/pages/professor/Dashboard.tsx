@@ -9,6 +9,7 @@ import {
   GraduationCap,
   Plus,
   ShieldCheck,
+  Users,
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { useProfessor } from '../../hooks/useProfessor';
@@ -88,26 +89,33 @@ export default function Dashboard() {
             {builtinCourses.map((course) => {
               const sessionCount = getSessionsForCourse(course.id).length;
               return (
-                <Link
-                  key={course.id}
-                  to={`/professor/courses/${course.id}/create`}
-                  className="dramatic-card p-6 hover:scale-[1.02] transition-transform cursor-pointer group"
-                >
-                  <div className={`w-14 h-14 ${course.iconClass} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
+                <div key={course.id} className="dramatic-card p-6 group">
+                  <div className={`w-14 h-14 ${course.iconClass} rounded-xl flex items-center justify-center mb-4`}>
                     <BookOpen className="w-7 h-7 text-white" />
                   </div>
                   <h3 className="text-xl font-bold mb-1">{course.name}</h3>
                   <p className="text-white/60 text-sm mb-4">{course.tagline}</p>
-                  <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-center justify-between text-sm mb-4">
                     <span className="text-white/50">
                       {sessionCount} {sessionCount === 1 ? 'sesion' : 'sesiones'}
                     </span>
-                    <span className="text-cyan-400 flex items-center gap-1 font-semibold">
-                      Crear juego
-                      <ChevronRight className="w-4 h-4" />
-                    </span>
                   </div>
-                </Link>
+                  <div className="flex gap-2">
+                    <Link
+                      to={`/professor/courses/${course.id}/create`}
+                      className="flex-1 py-2 text-center bg-white/10 hover:bg-white/20 rounded-lg transition-colors font-semibold text-sm"
+                    >
+                      Crear juego
+                    </Link>
+                    <Link
+                      to={`/professor/courses/${course.id}/judges`}
+                      className="flex items-center gap-1 px-3 py-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors text-sm"
+                    >
+                      <Users className="w-4 h-4" />
+                      Jueces
+                    </Link>
+                  </div>
+                </div>
               );
             })}
 
