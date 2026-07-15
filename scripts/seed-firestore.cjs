@@ -41,7 +41,7 @@ function loadCourseJudges() {
         );
       }
       seenIds.add(judge.judgeId);
-      allJudges.push(judge);
+      allJudges.push({ ...judge, courseId });
     }
     Object.assign(allWeights, data.defaultWeights || {});
     console.log(`  loaded ${data.judges?.length || 0} judges from ${courseId}`);
@@ -75,4 +75,8 @@ async function main() {
   }
 }
 
-main();
+if (require.main === module) {
+  main();
+} else {
+  module.exports = { loadCourseJudges };
+}
