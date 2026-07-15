@@ -112,5 +112,19 @@ service cloud.firestore {
       allow read: if isAuthenticated();
       allow write: if false;
     }
+
+    // Seeded judge baseline (personas) — readable by any authenticated professor so the
+    // course-judges editor can show current personas. Written only by the seed (admin SDK).
+    match /config/{docId} {
+      allow read: if isAuthenticated();
+      allow write: if false;
+    }
+
+    // Per-course judge persona overrides (name/avatar/personality/evaluationStyle).
+    // Course-wide by design: any approved professor may edit a course's judges.
+    match /judgeOverrides/{courseId} {
+      allow read: if isAuthenticated();
+      allow write: if isApprovedProfessor();
+    }
   }
 }
