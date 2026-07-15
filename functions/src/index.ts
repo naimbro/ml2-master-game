@@ -23,6 +23,7 @@ import {
   buildGenerationPrompt,
   type SessionDraftInput,
 } from './lib/sessionDraft';
+import { applyJudgeOverrides, type JudgeOverrides } from './lib/judgeOverrides';
 
 admin.initializeApp();
 const db = admin.firestore();
@@ -174,6 +175,17 @@ async function getGemini() {
   }
   const { GoogleGenAI } = await getGenaiModule();
   return new GoogleGenAI({ apiKey });
+}
+
+/**
+ * Per-course judge persona overrides (name/avatar/personality/evaluationStyle),
+ * written live from the frontend and layered over the seeded config/judges baseline.
+ * Returns null when the course has no overrides (or the game predates courseId).
+ */
+async function loadJudgeOverrides(courseId: string | undefined): Promise<JudgeOverrides | null> {
+  if (!courseId) return null;
+  const snap = await db.collection('judgeOverrides').doc(courseId).get();
+  return snap.exists ? (snap.data() as JudgeOverrides) : null;
 }
 
 /**
@@ -568,9 +580,11 @@ export const evaluateSubmission = functions
           if (!j) console.warn(`Judge not found in config/judges`);
           return !!j;
         });
-      const clients = await buildJudgeClients(activeJudges);
+      const judgeOverrides = await loadJudgeOverrides(game.courseId);
+      const mergedJudges = applyJudgeOverrides(activeJudges, judgeOverrides);
+      const clients = await buildJudgeClients(mergedJudges);
 
-      const evaluationPromises = activeJudges.map((judge) =>
+      const evaluationPromises = mergedJudges.map((judge) =>
         evaluateWithJudge(
           clients, judge, scenario, submission.response,
           sessionConfig, game.knowledgeBase || '', game.referenceDocs || '',
@@ -674,12 +688,14 @@ export const processRoundEnd = functions
       const activeJudges = judgeWeights
         .map((jw) => judgesConfig?.judges?.find((j: Judge) => j.judgeId === jw.judgeId) as Judge | undefined)
         .filter((j): j is Judge => !!j);
-      const clients = await buildJudgeClients(activeJudges);
+      const judgeOverrides = await loadJudgeOverrides(game.courseId);
+      const mergedJudges = applyJudgeOverrides(activeJudges, judgeOverrides);
+      const clients = await buildJudgeClients(mergedJudges);
 
       for (const doc of unevaluatedDocs) {
         const submission = doc.data();
 
-        const evaluationPromises = activeJudges.map((judge) =>
+        const evaluationPromises = mergedJudges.map((judge) =>
           evaluateWithJudge(
             clients, judge, scenario, submission.response,
             sessionConfig, game.knowledgeBase || '', game.referenceDocs || '',

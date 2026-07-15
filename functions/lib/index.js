@@ -43,6 +43,7 @@ const parse_1 = require("./lib/parse");
 const scoring_1 = require("./lib/scoring");
 const judgeModels_1 = require("./lib/judgeModels");
 const sessionDraft_1 = require("./lib/sessionDraft");
+const judgeOverrides_1 = require("./lib/judgeOverrides");
 admin.initializeApp();
 const db = admin.firestore();
 // Lazy-load SDKs to avoid initialization timeout (they load only when a judge of
@@ -130,6 +131,17 @@ async function getGemini() {
     }
     const { GoogleGenAI } = await getGenaiModule();
     return new GoogleGenAI({ apiKey });
+}
+/**
+ * Per-course judge persona overrides (name/avatar/personality/evaluationStyle),
+ * written live from the frontend and layered over the seeded config/judges baseline.
+ * Returns null when the course has no overrides (or the game predates courseId).
+ */
+async function loadJudgeOverrides(courseId) {
+    if (!courseId)
+        return null;
+    const snap = await db.collection('judgeOverrides').doc(courseId).get();
+    return snap.exists ? snap.data() : null;
 }
 /**
  * Construct exactly the provider clients a set of judges needs.
@@ -464,8 +476,10 @@ exports.evaluateSubmission = functions
                 console.warn(`Judge not found in config/judges`);
             return !!j;
         });
-        const clients = await buildJudgeClients(activeJudges);
-        const evaluationPromises = activeJudges.map((judge) => evaluateWithJudge(clients, judge, scenario, submission.response, sessionConfig, game.knowledgeBase || '', game.referenceDocs || '', isRanked));
+        const judgeOverrides = await loadJudgeOverrides(game.courseId);
+        const mergedJudges = (0, judgeOverrides_1.applyJudgeOverrides)(activeJudges, judgeOverrides);
+        const clients = await buildJudgeClients(mergedJudges);
+        const evaluationPromises = mergedJudges.map((judge) => evaluateWithJudge(clients, judge, scenario, submission.response, sessionConfig, game.knowledgeBase || '', game.referenceDocs || '', isRanked));
         const evaluations = (await Promise.all(evaluationPromises)).filter(Boolean);
         const { finalScore, conceptsIdentified, failedJudges } = aggregateEvaluations(evaluations, judgeWeights);
         if (failedJudges.length > 0) {
@@ -548,10 +562,12 @@ exports.processRoundEnd = functions
         const activeJudges = judgeWeights
             .map((jw) => { var _a; return (_a = judgesConfig === null || judgesConfig === void 0 ? void 0 : judgesConfig.judges) === null || _a === void 0 ? void 0 : _a.find((j) => j.judgeId === jw.judgeId); })
             .filter((j) => !!j);
-        const clients = await buildJudgeClients(activeJudges);
+        const judgeOverrides = await loadJudgeOverrides(game.courseId);
+        const mergedJudges = (0, judgeOverrides_1.applyJudgeOverrides)(activeJudges, judgeOverrides);
+        const clients = await buildJudgeClients(mergedJudges);
         for (const doc of unevaluatedDocs) {
             const submission = doc.data();
-            const evaluationPromises = activeJudges.map((judge) => evaluateWithJudge(clients, judge, scenario, submission.response, sessionConfig, game.knowledgeBase || '', game.referenceDocs || '', isRanked));
+            const evaluationPromises = mergedJudges.map((judge) => evaluateWithJudge(clients, judge, scenario, submission.response, sessionConfig, game.knowledgeBase || '', game.referenceDocs || '', isRanked));
             const evaluations = (await Promise.all(evaluationPromises)).filter(Boolean);
             const { finalScore, conceptsIdentified, failedJudges } = aggregateEvaluations(evaluations, judgeWeights);
             if (failedJudges.length > 0) {
