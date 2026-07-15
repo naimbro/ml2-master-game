@@ -184,8 +184,13 @@ async function getGemini() {
  */
 async function loadJudgeOverrides(courseId: string | undefined): Promise<JudgeOverrides | null> {
   if (!courseId) return null;
-  const snap = await db.collection('judgeOverrides').doc(courseId).get();
-  return snap.exists ? (snap.data() as JudgeOverrides) : null;
+  try {
+    const snap = await db.collection('judgeOverrides').doc(courseId).get();
+    return snap.exists ? (snap.data() as JudgeOverrides) : null;
+  } catch (err) {
+    console.warn(`Failed to load judgeOverrides for course ${courseId}; using baseline judges.`, err);
+    return null;
+  }
 }
 
 /**

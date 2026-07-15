@@ -140,8 +140,14 @@ async function getGemini() {
 async function loadJudgeOverrides(courseId) {
     if (!courseId)
         return null;
-    const snap = await db.collection('judgeOverrides').doc(courseId).get();
-    return snap.exists ? snap.data() : null;
+    try {
+        const snap = await db.collection('judgeOverrides').doc(courseId).get();
+        return snap.exists ? snap.data() : null;
+    }
+    catch (err) {
+        console.warn(`Failed to load judgeOverrides for course ${courseId}; using baseline judges.`, err);
+        return null;
+    }
 }
 /**
  * Construct exactly the provider clients a set of judges needs.
