@@ -77,5 +77,98 @@
     "Metricas tecnicas para problemas politicos.",
     "Confunde anonimato con privacidad o transparencia con accountability.",
     "Citas como ornamento sin argumentacion."
-  ]
+  ],
+  "penalties": [
+    {
+      "id": "solucionismo_tecnologico",
+      "description": "Solucionismo tecnologico: si propone IA como si por si sola resolviera el problema, sin actor ni mecanismo, no puede superar 60 en Identificacion del Dilema ni en Mapeo de Actores.",
+      "effect": {
+        "type": "cap",
+        "value": 60,
+        "dimensions": [
+          "process_structuring",
+          "institutional_realism"
+        ]
+      }
+    },
+    {
+      "id": "neutralidad_tecnica_ingenua",
+      "description": "Neutralidad tecnica ingenua: si trata la IA como neutral sin valores ni sesgos, no puede superar 60 en Mapeo de Actores.",
+      "effect": {
+        "type": "cap",
+        "value": 60,
+        "dimensions": [
+          "institutional_realism"
+        ]
+      }
+    },
+    {
+      "id": "legalidad_equivale_a_legitimidad",
+      "description": "Legalidad equivale a legitimidad: si asume legitimidad por legalidad, no puede superar 60 en Identificacion del Dilema.",
+      "effect": {
+        "type": "cap",
+        "value": 60,
+        "dimensions": [
+          "process_structuring"
+        ]
+      }
+    },
+    {
+      "id": "ignorar_afectados_no_presentes",
+      "description": "Ignorar afectados no presentes: si no considera grupos vulnerables o sin voz, no puede superar 60 en Mapeo de Actores.",
+      "effect": {
+        "type": "cap",
+        "value": 60,
+        "dimensions": [
+          "institutional_realism"
+        ]
+      }
+    },
+    {
+      "id": "falsa_precision",
+      "description": "Falsa precision: si inventa cifras o capacidades no entregadas, baja 20 en Claridad y no puede superar 60 en Mapeo de Actores.",
+      "effect": {
+        "type": "deduct",
+        "value": 20,
+        "dimensions": [
+          "precision_clarity"
+        ]
+      }
+    },
+    {
+      "id": "autoritarismo_eficiente",
+      "description": "Autoritarismo eficiente: si justifica vigilancia o coercion solo por eficiencia, no puede superar 60 en Identificacion del Dilema ni en Mapeo de Actores.",
+      "effect": {
+        "type": "cap",
+        "value": 60,
+        "dimensions": [
+          "process_structuring",
+          "institutional_realism"
+        ]
+      }
+    },
+    {
+      "id": "accountability_decorativa",
+      "description": "Accountability decorativa: transparencia sin quien-ante-quien-cuando-consecuencia, no puede superar 60 en Mapeo de Actores.",
+      "effect": {
+        "type": "cap",
+        "value": 60,
+        "dimensions": [
+          "institutional_realism"
+        ]
+      }
+    },
+    {
+      "id": "tags_solicitados_ausentes",
+      "description": "Tags solicitados ausentes: si requiredTags no aparecen literalmente, baja Claridad.",
+      "effect": {
+        "type": "deduct",
+        "value": 20,
+        "dimensions": [
+          "precision_clarity"
+        ]
+      }
+    }
+  ],
+  "_penalties_note": "Formato estructurado: el juez reporta ids en 'penaltiesApplied' y el motor (functions/src/lib/scoring.ts) aplica el 'effect'. Una penalizacion SIN 'effect' se le muestra al juez pero NO mueve el score. 'globalPenalties' queda como fallback legacy. Pendiente: medir cuales se gatillan de verdad y bajar de 8 a <=3."
 }

@@ -5,7 +5,14 @@
   "sessionId": "REPLACE_WITH_SESSION_ID",
   "globalInstructions": "Evalua SOLO lo que esta escrito. No asumas informacion faltante. Este es el curso 'IA y Democracia' del Minor en IA de la UAI, edicion 2026. Los estudiantes son universitarios de pregrado avanzado en su primera incursion sistematica al cruce IA/democracia. La evaluacion premia: identificacion de tensiones reales, mapeo concreto de actores y asimetrias, propuesta de mecanismos institucionales operacionales, y claridad anti-vaga. Penaliza: solucionismo tecnologico, neutralidad tecnica ingenua, confundir legalidad con legitimidad, accountability decorativa, autoritarismo eficiente, y falsa precision. Usa el campo 'judgeFocus' del escenario como ancla principal para esta ronda. Para escenarios con 'requiredTags' declarados, verifica que la respuesta los use literalmente.",
   "scoring": {
-    "scaleLevels": [100, 80, 60, 40, 20, 0],
+    "scaleLevels": [
+      100,
+      80,
+      60,
+      40,
+      20,
+      0
+    ],
     "instructions": "Evalua SOLO lo que esta escrito. Premia identificacion de tensiones reales, mapeo concreto de actores, mecanismos operacionales de rendicion de cuentas, y honestidad sobre supuestos. Penaliza vaguedad, solucionismo tecnologico y accountability decorativa. Una respuesta corta y bien tagueada vale mas que una larga y vaga."
   },
   "dimensions": [
@@ -36,7 +43,7 @@
     {
       "id": "precision_clarity",
       "name": "Claridad, Estructura, Uso de Tags y Anti-vaguedad",
-      "weight": 0.20,
+      "weight": 0.2,
       "description": "Respuestas concretas, estructuradas, sin buzzwords. Uso correcto de los tags solicitados. Capacidad de tomar posicion en vez de responder 'depende'. Falsa precision (cifras inventadas, capacidades exageradas) penaliza fuerte.",
       "level_100": "Lenguaje concreto, sin buzzwords vacias. Tags solicitados aparecen literalmente. Maximo en torno a 12 lineas bien usadas. Toma posicion clara incluso bajo incertidumbre. No inventa datos.",
       "level_80": "Mayormente claro; 1-2 frases vagas, o un tag faltante, o un dato no respaldado.",
@@ -74,5 +81,98 @@
     "Propone regulacion sin considerar capacidad institucional para implementarla ni riesgo de captura.",
     "Confunde anonimato con privacidad, transparencia con accountability, o consulta con deliberacion.",
     "Cita autores como ornamento sin que la cita aporte argumentativamente."
-  ]
+  ],
+  "penalties": [
+    {
+      "id": "solucionismo_tecnologico",
+      "description": "Solucionismo tecnologico: si propone una herramienta de IA como si por si sola resolviera un problema politico o institucional, sin actor, mecanismo de adopcion ni condiciones, no puede superar 60 en Identificacion del Dilema ni en Mapeo de Actores.",
+      "effect": {
+        "type": "cap",
+        "value": 60,
+        "dimensions": [
+          "process_structuring",
+          "institutional_realism"
+        ]
+      }
+    },
+    {
+      "id": "neutralidad_tecnica_ingenua",
+      "description": "Neutralidad tecnica ingenua: si trata el sistema de IA como neutral, sin valores ni sesgos ni intereses, no puede superar 60 en Mapeo de Actores.",
+      "effect": {
+        "type": "cap",
+        "value": 60,
+        "dimensions": [
+          "institutional_realism"
+        ]
+      }
+    },
+    {
+      "id": "legalidad_equivale_a_legitimidad",
+      "description": "Legalidad equivale a legitimidad: si asume que algo es legitimo solo porque es legal, sin preguntar a quien beneficia ni si los afectados tuvieron voz, no puede superar 60 en Identificacion del Dilema.",
+      "effect": {
+        "type": "cap",
+        "value": 60,
+        "dimensions": [
+          "process_structuring"
+        ]
+      }
+    },
+    {
+      "id": "ignorar_afectados_no_presentes",
+      "description": "Ignorar afectados no presentes: si no considera grupos vulnerables o sin voz cuando el escenario los implica, no puede superar 60 en Mapeo de Actores.",
+      "effect": {
+        "type": "cap",
+        "value": 60,
+        "dimensions": [
+          "institutional_realism"
+        ]
+      }
+    },
+    {
+      "id": "falsa_precision",
+      "description": "Falsa precision: si inventa cifras, porcentajes o capacidades tecnicas no entregadas en el escenario, baja 20 puntos en Claridad y no puede superar 60 en Mapeo de Actores.",
+      "effect": {
+        "type": "deduct",
+        "value": 20,
+        "dimensions": [
+          "precision_clarity"
+        ]
+      }
+    },
+    {
+      "id": "autoritarismo_eficiente",
+      "description": "Autoritarismo eficiente: si justifica vigilancia, censura o automatizacion coercitiva solo con el argumento de que 'funciona', no puede superar 60 en Identificacion del Dilema ni en Mapeo de Actores.",
+      "effect": {
+        "type": "cap",
+        "value": 60,
+        "dimensions": [
+          "process_structuring",
+          "institutional_realism"
+        ]
+      }
+    },
+    {
+      "id": "accountability_decorativa",
+      "description": "Accountability decorativa: si menciona transparencia o supervision sin nombrar quien-ante-quien-cuando-consecuencia, no puede superar 60 en Mapeo de Actores.",
+      "effect": {
+        "type": "cap",
+        "value": 60,
+        "dimensions": [
+          "institutional_realism"
+        ]
+      }
+    },
+    {
+      "id": "tags_solicitados_ausentes",
+      "description": "Tags solicitados ausentes: si el escenario lista 'requiredTags' y la respuesta no los usa o los reemplaza por estructura propia, baja Claridad.",
+      "effect": {
+        "type": "deduct",
+        "value": 20,
+        "dimensions": [
+          "precision_clarity"
+        ]
+      }
+    }
+  ],
+  "_penalties_note": "Formato estructurado: el juez reporta ids en 'penaltiesApplied' y el motor (functions/src/lib/scoring.ts) aplica el 'effect'. Una penalizacion SIN 'effect' se le muestra al juez pero NO mueve el score. 'globalPenalties' queda como fallback legacy. Pendiente: medir cuales se gatillan de verdad y bajar de 8 a <=3."
 }

@@ -5,6 +5,19 @@ import { runSwissComparisons, buildComparePrompt, type PairwisePlayer } from './
 import { ranksDescending } from './lib/stats';
 import { coerceScore } from './lib/parse';
 import {
+  computeJudgeScore,
+  loadPenalties,
+  resolveDimensionWeights,
+  type AppliedPenalty,
+  type PenaltyDef,
+} from './lib/scoring';
+import {
+  callJudgeModel,
+  resolveProvider,
+  resolveModel,
+  type JudgeModelClients,
+} from './lib/judgeModels';
+import {
   validateDraftInput,
   validateGeneratedDraft,
   buildGenerationPrompt,
@@ -14,13 +27,30 @@ import {
 admin.initializeApp();
 const db = admin.firestore();
 
-// Lazy-load OpenAI to avoid initialization timeout
+// Lazy-load SDKs to avoid initialization timeout (they load only when a judge of
+// that provider actually runs).
 let openaiModule: typeof import('openai') | null = null;
 async function getOpenAIModule() {
   if (!openaiModule) {
     openaiModule = await import('openai');
   }
   return openaiModule;
+}
+
+let anthropicModule: typeof import('@anthropic-ai/sdk') | null = null;
+async function getAnthropicModule() {
+  if (!anthropicModule) {
+    anthropicModule = await import('@anthropic-ai/sdk');
+  }
+  return anthropicModule;
+}
+
+let genaiModule: typeof import('@google/genai') | null = null;
+async function getGenaiModule() {
+  if (!genaiModule) {
+    genaiModule = await import('@google/genai');
+  }
+  return genaiModule;
 }
 
 // Types
@@ -31,6 +61,10 @@ interface Judge {
   personality: string;
   evaluationStyle: string;
   promptTemplate: string;
+  /** 'openai' | 'anthropic' | 'gemini'. Falls back to the per-judgeId map. */
+  provider?: string;
+  /** Model id override; falls back to the provider default. */
+  model?: string;
 }
 
 interface JudgeWeight {
@@ -41,6 +75,7 @@ interface JudgeWeight {
 interface Evaluation {
   judgeId: string;
   judgeName: string;
+  /** Computed in code from `dimensionScores` + penalties. Not emitted by the model. */
   score: number;
   feedback: string;
   strengths: string[];
@@ -48,6 +83,15 @@ interface Evaluation {
   rawResponse: Record<string, unknown>;
   parsedSignals?: Record<string, unknown>;
   promptUsed?: string;
+  /** True when this judge errored or returned an unusable score. Excluded from the mean. */
+  failed?: boolean;
+  /** Per-dimension anchors after penalties. Empty on the legacy flat-score path. */
+  dimensionScores?: Record<string, number>;
+  /** What each penalty actually did, so a score can be explained to a student. */
+  appliedPenalties?: AppliedPenalty[];
+  /** Which model backed this judge — recorded so reports can show panel diversity. */
+  provider?: string;
+  model?: string;
 }
 
 interface SubmissionEvaluation {
@@ -55,6 +99,53 @@ interface SubmissionEvaluation {
   evaluations: Evaluation[];
   conceptsIdentified: string[];
   processedAt: admin.firestore.Timestamp;
+  /** judgeIds that failed. Non-empty means finalScore rests on fewer judges than configured. */
+  failedJudges?: string[];
+}
+
+/**
+ * Combine per-judge scores into a round score.
+ *
+ * Weights are looked up BY judgeId, not by array position: `evaluations` may be
+ * shorter than `judgeWeights` (a judge missing from config/judges is filtered
+ * out), and positional lookup silently shifts every subsequent weight onto the
+ * wrong judge.
+ *
+ * Failed judges are dropped rather than scored — a judge that times out used to
+ * contribute a neutral 50, which quietly dragged strong answers down and weak
+ * ones up. `totalWeight` renormalizes over whoever actually answered.
+ */
+function aggregateEvaluations(
+  evaluations: Evaluation[],
+  judgeWeights: JudgeWeight[]
+): { finalScore: number; conceptsIdentified: string[]; failedJudges: string[] } {
+  const weightById = new Map(judgeWeights.map((jw) => [jw.judgeId, jw.weight]));
+  const conceptsIdentified: string[] = [];
+  const failedJudges: string[] = [];
+  let totalWeight = 0;
+  let weightedScore = 0;
+
+  for (const evaluation of evaluations) {
+    const raw = evaluation.rawResponse as Record<string, unknown> | undefined;
+    if (raw && Array.isArray(raw.conceptsIdentified)) {
+      conceptsIdentified.push(...(raw.conceptsIdentified as string[]));
+    }
+
+    if (evaluation.failed || !Number.isFinite(evaluation.score)) {
+      failedJudges.push(evaluation.judgeId);
+      continue;
+    }
+
+    const weight = weightById.get(evaluation.judgeId) ?? 0;
+    weightedScore += evaluation.score * weight;
+    totalWeight += weight;
+  }
+
+  return {
+    finalScore: totalWeight > 0 ? Math.round(weightedScore / totalWeight) : 0,
+    conceptsIdentified: [...new Set(conceptsIdentified)],
+    failedJudges,
+  };
 }
 
 // Helper function to get OpenAI client (async due to lazy loading)
@@ -65,6 +156,49 @@ async function getOpenAI() {
   }
   const { default: OpenAI } = await getOpenAIModule();
   return new OpenAI({ apiKey });
+}
+
+async function getAnthropic() {
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) {
+    throw new Error('ANTHROPIC_API_KEY secret not configured');
+  }
+  const { default: Anthropic } = await getAnthropicModule();
+  return new Anthropic({ apiKey });
+}
+
+async function getGemini() {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    throw new Error('GEMINI_API_KEY secret not configured');
+  }
+  const { GoogleGenAI } = await getGenaiModule();
+  return new GoogleGenAI({ apiKey });
+}
+
+/**
+ * Construct exactly the provider clients a set of judges needs.
+ *
+ * A course whose panel is all-OpenAI never constructs the Anthropic/Gemini
+ * clients (and never requires their secrets to be set). A failure to build one
+ * provider's client is isolated to that provider — the other judges still run,
+ * and the judge whose client is missing fails cleanly (excluded from the mean).
+ */
+async function buildJudgeClients(judges: Judge[]): Promise<JudgeModelClients> {
+  const providers = new Set(judges.map((j) => resolveProvider(j)));
+  const clients: JudgeModelClients = {};
+  await Promise.all(
+    [...providers].map(async (p) => {
+      try {
+        if (p === 'openai') clients.openai = await getOpenAI();
+        else if (p === 'anthropic') clients.anthropic = await getAnthropic();
+        else if (p === 'gemini') clients.gemini = await getGemini();
+      } catch (e) {
+        console.error(`Failed to init ${p} client — its judges will fail:`, e);
+      }
+    })
+  );
+  return clients;
 }
 
 // Helper: select only relevant KB sections for a given round's conceptTags
@@ -86,24 +220,38 @@ function selectKBSections(knowledgeBase: string, conceptTags: string[]): string 
   return result.trim();
 }
 
-// Helper: build compact rubric for prompt (drops verbose fields)
-function buildCompactRubric(rubric: Record<string, unknown>): Record<string, unknown> {
+/**
+ * Build the rubric the judge actually sees.
+ *
+ * All SIX anchors are included. They used to be trimmed to three (100/60/20) to
+ * save tokens, which was defensible when we asked for a free 0-100 number, but
+ * the judge is now asked to *pick* an anchor — so every option it may pick needs
+ * its written definition present, or it is choosing between levels it can't read.
+ *
+ * Dimension `weight` is deliberately omitted: weights are applied in code now, and
+ * showing them invited the model to pre-multiply and hand back an aggregate.
+ * Penalties are listed WITH their ids, because the judge reports ids back.
+ */
+function buildCompactRubric(
+  rubric: Record<string, unknown>,
+  penalties: PenaltyDef[]
+): Record<string, unknown> {
   const dimensions = (rubric.dimensions || []) as Array<Record<string, unknown>>;
   return {
     globalInstructions: rubric.globalInstructions,
     dimensions: dimensions.map(d => ({
-      id: d.id, name: d.name, weight: d.weight, description: d.description,
-      level_100: d.level_100, level_60: d.level_60, level_20: d.level_20,
+      id: d.id, name: d.name, description: d.description,
+      level_100: d.level_100, level_80: d.level_80, level_60: d.level_60,
+      level_40: d.level_40, level_20: d.level_20, level_0: d.level_0,
     })),
-    hardPenalties: rubric.hardPenalties || rubric.globalPenalties,
+    penalties: penalties.map(p => ({ id: p.id, description: p.description })),
     softPenalties: rubric.softPenalties,
   };
 }
 
 // Helper function to evaluate with a single judge
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function evaluateWithJudge(
-  openai: any,
+  clients: JudgeModelClients,
   judge: Judge,
   scenario: Record<string, unknown>,
   studentResponse: string,
@@ -124,9 +272,9 @@ async function evaluateWithJudge(
   const conceptTags = (scenario.conceptTags || []) as string[];
   const relevantKB = selectKBSections(knowledgeBase, conceptTags);
 
-  // Build compact rubric (3 anchor levels, no bonusIndicators)
   const rubricConfig = (sessionConfig.rubric || {}) as Record<string, unknown>;
-  const compactRubric = buildCompactRubric(rubricConfig);
+  const penaltyDefs = loadPenalties(rubricConfig);
+  const compactRubric = buildCompactRubric(rubricConfig, penaltyDefs);
 
   let prompt = judge.promptTemplate
     .replace('{{name}}', judge.name)
@@ -143,9 +291,13 @@ async function evaluateWithJudge(
   const rubricDimensions = (rubricConfig.dimensions || []) as Array<Record<string, unknown>>;
   const dimensionIds = rubricDimensions.map(d => d.id as string);
 
-  const dimensionScoresJson = dimensionIds.length > 0
-    ? dimensionIds.map(id => `    "${id}": "<0-100>"`).join(',\n')
-    : '    "dimension_1": "<0-100>",\n    "dimension_2": "<0-100>",\n    "dimension_3": "<0-100>"';
+  // The judge picks ONE OF SIX ANCHORS per dimension — it never emits a free number
+  // and never emits an aggregate. Turning "produce a score" into "which of these six
+  // written levels describes this answer" makes the task a classification with a
+  // definition for every option, which is far more repeatable than a regression.
+  const dimensionScoresJson = (dimensionIds.length > 0 ? dimensionIds : ['dimension_1', 'dimension_2', 'dimension_3'])
+    .map(id => `    "${id}": <0|20|40|60|80|100>`)
+    .join(',\n');
 
   const judgeSessionConfig = (
     ((sessionConfig as Record<string, unknown>).judgeConfig || {}) as Record<string, Record<string, string>>
@@ -155,14 +307,45 @@ async function evaluateWithJudge(
     ? `\nFOCO ESPECIFICO PARA ESTA SESION:\n${judgeSessionConfig.sessionLens}`
     : '';
 
+  // Weights are no longer shown to the judge — they are applied in code (see
+  // scoring.ts). The session's weightFormula string is now PARSED and executed
+  // rather than handed to the model as prose to do arithmetic with.
   const defaultFormulas: Record<string, string> = {
     'technical_expert': `score = 0.50 * ${dimensionIds[0] || 'process_structuring'} + 0.10 * ${dimensionIds[1] || 'institutional_realism'} + 0.40 * ${dimensionIds[2] || 'precision_clarity'}`,
     'public_sector': `score = 0.15 * ${dimensionIds[0] || 'process_structuring'} + 0.65 * ${dimensionIds[1] || 'institutional_realism'} + 0.20 * ${dimensionIds[2] || 'precision_clarity'}`,
     'professor_twin': `score = 0.35 * ${dimensionIds[0] || 'process_structuring'} + 0.30 * ${dimensionIds[1] || 'institutional_realism'} + 0.35 * ${dimensionIds[2] || 'precision_clarity'}`,
   };
-  const weightFormula = judgeSessionConfig.weightFormula
-    || defaultFormulas[judge.judgeId]
-    || 'score = weighted average of dimensions';
+  const weightFormula = judgeSessionConfig.weightFormula || defaultFormulas[judge.judgeId];
+  const dimensionWeights = resolveDimensionWeights(
+    weightFormula,
+    rubricDimensions as Array<{ id: string; weight?: number }>
+  );
+
+  // The judge must know which penalty ids exist, because it reports ids back and
+  // an id we don't recognize is a hallucination we want to catch, not obey.
+  //
+  // Two modes, because not every rubric is migrated yet. A rubric with structured
+  // `penalties` gets its ceilings applied by scoring.ts, so the judge is told NOT
+  // to touch the numbers. A legacy prose rubric has ceilings we cannot execute
+  // (they live inside Spanish sentences, sometimes at off-anchor values like 75) —
+  // there, the judge keeps self-enforcing exactly as it does today. The point is
+  // that no un-migrated session silently loses its ceilings.
+  const enforcedInCode = penaltyDefs.some(p => p.effect);
+  const penaltyList = penaltyDefs.length === 0
+    ? '(ninguna penalizacion declarada para esta sesion)'
+    : penaltyDefs.map(p => `- "${p.id}": ${p.description}`).join('\n') + (enforcedInCode
+      ? '\n\nEl motor aplica automaticamente los topes y descuentos de estas penalizaciones. '
+        + 'Tu unica tarea es reportar los ids gatillados en "penaltiesApplied". NO bajes tu mismo los niveles por estas penalizaciones.'
+      : '\n\nIMPORTANTE: estas penalizaciones NO se aplican automaticamente. Ademas de reportar sus ids en '
+        + '"penaltiesApplied", debes reflejarlas TU MISMO en los niveles que asignas (ej: si una penalizacion impone '
+        + 'un tope de 60 en una dimension, no reportes mas de 60 en esa dimension).');
+
+  if (penaltyDefs.length > 0 && !enforcedInCode) {
+    console.warn(
+      `Rubric for session has ${penaltyDefs.length} legacy prose penalties with no executable effect — `
+      + 'judge is self-enforcing them. Migrate to structured `penalties` to get code enforcement.'
+    );
+  }
 
   const evalGuide = scenario.evaluationGuide
     ? JSON.stringify(scenario.evaluationGuide, null, 2)
@@ -172,7 +355,10 @@ async function evaluateWithJudge(
 
   prompt = prompt
     .replace('{{dimensionScoresJson}}', dimensionScoresJson)
-    .replace('{{weightFormula}}', weightFormula)
+    .replace('{{penaltyList}}', penaltyList)
+    // Legacy slot. Templates still carrying it (e.g. an un-reseeded config/judges
+    // in Firestore) get an empty formula rather than an instruction to do algebra.
+    .replace('{{weightFormula}}', '(los pesos se aplican en el motor; no calcules un score agregado)')
     .replace('{{sessionLens}}', sessionLens)
     .replace('{{evaluationGuide}}', evalGuide)
     .replace('{{referenceAnswer}}', refAnswer ? `${refAnswer}\n\nCALIBRACION: La respuesta de referencia muestra el nivel de detalle y extension ESPERADO para una buena respuesta (~80 pts). NO penalices brevedad si los puntos clave estan cubiertos. Respuestas mas cortas que la referencia pero que cubren lo esencial pueden obtener 80+.` : '');
@@ -222,28 +408,68 @@ Manten tu respuesta concisa (max 120 palabras de feedback + bloque de senales).`
     }
   }
 
+  const provider = resolveProvider(judge);
+  const model = resolveModel(judge);
+
   try {
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o',
-      messages: [
-        { role: 'system', content: prompt },
-        { role: 'user', content: 'Evalua la respuesta del estudiante y responde SOLO con JSON valido.' }
-      ],
-      temperature: 0.5,
-      max_tokens: isRanked ? 1200 : 1500,
-      response_format: { type: 'json_object' },
+    // Dispatch to whichever model backs this judge (OpenAI / Anthropic / Gemini).
+    // Three DIFFERENT models decorrelate errors that three personas of one model
+    // would share; the score is still computed in code from the returned anchors.
+    const response = await callJudgeModel(clients, {
+      provider,
+      model,
+      systemPrompt: prompt,
+      userPrompt: 'Evalua la respuesta del estudiante y responde SOLO con JSON valido.',
+      maxTokens: isRanked ? 1200 : 1500,
     });
 
-    const responseText = completion.choices[0]?.message?.content || '{}';
-    const response = JSON.parse(responseText);
+    // The score is COMPUTED from the judge's dimension anchors and the penalties it
+    // reported — it is no longer whatever number the model chose to emit.
+    const scored = computeJudgeScore(
+      response.dimensionScores as Record<string, unknown> | undefined,
+      response.penaltiesApplied,
+      dimensionWeights,
+      penaltyDefs
+    );
+
+    if (scored.unknownPenalties.length > 0) {
+      console.warn(
+        `Judge ${judge.judgeId} reported unknown penalty ids (ignored): ${scored.unknownPenalties.join(', ')}`
+      );
+    }
+
+    // Legacy fallback: the ml2-2025 judges never emitted dimensionScores at all,
+    // only a flat `score`. Honour it so those sessions keep working, but say so —
+    // that path has none of the guarantees above (no anchors, no penalty audit,
+    // arithmetic still done by the model).
+    let score = scored.score;
+    let failed = scored.failed;
+    if (scored.failed) {
+      const legacy = coerceScore(response.score);
+      if (Number.isFinite(legacy)) {
+        console.warn(`Judge ${judge.judgeId}: no usable dimensionScores, falling back to legacy flat score`);
+        score = Math.max(0, Math.min(100, legacy));
+        failed = false;
+      } else {
+        console.error(
+          `Judge ${judge.judgeId} (${provider}/${model}) returned no usable score:`,
+          JSON.stringify(response).slice(0, 200)
+        );
+      }
+    }
 
     const evaluation: Evaluation = {
       judgeId: judge.judgeId,
       judgeName: judge.name,
-      score: response.score || 0,
-      feedback: response.feedback || 'Sin retroalimentacion',
-      strengths: response.strengths || [],
-      improvements: response.improvements || [],
+      score,
+      failed,
+      provider,
+      model,
+      dimensionScores: scored.dimensionScores,
+      appliedPenalties: scored.appliedPenalties,
+      feedback: (response.feedback as string) || 'Sin retroalimentacion',
+      strengths: (response.strengths as string[]) || [],
+      improvements: (response.improvements as string[]) || [],
       rawResponse: response,
       promptUsed: prompt,
     };
@@ -258,12 +484,15 @@ Manten tu respuesta concisa (max 120 palabras de feedback + bloque de senales).`
 
     return evaluation;
   } catch (error) {
-    console.error(`Error with judge ${judge.judgeId}:`, error);
+    console.error(`Error with judge ${judge.judgeId} (${provider}/${model}):`, error);
     return {
       judgeId: judge.judgeId,
       judgeName: judge.name,
-      score: 50,
-      feedback: 'Error en la evaluacion. Se asigno puntaje neutral.',
+      score: 0,
+      failed: true,
+      provider,
+      model,
+      feedback: 'Error en la evaluacion. Este juez no pudo evaluar la respuesta.',
       strengths: [],
       improvements: [],
       rawResponse: { error: String(error) },
@@ -276,7 +505,11 @@ Manten tu respuesta concisa (max 120 palabras de feedback + bloque de senales).`
 // =====================================
 export const evaluateSubmission = functions
   .region('us-central1')
-  .runWith({ timeoutSeconds: 120, memory: '512MB', secrets: ['OPENAI_API_KEY'] })
+  .runWith({
+    timeoutSeconds: 120,
+    memory: '512MB',
+    secrets: ['OPENAI_API_KEY', 'ANTHROPIC_API_KEY', 'GEMINI_API_KEY'],
+  })
   .https.onCall(async (data, context) => {
     if (!context.auth) {
       throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
@@ -287,8 +520,6 @@ export const evaluateSubmission = functions
     if (!gameCode || round === undefined || !submissionId) {
       throw new functions.https.HttpsError('invalid-argument', 'Missing required parameters');
     }
-
-    const openai = await getOpenAI();
 
     try {
       const submissionRef = db.collection('games').doc(gameCode)
@@ -330,40 +561,35 @@ export const evaluateSubmission = functions
 
       const isRanked = scenario.ranked !== false;
 
-      const evaluationPromises = judgeWeights.map(async (jw) => {
-        const judge = judgesConfig?.judges?.find((j: Judge) => j.judgeId === jw.judgeId);
-        if (!judge) {
-          console.warn(`Judge ${jw.judgeId} not found`);
-          return null;
-        }
-        return evaluateWithJudge(
-          openai, judge, scenario, submission.response,
+      // Resolve the judges first, then build only the provider clients they need.
+      const activeJudges = judgeWeights
+        .map((jw) => judgesConfig?.judges?.find((j: Judge) => j.judgeId === jw.judgeId) as Judge | undefined)
+        .filter((j): j is Judge => {
+          if (!j) console.warn(`Judge not found in config/judges`);
+          return !!j;
+        });
+      const clients = await buildJudgeClients(activeJudges);
+
+      const evaluationPromises = activeJudges.map((judge) =>
+        evaluateWithJudge(
+          clients, judge, scenario, submission.response,
           sessionConfig, game.knowledgeBase || '', game.referenceDocs || '',
           isRanked
-        );
-      });
+        )
+      );
 
       const evaluations = (await Promise.all(evaluationPromises)).filter(Boolean) as Evaluation[];
 
-      let totalWeight = 0;
-      let weightedScore = 0;
-      const conceptsIdentified: string[] = [];
-
-      evaluations.forEach((evaluation, index) => {
-        const weight = judgeWeights[index]?.weight || 0.33;
-        weightedScore += evaluation.score * weight;
-        totalWeight += weight;
-        if (evaluation.rawResponse && Array.isArray((evaluation.rawResponse as Record<string, unknown>).conceptsIdentified)) {
-          conceptsIdentified.push(...(evaluation.rawResponse as Record<string, string[]>).conceptsIdentified);
-        }
-      });
-
-      const finalScore = totalWeight > 0 ? Math.round(weightedScore / totalWeight) : 0;
+      const { finalScore, conceptsIdentified, failedJudges } = aggregateEvaluations(evaluations, judgeWeights);
+      if (failedJudges.length > 0) {
+        console.error(`Submission ${submissionId} scored with failed judges: ${failedJudges.join(', ')}`);
+      }
 
       const evaluationResult: SubmissionEvaluation = {
         finalScore,
+        failedJudges,
         evaluations,
-        conceptsIdentified: [...new Set(conceptsIdentified)],
+        conceptsIdentified,
         processedAt: admin.firestore.Timestamp.now(),
       };
 
@@ -392,7 +618,11 @@ export const evaluateSubmission = functions
 // =====================================
 export const processRoundEnd = functions
   .region('us-central1')
-  .runWith({ timeoutSeconds: 300, memory: '1GB', secrets: ['OPENAI_API_KEY'] })
+  .runWith({
+    timeoutSeconds: 300,
+    memory: '1GB',
+    secrets: ['OPENAI_API_KEY', 'ANTHROPIC_API_KEY', 'GEMINI_API_KEY'],
+  })
   .https.onCall(async (data, context) => {
     if (!context.auth) {
       throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
@@ -403,8 +633,6 @@ export const processRoundEnd = functions
     if (!gameCode || round === undefined) {
       throw new functions.https.HttpsError('invalid-argument', 'Missing gameCode or round');
     }
-
-    const openai = await getOpenAI();
 
     try {
       // Idempotency check: if round was already processed, return existing results
@@ -441,41 +669,37 @@ export const processRoundEnd = functions
       const isRanked = scenario.ranked !== false;
       const unevaluatedDocs = submissionsSnapshot.docs.filter(doc => !doc.data().evaluated);
 
+      // Judges are constant across this round's submissions — resolve them and
+      // build the provider clients once.
+      const activeJudges = judgeWeights
+        .map((jw) => judgesConfig?.judges?.find((j: Judge) => j.judgeId === jw.judgeId) as Judge | undefined)
+        .filter((j): j is Judge => !!j);
+      const clients = await buildJudgeClients(activeJudges);
+
       for (const doc of unevaluatedDocs) {
         const submission = doc.data();
 
-        const evaluationPromises = judgeWeights.map(async (jw) => {
-          const judge = judgesConfig?.judges?.find((j: Judge) => j.judgeId === jw.judgeId);
-          if (!judge) return null;
-          return evaluateWithJudge(
-            openai, judge, scenario, submission.response,
+        const evaluationPromises = activeJudges.map((judge) =>
+          evaluateWithJudge(
+            clients, judge, scenario, submission.response,
             sessionConfig, game.knowledgeBase || '', game.referenceDocs || '',
             isRanked
-          );
-        });
+          )
+        );
 
         const evaluations = (await Promise.all(evaluationPromises)).filter(Boolean) as Evaluation[];
 
-        let totalWeight = 0;
-        let weightedScore = 0;
-        const conceptsIdentified: string[] = [];
-
-        evaluations.forEach((evaluation, index) => {
-          const weight = judgeWeights[index]?.weight || 0.33;
-          weightedScore += evaluation.score * weight;
-          totalWeight += weight;
-          if (evaluation.rawResponse && Array.isArray((evaluation.rawResponse as Record<string, unknown>).conceptsIdentified)) {
-            conceptsIdentified.push(...(evaluation.rawResponse as Record<string, string[]>).conceptsIdentified);
-          }
-        });
-
-        const finalScore = totalWeight > 0 ? Math.round(weightedScore / totalWeight) : 0;
+        const { finalScore, conceptsIdentified, failedJudges } = aggregateEvaluations(evaluations, judgeWeights);
+        if (failedJudges.length > 0) {
+          console.error(`Submission ${doc.id} scored with failed judges: ${failedJudges.join(', ')}`);
+        }
 
         await doc.ref.update({
           evaluation: {
             finalScore,
+            failedJudges,
             evaluations,
-            conceptsIdentified: [...new Set(conceptsIdentified)],
+            conceptsIdentified,
             processedAt: admin.firestore.Timestamp.now(),
           },
           evaluated: true,

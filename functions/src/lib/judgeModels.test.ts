@@ -1,0 +1,183 @@
+import { describe, it, expect, vi } from 'vitest';
+import {
+  resolveProvider,
+  resolveModel,
+  parseJudgeJson,
+  callJudgeModel,
+  isOpenAIReasoningModel,
+  DEFAULT_MODELS,
+  GEMINI_THINKING_BUDGET,
+} from './judgeModels';
+
+describe('resolveProvider', () => {
+  it('honours an explicit valid provider', () => {
+    expect(resolveProvider({ judgeId: 'anything', provider: 'gemini' })).toBe('gemini');
+  });
+
+  it('ignores an invalid provider string and falls back by judgeId', () => {
+    expect(resolveProvider({ judgeId: 'democracy_scholar', provider: 'llama' })).toBe('openai');
+  });
+
+  it('maps the approved persona -> provider assignment', () => {
+    expect(resolveProvider({ judgeId: 'professor_twin_ayd' })).toBe('anthropic');
+    expect(resolveProvider({ judgeId: 'democracy_scholar' })).toBe('openai');
+    expect(resolveProvider({ judgeId: 'policy_lawyer' })).toBe('gemini');
+    expect(resolveProvider({ judgeId: 'professor_twin' })).toBe('anthropic');
+    expect(resolveProvider({ judgeId: 'technical_expert' })).toBe('openai');
+    expect(resolveProvider({ judgeId: 'public_sector' })).toBe('gemini');
+  });
+
+  it('defaults an unknown judge to openai (historical behavior)', () => {
+    expect(resolveProvider({ judgeId: 'brand_new_judge' })).toBe('openai');
+  });
+});
+
+describe('resolveModel', () => {
+  it('uses an explicit per-judge model override', () => {
+    expect(resolveModel({ judgeId: 'professor_twin_ayd', model: 'claude-haiku-4-5' })).toBe(
+      'claude-haiku-4-5'
+    );
+  });
+
+  it('falls back to the provider default', () => {
+    expect(resolveModel({ judgeId: 'professor_twin_ayd' })).toBe(DEFAULT_MODELS.anthropic);
+    expect(resolveModel({ judgeId: 'democracy_scholar' })).toBe(DEFAULT_MODELS.openai);
+    expect(resolveModel({ judgeId: 'policy_lawyer' })).toBe(DEFAULT_MODELS.gemini);
+  });
+
+  it('honours provider override when picking the default model', () => {
+    expect(resolveModel({ judgeId: 'x', provider: 'gemini' })).toBe(DEFAULT_MODELS.gemini);
+  });
+});
+
+describe('isOpenAIReasoningModel', () => {
+  it('flags the GPT-5 line and o-series', () => {
+    for (const m of ['gpt-5', 'gpt-5-mini', 'GPT-5', 'o1', 'o3', 'o4-mini']) {
+      expect(isOpenAIReasoningModel(m)).toBe(true);
+    }
+  });
+  it('does not flag gpt-4o chat models', () => {
+    for (const m of ['gpt-4o', 'gpt-4.1', 'gpt-4o-mini']) {
+      expect(isOpenAIReasoningModel(m)).toBe(false);
+    }
+  });
+});
+
+describe('parseJudgeJson', () => {
+  it('parses clean JSON', () => {
+    expect(parseJudgeJson('{"score": 80}')).toEqual({ score: 80 });
+  });
+
+  it('strips a ```json fence (Claude sometimes wraps output)', () => {
+    expect(parseJudgeJson('```json\n{"a": 1}\n```')).toEqual({ a: 1 });
+  });
+
+  it('strips a bare ``` fence', () => {
+    expect(parseJudgeJson('```\n{"a": 1}\n```')).toEqual({ a: 1 });
+  });
+
+  it('recovers a {...} span from surrounding prose', () => {
+    expect(parseJudgeJson('Here is my evaluation: {"a": 1}. Done.')).toEqual({ a: 1 });
+  });
+
+  it('throws on empty output', () => {
+    expect(() => parseJudgeJson('   ')).toThrow();
+  });
+
+  it('throws when there is no JSON object', () => {
+    expect(() => parseJudgeJson('no json here')).toThrow();
+  });
+});
+
+describe('callJudgeModel dispatch', () => {
+  const base = { systemPrompt: 'sys', userPrompt: 'usr', maxTokens: 100 };
+
+  it('calls a gpt-4o chat model with temperature 0 and max_tokens', async () => {
+    const create = vi.fn().mockResolvedValue({
+      choices: [{ message: { content: '{"dimensionScores":{"d":80}}' } }],
+    });
+    const out = await callJudgeModel(
+      { openai: { chat: { completions: { create } } } },
+      { ...base, provider: 'openai', model: 'gpt-4o' }
+    );
+    expect(out).toEqual({ dimensionScores: { d: 80 } });
+    const arg = create.mock.calls[0][0];
+    expect(arg.model).toBe('gpt-4o');
+    expect(arg.temperature).toBe(0);
+    expect(arg.max_tokens).toBe(100);
+    expect(arg.max_completion_tokens).toBeUndefined();
+    expect(arg.reasoning_effort).toBeUndefined();
+    expect(arg.response_format).toEqual({ type: 'json_object' });
+    expect(arg.messages[0]).toEqual({ role: 'system', content: 'sys' });
+  });
+
+  it('calls a GPT-5 reasoning model with max_completion_tokens and NO temperature', async () => {
+    const create = vi.fn().mockResolvedValue({
+      choices: [{ message: { content: '{"dimensionScores":{"d":60}}' } }],
+    });
+    const out = await callJudgeModel(
+      { openai: { chat: { completions: { create } } } },
+      { ...base, provider: 'openai', model: 'gpt-5' }
+    );
+    expect(out).toEqual({ dimensionScores: { d: 60 } });
+    const arg = create.mock.calls[0][0];
+    // GPT-5 rejects temperature (only default 1) and max_tokens.
+    expect(arg.temperature).toBeUndefined();
+    expect(arg.max_tokens).toBeUndefined();
+    expect(arg.max_completion_tokens).toBe(100);
+    expect(arg.reasoning_effort).toBe('minimal');
+    expect(arg.response_format).toEqual({ type: 'json_object' });
+  });
+
+  it('calls Anthropic with top-level system and NO temperature (opus rejects it)', async () => {
+    const create = vi.fn().mockResolvedValue({
+      content: [{ type: 'text', text: '{"ok":true}' }],
+    });
+    const out = await callJudgeModel(
+      { anthropic: { messages: { create } } },
+      { ...base, provider: 'anthropic', model: 'claude-opus-4-8' }
+    );
+    expect(out).toEqual({ ok: true });
+    const arg = create.mock.calls[0][0];
+    expect(arg.system).toBe('sys');
+    expect(arg.temperature).toBeUndefined();
+    expect('thinking' in arg).toBe(false);
+    expect(arg.messages).toEqual([{ role: 'user', content: 'usr' }]);
+  });
+
+  it('concatenates multiple Anthropic text blocks', async () => {
+    const create = vi.fn().mockResolvedValue({
+      content: [
+        { type: 'text', text: '{"a":1,' },
+        { type: 'text', text: '"b":2}' },
+      ],
+    });
+    const out = await callJudgeModel(
+      { anthropic: { messages: { create } } },
+      { ...base, provider: 'anthropic', model: 'claude-opus-4-8' }
+    );
+    expect(out).toEqual({ a: 1, b: 2 });
+  });
+
+  it('calls Gemini with systemInstruction and json mime type', async () => {
+    const generateContent = vi.fn().mockResolvedValue({ text: '{"g":9}' });
+    const out = await callJudgeModel(
+      { gemini: { models: { generateContent } } },
+      { ...base, provider: 'gemini', model: 'gemini-2.5-pro' }
+    );
+    expect(out).toEqual({ g: 9 });
+    const arg = generateContent.mock.calls[0][0];
+    expect(arg.model).toBe('gemini-2.5-pro');
+    expect(arg.config.systemInstruction).toBe('sys');
+    expect(arg.config.responseMimeType).toBe('application/json');
+    expect(arg.config.temperature).toBe(0);
+    // Hidden thinking is capped low or it eats the token budget and truncates JSON.
+    expect(arg.config.thinkingConfig).toEqual({ thinkingBudget: GEMINI_THINKING_BUDGET });
+  });
+
+  it('throws when the needed client is missing', async () => {
+    await expect(
+      callJudgeModel({}, { ...base, provider: 'anthropic', model: 'claude-opus-4-8' })
+    ).rejects.toThrow('anthropic client not provided');
+  });
+});
