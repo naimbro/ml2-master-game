@@ -12,7 +12,7 @@ import MusicSelector from '../../components/MusicSelector';
 import MediaBlock from '../../components/MediaBlock';
 import { resolveMediaSrc } from '../../lib/media';
 import { scoreMCQuestion, scoreMCBlock, MC_SCORING_LEGEND } from '../../lib/mcScoring';
-import { MC_GATE_SECONDS } from '../../lib/mcTiming';
+import { MC_GATE_SECONDS, isQuestionTimedOut } from '../../lib/mcTiming';
 import type { MCResponse } from '../../types/game';
 
 // On a light ground the four Kahoot fills would be four shouting rectangles, so
@@ -72,6 +72,8 @@ export default function Round() {
   const [mcCurrentQ, setMcCurrentQ] = useState(0);
   const [mcResponses, setMcResponses] = useState<MCResponse[]>([]);
   const [mcQuestionStart, setMcQuestionStart] = useState<number>(0);
+  // Which question the countdown is currently armed for (null = none yet).
+  const [mcArmedQ, setMcArmedQ] = useState<number | null>(null);
   const [mcQuestionTimeLeft, setMcQuestionTimeLeft] = useState(0);
   const [mcSelectedOption, setMcSelectedOption] = useState<string | null>(null);
   const [mcShowFeedback, setMcShowFeedback] = useState(false);
@@ -193,6 +195,9 @@ export default function Round() {
     setMcQuestionStart(Date.now());
     setMcSelectedOption(null);
     setMcShowFeedback(false);
+    // Arm the clock for THIS question. Until this lands, the auto-timeout must
+    // not fire — otherwise it reads the initial 0 and kills the question.
+    setMcArmedQ(mcCurrentQ);
 
     mcTimerRef.current = setInterval(() => {
       setMcQuestionTimeLeft(prev => {
@@ -209,20 +214,23 @@ export default function Round() {
     };
   }, [isMC, mcCurrentQ, hasSubmitted, mcBlockDone, mcStarted]);
 
-  // MC: auto-timeout when question timer hits 0
+  // MC: auto-timeout when this question's clock actually runs out
   useEffect(() => {
     if (!isMC || !mcQuestions || mcShowFeedback || mcSelectedOption !== null || !mcStarted) return;
-    if (mcQuestionTimeLeft === 0 && mcCurrentQ < mcQuestions.length && !mcBlockDone && !hasSubmitted) {
+    if (mcCurrentQ >= mcQuestions.length || mcBlockDone || hasSubmitted) return;
+    if (isQuestionTimedOut({ armedQuestion: mcArmedQ, currentQuestion: mcCurrentQ, secondsLeft: mcQuestionTimeLeft })) {
       handleMCSelect(null);
     }
-  }, [mcQuestionTimeLeft, isMC, mcShowFeedback, mcSelectedOption, mcBlockDone, hasSubmitted, mcStarted]);
+  }, [mcQuestionTimeLeft, isMC, mcShowFeedback, mcSelectedOption, mcBlockDone, hasSubmitted, mcStarted, mcArmedQ, mcCurrentQ]);
 
   const handleMCSelect = useCallback((optionId: string | null) => {
     if (!mcQuestions || mcShowFeedback || mcBlockDone || hasSubmitted) return;
     if (mcTimerRef.current) clearInterval(mcTimerRef.current);
 
     const q = mcQuestions[mcCurrentQ];
-    const responseTimeMs = Date.now() - mcQuestionStart;
+    // Guard the arithmetic too: with mcQuestionStart still 0 this used to
+    // store a Unix timestamp as if it were an elapsed duration.
+    const responseTimeMs = mcQuestionStart > 0 ? Math.max(0, Date.now() - mcQuestionStart) : 0;
     const correct = optionId !== null && q.options.findIndex(o => o.id === optionId) === q.correctOptionIndex;
 
     const pointsAwarded = scoreMCQuestion({

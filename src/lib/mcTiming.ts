@@ -21,6 +21,32 @@ export const MC_SLACK_SECONDS = 15;
 export const MC_DEFAULT_TIME_LIMIT = 20;
 
 /**
+ * Should the current MC question be auto-recorded as timed out?
+ *
+ * The countdown state starts at 0, so "secondsLeft === 0" alone is also true in
+ * the render *before* the timer effect has loaded the real limit. Reading only
+ * that flag made every question 0 of every block instantly time out — the whole
+ * round in a single-question block.
+ *
+ * `armedQuestion` is set by the timer effect when it actually starts a
+ * question's clock, so the timeout can never fire for a question whose clock
+ * was never armed, regardless of the order React happens to run effects in.
+ */
+export function isQuestionTimedOut({
+  armedQuestion,
+  currentQuestion,
+  secondsLeft,
+}: {
+  armedQuestion: number | null;
+  currentQuestion: number;
+  secondsLeft: number;
+}): boolean {
+  if (armedQuestion === null) return false;
+  if (armedQuestion !== currentQuestion) return false;
+  return secondsLeft <= 0;
+}
+
+/**
  * Round duration for an MC block:
  *   gate + sum(question limits) + feedback per question + slack
  *
