@@ -104,16 +104,32 @@ Cualquier cuenta de Google puede entrar (no hay restricción de dominio).
 
 ---
 
-## D. Lo que quedó fuera (P1, no bloquea el martes)
+## D. Estado de P1
 
-1. **Pasada visual** (responsive de `Results.tsx`, legibilidad de proyector, pulido del
-   feedback MC). Deliberadamente pospuesta: rediseñar la pantalla más coreografiada
-   del sistema el día antes de la demo es el peor cambio riesgo/beneficio disponible.
-2. **Botón "crear sesión en blanco"** — hoy la única vía para crear una sesión en un
+**Hecha: pasada visual** (commit `65e3cfa`). Qué cambió y qué mirar en el ensayo:
+
+- **Bug real de layout corregido**: las filas del ranking y del podio usaban
+  `flex-1 ... truncate` sin `min-w-0`. Un nombre largo desbordaba la fila y producía
+  scroll horizontal en teléfono. Corregido en los tres lugares → **revisa B4 con un
+  nombre largo de verdad** (ej. "María José Fernández-Larraín").
+- Filas del ranking: en teléfono se achican los gaps y el padding **horizontal**; el
+  padding vertical NO cambia, porque `ROW_H` es la constante con la que se calculan
+  los desplazamientos de la animación de intercambio. Si la animación de swap se ve
+  rara en móvil, avísame — sería justamente esto.
+- Tipografía más grande a partir de `sm:` en nombres, promedios, enunciado MC,
+  alternativas y el veredicto. `tabular-nums` en las columnas numéricas.
+- **Feedback MC**: la correcta ahora da un pulso + halo verde; la incorrecta, una
+  sacudida corta. Es el momento más mirado de la ronda.
+- Guard global de `prefers-reduced-motion`.
+
+Sigue fuera (no bloquea el martes):
+
+1. **Botón "crear sesión en blanco"** — hoy la única vía para crear una sesión en un
    curso dinámico es el generador con IA. Sería un seguro barato para B3.
-3. **Guía en Google Slides** para profesores. La infraestructura ya existe en
+2. **Guía en Google Slides** para profesores. La infraestructura ya existe en
    `naimbro.github.io` (service account + `slide_template.py`). Debe hacerse **después**
    de congelar la interfaz, con capturas reales.
+3. Tokens de diseño y rediseño tipo ESPN del leaderboard: P2, después del martes.
 
 ## E. Decisión de scoring, en una línea para la audiencia
 
