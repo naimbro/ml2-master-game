@@ -14,7 +14,7 @@ se inventó nada.
 | Afirmación | Dónde se usa | Fuentes |
 |---|---|---|
 | España venció a Argentina 1-0 en tiempo extra. Final el 19 de julio de 2026 en el MetLife Stadium | R1 Q1, R4, KB | [Wikipedia — 2026 FIFA World Cup final](https://en.wikipedia.org/wiki/2026_FIFA_World_Cup_final); [FIFA — final tournament standings](https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/final-tournament-standings) |
-| Ferran Torres marcó el único gol al minuto 106 (segundo tiempo del alargue) | R1 Q2, R4 | Wikipedia (arriba); [Coaches' Voice — análisis táctico](https://learning.coachesvoice.com/cv/spain-argentina-2026-world-cup-final-tactical-analysis/) |
+| Ferran Torres marcó el único gol al minuto 106 (segunda mitad del tiempo extra) | R1 Q2, R4 | Wikipedia (arriba); [Coaches' Voice — análisis táctico](https://learning.coachesvoice.com/cv/spain-argentina-2026-world-cup-final-tactical-analysis/) |
 | Argentina terminó con 2 remates y **0 al arco**; España con 20 remates y 12 al arco; posesión ~60/32 | R4, diagrama, KB | Wikipedia (ficha del partido); Coaches' Voice |
 | Lisandro Martínez salió lesionado al 44'; Paredes entró en el descanso; Molina al 58'; Medina y Simeone al 70' | R4 (contexto y respuesta de referencia) | Wikipedia (ficha del partido, sustituciones) |
 | Emiliano Martínez hizo 11 atajadas | KB | Wikipedia (ficha del partido) |

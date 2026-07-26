@@ -36,7 +36,7 @@
         "options": [
           { "id": "A", "text": "Minuto 12" },
           { "id": "B", "text": "Minuto 78" },
-          { "id": "C", "text": "Minuto 106, en el alargue" },
+          { "id": "C", "text": "Minuto 106, en el tiempo extra" },
           { "id": "D", "text": "En los penales" }
         ],
         "correctOptionIndex": 2,
@@ -81,13 +81,13 @@
         "question": "Vozinha, arquero de 40 anos que llego al torneo sin contrato profesional vigente, dejo su arco en cero ante Espana en el debut. ¿Hasta donde llego Cabo Verde?",
         "options": [
           { "id": "A", "text": "Se quedo en fase de grupos" },
-          { "id": "B", "text": "Ronda de 32: cayo 3-2 con Argentina en el alargue" },
+          { "id": "B", "text": "Ronda de 32: cayo 3-2 con Argentina en el tiempo extra" },
           { "id": "C", "text": "Cuartos de final" },
           { "id": "D", "text": "Semifinales" }
         ],
         "correctOptionIndex": 1,
         "timeLimitSeconds": 20,
-        "explanation": "Tres empates en el grupo, segundos detras de Espana, y una eliminacion en el alargue ante el campeon defensor. 18 atajadas de Vozinha en el torneo."
+        "explanation": "Tres empates en el grupo, segundos detras de Espana, y una eliminacion en el tiempo extra ante el campeon defensor. 18 atajadas de Vozinha en el torneo."
       }
     ]
   },

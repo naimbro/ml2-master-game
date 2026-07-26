@@ -11,7 +11,7 @@ desconocimiento futbolistico**: esta sesion evalua razonamiento, no deporte.
 19 de julio de 2026, MetLife Stadium, East Rutherford. Arbitro: Slavko Vincic.
 Segundo titulo mundial de Espana tras 2010.
 
-**El gol:** minuto 106, segundo tiempo del alargue. Pedro Porro centro desde el
+**El gol:** minuto 106, segunda mitad del tiempo extra. Pedro Porro centro desde el
 carril interior, Nico Williams la bajo de cabeza en el segundo palo y Ferran Torres
 —que habia entrado al 62'— definio de zurda. Torres fue elegido mejor jugador del
 partido.
@@ -50,7 +50,7 @@ un 4-4-2 compacto, sin presionar arriba, y su salida nunca fue limpia: Julian Al
 quedo aislado y el equipo no logro sostener la pelota en campo rival.
 
 Lo que Scaloni hizo al 70' fue reforzar el costado y refrescar piernas (Medina,
-Simeone) y en el alargue paso a un 5-3-1 con Senesi. Ninguno de esos cambios produjo
+Simeone) y en el tiempo extra paso a un 5-3-1 con Senesi. Ninguno de esos cambios produjo
 un remate al arco. **Esto no significa que fueran errores obvios**: significa que el
 problema era estructural y que cualquier alternativa tenia su propio costo.
 
@@ -66,7 +66,7 @@ Tres empates, segundo lugar del Grupo H por detras de Espana. En la ronda de 32 
 3-2 con Argentina en tiempo extra: Messi abrio el marcador al 29' (su gol mundialista
 numero 20), Deroy Duarte empato, Lisandro Martinez puso a Argentina otra vez arriba,
 Sidny Lopes Cabral volvio a empatar con un remate desde afuera del area, y un cabezazo
-de Romero desviado por Diney Borges definio en el alargue.
+de Romero desviado por Diney Borges definio en el tiempo extra.
 
 **Cabo Verde termino el torneo sin ganar un solo partido.**
 

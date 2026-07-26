@@ -36,7 +36,7 @@
         "options": [
           { "id": "A", "text": "Minuto 12" },
           { "id": "B", "text": "Minuto 78" },
-          { "id": "C", "text": "Minuto 106, en el alargue" },
+          { "id": "C", "text": "Minuto 106, en el tiempo extra" },
           { "id": "D", "text": "En los penales" }
         ],
         "correctOptionIndex": 2,
@@ -81,13 +81,13 @@
         "question": "Vozinha, arquero de 40 anos que llego al torneo sin contrato profesional vigente, dejo su arco en cero ante Espana en el debut. ¿Hasta donde llego Cabo Verde?",
         "options": [
           { "id": "A", "text": "Se quedo en fase de grupos" },
-          { "id": "B", "text": "Ronda de 32: cayo 3-2 con Argentina en el alargue" },
+          { "id": "B", "text": "Ronda de 32: cayo 3-2 con Argentina en el tiempo extra" },
           { "id": "C", "text": "Cuartos de final" },
           { "id": "D", "text": "Semifinales" }
         ],
         "correctOptionIndex": 1,
         "timeLimitSeconds": 20,
-        "explanation": "Tres empates en el grupo, segundos detras de Espana, y una eliminacion en el alargue ante el campeon defensor. 18 atajadas de Vozinha en el torneo."
+        "explanation": "Tres empates en el grupo, segundos detras de Espana, y una eliminacion en el tiempo extra ante el campeon defensor. 18 atajadas de Vozinha en el torneo."
       }
     ]
   },
@@ -133,7 +133,7 @@
     "durationSeconds": 240,
     "conceptTags": ["razonamiento_tactico", "trade_offs"],
     "judgeFocus": "NO evalues si la respuesta coincide con lo que Scaloni hizo de verdad. Evalua si el cambio propuesto es (1) especifico y (2) coherente con el problema descrito. Especifico significa que se puede dibujar: que jugador, que posicion, que altura de presion, que hace el equipo cuando recupera. 'Cambiar el chip', 'salir a buscarlo', 'presionar arriba' sin decir con quien ni desde donde = maximo 40 en mecanismo_especifico. El segundo criterio es el trade-off: cualquier cambio que ataque el problema de Argentina (sin remates al arco) abre otro problema (mas espacio para Yamal, menos gente atras, cansancio). La respuesta de 100 nombra explicitamente que resigna. Si describe solo beneficios, maximo 40 en trade_off_explicito. Tercero: que use los datos dados (0 remates al arco, Yamal 1v1, De Paul anclado, Alvarez aislado, tres cambios ya usados) y no un partido generico. No premies jerga futbolistica por si misma: un profesor sin conocimiento de futbol puede sacar 100 si razona bien con lo que se le dio.",
-    "context": "Final del Mundial 2026, MetLife Stadium. Espana 0 - Argentina 0, y el partido va camino a decidirse en el alargue.\n\nEspana domina. Terminara el partido con 20 remates, 12 al arco y cerca del 60% de la posesion. Argentina terminara con 2 remates y NINGUNO al arco en 120 minutos.\n\nEl patron es claro: Lamine Yamal gana una y otra vez su duelo por la banda. Cucurella sube por la otra, y De Paul queda anclado siguiendolo en vez de atacar. Enzo y Mac Allister no encuentran salida limpia. Julian Alvarez esta aislado arriba.\n\nYa gastaste tres cambios: Lisandro Martinez salio lesionado al 44', Paredes entro en el descanso y Molina al 58'.",
+    "context": "Final del Mundial 2026, MetLife Stadium. Espana 0 - Argentina 0, y el partido va camino a decidirse en el tiempo extra.\n\nEspana domina. Terminara el partido con 20 remates, 12 al arco y cerca del 60% de la posesion. Argentina terminara con 2 remates y NINGUNO al arco en 120 minutos.\n\nEl patron es claro: Lamine Yamal gana una y otra vez su duelo por la banda. Cucurella sube por la otra, y De Paul queda anclado siguiendolo en vez de atacar. Enzo y Mac Allister no encuentran salida limpia. Julian Alvarez esta aislado arriba.\n\nYa gastaste tres cambios: Lisandro Martinez salio lesionado al 44', Paredes entro en el descanso y Molina al 58'.",
     "question": "Eres Lionel Scaloni. Es el minuto 60.\n\n¿Que modificacion tactica haces y por que?\n\nSe especifico: que cambia exactamente (estructura, jugador, altura de presion, que hacen con la pelota cuando la recuperan), que ganas con eso, y que riesgo aceptas a cambio.",
     "media": [
       {
@@ -143,7 +143,7 @@
         "credit": "Esquema propio — Aula Maestra"
       }
     ],
-    "referenceAnswer": "No hay una unica respuesta correcta. Lo que se evalua es el par mecanismo + costo asumido.\n\nLo que Scaloni hizo realmente: al 70' saco a Romero y De Paul por Facundo Medina y Giuliano Simeone, y en el alargue paso a un 5-3-1 con Senesi. Argentina siguio sin rematar al arco y perdio al 106'.\n\nFamilias de respuesta defendibles, todas con su costo:\n\n1) Doblar la marca sobre Yamal (el lateral mas un volante que baje). Gana: corta la fuente principal de peligro. Cuesta: libera al hombre que ese volante dejo de cubrir, y hunde aun mas al equipo — con 0 remates al arco, hundirse mas hace casi imposible generar.\n\n2) Soltar a De Paul de la marca sobre Cucurella y aceptar el 1v1 atras. Gana: recupera un conductor para salir jugando, que es exactamente lo que falta. Cuesta: Cucurella queda libre para subir, y el problema se traslada a la otra banda.\n\n3) Juego directo sobre Alvarez con un segundo delantero cerca para la segunda pelota. Gana: evita la salida corta, que Espana esta ganando; ataca la unica ventaja disponible. Cuesta: cede definitivamente la posesion y depende de duelos individuales.\n\n4) Presion alta con disparadores definidos (por ejemplo, saltar cuando la pelota va al lateral). Gana: impide que Espana se instale. Cuesta: es lo mas exigente fisicamente al minuto 60, y si se falla el salto, el bloque queda partido con Yamal de cara.\n\nUna respuesta de 100 elige una familia, la aterriza en jugadores y posiciones concretas, y dice en voz alta que resigna. Una respuesta de 40 dice 'hay que ir a buscarlo' sin decir con quien ni a costa de que.",
+    "referenceAnswer": "No hay una unica respuesta correcta. Lo que se evalua es el par mecanismo + costo asumido.\n\nLo que Scaloni hizo realmente: al 70' saco a Romero y De Paul por Facundo Medina y Giuliano Simeone, y en el tiempo extra paso a un 5-3-1 con Senesi. Argentina siguio sin rematar al arco y perdio al 106'.\n\nFamilias de respuesta defendibles, todas con su costo:\n\n1) Doblar la marca sobre Yamal (el lateral mas un volante que baje). Gana: corta la fuente principal de peligro. Cuesta: libera al hombre que ese volante dejo de cubrir, y hunde aun mas al equipo — con 0 remates al arco, hundirse mas hace casi imposible generar.\n\n2) Soltar a De Paul de la marca sobre Cucurella y aceptar el 1v1 atras. Gana: recupera un conductor para salir jugando, que es exactamente lo que falta. Cuesta: Cucurella queda libre para subir, y el problema se traslada a la otra banda.\n\n3) Juego directo sobre Alvarez con un segundo delantero cerca para la segunda pelota. Gana: evita la salida corta, que Espana esta ganando; ataca la unica ventaja disponible. Cuesta: cede definitivamente la posesion y depende de duelos individuales.\n\n4) Presion alta con disparadores definidos (por ejemplo, saltar cuando la pelota va al lateral). Gana: impide que Espana se instale. Cuesta: es lo mas exigente fisicamente al minuto 60, y si se falla el salto, el bloque queda partido con Yamal de cara.\n\nUna respuesta de 100 elige una familia, la aterriza en jugadores y posiciones concretas, y dice en voz alta que resigna. Una respuesta de 40 dice 'hay que ir a buscarlo' sin decir con quien ni a costa de que.",
     "idealAnswer": {
       "keyPoints": [
         "Un cambio concreto que se puede dibujar: jugador, posicion, altura de presion",
