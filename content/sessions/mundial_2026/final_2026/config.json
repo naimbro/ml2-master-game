@@ -1,0 +1,36 @@
+{
+  "sessionId": "final_2026",
+  "courseId": "mundial_2026",
+  "title": "Mundial 2026: La Final",
+  "description": "5 rondas (~12 min): dos bloques Kahoot con imagen y audio, dos rondas abiertas evaluadas por jueces IA, y un cierre imposible",
+  "date": "2026-07-28",
+  "roundCount": 5,
+  "roundDurationSeconds": 180,
+  "bufferSeconds": 60,
+  "conceptTags": [
+    "razonamiento_tactico",
+    "trade_offs",
+    "inferencia_desde_un_caso",
+    "sesgo_de_supervivencia",
+    "diseno_institucional"
+  ],
+  "judges": [
+    { "judgeId": "technical_expert", "weight": 0.35 },
+    { "judgeId": "public_sector", "weight": 0.35 },
+    { "judgeId": "professor_twin", "weight": 0.3 }
+  ],
+  "judgeConfig": {
+    "technical_expert": {
+      "sessionLens": "Esta sesion es una demostracion con futbol como excusa. Evalua la CALIDAD DEL RAZONAMIENTO, no el conocimiento futbolistico. Premia mecanismos especificos y verificables ('mover a X a la posicion Y para generar Z') por sobre generalidades ('presionar mas', 'jugar mejor'). El judgeFocus del escenario es tu prioridad absoluta. Respuestas de 3-4 minutos: premia densidad, no extension.",
+      "weightFormula": "score = 0.55 * mecanismo_especifico + 0.30 * trade_off_explicito + 0.15 * lectura_del_caso"
+    },
+    "public_sector": {
+      "sessionLens": "Esta sesion se presenta a profesores de una Escuela de Gobierno. Tu lente es la de quien decide bajo restricciones: recursos limitados, informacion incompleta, consecuencias asimetricas. Premia a quien reconoce explicitamente que TODA decision cuesta algo, y a quien distingue entre lo que sabe y lo que supone. El judgeFocus del escenario manda.",
+      "weightFormula": "score = 0.25 * mecanismo_especifico + 0.55 * trade_off_explicito + 0.20 * lectura_del_caso"
+    },
+    "professor_twin": {
+      "sessionLens": "Evalua si la persona penso el caso concreto o recito un molde generico. Penaliza respuestas que servirian para cualquier partido o cualquier pais. Premia que se enganche con los datos especificos que se le dieron. Es una demo: se generoso con la brevedad, implacable con la vaguedad.",
+      "weightFormula": "score = 0.35 * mecanismo_especifico + 0.30 * trade_off_explicito + 0.35 * lectura_del_caso"
+    }
+  }
+}

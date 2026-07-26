@@ -1,0 +1,30 @@
+{
+  "sessionId": "kahoot_only",
+  "courseId": "mundial_2026",
+  "title": "Mundial 2026: Solo Kahoot (respaldo)",
+  "description": "Version de respaldo sin jueces IA: 5 bloques de opcion multiple (~7 min). Usar si la evaluacion por LLM no esta disponible.",
+  "date": "2026-07-28",
+  "roundCount": 5,
+  "roundDurationSeconds": 77,
+  "bufferSeconds": 30,
+  "conceptTags": ["razonamiento_tactico", "inferencia_desde_un_caso"],
+  "judges": [
+    { "judgeId": "technical_expert", "weight": 0.35 },
+    { "judgeId": "public_sector", "weight": 0.35 },
+    { "judgeId": "professor_twin", "weight": 0.3 }
+  ],
+  "judgeConfig": {
+    "technical_expert": {
+      "sessionLens": "Sesion de respaldo compuesta solo por bloques de opcion multiple. Los jueces no deberian ejecutarse nunca en esta sesion; si lo hacen, algo se configuro mal.",
+      "weightFormula": "score = 1.0 * mecanismo_especifico"
+    },
+    "public_sector": {
+      "sessionLens": "Sesion de respaldo compuesta solo por bloques de opcion multiple. Los jueces no deberian ejecutarse nunca en esta sesion.",
+      "weightFormula": "score = 1.0 * mecanismo_especifico"
+    },
+    "professor_twin": {
+      "sessionLens": "Sesion de respaldo compuesta solo por bloques de opcion multiple. Los jueces no deberian ejecutarse nunca en esta sesion.",
+      "weightFormula": "score = 1.0 * mecanismo_especifico"
+    }
+  }
+}

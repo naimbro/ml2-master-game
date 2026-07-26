@@ -164,23 +164,18 @@ export default function Round() {
   const isMC = currentScenarioRef.current?.type === 'multiple_choice';
   const mcQuestions = currentScenarioRef.current?.mcQuestions;
 
-  // MC: block start gate — auto-starts so nobody is stranded on the intro
+  // MC: block start gate — auto-starts so nobody is stranded on the intro.
+  // Self-scheduling timeout keyed on mcGateLeft, so the state updater stays
+  // pure (no setState inside another setState's updater).
   useEffect(() => {
     if (!isMC || !mcQuestions || mcStarted || hasSubmitted || mcBlockDone) return;
-
-    const gate = setInterval(() => {
-      setMcGateLeft(prev => {
-        if (prev <= 1) {
-          clearInterval(gate);
-          setMcStarted(true);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(gate);
-  }, [isMC, mcQuestions, mcStarted, hasSubmitted, mcBlockDone]);
+    if (mcGateLeft <= 0) {
+      setMcStarted(true);
+      return;
+    }
+    const tick = setTimeout(() => setMcGateLeft((g) => g - 1), 1000);
+    return () => clearTimeout(tick);
+  }, [isMC, mcQuestions, mcStarted, hasSubmitted, mcBlockDone, mcGateLeft]);
 
   useEffect(() => {
     if (!isMC || !mcQuestions || hasSubmitted || mcBlockDone || !mcStarted) return;
@@ -455,7 +450,27 @@ export default function Round() {
                 </p>
               </div>
 
-              {!mcStarted && !mcBlockDone && !hasSubmitted ? (
+              {hasSubmitted && !mcBlockDone ? (
+                /* Already submitted this block in an earlier page load (e.g. the
+                   player refreshed their phone). Never re-show the questions. */
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="dramatic-card p-8 text-center"
+                >
+                  <CheckCircle className="w-14 h-14 text-kahoot-green mx-auto mb-4" />
+                  <h3 className="text-2xl font-black mb-2">Bloque completado</h3>
+                  <p className="text-white/70 font-semibold">
+                    Ya enviaste tus respuestas de esta ronda.
+                  </p>
+                  <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full">
+                    <div className="w-2 h-2 bg-kahoot-green rounded-full animate-pulse" />
+                    <span className="text-white/70 text-sm font-semibold">
+                      Esperando a que termine la ronda...
+                    </span>
+                  </div>
+                </motion.div>
+              ) : !mcStarted && !mcBlockDone ? (
                 /* ============ BLOCK START GATE ============
                    Nothing is timed until the player is ready: latecomers do not
                    lose Q1, and an audio clue can be played before any clock. */
@@ -614,13 +629,20 @@ export default function Round() {
                           }`}
                         >
                           {opt.imageSrc && (
-                            <img
-                              src={resolveMediaSrc(opt.imageSrc)}
-                              alt={opt.imageAlt || opt.text}
-                              loading="lazy"
-                              onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                              className="w-full h-36 sm:h-44 object-cover rounded-lg bg-black/20"
-                            />
+                            <span className="block">
+                              <img
+                                src={resolveMediaSrc(opt.imageSrc)}
+                                alt={opt.imageAlt || opt.text}
+                                loading="lazy"
+                                onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                                className="w-full h-36 sm:h-44 object-cover rounded-lg bg-black/20"
+                              />
+                              {opt.imageCredit && (
+                                <span className="block text-[9px] font-medium text-white/50 mt-1 leading-tight">
+                                  {opt.imageCredit}
+                                </span>
+                              )}
+                            </span>
                           )}
                           <span className="flex items-center gap-3">
                             <span className="w-8 h-8 rounded-lg bg-black/20 flex items-center justify-center text-sm font-black shrink-0">

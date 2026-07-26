@@ -172,8 +172,9 @@ export interface MediaAsset {
 export interface MCOption {
   id: string;        // 'A', 'B', 'C', 'D'
   text: string;
-  imageSrc?: string; // optional picture-answer (same resolution rules as MediaAsset.src)
+  imageSrc?: string;  // optional picture-answer (same resolution rules as MediaAsset.src)
   imageAlt?: string;
+  imageCredit?: string; // attribution — required by CC BY assets, rendered under the image
 }
 
 export interface MCQuestion {

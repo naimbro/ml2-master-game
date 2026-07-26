@@ -1,0 +1,221 @@
+[
+  {
+    "id": "m26k_r1_calentamiento",
+    "order": 1,
+    "title": "Calentamiento: que paso en el Mundial",
+    "category": "Kahoot",
+    "type": "multiple_choice",
+    "ranked": true,
+    "durationSeconds": 77,
+    "context": "",
+    "question": "",
+    "conceptTags": ["razonamiento_tactico"],
+    "media": [
+      {
+        "kind": "audio",
+        "src": "media/mundial/marcha-real.mp3",
+        "alt": "Escucha antes de empezar: el himno del campeon",
+        "credit": "United States Navy Band — dominio publico"
+      }
+    ],
+    "mcQuestions": [
+      {
+        "question": "Acabas de escuchar el himno del campeon del mundo. El 19 de julio de 2026, en el MetLife Stadium, ¿que seleccion levanto la Copa?",
+        "options": [
+          { "id": "A", "text": "Argentina" },
+          { "id": "B", "text": "Espana" },
+          { "id": "C", "text": "Francia" },
+          { "id": "D", "text": "Inglaterra" }
+        ],
+        "correctOptionIndex": 1,
+        "timeLimitSeconds": 20,
+        "explanation": "Espana 1-0 Argentina en tiempo extra. Su segundo titulo mundial, despues de 2010."
+      },
+      {
+        "question": "Ferran Torres marco el unico gol de la final. ¿En que momento?",
+        "options": [
+          { "id": "A", "text": "Minuto 12" },
+          { "id": "B", "text": "Minuto 78" },
+          { "id": "C", "text": "Minuto 106, en el alargue" },
+          { "id": "D", "text": "En los penales" }
+        ],
+        "correctOptionIndex": 2,
+        "timeLimitSeconds": 20,
+        "explanation": "Minuto 106: Nico Williams la bajo de cabeza y Torres definio de zurda. 0-0 hasta ahi."
+      }
+    ]
+  },
+  {
+    "id": "m26k_r2_cabo_verde",
+    "order": 2,
+    "title": "Cabo Verde: 500.000 habitantes en un Mundial",
+    "category": "Kahoot",
+    "type": "multiple_choice",
+    "ranked": true,
+    "durationSeconds": 77,
+    "context": "",
+    "question": "",
+    "conceptTags": ["inferencia_desde_un_caso"],
+    "mcQuestions": [
+      {
+        "question": "Esta es la bandera de Cabo Verde, debutante en el Mundial 2026. Las 10 estrellas en circulo representan:",
+        "options": [
+          { "id": "A", "text": "Los 10 anos de independencia" },
+          { "id": "B", "text": "Las 10 islas principales del archipielago" },
+          { "id": "C", "text": "Los 10 fundadores del pais" },
+          { "id": "D", "text": "Los 10 puertos historicos" }
+        ],
+        "correctOptionIndex": 1,
+        "timeLimitSeconds": 20,
+        "explanation": "Las 10 islas principales. El circulo simboliza la unidad de un pais separado por el oceano.",
+        "media": [
+          {
+            "kind": "image",
+            "src": "media/mundial/bandera-cabo-verde.svg",
+            "alt": "Bandera de Cabo Verde: franjas azul, blanca y roja con un circulo de diez estrellas amarillas",
+            "credit": "Wikimedia Commons — dominio publico"
+          }
+        ]
+      },
+      {
+        "question": "Vozinha, arquero de 40 anos que llego al torneo sin contrato profesional vigente, dejo su arco en cero ante Espana en el debut. ¿Hasta donde llego Cabo Verde?",
+        "options": [
+          { "id": "A", "text": "Se quedo en fase de grupos" },
+          { "id": "B", "text": "Ronda de 32: cayo 3-2 con Argentina en el alargue" },
+          { "id": "C", "text": "Cuartos de final" },
+          { "id": "D", "text": "Semifinales" }
+        ],
+        "correctOptionIndex": 1,
+        "timeLimitSeconds": 20,
+        "explanation": "Tres empates en el grupo, segundos detras de Espana, y una eliminacion en el alargue ante el campeon defensor. 18 atajadas de Vozinha en el torneo."
+      }
+    ]
+  },
+  {
+    "id": "m26k_r3_la_final_en_numeros",
+    "order": 3,
+    "title": "La final en numeros",
+    "category": "Kahoot",
+    "type": "multiple_choice",
+    "ranked": true,
+    "durationSeconds": 77,
+    "context": "",
+    "question": "",
+    "conceptTags": ["razonamiento_tactico"],
+    "media": [
+      {
+        "kind": "image",
+        "src": "media/mundial/final-minuto-60.svg",
+        "alt": "Diagrama tactico del minuto 60 de la final: Espana ataca en 4-3-3, Argentina defiende en bloque 4-4-2",
+        "credit": "Esquema propio — Aula Maestra"
+      }
+    ],
+    "mcQuestions": [
+      {
+        "question": "En los 120 minutos de la final, ¿cuantos remates AL ARCO registro Argentina?",
+        "options": [
+          { "id": "A", "text": "Ninguno" },
+          { "id": "B", "text": "Tres" },
+          { "id": "C", "text": "Siete" },
+          { "id": "D", "text": "Doce" }
+        ],
+        "correctOptionIndex": 0,
+        "timeLimitSeconds": 20,
+        "explanation": "Cero. Argentina remato dos veces en total, ninguna al arco. Espana remato 20 veces, 12 al arco."
+      },
+      {
+        "question": "Emiliano Martinez establecio un record en esa final. ¿Cual?",
+        "options": [
+          { "id": "A", "text": "El arquero mas veterano en jugar una final" },
+          { "id": "B", "text": "11 atajadas, record para una final de Mundial" },
+          { "id": "C", "text": "El primer arquero expulsado en una final" },
+          { "id": "D", "text": "El primero en atajar dos penales en una final" }
+        ],
+        "correctOptionIndex": 1,
+        "timeLimitSeconds": 20,
+        "explanation": "11 atajadas. Perdio el partido siendo la figura de su equipo — un buen recordatorio de que el resultado no mide la calidad de la actuacion."
+      }
+    ]
+  },
+  {
+    "id": "m26k_r4_premios_y_formato",
+    "order": 4,
+    "title": "Premios y formato",
+    "category": "Kahoot",
+    "type": "multiple_choice",
+    "ranked": true,
+    "durationSeconds": 77,
+    "context": "",
+    "question": "",
+    "conceptTags": ["razonamiento_tactico"],
+    "mcQuestions": [
+      {
+        "question": "El Balon de Oro al mejor jugador del Mundial 2026 no fue para Messi. ¿Para quien fue?",
+        "options": [
+          { "id": "A", "text": "Kylian Mbappe" },
+          { "id": "B", "text": "Lamine Yamal" },
+          { "id": "C", "text": "Rodri" },
+          { "id": "D", "text": "Ferran Torres" }
+        ],
+        "correctOptionIndex": 2,
+        "timeLimitSeconds": 20,
+        "explanation": "Rodri. Mbappe se llevo la Bota de Oro con 10 goles; Unai Simon el Guante de Oro; Pau Cubarsi el premio al mejor joven."
+      },
+      {
+        "question": "El Mundial 2026 estreno un formato nuevo. ¿Cuantas selecciones participaron?",
+        "options": [
+          { "id": "A", "text": "32" },
+          { "id": "B", "text": "40" },
+          { "id": "C", "text": "48" },
+          { "id": "D", "text": "64" }
+        ],
+        "correctOptionIndex": 2,
+        "timeLimitSeconds": 20,
+        "explanation": "48 selecciones en 12 grupos de cuatro, 104 partidos, y una ronda de 32 antes de los octavos."
+      }
+    ]
+  },
+  {
+    "id": "m26k_r5_el_mejor_de_todos",
+    "order": 5,
+    "title": "La pregunta imposible",
+    "category": "Kahoot",
+    "type": "multiple_choice",
+    "ranked": true,
+    "durationSeconds": 57,
+    "context": "",
+    "question": "",
+    "conceptTags": ["razonamiento_tactico"],
+    "mcQuestions": [
+      {
+        "question": "Ultima pregunta. ¿Quien es el mejor futbolista de todos los tiempos?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Pele",
+            "imageSrc": "media/mundial/pele.jpg",
+            "imageAlt": "Pele con la camiseta de Brasil en 1970",
+            "imageCredit": "El Grafico, 1970 — dominio publico"
+          },
+          {
+            "id": "B",
+            "text": "Diego Maradona",
+            "imageSrc": "media/mundial/maradona.jpg",
+            "imageAlt": "Diego Maradona levantando la Copa del Mundo en 1986",
+            "imageCredit": "El Grafico, 1986 — dominio publico"
+          },
+          {
+            "id": "C",
+            "text": "Lionel Messi",
+            "imageSrc": "media/mundial/messi.jpg",
+            "imageAlt": "Lionel Messi con la camiseta de Argentina",
+            "imageCredit": "Hossein Zohrevand / Tasnim News Agency — CC BY 4.0"
+          }
+        ],
+        "correctOptionIndex": 2,
+        "timeLimitSeconds": 25,
+        "explanation": "Esta pregunta no tiene respuesta objetiva. Pero el administrador del juego posee considerable autoridad epistemica — y eso, en cualquier sistema de evaluacion, tambien es un dato."
+      }
+    ]
+  }
+]

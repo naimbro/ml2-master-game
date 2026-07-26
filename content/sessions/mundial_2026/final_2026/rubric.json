@@ -1,0 +1,77 @@
+{
+  "_doc": "Rubrica de la sesion demo Mundial 2026. Se aplica SOLO a las rondas abiertas (R3 y R4); los bloques Kahoot se puntuan en el cliente sobre la misma escala 0-100. El publico son profesores sin conocimiento futbolistico garantizado: el futbol es la excusa, el objeto evaluado es el razonamiento.",
+  "sessionId": "final_2026",
+  "globalInstructions": "Evalua SOLO lo que esta escrito. No completes la respuesta con lo que el participante 'seguramente quiso decir'.\n\nEsta sesion evalua RAZONAMIENTO, no conocimiento de futbol. Un participante que nunca vio un partido puede obtener 100 si usa bien los datos que se le dieron. Un participante que despliega jerga futbolistica sin mecanismo ni costo no pasa de 40.\n\nLas respuestas se escriben en 3-4 minutos: premia densidad, no extension. Una respuesta corta y precisa vale mas que una larga y vaga. No penalices la brevedad; penaliza la vaguedad.\n\nEl judgeFocus del escenario es tu prioridad absoluta y manda sobre estas instrucciones generales si hay tension.",
+  "scoring": {
+    "scaleLevels": [100, 80, 60, 40, 20, 0],
+    "instructions": "Elige uno de los seis niveles escritos por dimension. No inventes valores intermedios. Si la respuesta satisface un nivel solo parcialmente, baja al nivel inferior."
+  },
+  "dimensions": [
+    {
+      "id": "mecanismo_especifico",
+      "name": "Mecanismo especifico",
+      "weight": 0.4,
+      "description": "¿La propuesta se puede ejecutar tal como esta escrita? Un mecanismo especifico nombra quien hace que, donde y con que recurso. Una intencion no es un mecanismo.",
+      "level_100": "Propone algo que se podria dibujar o presupuestar sin pedir aclaraciones: nombra ejecutantes concretos, posiciones o instrumentos, y como cambia el funcionamiento del sistema. Nada queda librado a la interpretacion del lector.",
+      "level_80": "Mecanismo claro y ejecutable, pero un elemento queda a medio especificar (dice que jugador entra pero no en que posicion, o que institucion actua pero no con que recurso).",
+      "level_60": "Se entiende la direccion del cambio y es razonable, pero falta el como: quedaria trabajo de diseno antes de poder ejecutarlo.",
+      "level_40": "Enuncia una intencion vestida de decision: 'presionar mas arriba', 'invertir en formacion', 'ir a buscar el partido'. No nombra ejecutante ni recurso.",
+      "level_20": "Menciona que algo hay que cambiar sin decir que, o repite el enunciado con otras palabras.",
+      "level_0": "No propone nada, o lo propuesto no tiene relacion con el problema planteado."
+    },
+    {
+      "id": "trade_off_explicito",
+      "name": "Costo asumido",
+      "weight": 0.35,
+      "description": "¿Reconoce que su decision cuesta algo? Toda decision bajo restriccion cierra puertas. Quien solo describe beneficios no ha terminado de pensar la decision.",
+      "level_100": "Nombra explicitamente que resigna y por que acepta ese costo. El costo identificado es el real, no uno decorativo, y conecta con el mecanismo que propuso.",
+      "level_80": "Reconoce un costo concreto y pertinente, pero no argumenta por que vale la pena pagarlo.",
+      "level_60": "Admite que hay riesgo de forma generica ('podria salir mal', 'es arriesgado') sin identificar cual es el riesgo especifico de SU propuesta.",
+      "level_40": "Menciona el riesgo solo de pasada, o el costo que nombra no se sigue de lo que propuso.",
+      "level_20": "Presenta la decision como si fuera gratis, aunque el enunciado dejaba ver la tension.",
+      "level_0": "Solo beneficios, o afirma que su propuesta no tiene contraindicaciones."
+    },
+    {
+      "id": "lectura_del_caso",
+      "name": "Lectura del caso concreto",
+      "weight": 0.25,
+      "description": "¿Se engancho con los datos especificos que se le dieron, o respondio un molde que serviria para cualquier caso? Incluye reconocer los limites de lo que el caso permite concluir.",
+      "level_100": "Usa datos especificos del enunciado como parte del argumento, y ademas distingue lo que el caso demuestra de lo que solo sugiere (o usa una restriccion dada como parte del razonamiento).",
+      "level_80": "Se apoya claramente en los datos del enunciado; la respuesta no serviria para otro caso. Los limites de la inferencia quedan implicitos.",
+      "level_60": "Menciona algun dato del enunciado pero el grueso del argumento es generico y se podria trasplantar a otro caso sin cambios.",
+      "level_40": "Molde generico con una referencia superficial al caso, del tipo que se agrega al final.",
+      "level_20": "Ignora los datos entregados; responde sobre el tema en abstracto.",
+      "level_0": "Contradice los datos del enunciado o responde sobre otra cosa."
+    }
+  ],
+  "penalties": [
+    {
+      "id": "solo_beneficios",
+      "description": "Presentar una decision sin ningun costo asociado no puede superar 40 en 'Costo asumido'.",
+      "effect": { "type": "cap", "value": 40, "dimensions": ["trade_off_explicito"] }
+    },
+    {
+      "id": "molde_generico",
+      "description": "Una respuesta que serviria identica para cualquier partido o cualquier pais no puede superar 40 en 'Lectura del caso concreto'.",
+      "effect": { "type": "cap", "value": 40, "dimensions": ["lectura_del_caso"] }
+    },
+    {
+      "id": "jerga_sin_mecanismo",
+      "description": "Vocabulario tecnico (futbolistico o de politica publica) sin un mecanismo ejecutable detras no puede superar 40 en 'Mecanismo especifico'.",
+      "effect": { "type": "cap", "value": 40, "dimensions": ["mecanismo_especifico"] }
+    }
+  ],
+  "globalPenalties": [
+    "Conocimiento futbolistico como sustituto del razonamiento: nombrar jugadores, sistemas o partidos no suma por si mismo. Lo que suma es el mecanismo y el costo.",
+    "Extension como sustituto de contenido: una respuesta larga que repite la misma idea vale lo mismo que la idea dicha una vez."
+  ],
+  "bonusIndicators": [
+    "Reconoce explicitamente que observamos el caso porque tuvo exito (problema de seleccion)",
+    "Usa una restriccion del enunciado (cambios ya gastados, tamano del pais) como parte del argumento y no como excusa",
+    "Distingue con claridad entre lo que sabe por los datos y lo que esta suponiendo"
+  ],
+  "penaltyIndicators": [
+    "Propone algo que el enunciado ya declaro imposible o ya gastado",
+    "Confunde el resultado del partido con la calidad de la decision (resultadismo)"
+  ]
+}

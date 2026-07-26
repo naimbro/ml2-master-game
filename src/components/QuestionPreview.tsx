@@ -38,13 +38,20 @@ function OptionCard({
       }`}
     >
       {option.imageSrc && (
-        <img
-          src={resolveMediaSrc(option.imageSrc)}
-          alt={option.imageAlt || option.text}
-          loading="lazy"
-          onError={(e) => { e.currentTarget.style.display = 'none'; }}
-          className="w-full h-28 object-cover rounded-lg bg-black/20"
-        />
+        <span className="block">
+          <img
+            src={resolveMediaSrc(option.imageSrc)}
+            alt={option.imageAlt || option.text}
+            loading="lazy"
+            onError={(e) => { e.currentTarget.style.display = 'none'; }}
+            className="w-full h-28 object-cover rounded-lg bg-black/20"
+          />
+          {option.imageCredit && (
+            <span className="block text-[9px] font-medium text-white/50 mt-1 leading-tight">
+              {option.imageCredit}
+            </span>
+          )}
+        </span>
       )}
       <span className="flex items-center gap-3">
         <span className="w-7 h-7 rounded-lg bg-black/20 flex items-center justify-center text-xs font-black shrink-0">

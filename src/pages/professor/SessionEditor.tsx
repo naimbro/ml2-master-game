@@ -619,12 +619,20 @@ export default function SessionEditor() {
                                       className={`${SMALL_INPUT_CLASS} text-xs`}
                                     />
                                     {opt.imageSrc && (
-                                      <input
-                                        type="text" value={opt.imageAlt || ''}
-                                        placeholder="Texto alt"
-                                        onChange={(e) => updateMCOption(i, qi, oi, { imageAlt: e.target.value })}
-                                        className={`${SMALL_INPUT_CLASS} text-xs`}
-                                      />
+                                      <>
+                                        <input
+                                          type="text" value={opt.imageAlt || ''}
+                                          placeholder="Texto alt"
+                                          onChange={(e) => updateMCOption(i, qi, oi, { imageAlt: e.target.value })}
+                                          className={`${SMALL_INPUT_CLASS} text-xs`}
+                                        />
+                                        <input
+                                          type="text" value={opt.imageCredit || ''}
+                                          placeholder="Crédito"
+                                          onChange={(e) => updateMCOption(i, qi, oi, { imageCredit: e.target.value })}
+                                          className={`${SMALL_INPUT_CLASS} text-xs`}
+                                        />
+                                      </>
                                     )}
                                   </div>
                                 </div>
