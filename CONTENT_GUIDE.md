@@ -131,6 +131,90 @@ content/sessions/{course}/session_N_{topic}/
 - `conceptTags`: Concepts tested (for analytics)
 - `idealAnswer`: Reference for AI judges (not shown to students)
 
+#### Multiple-choice rounds
+
+A scenario with `"type": "multiple_choice"` is a Kahoot-style block instead of an
+open question. It is scored on the client and never reaches the AI judges.
+
+```json
+{
+  "id": "s1_mc_conceptos",
+  "order": 2,
+  "title": "Kahoot: conceptos base",
+  "type": "multiple_choice",
+  "ranked": true,
+  "durationSeconds": 77,
+  "context": "",
+  "question": "",
+  "conceptTags": ["chunking"],
+  "mcQuestions": [
+    {
+      "question": "El overlap en chunking sirve para:",
+      "options": [
+        { "id": "A", "text": "Reducir el tamano de los embeddings" },
+        { "id": "B", "text": "Preservar contexto entre chunks" }
+      ],
+      "correctOptionIndex": 1,
+      "timeLimitSeconds": 20,
+      "explanation": "Se muestra tras responder (opcional)"
+    }
+  ]
+}
+```
+
+- 2 to 4 options per question; `correctOptionIndex` is 0-based.
+- `context` and `question` stay present-but-empty for legacy consumers.
+- **`durationSeconds` is derived, not free-form.** The round timer must outlast
+  the block or the host's auto-end cuts it off mid-question:
+
+  ```
+  durationSeconds = 12 (intro gate) + sum(timeLimitSeconds) + 5 * nQuestions + 15
+  ```
+
+  `src/lib/mcTiming.ts` is the source of truth; the session editor computes it
+  for you, and `validate-content.cjs` fails the build if it is too small.
+
+**Scoring** (`src/lib/mcScoring.ts`, unit-tested) puts MC on the same 0-100
+six-anchor scale the judges use, so both round types feed one leaderboard:
+
+| Outcome | Points |
+|---|---|
+| Correct | `70 + 30 x (fraction of time left)` -> 70..100 |
+| Answered but wrong | 20 (the rubric's "intento y fallo" anchor) |
+| No answer / timeout | 0 |
+
+The block score is the sum divided by the **total** number of questions, not the
+number answered. Correctness is worth 70 and speed at most 30, so a slow correct
+answer always beats a fast wrong one and speed can never dominate the ranking.
+
+> Changed 2026-07-26 (was `80 + 20 x speed`, wrong = 0, divided by answered).
+> Only affects games created after that date — scores are snapshotted per game.
+
+#### Images and audio
+
+Any scenario, MC question, or MC option can carry media. All fields are optional
+and legacy content is unaffected.
+
+```json
+"media": [
+  { "kind": "image", "src": "media/mi-curso/foto.jpg",
+    "alt": "Texto que se muestra si la imagen falla", "credit": "Autor - licencia" },
+  { "kind": "audio", "src": "media/mi-curso/clip.mp3", "alt": "Descripcion" }
+]
+```
+
+On an MC option instead: `imageSrc`, `imageAlt`, `imageCredit`.
+
+Rules the validator enforces:
+
+- Put files in `public/media/<curso>/` and reference them **without** a leading
+  slash. The app is served from `/ml2-master-game/` on GitHub Pages, so `/media/x.jpg`
+  resolves to the domain root and 404s **in production only** — never in `npm run dev`.
+  Absolute `https://` URLs are allowed and passed through untouched.
+- Images require `alt`; it is what the player sees if the file fails to load.
+- Use **`.mp3`, not `.ogg`** — iOS Safari cannot play Ogg Vorbis and students are on phones.
+- Audio never autoplays and stops the host's background music when played.
+
 ### Step 4: Create rubric.json
 
 ```json

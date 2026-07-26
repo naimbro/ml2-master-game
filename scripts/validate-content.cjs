@@ -29,6 +29,7 @@ const path = require('path');
 const ROOT = path.join(__dirname, '..');
 const SESSIONS_ROOT = path.join(ROOT, 'content', 'sessions');
 const JUDGES_PATH = path.join(ROOT, 'content', 'judges', 'default_judges.json');
+const PUBLIC_ROOT = path.join(ROOT, 'public');
 
 let errorCount = 0;
 let warnCount = 0;
@@ -74,6 +75,16 @@ function loadKnownJudgeIds() {
   }
 }
 
+// A relative media src must resolve to a real file under public/, or it will
+// 404 in the live game — and nothing else in the pipeline would catch it.
+function checkMediaFileExists(scope, src) {
+  if (!src || /^(https?:)?\/\//i.test(src) || /^(data|blob):/i.test(src)) return;
+  const target = path.join(PUBLIC_ROOT, src.replace(/^\//, ''));
+  if (!fs.existsSync(target)) {
+    err(scope, `el archivo no existe: public/${src.replace(/^\//, '')}`);
+  }
+}
+
 // Optional image/audio attached to a scenario or an MC question.
 // `src` is either a path relative to the app base URL (public/...) or an https URL.
 function validateMedia(scope, media, whereLabel) {
@@ -104,6 +115,7 @@ function validateMedia(scope, media, whereLabel) {
     if (m.kind === 'audio' && /\.ogg$/i.test(m.src || '')) {
       warn(mScope, 'audio .ogg no reproduce en Safari/iOS — usa .mp3');
     }
+    checkMediaFileExists(mScope, m.src);
   }
 }
 
@@ -136,6 +148,11 @@ function validateMCQuestions(scope, sc) {
             err(`${qScope}/opt#${oi}`, 'imageSrc vacio');
           } else if (o.imageSrc.startsWith('/')) {
             err(`${qScope}/opt#${oi}`, `imageSrc no debe empezar con '/'`);
+          } else {
+            checkMediaFileExists(`${qScope}/opt#${oi}`, o.imageSrc);
+            if (!o.imageAlt || !String(o.imageAlt).trim()) {
+              err(`${qScope}/opt#${oi}`, 'alternativa con imagen pero sin imageAlt');
+            }
           }
         }
       }
