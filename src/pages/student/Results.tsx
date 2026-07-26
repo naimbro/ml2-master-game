@@ -10,6 +10,7 @@ import { playScoreReveal, playGoodScore, playBadScore, playDrumRoll, playTension
 import { confettiBurst, confettiCannons } from '../../lib/confetti';
 import RecalibrationReveal from './RecalibrationReveal';
 import { useRoundDuels } from '../../hooks/useRoundDuels';
+import { MC_SCORING_LEGEND } from '../../lib/mcScoring';
 
 interface JudgeEvaluation {
   judgeName: string;
@@ -107,6 +108,7 @@ export default function Results() {
   // Compute values needed by hooks (must be before early returns)
   const currentScenario = game?.scenarios?.[game?.currentRound ? game.currentRound - 1 : 0];
   const isRankedRound = currentScenario?.ranked !== false;
+  const isMCRound = currentScenario?.type === 'multiple_choice';
 
   // Cumulative leaderboard rankings
   // Uses totalScore from round doc (race-condition-proof) with game doc fallback
@@ -197,14 +199,18 @@ export default function Results() {
   useEffect(() => {
     const phase = (roundResults as { phase?: string } | null)?.phase;
     if (
-      isHost && phase === 'provisional' && isRankedRound &&
+      // MC rounds have no text to compare, so the pairwise tournament would
+      // find <2 candidates and bail — but not before flipping the round to
+      // 'recalibrating', which renders an empty duel overlay and then replays
+      // the whole leaderboard reveal. Skip it outright.
+      isHost && phase === 'provisional' && isRankedRound && !isMCRound &&
       currentRound !== undefined && totalRounds !== undefined &&
       currentRound < totalRounds && !recalTriggered.current
     ) {
       recalTriggered.current = true;
       setTimeout(() => { recalibrateRound(currentRound).catch(console.error); }, 3500);
     }
-  }, [isHost, roundResults, isRankedRound, currentRound, totalRounds, recalibrateRound]);
+  }, [isHost, roundResults, isRankedRound, isMCRound, currentRound, totalRounds, recalibrateRound]);
 
   // Replay the leaderboard reveal when phase flips provisional -> final
   const prevPhaseRef = useRef<string | undefined>(undefined);
@@ -275,7 +281,6 @@ export default function Results() {
   const userSubmission = submissions.find(s => s.playerId === user?.uid);
   const userEvaluation = userSubmission?.evaluation;
   const userRank = roundResults?.rankings.find(r => r.playerId === user?.uid);
-  const isMCRound = currentScenario?.type === 'multiple_choice';
 
   // Judge bar colors (Kahoot answer colors)
   const JUDGE_COLORS = ['bg-kahoot-red', 'bg-kahoot-blue', 'bg-kahoot-green'];
@@ -563,6 +568,10 @@ export default function Results() {
                 ))}
               </div>
             )}
+
+            <p className="text-white/40 text-xs font-medium mt-6 max-w-md mx-auto leading-relaxed">
+              {MC_SCORING_LEGEND}
+            </p>
           </motion.div>
         )}
 

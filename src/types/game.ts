@@ -150,12 +150,30 @@ export interface LeaderboardEntry {
 }
 
 // =====================================
+// MEDIA
+// =====================================
+
+// `src` is either a path relative to the app's base URL (e.g.
+// 'media/mundial/bandera.jpg' -> public/media/mundial/bandera.jpg) or an
+// absolute https:// URL. Always resolve through resolveMediaSrc() in
+// src/components/MediaBlock.tsx — the app is served from a sub-path on GitHub
+// Pages, so a bare '/media/...' 404s in production only.
+export interface MediaAsset {
+  kind: 'image' | 'audio';
+  src: string;
+  alt?: string;      // alt text for images; also the fallback shown if the asset fails
+  credit?: string;   // attribution line (required for CC BY-SA assets)
+}
+
+// =====================================
 // MULTIPLE CHOICE TYPES
 // =====================================
 
 export interface MCOption {
   id: string;        // 'A', 'B', 'C', 'D'
   text: string;
+  imageSrc?: string; // optional picture-answer (same resolution rules as MediaAsset.src)
+  imageAlt?: string;
 }
 
 export interface MCQuestion {
@@ -163,6 +181,8 @@ export interface MCQuestion {
   options: MCOption[];
   correctOptionIndex: number;
   timeLimitSeconds: number;
+  media?: MediaAsset[];   // shown above the options
+  explanation?: string;   // shown during the post-answer feedback beat
 }
 
 export interface MCResponse {
@@ -204,6 +224,7 @@ export interface Scenario {
   durationSeconds?: number;
   type?: 'open' | 'multiple_choice';    // default 'open'
   mcQuestions?: MCQuestion[];
+  media?: MediaAsset[];                 // open-round scenario card / MC block intro
   context: string;
   question: string;
   conceptTags: string[];

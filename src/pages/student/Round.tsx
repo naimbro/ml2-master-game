@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Clock, Send, AlertCircle, StopCircle, Info, MessageSquare, Code, CheckCircle, XCircle, Zap } from 'lucide-react';
+import { Clock, Send, AlertCircle, StopCircle, Info, MessageSquare, Code, CheckCircle, XCircle, Zap, Play } from 'lucide-react';
 import { useGame } from '../../hooks/useGame';
 import { useAuth } from '../../hooks/useAuth';
 import { doc, updateDoc, serverTimestamp } from 'firebase/firestore';
@@ -9,6 +9,10 @@ import { db } from '../../lib/firebase';
 import { playCountdownTick, playCriticalTick, playSubmitSuccess, playScoreReveal, playGoodScore, playBadScore, startBackgroundMusic, stopBackgroundMusic, getMuted, getCurrentMusicStyle } from '../../lib/sounds';
 import { confettiBurst, confettiCannons, confettiPop } from '../../lib/confetti';
 import MusicSelector from '../../components/MusicSelector';
+import MediaBlock from '../../components/MediaBlock';
+import { resolveMediaSrc } from '../../lib/media';
+import { scoreMCQuestion, scoreMCBlock, MC_SCORING_LEGEND } from '../../lib/mcScoring';
+import { MC_GATE_SECONDS } from '../../lib/mcTiming';
 import type { MCResponse } from '../../types/game';
 
 // Kahoot-style colors for MC options
@@ -18,6 +22,7 @@ const MC_COLORS = [
   { bg: 'bg-yellow-600', hover: 'hover:bg-yellow-500', border: 'border-yellow-400', selected: 'bg-yellow-500 ring-4 ring-yellow-300' },
   { bg: 'bg-green-600', hover: 'hover:bg-green-500', border: 'border-green-400', selected: 'bg-green-500 ring-4 ring-green-300' },
 ];
+
 
 export default function Round() {
   const { gameCode } = useParams<{ gameCode: string }>();
@@ -65,6 +70,10 @@ export default function Round() {
   const [mcShowFeedback, setMcShowFeedback] = useState(false);
   const [mcBlockDone, setMcBlockDone] = useState(false);
   const [mcBlockScore, setMcBlockScore] = useState(0);
+  // Block start gate: question timers do not run until the player presses
+  // "Empezar" or the gate countdown expires.
+  const [mcStarted, setMcStarted] = useState(false);
+  const [mcGateLeft, setMcGateLeft] = useState(MC_GATE_SECONDS);
   const mcTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Check if current user has already submitted
@@ -80,11 +89,12 @@ export default function Round() {
   // Navigate based on game status
   useEffect(() => {
     if (game?.status === 'round_end') {
-      // Auto-submit incomplete MC block before navigating away
+      // Auto-submit incomplete MC block before navigating away.
+      // Score over the block's TOTAL questions: averaging over answered ones
+      // would let abandoning a block outscore completing it.
       if (currentScenarioRef.current?.type === 'multiple_choice' && !hasSubmitted && mcResponses.length > 0) {
-        const totalPoints = mcResponses.reduce((sum, r) => sum + r.pointsAwarded, 0);
-        const blockScore = Math.round(totalPoints / mcResponses.length);
-        submitMCBlock(mcResponses, blockScore);
+        const totalQuestions = currentScenarioRef.current.mcQuestions?.length ?? mcResponses.length;
+        submitMCBlock(mcResponses, scoreMCBlock(mcResponses, totalQuestions));
       }
       navigate(`/game/${gameCode}/results`);
     } else if (game?.status === 'finished') {
@@ -154,8 +164,26 @@ export default function Round() {
   const isMC = currentScenarioRef.current?.type === 'multiple_choice';
   const mcQuestions = currentScenarioRef.current?.mcQuestions;
 
+  // MC: block start gate — auto-starts so nobody is stranded on the intro
   useEffect(() => {
-    if (!isMC || !mcQuestions || hasSubmitted || mcBlockDone) return;
+    if (!isMC || !mcQuestions || mcStarted || hasSubmitted || mcBlockDone) return;
+
+    const gate = setInterval(() => {
+      setMcGateLeft(prev => {
+        if (prev <= 1) {
+          clearInterval(gate);
+          setMcStarted(true);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(gate);
+  }, [isMC, mcQuestions, mcStarted, hasSubmitted, mcBlockDone]);
+
+  useEffect(() => {
+    if (!isMC || !mcQuestions || hasSubmitted || mcBlockDone || !mcStarted) return;
     if (mcCurrentQ >= mcQuestions.length) return;
 
     const timeLimit = mcQuestions[mcCurrentQ].timeLimitSeconds;
@@ -177,15 +205,15 @@ export default function Round() {
     return () => {
       if (mcTimerRef.current) clearInterval(mcTimerRef.current);
     };
-  }, [isMC, mcCurrentQ, hasSubmitted, mcBlockDone]);
+  }, [isMC, mcCurrentQ, hasSubmitted, mcBlockDone, mcStarted]);
 
   // MC: auto-timeout when question timer hits 0
   useEffect(() => {
-    if (!isMC || !mcQuestions || mcShowFeedback || mcSelectedOption !== null) return;
+    if (!isMC || !mcQuestions || mcShowFeedback || mcSelectedOption !== null || !mcStarted) return;
     if (mcQuestionTimeLeft === 0 && mcCurrentQ < mcQuestions.length && !mcBlockDone && !hasSubmitted) {
       handleMCSelect(null);
     }
-  }, [mcQuestionTimeLeft, isMC, mcShowFeedback, mcSelectedOption, mcBlockDone, hasSubmitted]);
+  }, [mcQuestionTimeLeft, isMC, mcShowFeedback, mcSelectedOption, mcBlockDone, hasSubmitted, mcStarted]);
 
   const handleMCSelect = useCallback((optionId: string | null) => {
     if (!mcQuestions || mcShowFeedback || mcBlockDone || hasSubmitted) return;
@@ -195,11 +223,12 @@ export default function Round() {
     const responseTimeMs = Date.now() - mcQuestionStart;
     const correct = optionId !== null && q.options.findIndex(o => o.id === optionId) === q.correctOptionIndex;
 
-    let pointsAwarded = 0;
-    if (correct) {
-      const speedBonus = Math.floor(20 * Math.max(0, 1 - (responseTimeMs / 1000) / q.timeLimitSeconds));
-      pointsAwarded = 80 + speedBonus;
-    }
+    const pointsAwarded = scoreMCQuestion({
+      correct,
+      answered: optionId !== null,
+      elapsedMs: responseTimeMs,
+      timeLimitSeconds: q.timeLimitSeconds,
+    });
 
     const mcResponse: MCResponse = {
       questionIndex: mcCurrentQ,
@@ -227,9 +256,8 @@ export default function Round() {
       if (mcCurrentQ + 1 < mcQuestions.length) {
         setMcCurrentQ(mcCurrentQ + 1);
       } else {
-        // Block done — calculate score and submit
-        const totalPoints = newResponses.reduce((sum, r) => sum + r.pointsAwarded, 0);
-        const blockScore = Math.round(totalPoints / newResponses.length);
+        // Block done — score over the block's TOTAL questions and submit
+        const blockScore = scoreMCBlock(newResponses, mcQuestions.length);
         setMcBlockScore(blockScore);
         setMcBlockDone(true);
         submitMCBlock(newResponses, blockScore);
@@ -298,6 +326,15 @@ export default function Round() {
   const isLowTime = timeLeft <= 60;
   const totalTime = currentScenario?.durationSeconds || game.roundDurationSeconds || 300;
   const timeProgress = ((totalTime - timeLeft) / totalTime) * 100;
+
+  // Picture-answer questions need a wider grid so three portraits sit side by
+  // side on a laptop/projector while still stacking on a phone.
+  const mcCurrentOptions = currentScenario?.mcQuestions?.[mcCurrentQ]?.options ?? [];
+  const mcHasOptionImages = mcCurrentOptions.some((o) => Boolean(o.imageSrc));
+  const mcOptionGridClass =
+    mcHasOptionImages && mcCurrentOptions.length === 3
+      ? 'grid-cols-1 sm:grid-cols-3'
+      : 'grid-cols-1 sm:grid-cols-2';
 
   return (
     <div className="min-h-screen bg-gradient-main relative">
@@ -418,7 +455,37 @@ export default function Round() {
                 </p>
               </div>
 
-              {mcBlockDone ? (
+              {!mcStarted && !mcBlockDone && !hasSubmitted ? (
+                /* ============ BLOCK START GATE ============
+                   Nothing is timed until the player is ready: latecomers do not
+                   lose Q1, and an audio clue can be played before any clock. */
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="dramatic-card p-6 sm:p-8 text-center"
+                >
+                  <MediaBlock media={currentScenario.media} className="mb-6" />
+
+                  <p className="text-white/70 font-semibold mb-2">
+                    {currentScenario.mcQuestions.length} preguntas · {currentScenario.mcQuestions[0]?.timeLimitSeconds}s cada una
+                  </p>
+                  <p className="text-white/40 text-xs font-medium mb-6 max-w-md mx-auto leading-relaxed">
+                    {MC_SCORING_LEGEND}
+                  </p>
+
+                  <button
+                    onClick={() => setMcStarted(true)}
+                    className="primary-button inline-flex items-center gap-2 px-8 py-4 text-lg"
+                  >
+                    <Play className="w-5 h-5" />
+                    Empezar
+                  </button>
+
+                  <p className="text-white/40 text-sm font-semibold mt-4">
+                    Empieza solo en {mcGateLeft}s
+                  </p>
+                </motion.div>
+              ) : mcBlockDone ? (
                 /* MC Block Summary */
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
@@ -435,7 +502,10 @@ export default function Round() {
                   >
                     {mcBlockScore}
                   </motion.div>
-                  <p className="text-white/50 text-sm font-bold mb-6">Puntaje del Bloque</p>
+                  <p className="text-white/50 text-sm font-bold mb-1">Puntaje del Bloque</p>
+                  <p className="text-white/40 text-xs font-medium mb-6 max-w-md mx-auto leading-relaxed">
+                    {MC_SCORING_LEGEND}
+                  </p>
 
                   <div className="space-y-3 max-w-md mx-auto">
                     {mcResponses.map((r, i) => (
@@ -491,11 +561,15 @@ export default function Round() {
                     </motion.div>
                   </div>
 
-                  {/* Question text */}
+                  {/* Question text + optional media */}
                   <div className="dramatic-card p-6">
                     <p className="text-xl font-black text-white leading-relaxed">
                       {currentScenario.mcQuestions[mcCurrentQ]?.question}
                     </p>
+                    <MediaBlock
+                      media={currentScenario.mcQuestions[mcCurrentQ]?.media}
+                      className="mt-4"
+                    />
                   </div>
 
                   {/* Timer progress bar */}
@@ -510,7 +584,7 @@ export default function Round() {
                   </div>
 
                   {/* Option buttons */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className={`grid ${mcOptionGridClass} gap-3`}>
                     {currentScenario.mcQuestions[mcCurrentQ]?.options.map((opt, i) => {
                       const correctIdx = currentScenario.mcQuestions![mcCurrentQ]?.correctOptionIndex;
                       const isCorrectOption = i === correctIdx;
@@ -535,18 +609,31 @@ export default function Round() {
                           disabled={mcShowFeedback}
                           whileHover={!mcShowFeedback ? { scale: 1.02 } : {}}
                           whileTap={!mcShowFeedback ? { scale: 0.98 } : {}}
-                          className={`${btnClass} p-5 rounded-xl text-left transition-all font-bold text-white text-base leading-snug min-h-[80px] flex items-center gap-3`}
+                          className={`${btnClass} p-5 rounded-xl text-left transition-all font-bold text-white text-base leading-snug min-h-[80px] flex ${
+                            opt.imageSrc ? 'flex-col items-stretch gap-3' : 'items-center gap-3'
+                          }`}
                         >
-                          <span className="w-8 h-8 rounded-lg bg-black/20 flex items-center justify-center text-sm font-black shrink-0">
-                            {opt.id}
+                          {opt.imageSrc && (
+                            <img
+                              src={resolveMediaSrc(opt.imageSrc)}
+                              alt={opt.imageAlt || opt.text}
+                              loading="lazy"
+                              onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                              className="w-full h-36 sm:h-44 object-cover rounded-lg bg-black/20"
+                            />
+                          )}
+                          <span className="flex items-center gap-3">
+                            <span className="w-8 h-8 rounded-lg bg-black/20 flex items-center justify-center text-sm font-black shrink-0">
+                              {opt.id}
+                            </span>
+                            <span className="flex-1">{opt.text}</span>
+                            {showResult && isCorrectOption && (
+                              <CheckCircle className="w-6 h-6 text-white shrink-0" />
+                            )}
+                            {showResult && isSelected && !isCorrectOption && (
+                              <XCircle className="w-6 h-6 text-white shrink-0" />
+                            )}
                           </span>
-                          <span className="flex-1">{opt.text}</span>
-                          {showResult && isCorrectOption && (
-                            <CheckCircle className="w-6 h-6 text-white shrink-0" />
-                          )}
-                          {showResult && isSelected && !isCorrectOption && (
-                            <XCircle className="w-6 h-6 text-white shrink-0" />
-                          )}
                         </motion.button>
                       );
                     })}
@@ -565,7 +652,14 @@ export default function Round() {
                         </p>
                       ) : (
                         <p className="text-kahoot-red font-black text-lg">
-                          {mcSelectedOption === null ? 'Tiempo agotado!' : 'Incorrecto'}
+                          {mcSelectedOption === null
+                            ? 'Tiempo agotado! +0 pts'
+                            : `Incorrecto +${mcResponses[mcResponses.length - 1]?.pointsAwarded ?? 0} pts`}
+                        </p>
+                      )}
+                      {currentScenario.mcQuestions[mcCurrentQ]?.explanation && (
+                        <p className="text-white/70 text-sm font-medium mt-2 max-w-xl mx-auto leading-relaxed">
+                          {currentScenario.mcQuestions[mcCurrentQ]?.explanation}
                         </p>
                       )}
                     </motion.div>
@@ -617,6 +711,7 @@ export default function Round() {
                   <p className="text-white/80 leading-relaxed whitespace-pre-wrap font-medium">
                     {currentScenario.context ?? currentScenario.prompt}
                   </p>
+                  <MediaBlock media={currentScenario.media} className="mt-4" />
                 </div>
 
                 {currentScenario.question && (

@@ -41,7 +41,7 @@
     "category": "Kahoot",
     "type": "multiple_choice",
     "ranked": true,
-    "durationSeconds": 55,
+    "durationSeconds": 87,
     "mcQuestions": [
       {
         "question": "La indexacion de documentos (generar embeddings) se hace:",
@@ -112,7 +112,7 @@
     "category": "Kahoot",
     "type": "multiple_choice",
     "ranked": true,
-    "durationSeconds": 55,
+    "durationSeconds": 87,
     "mcQuestions": [
       {
         "question": "Si la query 'apoyo laboral' devuelve chunks sobre 'becas', el problema mas probable es:",
@@ -218,7 +218,7 @@
     "category": "Kahoot",
     "type": "multiple_choice",
     "ranked": true,
-    "durationSeconds": 55,
+    "durationSeconds": 87,
     "mcQuestions": [
       {
         "question": "Si el RAG inventa un requisito que no esta en ningun chunk recuperado, el problema es de:",
