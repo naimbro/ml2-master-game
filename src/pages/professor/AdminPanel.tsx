@@ -41,7 +41,7 @@ export default function AdminPanel() {
   return (
     <div className="min-h-screen bg-gradient-main">
       <header className="p-4">
-        <Link to="/professor" className="flex items-center gap-2 text-white/70 hover:text-white transition-colors w-fit">
+        <Link to="/professor" className="flex items-center gap-2 text-ink-soft hover:text-ink transition-colors w-fit">
           <ArrowLeft className="w-5 h-5" />
           Volver al panel
         </Link>
@@ -58,7 +58,7 @@ export default function AdminPanel() {
             Solicitudes pendientes {pending.length > 0 && `(${pending.length})`}
           </h2>
           {pending.length === 0 && (
-            <p className="text-white/50 mb-8">No hay solicitudes pendientes.</p>
+            <p className="text-muted mb-8">No hay solicitudes pendientes.</p>
           )}
           <div className="space-y-4 mb-10">
             {pending.map((p) => (
@@ -66,19 +66,19 @@ export default function AdminPanel() {
                 <div className="flex justify-between items-start gap-4">
                   <div>
                     <p className="font-bold">{p.displayName || p.email}</p>
-                    <p className="text-white/60 text-sm">{p.email} · {p.institution}</p>
-                    <p className="text-white/70 text-sm mt-2">{p.motivation}</p>
+                    <p className="text-muted text-sm">{p.email} · {p.institution}</p>
+                    <p className="text-ink-soft text-sm mt-2">{p.motivation}</p>
                   </div>
                   <div className="flex gap-2 shrink-0">
                     <button
                       onClick={() => review(p.uid, 'approved')}
-                      className="flex items-center gap-1 px-3 py-2 bg-emerald-500/20 hover:bg-emerald-500/40 text-emerald-300 rounded-lg transition-colors text-sm font-semibold"
+                      className="flex items-center gap-1 px-3 py-2 bg-emerald-500/20 hover:bg-emerald-500/40 text-emerald-700 rounded-lg transition-colors text-sm font-semibold"
                     >
                       <Check className="w-4 h-4" /> Aprobar
                     </button>
                     <button
                       onClick={() => review(p.uid, 'rejected')}
-                      className="flex items-center gap-1 px-3 py-2 bg-rose-500/20 hover:bg-rose-500/40 text-rose-300 rounded-lg transition-colors text-sm font-semibold"
+                      className="flex items-center gap-1 px-3 py-2 bg-rose-500/20 hover:bg-rose-500/40 text-rose-700 rounded-lg transition-colors text-sm font-semibold"
                     >
                       <X className="w-4 h-4" /> Rechazar
                     </button>
@@ -89,19 +89,19 @@ export default function AdminPanel() {
           </div>
 
           <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-            <Users className="w-5 h-5 text-white/50" />
+            <Users className="w-5 h-5 text-muted" />
             Profesores aprobados ({approved.length})
           </h2>
           <div className="space-y-2">
             {approved.map((p) => (
-              <div key={p.uid} className="bg-white/5 rounded-lg px-4 py-3 flex justify-between items-center">
+              <div key={p.uid} className="bg-surface-2 rounded-lg px-4 py-3 flex justify-between items-center">
                 <div>
                   <span className="font-semibold">{p.displayName || p.email}</span>
-                  <span className="text-white/50 text-sm ml-2">{p.email} · {p.institution}</span>
+                  <span className="text-muted text-sm ml-2">{p.email} · {p.institution}</span>
                 </div>
                 <button
                   onClick={() => review(p.uid, 'rejected')}
-                  className="text-white/40 hover:text-rose-400 text-sm transition-colors"
+                  className="text-faint hover:text-rose-400 text-sm transition-colors"
                 >
                   Revocar
                 </button>

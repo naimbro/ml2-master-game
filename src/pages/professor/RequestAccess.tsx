@@ -58,7 +58,7 @@ export default function RequestAccess({ access }: { access: ProfessorAccess }) {
           <div className="text-center">
             <Clock className="w-12 h-12 text-amber-400 mx-auto mb-4" />
             <h1 className="text-2xl font-bold mb-2">Solicitud en revisión</h1>
-            <p className="text-white/60 mb-6">
+            <p className="text-muted mb-6">
               Tu solicitud de acceso como profesor está siendo revisada.
               Te avisaremos por correo cuando sea aprobada.
             </p>
@@ -69,7 +69,7 @@ export default function RequestAccess({ access }: { access: ProfessorAccess }) {
           <div className="text-center">
             <XCircle className="w-12 h-12 text-rose-400 mx-auto mb-4" />
             <h1 className="text-2xl font-bold mb-2">Solicitud no aprobada</h1>
-            <p className="text-white/60 mb-6">
+            <p className="text-muted mb-6">
               Tu solicitud no fue aprobada. Si crees que es un error, escribe a
               naim.bro@gmail.com.
             </p>
@@ -81,14 +81,14 @@ export default function RequestAccess({ access }: { access: ProfessorAccess }) {
             <div className="text-center mb-6">
               <GraduationCap className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
               <h1 className="text-2xl font-bold mb-2">Acceso para profesores</h1>
-              <p className="text-white/60">
+              <p className="text-muted">
                 Cuéntanos quién eres y qué curso quieres crear. El administrador
                 revisará tu solicitud.
               </p>
             </div>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm text-white/70 mb-1">Institución</label>
+                <label className="block text-sm text-ink-soft mb-1">Institución</label>
                 <input
                   type="text"
                   value={institution}
@@ -96,11 +96,11 @@ export default function RequestAccess({ access }: { access: ProfessorAccess }) {
                   required
                   maxLength={120}
                   placeholder="Ej: Universidad Adolfo Ibáñez"
-                  className="w-full bg-white/10 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-cyan-400"
+                  className="w-full bg-surface-2 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-cyan-400"
                 />
               </div>
               <div>
-                <label className="block text-sm text-white/70 mb-1">
+                <label className="block text-sm text-ink-soft mb-1">
                   ¿Qué curso quieres crear?
                 </label>
                 <textarea
@@ -110,7 +110,7 @@ export default function RequestAccess({ access }: { access: ProfessorAccess }) {
                   maxLength={500}
                   rows={3}
                   placeholder="Ej: Curso de políticas públicas para 30 estudiantes de magíster"
-                  className="w-full bg-white/10 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-cyan-400 resize-none"
+                  className="w-full bg-surface-2 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-cyan-400 resize-none"
                 />
               </div>
               {error && <p className="text-rose-400 text-sm">{error}</p>}
@@ -127,7 +127,7 @@ export default function RequestAccess({ access }: { access: ProfessorAccess }) {
 
         <button
           onClick={handleLogout}
-          className="flex items-center gap-2 mx-auto mt-6 px-3 py-1.5 text-sm text-white/60 hover:text-white bg-white/5 hover:bg-white/10 rounded-lg transition-colors"
+          className="flex items-center gap-2 mx-auto mt-6 px-3 py-1.5 text-sm text-muted hover:text-ink bg-surface-2 hover:bg-surface-2 rounded-lg transition-colors"
         >
           <LogOut className="w-4 h-4" />
           Salir ({user?.email})

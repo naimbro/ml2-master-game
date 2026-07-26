@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 660" role="img"
+     aria-label="Diagrama tactico del minuto 60 de la final: Espana ataca hacia la derecha en 4-3-3; Argentina defiende en bloque 4-4-2. Yamal gana el uno contra uno por su banda, Cucurella sube y De Paul queda anclado siguiendolo, y Julian Alvarez queda aislado sin apoyos.">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#FFC107"/>
+    </marker>
+    <marker id="arrowDim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#ffffff" opacity="0.6"/>
+    </marker>
+    <style>
+      .name { font-family: Montserrat, system-ui, sans-serif; font-weight: 700; font-size: 13px; fill: #ffffff; }
+      .note { font-family: Montserrat, system-ui, sans-serif; font-weight: 800; font-size: 15px; fill: #FFC107; }
+      .cap  { font-family: Montserrat, system-ui, sans-serif; font-weight: 800; font-size: 20px; fill: #ffffff; }
+      .stat { font-family: Montserrat, system-ui, sans-serif; font-weight: 700; font-size: 15px; fill: #ffffff; }
+      .sub  { font-family: Montserrat, system-ui, sans-serif; font-weight: 600; font-size: 12px; fill: #ffffff; }
+    </style>
+  </defs>
+
+  <rect width="900" height="660" fill="#12331f"/>
+  <text class="cap" x="30" y="34">Final del Mundial 2026 — minuto 60 — Espana 0-0 Argentina</text>
+
+  <!-- pitch -->
+  <g stroke="#ffffff" stroke-opacity=".32" stroke-width="2" fill="none">
+    <rect x="30" y="50" width="840" height="480" rx="4"/>
+    <line x1="450" y1="50" x2="450" y2="530"/>
+    <circle cx="450" cy="290" r="64"/>
+    <rect x="30" y="140" width="96" height="300"/>
+    <rect x="774" y="140" width="96" height="300"/>
+    <rect x="30" y="218" width="34" height="144"/>
+    <rect x="836" y="218" width="34" height="144"/>
+  </g>
+
+  <!-- Argentina 4-4-2 block -->
+  <!-- Dashed outline as well as the tint: if a renderer ignores fill-opacity the
+       block is still legible as an outline rather than a solid blue slab. -->
+  <rect x="540" y="90" width="290" height="400" fill="#45A3E5" fill-opacity=".12"
+        stroke="#9AD3F5" stroke-opacity=".55" stroke-width="2" stroke-dasharray="10 7" rx="10"/>
+  <text class="name" x="815" y="112" text-anchor="end" fill="#9AD3F5" font-size="14">BLOQUE 4-4-2</text>
+
+  <!-- SPAIN -->
+  <g fill="#E03A4E" stroke="#ffffff" stroke-width="2">
+    <circle cx="62"  cy="290" r="12"/>
+    <circle cx="170" cy="205" r="12"/>
+    <circle cx="170" cy="385" r="12"/>
+    <circle cx="245" cy="462" r="12"/>
+    <circle cx="430" cy="118" r="12"/>
+    <circle cx="285" cy="290" r="12"/>
+    <circle cx="392" cy="378" r="12"/>
+    <circle cx="412" cy="238" r="12"/>
+    <circle cx="452" cy="168" r="12"/>
+    <circle cx="548" cy="322" r="12"/>
+    <circle cx="586" cy="462" r="15" stroke="#FFC107" stroke-width="3"/>
+  </g>
+  <g class="name" text-anchor="middle">
+    <text x="62"  y="320">Simon</text>
+    <text x="170" y="192">Cubarsi</text>
+    <text x="170" y="414">Laporte</text>
+    <text x="245" y="491">Porro</text>
+    <text x="430" y="103">Cucurella</text>
+    <text x="285" y="320">Rodri</text>
+    <text x="392" y="407">Fabian</text>
+    <text x="412" y="225">Olmo</text>
+    <text x="452" y="155">Baena</text>
+    <text x="548" y="351">Oyarzabal</text>
+  </g>
+  <text class="name" x="556" y="467" text-anchor="end" fill="#FFC107">Yamal</text>
+
+  <!-- ARGENTINA -->
+  <g fill="#7FC4E8" stroke="#0d2b3e" stroke-width="2">
+    <circle cx="858" cy="290" r="12"/>
+    <circle cx="668" cy="425" r="12"/>
+    <circle cx="716" cy="345" r="12"/>
+    <circle cx="716" cy="238" r="12"/>
+    <circle cx="668" cy="158" r="12"/>
+    <circle cx="576" cy="140" r="12"/>
+    <circle cx="614" cy="358" r="12"/>
+    <circle cx="614" cy="252" r="12"/>
+    <circle cx="640" cy="470" r="12"/>
+    <circle cx="508" cy="205" r="12"/>
+    <circle cx="450" cy="290" r="15" stroke="#FFC107" stroke-width="3"/>
+  </g>
+  <g class="name" text-anchor="middle" fill="#DCEFFA">
+    <text x="858" y="320">E. Martinez</text>
+    <text x="668" y="454">Tagliafico</text>
+    <text x="716" y="374">Otamendi</text>
+    <text x="716" y="225">Medina</text>
+    <text x="668" y="145">Molina</text>
+    <text x="576" y="127">De Paul</text>
+    <text x="614" y="387">Mac Allister</text>
+    <text x="614" y="239">Enzo</text>
+    <text x="640" y="499">Simeone</text>
+    <text x="508" y="192">Messi</text>
+    <text x="450" y="360" fill="#FFC107">J. Alvarez</text>
+  </g>
+
+  <!-- Yamal 1v1 -->
+  <path d="M606 455 Q 700 420 782 358" stroke="#FFC107" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+  <text class="note" x="700" y="516" text-anchor="middle">1v1 de Yamal, una y otra vez</text>
+
+  <!-- Cucurella pins De Paul -->
+  <path d="M450 122 L 552 136" stroke="#ffffff" stroke-opacity=".6" stroke-width="3" stroke-dasharray="7 5" fill="none" marker-end="url(#arrowDim)"/>
+  <text class="note" x="300" y="76" text-anchor="middle">Cucurella sube: De Paul queda anclado</text>
+
+  <!-- Alvarez isolated -->
+  <circle cx="450" cy="290" r="42" fill="none" stroke="#FFC107" stroke-width="2.5" stroke-dasharray="6 6"/>
+  <text class="note" x="322" y="243" text-anchor="middle">Alvarez, sin apoyos</text>
+  <path d="M352 253 L 418 279" stroke="#FFC107" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- facts below the pitch -->
+  <text class="stat" x="30" y="562">Argentina: 0 remates al arco en todo el partido (2 remates en total).</text>
+  <text class="stat" x="30" y="586">Espana terminara con 20 remates, 12 al arco y ~60% de posesion.</text>
+  <text class="sub"  x="30" y="620" opacity=".6">Espana ataca hacia la derecha. Esquema propio; posiciones ilustrativas del patron descrito por los analisis del partido.</text>
+</svg>

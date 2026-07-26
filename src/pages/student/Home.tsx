@@ -45,7 +45,7 @@ export default function Home() {
       <header className="relative z-10 p-4 flex justify-between items-center">
         <div className="flex items-center gap-2">
           <div className="w-9 h-9 bg-kahoot-green rounded-lg flex items-center justify-center shadow-md">
-            <Zap className="w-5 h-5 text-white" />
+            <Zap className="w-5 h-5 text-onaccent" />
           </div>
           <span className="text-xl font-extrabold tracking-tight">Aula Maestra</span>
         </div>
@@ -57,18 +57,18 @@ export default function Home() {
                 <img
                   src={user.photoURL}
                   alt={user.displayName || 'User'}
-                  className="w-8 h-8 rounded-full border-2 border-white/30"
+                  className="w-8 h-8 rounded-full border-2 border-line"
                 />
               ) : (
-                <User className="w-8 h-8 text-white/70" />
+                <User className="w-8 h-8 text-ink-soft" />
               )}
-              <span className="text-white/70 text-sm hidden sm:block font-medium">
+              <span className="text-ink-soft text-sm hidden sm:block font-medium">
                 {user.displayName || user.email}
               </span>
             </div>
             <button
               onClick={logout}
-              className="flex items-center gap-2 px-3 py-1.5 text-sm bg-white/10 hover:bg-white/20 rounded-lg transition-colors font-semibold"
+              className="flex items-center gap-2 px-3 py-1.5 text-sm bg-surface-2 hover:bg-surface-3 rounded-lg transition-colors font-semibold"
             >
               <LogOut className="w-4 h-4" />
               <span className="hidden sm:inline">Salir</span>
@@ -92,17 +92,17 @@ export default function Home() {
             className="inline-block mb-6"
           >
             <div className="w-24 h-24 bg-kahoot-green rounded-3xl flex items-center justify-center mx-auto shadow-xl shadow-kahoot-green/30 rotate-3">
-              <Zap className="w-14 h-14 text-white" />
+              <Zap className="w-14 h-14 text-onaccent" />
             </div>
           </motion.div>
 
           <h1 className="text-5xl md:text-7xl font-black mb-4 tracking-tight">
             Aula Maestra
           </h1>
-          <p className="text-xl md:text-2xl text-white/80 max-w-2xl mx-auto font-semibold">
+          <p className="text-xl md:text-2xl text-ink-soft max-w-2xl mx-auto font-semibold">
             Aprende jugando
           </p>
-          <p className="text-white/50 mt-3 font-medium">
+          <p className="text-muted mt-3 font-medium">
             Pon a prueba tus conocimientos en escenarios reales de tu curso
           </p>
         </motion.div>
@@ -145,10 +145,10 @@ export default function Home() {
               className="dramatic-card p-6 text-center hover:scale-[1.02] transition-transform"
             >
               <div className={`w-14 h-14 ${feature.color} rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg ${feature.shadow}`}>
-                <feature.icon className="w-7 h-7 text-white" />
+                <feature.icon className="w-7 h-7 text-onaccent" />
               </div>
               <h3 className="text-lg font-bold mb-2">{feature.title}</h3>
-              <p className="text-white/60 text-sm font-medium">
+              <p className="text-muted text-sm font-medium">
                 {feature.desc}
               </p>
             </motion.div>
@@ -170,7 +170,7 @@ export default function Home() {
             >
               {isLoggingIn ? (
                 <>
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <div className="w-5 h-5 border-2 border-ink border-t-transparent rounded-full animate-spin" />
                   Conectando...
                 </>
               ) : (
@@ -192,7 +192,7 @@ export default function Home() {
 
               <button
                 onClick={handleProfessorDashboard}
-                className="text-white/60 hover:text-white transition-colors font-semibold text-sm"
+                className="text-muted hover:text-ink transition-colors font-semibold text-sm"
               >
                 Panel del Profesor
               </button>
@@ -202,8 +202,8 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="fixed bottom-0 left-0 right-0 p-4 text-center text-white/30 text-sm font-medium">
-        <a href="https://naimbro.github.io/" target="_blank" rel="noopener noreferrer" className="hover:text-white/50 transition-colors">Naim Bro</a> — Escuela de Gobierno, Universidad Adolfo Ibanez
+      <footer className="fixed bottom-0 left-0 right-0 p-4 text-center text-faint text-sm font-medium">
+        <a href="https://naimbro.github.io/" target="_blank" rel="noopener noreferrer" className="hover:text-muted transition-colors">Naim Bro</a> — Escuela de Gobierno, Universidad Adolfo Ibanez
         <SupportLink variant="footer" />
       </footer>
     </div>

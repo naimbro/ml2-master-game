@@ -20,7 +20,7 @@ export default function SupportLink({ variant }: SupportLinkProps) {
           href={DONATION_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="hover:text-white/50 transition-colors"
+          className="hover:text-muted transition-colors"
         >
           ☕ Apoya este proyecto
         </a>
@@ -30,7 +30,7 @@ export default function SupportLink({ variant }: SupportLinkProps) {
 
   return (
     <div className="dramatic-card p-6 text-center">
-      <p className="text-white/70 mb-4">
+      <p className="text-ink-soft mb-4">
         ¿Te gustó la experiencia? Este proyecto se financia con donaciones.
       </p>
       <a

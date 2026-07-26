@@ -39,7 +39,7 @@ export default function CourseForm() {
   return (
     <div className="min-h-screen bg-gradient-main">
       <header className="p-4">
-        <Link to="/professor" className="flex items-center gap-2 text-white/70 hover:text-white transition-colors w-fit">
+        <Link to="/professor" className="flex items-center gap-2 text-ink-soft hover:text-ink transition-colors w-fit">
           <ArrowLeft className="w-5 h-5" />
           Volver al panel
         </Link>
@@ -51,43 +51,43 @@ export default function CourseForm() {
             <BookOpen className="w-8 h-8 text-cyan-400" />
             Crear curso
           </h1>
-          <p className="text-white/60 mb-8">
+          <p className="text-muted mb-8">
             Después de crear el curso podrás generar sesiones con el asistente IA.
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-sm text-white/70 mb-1">Nombre del curso</label>
+              <label className="block text-sm text-ink-soft mb-1">Nombre del curso</label>
               <input
                 type="text" value={name} onChange={(e) => setName(e.target.value)}
                 required maxLength={80} placeholder="Ej: Economía del Comportamiento"
-                className="w-full bg-white/10 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-cyan-400"
+                className="w-full bg-surface-2 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-cyan-400"
               />
             </div>
             <div>
-              <label className="block text-sm text-white/70 mb-1">Nombre corto (opcional)</label>
+              <label className="block text-sm text-ink-soft mb-1">Nombre corto (opcional)</label>
               <input
                 type="text" value={shortName} onChange={(e) => setShortName(e.target.value)}
                 maxLength={12} placeholder="Ej: EconC"
-                className="w-full bg-white/10 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-cyan-400"
+                className="w-full bg-surface-2 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-cyan-400"
               />
             </div>
             <div>
-              <label className="block text-sm text-white/70 mb-1">Descripción breve</label>
+              <label className="block text-sm text-ink-soft mb-1">Descripción breve</label>
               <input
                 type="text" value={tagline} onChange={(e) => setTagline(e.target.value)}
                 required maxLength={120} placeholder="Una línea que describa el curso"
-                className="w-full bg-white/10 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-cyan-400"
+                className="w-full bg-surface-2 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-cyan-400"
               />
             </div>
             <div>
-              <label className="block text-sm text-white/70 mb-2">Color</label>
+              <label className="block text-sm text-ink-soft mb-2">Color</label>
               <div className="flex gap-3">
                 {COURSE_COLORS.map((c) => (
                   <button
                     key={c.id} type="button" onClick={() => setColor(c.id)}
                     className={`w-10 h-10 rounded-lg ${c.iconClass} transition-transform ${
-                      color === c.id ? 'ring-2 ring-white scale-110' : 'opacity-60 hover:opacity-100'
+                      color === c.id ? 'ring-2 ring-ink scale-110' : 'opacity-60 hover:opacity-100'
                     }`}
                     aria-label={`Color ${c.id}`}
                   />

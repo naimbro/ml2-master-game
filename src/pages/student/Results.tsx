@@ -10,6 +10,7 @@ import { playScoreReveal, playGoodScore, playBadScore, playDrumRoll, playTension
 import { confettiBurst, confettiCannons } from '../../lib/confetti';
 import RecalibrationReveal from './RecalibrationReveal';
 import { useRoundDuels } from '../../hooks/useRoundDuels';
+import { MC_SCORING_LEGEND } from '../../lib/mcScoring';
 
 interface JudgeEvaluation {
   judgeName: string;
@@ -107,6 +108,7 @@ export default function Results() {
   // Compute values needed by hooks (must be before early returns)
   const currentScenario = game?.scenarios?.[game?.currentRound ? game.currentRound - 1 : 0];
   const isRankedRound = currentScenario?.ranked !== false;
+  const isMCRound = currentScenario?.type === 'multiple_choice';
 
   // Cumulative leaderboard rankings
   // Uses totalScore from round doc (race-condition-proof) with game doc fallback
@@ -197,14 +199,18 @@ export default function Results() {
   useEffect(() => {
     const phase = (roundResults as { phase?: string } | null)?.phase;
     if (
-      isHost && phase === 'provisional' && isRankedRound &&
+      // MC rounds have no text to compare, so the pairwise tournament would
+      // find <2 candidates and bail — but not before flipping the round to
+      // 'recalibrating', which renders an empty duel overlay and then replays
+      // the whole leaderboard reveal. Skip it outright.
+      isHost && phase === 'provisional' && isRankedRound && !isMCRound &&
       currentRound !== undefined && totalRounds !== undefined &&
       currentRound < totalRounds && !recalTriggered.current
     ) {
       recalTriggered.current = true;
       setTimeout(() => { recalibrateRound(currentRound).catch(console.error); }, 3500);
     }
-  }, [isHost, roundResults, isRankedRound, currentRound, totalRounds, recalibrateRound]);
+  }, [isHost, roundResults, isRankedRound, isMCRound, currentRound, totalRounds, recalibrateRound]);
 
   // Replay the leaderboard reveal when phase flips provisional -> final
   const prevPhaseRef = useRef<string | undefined>(undefined);
@@ -250,10 +256,10 @@ export default function Results() {
       <div className="min-h-screen bg-gradient-main flex items-center justify-center">
         <div className="text-center">
           <div className="w-20 h-20 border-4 border-kahoot-green border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-white/80 text-lg font-bold">
+          <p className="text-ink-soft text-lg font-bold">
             {isProcessing ? 'Evaluando respuestas con IA...' : 'Cargando resultados...'}
           </p>
-          <p className="text-white/50 text-sm mt-2 font-medium">
+          <p className="text-muted text-sm mt-2 font-medium">
             3 jueces AI estan analizando cada respuesta
           </p>
         </div>
@@ -275,7 +281,6 @@ export default function Results() {
   const userSubmission = submissions.find(s => s.playerId === user?.uid);
   const userEvaluation = userSubmission?.evaluation;
   const userRank = roundResults?.rankings.find(r => r.playerId === user?.uid);
-  const isMCRound = currentScenario?.type === 'multiple_choice';
 
   // Judge bar colors (Kahoot answer colors)
   const JUDGE_COLORS = ['bg-kahoot-red', 'bg-kahoot-blue', 'bg-kahoot-green'];
@@ -283,16 +288,16 @@ export default function Results() {
   return (
     <div className="min-h-screen bg-gradient-main">
       {/* Header */}
-      <header className="p-4 border-b-2 border-white/10">
+      <header className="p-4 border-b-2 border-line">
         <div className="max-w-4xl mx-auto flex justify-between items-center">
           <div>
-            <span className="text-white/50 text-xs font-bold uppercase tracking-wider">Resultados Ronda</span>
+            <span className="text-muted text-xs font-bold uppercase tracking-wider">Resultados Ronda</span>
             <p className="text-xl font-black">
-              {game.currentRound} <span className="text-white/40 font-bold">/ {game.totalRounds}</span>
+              {game.currentRound} <span className="text-faint font-bold">/ {game.totalRounds}</span>
             </p>
           </div>
 
-          <div className="text-2xl font-black tracking-wider text-white/60">
+          <div className="text-2xl font-black tracking-wider text-muted">
             {gameCode}
           </div>
         </div>
@@ -316,11 +321,11 @@ export default function Results() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-3xl font-black mb-2 text-center flex items-center justify-center gap-3">
-              <TrendingUp className="w-8 h-8 text-kahoot-green" />
+            <h2 className="text-3xl sm:text-4xl font-black mb-2 text-center flex items-center justify-center gap-3">
+              <TrendingUp className="w-8 h-8 sm:w-9 sm:h-9 text-kahoot-green" />
               {numPlayers > TOP_N ? `Top ${TOP_N}` : 'Ranking'}
             </h2>
-            <p className="text-white/40 text-sm font-bold text-center mb-8 uppercase tracking-widest">
+            <p className="text-faint text-sm font-bold text-center mb-8 uppercase tracking-widest">
               {allRevealed ? 'Posiciones actualizadas'
                 : lbPhase === 'swap' ? 'Actualizando posiciones...'
                 : lbPhase === 'reveal' || revealedCount > 0 ? 'Revelando resultados...'
@@ -328,15 +333,15 @@ export default function Results() {
             </p>
 
             {/* Column Headers */}
-            <div className="flex items-center gap-4 px-4 py-2 text-[10px] text-white/50 uppercase tracking-widest font-bold border-b border-white/10 mb-3 max-w-2xl mx-auto">
+            <div className="flex items-center gap-2 sm:gap-4 px-3 sm:px-4 py-2 text-[10px] text-muted uppercase tracking-widest font-bold border-b border-line mb-3 max-w-2xl lg:max-w-3xl mx-auto">
               <div className="w-12"></div>
-              <span className="flex-1">Jugador</span>
-              <span className="w-16 text-right">Ronda</span>
-              <span className="w-16 text-right">Prom</span>
+              <span className="flex-1 min-w-0">Jugador</span>
+              <span className="w-12 sm:w-16 text-right">Ronda</span>
+              <span className="w-12 sm:w-16 text-right">Prom</span>
             </div>
 
             {/* Animated Top N — explicit y-offset animation (no LayoutGroup) */}
-            <div className="space-y-2 max-w-2xl mx-auto">
+            <div className="space-y-2 max-w-2xl lg:max-w-3xl mx-auto">
               {topRankings.map((player, finalIdx) => {
                 // Calculate y-offset to show element at its INITIAL position
                 const initialIdx = topInitial.findIndex(p => p.playerId === player.playerId);
@@ -364,26 +369,29 @@ export default function Results() {
                       ? { type: 'tween', duration: 3, ease: [0.25, 0.1, 0.25, 1] }
                       : { duration: 0 }
                     }
-                    className={`flex items-center gap-4 p-4 rounded-xl transition-colors duration-500 ${
+                    // Horizontal padding and gaps shrink on phones, but vertical
+                    // padding must NOT: ROW_H below is the fixed row height the
+                    // swap animation offsets are computed from.
+                    className={`flex items-center gap-2 sm:gap-4 px-3 sm:px-4 py-4 rounded-xl transition-colors duration-500 ${
                       isSpotlight
                         ? 'bg-kahoot-green/25 border-2 border-kahoot-green/50 shadow-lg shadow-kahoot-green/20'
                         : player.playerId === user?.uid
                         ? 'bg-kahoot-green/15 border-2 border-kahoot-green/30'
-                        : 'bg-white/5 border-2 border-transparent'
+                        : 'bg-surface-2 border-2 border-transparent'
                     }`}
                   >
                     <div className="flex items-center gap-2">
                       <div
                         className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-lg transition-colors duration-500 ${
                           !revealed
-                            ? showingPrev ? 'bg-white/15' : 'bg-white/10'
+                            ? showingPrev ? 'bg-surface-3' : 'bg-surface-2'
                             : player.rank === 1
                             ? 'bg-yellow-500 text-black'
                             : player.rank === 2
                             ? 'bg-gray-400 text-black'
                             : player.rank === 3
                             ? 'bg-amber-600 text-black'
-                            : 'bg-white/20'
+                            : 'bg-surface-3'
                         }`}
                       >
                         {revealed ? (
@@ -395,7 +403,7 @@ export default function Results() {
                             {displayRank}
                           </motion.span>
                         ) : (
-                          <span className={showingPrev ? 'text-white/60' : ''}>
+                          <span className={showingPrev ? 'text-muted' : ''}>
                             {displayRank}
                           </span>
                         )}
@@ -415,19 +423,21 @@ export default function Results() {
                       </AnimatePresence>
                     </div>
 
-                    {/* Names ALWAYS fully visible — watching them move is the drama */}
-                    <span className="flex-1 font-bold text-lg truncate">
+                    {/* Names ALWAYS fully visible — watching them move is the drama.
+                        min-w-0 is required: a flex-1 child defaults to min-width:auto,
+                        so `truncate` cannot shrink it and long names overflow the row. */}
+                    <span className="flex-1 min-w-0 font-bold text-lg sm:text-xl truncate">
                       {player.playerName}
                       {player.playerId === user?.uid && (
                         <span className="text-kahoot-green text-sm ml-2 font-bold">(Tu)</span>
                       )}
                     </span>
 
-                    <span className={`w-16 text-right font-mono font-bold transition-all duration-300 ${
+                    <span className={`w-12 sm:w-16 text-right font-mono tabular-nums font-bold transition-all duration-300 ${
                       revealed
                         ? player.roundScore >= 80 ? 'text-kahoot-green' :
-                          player.roundScore >= 60 ? 'text-kahoot-yellow' : 'text-kahoot-red'
-                        : 'text-white/20'
+                          player.roundScore >= 60 ? 'text-amber-ink' : 'text-kahoot-red'
+                        : 'text-faint'
                     }`}>
                       {revealed ? (
                         <motion.span
@@ -441,7 +451,7 @@ export default function Results() {
                     </span>
 
                     <span
-                      className={`w-16 text-right font-mono font-black text-xl transition-all duration-500 ${
+                      className={`w-12 sm:w-16 text-right font-mono tabular-nums font-black text-xl sm:text-2xl transition-all duration-500 ${
                         revealed ? 'opacity-100' : showingPrev ? 'opacity-50' : 'opacity-20'
                       }`}
                     >
@@ -468,18 +478,18 @@ export default function Results() {
                 transition={{ delay: 0.2 }}
                 className="max-w-2xl mx-auto mt-4"
               >
-                <div className="text-center text-white/30 text-xs font-bold my-1">· · ·</div>
-                <div className="flex items-center gap-4 p-4 rounded-xl bg-kahoot-green/15 border-2 border-kahoot-green/30">
-                  <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center font-black text-lg">
+                <div className="text-center text-faint text-xs font-bold my-1">· · ·</div>
+                <div className="flex items-center gap-2 sm:gap-4 px-3 sm:px-4 py-4 rounded-xl bg-kahoot-green/15 border-2 border-kahoot-green/30">
+                  <div className="w-10 h-10 shrink-0 rounded-xl bg-surface-3 flex items-center justify-center font-black text-lg">
                     {userRankingEntry.rank}
                   </div>
-                  <span className="flex-1 font-bold text-lg truncate">
+                  <span className="flex-1 min-w-0 font-bold text-lg sm:text-xl truncate">
                     {userRankingEntry.playerName}
                     <span className="text-kahoot-green text-sm ml-2 font-bold">(Tu)</span>
                   </span>
                   <span className={`w-16 text-right font-mono font-bold ${
                     userRankingEntry.roundScore >= 80 ? 'text-kahoot-green' :
-                    userRankingEntry.roundScore >= 60 ? 'text-kahoot-yellow' : 'text-kahoot-red'
+                    userRankingEntry.roundScore >= 60 ? 'text-amber-ink' : 'text-kahoot-red'
                   }`}>
                     +{userRankingEntry.roundScore}
                   </span>
@@ -505,7 +515,7 @@ export default function Results() {
           >
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
-                <Zap className="w-5 h-5 text-kahoot-yellow" />
+                <Zap className="w-5 h-5 text-amber-ink" />
                 <h2 className="text-xl font-black">Resultado Kahoot</h2>
               </div>
               {userRank && (
@@ -518,9 +528,9 @@ export default function Results() {
                   <Trophy
                     className={`w-6 h-6 ${
                       userRank.rank === 1 ? 'text-yellow-400'
-                        : userRank.rank === 2 ? 'text-gray-300'
+                        : userRank.rank === 2 ? 'text-muted'
                         : userRank.rank === 3 ? 'text-amber-600'
-                        : 'text-white/50'
+                        : 'text-muted'
                     }`}
                   />
                   <span className="text-lg font-black">#{userRank.rank}</span>
@@ -535,25 +545,25 @@ export default function Results() {
                 transition={{ type: 'spring', stiffness: 200, delay: 0.2 }}
                 className={`text-6xl font-black ${
                   (userSubmission.mcBlockScore || 0) >= 80 ? 'text-kahoot-green'
-                    : (userSubmission.mcBlockScore || 0) >= 40 ? 'text-kahoot-yellow'
+                    : (userSubmission.mcBlockScore || 0) >= 40 ? 'text-amber-ink'
                     : 'text-kahoot-red'
                 }`}
               >
                 {userSubmission.mcBlockScore || 0}
               </motion.div>
-              <p className="text-white/50 text-sm font-bold">Puntaje del Bloque</p>
+              <p className="text-muted text-sm font-bold">Puntaje del Bloque</p>
             </div>
 
             {userSubmission.mcResponses && currentScenario?.mcQuestions && (
               <div className="space-y-3 max-w-md mx-auto">
                 {userSubmission.mcResponses.map((r: { questionIndex: number; correct: boolean; pointsAwarded: number; selectedOptionId: string | null }, i: number) => (
-                  <div key={i} className="flex items-center gap-3 p-3 bg-white/5 rounded-xl">
+                  <div key={i} className="flex items-center gap-3 p-3 bg-surface-2 rounded-xl">
                     {r.correct ? (
                       <CheckCircle className="w-6 h-6 text-kahoot-green shrink-0" />
                     ) : (
                       <XCircle className="w-6 h-6 text-kahoot-red shrink-0" />
                     )}
-                    <span className="text-sm text-white/80 font-medium flex-1 text-left">
+                    <span className="text-sm text-ink-soft font-medium flex-1 text-left">
                       {currentScenario.mcQuestions![i]?.question?.slice(0, 80)}...
                     </span>
                     <span className="font-mono font-bold text-sm">
@@ -563,6 +573,10 @@ export default function Results() {
                 ))}
               </div>
             )}
+
+            <p className="text-faint text-xs font-medium mt-6 max-w-md mx-auto leading-relaxed">
+              {MC_SCORING_LEGEND}
+            </p>
           </motion.div>
         )}
 
@@ -588,17 +602,17 @@ export default function Results() {
                       userRank.rank === 1
                         ? 'text-yellow-400'
                         : userRank.rank === 2
-                        ? 'text-gray-300'
+                        ? 'text-muted'
                         : userRank.rank === 3
                         ? 'text-amber-600'
-                        : 'text-white/50'
+                        : 'text-muted'
                     }`}
                   />
                   <span className="text-lg font-black">#{userRank.rank}</span>
                 </motion.div>
               )}
               {!isRankedRound && (
-                <span className="px-3 py-1 bg-kahoot-orange/25 text-orange-200 rounded-full text-xs font-bold uppercase tracking-wider">
+                <span className="px-3 py-1 bg-kahoot-orange/25 text-orange-800 rounded-full text-xs font-bold uppercase tracking-wider">
                   Diagnostica
                 </span>
               )}
@@ -614,22 +628,22 @@ export default function Results() {
                     userEvaluation.finalScore >= 80
                       ? 'text-kahoot-green'
                       : userEvaluation.finalScore >= 60
-                      ? 'text-kahoot-yellow'
+                      ? 'text-amber-ink'
                       : 'text-kahoot-red'
                   }`}
                 >
                   {userEvaluation.finalScore}
                 </motion.div>
-                <p className="text-white/50 text-sm font-bold">Puntaje</p>
+                <p className="text-muted text-sm font-bold">Puntaje</p>
               </div>
 
               <div className="flex-1 space-y-3">
                 {userEvaluation.evaluations?.map((evaluation: JudgeEvaluation, i: number) => (
                   <div key={i} className="flex items-center gap-3">
-                    <span className="text-sm text-white/70 w-32 truncate font-semibold">
+                    <span className="text-sm text-ink-soft w-32 truncate font-semibold">
                       {evaluation.judgeAvatar ? `${evaluation.judgeAvatar} ` : ''}{evaluation.judgeName}
                     </span>
-                    <div className="flex-1 h-3 bg-white/10 rounded-full overflow-hidden">
+                    <div className="flex-1 h-3 bg-surface-2 rounded-full overflow-hidden">
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${evaluation.score}%` }}
@@ -647,19 +661,19 @@ export default function Results() {
 
             {/* Student's submitted response */}
             {userSubmission?.response && (
-              <div className="mb-4 p-4 bg-white/5 rounded-xl">
-                <p className="text-sm text-white/50 mb-2 font-bold uppercase tracking-wider text-xs">Tu respuesta:</p>
-                <p className="text-white/80 text-sm whitespace-pre-wrap font-medium">{userSubmission.response}</p>
+              <div className="mb-4 p-4 bg-surface-2 rounded-xl">
+                <p className="text-sm text-muted mb-2 font-bold uppercase tracking-wider text-xs">Tu respuesta:</p>
+                <p className="text-ink-soft text-sm whitespace-pre-wrap font-medium">{userSubmission.response}</p>
               </div>
             )}
 
             {/* Reference Answer */}
             {currentScenario?.referenceAnswer && (
-              <details className="mb-4 p-4 bg-white/5 rounded-xl">
-                <summary className="text-white/50 font-bold uppercase tracking-wider text-xs cursor-pointer hover:text-white/70">
+              <details className="mb-4 p-4 bg-surface-2 rounded-xl">
+                <summary className="text-muted font-bold uppercase tracking-wider text-xs cursor-pointer hover:text-ink-soft">
                   Ver respuesta de referencia
                 </summary>
-                <p className="text-white/70 text-sm whitespace-pre-wrap font-medium mt-2">
+                <p className="text-ink-soft text-sm whitespace-pre-wrap font-medium mt-2">
                   {currentScenario.referenceAnswer}
                 </p>
               </details>
@@ -667,19 +681,19 @@ export default function Results() {
 
             {/* Feedback */}
             {userEvaluation.evaluations?.map((evaluation: JudgeEvaluation, i: number) => (
-              <div key={i} className="mb-4 p-4 bg-white/5 rounded-xl">
+              <div key={i} className="mb-4 p-4 bg-surface-2 rounded-xl">
                 <div className="flex items-center gap-2 mb-2">
                   <MessageSquare className={`w-4 h-4 ${
                     i === 0 ? 'text-kahoot-red' : i === 1 ? 'text-kahoot-blue' : 'text-kahoot-green'
                   }`} />
                   <span className="font-bold">{evaluation.judgeAvatar ? `${evaluation.judgeAvatar} ` : ''}{evaluation.judgeName}</span>
                 </div>
-                <p className="text-white/80 text-sm mb-3 font-medium">{evaluation.feedback}</p>
+                <p className="text-ink-soft text-sm mb-3 font-medium">{evaluation.feedback}</p>
 
                 {evaluation.strengths?.length > 0 && (
                   <div className="mb-2">
                     <span className="text-xs text-kahoot-green font-bold uppercase tracking-wider">Fortalezas:</span>
-                    <ul className="text-xs text-white/60 ml-4 mt-1 font-medium">
+                    <ul className="text-xs text-muted ml-4 mt-1 font-medium">
                       {evaluation.strengths.map((s: string, j: number) => (
                         <li key={j}>• {s}</li>
                       ))}
@@ -689,8 +703,8 @@ export default function Results() {
 
                 {evaluation.improvements?.length > 0 && (
                   <div>
-                    <span className="text-xs text-kahoot-orange font-bold uppercase tracking-wider">Areas de mejora:</span>
-                    <ul className="text-xs text-white/60 ml-4 mt-1 font-medium">
+                    <span className="text-xs text-orange-ink font-bold uppercase tracking-wider">Areas de mejora:</span>
+                    <ul className="text-xs text-muted ml-4 mt-1 font-medium">
                       {evaluation.improvements.map((s: string, j: number) => (
                         <li key={j}>• {s}</li>
                       ))}
@@ -700,16 +714,16 @@ export default function Results() {
 
                 {/* Prompt viewer (host only) */}
                 {evaluation.promptUsed && (
-                  <div className="mt-3 pt-3 border-t border-white/10">
+                  <div className="mt-3 pt-3 border-t border-line">
                     <button
                       onClick={() => setExpandedPrompts(prev => ({ ...prev, [i]: !prev[i] }))}
-                      className="flex items-center gap-1.5 text-xs text-white/40 hover:text-white/70 transition-colors font-semibold"
+                      className="flex items-center gap-1.5 text-xs text-faint hover:text-ink-soft transition-colors font-semibold"
                     >
                       <Code className="w-3 h-3" />
                       {expandedPrompts[i] ? 'Ocultar Prompt' : 'Ver Prompt'}
                     </button>
                     {expandedPrompts[i] && (
-                      <pre className="mt-2 p-3 bg-black/30 rounded-lg text-[10px] text-white/50 overflow-x-auto max-h-64 overflow-y-auto whitespace-pre-wrap break-words font-mono">
+                      <pre className="mt-2 p-3 bg-surface-3 rounded-lg text-[10px] text-muted overflow-x-auto max-h-64 overflow-y-auto whitespace-pre-wrap break-words font-mono">
                         {evaluation.promptUsed}
                       </pre>
                     )}
@@ -729,10 +743,10 @@ export default function Results() {
             className="dramatic-card p-6"
           >
             <div className="flex items-center gap-3 mb-3">
-              <Info className="w-5 h-5 text-kahoot-orange" />
-              <h2 className="text-lg font-black text-orange-200">Ronda Diagnostica</h2>
+              <Info className="w-5 h-5 text-orange-ink" />
+              <h2 className="text-lg font-black text-orange-800">Ronda Diagnostica</h2>
             </div>
-            <p className="text-white/60 text-sm font-medium">
+            <p className="text-muted text-sm font-medium">
               Esta ronda no afecta el ranking. Tu respuesta se usa para sugerir equipos y temas de proyecto.
               El feedback de los jueces es informativo para que conozcas como se evalua en el curso.
             </p>
@@ -763,7 +777,7 @@ export default function Results() {
             {game.currentRound < game.totalRounds && (
               <button
                 onClick={handleEndGame}
-                className="px-6 py-5 text-lg font-bold rounded-xl bg-red-600/20 text-red-300 border-2 border-red-500/30 hover:bg-red-600/40 hover:border-red-500/50 transition-all"
+                className="px-6 py-5 text-lg font-bold rounded-xl bg-red-600/20 text-red-700 border-2 border-red-500/30 hover:bg-red-600/40 hover:border-red-500/50 transition-all"
               >
                 Terminar Juego
               </button>
@@ -779,9 +793,9 @@ export default function Results() {
             transition={{ delay: 0.4 }}
             className="text-center"
           >
-            <div className="inline-flex items-center gap-2 px-5 py-3 bg-white/10 rounded-full">
+            <div className="inline-flex items-center gap-2 px-5 py-3 bg-surface-2 rounded-full">
               <div className="w-2 h-2 bg-kahoot-green rounded-full animate-pulse" />
-              <span className="text-white/70 font-semibold">
+              <span className="text-ink-soft font-semibold">
                 Esperando la siguiente ronda...
               </span>
             </div>

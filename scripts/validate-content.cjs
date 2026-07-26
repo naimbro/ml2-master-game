@@ -29,6 +29,7 @@ const path = require('path');
 const ROOT = path.join(__dirname, '..');
 const SESSIONS_ROOT = path.join(ROOT, 'content', 'sessions');
 const JUDGES_PATH = path.join(ROOT, 'content', 'judges', 'default_judges.json');
+const PUBLIC_ROOT = path.join(ROOT, 'public');
 
 let errorCount = 0;
 let warnCount = 0;
@@ -71,6 +72,116 @@ function loadKnownJudgeIds() {
   } catch (e) {
     warn('global', `no pude parsear default_judges.json: ${e.message}`);
     return null;
+  }
+}
+
+// A relative media src must resolve to a real file under public/, or it will
+// 404 in the live game — and nothing else in the pipeline would catch it.
+function checkMediaFileExists(scope, src) {
+  if (!src || /^(https?:)?\/\//i.test(src) || /^(data|blob):/i.test(src)) return;
+  const target = path.join(PUBLIC_ROOT, src.replace(/^\//, ''));
+  if (!fs.existsSync(target)) {
+    err(scope, `el archivo no existe: public/${src.replace(/^\//, '')}`);
+  }
+}
+
+// Optional image/audio attached to a scenario or an MC question.
+// `src` is either a path relative to the app base URL (public/...) or an https URL.
+function validateMedia(scope, media, whereLabel) {
+  if (media === undefined) return;
+  if (!Array.isArray(media)) {
+    err(scope, `media de ${whereLabel} debe ser array, encontrado ${typeof media}`);
+    return;
+  }
+  for (const [i, m] of media.entries()) {
+    const mScope = `${scope}/media#${i}`;
+    if (!m || typeof m !== 'object') {
+      err(mScope, 'entrada de media no es un objeto');
+      continue;
+    }
+    if (m.kind !== 'image' && m.kind !== 'audio') {
+      err(mScope, `media.kind debe ser 'image' o 'audio', encontrado '${m.kind}'`);
+    }
+    if (typeof m.src !== 'string' || !m.src.trim()) {
+      err(mScope, 'media sin src');
+    } else if (m.src.startsWith('/')) {
+      // A leading slash resolves to the domain root and 404s on GitHub Pages,
+      // where the app lives under /ml2-master-game/.
+      err(mScope, `media.src no debe empezar con '/': usa una ruta relativa ('media/...') o una URL absoluta`);
+    }
+    if (m.kind === 'image' && (typeof m.alt !== 'string' || !m.alt.trim())) {
+      err(mScope, 'imagen sin alt (se muestra si el archivo no carga)');
+    }
+    if (m.kind === 'audio' && /\.ogg$/i.test(m.src || '')) {
+      warn(mScope, 'audio .ogg no reproduce en Safari/iOS — usa .mp3');
+    }
+    checkMediaFileExists(mScope, m.src);
+  }
+}
+
+function validateMCQuestions(scope, sc) {
+  const questions = sc.mcQuestions;
+  if (!Array.isArray(questions) || questions.length === 0) {
+    err(scope, 'escenario multiple_choice sin mcQuestions');
+    return;
+  }
+
+  let expectedDuration = 12 + 15; // gate + slack, mirrors src/lib/mcTiming.ts
+
+  for (const [qi, q] of questions.entries()) {
+    const qScope = `${scope}/q#${qi}`;
+    if (typeof q.question !== 'string' || !q.question.trim()) {
+      err(qScope, 'pregunta sin enunciado');
+    }
+    if (!Array.isArray(q.options) || q.options.length < 2 || q.options.length > 4) {
+      err(qScope, `una pregunta necesita entre 2 y 4 alternativas, encontradas ${Array.isArray(q.options) ? q.options.length : 0}`);
+    } else {
+      for (const [oi, o] of q.options.entries()) {
+        if (!o || typeof o.text !== 'string' || !o.text.trim()) {
+          err(`${qScope}/opt#${oi}`, 'alternativa sin texto');
+        }
+        if (!o || typeof o.id !== 'string' || !o.id.trim()) {
+          err(`${qScope}/opt#${oi}`, 'alternativa sin id (A/B/C/D)');
+        }
+        if (o && o.imageSrc !== undefined) {
+          if (typeof o.imageSrc !== 'string' || !o.imageSrc.trim()) {
+            err(`${qScope}/opt#${oi}`, 'imageSrc vacio');
+          } else if (o.imageSrc.startsWith('/')) {
+            err(`${qScope}/opt#${oi}`, `imageSrc no debe empezar con '/'`);
+          } else {
+            checkMediaFileExists(`${qScope}/opt#${oi}`, o.imageSrc);
+            if (!o.imageAlt || !String(o.imageAlt).trim()) {
+              err(`${qScope}/opt#${oi}`, 'alternativa con imagen pero sin imageAlt');
+            }
+          }
+        }
+      }
+    }
+
+    const n = Array.isArray(q.options) ? q.options.length : 0;
+    if (!Number.isInteger(q.correctOptionIndex) || q.correctOptionIndex < 0 || q.correctOptionIndex >= n) {
+      err(qScope, `correctOptionIndex=${q.correctOptionIndex} fuera de rango (0..${Math.max(0, n - 1)})`);
+    }
+
+    const limit = Number(q.timeLimitSeconds);
+    if (!Number.isFinite(limit) || limit <= 0) {
+      err(qScope, `timeLimitSeconds invalido: ${q.timeLimitSeconds}`);
+      expectedDuration += 20 + 5;
+    } else {
+      expectedDuration += limit + 5;
+    }
+
+    validateMedia(qScope, q.media, 'pregunta');
+  }
+
+  // The round timer must outlast the block, or the host auto-end guillotines it.
+  if (sc.durationSeconds === undefined) {
+    err(scope, `escenario multiple_choice sin durationSeconds (deberia ser ${expectedDuration})`);
+  } else if (Number(sc.durationSeconds) < expectedDuration) {
+    err(
+      scope,
+      `durationSeconds=${sc.durationSeconds} es menor que lo que consume el bloque (${expectedDuration}s): el host cortaria la ronda a medias`,
+    );
   }
 }
 
@@ -146,7 +257,11 @@ function validateSession(courseId, sessionId, sessionDir, knownJudgeIds) {
           }
         }
       }
-      if (sc.idealAnswer === undefined && sc.referenceAnswer === undefined) {
+      validateMedia(sScope, sc.media, 'escenario');
+
+      if (isMC) {
+        validateMCQuestions(sScope, sc);
+      } else if (sc.idealAnswer === undefined && sc.referenceAnswer === undefined) {
         warn(sScope, `escenario '${sc.id || i}' no tiene idealAnswer ni referenceAnswer (el juez tendra menos calibracion)`);
       }
     }

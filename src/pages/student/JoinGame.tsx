@@ -92,7 +92,7 @@ export default function JoinGame() {
       <header className="p-4">
         <Link
           to="/"
-          className="flex items-center gap-2 text-white/70 hover:text-white transition-colors w-fit font-semibold"
+          className="flex items-center gap-2 text-ink-soft hover:text-ink transition-colors w-fit font-semibold"
         >
           <ArrowLeft className="w-5 h-5" />
           Volver
@@ -113,10 +113,10 @@ export default function JoinGame() {
               transition={{ type: 'spring', stiffness: 200, delay: 0.1 }}
               className="w-20 h-20 bg-kahoot-green rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-lg shadow-kahoot-green/30"
             >
-              <Zap className="w-10 h-10 text-white" />
+              <Zap className="w-10 h-10 text-onaccent" />
             </motion.div>
             <h1 className="text-3xl font-black mb-2">Unirse al Juego</h1>
-            <p className="text-white/60 font-medium">
+            <p className="text-muted font-medium">
               Ingresa el codigo de 6 letras que aparece en pantalla
             </p>
           </div>
@@ -124,7 +124,7 @@ export default function JoinGame() {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Game Code Input */}
             <div>
-              <label className="block text-sm font-bold text-white/80 mb-2 uppercase tracking-wider">
+              <label className="block text-sm font-bold text-ink-soft mb-2 uppercase tracking-wider">
                 Codigo del Juego
               </label>
               <input
@@ -140,7 +140,7 @@ export default function JoinGame() {
 
             {/* Player Name Input */}
             <div>
-              <label className="block text-sm font-bold text-white/80 mb-2 uppercase tracking-wider">
+              <label className="block text-sm font-bold text-ink-soft mb-2 uppercase tracking-wider">
                 Tu Nombre
               </label>
               <input
@@ -158,7 +158,7 @@ export default function JoinGame() {
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="p-3 bg-kahoot-red/20 border-2 border-kahoot-red/40 rounded-xl text-red-200 text-sm text-center font-semibold"
+                className="p-3 bg-kahoot-red/20 border-2 border-kahoot-red/40 rounded-xl text-red-700 text-sm text-center font-semibold"
               >
                 {error}
               </motion.div>
@@ -172,7 +172,7 @@ export default function JoinGame() {
             >
               {isJoining ? (
                 <>
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <div className="w-5 h-5 border-2 border-ink border-t-transparent rounded-full animate-spin" />
                   Uniendose...
                 </>
               ) : (

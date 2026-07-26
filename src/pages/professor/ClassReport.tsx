@@ -248,7 +248,7 @@ export default function ClassReport() {
       <div className="min-h-screen bg-gradient-main flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-white/70">Generando reporte de clase...</p>
+          <p className="text-ink-soft">Generando reporte de clase...</p>
         </div>
       </div>
     );
@@ -271,11 +271,11 @@ export default function ClassReport() {
   return (
     <div className="min-h-screen bg-gradient-main">
       {/* Header */}
-      <header className="p-4 border-b border-white/10">
+      <header className="p-4 border-b border-line">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <Link
             to="/professor"
-            className="flex items-center gap-2 text-white/70 hover:text-white transition-colors"
+            className="flex items-center gap-2 text-ink-soft hover:text-ink transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
             Volver al panel
@@ -288,7 +288,7 @@ export default function ClassReport() {
           >
             {downloadingPdf ? (
               <>
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <div className="w-4 h-4 border-2 border-ink border-t-transparent rounded-full animate-spin" />
                 Generando...
               </>
             ) : (
@@ -310,7 +310,7 @@ export default function ClassReport() {
           className="mb-8"
         >
           <h1 className="text-3xl font-bold mb-2">{report.sessionTitle}</h1>
-          <p className="text-white/60">
+          <p className="text-muted">
             Codigo: <span className="font-mono text-cyan-400">{report.gameCode}</span>
             {' | '}
             {report.totalPlayers} estudiantes | {report.totalRounds} rondas
@@ -327,25 +327,25 @@ export default function ClassReport() {
           <div className="dramatic-card p-6 text-center">
             <Users className="w-8 h-8 text-cyan-400 mx-auto mb-2" />
             <p className="text-3xl font-bold">{report.totalPlayers}</p>
-            <p className="text-white/50 text-sm">Estudiantes</p>
+            <p className="text-muted text-sm">Estudiantes</p>
           </div>
 
           <div className="dramatic-card p-6 text-center">
             <BarChart3 className="w-8 h-8 text-purple-400 mx-auto mb-2" />
             <p className="text-3xl font-bold">{report.classAverage}</p>
-            <p className="text-white/50 text-sm">Promedio Clase</p>
+            <p className="text-muted text-sm">Promedio Clase</p>
           </div>
 
           <div className="dramatic-card p-6 text-center">
             <TrendingUp className="w-8 h-8 text-green-400 mx-auto mb-2" />
             <p className="text-3xl font-bold">{report.distribution.excellent + report.distribution.good}</p>
-            <p className="text-white/50 text-sm">Sobre 75 pts</p>
+            <p className="text-muted text-sm">Sobre 75 pts</p>
           </div>
 
           <div className="dramatic-card p-6 text-center">
             <TrendingDown className="w-8 h-8 text-red-400 mx-auto mb-2" />
             <p className="text-3xl font-bold">{report.distribution.needsWork}</p>
-            <p className="text-white/50 text-sm">Bajo 60 pts</p>
+            <p className="text-muted text-sm">Bajo 60 pts</p>
           </div>
         </motion.div>
 
@@ -367,8 +367,8 @@ export default function ClassReport() {
                 { label: 'Necesita Mejora (<60)', count: report.distribution.needsWork, color: 'bg-red-500' },
               ].map((item) => (
                 <div key={item.label} className="flex items-center gap-3">
-                  <span className="text-sm text-white/70 w-40">{item.label}</span>
-                  <div className="flex-1 h-4 bg-white/10 rounded-full overflow-hidden">
+                  <span className="text-sm text-ink-soft w-40">{item.label}</span>
+                  <div className="flex-1 h-4 bg-surface-2 rounded-full overflow-hidden">
                     <div
                       className={`h-full ${item.color}`}
                       style={{ width: `${report.totalPlayers > 0 ? (item.count / report.totalPlayers) * 100 : 0}%` }}
@@ -393,15 +393,15 @@ export default function ClassReport() {
                 const avg = report.roundAverages[scenario.round] || 0;
                 return (
                   <div key={scenario.round} className="flex items-center gap-3">
-                    <span className="text-sm text-white/70 w-8">R{scenario.round}</span>
+                    <span className="text-sm text-ink-soft w-8">R{scenario.round}</span>
                     <div className="flex-1">
-                      <div className="h-4 bg-white/10 rounded-full overflow-hidden">
+                      <div className="h-4 bg-surface-2 rounded-full overflow-hidden">
                         <div
                           className={`h-full ${avg >= 75 ? 'bg-green-500' : avg >= 60 ? 'bg-yellow-500' : 'bg-red-500'}`}
                           style={{ width: `${avg}%` }}
                         />
                       </div>
-                      <p className="text-xs text-white/50 mt-1 truncate">{scenario.title}</p>
+                      <p className="text-xs text-muted mt-1 truncate">{scenario.title}</p>
                     </div>
                     <span className="font-mono text-sm w-10 text-right">{avg}</span>
                   </div>
@@ -427,7 +427,7 @@ export default function ClassReport() {
               {report.topImprovementAreas.map(({ area, count }) => (
                 <div key={area} className="flex items-center gap-3 p-3 bg-yellow-500/10 rounded-lg">
                   <span className="text-yellow-400 font-bold">{count}</span>
-                  <span className="text-sm text-white/80">{area}</span>
+                  <span className="text-sm text-ink-soft">{area}</span>
                 </div>
               ))}
             </div>
@@ -447,7 +447,7 @@ export default function ClassReport() {
           </h2>
 
           {/* Table Header */}
-          <div className="hidden md:flex items-center gap-4 px-4 py-2 text-xs text-white/50 uppercase tracking-wide border-b border-white/10 mb-2">
+          <div className="hidden md:flex items-center gap-4 px-4 py-2 text-xs text-muted uppercase tracking-wide border-b border-line mb-2">
             <div className="w-12">Pos</div>
             <div className="flex-1">Estudiante</div>
             <div className="w-20 text-right">Promedio</div>
@@ -463,7 +463,7 @@ export default function ClassReport() {
               <div key={player.playerId}>
                 <div
                   className={`flex items-center gap-4 p-4 rounded-lg cursor-pointer transition-colors ${
-                    expandedPlayer === player.playerId ? 'bg-white/10' : 'bg-white/5 hover:bg-white/10'
+                    expandedPlayer === player.playerId ? 'bg-surface-2' : 'bg-surface-2 hover:bg-surface-2'
                   }`}
                   onClick={() => setExpandedPlayer(expandedPlayer === player.playerId ? null : player.playerId)}
                 >
@@ -476,7 +476,7 @@ export default function ClassReport() {
                         ? 'bg-gray-400 text-black'
                         : player.rank === 3
                         ? 'bg-amber-600 text-black'
-                        : 'bg-white/20'
+                        : 'bg-surface-3'
                     }`}
                   >
                     {player.rank}
@@ -485,7 +485,7 @@ export default function ClassReport() {
                   {/* Name */}
                   <div className="flex-1 min-w-0">
                     <p className="font-medium truncate">{player.name}</p>
-                    <p className="text-xs text-white/50 md:hidden">
+                    <p className="text-xs text-muted md:hidden">
                       Promedio: {player.averageScore}
                     </p>
                   </div>
@@ -511,7 +511,7 @@ export default function ClassReport() {
                         key={i}
                         className={`hidden md:block w-12 text-center font-mono text-sm ${
                           score === undefined
-                            ? 'text-white/30'
+                            ? 'text-faint'
                             : score >= 80
                             ? 'text-green-400'
                             : score >= 60
@@ -527,9 +527,9 @@ export default function ClassReport() {
                   {/* Expand Icon */}
                   <div className="w-8 flex justify-center">
                     {expandedPlayer === player.playerId ? (
-                      <ChevronUp className="w-5 h-5 text-white/50" />
+                      <ChevronUp className="w-5 h-5 text-muted" />
                     ) : (
-                      <ChevronDown className="w-5 h-5 text-white/50" />
+                      <ChevronDown className="w-5 h-5 text-muted" />
                     )}
                   </div>
                 </div>
@@ -541,9 +541,9 @@ export default function ClassReport() {
                     animate={{ opacity: 1, height: 'auto' }}
                     className="px-4 pb-4"
                   >
-                    <div className="p-4 bg-white/5 rounded-lg mt-2 space-y-4">
+                    <div className="p-4 bg-surface-2 rounded-lg mt-2 space-y-4">
                       {player.roundDetails.map((rd) => (
-                        <div key={rd.round} className="border-b border-white/10 pb-4 last:border-0 last:pb-0">
+                        <div key={rd.round} className="border-b border-line pb-4 last:border-0 last:pb-0">
                           <div className="flex justify-between items-center mb-2">
                             <span className="font-medium">
                               Ronda {rd.round}: {report.scenarios[rd.round - 1]?.title}
@@ -560,7 +560,7 @@ export default function ClassReport() {
                           {rd.strengths.length > 0 && (
                             <div className="mb-2">
                               <p className="text-xs text-green-400 font-medium mb-1">Fortalezas:</p>
-                              <ul className="text-xs text-white/60 ml-4">
+                              <ul className="text-xs text-muted ml-4">
                                 {rd.strengths.slice(0, 3).map((s, i) => (
                                   <li key={i}>• {s}</li>
                                 ))}
@@ -571,7 +571,7 @@ export default function ClassReport() {
                           {rd.improvements.length > 0 && (
                             <div>
                               <p className="text-xs text-yellow-400 font-medium mb-1">Areas de mejora:</p>
-                              <ul className="text-xs text-white/60 ml-4">
+                              <ul className="text-xs text-muted ml-4">
                                 {rd.improvements.slice(0, 3).map((s, i) => (
                                   <li key={i}>• {s}</li>
                                 ))}

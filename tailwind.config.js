@@ -7,20 +7,46 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Montserrat', 'system-ui', 'sans-serif'],
+        sans: ['Outfit', 'system-ui', 'sans-serif'],
+        display: ['"Archivo Black"', 'Outfit', 'system-ui', 'sans-serif'],
       },
       colors: {
+        // ── "Cancha": light ground, orange is the action colour, green is
+        // reserved exclusively for "correct". Ink carries all structure.
+        paper: '#FAFAF8',
+        ink: '#101114',
+        'ink-soft': '#3A3D45',
+        muted: '#5F6269',
+        faint: '#767980',
+        surface: '#FFFFFF',
+        'surface-2': '#F2F1ED',
+        'surface-3': '#E8E7E2',
+        line: '#E6E5E0',
+        'line-strong': '#101114',
+        // Text/icons sitting ON a saturated fill (orange button, coloured tile).
+        // Named so a future palette change cannot accidentally darken them.
+        onaccent: '#FFFFFF',
+        // Dark variants for when an accent has to be TEXT on paper, where the
+        // vivid fill versions fall below 4.5:1.
+        'orange-ink': '#C2400F',
+        'amber-ink': '#92400E',
+
+        // The Kahoot names stay as an alias layer: dozens of components still
+        // say `bg-kahoot-green`, and remapping here is what makes this whole
+        // restyle one revertible commit instead of a thousand edits.
         kahoot: {
-          purple: '#46178F',
-          'purple-dark': '#2D1065',
-          'purple-deep': '#1A0A3E',
-          green: '#66BF39',
-          'green-dark': '#4A9B1F',
-          blue: '#1368CE',
-          'blue-light': '#45A3E5',
-          red: '#FF3355',
-          orange: '#EB670F',
-          yellow: '#FFC107',
+          purple: '#101114',        // was a background; now ink
+          'purple-dark': '#F2F1ED',
+          'purple-deep': '#FAFAF8',
+          // Every value below is contrast-checked: usable as text on paper
+          // AND as a fill under white text, except the two marked fill-only.
+          green: '#0B7A46',         // "correct" only
+          'green-dark': '#09693D',
+          blue: '#2563EB',
+          'blue-light': '#1D4ED8',
+          red: '#B3272B',
+          orange: '#FF5A1F',        // FILL ONLY — carries ink text, not white
+          yellow: '#F5A524',        // FILL ONLY — carries ink text, not white
         },
       },
       animation: {

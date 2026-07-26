@@ -29,14 +29,14 @@ export default function MusicSelector() {
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-1.5 px-3 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg font-bold text-sm transition-all"
+        className="flex items-center gap-1.5 px-3 py-2 bg-surface-2 hover:bg-surface-3 text-ink rounded-lg font-bold text-sm transition-all"
       >
         <Music className="w-4 h-4" />
         <span className="hidden sm:inline">{currentName}</span>
       </button>
 
       {open && (
-        <div className="absolute top-full mt-2 right-0 w-48 bg-[#1a0a3e] border-2 border-white/15 rounded-xl shadow-2xl overflow-hidden z-50">
+        <div className="absolute top-full mt-2 right-0 w-48 bg-surface border-2 border-line rounded-xl shadow-2xl overflow-hidden z-50">
           {MUSIC_OPTIONS.map((opt) => (
             <button
               key={opt.id}
@@ -44,7 +44,7 @@ export default function MusicSelector() {
               className={`w-full text-left px-4 py-2.5 text-sm font-semibold transition-colors ${
                 selected === opt.id
                   ? 'bg-kahoot-green/20 text-kahoot-green'
-                  : 'text-white/70 hover:bg-white/10 hover:text-white'
+                  : 'text-ink-soft hover:bg-surface-2 hover:text-ink'
               }`}
             >
               {selected === opt.id && <span className="mr-2">&#9679;</span>}

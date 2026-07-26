@@ -126,21 +126,21 @@ export default function CreateGame() {
           className="dramatic-card p-8 max-w-md w-full text-center"
         >
           <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-cyan-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
-            <Check className="w-10 h-10 text-white" />
+            <Check className="w-10 h-10 text-onaccent" />
           </div>
 
           <h1 className="text-2xl font-bold mb-2">Juego Creado</h1>
-          <p className="text-white/60 mb-6">
+          <p className="text-muted mb-6">
             Comparte este codigo con tus estudiantes
           </p>
 
-          <div className="bg-white/10 rounded-xl p-6 mb-6">
+          <div className="bg-surface-2 rounded-xl p-6 mb-6">
             <p className="text-5xl font-mono font-bold tracking-widest text-cyan-400 mb-4">
               {createdGame.code}
             </p>
             <button
               onClick={handleCopyCode}
-              className="flex items-center gap-2 mx-auto px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors"
+              className="flex items-center gap-2 mx-auto px-4 py-2 bg-surface-2 hover:bg-surface-3 rounded-lg transition-colors"
             >
               {copied ? (
                 <>
@@ -177,7 +177,7 @@ export default function CreateGame() {
     return (
       <div className="min-h-screen bg-gradient-main flex items-center justify-center p-4">
         <div className="text-center">
-          <p className="text-white/70 mb-4">Curso no encontrado: {courseId}</p>
+          <p className="text-ink-soft mb-4">Curso no encontrado: {courseId}</p>
           <Link to="/professor" className="text-cyan-400 hover:underline">
             Volver al panel
           </Link>
@@ -192,7 +192,7 @@ export default function CreateGame() {
       <header className="p-4">
         <Link
           to="/professor"
-          className="flex items-center gap-2 text-white/70 hover:text-white transition-colors w-fit"
+          className="flex items-center gap-2 text-ink-soft hover:text-ink transition-colors w-fit"
         >
           <ArrowLeft className="w-5 h-5" />
           Volver al panel
@@ -211,14 +211,14 @@ export default function CreateGame() {
                 {course.name}
               </p>
               <h1 className="text-3xl font-bold mb-2">Crear Nuevo Juego</h1>
-              <p className="text-white/60 mb-8">
+              <p className="text-muted mb-8">
                 Selecciona una sesion de este curso
               </p>
             </>
           ) : (
             <>
               <h1 className="text-3xl font-bold mb-2">Crear Nuevo Juego</h1>
-              <p className="text-white/60 mb-8">
+              <p className="text-muted mb-8">
                 Selecciona una sesion para comenzar
               </p>
             </>
@@ -245,7 +245,7 @@ export default function CreateGame() {
                 if (list.length === 0) return null;
                 return (
                   <div key={c.id}>
-                    <h2 className="text-sm font-semibold uppercase tracking-wider text-white/50 mb-3 px-1">
+                    <h2 className="text-sm font-semibold uppercase tracking-wider text-muted mb-3 px-1">
                       {c.name}
                     </h2>
                     <div className="space-y-4">
@@ -272,7 +272,7 @@ export default function CreateGame() {
           >
             {isCreating ? (
               <>
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <div className="w-5 h-5 border-2 border-ink border-t-transparent rounded-full animate-spin" />
                 Creando juego...
               </>
             ) : (
@@ -301,13 +301,13 @@ function SessionCard({
     <div
       onClick={onSelect}
       className={`dramatic-card p-6 cursor-pointer transition-all ${
-        selected ? 'ring-2 ring-cyan-400 bg-cyan-500/10' : 'hover:bg-white/5'
+        selected ? 'ring-2 ring-cyan-400 bg-cyan-500/10' : 'hover:bg-surface-2'
       }`}
     >
       <div className="flex items-start gap-4">
         <div
           className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-            selected ? 'bg-cyan-500' : 'bg-white/10'
+            selected ? 'bg-cyan-500' : 'bg-surface-2'
           }`}
         >
           <BookOpen className="w-6 h-6" />
@@ -315,9 +315,9 @@ function SessionCard({
 
         <div className="flex-1">
           <h3 className="text-lg font-bold mb-1">{session.title}</h3>
-          <p className="text-white/60 text-sm mb-3">{session.description}</p>
+          <p className="text-muted text-sm mb-3">{session.description}</p>
 
-          <div className="flex gap-4 text-sm text-white/50">
+          <div className="flex gap-4 text-sm text-muted">
             <span className="flex items-center gap-1">
               <BookOpen className="w-4 h-4" />
               {session.rounds} rondas
@@ -331,7 +331,7 @@ function SessionCard({
 
         <div
           className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-            selected ? 'border-cyan-400 bg-cyan-400' : 'border-white/30'
+            selected ? 'border-cyan-400 bg-cyan-400' : 'border-line'
           }`}
         >
           {selected && <Check className="w-4 h-4 text-black" />}

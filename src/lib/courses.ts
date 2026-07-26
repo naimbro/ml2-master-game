@@ -36,6 +36,16 @@ import teB3Scenarios from '../../content/sessions/temas_emergentes_2026/bloque_3
 import teB3Rubric from '../../content/sessions/temas_emergentes_2026/bloque_3_captura_populismo/rubric.json';
 import teB3KnowledgeBase from '../../content/sessions/temas_emergentes_2026/bloque_3_captura_populismo/knowledge_base.md?raw';
 
+import mundialFinalConfig from '../../content/sessions/mundial_2026/final_2026/config.json';
+import mundialFinalScenarios from '../../content/sessions/mundial_2026/final_2026/scenarios.json';
+import mundialFinalRubric from '../../content/sessions/mundial_2026/final_2026/rubric.json';
+import mundialFinalKnowledgeBase from '../../content/sessions/mundial_2026/final_2026/knowledge_base.md?raw';
+
+import mundialKahootConfig from '../../content/sessions/mundial_2026/kahoot_only/config.json';
+import mundialKahootScenarios from '../../content/sessions/mundial_2026/kahoot_only/scenarios.json';
+import mundialKahootRubric from '../../content/sessions/mundial_2026/kahoot_only/rubric.json';
+import mundialKahootKnowledgeBase from '../../content/sessions/mundial_2026/kahoot_only/knowledge_base.md?raw';
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyJson = any;
 
@@ -85,6 +95,14 @@ export const COURSES: Course[] = [
     tagline: 'Magister en Economia y Politicas Publicas (UAI)',
     accentClass: 'from-emerald-500 to-teal-600',
     iconClass: 'bg-gradient-to-br from-emerald-500 to-teal-600',
+  },
+  {
+    id: 'mundial_2026',
+    name: 'Mundial 2026',
+    shortName: 'MUN',
+    tagline: 'Demo docente — opcion multiple, imagenes y audio',
+    accentClass: 'from-amber-500 to-orange-600',
+    iconClass: 'bg-gradient-to-br from-amber-500 to-orange-600',
   },
 ];
 
@@ -172,6 +190,30 @@ export const SESSIONS: SessionOption[] = [
     scenarios: teB3Scenarios,
     rubric: teB3Rubric,
     knowledgeBase: teB3KnowledgeBase,
+  },
+  {
+    id: 'final_2026',
+    courseId: 'mundial_2026',
+    title: mundialFinalConfig.title,
+    description: mundialFinalConfig.description,
+    rounds: mundialFinalScenarios.length,
+    duration: Math.round(mundialFinalConfig.roundDurationSeconds / 60),
+    config: mundialFinalConfig,
+    scenarios: mundialFinalScenarios,
+    rubric: mundialFinalRubric,
+    knowledgeBase: mundialFinalKnowledgeBase,
+  },
+  {
+    id: 'kahoot_only',
+    courseId: 'mundial_2026',
+    title: mundialKahootConfig.title,
+    description: mundialKahootConfig.description,
+    rounds: mundialKahootScenarios.length,
+    duration: Math.round(mundialKahootConfig.roundDurationSeconds / 60),
+    config: mundialKahootConfig,
+    scenarios: mundialKahootScenarios,
+    rubric: mundialKahootRubric,
+    knowledgeBase: mundialKahootKnowledgeBase,
   },
 ];
 
