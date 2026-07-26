@@ -48,7 +48,7 @@ export default function Lobby() {
       <div className="min-h-screen bg-gradient-main flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-kahoot-green border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-white/70 font-semibold">Cargando juego...</p>
+          <p className="text-ink-soft font-semibold">Cargando juego...</p>
         </div>
       </div>
     );
@@ -75,13 +75,13 @@ export default function Lobby() {
       <header className="relative z-10 p-4 flex justify-between items-center">
         <Link
           to="/"
-          className="flex items-center gap-2 text-white/70 hover:text-white transition-colors font-semibold"
+          className="flex items-center gap-2 text-ink-soft hover:text-ink transition-colors font-semibold"
         >
           <ArrowLeft className="w-5 h-5" />
           Salir
         </Link>
 
-        <div className="flex items-center gap-2 text-white/60 font-semibold text-sm">
+        <div className="flex items-center gap-2 text-muted font-semibold text-sm">
           <Clock className="w-4 h-4" />
           {game.totalRounds} rondas x {Math.floor((game.roundDurationSeconds || 300) / 60)} min
         </div>
@@ -94,11 +94,11 @@ export default function Lobby() {
           animate={{ scale: 1, opacity: 1 }}
           transition={{ type: 'spring', stiffness: 150 }}
         >
-          <p className="text-white/50 text-sm font-bold uppercase tracking-widest mb-2">
+          <p className="text-muted text-sm font-bold uppercase tracking-widest mb-2">
             Codigo del Juego
           </p>
-          <div className="inline-block bg-white/10 rounded-2xl px-10 py-4 border-2 border-white/20">
-            <p className="text-5xl md:text-7xl font-black tracking-[0.2em] text-white">
+          <div className="inline-block bg-surface-2 rounded-2xl px-10 py-4 border-2 border-line">
+            <p className="text-5xl md:text-7xl font-black tracking-[0.2em] text-ink">
               {gameCode}
             </p>
           </div>
@@ -112,7 +112,7 @@ export default function Lobby() {
         transition={{ delay: 0.2 }}
         className="text-center mb-6"
       >
-        <h1 className="text-xl font-bold text-white/80">
+        <h1 className="text-xl font-bold text-ink-soft">
           {game.sessionConfig?.title || 'Sesion'}
         </h1>
       </motion.div>
@@ -124,7 +124,7 @@ export default function Lobby() {
         transition={{ delay: 0.3 }}
         className="text-center mb-6"
       >
-        <div className="inline-flex items-center gap-3 bg-white/10 rounded-full px-6 py-3 border border-white/15">
+        <div className="inline-flex items-center gap-3 bg-surface-2 rounded-full px-6 py-3 border border-line">
           <Users className="w-5 h-5 text-kahoot-green" />
           <span className="font-bold text-lg">
             <motion.span
@@ -158,23 +158,23 @@ export default function Lobby() {
               className={`relative rounded-2xl p-4 text-center bg-gradient-to-br ${
                 PLAYER_COLORS[index % PLAYER_COLORS.length]
               } shadow-lg ${
-                player.id === user?.uid ? 'ring-3 ring-white ring-offset-2 ring-offset-[#46178F]' : ''
+                player.id === user?.uid ? 'ring-3 ring-ink ring-offset-2 ring-offset-paper' : ''
               }`}
             >
               {player.photoURL ? (
                 <img
                   src={player.photoURL}
                   alt={player.name}
-                  className="w-12 h-12 rounded-full mx-auto mb-2 border-2 border-white/40"
+                  className="w-12 h-12 rounded-full mx-auto mb-2 border-2 border-line"
                 />
               ) : (
-                <div className="w-12 h-12 rounded-full bg-white/20 mx-auto mb-2 flex items-center justify-center text-xl font-black">
+                <div className="w-12 h-12 rounded-full bg-surface-3 mx-auto mb-2 flex items-center justify-center text-xl font-black">
                   {player.name.charAt(0).toUpperCase()}
                 </div>
               )}
               <p className="font-bold text-sm truncate">{player.name}</p>
               {player.id === user?.uid && (
-                <span className="text-[10px] font-bold uppercase tracking-wider text-white/70">Tu</span>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-ink-soft">Tu</span>
               )}
             </motion.div>
           ))}
@@ -198,20 +198,20 @@ export default function Lobby() {
                 Comenzar Juego
               </button>
               {players.length < 2 && (
-                <p className="text-white/50 text-sm mt-4 font-medium">
+                <p className="text-muted text-sm mt-4 font-medium">
                   Esperando mas jugadores...
                 </p>
               )}
             </div>
           ) : (
-            <div className="inline-flex items-center gap-3 bg-white/10 rounded-2xl px-8 py-5 border border-white/15">
+            <div className="inline-flex items-center gap-3 bg-surface-2 rounded-2xl px-8 py-5 border border-line">
               <motion.div
                 animate={{ scale: [1, 1.3, 1] }}
                 transition={{ repeat: Infinity, duration: 1.5 }}
               >
                 <Zap className="w-5 h-5 text-kahoot-green" />
               </motion.div>
-              <p className="text-white/80 font-semibold">
+              <p className="text-ink-soft font-semibold">
                 Esperando que el profesor inicie el juego...
               </p>
             </div>

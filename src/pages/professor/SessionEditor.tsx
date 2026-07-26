@@ -28,8 +28,8 @@ const RUBRIC_LEVELS = ['level_100', 'level_80', 'level_60', 'level_40', 'level_2
 const OPTION_IDS = ['A', 'B', 'C', 'D'];
 const DEFAULT_OPEN_DURATION = 180;
 
-const INPUT_CLASS = 'w-full bg-white/10 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-cyan-400';
-const SMALL_INPUT_CLASS = 'w-full bg-white/10 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-cyan-400';
+const INPUT_CLASS = 'w-full bg-surface-2 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-cyan-400';
+const SMALL_INPUT_CLASS = 'w-full bg-surface-2 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-cyan-400';
 
 // Defined at module level, NOT inside SessionEditor: a component declared during
 // render is a new type on every keystroke, so React remounts it and the input
@@ -50,33 +50,33 @@ function MediaEditor({
   return (
     <div>
       <div className="flex flex-wrap items-center gap-2 mb-2">
-        <span className="text-sm text-white/70">{label}</span>
+        <span className="text-sm text-ink-soft">{label}</span>
         <button
           type="button"
           onClick={() => onChange([...list, { kind: 'image', src: '', alt: '' }])}
-          className="flex items-center gap-1 px-2 py-1 bg-white/10 hover:bg-white/20 rounded-lg text-xs font-semibold transition-colors"
+          className="flex items-center gap-1 px-2 py-1 bg-surface-2 hover:bg-surface-3 rounded-lg text-xs font-semibold transition-colors"
         >
           <ImageIcon className="w-3 h-3" aria-hidden="true" /> Imagen
         </button>
         <button
           type="button"
           onClick={() => onChange([...list, { kind: 'audio', src: '', alt: '' }])}
-          className="flex items-center gap-1 px-2 py-1 bg-white/10 hover:bg-white/20 rounded-lg text-xs font-semibold transition-colors"
+          className="flex items-center gap-1 px-2 py-1 bg-surface-2 hover:bg-surface-3 rounded-lg text-xs font-semibold transition-colors"
         >
           <Music className="w-3 h-3" aria-hidden="true" /> Audio
         </button>
       </div>
 
       {list.map((m: AnyJson, mi: number) => (
-        <div key={mi} className="mb-2 p-3 bg-black/20 rounded-lg space-y-2">
+        <div key={mi} className="mb-2 p-3 bg-surface-3 rounded-lg space-y-2">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-white/50 shrink-0">
+            <span className="text-xs font-bold uppercase tracking-wider text-muted shrink-0">
               {m.kind === 'audio' ? 'Audio' : 'Imagen'}
             </span>
             <button
               type="button"
               onClick={() => onChange(list.filter((_, i) => i !== mi))}
-              className="ml-auto text-white/40 hover:text-rose-400 transition-colors"
+              className="ml-auto text-faint hover:text-rose-400 transition-colors"
               aria-label="Quitar medio"
             >
               <X className="w-4 h-4" />
@@ -101,7 +101,7 @@ function MediaEditor({
             className={SMALL_INPUT_CLASS}
           />
           {m.kind === 'image' && !m.alt && (
-            <p className="text-amber-300 text-xs font-medium">
+            <p className="text-amber-700 text-xs font-medium">
               Añade texto alternativo: se muestra si la imagen no carga.
             </p>
           )}
@@ -351,7 +351,7 @@ export default function SessionEditor() {
     return (
       <div className="min-h-screen bg-gradient-main flex items-center justify-center p-4">
         <div className="text-center">
-          <p className="text-white/70 mb-4">Sesión no encontrada</p>
+          <p className="text-ink-soft mb-4">Sesión no encontrada</p>
           <Link to={`/professor/courses/${courseId}`} className="text-cyan-400 hover:underline">
             Volver al curso
           </Link>
@@ -362,21 +362,21 @@ export default function SessionEditor() {
 
   return (
     <div className="min-h-screen bg-gradient-main pb-32">
-      <header className="p-4 sticky top-0 bg-black/40 backdrop-blur-md z-10 border-b border-white/10">
+      <header className="p-4 sticky top-0 bg-surface-3 backdrop-blur-md z-10 border-b border-line">
         <div className="max-w-3xl mx-auto flex flex-wrap justify-between items-center gap-3">
           <Link
             to={`/professor/courses/${courseId}`}
-            className="flex items-center gap-2 text-white/70 hover:text-white transition-colors"
+            className="flex items-center gap-2 text-ink-soft hover:text-ink transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
             Volver al curso
           </Link>
           <div className="flex items-center gap-3">
-            {savedAt && !saving && <span className="text-white/40 text-sm">Guardado ✓</span>}
+            {savedAt && !saving && <span className="text-faint text-sm">Guardado ✓</span>}
             <button
               onClick={() => persist(draft.status)}
               disabled={saving}
-              className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors text-sm font-semibold"
+              className="flex items-center gap-2 px-4 py-2 bg-surface-2 hover:bg-surface-3 rounded-lg transition-colors text-sm font-semibold"
             >
               <Save className="w-4 h-4" />
               Guardar
@@ -401,7 +401,7 @@ export default function SessionEditor() {
           <h2 className="text-xl font-bold mb-4">Datos de la sesión</h2>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm text-white/70 mb-1" htmlFor="session-title">Título</label>
+              <label className="block text-sm text-ink-soft mb-1" htmlFor="session-title">Título</label>
               <input
                 id="session-title" type="text" value={draft.title}
                 onChange={(e) => setDraft({ ...draft, title: e.target.value })}
@@ -409,7 +409,7 @@ export default function SessionEditor() {
               />
             </div>
             <div>
-              <label className="block text-sm text-white/70 mb-1" htmlFor="session-desc">Descripción</label>
+              <label className="block text-sm text-ink-soft mb-1" htmlFor="session-desc">Descripción</label>
               <textarea
                 id="session-desc" value={draft.description} rows={2}
                 onChange={(e) => setDraft({ ...draft, description: e.target.value })}
@@ -425,7 +425,7 @@ export default function SessionEditor() {
             <h2 className="text-xl font-bold">Rondas ({draft.scenarios.length})</h2>
             <button
               onClick={addRound}
-              className="flex items-center gap-2 px-3 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-sm font-semibold transition-colors"
+              className="flex items-center gap-2 px-3 py-2 bg-surface-2 hover:bg-surface-3 rounded-lg text-sm font-semibold transition-colors"
             >
               <Plus className="w-4 h-4" />
               Añadir ronda
@@ -446,28 +446,28 @@ export default function SessionEditor() {
                     <div className="flex items-center gap-1">
                       <button
                         onClick={() => setPreviewRound({ ...previewRound, [i]: !showPreview })}
-                        className="flex items-center gap-1 px-2 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg text-xs font-semibold transition-colors"
+                        className="flex items-center gap-1 px-2 py-1.5 bg-surface-2 hover:bg-surface-3 rounded-lg text-xs font-semibold transition-colors"
                       >
                         {showPreview ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                         Vista previa
                       </button>
                       <button
                         onClick={() => moveRound(i, -1)} disabled={i === 0}
-                        className="p-1.5 bg-white/10 hover:bg-white/20 rounded-lg disabled:opacity-30 transition-colors"
+                        className="p-1.5 bg-surface-2 hover:bg-surface-3 rounded-lg disabled:opacity-30 transition-colors"
                         aria-label="Subir ronda"
                       >
                         <ArrowUp className="w-3.5 h-3.5" />
                       </button>
                       <button
                         onClick={() => moveRound(i, 1)} disabled={i === draft.scenarios.length - 1}
-                        className="p-1.5 bg-white/10 hover:bg-white/20 rounded-lg disabled:opacity-30 transition-colors"
+                        className="p-1.5 bg-surface-2 hover:bg-surface-3 rounded-lg disabled:opacity-30 transition-colors"
                         aria-label="Bajar ronda"
                       >
                         <ArrowDown className="w-3.5 h-3.5" />
                       </button>
                       <button
                         onClick={() => deleteRound(i)}
-                        className="p-1.5 bg-white/10 hover:bg-rose-500/40 rounded-lg transition-colors"
+                        className="p-1.5 bg-surface-2 hover:bg-rose-500/40 rounded-lg transition-colors"
                         aria-label="Eliminar ronda"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
@@ -477,11 +477,11 @@ export default function SessionEditor() {
 
                   {/* Type toggle + ranked + duration */}
                   <div className="flex flex-wrap items-center gap-4">
-                    <div className="flex rounded-lg overflow-hidden border border-white/15">
+                    <div className="flex rounded-lg overflow-hidden border border-line">
                       <button
                         onClick={() => setRoundType(i, 'open')}
                         className={`px-3 py-2 text-sm font-semibold transition-colors ${
-                          !isMC ? 'bg-cyan-500 text-black' : 'bg-white/5 hover:bg-white/10'
+                          !isMC ? 'bg-cyan-500 text-black' : 'bg-surface-2 hover:bg-surface-2'
                         }`}
                       >
                         Abierta
@@ -489,14 +489,14 @@ export default function SessionEditor() {
                       <button
                         onClick={() => setRoundType(i, 'multiple_choice')}
                         className={`px-3 py-2 text-sm font-semibold transition-colors ${
-                          isMC ? 'bg-kahoot-yellow text-black' : 'bg-white/5 hover:bg-white/10'
+                          isMC ? 'bg-kahoot-yellow text-black' : 'bg-surface-2 hover:bg-surface-2'
                         }`}
                       >
                         Opción múltiple
                       </button>
                     </div>
 
-                    <label className="flex items-center gap-2 text-sm text-white/70">
+                    <label className="flex items-center gap-2 text-sm text-ink-soft">
                       <input
                         type="checkbox"
                         checked={scenario.ranked !== false}
@@ -507,25 +507,25 @@ export default function SessionEditor() {
                     </label>
 
                     {isMC ? (
-                      <span className="text-sm text-white/50">
-                        Duración: <strong className="text-white/80">{scenario.durationSeconds ?? derivedMCRoundDuration(scenario.mcQuestions)}s</strong>{' '}
+                      <span className="text-sm text-muted">
+                        Duración: <strong className="text-ink-soft">{scenario.durationSeconds ?? derivedMCRoundDuration(scenario.mcQuestions)}s</strong>{' '}
                         (calculada)
                       </span>
                     ) : (
-                      <label className="flex items-center gap-2 text-sm text-white/70">
+                      <label className="flex items-center gap-2 text-sm text-ink-soft">
                         Duración (s)
                         <input
                           type="number" min={30} max={900} step={30}
                           value={scenario.durationSeconds ?? DEFAULT_OPEN_DURATION}
                           onChange={(e) => updateScenario(i, 'durationSeconds', Number(e.target.value))}
-                          className="w-24 bg-white/10 rounded-lg px-2 py-2 text-center outline-none focus:ring-2 focus:ring-cyan-400"
+                          className="w-24 bg-surface-2 rounded-lg px-2 py-2 text-center outline-none focus:ring-2 focus:ring-cyan-400"
                         />
                       </label>
                     )}
                   </div>
 
                   <div>
-                    <label className="block text-sm text-white/70 mb-1">Título</label>
+                    <label className="block text-sm text-ink-soft mb-1">Título</label>
                     <input
                       type="text" value={scenario.title || ''}
                       onChange={(e) => updateScenario(i, 'title', e.target.value)}
@@ -543,22 +543,22 @@ export default function SessionEditor() {
 
                       <div className="space-y-4">
                         {(scenario.mcQuestions || []).map((q: AnyJson, qi: number) => (
-                          <div key={qi} className="p-4 bg-black/20 rounded-xl space-y-3">
+                          <div key={qi} className="p-4 bg-surface-3 rounded-xl space-y-3">
                             <div className="flex items-center justify-between gap-3">
-                              <span className="text-sm font-bold text-white/70">Pregunta {qi + 1}</span>
+                              <span className="text-sm font-bold text-ink-soft">Pregunta {qi + 1}</span>
                               <div className="flex items-center gap-3">
-                                <label className="flex items-center gap-1.5 text-xs text-white/60">
+                                <label className="flex items-center gap-1.5 text-xs text-muted">
                                   Tiempo (s)
                                   <input
                                     type="number" min={5} max={120} step={5}
                                     value={q.timeLimitSeconds ?? MC_DEFAULT_TIME_LIMIT}
                                     onChange={(e) => updateMCQuestion(i, qi, { timeLimitSeconds: Number(e.target.value) })}
-                                    className="w-16 bg-white/10 rounded-lg px-2 py-1 text-center outline-none focus:ring-2 focus:ring-cyan-400"
+                                    className="w-16 bg-surface-2 rounded-lg px-2 py-1 text-center outline-none focus:ring-2 focus:ring-cyan-400"
                                   />
                                 </label>
                                 <button
                                   onClick={() => removeMCQuestion(i, qi)}
-                                  className="text-white/40 hover:text-rose-400 transition-colors"
+                                  className="text-faint hover:text-rose-400 transition-colors"
                                   aria-label="Eliminar pregunta"
                                 >
                                   <Trash2 className="w-4 h-4" />
@@ -580,7 +580,7 @@ export default function SessionEditor() {
                             />
 
                             <div className="space-y-2">
-                              <p className="text-xs text-white/50 font-semibold uppercase tracking-wider">
+                              <p className="text-xs text-muted font-semibold uppercase tracking-wider">
                                 Alternativas — marca la correcta
                               </p>
                               {(q.options || []).map((opt: AnyJson, oi: number) => (
@@ -594,7 +594,7 @@ export default function SessionEditor() {
                                       className="w-4 h-4 accent-kahoot-green shrink-0"
                                       aria-label={`Alternativa ${opt.id} es la correcta`}
                                     />
-                                    <span className="w-6 text-center text-xs font-black text-white/60 shrink-0">
+                                    <span className="w-6 text-center text-xs font-black text-muted shrink-0">
                                       {opt.id}
                                     </span>
                                     <input
@@ -605,7 +605,7 @@ export default function SessionEditor() {
                                     />
                                     <button
                                       onClick={() => removeMCOption(i, qi, oi)}
-                                      className="text-white/40 hover:text-rose-400 transition-colors shrink-0"
+                                      className="text-faint hover:text-rose-400 transition-colors shrink-0"
                                       aria-label={`Eliminar alternativa ${opt.id}`}
                                     >
                                       <X className="w-4 h-4" />
@@ -640,7 +640,7 @@ export default function SessionEditor() {
                               {(q.options || []).length < 4 && (
                                 <button
                                   onClick={() => addMCOption(i, qi)}
-                                  className="flex items-center gap-1 text-xs text-cyan-400 hover:text-cyan-300 font-semibold"
+                                  className="flex items-center gap-1 text-xs text-cyan-400 hover:text-cyan-700 font-semibold"
                                 >
                                   <Plus className="w-3 h-3" /> Añadir alternativa
                                 </button>
@@ -658,7 +658,7 @@ export default function SessionEditor() {
 
                         <button
                           onClick={() => addMCQuestion(i)}
-                          className="flex items-center gap-2 px-3 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-sm font-semibold transition-colors"
+                          className="flex items-center gap-2 px-3 py-2 bg-surface-2 hover:bg-surface-3 rounded-lg text-sm font-semibold transition-colors"
                         >
                           <Plus className="w-4 h-4" /> Añadir pregunta
                         </button>
@@ -667,7 +667,7 @@ export default function SessionEditor() {
                   ) : (
                     <>
                       <div>
-                        <label className="block text-sm text-white/70 mb-1">
+                        <label className="block text-sm text-ink-soft mb-1">
                           Escenario (lo que ve el estudiante)
                         </label>
                         <textarea
@@ -684,7 +684,7 @@ export default function SessionEditor() {
                       />
 
                       <div>
-                        <label className="block text-sm text-white/70 mb-1">
+                        <label className="block text-sm text-ink-soft mb-1">
                           Foco de los jueces en esta ronda
                         </label>
                         <textarea
@@ -698,7 +698,7 @@ export default function SessionEditor() {
 
                   {showPreview && (
                     <div>
-                      <p className="text-xs text-white/50 font-semibold uppercase tracking-wider mb-2">
+                      <p className="text-xs text-muted font-semibold uppercase tracking-wider mb-2">
                         Vista previa (como la ve el estudiante)
                       </p>
                       <QuestionPreview scenario={scenario} />
@@ -713,12 +713,12 @@ export default function SessionEditor() {
         {/* Rubric */}
         <section>
           <h2 className="text-xl font-bold mb-1">Rúbrica</h2>
-          <p className="text-white/50 text-sm mb-4">
+          <p className="text-muted text-sm mb-4">
             Solo se aplica a las rondas abiertas. Los pesos deben sumar 1.0. Cada dimensión describe
             qué separa una respuesta excelente (100) de una deficiente (0).
           </p>
           <div className="mb-4">
-            <label className="block text-sm text-white/70 mb-1">Instrucciones globales para los jueces</label>
+            <label className="block text-sm text-ink-soft mb-1">Instrucciones globales para los jueces</label>
             <textarea
               value={draft.rubric.globalInstructions || ''} rows={3}
               onChange={(e) => setDraft({ ...draft, rubric: { ...draft.rubric, globalInstructions: e.target.value } })}
@@ -745,7 +745,7 @@ export default function SessionEditor() {
                     className={`${INPUT_CLASS} font-bold flex-1 min-w-[12rem]`}
                   />
                   <div className="flex items-center gap-2 shrink-0">
-                    <label className="text-sm text-white/50">Peso</label>
+                    <label className="text-sm text-muted">Peso</label>
                     <input
                       type="number" step="0.05" min="0" max="1" value={dim.weight ?? 0}
                       onChange={(e) =>
@@ -759,7 +759,7 @@ export default function SessionEditor() {
                           },
                         })
                       }
-                      className="w-20 bg-white/10 rounded-lg px-2 py-2 outline-none focus:ring-2 focus:ring-cyan-400 text-center"
+                      className="w-20 bg-surface-2 rounded-lg px-2 py-2 outline-none focus:ring-2 focus:ring-cyan-400 text-center"
                     />
                   </div>
                 </div>
@@ -780,7 +780,7 @@ export default function SessionEditor() {
                 />
                 <button
                   onClick={() => setOpenDim(openDim === i ? null : i)}
-                  className="flex items-center gap-1 text-sm text-cyan-400 hover:text-cyan-300"
+                  className="flex items-center gap-1 text-sm text-cyan-400 hover:text-cyan-700"
                 >
                   {openDim === i ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                   Niveles de puntaje
@@ -789,7 +789,7 @@ export default function SessionEditor() {
                   <div className="mt-3 space-y-2">
                     {RUBRIC_LEVELS.map((level) => (
                       <div key={level}>
-                        <label className="block text-xs text-white/50 mb-1">
+                        <label className="block text-xs text-muted mb-1">
                           {level.replace('level_', 'Puntaje ')}
                         </label>
                         <textarea
@@ -819,7 +819,7 @@ export default function SessionEditor() {
         {/* Knowledge base */}
         <section>
           <h2 className="text-xl font-bold mb-1">Material de apoyo (knowledge base)</h2>
-          <p className="text-white/50 text-sm mb-4">
+          <p className="text-muted text-sm mb-4">
             Contexto que los jueces usan para evaluar. Formato markdown.
           </p>
           <textarea

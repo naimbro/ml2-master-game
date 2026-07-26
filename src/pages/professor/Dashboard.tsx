@@ -40,33 +40,33 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gradient-main">
       {/* Header */}
-      <header className="p-4 border-b border-white/10">
+      <header className="p-4 border-b border-line">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-3">
             <Link to="/" className="flex items-center gap-2">
               <Gamepad2 className="w-8 h-8 text-cyan-400" />
               <span className="text-xl font-bold gradient-text">Aula Maestra</span>
             </Link>
-            <span className="text-white/30">|</span>
-            <span className="text-white/70">Panel del Profesor</span>
+            <span className="text-faint">|</span>
+            <span className="text-ink-soft">Panel del Profesor</span>
           </div>
 
           <div className="flex items-center gap-4">
             {access === 'admin' && (
               <Link
                 to="/professor/admin"
-                className="flex items-center gap-2 px-3 py-1.5 text-sm bg-white/10 hover:bg-white/20 rounded-lg transition-colors"
+                className="flex items-center gap-2 px-3 py-1.5 text-sm bg-surface-2 hover:bg-surface-3 rounded-lg transition-colors"
               >
                 <ShieldCheck className="w-4 h-4 text-cyan-400" />
                 <span className="hidden sm:inline">Admin</span>
               </Link>
             )}
-            <span className="text-white/70 text-sm hidden sm:block">
+            <span className="text-ink-soft text-sm hidden sm:block">
               {user?.displayName || user?.email}
             </span>
             <button
               onClick={handleLogout}
-              className="flex items-center gap-2 px-3 py-1.5 text-sm bg-white/10 hover:bg-white/20 rounded-lg transition-colors"
+              className="flex items-center gap-2 px-3 py-1.5 text-sm bg-surface-2 hover:bg-surface-3 rounded-lg transition-colors"
             >
               <LogOut className="w-4 h-4" />
               <span className="hidden sm:inline">Salir</span>
@@ -91,25 +91,25 @@ export default function Dashboard() {
               return (
                 <div key={course.id} className="dramatic-card p-6 group">
                   <div className={`w-14 h-14 ${course.iconClass} rounded-xl flex items-center justify-center mb-4`}>
-                    <BookOpen className="w-7 h-7 text-white" />
+                    <BookOpen className="w-7 h-7 text-onaccent" />
                   </div>
                   <h3 className="text-xl font-bold mb-1">{course.name}</h3>
-                  <p className="text-white/60 text-sm mb-4">{course.tagline}</p>
+                  <p className="text-muted text-sm mb-4">{course.tagline}</p>
                   <div className="flex items-center justify-between text-sm mb-4">
-                    <span className="text-white/50">
+                    <span className="text-muted">
                       {sessionCount} {sessionCount === 1 ? 'sesion' : 'sesiones'}
                     </span>
                   </div>
                   <div className="flex gap-2">
                     <Link
                       to={`/professor/courses/${course.id}/create`}
-                      className="flex-1 py-2 text-center bg-white/10 hover:bg-white/20 rounded-lg transition-colors font-semibold text-sm"
+                      className="flex-1 py-2 text-center bg-surface-2 hover:bg-surface-3 rounded-lg transition-colors font-semibold text-sm"
                     >
                       Crear juego
                     </Link>
                     <Link
                       to={`/professor/courses/${course.id}/judges`}
-                      className="flex items-center gap-1 px-3 py-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors text-sm"
+                      className="flex items-center gap-1 px-3 py-2 bg-surface-2 hover:bg-surface-3 rounded-lg transition-colors text-sm"
                     >
                       <Users className="w-4 h-4" />
                       Jueces
@@ -126,10 +126,10 @@ export default function Dashboard() {
                 className="dramatic-card p-6 hover:scale-[1.02] transition-transform cursor-pointer group"
               >
                 <div className={`w-14 h-14 ${course.iconClass} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-                  <BookOpen className="w-7 h-7 text-white" />
+                  <BookOpen className="w-7 h-7 text-onaccent" />
                 </div>
                 <h3 className="text-xl font-bold mb-1">{course.name}</h3>
-                <p className="text-white/60 text-sm mb-4">{course.tagline}</p>
+                <p className="text-muted text-sm mb-4">{course.tagline}</p>
                 <div className="flex items-center justify-end text-sm">
                   <span className="text-cyan-400 flex items-center gap-1 font-semibold">
                     Gestionar
@@ -142,13 +142,13 @@ export default function Dashboard() {
             {/* Create course card */}
             <Link
               to="/professor/courses/new"
-              className="dramatic-card p-6 hover:scale-[1.02] transition-transform cursor-pointer group border-2 border-dashed border-white/20 flex flex-col items-center justify-center text-center min-h-[220px]"
+              className="dramatic-card p-6 hover:scale-[1.02] transition-transform cursor-pointer group border-2 border-dashed border-line flex flex-col items-center justify-center text-center min-h-[220px]"
             >
-              <div className="w-14 h-14 bg-white/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <div className="w-14 h-14 bg-surface-2 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                 <Plus className="w-7 h-7 text-cyan-400" />
               </div>
               <h3 className="text-xl font-bold mb-1">Crear curso</h3>
-              <p className="text-white/60 text-sm">
+              <p className="text-muted text-sm">
                 Genera sesiones con el asistente IA
               </p>
             </Link>

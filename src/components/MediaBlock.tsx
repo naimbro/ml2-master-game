@@ -10,12 +10,12 @@ function MediaImage({ asset, className }: { asset: MediaAsset; className?: strin
   if (failed) {
     return (
       <div
-        className={`flex items-center gap-3 p-4 bg-white/5 border-2 border-dashed border-white/20 rounded-xl ${className ?? ''}`}
+        className={`flex items-center gap-3 p-4 bg-surface-2 border-2 border-dashed border-line rounded-xl ${className ?? ''}`}
         role="img"
         aria-label={asset.alt || 'Imagen no disponible'}
       >
-        <ImageOff className="w-6 h-6 text-white/40 shrink-0" />
-        <span className="text-white/60 text-sm font-medium">
+        <ImageOff className="w-6 h-6 text-faint shrink-0" />
+        <span className="text-muted text-sm font-medium">
           {asset.alt || 'Imagen no disponible'}
         </span>
       </div>
@@ -38,9 +38,9 @@ function MediaAudio({ asset }: { asset: MediaAsset }) {
 
   if (failed) {
     return (
-      <div className="flex items-center gap-3 p-4 bg-white/5 border-2 border-dashed border-white/20 rounded-xl">
-        <Music className="w-6 h-6 text-white/40 shrink-0" />
-        <span className="text-white/60 text-sm font-medium">
+      <div className="flex items-center gap-3 p-4 bg-surface-2 border-2 border-dashed border-line rounded-xl">
+        <Music className="w-6 h-6 text-faint shrink-0" />
+        <span className="text-muted text-sm font-medium">
           {asset.alt || 'Audio no disponible'}
         </span>
       </div>
@@ -50,8 +50,8 @@ function MediaAudio({ asset }: { asset: MediaAsset }) {
   return (
     <div className="flex flex-col gap-2">
       {asset.alt && (
-        <div className="flex items-center gap-2 text-white/70 text-sm font-semibold">
-          <Music className="w-4 h-4 text-kahoot-yellow shrink-0" />
+        <div className="flex items-center gap-2 text-ink-soft text-sm font-semibold">
+          <Music className="w-4 h-4 text-amber-ink shrink-0" />
           <span>{asset.alt}</span>
         </div>
       )}
@@ -91,7 +91,7 @@ export default function MediaBlock({
         <figure key={`${asset.src}-${i}`} className="m-0">
           {asset.kind === 'audio' ? <MediaAudio asset={asset} /> : <MediaImage asset={asset} />}
           {asset.credit && (
-            <figcaption className="mt-1.5 text-[10px] text-white/40 text-center font-medium">
+            <figcaption className="mt-1.5 text-[10px] text-faint text-center font-medium">
               {asset.credit}
             </figcaption>
           )}

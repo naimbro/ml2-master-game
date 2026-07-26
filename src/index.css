@@ -2,9 +2,78 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Base styles - Montserrat (Kahoot's actual font) */
+/* ═══════════════════════════════════════════════════════════════════════
+   "Cancha" — light ground, chunky blocks, hard bottom shadows.
+   Orange is the ACTION colour (what you press, where you are).
+   Green is reserved exclusively for "correct". Ink carries structure.
+
+   Fonts are self-hosted from public/fonts so a live game never depends on
+   a font CDN. Archivo Black for display, Outfit (variable) for everything.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+@font-face {
+  font-family: 'Archivo Black';
+  src: url('./assets/fonts/archivo-black-latin.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+                 U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+                 U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Archivo Black';
+  src: url('./assets/fonts/archivo-black-latin-ext.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF,
+                 U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Outfit';
+  src: url('./assets/fonts/outfit-latin.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+                 U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+                 U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Outfit';
+  src: url('./assets/fonts/outfit-latin-ext.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF,
+                 U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* ── Tokens ───────────────────────────────────────────────────────────── */
 :root {
-  font-family: 'Montserrat', system-ui, sans-serif;
+  --paper:       #FAFAF8;
+  --surface:     #FFFFFF;
+  --surface-2:   #F2F1ED;
+  --surface-3:   #E8E7E2;
+  --ink:         #101114;
+  --ink-soft:    #3A3D45;
+  --muted:       #5F6269;
+  --faint:       #767980;
+  --line:        #E6E5E0;
+
+  --orange:      #FF5A1F;
+  --orange-dark: #C2400F;
+  --correct:     #0B7A46;
+  --correct-dark:#09693D;
+  --wrong:       #B3272B;
+  --wrong-dark:  #8E1F22;
+  --amber:       #F5A524;
+  --blue:        #2563EB;
+
+  --shadow-hard: 0 3px 0;
+
+  font-family: 'Outfit', system-ui, sans-serif;
   line-height: 1.5;
   font-weight: 500;
   font-synthesis: none;
@@ -13,227 +82,192 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Kahoot-inspired deep purple background */
 body {
-  background: linear-gradient(135deg, #1A0A3E 0%, #46178F 50%, #2D1065 100%);
-  @apply min-h-screen text-white;
+  background: var(--paper);
+  @apply min-h-screen text-ink;
   margin: 0;
 }
 
-/* Utility: main background gradient (used across pages) */
-@layer utilities {
-  .bg-gradient-main {
-    background: linear-gradient(135deg, #1A0A3E 0%, #46178F 50%, #2D1065 100%);
-  }
+/* Display face: reserved for headline moments, always uppercase. */
+.font-display,
+h1.display,
+.hero-title {
+  font-family: 'Archivo Black', 'Outfit', system-ui, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: -0.015em;
 }
 
-/* Reusable component classes */
+@layer utilities {
+  /* Used on every page as the full-screen ground. Kept as a utility name so
+     the restyle is a CSS change, not 36 component edits. */
+  .bg-gradient-main {
+    background: var(--paper);
+  }
+  .text-shadow-none { text-shadow: none; }
+}
+
+/* ── Components ───────────────────────────────────────────────────────── */
 @layer components {
-  /* Bold card - solid with colored accent, Kahoot-style */
+  /* The signature block: white card, ink border, hard bottom shadow. */
   .dramatic-card {
-    @apply bg-white/10 rounded-2xl border-2 border-white/15 shadow-2xl;
-    backdrop-filter: blur(8px);
+    @apply bg-surface rounded-xl border-2 border-line;
+    box-shadow: 0 2px 0 var(--line);
   }
 
-  /* Primary action button - Kahoot green */
+  .card-ink {
+    @apply bg-surface rounded-xl border-2;
+    border-color: var(--ink);
+    box-shadow: var(--shadow-hard) var(--ink);
+  }
+
+  /* Primary action — orange, with the press physics the game already had. */
+  /* Ink on orange, not white: white on #FF5A1F is only 3.1:1. */
   .primary-button {
-    @apply text-white px-6 py-3 rounded-lg font-bold text-base uppercase tracking-wide;
-    @apply transition-all duration-200 shadow-lg;
-    @apply disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none;
-    background: #66BF39;
-    box-shadow: 0 4px 0 #4A9B1F, 0 6px 20px rgba(102, 191, 57, 0.3);
+    @apply text-ink px-6 py-3 rounded-xl font-bold text-base uppercase tracking-wide;
+    @apply transition-all duration-150;
+    @apply disabled:opacity-40 disabled:cursor-not-allowed;
+    background: var(--orange);
+    box-shadow: var(--shadow-hard) var(--orange-dark);
   }
-
-  .primary-button:hover:not(:disabled) {
-    background: #5BAD30;
-    transform: translateY(-1px);
-    box-shadow: 0 5px 0 #4A9B1F, 0 8px 25px rgba(102, 191, 57, 0.4);
-  }
-
+  .primary-button:hover:not(:disabled) { filter: brightness(1.05); }
   .primary-button:active:not(:disabled) {
-    transform: translateY(2px);
-    box-shadow: 0 2px 0 #4A9B1F, 0 3px 10px rgba(102, 191, 57, 0.3);
+    transform: translateY(3px);
+    box-shadow: 0 0 0 var(--orange-dark);
   }
 
-  /* Secondary button */
   .secondary-button {
-    @apply bg-white/15 hover:bg-white/25 border-2 border-white/20;
-    @apply text-white px-6 py-3 rounded-lg font-bold uppercase tracking-wide;
-    @apply transition-all duration-200;
+    @apply bg-surface text-ink px-6 py-3 rounded-xl font-bold uppercase tracking-wide;
+    @apply transition-all duration-150 border-2;
+    border-color: var(--ink);
+    box-shadow: var(--shadow-hard) var(--ink);
+  }
+  .secondary-button:hover:not(:disabled) { background: var(--surface-2); }
+  .secondary-button:active:not(:disabled) {
+    transform: translateY(3px);
+    box-shadow: 0 0 0 var(--ink);
   }
 
-  /* Danger button - Kahoot red */
   .danger-button {
-    @apply text-white px-6 py-3 rounded-lg font-bold uppercase tracking-wide;
-    @apply transition-all duration-200;
-    background: #FF3355;
-    box-shadow: 0 4px 0 #CC2944, 0 6px 20px rgba(255, 51, 85, 0.3);
+    @apply text-white px-6 py-3 rounded-xl font-bold uppercase tracking-wide;
+    @apply transition-all duration-150;
+    background: var(--wrong);
+    box-shadow: var(--shadow-hard) var(--wrong-dark);
+  }
+  .danger-button:hover:not(:disabled) { filter: brightness(1.05); }
+  .danger-button:active:not(:disabled) {
+    transform: translateY(3px);
+    box-shadow: 0 0 0 var(--wrong-dark);
   }
 
-  .danger-button:hover:not(:disabled) {
-    background: #E62E4D;
-    transform: translateY(-1px);
-  }
-
-  /* Input field - cleaner, bolder */
   .input-field {
-    @apply bg-white/10 border-2 border-white/20 rounded-xl px-4 py-3;
-    @apply text-white placeholder-white/40 font-medium;
-    @apply focus:outline-none focus:border-white/50 focus:bg-white/15;
-    @apply transition-all duration-200 w-full;
+    @apply bg-surface border-2 rounded-xl px-4 py-3;
+    @apply text-ink font-medium;
+    @apply focus:outline-none transition-all duration-150 w-full;
+    border-color: var(--line);
+  }
+  .input-field::placeholder { color: var(--faint); }
+  .input-field:focus {
+    border-color: var(--orange);
+    box-shadow: 0 0 0 3px rgba(255, 90, 31, 0.18);
   }
 
-  /* Textarea styling */
   .textarea-field {
-    @apply bg-white/10 border-2 border-white/20 rounded-xl px-4 py-3;
-    @apply text-white placeholder-white/40 resize-none font-medium;
-    @apply focus:outline-none focus:border-white/50 focus:bg-white/15;
-    @apply transition-all duration-200;
+    @apply bg-surface border-2 rounded-xl px-4 py-3;
+    @apply text-ink resize-none font-medium;
+    @apply focus:outline-none transition-all duration-150;
+    border-color: var(--line);
+  }
+  .textarea-field::placeholder { color: var(--faint); }
+  .textarea-field:focus {
+    border-color: var(--orange);
+    box-shadow: 0 0 0 3px rgba(255, 90, 31, 0.18);
   }
 
-  /* Gradient text - purple to pink */
-  .gradient-text {
-    @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, #A855F7, #EC4899, #F97316);
-  }
+  /* Was a purple→pink→orange gradient; now a flat, confident orange. */
+  .gradient-text { color: var(--orange); }
 
-  /* Progress bar */
   .progress-bar {
     @apply h-3 rounded-full transition-all duration-500;
-    background: linear-gradient(90deg, #66BF39, #45A3E5);
+    background: var(--orange);
   }
 
-  /* Badge/chip */
   .badge {
-    @apply px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider;
+    @apply px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider border;
   }
+  .badge-indigo { @apply badge; background: #EEF2FF; color: #3730A3; border-color: #C7D2FE; }
+  .badge-cyan   { @apply badge; background: #ECFEFF; color: #155E75; border-color: #A5F3FC; }
+  .badge-green  { @apply badge; background: #E7F8F0; color: var(--correct-dark); border-color: #A7E8C8; }
+  .badge-red    { @apply badge; background: #FDECEC; color: var(--wrong-dark); border-color: #F7C5C6; }
+  .badge-yellow { @apply badge; background: #FEF4E2; color: #92400E; border-color: #FBD9A0; }
 
-  .badge-indigo {
-    @apply badge bg-purple-500/25 text-purple-200 border border-purple-400/30;
-  }
+  .score-excellent { color: var(--correct-dark); }
+  .score-good      { color: var(--blue); }
+  .score-average   { color: #92400E; }
+  .score-poor      { color: var(--wrong-dark); }
 
-  .badge-cyan {
-    @apply badge bg-blue-500/25 text-blue-200 border border-blue-400/30;
-  }
-
-  .badge-green {
-    @apply badge bg-green-500/25 text-green-200 border border-green-400/30;
-  }
-
-  .badge-red {
-    @apply badge bg-red-500/25 text-red-200 border border-red-400/30;
-  }
-
-  .badge-yellow {
-    @apply badge bg-yellow-500/25 text-yellow-200 border border-yellow-400/30;
-  }
-
-  /* Score colors */
-  .score-excellent {
-    @apply text-green-400;
-  }
-
-  .score-good {
-    @apply text-blue-400;
-  }
-
-  .score-average {
-    @apply text-yellow-400;
-  }
-
-  .score-poor {
-    @apply text-red-400;
-  }
-
-  /* Kahoot-style answer colors for judges */
-  .judge-red { background: #FF3355; }
-  .judge-blue { background: #1368CE; }
-  .judge-green { background: #66BF39; }
+  /* Judge accents — three distinct hues that all read on white. */
+  .judge-red   { background: var(--wrong); }
+  .judge-blue  { background: var(--blue); }
+  .judge-green { background: var(--correct); }
 }
 
-/* Floating geometric shapes (Kahoot's signature) */
+/* Decorative floating shapes, restrained on a light ground. */
 .kahoot-shapes::before,
 .kahoot-shapes::after {
   content: '';
   position: fixed;
-  border-radius: 10px;
-  opacity: 0.06;
+  border-radius: 12px;
+  opacity: 0.10;
   pointer-events: none;
   z-index: 0;
 }
-
 .kahoot-shapes::before {
-  width: 120px;
-  height: 120px;
-  background: #FF3355;
-  top: 10%;
-  left: 5%;
-  transform: rotate(45deg);
+  width: 120px; height: 120px; background: var(--orange);
+  top: 10%; left: 5%; transform: rotate(45deg);
   animation: float 8s ease-in-out infinite;
 }
-
 .kahoot-shapes::after {
-  width: 80px;
-  height: 80px;
-  background: #66BF39;
-  bottom: 15%;
-  right: 8%;
-  border-radius: 50%;
+  width: 80px; height: 80px; background: var(--ink);
+  bottom: 15%; right: 8%; border-radius: 50%;
   animation: float 6s ease-in-out 2s infinite;
 }
 
-/* Timer dramatic pulse */
-.timer-critical {
-  animation: timerPulse 0.5s ease-in-out infinite;
-}
-
+.timer-critical { animation: timerPulse 0.5s ease-in-out infinite; }
 @keyframes timerPulse {
   0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.08); }
+  50%      { transform: scale(1.08); }
 }
 
-/* Score counter animation */
-.score-reveal {
-  animation: scoreReveal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-
+.score-reveal { animation: scoreReveal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
 @keyframes scoreReveal {
-  0% { opacity: 0; transform: scale(0.3) translateY(20px); }
-  60% { transform: scale(1.15) translateY(-5px); }
+  0%   { opacity: 0; transform: scale(0.3) translateY(20px); }
+  60%  { transform: scale(1.15) translateY(-5px); }
   100% { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-/* Podium bars grow animation */
 .podium-grow {
   animation: podiumGrow 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
   transform-origin: bottom;
 }
-
 @keyframes podiumGrow {
-  0% { transform: scaleY(0); opacity: 0; }
+  0%   { transform: scaleY(0); opacity: 0; }
   100% { transform: scaleY(1); opacity: 1; }
 }
 
-/* ---- Multiple-choice answer feedback -------------------------------------
-   The single most-watched moment of a Kahoot round: the beat between picking
-   an answer and learning if it was right. One decisive pulse reads clearly
-   from the back of a lecture hall; a subtle tint does not. */
-
+/* ── Multiple-choice answer feedback ──────────────────────────────────
+   The most-watched beat of a round: one decisive pulse, readable from the
+   back of a room. Green here means correct and nothing else. */
 .mc-correct {
   animation: mcCorrect 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
-  box-shadow: 0 0 0 4px rgba(134, 239, 172, 0.9), 0 0 34px 6px rgba(102, 191, 57, 0.55);
+  box-shadow: 0 0 0 4px rgba(11, 122, 70, 0.30), 0 4px 0 var(--correct-dark);
 }
-
 @keyframes mcCorrect {
   0%   { transform: scale(1); }
   45%  { transform: scale(1.045); }
   100% { transform: scale(1); }
 }
 
-.mc-wrong {
-  animation: mcWrong 0.4s ease-in-out;
-}
-
+.mc-wrong { animation: mcWrong 0.4s ease-in-out; }
 @keyframes mcWrong {
   0%, 100% { transform: translateX(0); }
   20%      { transform: translateX(-6px); }
@@ -241,18 +275,26 @@ body {
   80%      { transform: translateX(-3px); }
 }
 
-/* Media inside a question card reads as part of the question, not a loose
-   attachment: same rounding, a hairline edge, and a dark mat behind it. */
+/* Media reads as part of its question card, not a loose attachment. */
 .media-frame {
   @apply rounded-xl overflow-hidden;
-  background: rgba(0, 0, 0, 0.25);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  background: var(--surface-2);
+  box-shadow: inset 0 0 0 1px var(--line);
 }
 
-/* ---- Accessibility --------------------------------------------------------
-   Kill the decorative CSS animations for anyone who asked for less motion.
-   Framer Motion drives its own inline styles and is unaffected here; the
-   RecalibrationReveal sheet carries its own matching guard. */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--surface-2); }
+::-webkit-scrollbar-thumb { background: var(--surface-3); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: var(--faint); }
+
+::selection { background: rgba(255, 90, 31, 0.22); color: var(--ink); }
+
+/* Keyboard focus must stay visible on every interactive surface. */
+:where(button, a, input, textarea, select, [tabindex]):focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: 2px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .kahoot-shapes::before,
   .kahoot-shapes::after,
@@ -263,35 +305,9 @@ body {
   .mc-wrong {
     animation: none !important;
   }
-
-  .primary-button:hover:not(:disabled),
   .primary-button:active:not(:disabled),
-  .danger-button:hover:not(:disabled) {
+  .secondary-button:active:not(:disabled),
+  .danger-button:active:not(:disabled) {
     transform: none;
   }
-}
-
-/* Custom scrollbar for dark theme */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #1A0A3E;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #46178F;
-  border-radius: 999px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #5B20B5;
-}
-
-/* Selection color */
-::selection {
-  background: rgba(102, 191, 57, 0.3);
-  color: white;
 }

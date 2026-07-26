@@ -58,7 +58,7 @@ function AppRoutes() {
       <div className="min-h-screen bg-gradient-main flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-white/70">Cargando...</p>
+          <p className="text-ink-soft">Cargando...</p>
         </div>
       </div>
     );

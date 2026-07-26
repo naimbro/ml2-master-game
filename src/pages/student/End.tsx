@@ -341,7 +341,7 @@ export default function End() {
       <div className="min-h-screen bg-gradient-main flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-kahoot-green border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-white/70 font-bold">Calculando resultados finales...</p>
+          <p className="text-ink-soft font-bold">Calculando resultados finales...</p>
         </div>
       </div>
     );
@@ -372,7 +372,7 @@ export default function End() {
           animate={{ opacity: 1, y: 0 }}
         >
           <h1 className="text-2xl font-black">{game.sessionConfig?.title || 'Sesion'}</h1>
-          <p className="text-white/50 font-bold uppercase tracking-wider text-sm">Resultados Finales</p>
+          <p className="text-muted font-bold uppercase tracking-wider text-sm">Resultados Finales</p>
         </motion.div>
       </header>
 
@@ -389,7 +389,7 @@ export default function End() {
               transition={{ duration: 0.4 }}
               className="text-center py-8"
             >
-              <p className="text-3xl md:text-4xl font-black text-white/90 animate-pulse">
+              <p className="text-3xl md:text-4xl font-black text-ink-soft animate-pulse">
                 {announcement}
               </p>
             </motion.div>
@@ -479,12 +479,12 @@ export default function End() {
             className="dramatic-card p-6"
           >
             <h2 className="text-xl font-black mb-4 flex items-center gap-2">
-              <Star className="w-5 h-5 text-kahoot-yellow" />
+              <Star className="w-5 h-5 text-amber-ink" />
               Tu Resultado Final
             </h2>
 
             <div className="grid grid-cols-3 gap-4 text-center mb-6">
-              <div className="p-4 bg-white/5 rounded-xl">
+              <div className="p-4 bg-surface-2 rounded-xl">
                 <motion.p
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
@@ -493,9 +493,9 @@ export default function End() {
                 >
                   #{userRanking.rank}
                 </motion.p>
-                <p className="text-sm text-white/50 font-bold">Posicion</p>
+                <p className="text-sm text-muted font-bold">Posicion</p>
               </div>
-              <div className="p-4 bg-white/5 rounded-xl">
+              <div className="p-4 bg-surface-2 rounded-xl">
                 <motion.p
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
@@ -504,9 +504,9 @@ export default function End() {
                 >
                   {userRanking.totalScore}
                 </motion.p>
-                <p className="text-sm text-white/50 font-bold">Puntaje Total</p>
+                <p className="text-sm text-muted font-bold">Puntaje Total</p>
               </div>
-              <div className="p-4 bg-white/5 rounded-xl">
+              <div className="p-4 bg-surface-2 rounded-xl">
                 <motion.p
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
@@ -515,12 +515,12 @@ export default function End() {
                 >
                   {Math.round(userRanking.totalScore / (userRanking.roundScores.length || 1))}
                 </motion.p>
-                <p className="text-sm text-white/50 font-bold">Promedio</p>
+                <p className="text-sm text-muted font-bold">Promedio</p>
               </div>
             </div>
 
             <div className="mb-6">
-              <p className="text-xs text-white/50 mb-2 font-bold uppercase tracking-wider">Puntaje por ronda:</p>
+              <p className="text-xs text-muted mb-2 font-bold uppercase tracking-wider">Puntaje por ronda:</p>
               <div className="flex gap-2">
                 {userRanking.roundScores.map((score, i) => {
                   const isRoundRanked = game?.scenarios?.[i]?.ranked !== false;
@@ -529,22 +529,22 @@ export default function End() {
                       key={i}
                       className={`flex-1 p-2 rounded-xl text-center ${
                         !isRoundRanked
-                          ? 'border-2 border-dashed border-white/20 bg-white/5 text-white/50'
+                          ? 'border-2 border-dashed border-line bg-surface-2 text-muted'
                           : score >= 80
                           ? 'bg-kahoot-green/20 text-kahoot-green border-2 border-kahoot-green/30'
                           : score >= 60
-                          ? 'bg-kahoot-yellow/20 text-kahoot-yellow border-2 border-kahoot-yellow/30'
+                          ? 'bg-kahoot-yellow/20 text-amber-ink border-2 border-kahoot-yellow/30'
                           : 'bg-kahoot-red/20 text-kahoot-red border-2 border-kahoot-red/30'
                       }`}
                     >
-                      <p className="text-[10px] text-white/50 font-bold">R{i + 1}{!isRoundRanked ? '*' : ''}</p>
+                      <p className="text-[10px] text-muted font-bold">R{i + 1}{!isRoundRanked ? '*' : ''}</p>
                       <p className="font-black">{score || '-'}</p>
                     </div>
                   );
                 })}
               </div>
               {game?.scenarios?.some((s: { ranked?: boolean }) => s.ranked === false) && (
-                <p className="text-xs text-white/40 mt-2 font-medium">* Ronda diagnostica (no afecta ranking)</p>
+                <p className="text-xs text-faint mt-2 font-medium">* Ronda diagnostica (no afecta ranking)</p>
               )}
             </div>
 
@@ -555,7 +555,7 @@ export default function End() {
             >
               {reportLoading ? (
                 <>
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <div className="w-4 h-4 border-2 border-ink border-t-transparent rounded-full animate-spin" />
                   Generando reporte...
                 </>
               ) : (
@@ -592,7 +592,7 @@ export default function End() {
                   className={`flex items-center gap-4 p-3 rounded-xl ${
                     player.playerId === user?.uid
                       ? 'bg-kahoot-green/15 border-2 border-kahoot-green/30'
-                      : 'bg-white/5'
+                      : 'bg-surface-2'
                   }`}
                 >
                   <div
@@ -603,7 +603,7 @@ export default function End() {
                         ? 'bg-gray-400 text-black'
                         : player.rank === 3
                         ? 'bg-amber-600 text-black'
-                        : 'bg-white/20'
+                        : 'bg-surface-3'
                     }`}
                   >
                     {player.rank}
@@ -623,7 +623,7 @@ export default function End() {
                         <span
                           key={i}
                           className={`text-xs w-8 text-center font-semibold ${
-                            !isRoundRanked ? 'text-white/30 italic' : 'text-white/50'
+                            !isRoundRanked ? 'text-faint italic' : 'text-muted'
                           }`}
                         >
                           {score || '-'}{!isRoundRanked ? '*' : ''}
@@ -653,7 +653,7 @@ export default function End() {
               <FileText className="w-5 h-5 text-purple-400" />
               Panel del Profesor
             </h2>
-            <p className="text-white/60 text-sm mb-4 font-medium">
+            <p className="text-muted text-sm mb-4 font-medium">
               Como profesor, puedes ver el reporte completo de la clase con estadisticas detalladas de todos los estudiantes.
             </p>
             <div className="space-y-3">
@@ -671,7 +671,7 @@ export default function End() {
               >
                 {signalsLoading ? (
                   <>
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <div className="w-4 h-4 border-2 border-ink border-t-transparent rounded-full animate-spin" />
                     Exportando...
                   </>
                 ) : (

@@ -15,13 +15,20 @@ import { scoreMCQuestion, scoreMCBlock, MC_SCORING_LEGEND } from '../../lib/mcSc
 import { MC_GATE_SECONDS } from '../../lib/mcTiming';
 import type { MCResponse } from '../../types/game';
 
-// Kahoot-style colors for MC options
-const MC_COLORS = [
-  { bg: 'bg-red-600', hover: 'hover:bg-red-500', border: 'border-red-400', selected: 'bg-red-500 ring-4 ring-red-300' },
-  { bg: 'bg-blue-600', hover: 'hover:bg-blue-500', border: 'border-blue-400', selected: 'bg-blue-500 ring-4 ring-blue-300' },
-  { bg: 'bg-yellow-600', hover: 'hover:bg-yellow-500', border: 'border-yellow-400', selected: 'bg-yellow-500 ring-4 ring-yellow-300' },
-  { bg: 'bg-green-600', hover: 'hover:bg-green-500', border: 'border-green-400', selected: 'bg-green-500 ring-4 ring-green-300' },
+// On a light ground the four Kahoot fills would be four shouting rectangles, so
+// the tile itself is a white card with an ink border and a hard bottom shadow,
+// and the position colour moves to the key badge. Colour-coding survives;
+// the text stays ink-on-white and readable.
+// Text colour travels with the fill: white is unreadable on the amber badge
+// (2.0:1), so that one carries ink instead.
+const MC_KEY_COLORS = [
+  'bg-kahoot-red text-onaccent',
+  'bg-kahoot-blue text-onaccent',
+  'bg-kahoot-yellow text-ink',
+  'bg-kahoot-green text-onaccent',
 ];
+const MC_TILE_BASE =
+  'bg-surface border-2 border-ink shadow-[0_3px_0_#101114] hover:bg-surface-2 active:translate-y-[3px] active:shadow-none';
 
 
 export default function Round() {
@@ -297,7 +304,7 @@ export default function Round() {
       <div className="min-h-screen bg-gradient-main flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-kahoot-green border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-white/70 font-semibold">Cargando ronda...</p>
+          <p className="text-ink-soft font-semibold">Cargando ronda...</p>
         </div>
       </div>
     );
@@ -308,7 +315,7 @@ export default function Round() {
       <div className="min-h-screen bg-gradient-main flex items-center justify-center p-4">
         <div className="text-center">
           <AlertCircle className="w-16 h-16 text-kahoot-red mx-auto mb-4" />
-          <p className="text-red-300 mb-4 font-semibold">{error || 'Error al cargar el juego'}</p>
+          <p className="text-red-700 mb-4 font-semibold">{error || 'Error al cargar el juego'}</p>
         </div>
       </div>
     );
@@ -343,13 +350,13 @@ export default function Round() {
         />
       )}
       {/* Header with Timer */}
-      <header className="sticky top-0 z-10 bg-[#2D1065]/90 backdrop-blur-sm border-b-2 border-white/10 p-4">
+      <header className="sticky top-0 z-10 bg-surface/90 backdrop-blur-sm border-b-2 border-line p-4">
         <div className="max-w-4xl mx-auto">
           <div className="flex justify-between items-center mb-3">
             <div>
-              <span className="text-white/50 text-xs font-bold uppercase tracking-wider">Ronda</span>
+              <span className="text-muted text-xs font-bold uppercase tracking-wider">Ronda</span>
               <p className="text-xl font-black">
-                {game.currentRound} <span className="text-white/40 font-bold">/ {game.totalRounds}</span>
+                {game.currentRound} <span className="text-faint font-bold">/ {game.totalRounds}</span>
               </p>
             </div>
 
@@ -358,7 +365,7 @@ export default function Round() {
               className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-black text-lg ${
                 isLowTime
                   ? 'bg-kahoot-red/30 text-kahoot-red border-2 border-kahoot-red/50'
-                  : 'bg-white/10 text-white border-2 border-white/15'
+                  : 'bg-surface-2 text-ink border-2 border-line'
               }`}
               animate={isLowTime ? { scale: [1, 1.05, 1] } : {}}
               transition={isLowTime ? { repeat: Infinity, duration: 0.8 } : {}}
@@ -370,15 +377,15 @@ export default function Round() {
             </motion.div>
 
             <div className="text-right">
-              <span className="text-white/50 text-xs font-bold uppercase tracking-wider">Respuestas</span>
+              <span className="text-muted text-xs font-bold uppercase tracking-wider">Respuestas</span>
               <p className="text-xl font-black text-kahoot-green">
-                {submissions.length} <span className="text-white/40 font-bold">/ {Object.keys(game.players || {}).length}</span>
+                {submissions.length} <span className="text-faint font-bold">/ {Object.keys(game.players || {}).length}</span>
               </p>
             </div>
           </div>
 
           {/* Progress bar */}
-          <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+          <div className="h-1.5 bg-surface-2 rounded-full overflow-hidden">
             <motion.div
               className={`h-full rounded-full ${isLowTime ? 'bg-kahoot-red' : 'bg-kahoot-green'}`}
               initial={{ width: 0 }}
@@ -394,11 +401,11 @@ export default function Round() {
               <button
                 onClick={handleEndRound}
                 disabled={endingRound}
-                className="flex items-center gap-2 px-4 py-2 bg-kahoot-red/80 hover:bg-kahoot-red text-white rounded-lg font-bold text-sm transition-all disabled:opacity-50"
+                className="flex items-center gap-2 px-4 py-2 bg-kahoot-red/80 hover:bg-kahoot-red text-ink rounded-lg font-bold text-sm transition-all disabled:opacity-50"
               >
                 {endingRound ? (
                   <>
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <div className="w-4 h-4 border-2 border-ink border-t-transparent rounded-full animate-spin" />
                     Terminando...
                   </>
                 ) : (
@@ -417,8 +424,8 @@ export default function Round() {
       {isNonRanked && (
         <div className="bg-kahoot-orange/15 border-b-2 border-kahoot-orange/30">
           <div className="max-w-4xl mx-auto px-4 py-3 flex items-center gap-3">
-            <Info className="w-5 h-5 text-kahoot-orange shrink-0" />
-            <p className="text-orange-200 text-sm font-semibold">
+            <Info className="w-5 h-5 text-orange-ink shrink-0" />
+            <p className="text-orange-800 text-sm font-semibold">
               No afecta ranking. Esto se usa para sugerir equipos y temas. Se honesto/a.
             </p>
           </div>
@@ -439,13 +446,13 @@ export default function Round() {
               {/* MC Title */}
               <div className="dramatic-card p-6 mb-6">
                 <div className="flex items-center gap-3 mb-3">
-                  <span className="px-3 py-1 bg-kahoot-yellow/25 text-yellow-200 rounded-full text-xs font-bold uppercase tracking-wider">
+                  <span className="px-3 py-1 bg-kahoot-yellow/25 text-amber-800 rounded-full text-xs font-bold uppercase tracking-wider">
                     Kahoot
                   </span>
-                  <Zap className="w-4 h-4 text-kahoot-yellow" />
+                  <Zap className="w-4 h-4 text-amber-ink" />
                 </div>
                 <h2 className="text-2xl font-black">{currentScenario.title}</h2>
-                <p className="text-white/50 text-sm font-semibold mt-1">
+                <p className="text-muted text-sm font-semibold mt-1">
                   {currentScenario.mcQuestions.length} preguntas — {currentScenario.mcQuestions[0]?.timeLimitSeconds}s cada una
                 </p>
               </div>
@@ -460,12 +467,12 @@ export default function Round() {
                 >
                   <CheckCircle className="w-14 h-14 text-kahoot-green mx-auto mb-4" />
                   <h3 className="text-2xl font-black mb-2">Bloque completado</h3>
-                  <p className="text-white/70 font-semibold">
+                  <p className="text-ink-soft font-semibold">
                     Ya enviaste tus respuestas de esta ronda.
                   </p>
-                  <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full">
+                  <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 bg-surface-2 rounded-full">
                     <div className="w-2 h-2 bg-kahoot-green rounded-full animate-pulse" />
-                    <span className="text-white/70 text-sm font-semibold">
+                    <span className="text-ink-soft text-sm font-semibold">
                       Esperando a que termine la ronda...
                     </span>
                   </div>
@@ -481,10 +488,10 @@ export default function Round() {
                 >
                   <MediaBlock media={currentScenario.media} className="mb-6" />
 
-                  <p className="text-white/70 font-semibold mb-2">
+                  <p className="text-ink-soft font-semibold mb-2">
                     {currentScenario.mcQuestions.length} preguntas · {currentScenario.mcQuestions[0]?.timeLimitSeconds}s cada una
                   </p>
-                  <p className="text-white/40 text-xs font-medium mb-6 max-w-md mx-auto leading-relaxed">
+                  <p className="text-faint text-xs font-medium mb-6 max-w-md mx-auto leading-relaxed">
                     {MC_SCORING_LEGEND}
                   </p>
 
@@ -496,7 +503,7 @@ export default function Round() {
                     Empezar
                   </button>
 
-                  <p className="text-white/40 text-sm font-semibold mt-4">
+                  <p className="text-faint text-sm font-semibold mt-4">
                     Empieza solo en {mcGateLeft}s
                   </p>
                 </motion.div>
@@ -512,25 +519,25 @@ export default function Round() {
                     animate={{ scale: 1 }}
                     transition={{ type: 'spring', stiffness: 200 }}
                     className={`text-6xl font-black mb-2 ${
-                      mcBlockScore >= 80 ? 'text-kahoot-green' : mcBlockScore >= 40 ? 'text-kahoot-yellow' : 'text-kahoot-red'
+                      mcBlockScore >= 80 ? 'text-kahoot-green' : mcBlockScore >= 40 ? 'text-amber-ink' : 'text-kahoot-red'
                     }`}
                   >
                     {mcBlockScore}
                   </motion.div>
-                  <p className="text-white/50 text-sm font-bold mb-1">Puntaje del Bloque</p>
-                  <p className="text-white/40 text-xs font-medium mb-6 max-w-md mx-auto leading-relaxed">
+                  <p className="text-muted text-sm font-bold mb-1">Puntaje del Bloque</p>
+                  <p className="text-faint text-xs font-medium mb-6 max-w-md mx-auto leading-relaxed">
                     {MC_SCORING_LEGEND}
                   </p>
 
                   <div className="space-y-3 max-w-md mx-auto">
                     {mcResponses.map((r, i) => (
-                      <div key={i} className="flex items-center gap-3 p-3 bg-white/5 rounded-xl">
+                      <div key={i} className="flex items-center gap-3 p-3 bg-surface-2 rounded-xl">
                         {r.correct ? (
                           <CheckCircle className="w-6 h-6 text-kahoot-green shrink-0" />
                         ) : (
                           <XCircle className="w-6 h-6 text-kahoot-red shrink-0" />
                         )}
-                        <span className="text-sm text-white/80 font-medium flex-1 text-left">
+                        <span className="text-sm text-ink-soft font-medium flex-1 text-left">
                           P{i + 1}: {currentScenario.mcQuestions![i]?.question?.slice(0, 60)}...
                         </span>
                         <span className="font-mono font-bold text-sm">
@@ -540,10 +547,10 @@ export default function Round() {
                     ))}
                   </div>
 
-                  <div className="mt-6 pt-4 border-t border-white/10">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full">
+                  <div className="mt-6 pt-4 border-t border-line">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-surface-2 rounded-full">
                       <div className="w-2 h-2 bg-kahoot-green rounded-full animate-pulse" />
-                      <span className="text-white/70 text-sm font-semibold">
+                      <span className="text-ink-soft text-sm font-semibold">
                         Esperando a que termine la ronda...
                       </span>
                     </div>
@@ -559,14 +566,14 @@ export default function Round() {
                 >
                   {/* Question counter + timer */}
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-white/50 text-sm font-bold">
+                    <span className="text-muted text-sm font-bold">
                       Pregunta {mcCurrentQ + 1} / {currentScenario.mcQuestions.length}
                     </span>
                     <motion.div
                       className={`flex items-center gap-2 px-4 py-2 rounded-full font-black text-lg sm:text-xl ${
                         mcQuestionTimeLeft <= 5
                           ? 'bg-kahoot-red/30 text-kahoot-red border-2 border-kahoot-red/50'
-                          : 'bg-white/10 text-white border-2 border-white/15'
+                          : 'bg-surface-2 text-ink border-2 border-line'
                       }`}
                       animate={mcQuestionTimeLeft <= 5 ? { scale: [1, 1.08, 1] } : {}}
                       transition={mcQuestionTimeLeft <= 5 ? { repeat: Infinity, duration: 0.6 } : {}}
@@ -579,7 +586,7 @@ export default function Round() {
                   {/* Question text + optional media — one card, so image and
                       question read as a single unit on a projected screen */}
                   <div className="dramatic-card p-5 sm:p-6">
-                    <p className="text-xl sm:text-2xl font-black text-white leading-snug">
+                    <p className="text-xl sm:text-2xl font-black text-ink leading-snug">
                       {currentScenario.mcQuestions[mcCurrentQ]?.question}
                     </p>
                     <MediaBlock
@@ -589,7 +596,7 @@ export default function Round() {
                   </div>
 
                   {/* Timer progress bar */}
-                  <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                  <div className="h-2 bg-surface-2 rounded-full overflow-hidden">
                     <motion.div
                       className={`h-full rounded-full ${mcQuestionTimeLeft <= 5 ? 'bg-kahoot-red' : 'bg-kahoot-green'}`}
                       style={{
@@ -607,16 +614,21 @@ export default function Round() {
                       const isSelected = mcSelectedOption === opt.id;
                       const showResult = mcShowFeedback;
 
-                      let btnClass = `${MC_COLORS[i].bg} ${MC_COLORS[i].hover}`;
+                      // Green means correct and nothing else in this palette.
+                      let btnClass = MC_TILE_BASE;
+                      let textClass = 'text-ink';
                       if (showResult) {
                         if (isCorrectOption) {
                           // mc-correct: one decisive pulse + glow, readable from
                           // the back of a room. Disabled under reduced-motion.
-                          btnClass = 'bg-green-500 mc-correct';
-                        } else if (isSelected && !isCorrectOption) {
-                          btnClass = 'bg-red-800 ring-4 ring-red-500 opacity-70 mc-wrong';
+                          btnClass = 'bg-kahoot-green border-2 border-kahoot-green-dark mc-correct';
+                          textClass = 'text-onaccent';
+                        } else if (isSelected) {
+                          btnClass = 'bg-kahoot-red border-2 border-red-700 shadow-[0_3px_0_#B3272B] mc-wrong';
+                          textClass = 'text-onaccent';
                         } else {
-                          btnClass = `${MC_COLORS[i].bg} opacity-40`;
+                          btnClass = 'bg-surface-2 border-2 border-line opacity-60';
+                          textClass = 'text-muted';
                         }
                       }
 
@@ -627,7 +639,7 @@ export default function Round() {
                           disabled={mcShowFeedback}
                           whileHover={!mcShowFeedback ? { scale: 1.02 } : {}}
                           whileTap={!mcShowFeedback ? { scale: 0.98 } : {}}
-                          className={`${btnClass} p-4 sm:p-5 rounded-xl text-left transition-all font-bold text-white text-base sm:text-lg leading-snug min-h-[76px] sm:min-h-[84px] flex ${
+                          className={`${btnClass} ${textClass} p-4 sm:p-5 rounded-xl text-left transition-all font-bold text-base sm:text-lg leading-snug min-h-[76px] sm:min-h-[84px] flex ${
                             opt.imageSrc ? 'flex-col items-stretch gap-3' : 'items-center gap-3'
                           }`}
                         >
@@ -638,25 +650,29 @@ export default function Round() {
                                 alt={opt.imageAlt || opt.text}
                                 loading="lazy"
                                 onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                                className="w-full h-36 sm:h-44 object-cover rounded-lg bg-black/20"
+                                className="w-full h-36 sm:h-44 object-cover rounded-lg bg-surface-3"
                               />
                               {opt.imageCredit && (
-                                <span className="block text-[9px] font-medium text-white/50 mt-1 leading-tight">
+                                <span className="block text-[9px] font-medium text-muted mt-1 leading-tight">
                                   {opt.imageCredit}
                                 </span>
                               )}
                             </span>
                           )}
                           <span className="flex items-center gap-3">
-                            <span className="w-8 h-8 rounded-lg bg-black/20 flex items-center justify-center text-sm font-black shrink-0">
+                            <span
+                              className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm font-black shrink-0 ${
+                                showResult ? 'bg-ink/20 text-ink' : MC_KEY_COLORS[i % MC_KEY_COLORS.length]
+                              }`}
+                            >
                               {opt.id}
                             </span>
                             <span className="flex-1">{opt.text}</span>
                             {showResult && isCorrectOption && (
-                              <CheckCircle className="w-6 h-6 text-white shrink-0" />
+                              <CheckCircle className="w-6 h-6 text-onaccent shrink-0" />
                             )}
                             {showResult && isSelected && !isCorrectOption && (
-                              <XCircle className="w-6 h-6 text-white shrink-0" />
+                              <XCircle className="w-6 h-6 text-onaccent shrink-0" />
                             )}
                           </span>
                         </motion.button>
@@ -683,7 +699,7 @@ export default function Round() {
                         </p>
                       )}
                       {currentScenario.mcQuestions[mcCurrentQ]?.explanation && (
-                        <p className="text-white/70 text-sm font-medium mt-2 max-w-xl mx-auto leading-relaxed">
+                        <p className="text-ink-soft text-sm font-medium mt-2 max-w-xl mx-auto leading-relaxed">
                           {currentScenario.mcQuestions[mcCurrentQ]?.explanation}
                         </p>
                       )}
@@ -704,7 +720,7 @@ export default function Round() {
               <div className="dramatic-card p-6 mb-6">
                 <div className="flex items-center gap-3 mb-4">
                   {currentScenario.category && (
-                    <span className="px-3 py-1 bg-kahoot-blue/25 text-blue-200 rounded-full text-xs font-bold uppercase tracking-wider">
+                    <span className="px-3 py-1 bg-kahoot-blue/25 text-blue-700 rounded-full text-xs font-bold uppercase tracking-wider">
                       {currentScenario.category}
                     </span>
                   )}
@@ -712,10 +728,10 @@ export default function Round() {
                     <span
                       className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
                         currentScenario.difficulty === 'easy'
-                          ? 'bg-kahoot-green/25 text-green-200'
+                          ? 'bg-kahoot-green/25 text-emerald-700'
                           : currentScenario.difficulty === 'medium'
-                          ? 'bg-kahoot-orange/25 text-orange-200'
-                          : 'bg-kahoot-red/25 text-red-200'
+                          ? 'bg-kahoot-orange/25 text-orange-800'
+                          : 'bg-kahoot-red/25 text-red-700'
                       }`}
                     >
                       {currentScenario.difficulty === 'easy'
@@ -730,10 +746,10 @@ export default function Round() {
                 <h2 className="text-2xl font-black mb-4">{currentScenario.title}</h2>
 
                 <div className="mb-6">
-                  <h3 className="text-xs font-bold text-white/50 uppercase tracking-widest mb-2">
+                  <h3 className="text-xs font-bold text-muted uppercase tracking-widest mb-2">
                     Contexto
                   </h3>
-                  <p className="text-white/80 leading-relaxed whitespace-pre-wrap font-medium">
+                  <p className="text-ink-soft leading-relaxed whitespace-pre-wrap font-medium">
                     {currentScenario.context ?? currentScenario.prompt}
                   </p>
                   <MediaBlock media={currentScenario.media} className="mt-4" />
@@ -741,10 +757,10 @@ export default function Round() {
 
                 {currentScenario.question && (
                   <div className="p-5 bg-kahoot-blue/15 border-2 border-kahoot-blue/30 rounded-xl">
-                    <h3 className="text-xs font-bold text-blue-300 uppercase tracking-widest mb-2">
+                    <h3 className="text-xs font-bold text-blue-700 uppercase tracking-widest mb-2">
                       Pregunta
                     </h3>
-                    <p className="text-white leading-relaxed font-semibold">
+                    <p className="text-ink leading-relaxed font-semibold">
                       {currentScenario.question}
                     </p>
                   </div>
@@ -767,7 +783,7 @@ export default function Round() {
                       <div className="flex items-center justify-between mb-6">
                         <h3 className="text-xl font-black">Tu Resultado</h3>
                         {isNonRanked && (
-                          <span className="px-3 py-1 bg-kahoot-orange/25 text-orange-200 rounded-full text-xs font-bold uppercase tracking-wider">
+                          <span className="px-3 py-1 bg-kahoot-orange/25 text-orange-800 rounded-full text-xs font-bold uppercase tracking-wider">
                             Diagnostica
                           </span>
                         )}
@@ -783,22 +799,22 @@ export default function Round() {
                               evaluation.finalScore >= 80
                                 ? 'text-kahoot-green'
                                 : evaluation.finalScore >= 60
-                                ? 'text-kahoot-yellow'
+                                ? 'text-amber-ink'
                                 : 'text-kahoot-red'
                             }`}
                           >
                             {evaluation.finalScore}
                           </motion.div>
-                          <p className="text-white/50 text-sm font-bold">Puntaje</p>
+                          <p className="text-muted text-sm font-bold">Puntaje</p>
                         </div>
 
                         <div className="flex-1 space-y-2">
                           {evaluation.evaluations?.map((ev: { judgeName: string; judgeAvatar?: string; score: number; feedback: string; strengths: string[]; improvements: string[] }, i: number) => (
                             <div key={i} className="flex items-center gap-3">
-                              <span className="text-sm text-white/70 w-32 truncate font-semibold">
+                              <span className="text-sm text-ink-soft w-32 truncate font-semibold">
                                 {ev.judgeAvatar ? `${ev.judgeAvatar} ` : ''}{ev.judgeName}
                               </span>
-                              <div className="flex-1 h-3 bg-white/10 rounded-full overflow-hidden">
+                              <div className="flex-1 h-3 bg-surface-2 rounded-full overflow-hidden">
                                 <motion.div
                                   initial={{ width: 0 }}
                                   animate={{ width: `${ev.score}%` }}
@@ -818,38 +834,38 @@ export default function Round() {
 
                       {/* Student's submitted response */}
                       {userSub?.response && (
-                        <div className="mb-4 p-4 bg-white/5 rounded-xl">
-                          <p className="text-sm text-white/50 mb-2 font-bold uppercase tracking-wider text-xs">Tu respuesta:</p>
-                          <p className="text-white/80 text-sm whitespace-pre-wrap font-medium">{userSub.response}</p>
+                        <div className="mb-4 p-4 bg-surface-2 rounded-xl">
+                          <p className="text-sm text-muted mb-2 font-bold uppercase tracking-wider text-xs">Tu respuesta:</p>
+                          <p className="text-ink-soft text-sm whitespace-pre-wrap font-medium">{userSub.response}</p>
                         </div>
                       )}
 
                       {/* Reference Answer */}
                       {currentScenario?.referenceAnswer && (
-                        <details className="mb-4 p-4 bg-white/5 rounded-xl">
-                          <summary className="text-white/50 font-bold uppercase tracking-wider text-xs cursor-pointer hover:text-white/70">
+                        <details className="mb-4 p-4 bg-surface-2 rounded-xl">
+                          <summary className="text-muted font-bold uppercase tracking-wider text-xs cursor-pointer hover:text-ink-soft">
                             Ver respuesta de referencia
                           </summary>
-                          <p className="text-white/70 text-sm whitespace-pre-wrap font-medium mt-2">
+                          <p className="text-ink-soft text-sm whitespace-pre-wrap font-medium mt-2">
                             {currentScenario.referenceAnswer}
                           </p>
                         </details>
                       )}
 
                       {evaluation.evaluations?.map((ev: { judgeName: string; judgeAvatar?: string; score: number; feedback: string; strengths: string[]; improvements: string[]; promptUsed?: string }, i: number) => (
-                        <div key={i} className="mb-4 p-4 bg-white/5 rounded-xl">
+                        <div key={i} className="mb-4 p-4 bg-surface-2 rounded-xl">
                           <div className="flex items-center gap-2 mb-2">
                             <MessageSquare className={`w-4 h-4 ${
                               i === 0 ? 'text-kahoot-red' : i === 1 ? 'text-kahoot-blue' : 'text-kahoot-green'
                             }`} />
                             <span className="font-bold">{ev.judgeAvatar ? `${ev.judgeAvatar} ` : ''}{ev.judgeName}</span>
                           </div>
-                          <p className="text-white/80 text-sm mb-3 font-medium">{ev.feedback}</p>
+                          <p className="text-ink-soft text-sm mb-3 font-medium">{ev.feedback}</p>
 
                           {ev.strengths?.length > 0 && (
                             <div className="mb-2">
                               <span className="text-xs text-kahoot-green font-bold uppercase tracking-wider">Fortalezas:</span>
-                              <ul className="text-xs text-white/60 ml-4 mt-1 font-medium">
+                              <ul className="text-xs text-muted ml-4 mt-1 font-medium">
                                 {ev.strengths.map((s: string, j: number) => (
                                   <li key={j}>• {s}</li>
                                 ))}
@@ -859,8 +875,8 @@ export default function Round() {
 
                           {ev.improvements?.length > 0 && (
                             <div>
-                              <span className="text-xs text-kahoot-orange font-bold uppercase tracking-wider">Areas de mejora:</span>
-                              <ul className="text-xs text-white/60 ml-4 mt-1 font-medium">
+                              <span className="text-xs text-orange-ink font-bold uppercase tracking-wider">Areas de mejora:</span>
+                              <ul className="text-xs text-muted ml-4 mt-1 font-medium">
                                 {ev.improvements.map((s: string, j: number) => (
                                   <li key={j}>• {s}</li>
                                 ))}
@@ -869,16 +885,16 @@ export default function Round() {
                           )}
 
                           {ev.promptUsed && (
-                            <div className="mt-3 pt-3 border-t border-white/10">
+                            <div className="mt-3 pt-3 border-t border-line">
                               <button
                                 onClick={() => setExpandedPrompts(prev => ({ ...prev, [i]: !prev[i] }))}
-                                className="flex items-center gap-1.5 text-xs text-white/40 hover:text-white/70 transition-colors font-semibold"
+                                className="flex items-center gap-1.5 text-xs text-faint hover:text-ink-soft transition-colors font-semibold"
                               >
                                 <Code className="w-3 h-3" />
                                 {expandedPrompts[i] ? 'Ocultar Prompt' : 'Ver Prompt'}
                               </button>
                               {expandedPrompts[i] && (
-                                <pre className="mt-2 p-3 bg-black/30 rounded-lg text-[10px] text-white/50 overflow-x-auto max-h-64 overflow-y-auto whitespace-pre-wrap break-words font-mono">
+                                <pre className="mt-2 p-3 bg-surface-3 rounded-lg text-[10px] text-muted overflow-x-auto max-h-64 overflow-y-auto whitespace-pre-wrap break-words font-mono">
                                   {ev.promptUsed}
                                 </pre>
                               )}
@@ -887,10 +903,10 @@ export default function Round() {
                         </div>
                       ))}
 
-                      <div className="mt-4 pt-4 border-t border-white/10 text-center">
-                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full">
+                      <div className="mt-4 pt-4 border-t border-line text-center">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-surface-2 rounded-full">
                           <div className="w-2 h-2 bg-kahoot-green rounded-full animate-pulse" />
-                          <span className="text-white/70 text-sm font-semibold">
+                          <span className="text-ink-soft text-sm font-semibold">
                             Esperando a que termine la ronda...
                           </span>
                         </div>
@@ -904,12 +920,12 @@ export default function Round() {
                     >
                       <div className="w-16 h-16 border-4 border-kahoot-green border-t-transparent rounded-full animate-spin mx-auto mb-4" />
                       <h3 className="text-2xl font-black mb-2">Respuesta Enviada</h3>
-                      <p className="text-white/70 font-semibold">
+                      <p className="text-ink-soft font-semibold">
                         3 jueces AI estan evaluando tu respuesta...
                       </p>
-                      <div className="mt-4 p-4 bg-white/5 rounded-xl text-left">
-                        <p className="text-sm text-white/50 mb-2 font-bold uppercase tracking-wider text-xs">Tu respuesta:</p>
-                        <p className="text-white/80 text-sm whitespace-pre-wrap font-medium">
+                      <div className="mt-4 p-4 bg-surface-2 rounded-xl text-left">
+                        <p className="text-sm text-muted mb-2 font-bold uppercase tracking-wider text-xs">Tu respuesta:</p>
+                        <p className="text-ink-soft text-sm whitespace-pre-wrap font-medium">
                           {response || userSub?.response}
                         </p>
                       </div>
@@ -918,7 +934,7 @@ export default function Round() {
                 })()
               ) : (
                 <div className="dramatic-card p-6">
-                  <label className="block text-xs font-bold text-white/50 uppercase tracking-widest mb-3">
+                  <label className="block text-xs font-bold text-muted uppercase tracking-widest mb-3">
                     Tu Respuesta
                   </label>
                   <textarea
@@ -931,7 +947,7 @@ export default function Round() {
                   />
 
                   <div className="flex justify-between items-center">
-                    <span className="text-white/50 text-sm font-semibold">
+                    <span className="text-muted text-sm font-semibold">
                       {response.length} caracteres
                     </span>
 
@@ -942,7 +958,7 @@ export default function Round() {
                     >
                       {isSubmitting ? (
                         <>
-                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          <div className="w-4 h-4 border-2 border-ink border-t-transparent rounded-full animate-spin" />
                           Enviando...
                         </>
                       ) : (
@@ -959,8 +975,8 @@ export default function Round() {
           )
         ) : (
           <div className="text-center py-12">
-            <AlertCircle className="w-16 h-16 text-kahoot-orange mx-auto mb-4" />
-            <p className="text-white/70 font-semibold">No hay escenario disponible</p>
+            <AlertCircle className="w-16 h-16 text-orange-ink mx-auto mb-4" />
+            <p className="text-ink-soft font-semibold">No hay escenario disponible</p>
           </div>
         )}
       </main>
