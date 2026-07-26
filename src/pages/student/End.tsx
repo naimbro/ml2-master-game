@@ -609,7 +609,7 @@ export default function End() {
                     {player.rank}
                   </div>
 
-                  <span className="flex-1 font-bold truncate">
+                  <span className="flex-1 min-w-0 font-bold truncate">
                     {player.playerName}
                     {player.playerId === user?.uid && (
                       <span className="text-kahoot-green text-sm ml-2 font-bold">(Tu)</span>

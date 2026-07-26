@@ -563,7 +563,7 @@ export default function Round() {
                       Pregunta {mcCurrentQ + 1} / {currentScenario.mcQuestions.length}
                     </span>
                     <motion.div
-                      className={`flex items-center gap-2 px-4 py-2 rounded-full font-black text-lg ${
+                      className={`flex items-center gap-2 px-4 py-2 rounded-full font-black text-lg sm:text-xl ${
                         mcQuestionTimeLeft <= 5
                           ? 'bg-kahoot-red/30 text-kahoot-red border-2 border-kahoot-red/50'
                           : 'bg-white/10 text-white border-2 border-white/15'
@@ -576,9 +576,10 @@ export default function Round() {
                     </motion.div>
                   </div>
 
-                  {/* Question text + optional media */}
-                  <div className="dramatic-card p-6">
-                    <p className="text-xl font-black text-white leading-relaxed">
+                  {/* Question text + optional media — one card, so image and
+                      question read as a single unit on a projected screen */}
+                  <div className="dramatic-card p-5 sm:p-6">
+                    <p className="text-xl sm:text-2xl font-black text-white leading-snug">
                       {currentScenario.mcQuestions[mcCurrentQ]?.question}
                     </p>
                     <MediaBlock
@@ -609,9 +610,11 @@ export default function Round() {
                       let btnClass = `${MC_COLORS[i].bg} ${MC_COLORS[i].hover}`;
                       if (showResult) {
                         if (isCorrectOption) {
-                          btnClass = 'bg-green-500 ring-4 ring-green-300';
+                          // mc-correct: one decisive pulse + glow, readable from
+                          // the back of a room. Disabled under reduced-motion.
+                          btnClass = 'bg-green-500 mc-correct';
                         } else if (isSelected && !isCorrectOption) {
-                          btnClass = 'bg-red-800 ring-4 ring-red-500 opacity-70';
+                          btnClass = 'bg-red-800 ring-4 ring-red-500 opacity-70 mc-wrong';
                         } else {
                           btnClass = `${MC_COLORS[i].bg} opacity-40`;
                         }
@@ -624,7 +627,7 @@ export default function Round() {
                           disabled={mcShowFeedback}
                           whileHover={!mcShowFeedback ? { scale: 1.02 } : {}}
                           whileTap={!mcShowFeedback ? { scale: 0.98 } : {}}
-                          className={`${btnClass} p-5 rounded-xl text-left transition-all font-bold text-white text-base leading-snug min-h-[80px] flex ${
+                          className={`${btnClass} p-4 sm:p-5 rounded-xl text-left transition-all font-bold text-white text-base sm:text-lg leading-snug min-h-[76px] sm:min-h-[84px] flex ${
                             opt.imageSrc ? 'flex-col items-stretch gap-3' : 'items-center gap-3'
                           }`}
                         >
@@ -669,11 +672,11 @@ export default function Round() {
                       className="text-center py-3"
                     >
                       {mcResponses[mcResponses.length - 1]?.correct ? (
-                        <p className="text-kahoot-green font-black text-lg">
+                        <p className="text-kahoot-green font-black text-lg sm:text-2xl">
                           Correcto! +{mcResponses[mcResponses.length - 1]?.pointsAwarded} pts
                         </p>
                       ) : (
-                        <p className="text-kahoot-red font-black text-lg">
+                        <p className="text-kahoot-red font-black text-lg sm:text-2xl">
                           {mcSelectedOption === null
                             ? 'Tiempo agotado! +0 pts'
                             : `Incorrecto +${mcResponses[mcResponses.length - 1]?.pointsAwarded ?? 0} pts`}

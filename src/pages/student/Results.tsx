@@ -321,8 +321,8 @@ export default function Results() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-3xl font-black mb-2 text-center flex items-center justify-center gap-3">
-              <TrendingUp className="w-8 h-8 text-kahoot-green" />
+            <h2 className="text-3xl sm:text-4xl font-black mb-2 text-center flex items-center justify-center gap-3">
+              <TrendingUp className="w-8 h-8 sm:w-9 sm:h-9 text-kahoot-green" />
               {numPlayers > TOP_N ? `Top ${TOP_N}` : 'Ranking'}
             </h2>
             <p className="text-white/40 text-sm font-bold text-center mb-8 uppercase tracking-widest">
@@ -333,15 +333,15 @@ export default function Results() {
             </p>
 
             {/* Column Headers */}
-            <div className="flex items-center gap-4 px-4 py-2 text-[10px] text-white/50 uppercase tracking-widest font-bold border-b border-white/10 mb-3 max-w-2xl mx-auto">
+            <div className="flex items-center gap-2 sm:gap-4 px-3 sm:px-4 py-2 text-[10px] text-white/50 uppercase tracking-widest font-bold border-b border-white/10 mb-3 max-w-2xl lg:max-w-3xl mx-auto">
               <div className="w-12"></div>
-              <span className="flex-1">Jugador</span>
-              <span className="w-16 text-right">Ronda</span>
-              <span className="w-16 text-right">Prom</span>
+              <span className="flex-1 min-w-0">Jugador</span>
+              <span className="w-12 sm:w-16 text-right">Ronda</span>
+              <span className="w-12 sm:w-16 text-right">Prom</span>
             </div>
 
             {/* Animated Top N — explicit y-offset animation (no LayoutGroup) */}
-            <div className="space-y-2 max-w-2xl mx-auto">
+            <div className="space-y-2 max-w-2xl lg:max-w-3xl mx-auto">
               {topRankings.map((player, finalIdx) => {
                 // Calculate y-offset to show element at its INITIAL position
                 const initialIdx = topInitial.findIndex(p => p.playerId === player.playerId);
@@ -369,7 +369,10 @@ export default function Results() {
                       ? { type: 'tween', duration: 3, ease: [0.25, 0.1, 0.25, 1] }
                       : { duration: 0 }
                     }
-                    className={`flex items-center gap-4 p-4 rounded-xl transition-colors duration-500 ${
+                    // Horizontal padding and gaps shrink on phones, but vertical
+                    // padding must NOT: ROW_H below is the fixed row height the
+                    // swap animation offsets are computed from.
+                    className={`flex items-center gap-2 sm:gap-4 px-3 sm:px-4 py-4 rounded-xl transition-colors duration-500 ${
                       isSpotlight
                         ? 'bg-kahoot-green/25 border-2 border-kahoot-green/50 shadow-lg shadow-kahoot-green/20'
                         : player.playerId === user?.uid
@@ -420,15 +423,17 @@ export default function Results() {
                       </AnimatePresence>
                     </div>
 
-                    {/* Names ALWAYS fully visible — watching them move is the drama */}
-                    <span className="flex-1 font-bold text-lg truncate">
+                    {/* Names ALWAYS fully visible — watching them move is the drama.
+                        min-w-0 is required: a flex-1 child defaults to min-width:auto,
+                        so `truncate` cannot shrink it and long names overflow the row. */}
+                    <span className="flex-1 min-w-0 font-bold text-lg sm:text-xl truncate">
                       {player.playerName}
                       {player.playerId === user?.uid && (
                         <span className="text-kahoot-green text-sm ml-2 font-bold">(Tu)</span>
                       )}
                     </span>
 
-                    <span className={`w-16 text-right font-mono font-bold transition-all duration-300 ${
+                    <span className={`w-12 sm:w-16 text-right font-mono tabular-nums font-bold transition-all duration-300 ${
                       revealed
                         ? player.roundScore >= 80 ? 'text-kahoot-green' :
                           player.roundScore >= 60 ? 'text-kahoot-yellow' : 'text-kahoot-red'
@@ -446,7 +451,7 @@ export default function Results() {
                     </span>
 
                     <span
-                      className={`w-16 text-right font-mono font-black text-xl transition-all duration-500 ${
+                      className={`w-12 sm:w-16 text-right font-mono tabular-nums font-black text-xl sm:text-2xl transition-all duration-500 ${
                         revealed ? 'opacity-100' : showingPrev ? 'opacity-50' : 'opacity-20'
                       }`}
                     >
@@ -474,11 +479,11 @@ export default function Results() {
                 className="max-w-2xl mx-auto mt-4"
               >
                 <div className="text-center text-white/30 text-xs font-bold my-1">· · ·</div>
-                <div className="flex items-center gap-4 p-4 rounded-xl bg-kahoot-green/15 border-2 border-kahoot-green/30">
-                  <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center font-black text-lg">
+                <div className="flex items-center gap-2 sm:gap-4 px-3 sm:px-4 py-4 rounded-xl bg-kahoot-green/15 border-2 border-kahoot-green/30">
+                  <div className="w-10 h-10 shrink-0 rounded-xl bg-white/20 flex items-center justify-center font-black text-lg">
                     {userRankingEntry.rank}
                   </div>
-                  <span className="flex-1 font-bold text-lg truncate">
+                  <span className="flex-1 min-w-0 font-bold text-lg sm:text-xl truncate">
                     {userRankingEntry.playerName}
                     <span className="text-kahoot-green text-sm ml-2 font-bold">(Tu)</span>
                   </span>

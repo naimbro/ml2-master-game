@@ -28,7 +28,7 @@ function MediaImage({ asset, className }: { asset: MediaAsset; className?: strin
       alt={asset.alt || ''}
       loading="lazy"
       onError={() => setFailed(true)}
-      className={`max-w-full w-auto max-h-[38vh] mx-auto rounded-xl object-contain ${className ?? ''}`}
+      className={`media-frame max-w-full w-auto max-h-[38vh] mx-auto block object-contain ${className ?? ''}`}
     />
   );
 }

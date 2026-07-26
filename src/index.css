@@ -214,6 +214,63 @@ body {
   100% { transform: scaleY(1); opacity: 1; }
 }
 
+/* ---- Multiple-choice answer feedback -------------------------------------
+   The single most-watched moment of a Kahoot round: the beat between picking
+   an answer and learning if it was right. One decisive pulse reads clearly
+   from the back of a lecture hall; a subtle tint does not. */
+
+.mc-correct {
+  animation: mcCorrect 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 0 0 4px rgba(134, 239, 172, 0.9), 0 0 34px 6px rgba(102, 191, 57, 0.55);
+}
+
+@keyframes mcCorrect {
+  0%   { transform: scale(1); }
+  45%  { transform: scale(1.045); }
+  100% { transform: scale(1); }
+}
+
+.mc-wrong {
+  animation: mcWrong 0.4s ease-in-out;
+}
+
+@keyframes mcWrong {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-6px); }
+  50%      { transform: translateX(5px); }
+  80%      { transform: translateX(-3px); }
+}
+
+/* Media inside a question card reads as part of the question, not a loose
+   attachment: same rounding, a hairline edge, and a dark mat behind it. */
+.media-frame {
+  @apply rounded-xl overflow-hidden;
+  background: rgba(0, 0, 0, 0.25);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+/* ---- Accessibility --------------------------------------------------------
+   Kill the decorative CSS animations for anyone who asked for less motion.
+   Framer Motion drives its own inline styles and is unaffected here; the
+   RecalibrationReveal sheet carries its own matching guard. */
+@media (prefers-reduced-motion: reduce) {
+  .kahoot-shapes::before,
+  .kahoot-shapes::after,
+  .timer-critical,
+  .score-reveal,
+  .podium-grow,
+  .mc-correct,
+  .mc-wrong {
+    animation: none !important;
+  }
+
+  .primary-button:hover:not(:disabled),
+  .primary-button:active:not(:disabled),
+  .danger-button:hover:not(:disabled) {
+    transform: none;
+  }
+}
+
 /* Custom scrollbar for dark theme */
 ::-webkit-scrollbar {
   width: 8px;
