@@ -72,9 +72,23 @@ Ronda por ronda, confirma:
 - [ ] **Refrescar la pestaña del host** a mitad de ronda y en resultados → debe
       recuperarse sola por el enrutamiento según `status`.
 
-### B5. Personalizar los jueces (sin código, 2 min — y demuestra una función)
-`/professor/courses/mundial_2026/judges` → renombra los tres jueces al tema:
-🎯 *La DT* · 🎙️ *El Relator* · 📊 *El Data Scout*.
+### B5. Jueces del Mundial — ya sembrados, solo verificar
+Las personas ya están escritas en `content/courses/mundial_2026/judge_overrides.json`
+y publicadas en Firestore (`node scripts/seed-judge-overrides.cjs mundial_2026`):
+
+| Juez | Lente | Peso dominante |
+|---|---|---|
+| 📋 **La DT** | el mecanismo: ¿podrías darle esta instrucción a un jugador? | mecanismo 0.55 |
+| 🎙️ **El Relator** | el costo: ¿qué resignas y lo dices en voz alta? | trade-off 0.55 |
+| 👨‍🏫 **Profe Naim** | ¿pensó el caso o recitó un molde? | repartido |
+
+Cada persona está escrita para coincidir con el `weightFormula` de ese juez en
+`content/sessions/mundial_2026/final_2026/config.json`. **Si editas una, revisa la otra**
+o el juicio se vuelve incoherente.
+
+- [ ] Abre `/professor/courses/mundial_2026/judges` y confirma que se ven los tres.
+- [ ] En una ronda abierta (R3 o R4), confirma que las tarjetas de feedback muestran
+      📋 La DT y 🎙️ El Relator, no Dr. Tech ni Ministra Digital.
 
 ---
 
