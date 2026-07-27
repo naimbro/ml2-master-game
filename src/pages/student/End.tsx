@@ -8,7 +8,7 @@ import { httpsCallable } from 'firebase/functions';
 import { functions } from '../../lib/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
-import jsPDF from 'jspdf';
+import { buildTranscriptPdf } from '../../lib/transcriptPdf';
 import { playPodiumFanfare, playLeaderboardTick, playDrumRoll, playApplause } from '../../lib/sounds';
 import { confettiPodium, confettiStars, confettiSmallBurst, confettiBurst } from '../../lib/confetti';
 import SupportLink from '../../components/SupportLink';
@@ -175,6 +175,22 @@ export default function End() {
           roundDetails: Array<{
             round: number;
             scenario: string;
+            type: 'multiple_choice' | 'open';
+            context: string;
+            question: string;
+            response: string;
+            mcQuestions: Array<{
+              question: string;
+              options: Array<{ id: string; text: string }>;
+              correctOptionIndex: number;
+              explanation: string;
+            }>;
+            mcResponses: Array<{
+              questionIndex: number;
+              selectedOptionId: string | null;
+              correct: boolean;
+              pointsAwarded: number;
+            }>;
             evaluation?: {
               finalScore: number;
               evaluations: Array<{
@@ -185,11 +201,6 @@ export default function End() {
               }>;
             };
           }>;
-          summary: {
-            strengths: string[];
-            improvements: string[];
-            conceptsIdentified: string[];
-          };
         };
       };
 
@@ -199,104 +210,15 @@ export default function End() {
 
       const report = reportData.report;
 
-      const doc = new jsPDF();
-      const pageWidth = doc.internal.pageSize.getWidth();
-      const margin = 20;
-      let y = 20;
-
-      doc.setFontSize(20);
-      doc.setTextColor(70, 23, 143);
-      doc.text('Reporte de Desempeno', margin, y);
-      y += 10;
-
-      doc.setFontSize(14);
-      doc.setTextColor(100, 100, 100);
-      doc.text(report.sessionTitle || 'ML2', margin, y);
-      y += 15;
-
-      doc.setFontSize(12);
-      doc.setTextColor(0, 0, 0);
-      doc.text(`Estudiante: ${user.displayName || user.email}`, margin, y);
-      y += 8;
-      doc.text(`Posicion Final: #${userRanking.rank} de ${finalRankings.length}`, margin, y);
-      y += 8;
-      doc.text(`Puntaje Total: ${userRanking.totalScore}`, margin, y);
-      y += 8;
-      doc.text(`Promedio: ${report.averageScore}`, margin, y);
-      y += 15;
-
-      doc.setFontSize(14);
-      doc.setTextColor(0, 102, 204);
-      doc.text('Puntajes por Ronda:', margin, y);
-      y += 8;
-      doc.setFontSize(10);
-      doc.setTextColor(0, 0, 0);
-      userRanking.roundScores.forEach((score, i) => {
-        doc.text(`Ronda ${i + 1}: ${score || 0} puntos`, margin + 5, y);
-        y += 6;
+      const doc = buildTranscriptPdf({
+        sessionTitle: report.sessionTitle,
+        studentName: user.displayName || user.email || "Estudiante",
+        gameCode,
+        totalScore: userRanking.totalScore,
+        dateLabel: new Date().toLocaleDateString("es-CL"),
+        rounds: report.roundDetails,
       });
-      y += 10;
-
-      if (report.summary.strengths.length > 0) {
-        doc.setFontSize(14);
-        doc.setTextColor(34, 139, 34);
-        doc.text('Fortalezas Identificadas:', margin, y);
-        y += 8;
-        doc.setFontSize(10);
-        doc.setTextColor(0, 0, 0);
-        report.summary.strengths.slice(0, 5).forEach((strength) => {
-          const lines = doc.splitTextToSize(`* ${strength}`, pageWidth - 2 * margin);
-          lines.forEach((line: string) => {
-            if (y > 270) { doc.addPage(); y = 20; }
-            doc.text(line, margin + 5, y);
-            y += 5;
-          });
-        });
-        y += 8;
-      }
-
-      if (report.summary.improvements.length > 0) {
-        if (y > 240) { doc.addPage(); y = 20; }
-        doc.setFontSize(14);
-        doc.setTextColor(220, 20, 60);
-        doc.text('Areas de Mejora:', margin, y);
-        y += 8;
-        doc.setFontSize(10);
-        doc.setTextColor(0, 0, 0);
-        report.summary.improvements.slice(0, 5).forEach((improvement) => {
-          const lines = doc.splitTextToSize(`* ${improvement}`, pageWidth - 2 * margin);
-          lines.forEach((line: string) => {
-            if (y > 270) { doc.addPage(); y = 20; }
-            doc.text(line, margin + 5, y);
-            y += 5;
-          });
-        });
-        y += 8;
-      }
-
-      if (report.summary.conceptsIdentified.length > 0) {
-        if (y > 240) { doc.addPage(); y = 20; }
-        doc.setFontSize(14);
-        doc.setTextColor(128, 0, 128);
-        doc.text('Conceptos Evaluados:', margin, y);
-        y += 8;
-        doc.setFontSize(10);
-        doc.setTextColor(0, 0, 0);
-        const conceptsText = report.summary.conceptsIdentified.join(', ');
-        const lines = doc.splitTextToSize(conceptsText, pageWidth - 2 * margin);
-        lines.forEach((line: string) => {
-          if (y > 270) { doc.addPage(); y = 20; }
-          doc.text(line, margin + 5, y);
-          y += 5;
-        });
-      }
-
-      doc.setFontSize(8);
-      doc.setTextColor(150, 150, 150);
-      doc.text(`Generado el ${new Date().toLocaleDateString('es-CL')}`, margin, 285);
-
-      const fileName = `reporte_${(user.displayName || 'estudiante').replace(/\s+/g, '_')}.pdf`;
-      doc.save(fileName);
+      doc.save(`transcripcion_${(user.displayName || "estudiante").replace(/\s+/g, "_")}.pdf`);
 
     } catch (err) {
       console.error('Report error:', err);
