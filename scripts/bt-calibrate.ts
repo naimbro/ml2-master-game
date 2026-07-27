@@ -114,6 +114,19 @@ function loadCache(code: string): Map<string, 'A' | 'B' | 'tie'> {
 }
 const appendCache = (code: string, key: string, winner: string) => appendFileSync(`${CACHE_DIR}/calib-${code}.jsonl`, JSON.stringify({ key, winner }) + '\n');
 
+/** Una comparación en UN orden, cacheada por `${ronda}|${idPrimero}|${idSegundo}`. */
+async function compareCached(
+  code: string, key: string, system: string, first: string, second: string,
+  cache: Map<string, 'A' | 'B' | 'tie'>,
+): Promise<'A' | 'B' | 'tie'> {
+  const hit = cache.get(key);
+  if (hit !== undefined) { cacheHits++; return hit; }
+  if (runningCost >= HARD_CAP_USD) return 'tie';
+  const w = await callLLM(system, first, second); callCount++;
+  appendCache(code, key, w); cache.set(key, w);
+  return w;
+}
+
 // ---------- Swiss band schedule + comparisons ----------
 interface Duel { i: number; j: number; d: number; winId: string; } // i,j = index into round.players; d = sorted-rank gap
 async function duelsForRound(code: string, rd: RoundData, cache: Map<string, 'A' | 'B' | 'tie'>): Promise<Duel[]> {
@@ -129,16 +142,16 @@ async function duelsForRound(code: string, rd: RoundData, cache: Map<string, 'A'
     while (ti < pairs.length) {
       const idx = ti++; const { a, b, d } = pairs[idx];
       const pa = rd.players[a], pb = rd.players[b];
-      const order = djb2(`${rd.round}|${pa.id}|${pb.id}`) % 2;      // deterministic presentation order
-      const first = order === 0 ? pa : pb, second = order === 0 ? pb : pa;
-      const key = `${rd.round}|${first.id}|${second.id}`;
-      let w = cache.get(key);
-      if (w === undefined) {
-        if (runningCost >= HARD_CAP_USD) { out[idx] = { i: a, j: b, d, winId: '' }; continue; }
-        w = await callLLM(system, first.response, second.response); callCount++;
-        appendCache(code, key, w); cache.set(key, w);
-      } else cacheHits++;
-      const winId = w === 'A' ? first.id : w === 'B' ? second.id : '';
+      // Los dos ordenes (LCES ec. 1), igual que produccion. El cache ya trae pagado
+      // uno de los dos de corridas anteriores, sea cual sea: solo se paga el que falte.
+      const [fwd, rev] = await Promise.all([
+        compareCached(code, `${rd.round}|${pa.id}|${pb.id}`, system, pa.response, pb.response, cache),
+        compareCached(code, `${rd.round}|${pb.id}|${pa.id}`, system, pb.response, pa.response, cache),
+      ]);
+      const fwdWin = fwd === 'A' ? pa.id : fwd === 'B' ? pb.id : '';
+      const revWin = rev === 'A' ? pb.id : rev === 'B' ? pa.id : '';
+      // winId === '' significa empate rio abajo: `recalibrate` lo saltea.
+      const winId = fwdWin && fwdWin === revWin ? fwdWin : '';
       out[idx] = { i: a, j: b, d, winId };
     }
   }

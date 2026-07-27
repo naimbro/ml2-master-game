@@ -17,10 +17,15 @@ export type OnDuel = (d: StreamDuel) => void | Promise<void>;
  *
  * Every pair is judged TWICE, once in each presentation order (LCES eq. 1,
  * Shibata & Miyamura 2025). A verdict that survives the swap is about the
- * answers; one that flips is about the position, and counts as a tie. We
- * measured 13.5% of verdicts flipping on our own cached duels, rising to 27.9%
- * among pairs less than 5 points apart — which is most of what the Swiss band
- * schedules, so the expected rate in production is ~21%.
+ * answers; one that flips is about the position, and counts as a tie.
+ *
+ * Measured on 1455 pairs drawn from this very schedule (scripts/bt-calibrate.ts
+ * caches both orders): 31.8% ± 1.2pp of verdicts flip. That is far above the
+ * 13.5% we first measured on index-adjacent pairs, because the Swiss band pairs
+ * answers that are CLOSE — deliberately — and closeness is exactly where the
+ * model stops being able to tell them apart. If anything 31.8% understates it:
+ * the sweep samples bands 1..5 and production uses 1..4, and the wider bands
+ * flip less.
  *
  * The previous hash-picked presentation order is gone: it spread the bias evenly
  * instead of favouring the top or the bottom of the table, but it turned that bias
