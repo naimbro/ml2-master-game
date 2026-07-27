@@ -137,11 +137,16 @@ export function buildTranscriptPdf(input: TranscriptInput): jsPDF {
     space(2);
 
     if (r.type === 'multiple_choice') {
-      r.mcQuestions.forEach((q, qi) => {
+      // Defensivo a proposito: si un cliente cacheado le pega a una version vieja de
+      // generateStudentReport, estos campos no vienen. Un PDF incompleto es molesto;
+      // uno que revienta delante del curso, no.
+      const mcQuestions = r.mcQuestions || [];
+      const mcResponses = r.mcResponses || [];
+      mcQuestions.forEach((q, qi) => {
         keepTogether(28);
-        const mine = r.mcResponses.find((m) => m.questionIndex === qi);
+        const mine = mcResponses.find((m) => m.questionIndex === qi);
         write(`${qi + 1}. ${q.question}`, { size: 10, color: INK, style: 'bold', gap: 5 });
-        q.options.forEach((o, oi) => {
+        (q.options || []).forEach((o, oi) => {
           const isCorrect = oi === q.correctOptionIndex;
           const isMine = mine?.selectedOptionId === o.id;
           // Marcadores ASCII: ">" lo que marcaste, "*" la correcta.
