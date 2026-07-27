@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Save, RotateCcw, Users, Check } from 'lucide-react';
@@ -20,6 +20,10 @@ export default function CourseJudges() {
   const [course, setCourse] = useState<Course | null>(courseId ? getCourse(courseId) ?? null : null);
   const [baseline, setBaseline] = useState<BaselineJudge[]>([]);
   const [draft, setDraft] = useState<Draft>({});
+  // Snapshot of what was saved when the page opened. "Restaurar" undoes the edits made in this
+  // sitting; it does NOT reset to the config/judges baseline — for a course like mundial_2026 the
+  // persona the professor knows (La DT) lives in judgeOverrides, so that would wipe it.
+  const savedRef = useRef<Draft>({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -44,6 +48,7 @@ export default function CourseJudges() {
             evaluationStyle: ov.evaluationStyle ?? j.evaluationStyle,
           };
         }
+        savedRef.current = initial;
         setDraft(initial);
       })
       .catch((err) => console.error('Error loading judges:', err))
@@ -56,13 +61,10 @@ export default function CourseJudges() {
   };
 
   const resetJudge = (j: BaselineJudge) => {
+    const savedJudge = savedRef.current[j.judgeId];
+    if (!savedJudge) return;
     setSaved(false);
-    setDraft((d) => ({
-      ...d,
-      [j.judgeId]: {
-        name: j.name, avatar: j.avatar, personality: j.personality, evaluationStyle: j.evaluationStyle,
-      },
-    }));
+    setDraft((d) => ({ ...d, [j.judgeId]: { ...savedJudge } }));
   };
 
   const handleSave = async () => {
@@ -70,6 +72,7 @@ export default function CourseJudges() {
     setSaving(true);
     try {
       await saveJudgeOverrides(courseId, user.uid, draft);
+      savedRef.current = draft;
       setSaved(true);
     } catch (err) {
       console.error('Error saving judges:', err);
@@ -135,7 +138,7 @@ export default function CourseJudges() {
                       />
                       <button
                         onClick={() => resetJudge(j)}
-                        title="Restaurar valores originales"
+                        title="Descartar los cambios sin guardar de este juez"
                         className="flex items-center gap-1 px-3 py-2 text-sm text-muted hover:text-ink bg-surface-2 hover:bg-surface-2 rounded-lg transition-colors shrink-0"
                       >
                         <RotateCcw className="w-4 h-4" />

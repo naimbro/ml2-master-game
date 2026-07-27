@@ -1,5 +1,8 @@
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from './firebase';
+import { getCourse, getSessionsForCourse } from './courses';
+import { fetchSessions } from './dynamicCourses';
+import { DEFAULT_JUDGE_IDS, judgeIdsFromSessions, mergeJudgeRoster } from './courseJudgeIds';
 
 // Mirror of the backend whitelist (functions/src/lib/judgeOverrides.ts). Keep in sync.
 export const JUDGE_OVERRIDE_FIELDS = ['name', 'avatar', 'personality', 'evaluationStyle'] as const;
@@ -29,12 +32,35 @@ export function pickOverrideFields(input: Record<string, unknown>): JudgeOverrid
   return out;
 }
 
-/** Seeded personas for one course, read from the global config/judges doc. */
+/**
+ * The judgeIds a course's sessions reference — read from the hardcoded catalog for repo courses
+ * and from `courses/<id>/sessions` for professor-authored ones. A course with no sessions yet
+ * falls back to the trio the AI builder will put in its first session.
+ */
+async function judgeIdsForCourse(courseId: string): Promise<string[]> {
+  const sessions = getCourse(courseId)
+    ? getSessionsForCourse(courseId)
+    : await fetchSessions(courseId).catch((err) => {
+        console.warn(`No se pudieron leer las sesiones de ${courseId}:`, err);
+        return [];
+      });
+  const ids = judgeIdsFromSessions(sessions);
+  return ids.length > 0 ? ids : [...DEFAULT_JUDGE_IDS];
+}
+
+/**
+ * Seeded personas for one course, read from the global config/judges doc: the judges tagged with
+ * this courseId, plus the ones its sessions actually use. See ./courseJudgeIds for why the tag
+ * alone is not enough.
+ */
 export async function fetchCourseJudges(courseId: string): Promise<BaselineJudge[]> {
-  const snap = await getDoc(doc(db, 'config', 'judges'));
+  const [snap, derivedIds] = await Promise.all([
+    getDoc(doc(db, 'config', 'judges')),
+    judgeIdsForCourse(courseId),
+  ]);
   if (!snap.exists()) return [];
   const judges = (snap.data().judges || []) as BaselineJudge[];
-  return judges.filter((j) => j.courseId === courseId);
+  return mergeJudgeRoster(courseId, derivedIds, judges);
 }
 
 /** Current per-course overrides (without the updatedAt/updatedBy metadata). */
