@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Clock, Send, AlertCircle, StopCircle, Info, MessageSquare, Code, CheckCircle, XCircle, Zap, Play } from 'lucide-react';
+import { Clock, Send, AlertCircle, StopCircle, Info, MessageSquare, Code, CheckCircle, XCircle, Zap } from 'lucide-react';
 import { useGame } from '../../hooks/useGame';
 import { useAuth } from '../../hooks/useAuth';
 import { doc, updateDoc, serverTimestamp } from 'firebase/firestore';
@@ -10,9 +10,10 @@ import { playCountdownTick, playCriticalTick, playSubmitSuccess, playScoreReveal
 import { confettiBurst, confettiCannons, confettiPop } from '../../lib/confetti';
 import MusicSelector from '../../components/MusicSelector';
 import MediaBlock from '../../components/MediaBlock';
+import WaitingForRound from '../../components/WaitingForRound';
 import { resolveMediaSrc } from '../../lib/media';
 import { scoreMCQuestion, scoreMCBlock, MC_SCORING_LEGEND } from '../../lib/mcScoring';
-import { MC_GATE_SECONDS, isQuestionTimedOut } from '../../lib/mcTiming';
+import { mcTimeline, mcGateSeconds } from '../../lib/mcTiming';
 import type { MCResponse } from '../../types/game';
 
 // On a light ground the four Kahoot fills would be four shouting rectangles, so
@@ -68,22 +69,20 @@ export default function Round() {
   const [expandedPrompts, setExpandedPrompts] = useState<Record<number, boolean>>({});
   const prevEvaluated = useRef(false);
 
-  // MC block state
-  const [mcCurrentQ, setMcCurrentQ] = useState(0);
-  const [mcResponses, setMcResponses] = useState<MCResponse[]>([]);
-  const [mcQuestionStart, setMcQuestionStart] = useState<number>(0);
-  // Which question the countdown is currently armed for (null = none yet).
-  const [mcArmedQ, setMcArmedQ] = useState<number | null>(null);
-  const [mcQuestionTimeLeft, setMcQuestionTimeLeft] = useState(0);
-  const [mcSelectedOption, setMcSelectedOption] = useState<string | null>(null);
-  const [mcShowFeedback, setMcShowFeedback] = useState(false);
+  // MC block state.
+  //
+  // The gate, the current question and its clock are NOT stored here — they are
+  // derived from the shared `game.roundStartTime` via mcTimeline(), so the
+  // projector and every phone show the same question at the same instant. The
+  // only local state is what THIS player picked.
+  const [mcAnswers, setMcAnswers] = useState<Record<number, MCResponse>>({});
   const [mcBlockDone, setMcBlockDone] = useState(false);
   const [mcBlockScore, setMcBlockScore] = useState(0);
-  // Block start gate: question timers do not run until the player presses
-  // "Empezar" or the gate countdown expires.
-  const [mcStarted, setMcStarted] = useState(false);
-  const [mcGateLeft, setMcGateLeft] = useState(MC_GATE_SECONDS);
-  const mcTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [nowMs, setNowMs] = useState(() => Date.now());
+  // Which question index we have already played the reveal for (once each).
+  const mcRevealedRef = useRef<number>(-1);
+  // Latest ordered responses, readable from effects declared above the memo.
+  const mcResponsesRef = useRef<MCResponse[]>([]);
 
   // Check if current user has already submitted
   useEffect(() => {
@@ -101,9 +100,10 @@ export default function Round() {
       // Auto-submit incomplete MC block before navigating away.
       // Score over the block's TOTAL questions: averaging over answered ones
       // would let abandoning a block outscore completing it.
-      if (currentScenarioRef.current?.type === 'multiple_choice' && !hasSubmitted && mcResponses.length > 0) {
-        const totalQuestions = currentScenarioRef.current.mcQuestions?.length ?? mcResponses.length;
-        submitMCBlock(mcResponses, scoreMCBlock(mcResponses, totalQuestions));
+      const pending = mcResponsesRef.current;
+      if (currentScenarioRef.current?.type === 'multiple_choice' && !hasSubmitted && pending.length > 0) {
+        const totalQuestions = currentScenarioRef.current.mcQuestions?.length ?? pending.length;
+        submitMCBlock(pending, scoreMCBlock(pending, totalQuestions));
       }
       navigate(`/game/${gameCode}/results`);
     } else if (game?.status === 'finished') {
@@ -173,113 +173,141 @@ export default function Round() {
   const isMC = currentScenarioRef.current?.type === 'multiple_choice';
   const mcQuestions = currentScenarioRef.current?.mcQuestions;
 
-  // MC: block start gate — auto-starts so nobody is stranded on the intro.
-  // Self-scheduling timeout keyed on mcGateLeft, so the state updater stays
-  // pure (no setState inside another setState's updater).
+  // MC: the only clock left. Everything visible is a pure function of the
+  // shared round start and this tick, so no screen can drift from another.
   useEffect(() => {
-    if (!isMC || !mcQuestions || mcStarted || hasSubmitted || mcBlockDone) return;
-    if (mcGateLeft <= 0) {
-      setMcStarted(true);
-      return;
-    }
-    const tick = setTimeout(() => setMcGateLeft((g) => g - 1), 1000);
-    return () => clearTimeout(tick);
-  }, [isMC, mcQuestions, mcStarted, hasSubmitted, mcBlockDone, mcGateLeft]);
+    if (!isMC || hasSubmitted || mcBlockDone) return;
+    const tick = setInterval(() => setNowMs(Date.now()), 250);
+    return () => clearInterval(tick);
+  }, [isMC, hasSubmitted, mcBlockDone]);
 
-  useEffect(() => {
-    if (!isMC || !mcQuestions || hasSubmitted || mcBlockDone || !mcStarted) return;
-    if (mcCurrentQ >= mcQuestions.length) return;
+  const mcGate = mcGateSeconds(currentScenarioRef.current?.media);
+  const timeline = useMemo(
+    () =>
+      isMC && mcQuestions
+        ? mcTimeline({
+            roundStartMs: game?.roundStartTime?.toMillis() ?? 0,
+            nowMs,
+            gateSeconds: mcGate,
+            questions: mcQuestions,
+          })
+        : null,
+    [isMC, mcQuestions, game?.roundStartTime, nowMs, mcGate],
+  );
 
-    const timeLimit = mcQuestions[mcCurrentQ].timeLimitSeconds;
-    setMcQuestionTimeLeft(timeLimit);
-    setMcQuestionStart(Date.now());
-    setMcSelectedOption(null);
-    setMcShowFeedback(false);
-    // Arm the clock for THIS question. Until this lands, the auto-timeout must
-    // not fire — otherwise it reads the initial 0 and kills the question.
-    setMcArmedQ(mcCurrentQ);
+  const mcCurrentQ = timeline?.questionIndex ?? 0;
+  // The reveal is shared: everyone sees the right answer when the question
+  // closes, not when they personally clicked. Answering early locks your tile
+  // and nothing else — otherwise a fast player would be a round ahead.
+  const mcRevealed = timeline?.phase === 'feedback';
+  const mcSelectedOption = mcAnswers[mcCurrentQ]?.selectedOptionId ?? null;
+  const mcAnswered = mcAnswers[mcCurrentQ] !== undefined;
+  const mcLocked = mcRevealed || mcAnswered || timeline?.phase !== 'question';
+  const mcQuestionTimeLeft = timeline?.phase === 'question' ? timeline.secondsLeft : 0;
 
-    mcTimerRef.current = setInterval(() => {
-      setMcQuestionTimeLeft(prev => {
-        if (prev <= 1) {
-          if (mcTimerRef.current) clearInterval(mcTimerRef.current);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
+  // Ordered, gap-free list for scoring and for the block summary.
+  const mcResponses = useMemo(
+    () =>
+      Array.from({ length: mcQuestions?.length ?? 0 }, (_, i) => mcAnswers[i]).filter(
+        (r): r is MCResponse => r !== undefined,
+      ),
+    [mcAnswers, mcQuestions],
+  );
+  mcResponsesRef.current = mcResponses;
 
-    return () => {
-      if (mcTimerRef.current) clearInterval(mcTimerRef.current);
-    };
-  }, [isMC, mcCurrentQ, hasSubmitted, mcBlockDone, mcStarted]);
+  const handleMCSelect = useCallback((optionId: string) => {
+    if (!mcQuestions || !timeline || timeline.phase !== 'question') return;
+    const qi = timeline.questionIndex;
+    const q = mcQuestions[qi];
+    if (!q || mcAnswers[qi] !== undefined) return;
 
-  // MC: auto-timeout when this question's clock actually runs out
-  useEffect(() => {
-    if (!isMC || !mcQuestions || mcShowFeedback || mcSelectedOption !== null || !mcStarted) return;
-    if (mcCurrentQ >= mcQuestions.length || mcBlockDone || hasSubmitted) return;
-    if (isQuestionTimedOut({ armedQuestion: mcArmedQ, currentQuestion: mcCurrentQ, secondsLeft: mcQuestionTimeLeft })) {
-      handleMCSelect(null);
-    }
-  }, [mcQuestionTimeLeft, isMC, mcShowFeedback, mcSelectedOption, mcBlockDone, hasSubmitted, mcStarted, mcArmedQ, mcCurrentQ]);
-
-  const handleMCSelect = useCallback((optionId: string | null) => {
-    if (!mcQuestions || mcShowFeedback || mcBlockDone || hasSubmitted) return;
-    if (mcTimerRef.current) clearInterval(mcTimerRef.current);
-
-    const q = mcQuestions[mcCurrentQ];
-    // Guard the arithmetic too: with mcQuestionStart still 0 this used to
-    // store a Unix timestamp as if it were an elapsed duration.
-    const responseTimeMs = mcQuestionStart > 0 ? Math.max(0, Date.now() - mcQuestionStart) : 0;
-    const correct = optionId !== null && q.options.findIndex(o => o.id === optionId) === q.correctOptionIndex;
-
-    const pointsAwarded = scoreMCQuestion({
-      correct,
-      answered: optionId !== null,
-      elapsedMs: responseTimeMs,
-      timeLimitSeconds: q.timeLimitSeconds,
-    });
+    // Elapsed is measured against the SHARED question start, so two players who
+    // answer at the same wall-clock instant get the same speed bonus regardless
+    // of when their page loaded.
+    const responseTimeMs = Math.max(0, Date.now() - timeline.questionStartMs);
+    const correct = q.options.findIndex(o => o.id === optionId) === q.correctOptionIndex;
 
     const mcResponse: MCResponse = {
-      questionIndex: mcCurrentQ,
+      questionIndex: qi,
       selectedOptionId: optionId,
       responseTimeMs,
       correct,
-      pointsAwarded,
+      pointsAwarded: scoreMCQuestion({
+        correct,
+        answered: true,
+        elapsedMs: responseTimeMs,
+        timeLimitSeconds: q.timeLimitSeconds,
+      }),
     };
 
-    setMcSelectedOption(optionId);
-    setMcShowFeedback(true);
+    setMcAnswers(prev => (prev[qi] !== undefined ? prev : { ...prev, [qi]: mcResponse }));
+    // "Locked in" — deliberately NOT a right/wrong sound. That comes at the reveal.
+    playSubmitSuccess();
+  }, [mcQuestions, timeline, mcAnswers]);
 
-    if (correct) {
-      playSubmitSuccess();
+  // MC: a question the timeline has already closed and we never answered is
+  // recorded as a no-answer, so the block score always divides by every
+  // question (abandoning a block must never beat completing it).
+  useEffect(() => {
+    if (!isMC || !mcQuestions || !timeline || hasSubmitted || mcBlockDone) return;
+    const closed =
+      timeline.phase === 'done' ? mcQuestions.length
+        : timeline.phase === 'feedback' ? timeline.questionIndex + 1
+          : timeline.questionIndex;
+    if (closed <= 0) return;
+
+    setMcAnswers(prev => {
+      let changed = false;
+      const next = { ...prev };
+      for (let i = 0; i < closed; i++) {
+        if (next[i] === undefined) {
+          next[i] = {
+            questionIndex: i,
+            selectedOptionId: null,
+            responseTimeMs: 0,
+            correct: false,
+            pointsAwarded: scoreMCQuestion({
+              correct: false, answered: false, elapsedMs: 0,
+              timeLimitSeconds: mcQuestions[i]?.timeLimitSeconds ?? 20,
+            }),
+          };
+          changed = true;
+        }
+      }
+      return changed ? next : prev;
+    });
+  }, [isMC, mcQuestions, timeline, hasSubmitted, mcBlockDone]);
+
+  // MC: right/wrong reveal, once per question, when the shared clock closes it.
+  useEffect(() => {
+    if (!isMC || !mcRevealed || hasSubmitted || mcBlockDone) return;
+    if (mcRevealedRef.current === mcCurrentQ) return;
+    mcRevealedRef.current = mcCurrentQ;
+    if (mcAnswers[mcCurrentQ]?.correct) {
+      playGoodScore();
       confettiPop();
     } else {
       playBadScore();
     }
+  }, [isMC, mcRevealed, mcCurrentQ, mcAnswers, hasSubmitted, mcBlockDone]);
 
-    const newResponses = [...mcResponses, mcResponse];
-    setMcResponses(newResponses);
+  // MC: block finished — score over the block's TOTAL questions and submit once.
+  useEffect(() => {
+    if (!isMC || !mcQuestions || hasSubmitted || mcBlockDone) return;
+    if (timeline?.phase !== 'done') return;
 
-    // After 2.5s pause, go to next question or finish
-    setTimeout(() => {
-      if (mcCurrentQ + 1 < mcQuestions.length) {
-        setMcCurrentQ(mcCurrentQ + 1);
-      } else {
-        // Block done — score over the block's TOTAL questions and submit
-        const blockScore = scoreMCBlock(newResponses, mcQuestions.length);
-        setMcBlockScore(blockScore);
-        setMcBlockDone(true);
-        submitMCBlock(newResponses, blockScore);
-        setHasSubmitted(true);
+    const responses = mcResponsesRef.current;
+    const blockScore = scoreMCBlock(responses, mcQuestions.length);
+    setMcBlockScore(blockScore);
+    setMcBlockDone(true);
+    setHasSubmitted(true);
+    submitMCBlock(responses, blockScore);
 
-        if (blockScore >= 80) {
-          playGoodScore();
-          confettiBurst();
-        }
-      }
-    }, 2500);
-  }, [mcQuestions, mcCurrentQ, mcQuestionStart, mcShowFeedback, mcBlockDone, hasSubmitted, mcResponses, submitMCBlock]);
+    if (blockScore >= 80) {
+      playGoodScore();
+      confettiBurst();
+    }
+  }, [isMC, mcQuestions, timeline?.phase, hasSubmitted, mcBlockDone, submitMCBlock]);
 
   const handleSubmit = useCallback(async () => {
     if (!response.trim() || hasSubmitted || isSubmitting) return;
@@ -452,7 +480,7 @@ export default function Round() {
               transition={{ duration: 0.3 }}
             >
               {/* MC Title */}
-              <div className="dramatic-card p-6 mb-6">
+              <div className="card-play p-6 mb-6">
                 <div className="flex items-center gap-3 mb-3">
                   <span className="px-3 py-1 bg-kahoot-yellow/25 text-amber-800 rounded-full text-xs font-bold uppercase tracking-wider">
                     Kahoot
@@ -471,48 +499,53 @@ export default function Round() {
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="dramatic-card p-8 text-center"
+                  className="card-play p-8 text-center"
                 >
                   <CheckCircle className="w-14 h-14 text-kahoot-green mx-auto mb-4" />
                   <h3 className="text-2xl font-black mb-2">Bloque completado</h3>
                   <p className="text-ink-soft font-semibold">
                     Ya enviaste tus respuestas de esta ronda.
                   </p>
-                  <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 bg-surface-2 rounded-full">
-                    <div className="w-2 h-2 bg-kahoot-green rounded-full animate-pulse" />
-                    <span className="text-ink-soft text-sm font-semibold">
-                      Esperando a que termine la ronda...
-                    </span>
+                  <div className="mt-6">
+                    <WaitingForRound
+                      answered={submissions.length}
+                      total={Object.keys(game.players || {}).length}
+                    />
                   </div>
                 </motion.div>
-              ) : !mcStarted && !mcBlockDone ? (
-                /* ============ BLOCK START GATE ============
-                   Nothing is timed until the player is ready: latecomers do not
-                   lose Q1, and an audio clue can be played before any clock. */
+              ) : timeline?.phase === 'gate' && !mcBlockDone ? (
+                /* ============ SHARED START GATE ============
+                   No button, on any screen. The countdown runs off the shared
+                   roundStartTime, so the professor's projector and every phone
+                   reach question 1 at the same instant. The host controls when
+                   the round starts; nobody starts their own copy. */
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="dramatic-card p-6 sm:p-8 text-center"
+                  className="card-play p-6 sm:p-8 text-center"
                 >
                   <MediaBlock media={currentScenario.media} className="mb-6" />
 
                   <p className="text-ink-soft font-semibold mb-2">
-                    {currentScenario.mcQuestions.length} preguntas · {currentScenario.mcQuestions[0]?.timeLimitSeconds}s cada una
+                    {currentScenario.mcQuestions.length === 1
+                      ? `1 pregunta · ${currentScenario.mcQuestions[0]?.timeLimitSeconds}s`
+                      : `${currentScenario.mcQuestions.length} preguntas · ${currentScenario.mcQuestions[0]?.timeLimitSeconds}s cada una`}
                   </p>
                   <p className="text-faint text-xs font-medium mb-6 max-w-md mx-auto leading-relaxed">
                     {MC_SCORING_LEGEND}
                   </p>
 
-                  <button
-                    onClick={() => setMcStarted(true)}
-                    className="primary-button inline-flex items-center gap-2 px-8 py-4 text-lg"
+                  <motion.div
+                    key={timeline.secondsLeft}
+                    initial={{ scale: 0.6, opacity: 0.4 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ type: 'spring', stiffness: 260, damping: 18 }}
+                    className="text-7xl sm:text-8xl font-black text-kahoot-green tabular-nums"
                   >
-                    <Play className="w-5 h-5" />
-                    Empezar
-                  </button>
-
-                  <p className="text-faint text-sm font-semibold mt-4">
-                    Empieza solo en {mcGateLeft}s
+                    {timeline.secondsLeft}
+                  </motion.div>
+                  <p className="text-faint text-sm font-semibold mt-3">
+                    Empieza para todos a la vez
                   </p>
                 </motion.div>
               ) : mcBlockDone ? (
@@ -520,7 +553,7 @@ export default function Round() {
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="dramatic-card p-8 text-center"
+                  className="card-play p-8 text-center"
                 >
                   <motion.div
                     initial={{ scale: 0.3 }}
@@ -556,12 +589,10 @@ export default function Round() {
                   </div>
 
                   <div className="mt-6 pt-4 border-t border-line">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-surface-2 rounded-full">
-                      <div className="w-2 h-2 bg-kahoot-green rounded-full animate-pulse" />
-                      <span className="text-ink-soft text-sm font-semibold">
-                        Esperando a que termine la ronda...
-                      </span>
-                    </div>
+                    <WaitingForRound
+                      answered={submissions.length}
+                      total={Object.keys(game.players || {}).length}
+                    />
                   </div>
                 </motion.div>
               ) : (
@@ -593,7 +624,7 @@ export default function Round() {
 
                   {/* Question text + optional media — one card, so image and
                       question read as a single unit on a projected screen */}
-                  <div className="dramatic-card p-5 sm:p-6">
+                  <div className="card-play p-5 sm:p-6">
                     <p className="text-xl sm:text-2xl font-black text-ink leading-snug">
                       {currentScenario.mcQuestions[mcCurrentQ]?.question}
                     </p>
@@ -620,7 +651,7 @@ export default function Round() {
                       const correctIdx = currentScenario.mcQuestions![mcCurrentQ]?.correctOptionIndex;
                       const isCorrectOption = i === correctIdx;
                       const isSelected = mcSelectedOption === opt.id;
-                      const showResult = mcShowFeedback;
+                      const showResult = mcRevealed;
 
                       // Green means correct and nothing else in this palette.
                       let btnClass = MC_TILE_BASE;
@@ -638,15 +669,22 @@ export default function Round() {
                           btnClass = 'bg-surface-2 border-2 border-line opacity-60';
                           textClass = 'text-muted';
                         }
+                      } else if (mcAnswered) {
+                        // Answered, reveal not due yet: confirm the pick without
+                        // leaking whether it was right — the reveal is shared.
+                        btnClass = isSelected
+                          ? 'bg-surface border-2 border-kahoot-blue shadow-[0_3px_0_#1368CE] ring-2 ring-kahoot-blue/30'
+                          : 'bg-surface-2 border-2 border-line opacity-50';
+                        textClass = isSelected ? 'text-ink' : 'text-muted';
                       }
 
                       return (
                         <motion.button
                           key={opt.id}
-                          onClick={() => !mcShowFeedback && handleMCSelect(opt.id)}
-                          disabled={mcShowFeedback}
-                          whileHover={!mcShowFeedback ? { scale: 1.02 } : {}}
-                          whileTap={!mcShowFeedback ? { scale: 0.98 } : {}}
+                          onClick={() => !mcLocked && handleMCSelect(opt.id)}
+                          disabled={mcLocked}
+                          whileHover={!mcLocked ? { scale: 1.02 } : {}}
+                          whileTap={!mcLocked ? { scale: 0.98 } : {}}
                           className={`${btnClass} ${textClass} p-4 sm:p-5 rounded-xl text-left transition-all font-bold text-base sm:text-lg leading-snug min-h-[76px] sm:min-h-[84px] flex ${
                             opt.imageSrc ? 'flex-col items-stretch gap-3' : 'items-center gap-3'
                           }`}
@@ -688,22 +726,38 @@ export default function Round() {
                     })}
                   </div>
 
-                  {/* Feedback after selection */}
-                  {mcShowFeedback && (
+                  {/* Answered, waiting for the shared reveal */}
+                  {mcAnswered && !mcRevealed && (
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       className="text-center py-3"
                     >
-                      {mcResponses[mcResponses.length - 1]?.correct ? (
+                      <div className="inline-flex items-center gap-2 px-4 py-2 bg-surface-2 rounded-full">
+                        <CheckCircle className="w-5 h-5 text-kahoot-blue" />
+                        <span className="text-ink-soft text-sm font-bold">
+                          Respuesta enviada. La respuesta correcta se revela para todos al cerrar la pregunta.
+                        </span>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* Shared reveal, once the question closes for everyone */}
+                  {mcRevealed && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="text-center py-3"
+                    >
+                      {mcAnswers[mcCurrentQ]?.correct ? (
                         <p className="text-kahoot-green font-black text-lg sm:text-2xl">
-                          Correcto! +{mcResponses[mcResponses.length - 1]?.pointsAwarded} pts
+                          Correcto! +{mcAnswers[mcCurrentQ]?.pointsAwarded} pts
                         </p>
                       ) : (
                         <p className="text-kahoot-red font-black text-lg sm:text-2xl">
-                          {mcSelectedOption === null
+                          {mcAnswers[mcCurrentQ]?.selectedOptionId == null
                             ? 'Tiempo agotado! +0 pts'
-                            : `Incorrecto +${mcResponses[mcResponses.length - 1]?.pointsAwarded ?? 0} pts`}
+                            : `Incorrecto +${mcAnswers[mcCurrentQ]?.pointsAwarded ?? 0} pts`}
                         </p>
                       )}
                       {currentScenario.mcQuestions[mcCurrentQ]?.explanation && (
@@ -725,7 +779,7 @@ export default function Round() {
               transition={{ duration: 0.3 }}
             >
               {/* Scenario Card */}
-              <div className="dramatic-card p-6 mb-6">
+              <div className="card-play p-6 mb-6">
                 <div className="flex items-center gap-3 mb-4">
                   {currentScenario.category && (
                     <span className="px-3 py-1 bg-kahoot-blue/25 text-blue-700 rounded-full text-xs font-bold uppercase tracking-wider">
@@ -786,7 +840,7 @@ export default function Round() {
                     <motion.div
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      className="dramatic-card p-6"
+                      className="card-play p-6"
                     >
                       <div className="flex items-center justify-between mb-6">
                         <h3 className="text-xl font-black">Tu Resultado</h3>
@@ -912,19 +966,17 @@ export default function Round() {
                       ))}
 
                       <div className="mt-4 pt-4 border-t border-line text-center">
-                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-surface-2 rounded-full">
-                          <div className="w-2 h-2 bg-kahoot-green rounded-full animate-pulse" />
-                          <span className="text-ink-soft text-sm font-semibold">
-                            Esperando a que termine la ronda...
-                          </span>
-                        </div>
+                        <WaitingForRound
+                          answered={submissions.length}
+                          total={Object.keys(game.players || {}).length}
+                        />
                       </div>
                     </motion.div>
                   ) : (
                     <motion.div
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      className="dramatic-card p-8 text-center"
+                      className="card-play p-8 text-center"
                     >
                       <div className="w-16 h-16 border-4 border-kahoot-green border-t-transparent rounded-full animate-spin mx-auto mb-4" />
                       <h3 className="text-2xl font-black mb-2">Respuesta Enviada</h3>
@@ -941,7 +993,7 @@ export default function Round() {
                   );
                 })()
               ) : (
-                <div className="dramatic-card p-6">
+                <div className="card-play p-6">
                   <label className="block text-xs font-bold text-muted uppercase tracking-widest mb-3">
                     Tu Respuesta
                   </label>

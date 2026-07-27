@@ -145,8 +145,11 @@ export default function Lobby() {
       <main className="relative z-10 max-w-4xl mx-auto px-4 pb-8">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mb-8">
           {players.map((player, index) => (
+            /* El giro va en un envoltorio, no en el motion.div: framer-motion escribe
+               `transform` inline y le ganaria a la clase. Asi ademas lo apaga el bloque
+               prefers-reduced-motion de index.css sin tocar la animacion de entrada. */
+            <div key={player.id} className={index % 2 === 0 ? 'tilt-a' : 'tilt-b'}>
             <motion.div
-              key={player.id}
               initial={{ opacity: 0, scale: 0.5, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{
@@ -177,6 +180,7 @@ export default function Lobby() {
                 <span className="text-[10px] font-bold uppercase tracking-wider text-ink-soft">Tu</span>
               )}
             </motion.div>
+            </div>
           ))}
         </div>
 

@@ -72,6 +72,10 @@
   --blue:        #2563EB;
 
   --shadow-hard: 0 3px 0;
+  /* Sobreimpresion risografica: la sombra dura se desplaza tambien en X y va a color. */
+  --shadow-print: 4px 4px 0;
+  --tilt-a: -0.6deg;
+  --tilt-b:  0.5deg;
 
   font-family: 'Outfit', system-ui, sans-serif;
   line-height: 1.5;
@@ -99,9 +103,13 @@ h1.display,
 
 @layer utilities {
   /* Used on every page as the full-screen ground. Kept as a utility name so
-     the restyle is a CSS change, not 36 component edits. */
+     the restyle is a CSS change, not 36 component edits.
+     La trama al 5% se nota a treinta centimetros y desaparece proyectada:
+     carino en el telefono, limpieza en la sala. */
   .bg-gradient-main {
-    background: var(--paper);
+    background:
+      radial-gradient(circle at 1px 1px, rgba(16, 17, 20, .05) 1px, transparent 1.6px) 0 0 / 7px 7px,
+      var(--paper);
   }
   .text-shadow-none { text-shadow: none; }
 }
@@ -113,6 +121,39 @@ h1.display,
     @apply bg-surface rounded-xl border-2 border-line;
     box-shadow: 0 2px 0 var(--line);
   }
+
+  /* ── Capa "papel y sticker" ─────────────────────────────────────────────
+     Solo para superficies de juego (home, join, lobby, round, results, end).
+     Las pantallas de autoria siguen usando .dramatic-card: fichas rotadas en
+     un editor de sesiones son ruido, no juego. */
+  .card-play {
+    @apply bg-surface rounded-2xl;
+    border: 2.5px solid var(--ink);
+    box-shadow: var(--shadow-print) var(--orange);
+  }
+
+  /* Calcomania troquelada. Define SOLO la forma: el relleno lo pone quien la
+     usa, porque el dorsal del podio cambia de color por puesto. */
+  .sticker {
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px var(--surface), 2px 3px 5px rgba(16, 17, 20, .30);
+    transform: rotate(-7deg);
+  }
+
+  /* Washi tape. Sin radio y con giro: se lee como un trozo de cinta pegado.
+     Ambar es fill-only, asi que lleva texto tinta. */
+  .tape {
+    background: var(--amber);
+    color: var(--ink);
+    padding: 0 .4em;
+    transform: rotate(-2deg);
+    display: inline-block;
+    font-weight: 800;
+  }
+
+  /* Nada rota mas de 0,6 grados: uno ya se lee como error de maquetacion. */
+  .tilt-a { transform: rotate(var(--tilt-a)); }
+  .tilt-b { transform: rotate(var(--tilt-b)); }
 
   .card-ink {
     @apply bg-surface rounded-xl border-2;
@@ -127,12 +168,13 @@ h1.display,
     @apply transition-all duration-150;
     @apply disabled:opacity-40 disabled:cursor-not-allowed;
     background: var(--orange);
-    box-shadow: var(--shadow-hard) var(--orange-dark);
+    border: 2.5px solid var(--ink);
+    box-shadow: var(--shadow-print) var(--ink);
   }
   .primary-button:hover:not(:disabled) { filter: brightness(1.05); }
   .primary-button:active:not(:disabled) {
-    transform: translateY(3px);
-    box-shadow: 0 0 0 var(--orange-dark);
+    transform: translate(4px, 4px);
+    box-shadow: 0 0 0 var(--ink);
   }
 
   .secondary-button {
@@ -308,6 +350,14 @@ h1.display,
   .primary-button:active:not(:disabled),
   .secondary-button:active:not(:disabled),
   .danger-button:active:not(:disabled) {
+    transform: none;
+  }
+  /* Las rotaciones de la capa "papel y sticker" son estaticas, no animaciones:
+     hay que apagarlas explicitamente, `animation: none` no las alcanza. */
+  .sticker,
+  .tape,
+  .tilt-a,
+  .tilt-b {
     transform: none;
   }
 }

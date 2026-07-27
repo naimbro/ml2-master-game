@@ -142,7 +142,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 + index * 0.1 }}
-              className="dramatic-card p-6 text-center hover:scale-[1.02] transition-transform"
+              className="card-play p-6 text-center hover:scale-[1.02] transition-transform"
             >
               <div className={`w-14 h-14 ${feature.color} rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg ${feature.shadow}`}>
                 <feature.icon className="w-7 h-7 text-onaccent" />

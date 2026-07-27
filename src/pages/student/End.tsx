@@ -476,7 +476,7 @@ export default function End() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="dramatic-card p-6"
+            className="card-play p-6"
           >
             <h2 className="text-xl font-black mb-4 flex items-center gap-2">
               <Star className="w-5 h-5 text-amber-ink" />
@@ -574,7 +574,7 @@ export default function End() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="dramatic-card p-6"
+            className="card-play p-6"
           >
             <h2 className="text-xl font-black mb-4 flex items-center gap-2">
               <Medal className="w-5 h-5 text-purple-400" />
@@ -647,7 +647,7 @@ export default function End() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="dramatic-card p-6"
+            className="card-play p-6"
           >
             <h2 className="text-xl font-black mb-4 flex items-center gap-2">
               <FileText className="w-5 h-5 text-purple-400" />

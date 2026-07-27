@@ -11,6 +11,8 @@ import { confettiBurst, confettiCannons } from '../../lib/confetti';
 import RecalibrationReveal from './RecalibrationReveal';
 import { useRoundDuels } from '../../hooks/useRoundDuels';
 import { MC_SCORING_LEGEND } from '../../lib/mcScoring';
+import { useCountUp } from '../../hooks/useCountUp';
+import { applyRound, rachaStorageKey, readRacha, writeRacha, EMPTY_RACHA } from '../../lib/racha';
 
 interface JudgeEvaluation {
   judgeName: string;
@@ -20,6 +22,22 @@ interface JudgeEvaluation {
   strengths: string[];
   improvements: string[];
   promptUsed?: string;
+}
+
+/* Los hooks no se pueden llamar dentro del .map() de las filas, asi que cada numero
+   que cuenta vive en su propio componente. Ambos se montan recien cuando la fila ya
+   esta revelada, o sea que el conteo arranca justo cuando se ve. */
+
+/** Promedio acumulado, contando desde el de la ronda anterior. */
+function AvgCounter({ from, to }: { from: number; to: number }) {
+  const value = useCountUp(from, to, { decimals: 1 });
+  return <>{value}</>;
+}
+
+/** Puntaje de la ronda, contando desde cero. */
+function RoundCounter({ to }: { to: number }) {
+  const value = useCountUp(0, to);
+  return <>+{value}</>;
 }
 
 export default function Results() {
@@ -251,6 +269,21 @@ export default function Results() {
       || (roundPhase === 'provisional' && roundDuels.length > 0)
       || (roundPhase === 'final' && roundDuels.length > 0));
 
+  // Racha del propio jugador. Es DECORACION: no entra en ningun calculo de puntaje.
+  // Se persiste en localStorage porque el doc del juego no guarda historial por ronda
+  // (Player solo tiene totalScore / currentRoundScore) — ver src/lib/racha.ts.
+  // Tiene que quedar ANTES de los early returns: es un hook.
+  const [racha, setRacha] = useState(EMPTY_RACHA);
+  const myRoundScore = roundResults?.rankings.find(r => r.playerId === user?.uid)?.score;
+  useEffect(() => {
+    if (!gameCode || !user?.uid || myRoundScore === undefined || !currentRound) return;
+    const key = rachaStorageKey(gameCode, user.uid);
+    // Number(): los puntajes viajan como string mas seguido de lo que uno quisiera.
+    const next = applyRound(readRacha(window.localStorage, key), currentRound, Number(myRoundScore));
+    writeRacha(window.localStorage, key, next);
+    setRacha(next);
+  }, [gameCode, user?.uid, myRoundScore, currentRound]);
+
   if (loading || isProcessing) {
     return (
       <div className="min-h-screen bg-gradient-main flex items-center justify-center">
@@ -288,16 +321,20 @@ export default function Results() {
   return (
     <div className="min-h-screen bg-gradient-main">
       {/* Header */}
-      <header className="p-4 border-b-2 border-line">
+      {/* Barra de marcador: tinta a sangre, codigo en naranjo. Da estructura de
+          competencia sin comprometer la identidad a un deporte concreto.
+          Naranjo sobre tinta es texto claro sobre fondo oscuro — el caso inverso
+          al que reprueba AA, asi que aqui si funciona como texto. */}
+      <header className="bg-ink text-onaccent p-4">
         <div className="max-w-4xl mx-auto flex justify-between items-center">
           <div>
-            <span className="text-muted text-xs font-bold uppercase tracking-wider">Resultados Ronda</span>
-            <p className="text-xl font-black">
-              {game.currentRound} <span className="text-faint font-bold">/ {game.totalRounds}</span>
+            <span className="text-white/60 text-xs font-bold uppercase tracking-widest">Resultados Ronda</span>
+            <p className="text-xl font-black tabular-nums">
+              {game.currentRound} <span className="text-white/45 font-bold">/ {game.totalRounds}</span>
             </p>
           </div>
 
-          <div className="text-2xl font-black tracking-wider text-muted">
+          <div className="text-2xl font-black tracking-[0.2em] text-kahoot-orange tabular-nums">
             {gameCode}
           </div>
         </div>
@@ -376,22 +413,26 @@ export default function Results() {
                       isSpotlight
                         ? 'bg-kahoot-green/25 border-2 border-kahoot-green/50 shadow-lg shadow-kahoot-green/20'
                         : player.playerId === user?.uid
-                        ? 'bg-kahoot-green/15 border-2 border-kahoot-green/30'
+                        /* Naranjo = donde estas. Verde queda reservado para "correcto". */
+                        ? 'bg-kahoot-orange/15 border-2 border-kahoot-orange/40'
                         : 'bg-surface-2 border-2 border-transparent'
                     }`}
                   >
                     <div className="flex items-center gap-2">
                       <div
-                        className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-lg transition-colors duration-500 ${
+                        /* Dorsal circular. Los cuatro rellenos son fill-only y llevan
+                           texto tinta fijo: antes esto usaba bg-yellow-500 / bg-gray-400 /
+                           bg-amber-600, tres colores crudos fuera del sistema Cancha. */
+                        className={`w-10 h-10 shrink-0 sticker flex items-center justify-center font-black text-lg text-ink transition-colors duration-500 ${
                           !revealed
                             ? showingPrev ? 'bg-surface-3' : 'bg-surface-2'
                             : player.rank === 1
-                            ? 'bg-yellow-500 text-black'
+                            ? 'bg-kahoot-yellow'
                             : player.rank === 2
-                            ? 'bg-gray-400 text-black'
+                            ? 'bg-surface-3'
                             : player.rank === 3
-                            ? 'bg-amber-600 text-black'
-                            : 'bg-surface-3'
+                            ? 'bg-kahoot-orange'
+                            : 'bg-surface-2'
                         }`}
                       >
                         {revealed ? (
@@ -429,7 +470,7 @@ export default function Results() {
                     <span className="flex-1 min-w-0 font-bold text-lg sm:text-xl truncate">
                       {player.playerName}
                       {player.playerId === user?.uid && (
-                        <span className="text-kahoot-green text-sm ml-2 font-bold">(Tu)</span>
+                        <span className="tape text-sm ml-2">Tu</span>
                       )}
                     </span>
 
@@ -445,7 +486,7 @@ export default function Results() {
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.3 }}
                         >
-                          +{player.roundScore}
+                          <RoundCounter to={player.roundScore} />
                         </motion.span>
                       ) : '...'}
                     </span>
@@ -461,7 +502,10 @@ export default function Results() {
                           animate={{ opacity: 1, scale: 1 }}
                           transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                         >
-                          {player.avgScore}
+                          <AvgCounter
+                            from={Math.round(player.prevAvg * 10) / 10}
+                            to={player.avgScore}
+                          />
                         </motion.span>
                       ) : displayAvg}
                     </span>
@@ -479,13 +523,13 @@ export default function Results() {
                 className="max-w-2xl mx-auto mt-4"
               >
                 <div className="text-center text-faint text-xs font-bold my-1">· · ·</div>
-                <div className="flex items-center gap-2 sm:gap-4 px-3 sm:px-4 py-4 rounded-xl bg-kahoot-green/15 border-2 border-kahoot-green/30">
+                <div className="flex items-center gap-2 sm:gap-4 px-3 sm:px-4 py-4 rounded-xl bg-kahoot-orange/15 border-2 border-kahoot-orange/40">
                   <div className="w-10 h-10 shrink-0 rounded-xl bg-surface-3 flex items-center justify-center font-black text-lg">
                     {userRankingEntry.rank}
                   </div>
                   <span className="flex-1 min-w-0 font-bold text-lg sm:text-xl truncate">
                     {userRankingEntry.playerName}
-                    <span className="text-kahoot-green text-sm ml-2 font-bold">(Tu)</span>
+                    <span className="tape text-sm ml-2">Tu</span>
                   </span>
                   <span className={`w-16 text-right font-mono font-bold ${
                     userRankingEntry.roundScore >= 80 ? 'text-kahoot-green' :
@@ -511,7 +555,7 @@ export default function Results() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="dramatic-card p-6"
+            className="card-play p-6"
           >
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
@@ -586,10 +630,19 @@ export default function Results() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="dramatic-card p-6"
+            className="card-play p-6"
           >
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-black">Tu Resultado</h2>
+              <div className="flex items-center gap-3 flex-wrap">
+                <h2 className="text-xl font-black">Tu Resultado</h2>
+                {/* Se muestra desde 2: una sola ronda buena no es una racha. */}
+                {racha.count >= 2 && (
+                  <span className="inline-flex items-center gap-2 bg-ink text-onaccent px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest">
+                    Racha
+                    <b className="font-display text-kahoot-orange text-sm">x{racha.count}</b>
+                  </span>
+                )}
+              </div>
               {isRankedRound && userRank && (
                 <motion.div
                   initial={{ scale: 0, rotate: -180 }}
@@ -740,7 +793,7 @@ export default function Results() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="dramatic-card p-6"
+            className="card-play p-6"
           >
             <div className="flex items-center gap-3 mb-3">
               <Info className="w-5 h-5 text-orange-ink" />
