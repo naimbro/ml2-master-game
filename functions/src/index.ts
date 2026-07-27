@@ -24,6 +24,7 @@ import {
   type SessionDraftInput,
 } from './lib/sessionDraft';
 import { applyJudgeOverrides, type JudgeOverrides } from './lib/judgeOverrides';
+import { strictJudgingClauses } from './lib/judgePromptClauses';
 
 admin.initializeApp();
 const db = admin.firestore();
@@ -380,6 +381,11 @@ async function evaluateWithJudge(
     .replace('{{sessionLens}}', sessionLens)
     .replace('{{evaluationGuide}}', evalGuide)
     .replace('{{referenceAnswer}}', refAnswer ? `${refAnswer}\n\nCALIBRACION: La respuesta de referencia muestra el nivel de detalle y extension ESPERADO para una buena respuesta (~80 pts). NO penalices brevedad si los puntos clave estan cubiertos. Respuestas mas cortas que la referencia pero que cubren lo esencial pueden obtener 80+.` : '');
+
+  // Anti-noise verification clauses (partial-satisfaction + requirement-expansion
+  // guards, per RuVerBench / Peng et al. 2026). Appended centrally so every judge
+  // on every course gets them without touching the per-course promptTemplate.
+  prompt += strictJudgingClauses();
 
   // For non-ranked rounds, add signal extraction instructions
   if (!isRanked) {

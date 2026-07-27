@@ -44,6 +44,7 @@ const scoring_1 = require("./lib/scoring");
 const judgeModels_1 = require("./lib/judgeModels");
 const sessionDraft_1 = require("./lib/sessionDraft");
 const judgeOverrides_1 = require("./lib/judgeOverrides");
+const judgePromptClauses_1 = require("./lib/judgePromptClauses");
 admin.initializeApp();
 const db = admin.firestore();
 // Lazy-load SDKs to avoid initialization timeout (they load only when a judge of
@@ -304,6 +305,10 @@ async function evaluateWithJudge(clients, judge, scenario, studentResponse, sess
         .replace('{{sessionLens}}', sessionLens)
         .replace('{{evaluationGuide}}', evalGuide)
         .replace('{{referenceAnswer}}', refAnswer ? `${refAnswer}\n\nCALIBRACION: La respuesta de referencia muestra el nivel de detalle y extension ESPERADO para una buena respuesta (~80 pts). NO penalices brevedad si los puntos clave estan cubiertos. Respuestas mas cortas que la referencia pero que cubren lo esencial pueden obtener 80+.` : '');
+    // Anti-noise verification clauses (partial-satisfaction + requirement-expansion
+    // guards, per RuVerBench / Peng et al. 2026). Appended centrally so every judge
+    // on every course gets them without touching the per-course promptTemplate.
+    prompt += (0, judgePromptClauses_1.strictJudgingClauses)();
     // For non-ranked rounds, add signal extraction instructions
     if (!isRanked) {
         const scenarioId = scenario.id || '';
