@@ -24,7 +24,6 @@ import {
   type SessionDraftInput,
 } from './lib/sessionDraft';
 import { applyJudgeOverrides, type JudgeOverrides } from './lib/judgeOverrides';
-import { strictJudgingClauses } from './lib/judgePromptClauses';
 
 admin.initializeApp();
 const db = admin.firestore();
@@ -382,10 +381,17 @@ async function evaluateWithJudge(
     .replace('{{evaluationGuide}}', evalGuide)
     .replace('{{referenceAnswer}}', refAnswer ? `${refAnswer}\n\nCALIBRACION: La respuesta de referencia muestra el nivel de detalle y extension ESPERADO para una buena respuesta (~80 pts). NO penalices brevedad si los puntos clave estan cubiertos. Respuestas mas cortas que la referencia pero que cubren lo esencial pueden obtener 80+.` : '');
 
-  // Anti-noise verification clauses (partial-satisfaction + requirement-expansion
-  // guards, per RuVerBench / Peng et al. 2026). Appended centrally so every judge
-  // on every course gets them without touching the per-course promptTemplate.
-  prompt += strictJudgingClauses();
+  // NOTA: aqui se inyectaban las clausulas de RuVerBench (strictJudgingClauses,
+  // en ./lib/judgePromptClauses). Se retiraron el 2026-07-27 despues de medirlas.
+  //
+  // A/B estratificado sobre 60 respuestas reales (scripts/bt-judge-prompt-ab.ts
+  // --stratify): 13 respuestas bajan, 0 suben, 22 movimientos de ancla y todos
+  // hacia abajo. El efecto se concentra en la banda alta (Δ -8.5 en >= 80 contra
+  // Δ -2.3 en < 60), con caidas de 87 a 60 sobre respuestas correctas.
+  //
+  // O sea: la clausula anti-expansion no produjo ningun efecto medible, y la de
+  // anclaje estricto solo comprime el techo de la escala. El modulo y el harness
+  // siguen en el repo por si se quieren retomar con otro diseno.
 
   // For non-ranked rounds, add signal extraction instructions
   if (!isRanked) {
