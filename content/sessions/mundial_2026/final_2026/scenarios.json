@@ -6,10 +6,12 @@
     "category": "Kahoot",
     "type": "multiple_choice",
     "ranked": true,
-    "durationSeconds": 77,
+    "durationSeconds": 52,
     "context": "",
     "question": "",
-    "conceptTags": ["razonamiento_tactico"],
+    "conceptTags": [
+      "razonamiento_tactico"
+    ],
     "media": [
       {
         "kind": "audio",
@@ -22,22 +24,62 @@
       {
         "question": "Acabas de escuchar el himno del campeon del mundo. El 19 de julio de 2026, en el MetLife Stadium, ¿que seleccion levanto la Copa?",
         "options": [
-          { "id": "A", "text": "Argentina" },
-          { "id": "B", "text": "Espana" },
-          { "id": "C", "text": "Francia" },
-          { "id": "D", "text": "Inglaterra" }
+          {
+            "id": "A",
+            "text": "Argentina"
+          },
+          {
+            "id": "B",
+            "text": "Espana"
+          },
+          {
+            "id": "C",
+            "text": "Francia"
+          },
+          {
+            "id": "D",
+            "text": "Inglaterra"
+          }
         ],
         "correctOptionIndex": 1,
         "timeLimitSeconds": 20,
         "explanation": "Espana 1-0 Argentina en tiempo extra. Su segundo titulo mundial, despues de 2010."
-      },
+      }
+    ]
+  },
+  {
+    "id": "m26_r1b_gol_final",
+    "order": 2,
+    "title": "El gol de la final",
+    "category": "Kahoot",
+    "type": "multiple_choice",
+    "ranked": true,
+    "durationSeconds": 45,
+    "context": "",
+    "question": "",
+    "conceptTags": [
+      "razonamiento_tactico"
+    ],
+    "mcQuestions": [
       {
         "question": "Ferran Torres marco el unico gol de la final. ¿En que momento?",
         "options": [
-          { "id": "A", "text": "Minuto 12" },
-          { "id": "B", "text": "Minuto 78" },
-          { "id": "C", "text": "Minuto 106, en el tiempo extra" },
-          { "id": "D", "text": "En los penales" }
+          {
+            "id": "A",
+            "text": "Minuto 12"
+          },
+          {
+            "id": "B",
+            "text": "Minuto 78"
+          },
+          {
+            "id": "C",
+            "text": "Minuto 106, en el tiempo extra"
+          },
+          {
+            "id": "D",
+            "text": "En los penales"
+          }
         ],
         "correctOptionIndex": 2,
         "timeLimitSeconds": 20,
@@ -47,23 +89,37 @@
   },
   {
     "id": "m26_r2_cabo_verde",
-    "order": 2,
+    "order": 3,
     "title": "Cabo Verde: 500.000 habitantes en un Mundial",
     "category": "Kahoot",
     "type": "multiple_choice",
     "ranked": true,
-    "durationSeconds": 77,
+    "durationSeconds": 45,
     "context": "",
     "question": "",
-    "conceptTags": ["inferencia_desde_un_caso"],
+    "conceptTags": [
+      "inferencia_desde_un_caso"
+    ],
     "mcQuestions": [
       {
         "question": "Esta es la bandera de Cabo Verde, debutante en el Mundial 2026. Las 10 estrellas en circulo representan:",
         "options": [
-          { "id": "A", "text": "Los 10 anos de independencia" },
-          { "id": "B", "text": "Las 10 islas principales del archipielago" },
-          { "id": "C", "text": "Los 10 fundadores del pais" },
-          { "id": "D", "text": "Los 10 puertos historicos" }
+          {
+            "id": "A",
+            "text": "Los 10 anos de independencia"
+          },
+          {
+            "id": "B",
+            "text": "Las 10 islas principales del archipielago"
+          },
+          {
+            "id": "C",
+            "text": "Los 10 fundadores del pais"
+          },
+          {
+            "id": "D",
+            "text": "Los 10 puertos historicos"
+          }
         ],
         "correctOptionIndex": 1,
         "timeLimitSeconds": 20,
@@ -76,14 +132,42 @@
             "credit": "Wikimedia Commons — dominio publico"
           }
         ]
-      },
+      }
+    ]
+  },
+  {
+    "id": "m26_r2b_vozinha",
+    "order": 4,
+    "title": "Vozinha, el arquero sin contrato",
+    "category": "Kahoot",
+    "type": "multiple_choice",
+    "ranked": true,
+    "durationSeconds": 45,
+    "context": "",
+    "question": "",
+    "conceptTags": [
+      "inferencia_desde_un_caso"
+    ],
+    "mcQuestions": [
       {
         "question": "Vozinha, arquero de 40 anos que llego al torneo sin contrato profesional vigente, dejo su arco en cero ante Espana en el debut. ¿Hasta donde llego Cabo Verde?",
         "options": [
-          { "id": "A", "text": "Se quedo en fase de grupos" },
-          { "id": "B", "text": "Ronda de 32: cayo 3-2 con Argentina en el tiempo extra" },
-          { "id": "C", "text": "Cuartos de final" },
-          { "id": "D", "text": "Semifinales" }
+          {
+            "id": "A",
+            "text": "Se quedo en fase de grupos"
+          },
+          {
+            "id": "B",
+            "text": "Ronda de 32: cayo 3-2 con Argentina en el tiempo extra"
+          },
+          {
+            "id": "C",
+            "text": "Cuartos de final"
+          },
+          {
+            "id": "D",
+            "text": "Semifinales"
+          }
         ],
         "correctOptionIndex": 1,
         "timeLimitSeconds": 20,
@@ -93,13 +177,17 @@
   },
   {
     "id": "m26_r3_leccion_cabo_verde",
-    "order": 3,
+    "order": 5,
     "title": "La leccion Cabo Verde",
     "category": "Inferencia desde un caso",
     "difficulty": "medium",
     "ranked": true,
     "durationSeconds": 180,
-    "conceptTags": ["inferencia_desde_un_caso", "sesgo_de_supervivencia", "diseno_institucional"],
+    "conceptTags": [
+      "inferencia_desde_un_caso",
+      "sesgo_de_supervivencia",
+      "diseno_institucional"
+    ],
     "judgeFocus": "Prioridad absoluta: ¿la persona propone MECANISMOS concretos o buenas intenciones? 'Invertir en formacion' o 'apoyar el deporte' no son decisiones institucionales: son deseos. Una decision concreta nombra QUIEN hace QUE con QUE recurso (ej: reglas de elegibilidad para jugadores de la diaspora, convenios con clubes extranjeros que ceden jugadores, continuidad del cuerpo tecnico por N ciclos, presupuesto atado a un indicador). Segundo: el riesgo de leer un solo caso exitoso como receta. La respuesta de 100 nombra explicitamente el problema de seleccion / sesgo de supervivencia: vemos a Cabo Verde porque gano, no vemos a los 40 paises pequenos que hicieron lo mismo y perdieron. Si solo dice 'puede que no funcione' o 'cada pais es distinto' sin identificar POR QUE el caso no es evidencia suficiente, maximo 60 en lectura_del_caso. No exijas conocimiento futbolistico: esto evalua razonamiento causal, no deporte.",
     "context": "Cabo Verde tiene unos 500.000 habitantes — es la nacion mas pequena que ha alcanzado la fase eliminatoria de un Mundial. En 2026 empato con Espana, con Uruguay y con Arabia Saudita, paso como segunda del grupo, y cayo 3-2 con Argentina en tiempo extra. Su plantel se construyo en buena medida sobre la diaspora: jugadores nacidos o formados en Portugal, Paises Bajos y Francia que optaron por representar al pais de sus familias. No gano ningun partido en el torneo.",
     "question": "Eres asesor o asesora de un pais pequeno cuyo gobierno quiere 'replicar el modelo Cabo Verde'. Responde dos cosas:\n\n1. DOS decisiones institucionales concretas que propondrias (quien hace que, con que recurso).\n\n2. Cual es el principal riesgo de leer a Cabo Verde como una receta.",
@@ -110,7 +198,11 @@
         "Identifica el problema de seleccion: solo observamos los casos que tuvieron exito",
         "Reconoce que el resultado dependio de margenes muy estrechos (tres empates, ninguna victoria)"
       ],
-      "expectedConcepts": ["sesgo_de_supervivencia", "diseno_institucional", "inferencia_desde_un_caso"],
+      "expectedConcepts": [
+        "sesgo_de_supervivencia",
+        "diseno_institucional",
+        "inferencia_desde_un_caso"
+      ],
       "commonMistakes": [
         "Proponer 'invertir mas en deporte' o 'mejorar la formacion' como si fueran decisiones",
         "Advertir que 'cada pais es distinto' sin explicar por que un caso exitoso no es evidencia",
@@ -125,13 +217,16 @@
   },
   {
     "id": "m26_r4_scaloni_minuto_60",
-    "order": 4,
+    "order": 6,
     "title": "Eres Lionel Scaloni. Minuto 60.",
     "category": "Decision bajo presion",
     "difficulty": "hard",
     "ranked": true,
     "durationSeconds": 240,
-    "conceptTags": ["razonamiento_tactico", "trade_offs"],
+    "conceptTags": [
+      "razonamiento_tactico",
+      "trade_offs"
+    ],
     "judgeFocus": "NO evalues si la respuesta coincide con lo que Scaloni hizo de verdad. Evalua si el cambio propuesto es (1) especifico y (2) coherente con el problema descrito. Especifico significa que se puede dibujar: que jugador, que posicion, que altura de presion, que hace el equipo cuando recupera. 'Cambiar el chip', 'salir a buscarlo', 'presionar arriba' sin decir con quien ni desde donde = maximo 40 en mecanismo_especifico. El segundo criterio es el trade-off: cualquier cambio que ataque el problema de Argentina (sin remates al arco) abre otro problema (mas espacio para Yamal, menos gente atras, cansancio). La respuesta de 100 nombra explicitamente que resigna. Si describe solo beneficios, maximo 40 en trade_off_explicito. Tercero: que use los datos dados (0 remates al arco, Yamal 1v1, De Paul anclado, Alvarez aislado, tres cambios ya usados) y no un partido generico. No premies jerga futbolistica por si misma: un profesor sin conocimiento de futbol puede sacar 100 si razona bien con lo que se le dio.",
     "context": "Final del Mundial 2026, MetLife Stadium. Espana 0 - Argentina 0, y el partido va camino a decidirse en el tiempo extra.\n\nEspana domina. Terminara el partido con 20 remates, 12 al arco y cerca del 60% de la posesion. Argentina terminara con 2 remates y NINGUNO al arco en 120 minutos.\n\nEl patron es claro: Lamine Yamal gana una y otra vez su duelo por la banda. Cucurella sube por la otra, y De Paul queda anclado siguiendolo en vez de atacar. Enzo y Mac Allister no encuentran salida limpia. Julian Alvarez esta aislado arriba.\n\nYa gastaste tres cambios: Lisandro Martinez salio lesionado al 44', Paredes entro en el descanso y Molina al 58'.",
     "question": "Eres Lionel Scaloni. Es el minuto 60.\n\n¿Que modificacion tactica haces y por que?\n\nSe especifico: que cambia exactamente (estructura, jugador, altura de presion, que hacen con la pelota cuando la recuperan), que ganas con eso, y que riesgo aceptas a cambio.",
@@ -150,7 +245,10 @@
         "Una consecuencia esperada conectada causalmente con el problema descrito",
         "El costo aceptado, dicho explicitamente"
       ],
-      "expectedConcepts": ["razonamiento_tactico", "trade_offs"],
+      "expectedConcepts": [
+        "razonamiento_tactico",
+        "trade_offs"
+      ],
       "commonMistakes": [
         "Generalidades sin ejecutante: 'presionar mas', 'salir a ganarlo'",
         "Enumerar solo beneficios y no lo que se resigna",
@@ -165,15 +263,17 @@
   },
   {
     "id": "m26_r5_el_mejor_de_todos",
-    "order": 5,
+    "order": 7,
     "title": "La pregunta imposible",
     "category": "Kahoot",
     "type": "multiple_choice",
     "ranked": true,
-    "durationSeconds": 57,
+    "durationSeconds": 50,
     "context": "",
     "question": "",
-    "conceptTags": ["razonamiento_tactico"],
+    "conceptTags": [
+      "razonamiento_tactico"
+    ],
     "mcQuestions": [
       {
         "question": "Ultima pregunta. ¿Quien es el mejor futbolista de todos los tiempos?",

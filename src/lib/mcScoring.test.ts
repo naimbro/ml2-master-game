@@ -7,7 +7,6 @@ import {
   MC_WRONG_POINTS,
   MC_NO_ANSWER_POINTS,
 } from './mcScoring';
-import { isQuestionTimedOut } from './mcTiming';
 import type { MCResponse } from '../types/game';
 
 function response(pointsAwarded: number, questionIndex = 0): MCResponse {
@@ -146,35 +145,15 @@ describe('scoreMCBlock', () => {
 });
 
 // ── Regression: the "question 0 dies instantly" bug ────────────────────────
-// Live game F35LUA lost question 0 of EVERY multiple-choice block. The
-// countdown state starts at 0, and the auto-timeout effect read it in the same
-// commit that opened the block — before the timer effect had loaded the real
-// limit. In the one-question final round that meant losing the whole round.
-describe('isQuestionTimedOut', () => {
-  it('does NOT fire before the question clock has been armed', () => {
-    // This is the exact state that broke the live game.
-    expect(isQuestionTimedOut({ armedQuestion: null, currentQuestion: 0, secondsLeft: 0 })).toBe(false);
-  });
-
-  it('does NOT fire for a question the clock is not armed for', () => {
-    // Advancing from q0 to q1 briefly leaves the old countdown at 0.
-    expect(isQuestionTimedOut({ armedQuestion: 0, currentQuestion: 1, secondsLeft: 0 })).toBe(false);
-  });
-
-  it('fires once the armed question genuinely runs out', () => {
-    expect(isQuestionTimedOut({ armedQuestion: 0, currentQuestion: 0, secondsLeft: 0 })).toBe(true);
-    expect(isQuestionTimedOut({ armedQuestion: 2, currentQuestion: 2, secondsLeft: 0 })).toBe(true);
-  });
-
-  it('does not fire while time remains', () => {
-    expect(isQuestionTimedOut({ armedQuestion: 0, currentQuestion: 0, secondsLeft: 12 })).toBe(false);
-    expect(isQuestionTimedOut({ armedQuestion: 0, currentQuestion: 0, secondsLeft: 1 })).toBe(false);
-  });
-
-  it('treats a negative countdown as timed out', () => {
-    expect(isQuestionTimedOut({ armedQuestion: 1, currentQuestion: 1, secondsLeft: -1 })).toBe(true);
-  });
-});
+// Live game F35LUA lost question 0 of EVERY multiple-choice block: the local
+// countdown started at 0 and the auto-timeout effect read it in the same commit
+// that opened the block, before the real limit had loaded.
+//
+// That whole mechanism is gone — there is no local countdown to read early any
+// more. The phase comes from mcTimeline(), a pure function of the shared round
+// start, which reports 'gate' at t=0 and cannot report an expired question
+// before that question has begun. The guard now lives in mcTiming.test.ts
+// ("never reports question 0 as expired at the start of the round").
 
 describe('elapsed-time corruption seen in game F35LUA', () => {
   it('a timestamp mistaken for a duration cannot inflate a score', () => {

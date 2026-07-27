@@ -126,7 +126,10 @@ function validateMCQuestions(scope, sc) {
     return;
   }
 
-  let expectedDuration = 12 + 15; // gate + slack, mirrors src/lib/mcTiming.ts
+  // gate + slack, mirrors src/lib/mcTiming.ts. The gate is longer when the
+  // round carries media, because the audio/image clue plays before any clock.
+  const hasMedia = Array.isArray(sc.media) && sc.media.length > 0;
+  let expectedDuration = (hasMedia ? 12 : 5) + 15;
 
   for (const [qi, q] of questions.entries()) {
     const qScope = `${scope}/q#${qi}`;

@@ -4,6 +4,7 @@ import { httpsCallable } from 'firebase/functions';
 import { db, functions } from '../lib/firebase';
 import type { Game, Player, Submission, RoundResults, GameStatus, MCResponse } from '../types/game';
 import { useAuth } from './useAuth';
+import { mcTimeline, mcGateSeconds } from '../lib/mcTiming';
 
 interface UseGameReturn {
   game: Game | null;
@@ -273,6 +274,42 @@ export function useGame(gameCode: string | undefined): UseGameReturn {
     const interval = setInterval(checkTimer, 1000);
     return () => clearInterval(interval);
   }, [isHost, game?.status, game?.roundEndTime, endRound]);
+
+  // Close an MC round as soon as it is genuinely over (host only).
+  //
+  // The round timer carries slack so a slow phone is never guillotined, but on a
+  // one-question-per-round Kahoot that slack is dead screen time on every single
+  // question. Two conditions, both required:
+  //   - the shared timeline says the block is done, so the correct answer has
+  //     already been revealed to everyone (never cut the reveal short); and
+  //   - every player has submitted — each client submits at 'done' even with no
+  //     answer, so this is really "every player still connected".
+  // A disconnected player just leaves the timer above as the backstop.
+  //
+  // Only MC. Open rounds keep their full clock: there, thinking time is the point.
+  useEffect(() => {
+    if (!isHost || !game || game.status !== 'active' || !game.roundStartTime) return;
+
+    const scenario = game.scenarios?.[game.currentRound - 1];
+    if (scenario?.type !== 'multiple_choice' || !scenario.mcQuestions?.length) return;
+
+    const playerCount = Object.keys(game.players || {}).length;
+    if (playerCount === 0 || submissions.length < playerCount) return;
+
+    const check = () => {
+      const { phase } = mcTimeline({
+        roundStartMs: game.roundStartTime!.toMillis(),
+        nowMs: Date.now(),
+        gateSeconds: mcGateSeconds(scenario.media),
+        questions: scenario.mcQuestions!,
+      });
+      if (phase === 'done') endRound();
+    };
+
+    check();
+    const interval = setInterval(check, 500);
+    return () => clearInterval(interval);
+  }, [isHost, game?.status, game?.currentRound, game?.roundStartTime, game?.scenarios, game?.players, submissions.length, endRound]);
 
   return {
     game,
