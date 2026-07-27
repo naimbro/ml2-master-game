@@ -3,15 +3,25 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.runSwissComparisons = runSwissComparisons;
 exports.buildComparePrompt = buildComparePrompt;
 const recalibration_1 = require("./lib/recalibration");
-const djb2 = (s) => {
-    let h = 5381;
-    for (let i = 0; i < s.length; i++)
-        h = ((h << 5) + h + s.charCodeAt(i)) >>> 0;
-    return h;
-};
 /**
  * Run the Swiss band-B schedule with `concurrency` parallel comparisons.
- * Presentation order per pair is deterministic (hash) to cancel position bias.
+ *
+ * Every pair is judged TWICE, once in each presentation order (LCES eq. 1,
+ * Shibata & Miyamura 2025). A verdict that survives the swap is about the
+ * answers; one that flips is about the position, and counts as a tie.
+ *
+ * Measured on 1455 pairs drawn from this very schedule (scripts/bt-calibrate.ts
+ * caches both orders): 31.8% ± 1.2pp of verdicts flip. That is far above the
+ * 13.5% we first measured on index-adjacent pairs, because the Swiss band pairs
+ * answers that are CLOSE — deliberately — and closeness is exactly where the
+ * model stops being able to tell them apart. If anything 31.8% understates it:
+ * the sweep samples bands 1..5 and production uses 1..4, and the wider bands
+ * flip less.
+ *
+ * The previous hash-picked presentation order is gone: it spread the bias evenly
+ * instead of favouring the top or the bottom of the table, but it turned that bias
+ * into per-duel noise rather than removing it.
+ *
  * Returns DuelResults (indices into `players`, winner 0=i / 1=j / -1=tie).
  */
 async function runSwissComparisons(players, contextPrompt, B, compare, concurrency, onDuel) {
@@ -24,15 +34,19 @@ async function runSwissComparisons(players, contextPrompt, B, compare, concurren
             const idx = ti++;
             const [i, j] = pairs[idx];
             const a = players[i], b = players[j];
-            const firstIsI = djb2(`${a.id}|${b.id}`) % 2 === 0;
-            const first = firstIsI ? a : b;
-            const second = firstIsI ? b : a;
-            const verdict = await compare(first.response, second.response);
-            let winner = -1;
-            if (verdict === 'A')
-                winner = first.id === a.id ? 0 : 1;
-            else if (verdict === 'B')
-                winner = second.id === a.id ? 0 : 1;
+            // Las dos llamadas van en paralelo: mantiene ~`concurrency` duelos en vuelo
+            // y deja el wall-clock donde estaba.
+            const [fwd, rev] = await Promise.all([
+                compare(a.response, b.response),
+                compare(b.response, a.response),
+            ]);
+            // fwd: 'A' => gana a (mostrado primero).  rev: 'A' => gana b (mostrado primero).
+            const fwdWinner = fwd === 'A' ? 0 : fwd === 'B' ? 1 : -1;
+            const revWinner = rev === 'A' ? 1 : rev === 'B' ? 0 : -1;
+            // Sólo cuenta si los dos órdenes deciden Y coinciden. Si se contradicen, o si
+            // alguno responde empate (incluido el 'tie' que index.ts devuelve cuando la
+            // llamada falla), el par es empate: no reordenamos con datos que no aguantan.
+            const winner = fwdWinner !== -1 && fwdWinner === revWinner ? fwdWinner : -1;
             out[idx] = { i, j, winner };
             if (onDuel)
                 await onDuel({ seq: idx, i, j, winner });

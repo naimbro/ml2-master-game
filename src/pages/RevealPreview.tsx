@@ -8,7 +8,7 @@ const D = (
   seq: number,
   a: [string, number, number],
   b: [string, number, number],
-  winner: 'a' | 'b',
+  winner: 'a' | 'b' | 'tie',
   isUpset: boolean,
   isClimax = false,
 ): RoundDuel => ({
@@ -20,14 +20,15 @@ const D = (
   isClimax,
 });
 
+// ~1 de cada 5 empatado, que es la tasa que produce el doble orden en produccion.
 const DUELS: RoundDuel[] = [
   D(0, ['Constanza Arcos', 6, 71], ['Ángelo Dossi', 7, 70], 'b', true),
   D(1, ['Javiera Piñol', 4, 74], ['Fabián Águila', 5, 73], 'a', false),
-  D(2, ['Natalia Rosales', 2, 76], ['Maximiliano Sotomayor', 3, 75], 'b', true),
+  D(2, ['Natalia Rosales', 2, 76], ['Maximiliano Sotomayor', 3, 75], 'tie', false),
   D(3, ['Ángelo Dossi', 7, 70], ['Matías Almarza', 8, 68], 'a', false),
   D(4, ['Fabián Águila', 5, 73], ['Constanza Arcos', 6, 71], 'b', true),
   D(5, ['Javiera Piñol', 4, 74], ['Natalia Rosales', 2, 76], 'a', true),
-  D(6, ['Ángelo Dossi', 7, 70], ['Fabián Águila', 5, 73], 'a', true),
+  D(6, ['Ángelo Dossi', 7, 70], ['Fabián Águila', 5, 73], 'tie', false),
   D(7, ['Maximiliano Sotomayor', 3, 75], ['Javiera Piñol', 4, 74], 'a', false),
   D(8, ['Joaco Morales', 1, 78], ['Natalia Rosales', 2, 76], 'a', false),
   D(9, ['Joaco Morales', 1, 78], ['Maximiliano Sotomayor', 3, 75], 'b', true, true),

@@ -28,6 +28,42 @@ describe('runSwissComparisons', () => {
   });
 });
 
+describe('runSwissComparisons: regla de los dos órdenes (LCES ec. 1)', () => {
+  it('cuenta empate cuando el veredicto se da vuelta al invertir el orden', async () => {
+    // Sesgo de posición puro: gana siempre quien va primero, diga lo que diga el texto.
+    const compare = async () => 'A' as const;
+    const duels = await runSwissComparisons(players, 'ctx', 2, compare, 4);
+    expect(duels.length).toBe(5);
+    expect(duels.every((d) => d.winner === -1)).toBe(true);
+  });
+
+  it('cuenta empate cuando el modelo prefiere siempre la segunda respuesta', async () => {
+    const compare = async () => 'B' as const;
+    const duels = await runSwissComparisons(players, 'ctx', 2, compare, 4);
+    expect(duels.every((d) => d.winner === -1)).toBe(true);
+  });
+
+  it('conserva al ganador cuando el veredicto sobrevive al swap', async () => {
+    // Depende del contenido, no de la posición: gana la respuesta alfabéticamente menor.
+    const compare = async (x: string, y: string) => (x < y ? 'A' : 'B') as 'A' | 'B';
+    const duels = await runSwissComparisons(players, 'ctx', 2, compare, 4);
+    // swissPairs emite [mejor-provisional, peor-provisional] = [i, j], y acá el orden
+    // provisional (80/76/72/68) coincide con el alfabético ('a'<'b'<'c'<'d'), así que
+    // gana siempre i.
+    expect(duels.every((d) => d.winner === 0)).toBe(true);
+  });
+
+  it('consulta al comparador dos veces por par y dispara onDuel una sola vez', async () => {
+    let calls = 0;
+    const compare = async (x: string, y: string) => { calls++; return (x < y ? 'A' : 'B') as 'A' | 'B'; };
+    const seen: number[] = [];
+    const duels = await runSwissComparisons(players, 'ctx', 2, compare, 4, (d) => { seen.push(d.seq); });
+    expect(duels.length).toBe(5);
+    expect(calls).toBe(10);   // 5 pares × 2 órdenes
+    expect(seen.length).toBe(5);
+  });
+});
+
 describe('runSwissComparisons onDuel', () => {
   it('fires onDuel once per resolved duel with seq and winner', async () => {
     const compare = async (a: string, b: string) => (a < b ? 'A' : 'B') as 'A' | 'B';

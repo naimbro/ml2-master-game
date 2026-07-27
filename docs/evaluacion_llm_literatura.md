@@ -1,7 +1,9 @@
 # Qué dice la literatura sobre nuestro sistema de puntuación
 
-Revisión de cuatro papers de *automated grading* / LLM-as-a-judge, leídos el 2026-07-14, y qué
-implican concretamente para el motor de evaluación de Aula Maestra.
+Revisión de papers de *automated grading* / LLM-as-a-judge, y qué implican concretamente para el
+motor de evaluación de Aula Maestra. Los cuatro primeros se leyeron el 2026-07-14 y tratan del
+**juez** (puntaje absoluto contra rúbrica); el quinto se leyó el 2026-07-27 y trata de los
+**duelos** (comparación de a pares + Bradley-Terry).
 
 Los PDFs están en `literatura/evaluacion_llm/` (ignorado por git — son copyrighted). Este
 documento es el registro persistente: si los PDFs desaparecen, lo que aprendimos sobrevive acá.
@@ -16,6 +18,7 @@ documento es el registro persistente: si los PDFs desaparecen, lo que aprendimos
 | 2 | **Beyond Human Subjectivity and Error** — Gobrecht et al., IU International University (arXiv 2405.04323) | Modelo ASAG fine-tuneado, comparado contra correctores humanos certificados sobre 1600 respuestas de exámenes reales con nota oficial vinculante. | **Alta.** El único con ground truth de alto riesgo y benchmark humano. |
 | 3 | **Automated grading workflows / `gradetools`** — Ricci, Medina, Dogucu (arXiv 2309.12924) | Paquete de R para corrección humana asistida: ítems de rúbrica ligados a feedback reutilizable, edición dinámica de rúbrica. Sin LLM. | **Media.** Aporte conceptual, no empírico. |
 | 4 | **GRAD-AI** — Gambo et al., Educ Inf Technol 30:9859 | Herramienta de corrección de código (AST + Halstead + TF-IDF + k-means). | **Baja.** Su única validación es una encuesta de satisfacción (85% "satisfecho con la justicia del sistema"). Sin ground truth. |
+| 5 | **LCES** — Shibata & Miyamura, EMNLP 2025 main (2025.emnlp-main.1523) | Corrección zero-shot vía **comparación de a pares** en vez de nota absoluta: duelos con corrección de sesgo de posición → puntaje latente con RankNet → conversión lineal a la escala de la rúbrica. Datasets: ASAP (12.978 ensayos) y TOEFL11 (12.100). | **Alta, y es el único que habla de nuestros duelos.** 5 modelos × 8 prompts × 2 datasets, con ablaciones de sesgo de posición y de método de agregación. |
 
 ---
 
@@ -118,7 +121,134 @@ rúbrica es perseguir ruido.
 
 ---
 
-## Lo que la literatura NO cambia (dónde vamos adelante)
+## Paper #5: LCES y nuestros duelos (leído 2026-07-27)
+
+Los cuatro primeros papers hablan del **juez**. LCES habla de la otra mitad del motor: los duelos
+de a pares que corre `recalibrateRound`. Su tesis es la que nosotros ya asumimos cuando
+construimos la recalibración — un LLM es mejor decidiendo *"¿cuál de estas dos es mejor?"* que
+poniendo una nota absoluta contra una rúbrica. Su aporte para nosotros no es la tesis, es la
+**higiene**: qué hay que hacer para que los duelos no midan otra cosa.
+
+Su pipeline tiene tres pasos. Adoptamos el primero, descartamos el tercero, y el segundo nunca
+estuvo en discusión.
+
+### Lo que medimos antes de decidir
+
+`scripts/bt-order-flip.ts` (nuevo) reusa los ~2.000 veredictos ya cacheados en
+`scripts/.cache/pairwise-*.jsonl` y corre **sólo el orden invertido** — la mitad forward sale
+gratis porque la clave del caché incluye el orden de presentación. 200 pares, gpt-4o a
+temperatura 0, $0,47:
+
+| Métrica | Valor |
+|---|---|
+| Los dos órdenes deciden y coinciden | 86,5% |
+| **Se contradicen (flip)** | **13,5% ± 2,4pp** |
+| Latencia por llamada | mediana 612 ms · p90 1.127 ms |
+| Costo por llamada | $0,0024 |
+
+Cae dentro del rango que LCES §5.2 reporta para gpt-4o (10,4% ASAP / 17,0% TOEFL11): el número
+ajeno transfiere. **El sesgo tiene dirección** — 21 de los 27 flips (78%) favorecen a la *segunda*
+respuesta, lo que concuerda con el `firstWinRate` de 0,458 promediado sobre las 16 rondas de
+`bt-pairwise-report.html`. No es ruido simétrico.
+
+Y el flip se concentra donde el reordenamiento ocurre: **27,9% con Δ<5**, 12,8% con Δ5-15, ~6% de
+ahí en adelante. Como el schedule Swiss empareja **por cercanía de puntaje, a propósito**, casi
+todos los duelos de producción caen en las bandas ruidosas. El schedule está optimizado para el
+drama y eso lo mete de lleno en el régimen malo: efecto del diseño, no accidente.
+
+**La medición directa, sobre los pares del propio schedule Swiss: 31,8% ± 1,2pp** (1.455 pares,
+cacheados al correr `bt-calibrate.ts` con doble orden). Primero proyectamos 21,2% reponderando las
+tasas por banda; la proyección se quedó corta porque el Swiss no reparte parejo dentro de la banda
+Δ<5, concentra en los pares aún más apretados. Y 31,8% es **piso**: el barrido samplea bandas 1-5
+y producción usa 1-4, y las bandas anchas flipean menos.
+
+**Uno de cada tres duelos lo decidía la posición y no la calidad.**
+
+### 1. Doble orden — ADOPTADO
+
+El comentario de `pairwise.ts:23` dice que el hash djb2 "cancela" el sesgo de posición. **Es
+falso.** Como `swissPairs` devuelve `[mejor, peor]` y el hash no está correlacionado con la
+fuerza, sí logra que el sesgo no favorezca a punteros ni a colistas — eso vale. Pero lo convierte
+en **ruido por duelo**, y el ruido atenúa: aplana las fuerzas BT y vuelve aleatorios los
+reordenamientos específicos. Lo reparte; no lo detecta ni lo elimina.
+
+LCES consulta cada par en los dos órdenes y, si se contradicen, lo cuenta como empate. **El costo
+que uno esperaría no existe:** el LLM tarda ~6 s en una ronda mediana (21 alumnos, 75 duelos) y el
+montaje del reveal necesita ~40 s, así que hoy el LLM termina con 34 s de holgura y al doblar con
+28 s. No se nota. Plata: +$0,18 por ronda.
+
+Diseño en `docs/superpowers/specs/2026-07-27-doble-orden-duelos-design.md`.
+
+Efecto lateral que hay que atender en el mismo cambio: **`RecalibrationReveal.tsx` no sabe dibujar
+un empate** (`:135` sólo pinta el cartel del ganador, y en `:113-120` los dos paneles quedan en
+`lose` si nadie ganó). Hoy no se nota porque el único empate posible es un error de API; con el
+doble orden sería 1 de cada 5 tarjetas viéndose como si el juego se hubiera roto.
+
+### 2. Empates explícitos en el prompt — DESCARTADO
+
+`buildComparePrompt` dice *"no empates salvo que sean indistinguibles"* y el formato que documenta
+sólo ofrece `{"winner":"A"}` o `{"winner":"B"}`. O sea: el tipo `Comparator` y `DuelResult.winner
+= -1` soportan empate de punta a punta, y el prompt lo desactiva.
+
+Se descartó igual. La regla de LCES ya captura los pares genuinamente parejos por la vía dura, y
+su tasa de empate queda **acotada por la de flip medida**. Ofrecerle la salida fácil al modelo
+tiene tasa de empate no acotada, y si abusa de ella la recalibración se apaga.
+
+Sobre el miedo a que los empates aplanen el ranking: **la escala no puede aplanarse**, porque
+`recalibration.ts:77` pasa por `linearMatchMoments`, que reimpone media y desviación de los
+provisionales pase lo que pase. Lo que los empates diluyen es el *poder de reordenar*: con n=21 y
+B=4 los duelos frescos son hoy el 50,2% de la masa direccional (74 duelos a peso 1 contra 210
+pares de ancla × 0,35), y con 21% de empates bajan a 44,3%. **Pero ese 21% ya era basura** — sus
+reordenamientos eran aleatorios. Predicción falsable: el `avgMove` de `bt-calibrate.ts` baja y su
+`stability` split-half sube.
+
+**Se cumplió, en las 12 celdas del barrido, sin excepción.** Para `B=4` (producción usa
+`w_anchor=0,35`, entre las dos celdas vecinas de la grilla):
+
+| B=4 | avg\|Δrank\| | %moved | stability |
+|---|---|---|---|
+| w=0,50 | 2,047 → 1,900 | 0,788 → 0,791 | 0,957 → **0,969** |
+| w=0,25 | 3,044 → 3,015 | 0,847 → 0,850 | 0,884 → **0,915** |
+
+**No hubo que mover ninguna constante.** El patrón fino importa: `%moved` queda plano y `avgMove`
+baja un poco, o sea que se mueve la misma gente pero salta menos lejos. Con la estabilidad al alza,
+la lectura es que sacamos los saltos largos aleatorios —las sorpresas que eran cara o sello— y
+conservamos el reordenamiento real. **Un upset falso es peor que ningún upset.**
+
+### 3. RankNet — DESCARTADO
+
+RankNet es una red chica que lee el **embedding del texto** y devuelve un número; se entrena con
+pares etiquetados y aprende texto → puntaje. Bradley-Terry no lee nada: un parámetro libre por
+ítem, ajustado contra el registro de victorias. El paper atribuye su ganancia justamente a eso, y
+tiene razón — pero es un artefacto de su régimen, que es el opuesto al nuestro.
+
+1.700 ensayos con 5.000 comparaciones son **~3 comparaciones por ítem**: la mayoría queda casi sin
+restringir y BT no tiene con qué ubicarlos; RankNet los rescata **interpolando** desde el
+embedding. La figura 4 con M=50 son **0,03 comparaciones por ítem**, donde BT ni siquiera puede
+rankear al 95% del conjunto. Que RankNet gane con 50-100 comparaciones es cierto y **no es nuestra
+situación**: nosotros hacemos `(4n−10)×2/n ≈ 7 duelos por estudiante`, cada ítem está densamente
+comparado, el grafo es conexo por construcción y el BT queda completamente determinado. No hay
+ítems huérfanos que rescatar, que es lo único que RankNet aporta.
+
+Acá además haría daño: ~800k parámetros sobre 21 ítems y 74 etiquetas binarias es sobreajuste
+garantizado; de embeddings de respuestas de alumnos aprendería longitud, tema y estilo —
+exactamente los atajos que no queremos premiar— sin conjunto de validación para pillarlo; y
+metería una llamada de embeddings por respuesta, un loop de entrenamiento dentro de una Cloud
+Function sin torch, e inicialización aleatoria en un ajuste que hoy es reproducible.
+
+### Lo que LCES admite y nos aplica
+
+Su sección *Limitations* dice tres cosas que son nuestras también:
+
+- Las etiquetas de preferencia son ruidosas y ese ruido pasa directo al puntaje. Es el mismo
+  problema que el doble orden ataca.
+- **No saben cómo elegir M** (cuántas comparaciones). Nosotros sí tenemos una respuesta empírica:
+  `bt-calibrate.ts` barre B y w_anchor contra estabilidad split-half. Vamos adelante en esto.
+- La conversión lineal a la escala de la rúbrica asume que las comparaciones cubren todo el rango.
+  Nosotros hacemos lo mismo (`linearMatchMoments`) y ya nos mordió una vez: el clamp a [0,100] de
+  `recalibration.ts:79` existe porque el juego UVMJW3 ronda 5 le mandó un −2 a un alumno.
+
+
 
 El aporte central de Grade-Like-a-Human es la etapa de **post-grading review**: agrupar todos los
 scores, hacer que un LLM detecte los inconsistentes, y re-corregirlos. Subió la detección de
@@ -126,8 +256,13 @@ anomalías de 0.58 → 0.76 con re-grouping.
 
 **Nuestro `recalibrateRound` (Bradley-Terry sobre duelos pairwise) es una versión estrictamente más
 fuerte de esa idea**: comparaciones pairwise reales en vez de un LLM mirando una lista de números,
-ajustadas con un modelo estadístico principiado y ancladas para que no se disparen. Nada en estos
+ajustadas con un modelo estadístico principiado y ancladas para que no se disparen. Nada en esos
 cuatro papers es tan sofisticado como lo que ya está deployado.
+
+**La excepción es LCES (#5)**, que sí trabaja en esta capa y va más allá en un punto concreto: la
+corrección de sesgo de posición, que nosotros creíamos tener resuelta con un hash y no lo estaba.
+Ese sí lo adoptamos. Su otra pieza (RankNet) es el caso contrario — nos gana en un régimen que no
+es el nuestro. Ver la sección del paper #5 arriba.
 
 Su **batching prompt** (corregir N alumnos en una sola llamada para que el modelo los tenga lado a
 lado) es la aproximación barata de lo que nuestros duelos ya hacen bien. **No adoptarlo.**
@@ -292,6 +427,18 @@ mitad, y modelo frontier actual en vez de uno legacy — upgrade estricto por me
 de que surta efecto.
 
 **Pendiente / propuesto:**
+- **Doble orden en los duelos** (LCES #5): implementado 2026-07-27 en la rama `duelos-doble-orden`,
+  **sin desplegar todavía**. `pairwise.ts` consulta los dos órdenes y trata la contradicción como
+  empate; `RecalibrationReveal.tsx` aprende a dibujar un empate (antes lo pintaba como dos paneles
+  apagados, sin texto, 160 ms). `RECAL_B` / `RECAL_W_ANCHOR` **no se tocaron**: el barrido mostró
+  que el drama aguanta y la estabilidad sube. Diseño en
+  `docs/superpowers/specs/2026-07-27-doble-orden-duelos-design.md`.
+  Falta: desplegar functions y **verificar jugando** — el empate mal dibujado pasaba todos los
+  tests, así que ninguna suite habría avisado.
+- **Hallazgo lateral, ya arreglado:** `bt-calibrate.ts` y `bt-pairwise.ts` estaban rotos en `HEAD`
+  y no arrancaban. `scripts/lib/bradley-terry.ts` era una copia de la de `functions/src/lib/` que
+  se quedó atrás en un refactor y no exportaba `fitBradleyTerryFromWins`. Ahora es un reenvío, que
+  no se puede desincronizar.
 - **Post-grading review** (Grade-Like-a-Human): la *detección* ahora es casi gratis — con 3 modelos
   distintos, la dispersión entre jueces ya es la señal (ver el 80/40/80 del smoke test). El *re-grade*
   es 1 llamada extra sólo para los flagged, y cabe dentro de la ventana de los duelos. Costo ≈ 0.
