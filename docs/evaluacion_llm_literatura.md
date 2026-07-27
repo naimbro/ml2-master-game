@@ -177,9 +177,10 @@ que uno esperaría no existe:** el LLM tarda ~6 s en una ronda mediana (21 alumn
 montaje del reveal necesita ~40 s, así que hoy el LLM termina con 34 s de holgura y al doblar con
 28 s. No se nota. Plata: +$0,18 por ronda.
 
-Diseño en `docs/superpowers/specs/2026-07-27-doble-orden-duelos-design.md`.
+Diseño en `docs/superpowers/specs/2026-07-27-doble-orden-duelos-design.md`. **Desplegado el
+2026-07-27** y verificado en vivo (ver "Estado de implementación").
 
-Efecto lateral que hay que atender en el mismo cambio: **`RecalibrationReveal.tsx` no sabe dibujar
+Efecto lateral que hubo que atender en el mismo cambio: **`RecalibrationReveal.tsx` no sabía dibujar
 un empate** (`:135` sólo pinta el cartel del ganador, y en `:113-120` los dos paneles quedan en
 `lose` si nadie ganó). Hoy no se nota porque el único empate posible es un error de API; con el
 doble orden sería 1 de cada 5 tarjetas viéndose como si el juego se hubiera roto.
@@ -426,19 +427,31 @@ mitad, y modelo frontier actual en vez de uno legacy — upgrade estricto por me
 `node scripts/seed-firestore.cjs` y desplegar functions (con los 3 secrets ya en Secret Manager) antes
 de que surta efecto.
 
+**Hecho (2026-07-27) — doble orden en los duelos (LCES #5), DESPLEGADO:**
+- `pairwise.ts` consulta cada par en los dos órdenes y trata la contradicción como empate. El hash
+  `djb2` se borró: repartía el sesgo en vez de eliminarlo.
+- `RecalibrationReveal.tsx` aprendió a dibujar un empate. Antes lo pintaba como dos paneles
+  apagados, sin texto, 160 ms — porque el único empate posible era un error de API. Con el doble
+  orden habría sido 1 de cada 3 tarjetas.
+- `RECAL_B` / `RECAL_W_ANCHOR` **no se tocaron**: el barrido mostró que el drama aguanta y la
+  estabilidad sube. Diseño en `docs/superpowers/specs/2026-07-27-doble-orden-duelos-design.md`.
+- **Verificación en vivo (juego `4GRBDT`, 3 rondas ranked):** los empates se producen en producción
+  y **no vienen de fallos de API** — cero `compare error` en los logs de `recalibrateRound`, así
+  que el empate observado es un veredicto que efectivamente se dio vuelta al invertir el orden.
+  Naim confirmó que se ve como el sello "EMPATE" y no como dos paneles apagados. Recalibración
+  completa en 1,5-2,1 s por ronda, consistente con los ~600 ms por llamada medidos offline.
+- **Lo que esa partida NO prueba:** la tasa del 31,8%. Fue con 2 cuentas, o sea 1 duelo por ronda:
+  1 empate de 3 duelos. El intervalo de confianza de 1/3 va de 0,8% a 91%. La tasa en vivo se
+  medirá sola la próxima vez que juegue un curso de ~20, donde una ronda genera ~70 duelos.
+
+**Hallazgo lateral, ya arreglado:** `bt-calibrate.ts` y `bt-pairwise.ts` estaban rotos en `HEAD` y
+no arrancaban. `scripts/lib/bradley-terry.ts` era una copia de la de `functions/src/lib/` que se
+quedó atrás en un refactor y no exportaba `fitBradleyTerryFromWins`. Ahora es un reenvío, que no se
+puede desincronizar. **Lección:** verificar que una herramienta de análisis *existe y hace lo que
+dice* no es lo mismo que verificar que *corre*. Dos de las tres estaban muertas y ningún test lo
+decía, porque los scripts de `scripts/` no los cubre ninguna suite.
+
 **Pendiente / propuesto:**
-- **Doble orden en los duelos** (LCES #5): implementado 2026-07-27 en la rama `duelos-doble-orden`,
-  **sin desplegar todavía**. `pairwise.ts` consulta los dos órdenes y trata la contradicción como
-  empate; `RecalibrationReveal.tsx` aprende a dibujar un empate (antes lo pintaba como dos paneles
-  apagados, sin texto, 160 ms). `RECAL_B` / `RECAL_W_ANCHOR` **no se tocaron**: el barrido mostró
-  que el drama aguanta y la estabilidad sube. Diseño en
-  `docs/superpowers/specs/2026-07-27-doble-orden-duelos-design.md`.
-  Falta: desplegar functions y **verificar jugando** — el empate mal dibujado pasaba todos los
-  tests, así que ninguna suite habría avisado.
-- **Hallazgo lateral, ya arreglado:** `bt-calibrate.ts` y `bt-pairwise.ts` estaban rotos en `HEAD`
-  y no arrancaban. `scripts/lib/bradley-terry.ts` era una copia de la de `functions/src/lib/` que
-  se quedó atrás en un refactor y no exportaba `fitBradleyTerryFromWins`. Ahora es un reenvío, que
-  no se puede desincronizar.
 - **Post-grading review** (Grade-Like-a-Human): la *detección* ahora es casi gratis — con 3 modelos
   distintos, la dispersión entre jueces ya es la señal (ver el 80/40/80 del smoke test). El *re-grade*
   es 1 llamada extra sólo para los flagged, y cabe dentro de la ventana de los duelos. Costo ≈ 0.
