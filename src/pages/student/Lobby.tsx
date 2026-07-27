@@ -5,6 +5,8 @@ import { ArrowLeft, Users, Play, Clock, Zap } from 'lucide-react';
 import { useGame } from '../../hooks/useGame';
 import { useAuth } from '../../hooks/useAuth';
 import { playPlayerJoin, playRoundStart } from '../../lib/sounds';
+import { QRCodeSVG } from 'qrcode.react';
+import { currentJoinUrl } from '../../lib/joinUrl';
 
 // Kahoot-inspired player card colors
 const PLAYER_COLORS = [
@@ -93,15 +95,39 @@ export default function Lobby() {
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ type: 'spring', stiffness: 150 }}
+          className="inline-flex flex-col sm:flex-row items-center justify-center gap-5 sm:gap-8"
         >
-          <p className="text-muted text-sm font-bold uppercase tracking-widest mb-2">
-            Codigo del Juego
-          </p>
-          <div className="inline-block bg-surface-2 rounded-2xl px-10 py-4 border-2 border-line">
-            <p className="text-5xl md:text-7xl font-black tracking-[0.2em] text-ink">
-              {gameCode}
+          <div>
+            <p className="text-muted text-sm font-bold uppercase tracking-widest mb-2">
+              Codigo del Juego
             </p>
+            <div className="inline-block bg-surface-2 rounded-2xl px-10 py-4 border-2 border-line">
+              <p className="text-5xl md:text-7xl font-black tracking-[0.2em] text-ink">
+                {gameCode}
+              </p>
+            </div>
           </div>
+
+          {/* El QR va solo en la pantalla del profesor: es la que se proyecta. Un alumno
+              que ya esta en la sala no tiene a quien mostrarselo, y en un telefono solo
+              ocupa espacio. */}
+          {isHost && gameCode && (
+            <div className="text-center">
+              <p className="text-muted text-sm font-bold uppercase tracking-widest mb-2">
+                O escanea
+              </p>
+              <div className="inline-block bg-white rounded-2xl p-3 border-2 border-line">
+                <QRCodeSVG
+                  value={currentJoinUrl(gameCode)}
+                  size={148}
+                  level="M"
+                  marginSize={0}
+                  bgColor="#ffffff"
+                  fgColor="#0f172a"
+                />
+              </div>
+            </div>
+          )}
         </motion.div>
       </div>
 

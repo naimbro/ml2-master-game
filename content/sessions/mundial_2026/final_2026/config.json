@@ -4,7 +4,7 @@
   "title": "Mundial 2026: La Final",
   "description": "7 rondas (~12 min): cinco preguntas Kahoot con imagen y audio, cada una con su ranking, dos rondas abiertas evaluadas por jueces IA, y un cierre imposible",
   "date": "2026-07-28",
-  "roundCount": 7,
+  "roundCount": 6,
   "roundDurationSeconds": 180,
   "bufferSeconds": 60,
   "conceptTags": [

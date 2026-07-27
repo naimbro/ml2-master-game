@@ -864,6 +864,7 @@ exports.generateStudentReport = functions
             .orderBy('round')
             .get();
         const roundDetails = submissionsSnapshot.docs.map(doc => {
+            var _a, _b;
             const data = doc.data();
             const scenarioData = game.scenarios[data.round - 1];
             return {
@@ -872,6 +873,22 @@ exports.generateStudentReport = functions
                 scenario: (scenarioData === null || scenarioData === void 0 ? void 0 : scenarioData.title) || `Ronda ${data.round}`,
                 response: data.response,
                 evaluation: data.evaluation,
+                // Todo lo de abajo existe para la transcripcion del PDF del alumno: sin el
+                // enunciado y sus propias respuestas, un reporte no le sirve para estudiar.
+                type: (scenarioData === null || scenarioData === void 0 ? void 0 : scenarioData.type) === 'multiple_choice' ? 'multiple_choice' : 'open',
+                // Los escenarios generados por IA traen el caso en `prompt` en vez de en
+                // `context` — mismo fallback que usa recalibrateRound.
+                context: (_b = (_a = scenarioData === null || scenarioData === void 0 ? void 0 : scenarioData.context) !== null && _a !== void 0 ? _a : scenarioData === null || scenarioData === void 0 ? void 0 : scenarioData.prompt) !== null && _b !== void 0 ? _b : '',
+                question: typeof (scenarioData === null || scenarioData === void 0 ? void 0 : scenarioData.question) === 'string'
+                    ? scenarioData.question
+                    : (scenarioData === null || scenarioData === void 0 ? void 0 : scenarioData.question) ? JSON.stringify(scenarioData.question) : '',
+                mcQuestions: ((scenarioData === null || scenarioData === void 0 ? void 0 : scenarioData.mcQuestions) || []).map((q) => ({
+                    question: q.question,
+                    options: (q.options || []).map((o) => ({ id: o.id, text: o.text })),
+                    correctOptionIndex: q.correctOptionIndex,
+                    explanation: q.explanation || '',
+                })),
+                mcResponses: data.mcResponses || [],
             };
         });
         // Only sum ranked round scores for totalScore/averageScore

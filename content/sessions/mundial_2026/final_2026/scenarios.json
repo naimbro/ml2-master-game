@@ -185,57 +185,8 @@
     }
   },
   {
-    "id": "m26_r3_noruega_soft_power",
-    "order": 5,
-    "title": "Haaland vale mas que una embajada",
-    "category": "Inferencia desde un caso",
-    "difficulty": "medium",
-    "ranked": true,
-    "durationSeconds": 180,
-    "conceptTags": [
-      "diseno_institucional",
-      "inferencia_desde_un_caso",
-      "trade_offs"
-    ],
-    "media": [
-      {
-        "kind": "image",
-        "src": "media/mundial/haaland.jpg",
-        "alt": "Erling Haaland, delantero noruego, con la camiseta a rayas rojas y negras del Manchester City",
-        "credit": "Jacek Stanislawek / Wikimedia Commons — CC BY-SA 4.0"
-      }
-    ],
-    "judgeFocus": "Prioridad absoluta: ¿la persona distingue ATENCION de INFLUENCIA? Que medio mundo mire a Noruega tres semanas no es poder blando; es materia prima. La respuesta de 100 nombra ese salto y propone un MECANISMO para convertir uno en otro (quien hace que, con que recurso, en que ventana de tiempo). Segundo: exige que se nombre la fragilidad de este activo — depende de una persona, de que siga ganando, y de una conducta que el Estado no controla ni puede corregir. Si solo dice 'hay que aprovecharlo' sin nombrar de que depende, maximo 60. Tercero: premia a quien reconoce que Noruega YA tiene instrumentos de poder blando consolidados (fondo soberano, Premio Nobel de la Paz, mediacion internacional, cooperacion) y discute si esto se suma a ellos o compite por la misma atencion. Penaliza la respuesta que trata el deporte como si fuera obviamente bueno para la imagen de un pais sin preguntarse para que publico ni para que fin. No exijas conocimiento futbolistico ni de Noruega.",
-    "context": "Noruega tiene unos 5,6 millones de habitantes y no pasaba de la fase de grupos de un Mundial desde el siglo pasado. En 2026 elimino a Brasil 2-1 en la ronda de 16 con dos goles de Erling Haaland, llego a su primer cuarto de final en la historia, y cayo 2-1 con Inglaterra en tiempo extra el 11 de julio. Haaland termino el torneo con siete goles.\n\nDurante esas tres semanas Noruega fue tema de conversacion global de una forma que su diplomacia nunca habia logrado — pese a que el pais ya cuenta con instrumentos de influencia bastante mas serios: el fondo soberano mas grande del mundo, la sede del Premio Nobel de la Paz, un historial largo de mediacion en conflictos y una cooperacion internacional muy por encima de su tamano.",
-    "question": "Eres asesor o asesora del Ministerio de Relaciones Exteriores de Noruega. El ministro te pide una nota corta. Responde tres cosas:\n\n1. QUE GANO Noruega realmente en esas tres semanas — se preciso sobre la diferencia entre que te miren y que te hagan caso.\n\n2. UNA decision concreta para convertir eso en algo que dure (quien hace que, con que recurso, en que plazo).\n\n3. POR QUE ESTE ACTIVO ES FRAGIL, y que haria que se evapore.",
-    "referenceAnswer": "Lo que se gano es atencion, que no es lo mismo que influencia. La atencion es un insumo barato de conseguir y caro de mantener: abre puertas, baja el costo de que te escuchen la primera vez, y hace que el nombre del pais este disponible en la cabeza de publicos que nunca leyeron una nota sobre el fondo soberano. Lo que no da es capacidad de que alguien cambie de posicion. Nadie firma un acuerdo comercial porque Haaland le hizo dos goles a Brasil. La confusion entre ambas cosas es el error central de casi toda la politica de imagen pais.\n\nUna decision concreta razonable ata la ventana de atencion a un instrumento que ya existe y que si genera influencia: por ejemplo, que el ministerio y el fondo soberano concentren en los doce meses siguientes su programa de becas o su agenda de inversion en los mercados donde el pico de busquedas fue mayor, con presupuesto asignado y una meta verificable (matriculas, acuerdos firmados, apertura de oficina comercial). Otra: un convenio con la federacion para que las giras de la seleccion se agenden junto con las misiones comerciales, que es barato y aprovecha una logistica que igual ocurre. Lo que importa es que haya actor, recurso, plazo e indicador — no una campana de marca pais.\n\nLa fragilidad tiene tres fuentes. Primera, depende de una persona: Haaland tiene una carrera finita y una lesion la acorta de golpe. Segunda, depende del resultado: Noruega gusto porque gano, y el mismo equipo eliminado en fase de grupos no habria producido nada. Tercera, y la mas incomoda para un ministerio, el Estado no controla la conducta del activo: un escandalo, una declaracion politica o un cambio de nacionalidad deportiva pueden invertir el signo de toda la operacion, y el gobierno no tiene ninguna herramienta legitima para evitarlo. Un activo de imagen que no se controla y que puede volverse negativo no debe recibir inversion institucional pesada: se aprovecha con instrumentos reversibles y de horizonte corto.",
-    "idealAnswer": {
-      "keyPoints": [
-        "Separa atencion de influencia y explica que hace cada una",
-        "La decision nombra actor, recurso, plazo e indicador — no una campana de imagen",
-        "La fragilidad se ata a que el activo es una persona cuya conducta el Estado no controla"
-      ],
-      "expectedConcepts": [
-        "diseno_institucional",
-        "trade_offs",
-        "inferencia_desde_un_caso"
-      ],
-      "commonMistakes": [
-        "Tratar la visibilidad como si fuera poder blando ya conseguido",
-        "Proponer 'una campana de marca pais' o 'aprovechar el momento' sin mecanismo",
-        "Ignorar que Noruega ya tiene instrumentos de influencia mas solidos que este",
-        "No preguntarse para que publico ni para que fin sirve la atencion"
-      ],
-      "excellentResponseIndicators": [
-        "Compara el rendimiento de este activo contra los instrumentos que el pais ya tiene",
-        "Elige deliberadamente instrumentos reversibles por la fragilidad del activo",
-        "Reconoce que el resultado deportivo, no la estrategia, produjo la atencion"
-      ]
-    }
-  },
-  {
     "id": "m26_r4_scaloni_minuto_60",
-    "order": 6,
+    "order": 5,
     "title": "Eres Lionel Scaloni. Minuto 60.",
     "category": "Decision bajo presion",
     "difficulty": "hard",
@@ -281,7 +232,7 @@
   },
   {
     "id": "m26_r5_el_mejor_de_todos",
-    "order": 7,
+    "order": 6,
     "title": "La pregunta imposible",
     "category": "Kahoot",
     "type": "multiple_choice",

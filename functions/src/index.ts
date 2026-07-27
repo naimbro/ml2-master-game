@@ -1038,6 +1038,22 @@ export const generateStudentReport = functions
           scenario: scenarioData?.title || `Ronda ${data.round}`,
           response: data.response,
           evaluation: data.evaluation,
+          // Todo lo de abajo existe para la transcripcion del PDF del alumno: sin el
+          // enunciado y sus propias respuestas, un reporte no le sirve para estudiar.
+          type: scenarioData?.type === 'multiple_choice' ? 'multiple_choice' : 'open',
+          // Los escenarios generados por IA traen el caso en `prompt` en vez de en
+          // `context` — mismo fallback que usa recalibrateRound.
+          context: scenarioData?.context ?? scenarioData?.prompt ?? '',
+          question: typeof scenarioData?.question === 'string'
+            ? scenarioData.question
+            : scenarioData?.question ? JSON.stringify(scenarioData.question) : '',
+          mcQuestions: (scenarioData?.mcQuestions || []).map((q: any) => ({
+            question: q.question,
+            options: (q.options || []).map((o: any) => ({ id: o.id, text: o.text })),
+            correctOptionIndex: q.correctOptionIndex,
+            explanation: q.explanation || '',
+          })),
+          mcResponses: data.mcResponses || [],
         };
       });
 
