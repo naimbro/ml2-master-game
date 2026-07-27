@@ -27,6 +27,14 @@ se inventó nada.
 | Premios: Balón de Oro Rodri; Bota de Oro Mbappé (10 goles); Guante de Oro Unai Simón; Mejor Joven Pau Cubarsí | Sesión `kahoot_only`, KB | [NBC Sports](https://www.nbcsports.com/soccer/news/2026-world-cup-award-winners-golden-boot-golden-ball-best-young-player-golden-glove); [Britannica](https://www.britannica.com/question/Who-won-the-Golden-Ball-Golden-Boot-and-Golden-Glove-awards-at-the-2026-FIFA-World-Cup) |
 | Semifinales: España 2-0 Francia; Argentina 2-1 Inglaterra | `kahoot_only`, KB | [FIFA — France v Spain](https://www.fifa.com/en/match-centre/match/17/285023/289290/400021541); [FIFA — England v Argentina](https://www.fifa.com/en/match-centre/match/17/285023/289290/400021540) |
 | Formato: 48 selecciones, 12 grupos de 4, 104 partidos, ronda de 32 | `kahoot_only`, KB | [Soccerway/Flashscore — how the 48-team format works](https://www.soccerway.com/news/soccer-world-cup-how-the-new-48-team-format-at-the-2026-world-cup-will-work/tIrc4C5j) |
+| Vozinha acordó con Colo Colo un contrato de 18 meses tras el Mundial; sus seguidores pasaron de ~50.000 a decenas de millones | R2b (Vozinha) | [Al Jazeera — Vozinha agrees deal with Colo Colo](https://www.aljazeera.com/sports/2026/7/26/cape-verde-world-cup-star-vozinha-agrees-deal-with-chiles-colo-colo); [ESPN — president: Vozinha to sign for Colo Colo](https://www.espn.com/soccer/story/_/id/49448250/vozinha-sign-colo-colo-stellar-world-cup-president); [TNT Sports](https://www.tntsports.co.uk/football/transfers/2026-2027/vozinha-colo-colo-new-club-cabo-verde-world-cup-exploits-aged-40_sto23322759/story.shtml) |
+| Vozinha hizo 7 atajadas ante España en el debut, con el arco en cero | R2b (Vozinha) | [FOX Sports](https://www.foxsports.com/stories/soccer/meet-vozinha-cape-verdean-goalkeeper-who-shut-out-spain); [ESPN](https://www.espn.com/soccer/story/_/id/49074487/cape-verde-gk-vozinha-stopped-world-cup-favourites-spain-gained-14m-followers) |
+| Noruega eliminó a Brasil 2-1 en la ronda de 16 con dos goles de Haaland (5 de julio) | R3 (Noruega) | [Al Jazeera](https://www.aljazeera.com/sports/2026/7/5/haaland-scores-twice-as-norway-stun-brazil-2-1-in-world-cup-2026-last-16); [Yahoo Sports](https://sports.yahoo.com/soccer/article/world-cup-2026-erling-haaland-scores-twice-and-norway-shocks-brazil-2-1-to-advance-to-quarterfinals-220552249.html) |
+| Noruega llegó a su primer cuarto de final y cayó 2-1 con Inglaterra en tiempo extra el 11 de julio (doblete de Bellingham); Haaland terminó con 7 goles | R3 (Noruega) | [ESPN — Norway 1-2 England](https://www.espn.com/soccer/match/_/gameId/760512/england-norway); [FIFA — match report](https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/norway-england-match-report-highlights); [NPR](https://www.npr.org/2026/07/11/nx-s1-5890169/2026-world-cup-fifa-england-norway-quarterfinal) |
+
+> El resultado Noruega–Inglaterra es además coherente con las semifinales ya
+> verificadas más arriba (España–Francia y Argentina–Inglaterra): Inglaterra llega a
+> semis por este partido.
 
 ## Afirmaciones descartadas en verificación
 
@@ -36,8 +44,9 @@ se inventó nada.
 - **Detalles del cuadro de eliminatorias** — una extracción de la tabla de Wikipedia
   devolvió resultados internamente inconsistentes (contradecían a FIFA). Se decidió no
   usar preguntas sobre el detalle del cuadro más allá de lo confirmado por FIFA.
-- **Foto de Vozinha** — no se encontró una imagen con licencia libre verificable en
-  Wikimedia Commons. **No se usa imagen de Vozinha**; la ronda usa la bandera.
+- ~~**Foto de Vozinha** — no se encontró una imagen con licencia libre verificable en
+  Wikimedia Commons.~~ **Revertido el 2026-07-27:** ahora sí hay fotos suyas en Commons,
+  subidas durante el torneo. Se usa la del partido con Arabia Saudita (CC BY 4.0).
 
 ---
 
@@ -53,6 +62,8 @@ bundle (no hay hotlinking en vivo). Uso: demostración académica interna.
 | `pele.jpg` | [File:Pele con brasil (cropped).jpg](https://commons.wikimedia.org/wiki/File:Pele_con_brasil_(cropped).jpg) | **Dominio público** (mismo fundamento) | Autor desconocido — *El Gráfico*, 1970 |
 | `bandera-cabo-verde.svg` | [File:Flag of Cape Verde.svg](https://commons.wikimedia.org/wiki/File:Flag_of_Cape_Verde.svg) | **Dominio público** (insignia oficial) | — |
 | `marcha-real.mp3` | [File:Marcha Real-Royal March by US Navy Band.ogg](https://commons.wikimedia.org/wiki/File:Marcha_Real-Royal_March_by_US_Navy_Band.ogg) | **Dominio público** (PD Mark 1.0, obra y ejecución) | United States Navy Band |
+| `vozinha.jpg` | [File:Vozinha Fifa World Cup 2026 Saudia Arabia vs Cabo Verde (cropped).jpg](https://commons.wikimedia.org/wiki/File:Vozinha_Fifa_World_Cup_2026_Saudia_Arabia_vs_Cabo_Verde_(cropped).jpg) | **CC BY 4.0** | Petsbikes — 26 jun 2026 |
+| `haaland.jpg` | [File:Erling Haaland 2023 (cropped-v2).jpg](https://commons.wikimedia.org/wiki/File:Erling_Haaland_2023_(cropped-v2).jpg) | **CC BY-SA 4.0** | Jacek Stanislawek — 22 feb 2023 |
 | `final-minuto-60.svg` | Creado para este proyecto | Propio | — |
 
 **Procesamiento aplicado:**

@@ -139,46 +139,6 @@
     "id": "m26_r2b_vozinha",
     "order": 4,
     "title": "Vozinha, el arquero sin contrato",
-    "category": "Kahoot",
-    "type": "multiple_choice",
-    "ranked": true,
-    "durationSeconds": 45,
-    "context": "",
-    "question": "",
-    "conceptTags": [
-      "inferencia_desde_un_caso"
-    ],
-    "mcQuestions": [
-      {
-        "question": "Vozinha, arquero de 40 anos que llego al torneo sin contrato profesional vigente, dejo su arco en cero ante Espana en el debut. ¿Hasta donde llego Cabo Verde?",
-        "options": [
-          {
-            "id": "A",
-            "text": "Se quedo en fase de grupos"
-          },
-          {
-            "id": "B",
-            "text": "Ronda de 32: cayo 3-2 con Argentina en el tiempo extra"
-          },
-          {
-            "id": "C",
-            "text": "Cuartos de final"
-          },
-          {
-            "id": "D",
-            "text": "Semifinales"
-          }
-        ],
-        "correctOptionIndex": 1,
-        "timeLimitSeconds": 20,
-        "explanation": "Tres empates en el grupo, segundos detras de Espana, y una eliminacion en el tiempo extra ante el campeon defensor. 18 atajadas de Vozinha en el torneo."
-      }
-    ]
-  },
-  {
-    "id": "m26_r3_leccion_cabo_verde",
-    "order": 5,
-    "title": "La leccion Cabo Verde",
     "category": "Inferencia desde un caso",
     "difficulty": "medium",
     "ranked": true,
@@ -186,32 +146,90 @@
     "conceptTags": [
       "inferencia_desde_un_caso",
       "sesgo_de_supervivencia",
-      "diseno_institucional"
+      "trade_offs"
     ],
-    "judgeFocus": "Prioridad absoluta: ¿la persona propone MECANISMOS concretos o buenas intenciones? 'Invertir en formacion' o 'apoyar el deporte' no son decisiones institucionales: son deseos. Una decision concreta nombra QUIEN hace QUE con QUE recurso (ej: reglas de elegibilidad para jugadores de la diaspora, convenios con clubes extranjeros que ceden jugadores, continuidad del cuerpo tecnico por N ciclos, presupuesto atado a un indicador). Segundo: el riesgo de leer un solo caso exitoso como receta. La respuesta de 100 nombra explicitamente el problema de seleccion / sesgo de supervivencia: vemos a Cabo Verde porque gano, no vemos a los 40 paises pequenos que hicieron lo mismo y perdieron. Si solo dice 'puede que no funcione' o 'cada pais es distinto' sin identificar POR QUE el caso no es evidencia suficiente, maximo 60 en lectura_del_caso. No exijas conocimiento futbolistico: esto evalua razonamiento causal, no deporte.",
-    "context": "Cabo Verde tiene unos 500.000 habitantes — es la nacion mas pequena que ha alcanzado la fase eliminatoria de un Mundial. En 2026 empato con Espana, con Uruguay y con Arabia Saudita, paso como segunda del grupo, y cayo 3-2 con Argentina en tiempo extra. Su plantel se construyo en buena medida sobre la diaspora: jugadores nacidos o formados en Portugal, Paises Bajos y Francia que optaron por representar al pais de sus familias. No gano ningun partido en el torneo.",
-    "question": "Eres asesor o asesora de un pais pequeno cuyo gobierno quiere 'replicar el modelo Cabo Verde'. Responde dos cosas:\n\n1. DOS decisiones institucionales concretas que propondrias (quien hace que, con que recurso).\n\n2. Cual es el principal riesgo de leer a Cabo Verde como una receta.",
-    "referenceAnswer": "Decisiones concretas posibles (cualquier par bien especificado sirve): (a) reglas de elegibilidad y un programa activo de identificacion de jugadores de la diaspora, con presupuesto para scouting en las ligas donde esa diaspora ya juega; (b) convenios formales con clubes extranjeros que garanticen la cesion de jugadores para eliminatorias, que es donde las federaciones pequenas suelen perder; (c) continuidad tecnica garantizada por varios ciclos en vez de recambio tras cada derrota; (d) concentrar el gasto en una sola categoria en vez de repartirlo entre todas.\n\nEl riesgo central es de inferencia, no de futbol: Cabo Verde es una observacion seleccionada por su resultado. Muchos paises pequenos aplican estrategias de diaspora parecidas y no clasifican nunca — no los vemos porque no llegan a la television. Sin conocer ese denominador, no sabemos si la estrategia elevo la probabilidad de exito o si Cabo Verde es el numero que salio en una loteria que muchos jugaron. A esto se suma que el propio torneo cambio (48 selecciones amplian los cupos) y que el equipo avanzo sin ganar un partido: el margen entre 'hazana historica' y 'eliminado en fase de grupos' fueron detalles no repetibles.",
+    "media": [
+      {
+        "kind": "image",
+        "src": "media/mundial/vozinha.jpg",
+        "alt": "Vozinha, arquero de Cabo Verde, con la camiseta amarilla numero 1 y el escudo de la federacion caboverdiana",
+        "credit": "Petsbikes / Wikimedia Commons — CC BY 4.0"
+      }
+    ],
+    "judgeFocus": "Prioridad absoluta: ¿la persona distingue el TAMANO DE LA MUESTRA de la calidad de la senal? Vozinha jugo cuatro partidos. La respuesta de 100 nombra explicitamente que cuatro partidos ante rivales que atacan mucho son una muestra chica y sesgada hacia el lucimiento de un arquero, y propone que mirarias ADEMAS (temporada completa en Chaves, minutos jugados, por que estaba sin contrato a los 40). Segundo: exige un criterio de decision, no una opinion. 'Yo lo ficharia' o 'es muy viejo' sin condicion asociada vale poco; 'lo ficharia solo si X' o 'no lo ficharia salvo que Y' es lo que se pide. Tercero: el trade-off tiene que ser explicito — 18 meses de contrato a un arquero de 40 anos cuesta algo, y ese algo tiene que nombrarse (el puesto que no se le da a un juvenil, el salario, el riesgo fisico, la expectativa de hinchada que se crea). No exijas conocimiento futbolistico ni de mercado chileno: esto evalua razonamiento bajo incertidumbre.",
+    "context": "Vozinha (Josimar Dias) tiene 40 anos y llego al Mundial 2026 sin contrato profesional vigente. Dejo su arco en cero ante Espana, el futuro campeon, en el debut de Cabo Verde, con siete atajadas. Cabo Verde llego a la ronda de 32 y cayo 3-2 con Argentina en tiempo extra. En total jugo cuatro partidos y sumo 18 atajadas. Sus seguidores en redes pasaron de unos 50.000 a decenas de millones en tres semanas.\n\nTerminado el torneo, Colo Colo acordo ficharlo por 18 meses.",
+    "question": "Eres parte de la gerencia deportiva de Colo Colo y te toca defender o rechazar esta decision ante el directorio. Responde tres cosas:\n\n1. QUE TE DICEN de verdad esos cuatro partidos sobre el rendimiento futuro de Vozinha, y que no te dicen.\n\n2. QUE OTRO DATO pedirias antes de firmar, y por que ese y no otro.\n\n3. EL COSTO concreto de este fichaje si sale mal — no 'seria malo', sino que se pierde exactamente.",
+    "referenceAnswer": "Sobre la evidencia: cuatro partidos son una muestra muy chica, y ademas seleccionada de la peor manera posible para inferir. Un arquero se luce cuando su equipo es superado: Cabo Verde fue dominado en todos sus partidos, asi que Vozinha tuvo un volumen de remates en contra que no volvera a tener en un equipo que suele llevar la iniciativa. Las 18 atajadas miden tanto la debilidad del equipo como la calidad del arquero. A esto se suma el problema de seleccion clasico: lo estamos mirando porque le fue bien; los arqueros veteranos que tuvieron una mala tarde en el mismo torneo no llegaron a la conversacion. Y hay un dato negativo disponible que la narrativa tapa: a los 40 anos estaba sin contrato, y el mercado suele tener razones.\n\nQue pedir: rendimiento sostenido en la temporada completa en Chaves y en las anteriores — minutos jugados, partidos perdidos por lesion, y alguna medida ajustada por volumen de disparos (goles evitados sobre esperados) en vez de atajadas brutas. Eso separa 'buen arquero' de 'arquero de equipo que sufre'. Tambien un examen fisico y el historial de lesiones, porque a esa edad la variable que decide no es el techo sino la disponibilidad.\n\nCosto si sale mal: 18 meses de sueldo de titular, el puesto que no se le da a un arquero joven durante ese periodo y su desarrollo perdido, el costo de buscar reemplazo a mitad de contrato con el mercado sabiendo que estas apurado, y un costo reputacional asimetrico — el fichaje se anuncio como una historia, y una historia que se cae en publico cuesta mas que un fichaje anonimo que no funciona. En el otro sentido, el fichaje tambien compra atencion y camisetas hoy, y una respuesta buena reconoce que esa parte puede justificarlo aunque el rendimiento sea mediocre: lo que no se puede es fingir que se firmo solo por razones deportivas.",
     "idealAnswer": {
       "keyPoints": [
-        "Dos decisiones que nombran actor, accion y recurso — no aspiraciones",
-        "Identifica el problema de seleccion: solo observamos los casos que tuvieron exito",
-        "Reconoce que el resultado dependio de margenes muy estrechos (tres empates, ninguna victoria)"
+        "Nombra el tamano de muestra Y por que esta sesgada: el arquero de un equipo dominado acumula atajadas",
+        "Pide un dato que separe al jugador del contexto (temporada completa, medida ajustada por volumen), no 'mas informacion'",
+        "El costo esta cuantificado en algo concreto: sueldo, puesto de un juvenil, reemplazo apurado, reputacion"
       ],
       "expectedConcepts": [
+        "inferencia_desde_un_caso",
         "sesgo_de_supervivencia",
+        "trade_offs"
+      ],
+      "commonMistakes": [
+        "Opinar 'esta muy viejo' o 'es un crack' sin criterio de decision asociado",
+        "Pedir 'mas datos' o 'ver mas partidos' sin decir cuales ni que pregunta responden",
+        "Tratar el costo como 'seria un fracaso' en vez de nombrar que se pierde",
+        "Discutir de futbol chileno en vez de razonar sobre la decision"
+      ],
+      "excellentResponseIndicators": [
+        "Distingue la senal del jugador de la senal del equipo que tenia delante",
+        "Usa el dato de que estaba sin contrato a los 40 como evidencia, no como color",
+        "Reconoce que la atencion mediatica puede ser una razon legitima, y la separa de la deportiva"
+      ]
+    }
+  },
+  {
+    "id": "m26_r3_noruega_soft_power",
+    "order": 5,
+    "title": "Haaland vale mas que una embajada",
+    "category": "Inferencia desde un caso",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 180,
+    "conceptTags": [
+      "diseno_institucional",
+      "inferencia_desde_un_caso",
+      "trade_offs"
+    ],
+    "media": [
+      {
+        "kind": "image",
+        "src": "media/mundial/haaland.jpg",
+        "alt": "Erling Haaland, delantero noruego, con la camiseta a rayas rojas y negras del Manchester City",
+        "credit": "Jacek Stanislawek / Wikimedia Commons — CC BY-SA 4.0"
+      }
+    ],
+    "judgeFocus": "Prioridad absoluta: ¿la persona distingue ATENCION de INFLUENCIA? Que medio mundo mire a Noruega tres semanas no es poder blando; es materia prima. La respuesta de 100 nombra ese salto y propone un MECANISMO para convertir uno en otro (quien hace que, con que recurso, en que ventana de tiempo). Segundo: exige que se nombre la fragilidad de este activo — depende de una persona, de que siga ganando, y de una conducta que el Estado no controla ni puede corregir. Si solo dice 'hay que aprovecharlo' sin nombrar de que depende, maximo 60. Tercero: premia a quien reconoce que Noruega YA tiene instrumentos de poder blando consolidados (fondo soberano, Premio Nobel de la Paz, mediacion internacional, cooperacion) y discute si esto se suma a ellos o compite por la misma atencion. Penaliza la respuesta que trata el deporte como si fuera obviamente bueno para la imagen de un pais sin preguntarse para que publico ni para que fin. No exijas conocimiento futbolistico ni de Noruega.",
+    "context": "Noruega tiene unos 5,6 millones de habitantes y no pasaba de la fase de grupos de un Mundial desde el siglo pasado. En 2026 elimino a Brasil 2-1 en la ronda de 16 con dos goles de Erling Haaland, llego a su primer cuarto de final en la historia, y cayo 2-1 con Inglaterra en tiempo extra el 11 de julio. Haaland termino el torneo con siete goles.\n\nDurante esas tres semanas Noruega fue tema de conversacion global de una forma que su diplomacia nunca habia logrado — pese a que el pais ya cuenta con instrumentos de influencia bastante mas serios: el fondo soberano mas grande del mundo, la sede del Premio Nobel de la Paz, un historial largo de mediacion en conflictos y una cooperacion internacional muy por encima de su tamano.",
+    "question": "Eres asesor o asesora del Ministerio de Relaciones Exteriores de Noruega. El ministro te pide una nota corta. Responde tres cosas:\n\n1. QUE GANO Noruega realmente en esas tres semanas — se preciso sobre la diferencia entre que te miren y que te hagan caso.\n\n2. UNA decision concreta para convertir eso en algo que dure (quien hace que, con que recurso, en que plazo).\n\n3. POR QUE ESTE ACTIVO ES FRAGIL, y que haria que se evapore.",
+    "referenceAnswer": "Lo que se gano es atencion, que no es lo mismo que influencia. La atencion es un insumo barato de conseguir y caro de mantener: abre puertas, baja el costo de que te escuchen la primera vez, y hace que el nombre del pais este disponible en la cabeza de publicos que nunca leyeron una nota sobre el fondo soberano. Lo que no da es capacidad de que alguien cambie de posicion. Nadie firma un acuerdo comercial porque Haaland le hizo dos goles a Brasil. La confusion entre ambas cosas es el error central de casi toda la politica de imagen pais.\n\nUna decision concreta razonable ata la ventana de atencion a un instrumento que ya existe y que si genera influencia: por ejemplo, que el ministerio y el fondo soberano concentren en los doce meses siguientes su programa de becas o su agenda de inversion en los mercados donde el pico de busquedas fue mayor, con presupuesto asignado y una meta verificable (matriculas, acuerdos firmados, apertura de oficina comercial). Otra: un convenio con la federacion para que las giras de la seleccion se agenden junto con las misiones comerciales, que es barato y aprovecha una logistica que igual ocurre. Lo que importa es que haya actor, recurso, plazo e indicador — no una campana de marca pais.\n\nLa fragilidad tiene tres fuentes. Primera, depende de una persona: Haaland tiene una carrera finita y una lesion la acorta de golpe. Segunda, depende del resultado: Noruega gusto porque gano, y el mismo equipo eliminado en fase de grupos no habria producido nada. Tercera, y la mas incomoda para un ministerio, el Estado no controla la conducta del activo: un escandalo, una declaracion politica o un cambio de nacionalidad deportiva pueden invertir el signo de toda la operacion, y el gobierno no tiene ninguna herramienta legitima para evitarlo. Un activo de imagen que no se controla y que puede volverse negativo no debe recibir inversion institucional pesada: se aprovecha con instrumentos reversibles y de horizonte corto.",
+    "idealAnswer": {
+      "keyPoints": [
+        "Separa atencion de influencia y explica que hace cada una",
+        "La decision nombra actor, recurso, plazo e indicador — no una campana de imagen",
+        "La fragilidad se ata a que el activo es una persona cuya conducta el Estado no controla"
+      ],
+      "expectedConcepts": [
         "diseno_institucional",
+        "trade_offs",
         "inferencia_desde_un_caso"
       ],
       "commonMistakes": [
-        "Proponer 'invertir mas en deporte' o 'mejorar la formacion' como si fueran decisiones",
-        "Advertir que 'cada pais es distinto' sin explicar por que un caso exitoso no es evidencia",
-        "Responder sobre futbol en vez de sobre diseno institucional"
+        "Tratar la visibilidad como si fuera poder blando ya conseguido",
+        "Proponer 'una campana de marca pais' o 'aprovechar el momento' sin mecanismo",
+        "Ignorar que Noruega ya tiene instrumentos de influencia mas solidos que este",
+        "No preguntarse para que publico ni para que fin sirve la atencion"
       ],
       "excellentResponseIndicators": [
-        "Nombra el denominador ausente: los paises que hicieron lo mismo y fracasaron",
-        "Ata al menos una decision a un indicador o presupuesto verificable",
-        "Distingue lo que el caso demuestra de lo que solo sugiere"
+        "Compara el rendimiento de este activo contra los instrumentos que el pais ya tiene",
+        "Elige deliberadamente instrumentos reversibles por la fragilidad del activo",
+        "Reconoce que el resultado deportivo, no la estrategia, produjo la atencion"
       ]
     }
   },
@@ -235,7 +253,7 @@
         "kind": "image",
         "src": "media/mundial/final-minuto-60.svg",
         "alt": "Diagrama tactico del minuto 60: Espana ataca en 4-3-3 hacia la derecha, Argentina defiende en bloque 4-4-2. Se destacan el uno contra uno de Yamal por su banda, Cucurella subiendo con De Paul anclado siguiendolo, y Julian Alvarez aislado sin apoyos.",
-        "credit": "Esquema propio — Aula Maestra"
+        "credit": "Esquema propio — ML2"
       }
     ],
     "referenceAnswer": "No hay una unica respuesta correcta. Lo que se evalua es el par mecanismo + costo asumido.\n\nLo que Scaloni hizo realmente: al 70' saco a Romero y De Paul por Facundo Medina y Giuliano Simeone, y en el tiempo extra paso a un 5-3-1 con Senesi. Argentina siguio sin rematar al arco y perdio al 106'.\n\nFamilias de respuesta defendibles, todas con su costo:\n\n1) Doblar la marca sobre Yamal (el lateral mas un volante que baje). Gana: corta la fuente principal de peligro. Cuesta: libera al hombre que ese volante dejo de cubrir, y hunde aun mas al equipo — con 0 remates al arco, hundirse mas hace casi imposible generar.\n\n2) Soltar a De Paul de la marca sobre Cucurella y aceptar el 1v1 atras. Gana: recupera un conductor para salir jugando, que es exactamente lo que falta. Cuesta: Cucurella queda libre para subir, y el problema se traslada a la otra banda.\n\n3) Juego directo sobre Alvarez con un segundo delantero cerca para la segunda pelota. Gana: evita la salida corta, que Espana esta ganando; ataca la unica ventaja disponible. Cuesta: cede definitivamente la posesion y depende de duelos individuales.\n\n4) Presion alta con disparadores definidos (por ejemplo, saltar cuando la pelota va al lateral). Gana: impide que Espana se instale. Cuesta: es lo mas exigente fisicamente al minuto 60, y si se falla el salto, el bloque queda partido con Yamal de cara.\n\nUna respuesta de 100 elige una familia, la aterriza en jugadores y posiciones concretas, y dice en voz alta que resigna. Una respuesta de 40 dice 'hay que ir a buscarlo' sin decir con quien ni a costa de que.",

@@ -171,7 +171,15 @@
         ],
         "correctOptionIndex": 1,
         "timeLimitSeconds": 20,
-        "explanation": "Tres empates en el grupo, segundos detras de Espana, y una eliminacion en el tiempo extra ante el campeon defensor. 18 atajadas de Vozinha en el torneo."
+        "explanation": "Tres empates en el grupo, segundos detras de Espana, y una eliminacion en el tiempo extra ante el campeon defensor. 18 atajadas de Vozinha en el torneo.",
+        "media": [
+          {
+            "kind": "image",
+            "src": "media/mundial/vozinha.jpg",
+            "alt": "Vozinha, arquero de Cabo Verde, con la camiseta amarilla numero 1 y el escudo de la federacion caboverdiana",
+            "credit": "Petsbikes / Wikimedia Commons — CC BY 4.0"
+          }
+        ]
       }
     ]
   },
@@ -193,7 +201,7 @@
         "kind": "image",
         "src": "media/mundial/final-minuto-60.svg",
         "alt": "Diagrama tactico del minuto 60 de la final: Espana ataca en 4-3-3, Argentina defiende en bloque 4-4-2",
-        "credit": "Esquema propio — Aula Maestra"
+        "credit": "Esquema propio — ML2"
       }
     ],
     "mcQuestions": [
