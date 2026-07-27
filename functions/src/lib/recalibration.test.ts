@@ -48,6 +48,37 @@ describe('recalibrateScores', () => {
     expect(mean(outs)).toBeCloseTo(mean(provs), 6);
     expect(sd(outs)).toBeCloseTo(sd(provs), 6);
   });
+  it('never returns a score outside 0-100, even when the provisionals hug the floor', () => {
+    // Observed live in game UVMJW3 round 5: provisionals [8, 0, 0] produced a
+    // final score of -2. Matching the mean and sd of a near-zero distribution
+    // pushes the bottom player below the scale.
+    const floor = [P('A', 8), P('B', 0), P('C', 0)];
+    const duels: DuelResult[] = [{ i: 0, j: 1, winner: 0 }, { i: 1, j: 2, winner: 0 }];
+    const r = recalibrateScores(floor, duels, 0.35);
+    for (const id of ['A', 'B', 'C']) {
+      expect(r[id]).toBeGreaterThanOrEqual(0);
+      expect(r[id]).toBeLessThanOrEqual(100);
+    }
+  });
+
+  it('never returns a score outside 0-100 when the provisionals hug the ceiling', () => {
+    const ceiling = [P('A', 100), P('B', 100), P('C', 96)];
+    const duels: DuelResult[] = [{ i: 2, j: 0, winner: 0 }, { i: 2, j: 1, winner: 0 }];
+    const r = recalibrateScores(ceiling, duels, 0.35);
+    for (const id of ['A', 'B', 'C']) {
+      expect(r[id]).toBeGreaterThanOrEqual(0);
+      expect(r[id]).toBeLessThanOrEqual(100);
+    }
+  });
+
+  it('still preserves the ordering after clamping', () => {
+    const floor = [P('A', 6), P('B', 0), P('C', 0)];
+    const duels: DuelResult[] = [{ i: 0, j: 1, winner: 0 }, { i: 1, j: 2, winner: 0 }];
+    const r = recalibrateScores(floor, duels, 2.0);
+    expect(r['A']).toBeGreaterThanOrEqual(r['B']);
+    expect(r['B']).toBeGreaterThanOrEqual(r['C']);
+  });
+
   it('splits ties half/half', () => {
     const even = [P('A',70), P('B',70)];
     const duels: DuelResult[] = [{i:0,j:1,winner:-1}];

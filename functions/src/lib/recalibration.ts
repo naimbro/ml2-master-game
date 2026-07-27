@@ -40,6 +40,13 @@ export function swissPairs(order: number[], B: number): [number, number][] {
  * votes over ALL pairs (supplies long-range order the band omits). Fit, then map
  * the log-strengths back onto the provisional score scale (same mean & sd) so only
  * the ordering changes. Returns recalibrated score per player id.
+ *
+ * The result is clamped to [0, 100]. Matching the moments of a distribution that
+ * already hugs an end of the scale pushes players past it — game UVMJW3 round 5 had
+ * provisionals [8, 0, 0] and shipped a final score of -2 to a student. When the clamp
+ * bites, the mean/sd match is given up: a score outside the scale is simply invalid,
+ * and the ordering (the only thing recalibration is meant to change) survives because
+ * clamping is monotonic.
  */
 export function recalibrateScores(
   players: RecalPlayer[],
@@ -69,7 +76,7 @@ export function recalibrateScores(
   const provs = players.map((p) => p.prov);
   const rescaled = linearMatchMoments(thetas, provs);
   const out: Record<string, number> = {};
-  ids.forEach((id, i) => (out[id] = rescaled[i]));
+  ids.forEach((id, i) => (out[id] = Math.min(100, Math.max(0, rescaled[i]))));
   return out;
 }
 

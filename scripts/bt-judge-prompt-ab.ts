@@ -41,6 +41,7 @@ const ANCHORS = [0, 20, 40, 60, 80, 100];
 const argv = process.argv.slice(2);
 const flag = (name: string, def: number) => { const i = argv.indexOf(`--${name}`); return i >= 0 ? Number(argv[i + 1]) : def; };
 const RUN = argv.includes('--run');
+const STRATIFY = argv.includes('--stratify');
 const N = flag('n', 40);
 const VOTES = Math.max(1, flag('votes', 1));
 const TEMP = flag('temp', 0);
@@ -73,7 +74,7 @@ function dedupeLatest(subs: Sub[]): Sub[] {
   return [...best.values()];
 }
 interface Dim { id: string; name: string; description: string; levels: Record<string, string>; }
-interface Item { code: string; round: number; playerId: string; playerName: string; response: string; context: string; dims: Dim[]; }
+interface Item { code: string; round: number; playerId: string; playerName: string; response: string; context: string; dims: Dim[]; stored: number; }
 
 function rubricDims(rubric: any): Dim[] {
   return ((rubric?.dimensions || []) as any[]).map((d) => ({
@@ -96,8 +97,9 @@ async function loadGame(code: string): Promise<Item[]> {
       sc.question ? `PREGUNTA: ${typeof sc.question === 'string' ? sc.question : JSON.stringify(sc.question)}` : ''].filter(Boolean).join('\n\n');
     for (const s of subs) {
       if (s.round !== round || !s.evaluation || typeof s.response !== 'string' || !s.response.trim()) continue;
-      if (!Number.isFinite(coerceScore(s.evaluation.finalScore))) continue;
-      items.push({ code, round, playerId: s.playerId, playerName: s.playerName, response: s.response.trim(), context, dims });
+      const stored = coerceScore(s.evaluation.finalScore);
+      if (!Number.isFinite(stored)) continue;
+      items.push({ code, round, playerId: s.playerId, playerName: s.playerName, response: s.response.trim(), context, dims, stored });
     }
   }
   return items;
@@ -157,8 +159,38 @@ async function scoreOnce(it: Item, treatment: boolean, vote: number, cache: Map<
 const meanScore = (s: Record<string, number>) => mean(Object.values(s));
 
 // ---------- sampling (deterministic: hash-ordered, no Math.random) ----------
+const hashOrder = (items: Item[]) =>
+  [...items].sort((a, b) => djb2(`${a.code}|${a.round}|${a.playerId}`) - djb2(`${b.code}|${b.round}|${b.playerId}`));
+
 function sample(items: Item[], n: number): Item[] {
-  return [...items].sort((a, b) => djb2(`${a.code}|${a.round}|${a.playerId}`) - djb2(`${b.code}|${b.round}|${b.playerId}`)).slice(0, n);
+  return hashOrder(items).slice(0, n);
+}
+
+/**
+ * Stratified by the STORED finalScore, in equal quotas per band.
+ *
+ * The first A/B run drew a plain hash sample and got zero answers >= 80, which left
+ * the anti-expansion hypothesis untestable: that clause can only show up on answers
+ * that were being penalised for things the rubric never asked. Quotas fix that;
+ * bands that are short give their leftover back to the others.
+ */
+const BANDS: [number, number, string][] = [
+  [0, 40, '0-39'], [40, 60, '40-59'], [60, 80, '60-79'], [80, 101, '80-100'],
+];
+
+function stratifiedSample(items: Item[], n: number): Item[] {
+  const buckets = BANDS.map(([lo, hi]) => hashOrder(items.filter((i) => i.stored >= lo && i.stored < hi)));
+  const picked: Item[] = [];
+  let quota = Math.ceil(n / BANDS.length);
+  // Several passes: each pass takes up to `quota` more per band, so bands that ran
+  // dry hand their share to the ones that still have material.
+  while (picked.length < n && buckets.some((b) => b.length)) {
+    for (const b of buckets) {
+      for (let k = 0; k < quota && b.length && picked.length < n; k++) picked.push(b.shift()!);
+    }
+    quota = 1;
+  }
+  return picked;
 }
 
 // ---------- main ----------
@@ -166,11 +198,16 @@ async function main() {
   mkdirSync(CACHE_DIR, { recursive: true });
   const all: Item[] = [];
   for (const code of games) all.push(...await loadGame(code));
-  const items = sample(all, N);
+  const items = STRATIFY ? stratifiedSample(all, N) : sample(all, N);
   const plannedCalls = items.length * 2 * VOTES; // baseline + treatment, × votes
 
   console.log(`\n===== JUDGE PROMPT A/B (strict-anchor + anti-expansion clauses) =====`);
   console.log(`games: ${games.join(', ')}   ranked submissions found: ${all.length}   sampled: ${items.length}`);
+  if (STRATIFY) {
+    const counts = BANDS.map(([lo, hi, label]) =>
+      `${label}: ${items.filter((i) => i.stored >= lo && i.stored < hi).length}/${all.filter((i) => i.stored >= lo && i.stored < hi).length}`);
+    console.log(`stratified by stored score — ${counts.join('   ')}`);
+  }
   console.log(`votes/cond: ${VOTES}   temperature: ${TEMP}   model: ${MODEL}   cost cap: $${CAP}`);
   console.log(`planned NEW LLM calls (before cache): ${plannedCalls}   rough est: $${(plannedCalls * 0.004).toFixed(2)} (~$0.004/call)`);
 
