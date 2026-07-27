@@ -7,6 +7,7 @@ import {
   MC_GATE_WITH_MEDIA_SECONDS,
   MC_FEEDBACK_SECONDS,
   MC_SLACK_SECONDS,
+  shouldCutQuestion,
 } from './mcTiming';
 
 const T0 = 1_700_000_000_000; // fixed epoch — no Date.now() anywhere in these tests
@@ -20,6 +21,39 @@ const line = (seconds: number, questions = oneQuestion, gateSeconds = 5) =>
 /** Same, with the "everybody already answered" cutoff written at `cutSeconds`. */
 const cutLine = (seconds: number, cutSeconds: number, questions = oneQuestion, gateSeconds = 5) =>
   mcTimeline({ roundStartMs: T0, nowMs: at(seconds), gateSeconds, questions, allAnsweredAtMs: at(cutSeconds) });
+
+describe('shouldCutQuestion', () => {
+  const base = { phase: 'question' as const, answeredCount: 2, playerCount: 2, alreadyCut: false };
+
+  it('corta cuando ya respondieron todos', () => {
+    expect(shouldCutQuestion(base)).toBe(true);
+  });
+
+  it('no corta si falta alguien', () => {
+    expect(shouldCutQuestion({ ...base, answeredCount: 1 })).toBe(false);
+  });
+
+  it('no corta dos veces', () => {
+    expect(shouldCutQuestion({ ...base, alreadyCut: true })).toBe(false);
+  });
+
+  it('no corta una pregunta que ya cerro', () => {
+    // Esta es la regresion que dejo el corte muerto: la senal que se contaba
+    // (las submissions) solo existia en 'done', o sea nunca durante 'question'.
+    for (const phase of ['gate', 'feedback', 'done'] as const) {
+      expect(shouldCutQuestion({ ...base, phase })).toBe(false);
+    }
+  });
+
+  it('no corta con el lobby vacio', () => {
+    expect(shouldCutQuestion({ ...base, answeredCount: 0, playerCount: 0 })).toBe(false);
+  });
+
+  it('tolera contar de mas', () => {
+    // Un jugador que se va despues de responder deja answeredCount > playerCount.
+    expect(shouldCutQuestion({ ...base, answeredCount: 3, playerCount: 2 })).toBe(true);
+  });
+});
 
 describe('mcTimeline with an all-answered cutoff', () => {
   // Gate 0-5s, question 5-25s, feedback 25-30s. Everyone answers at 12s.

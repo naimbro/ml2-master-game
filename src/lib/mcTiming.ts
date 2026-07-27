@@ -148,6 +148,37 @@ export function mcTimeline({
 }
 
 /**
+ * Should the host cut the running question short?
+ *
+ * Separated out and made pure because the first version of this lived inline in a
+ * React effect and counted the WRONG THING: it used the submissions subcollection,
+ * which is written once per block when the timeline reaches 'done'. So "everyone
+ * has submitted" could only ever be true once the question had already closed, and
+ * the cut never fired. `answeredCount` must come from a signal written when a
+ * player actually answers — see the `answers` subcollection.
+ */
+export function shouldCutQuestion({
+  phase,
+  answeredCount,
+  playerCount,
+  alreadyCut,
+}: {
+  phase: MCTimeline['phase'];
+  /** Players who have answered every question of this block. */
+  answeredCount: number;
+  playerCount: number;
+  /** True once mcAllAnsweredAt is already stamped for this round. */
+  alreadyCut: boolean;
+}): boolean {
+  if (alreadyCut) return false;
+  // Solo tiene sentido cortar algo que todavia esta corriendo.
+  if (phase !== 'question') return false;
+  // Sin jugadores no hay nada que esperar, y no se corta por un lobby vacio.
+  if (playerCount <= 0) return false;
+  return answeredCount >= playerCount;
+}
+
+/**
  * Round duration for an MC block:
  *   gate + sum(question limits) + feedback per question + slack
  *

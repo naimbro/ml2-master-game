@@ -36,7 +36,7 @@ export default function Round() {
   const { gameCode } = useParams<{ gameCode: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { game, loading, error, submitAnswer, submitMCBlock, submissions, isHost } = useGame(gameCode);
+  const { game, loading, error, submitAnswer, submitMCBlock, submissions, isHost, markAnswered } = useGame(gameCode);
 
   const [response, setResponse] = useState('');
   const [endingRound, setEndingRound] = useState(false);
@@ -247,7 +247,14 @@ export default function Round() {
     setMcAnswers(prev => (prev[qi] !== undefined ? prev : { ...prev, [qi]: mcResponse }));
     // "Locked in" — deliberately NOT a right/wrong sound. That comes at the reveal.
     playSubmitSuccess();
-  }, [mcQuestions, timeline, mcAnswers]);
+
+    // Avisa que este jugador ya contesto ESTA pregunta, para que el host pueda
+    // cortarla cuando ya contestaron todos. Va por separado de la submission a
+    // proposito: la submission se escribe recien en 'done', o sea siempre despues
+    // del instante en que habria que cortar. Solo dice quien, que ronda y que
+    // pregunta — la respuesta y el puntaje siguen viajando en /submissions.
+    markAnswered(qi);
+  }, [mcQuestions, timeline, mcAnswers, markAnswered]);
 
   // MC: a question the timeline has already closed and we never answered is
   // recorded as a no-answer, so the block score always divides by every

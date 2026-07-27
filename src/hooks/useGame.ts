@@ -1,10 +1,10 @@
 import { useEffect, useState, useCallback } from 'react';
-import { doc, onSnapshot, updateDoc, collection, query, where, addDoc, Timestamp, serverTimestamp, deleteField } from 'firebase/firestore';
+import { doc, onSnapshot, updateDoc, setDoc, collection, query, where, addDoc, Timestamp, serverTimestamp, deleteField } from 'firebase/firestore';
 import { httpsCallable } from 'firebase/functions';
 import { db, functions } from '../lib/firebase';
 import type { Game, Player, Submission, RoundResults, GameStatus, MCResponse } from '../types/game';
 import { useAuth } from './useAuth';
-import { mcTimeline, mcGateSeconds } from '../lib/mcTiming';
+import { mcTimeline, mcGateSeconds, shouldCutQuestion } from '../lib/mcTiming';
 
 interface UseGameReturn {
   game: Game | null;
@@ -21,6 +21,8 @@ interface UseGameReturn {
   nextRound: () => Promise<void>;
   endGame: () => Promise<void>;
   recalibrateRound: (round: number) => Promise<void>;
+  /** MC: avisa que este jugador ya contesto una pregunta, para que el host corte. */
+  markAnswered: (questionIndex: number) => Promise<void>;
 
   // Round data
   submissions: Submission[];
@@ -33,6 +35,8 @@ export function useGame(gameCode: string | undefined): UseGameReturn {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [submissions, setSubmissions] = useState<Submission[]>([]);
+  /** Quienes contestaron cada pregunta de la ronda actual, por indice de pregunta. */
+  const [answeredByQuestion, setAnsweredByQuestion] = useState<Record<number, string[]>>({});
   const [roundResults, setRoundResults] = useState<RoundResults | null>(null);
 
   // Subscribe to game document
@@ -82,6 +86,55 @@ export function useGame(gameCode: string | undefined): UseGameReturn {
 
     return () => unsubscribe();
   }, [gameCode, game?.currentRound]);
+
+  // "Ya conteste la pregunta N de esta ronda", un doc por jugador y pregunta.
+  // Existe SOLO para que el host sepa cuando cortar: las submissions no sirven,
+  // porque se escriben recien cuando la timeline llega a 'done' — o sea siempre
+  // despues del instante en que habria que cortar.
+  //
+  // Se filtra por ronda en la query y por pregunta en memoria: dos igualdades en
+  // la query exigirian un indice compuesto, y el conjunto por ronda es de a lo
+  // mas (jugadores x preguntas del bloque) documentos.
+  useEffect(() => {
+    if (!gameCode || !game) return;
+
+    const q = query(
+      collection(db, 'games', gameCode, 'answers'),
+      where('round', '==', game.currentRound),
+    );
+    const unsubscribe = onSnapshot(q, (snap) => {
+      // Se guardan los ids, no un contador: el host tiene que descartar a quien
+      // no este en `players` (un profesor que hostea sin jugar podria disparar el
+      // corte antes de que respondieran los alumnos).
+      const perQuestion: Record<number, string[]> = {};
+      snap.docs.forEach((d) => {
+        const { questionIndex, playerId } = d.data() as { questionIndex?: unknown; playerId?: unknown };
+        const qi = Number(questionIndex);
+        if (!Number.isFinite(qi) || typeof playerId !== 'string') return;
+        (perQuestion[qi] ||= []).push(playerId);
+      });
+      setAnsweredByQuestion(perQuestion);
+    });
+    return () => unsubscribe();
+  }, [gameCode, game?.currentRound]);
+
+  /** Marca que este jugador ya contesto una pregunta concreta. Idempotente. */
+  const markAnswered = useCallback(async (questionIndex: number) => {
+    if (!gameCode || !user || !game) return;
+    const id = `${game.currentRound}_${questionIndex}_${user.uid}`;
+    try {
+      await setDoc(doc(db, 'games', gameCode, 'answers', id), {
+        playerId: user.uid,
+        round: game.currentRound,
+        questionIndex,
+        at: serverTimestamp(),
+      });
+    } catch (e) {
+      // Perder este aviso solo significa que la ronda espera al reloj, que es el
+      // respaldo de siempre. No puede romperle la ronda al jugador.
+      console.error('markAnswered:', e);
+    }
+  }, [gameCode, user, game?.currentRound]);
 
   // Subscribe to round results
   useEffect(() => {
@@ -281,10 +334,11 @@ export function useGame(gameCode: string | undefined): UseGameReturn {
   // Cut an MC question short once every player has answered (host only).
   //
   // Nobody should watch a clock run out on a question that has nothing left to
-  // decide. When the last player submits, the host stamps `mcAllAnsweredAt` on the
-  // game doc; mcTimeline() truncates the running question at that instant on EVERY
-  // screen at once. It is written, not computed locally, precisely so the projector
-  // and the phones cut together.
+  // decide. When the last player ANSWERS (subcoleccion `answers`, escrita en el
+  // click), the host stamps `mcAllAnsweredAt` on the game doc; mcTimeline()
+  // truncates the running question at that instant on EVERY screen at once. It is
+  // written, not computed locally, precisely so the projector and the phones cut
+  // together.
   //
   // It moves the reveal earlier, it never skips it: the correct answer is shared,
   // so the full feedback window still plays after the cut.
@@ -292,27 +346,34 @@ export function useGame(gameCode: string | undefined): UseGameReturn {
   // Only MC. Open rounds keep their full clock: there, thinking time is the point.
   useEffect(() => {
     if (!isHost || !gameCode || !game || game.status !== 'active' || !game.roundStartTime) return;
-    if (game.mcAllAnsweredAt) return; // ya se estampo esta ronda
 
     const scenario = game.scenarios?.[game.currentRound - 1];
     if (scenario?.type !== 'multiple_choice' || !scenario.mcQuestions?.length) return;
 
-    const playerCount = Object.keys(game.players || {}).length;
-    if (playerCount === 0 || submissions.length < playerCount) return;
-
-    const { phase } = mcTimeline({
+    const { phase, questionIndex } = mcTimeline({
       roundStartMs: game.roundStartTime.toMillis(),
       nowMs: Date.now(),
       gateSeconds: mcGateSeconds(scenario.media),
       questions: scenario.mcQuestions,
+      allAnsweredAtMs: game.mcAllAnsweredAt?.toMillis() ?? null,
     });
-    // Solo tiene sentido cortar algo que todavia esta corriendo.
-    if (phase !== 'question') return;
+
+    // El conteo viene de la subcoleccion `answers`, NO de submissions: una
+    // submission se escribe recien en 'done', o sea siempre despues del instante
+    // en que habria que cortar. Contar submissions dejaba el corte muerto.
+    const players = game.players || {};
+    const answered = (answeredByQuestion[questionIndex] || []).filter((id) => id in players);
+    if (!shouldCutQuestion({
+      phase,
+      answeredCount: new Set(answered).size,
+      playerCount: Object.keys(players).length,
+      alreadyCut: Boolean(game.mcAllAnsweredAt),
+    })) return;
 
     updateDoc(doc(db, 'games', gameCode), { mcAllAnsweredAt: Timestamp.now() })
       .catch((e) => console.error('mcAllAnsweredAt:', e));
   }, [isHost, gameCode, game?.status, game?.currentRound, game?.roundStartTime,
-      game?.mcAllAnsweredAt, game?.scenarios, game?.players, submissions.length]);
+      game?.mcAllAnsweredAt, game?.scenarios, game?.players, answeredByQuestion]);
 
   // Close the round once the shared timeline says the block is done (host only).
   // Kept separate from the cut above: this one also fires for a player who never
@@ -358,5 +419,6 @@ export function useGame(gameCode: string | undefined): UseGameReturn {
     recalibrateRound,
     submissions,
     roundResults,
+    markAnswered,
   };
 }
