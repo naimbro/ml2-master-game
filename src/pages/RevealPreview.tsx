@@ -48,9 +48,8 @@ const FINAL = [
 export default function RevealPreview() {
   const [runKey, setRunKey] = useState(0);
   const [done, setDone] = useState(false);
-
   return (
-    <div style={{ minHeight: '100vh', background: '#07080d' }}>
+    <div style={{ minHeight: '100vh', background: '#FAFAF8' }}>
       <RecalibrationReveal
         key={runKey}
         duels={DUELS}
@@ -65,8 +64,9 @@ export default function RevealPreview() {
           style={{
             position: 'fixed', zIndex: 60, bottom: 24, left: '50%', transform: 'translateX(-50%)',
             fontFamily: 'ui-monospace, Menlo, monospace', fontSize: 13, letterSpacing: '.2em',
-            textTransform: 'uppercase', color: '#eef1f6', background: 'transparent',
-            border: '1px solid #ffc24b', padding: '12px 24px', cursor: 'pointer', borderRadius: 4,
+            textTransform: 'uppercase', color: '#101114', background: '#F5A524',
+            border: '2.5px solid #101114', boxShadow: '4px 4px 0 #101114',
+            padding: '12px 24px', cursor: 'pointer', borderRadius: 8, fontWeight: 700,
           }}
         >
           ▸ Repetir vista previa
