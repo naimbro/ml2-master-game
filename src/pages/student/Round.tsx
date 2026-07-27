@@ -190,9 +190,13 @@ export default function Round() {
             nowMs,
             gateSeconds: mcGate,
             questions: mcQuestions,
+            // Cuando ya respondieron todos, el host estampa el instante y la
+            // pregunta se corta aqui tambien: si no, el alumno seguiria viendo
+            // correr un reloj que el profesor ya cerro.
+            allAnsweredAtMs: game?.mcAllAnsweredAt?.toMillis() ?? null,
           })
         : null,
-    [isMC, mcQuestions, game?.roundStartTime, nowMs, mcGate],
+    [isMC, mcQuestions, game?.roundStartTime, game?.mcAllAnsweredAt, nowMs, mcGate],
   );
 
   const mcCurrentQ = timeline?.questionIndex ?? 0;

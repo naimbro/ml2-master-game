@@ -289,11 +289,17 @@ export default function Results() {
       <div className="min-h-screen bg-gradient-main flex items-center justify-center">
         <div className="text-center">
           <div className="w-20 h-20 border-4 border-kahoot-green border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          {/* Las rondas Kahoot se puntuan en el cliente (mcScoring.ts) y no pasan
+              por los jueces: anunciarlos aqui seria mentir sobre lo que ocurre. */}
           <p className="text-ink-soft text-lg font-bold">
-            {isProcessing ? 'Evaluando respuestas con IA...' : 'Cargando resultados...'}
+            {!isProcessing ? 'Cargando resultados...'
+              : isMCRound ? 'Contando los puntos...'
+              : 'Evaluando respuestas con IA...'}
           </p>
           <p className="text-muted text-sm mt-2 font-medium">
-            3 jueces AI estan analizando cada respuesta
+            {isMCRound
+              ? 'Armando la tabla de posiciones'
+              : '3 jueces AI estan analizando cada respuesta'}
           </p>
         </div>
       </div>

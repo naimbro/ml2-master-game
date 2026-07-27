@@ -33,6 +33,12 @@ export interface Game {
   roundStartTime?: Timestamp;
   roundEndTime?: Timestamp;
   roundDurationSeconds: number;
+  /**
+   * MC only: instant at which every player had answered the running question.
+   * Written once per round by the host; truncates the question on every screen at
+   * the same moment (see mcTimeline). Cleared when the round advances.
+   */
+  mcAllAnsweredAt?: Timestamp;
 
   // Config from session
   sessionConfig: SessionConfig;

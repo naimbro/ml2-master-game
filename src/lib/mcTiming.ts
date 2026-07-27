@@ -80,11 +80,20 @@ export function mcTimeline({
   nowMs,
   gateSeconds,
   questions,
+  allAnsweredAtMs,
 }: {
   roundStartMs: number;
   nowMs: number;
   gateSeconds: number;
   questions: MCTimingQuestion[];
+  /**
+   * Instant at which every player had answered, written once to the game doc by
+   * the host. Truncates the question that was running — nobody waits out a clock
+   * that has nothing left to decide. It moves the reveal EARLIER, never skips it:
+   * the correct answer is shared, so everyone still gets the full feedback window.
+   * Shared, like everything else here, so all screens cut at the same instant.
+   */
+  allAnsweredAtMs?: number | null;
 }): MCTimeline {
   const secondsUntil = (ms: number) => Math.max(0, Math.ceil((ms - nowMs) / 1000));
 
@@ -102,7 +111,13 @@ export function mcTimeline({
   let cursor = gateEnd;
   for (let i = 0; i < questions.length; i++) {
     const questionStartMs = cursor;
-    const questionEnd = questionStartMs + limitOf(questions[i]) * 1000;
+    const naturalEnd = questionStartMs + limitOf(questions[i]) * 1000;
+    // Un corte solo cuenta si cae DENTRO de esta pregunta: uno anterior es de una
+    // pregunta ya cerrada, y uno posterior no adelanta nada.
+    const cut = Number(allAnsweredAtMs);
+    const questionEnd = Number.isFinite(cut) && cut > questionStartMs && cut < naturalEnd
+      ? cut
+      : naturalEnd;
     if (nowMs < questionEnd) {
       return {
         phase: 'question',

@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { doc, onSnapshot, updateDoc, collection, query, where, addDoc, Timestamp, serverTimestamp } from 'firebase/firestore';
+import { doc, onSnapshot, updateDoc, collection, query, where, addDoc, Timestamp, serverTimestamp, deleteField } from 'firebase/firestore';
 import { httpsCallable } from 'firebase/functions';
 import { db, functions } from '../lib/firebase';
 import type { Game, Player, Submission, RoundResults, GameStatus, MCResponse } from '../types/game';
@@ -141,6 +141,7 @@ export function useGame(gameCode: string | undefined): UseGameReturn {
       currentRound: 1,
       roundStartTime: now,
       roundEndTime: endTime,
+      mcAllAnsweredAt: deleteField(),
       updatedAt: serverTimestamp(),
     });
   }, [gameCode, isHost, game?.roundDurationSeconds, game?.scenarios]);
@@ -224,6 +225,8 @@ export function useGame(gameCode: string | undefined): UseGameReturn {
         currentRound: nextRoundNum,
         roundStartTime: now,
         roundEndTime: endTime,
+        // El corte es por ronda: sin esto la ronda nueva nace ya truncada.
+        mcAllAnsweredAt: deleteField(),
         updatedAt: serverTimestamp(),
       });
 
@@ -275,18 +278,45 @@ export function useGame(gameCode: string | undefined): UseGameReturn {
     return () => clearInterval(interval);
   }, [isHost, game?.status, game?.roundEndTime, endRound]);
 
-  // Close an MC round as soon as it is genuinely over (host only).
+  // Cut an MC question short once every player has answered (host only).
   //
-  // The round timer carries slack so a slow phone is never guillotined, but on a
-  // one-question-per-round Kahoot that slack is dead screen time on every single
-  // question. Two conditions, both required:
-  //   - the shared timeline says the block is done, so the correct answer has
-  //     already been revealed to everyone (never cut the reveal short); and
-  //   - every player has submitted — each client submits at 'done' even with no
-  //     answer, so this is really "every player still connected".
-  // A disconnected player just leaves the timer above as the backstop.
+  // Nobody should watch a clock run out on a question that has nothing left to
+  // decide. When the last player submits, the host stamps `mcAllAnsweredAt` on the
+  // game doc; mcTimeline() truncates the running question at that instant on EVERY
+  // screen at once. It is written, not computed locally, precisely so the projector
+  // and the phones cut together.
+  //
+  // It moves the reveal earlier, it never skips it: the correct answer is shared,
+  // so the full feedback window still plays after the cut.
   //
   // Only MC. Open rounds keep their full clock: there, thinking time is the point.
+  useEffect(() => {
+    if (!isHost || !gameCode || !game || game.status !== 'active' || !game.roundStartTime) return;
+    if (game.mcAllAnsweredAt) return; // ya se estampo esta ronda
+
+    const scenario = game.scenarios?.[game.currentRound - 1];
+    if (scenario?.type !== 'multiple_choice' || !scenario.mcQuestions?.length) return;
+
+    const playerCount = Object.keys(game.players || {}).length;
+    if (playerCount === 0 || submissions.length < playerCount) return;
+
+    const { phase } = mcTimeline({
+      roundStartMs: game.roundStartTime.toMillis(),
+      nowMs: Date.now(),
+      gateSeconds: mcGateSeconds(scenario.media),
+      questions: scenario.mcQuestions,
+    });
+    // Solo tiene sentido cortar algo que todavia esta corriendo.
+    if (phase !== 'question') return;
+
+    updateDoc(doc(db, 'games', gameCode), { mcAllAnsweredAt: Timestamp.now() })
+      .catch((e) => console.error('mcAllAnsweredAt:', e));
+  }, [isHost, gameCode, game?.status, game?.currentRound, game?.roundStartTime,
+      game?.mcAllAnsweredAt, game?.scenarios, game?.players, submissions.length]);
+
+  // Close the round once the shared timeline says the block is done (host only).
+  // Kept separate from the cut above: this one also fires for a player who never
+  // answers at all, where the round timer is the only backstop.
   useEffect(() => {
     if (!isHost || !game || game.status !== 'active' || !game.roundStartTime) return;
 
@@ -302,6 +332,7 @@ export function useGame(gameCode: string | undefined): UseGameReturn {
         nowMs: Date.now(),
         gateSeconds: mcGateSeconds(scenario.media),
         questions: scenario.mcQuestions!,
+        allAnsweredAtMs: game.mcAllAnsweredAt?.toMillis() ?? null,
       });
       if (phase === 'done') endRound();
     };
@@ -309,7 +340,8 @@ export function useGame(gameCode: string | undefined): UseGameReturn {
     check();
     const interval = setInterval(check, 500);
     return () => clearInterval(interval);
-  }, [isHost, game?.status, game?.currentRound, game?.roundStartTime, game?.scenarios, game?.players, submissions.length, endRound]);
+  }, [isHost, game?.status, game?.currentRound, game?.roundStartTime, game?.mcAllAnsweredAt,
+      game?.scenarios, game?.players, submissions.length, endRound]);
 
   return {
     game,

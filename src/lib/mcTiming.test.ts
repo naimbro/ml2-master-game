@@ -17,6 +17,46 @@ const twoQuestions = [{ timeLimitSeconds: 20 }, { timeLimitSeconds: 30 }];
 const line = (seconds: number, questions = oneQuestion, gateSeconds = 5) =>
   mcTimeline({ roundStartMs: T0, nowMs: at(seconds), gateSeconds, questions });
 
+/** Same, with the "everybody already answered" cutoff written at `cutSeconds`. */
+const cutLine = (seconds: number, cutSeconds: number, questions = oneQuestion, gateSeconds = 5) =>
+  mcTimeline({ roundStartMs: T0, nowMs: at(seconds), gateSeconds, questions, allAnsweredAtMs: at(cutSeconds) });
+
+describe('mcTimeline with an all-answered cutoff', () => {
+  // Gate 0-5s, question 5-25s, feedback 25-30s. Everyone answers at 12s.
+  it('closes the question the moment the cutoff lands', () => {
+    expect(line(14).phase).toBe('question');       // sin corte seguiria preguntando
+    expect(cutLine(14, 12).phase).toBe('feedback');
+  });
+
+  it('still plays the full shared reveal after the cutoff', () => {
+    // El reveal es compartido y deliberado: cortar el reloj no puede saltarselo.
+    expect(cutLine(13, 12).phase).toBe('feedback');
+    expect(cutLine(16.5, 12).phase).toBe('feedback');
+    expect(cutLine(17.5, 12).phase).toBe('done');
+  });
+
+  it('shortens the visible countdown instead of letting it run out', () => {
+    // El corte se escribe cuando responde el ultimo, asi que en la practica nunca
+    // esta en el futuro; pero si lo estuviera, el reloj tiene que apuntar a el.
+    expect(cutLine(8, 12).phase).toBe('question');
+    expect(cutLine(8, 12).secondsLeft).toBe(4);
+    expect(line(8).secondsLeft).toBe(17);
+  });
+
+  it('ignores a cutoff that lands after the question would have ended anyway', () => {
+    expect(cutLine(26, 40)).toEqual(line(26));
+  });
+
+  it('ignores a cutoff from before the question started', () => {
+    expect(cutLine(14, 2)).toEqual(line(14));
+  });
+
+  it('is a no-op when no cutoff is given', () => {
+    expect(mcTimeline({ roundStartMs: T0, nowMs: at(14), gateSeconds: 5, questions: oneQuestion, allAnsweredAtMs: null }))
+      .toEqual(line(14));
+  });
+});
+
 describe('mcGateSeconds', () => {
   it('gives a media clue room to play', () => {
     expect(mcGateSeconds([{ kind: 'audio', src: 'a.mp3' }])).toBe(MC_GATE_WITH_MEDIA_SECONDS);
