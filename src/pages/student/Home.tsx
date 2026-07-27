@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { LogIn, LogOut, User, Zap, Brain, Trophy } from 'lucide-react';
+import { LogIn, LogOut, User, Zap, Brain, Trophy, GraduationCap } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { initAudio, playClick } from '../../lib/sounds';
 import SupportLink from '../../components/SupportLink';
@@ -47,7 +47,7 @@ export default function Home() {
           <div className="w-9 h-9 bg-kahoot-green rounded-lg flex items-center justify-center shadow-md">
             <Zap className="w-5 h-5 text-onaccent" />
           </div>
-          <span className="text-xl font-extrabold tracking-tight">Aula Maestra</span>
+          <span className="text-xl font-extrabold tracking-tight">ML2</span>
         </div>
 
         {user ? (
@@ -97,7 +97,7 @@ export default function Home() {
           </motion.div>
 
           <h1 className="text-5xl md:text-7xl font-black mb-4 tracking-tight">
-            Aula Maestra
+            ML2
           </h1>
           <p className="text-xl md:text-2xl text-ink-soft max-w-2xl mx-auto font-semibold">
             Aprende jugando
@@ -192,8 +192,9 @@ export default function Home() {
 
               <button
                 onClick={handleProfessorDashboard}
-                className="text-muted hover:text-ink transition-colors font-semibold text-sm"
+                className="secondary-button text-sm px-7 py-3.5 inline-flex items-center gap-2.5 mx-auto"
               >
+                <GraduationCap className="w-5 h-5" />
                 Panel del Profesor
               </button>
             </div>

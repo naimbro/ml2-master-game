@@ -45,7 +45,7 @@ export default function Dashboard() {
           <div className="flex items-center gap-3">
             <Link to="/" className="flex items-center gap-2">
               <Gamepad2 className="w-8 h-8 text-cyan-400" />
-              <span className="text-xl font-bold gradient-text">Aula Maestra</span>
+              <span className="text-xl font-bold gradient-text">ML2</span>
             </Link>
             <span className="text-faint">|</span>
             <span className="text-ink-soft">Panel del Profesor</span>

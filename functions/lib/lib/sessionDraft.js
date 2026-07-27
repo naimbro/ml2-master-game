@@ -101,7 +101,7 @@ function buildGenerationPrompt(input) {
     }`;
     return `Eres un diseñador instruccional experto en juegos educativos competitivos con evaluación por IA.
 
-Diseña una sesión de juego para la plataforma Aula Maestra. Los estudiantes responden por escrito, bajo presión de tiempo, a escenarios desafiantes; tres jueces IA evalúan cada respuesta con una rúbrica.
+Diseña una sesión de juego para la plataforma ML2. Los estudiantes responden por escrito, bajo presión de tiempo, a escenarios desafiantes; tres jueces IA evalúan cada respuesta con una rúbrica.
 
 DATOS DE LA SESIÓN:
 - Título: ${input.title}

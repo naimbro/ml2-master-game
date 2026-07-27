@@ -211,7 +211,7 @@ export default function End() {
 
       doc.setFontSize(14);
       doc.setTextColor(100, 100, 100);
-      doc.text(report.sessionTitle || 'Aula Maestra', margin, y);
+      doc.text(report.sessionTitle || 'ML2', margin, y);
       y += 15;
 
       doc.setFontSize(12);

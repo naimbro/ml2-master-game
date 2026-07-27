@@ -177,15 +177,18 @@ h1.display,
     box-shadow: 0 0 0 var(--ink);
   }
 
+  /* Misma fisica de pulsacion que el primario, distinto peso de color: el
+     primario es la accion, este es la puerta de al lado. */
   .secondary-button {
     @apply bg-surface text-ink px-6 py-3 rounded-xl font-bold uppercase tracking-wide;
-    @apply transition-all duration-150 border-2;
-    border-color: var(--ink);
-    box-shadow: var(--shadow-hard) var(--ink);
+    @apply transition-all duration-150;
+    @apply disabled:opacity-40 disabled:cursor-not-allowed;
+    border: 2.5px solid var(--ink);
+    box-shadow: var(--shadow-print) var(--ink);
   }
   .secondary-button:hover:not(:disabled) { background: var(--surface-2); }
   .secondary-button:active:not(:disabled) {
-    transform: translateY(3px);
+    transform: translate(4px, 4px);
     box-shadow: 0 0 0 var(--ink);
   }
 
