@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Users, Zap } from 'lucide-react';
 import { doc, getDoc } from 'firebase/firestore';
@@ -10,7 +10,12 @@ import { useGame } from '../../hooks/useGame';
 export default function JoinGame() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [gameCode, setGameCode] = useState('');
+  const [searchParams] = useSearchParams();
+  // El QR de la sala apunta a /join?code=ABC123. Se sanea igual que lo tipeado a mano:
+  // el parametro viene de una URL, o sea de cualquier parte.
+  const [gameCode, setGameCode] = useState(
+    () => (searchParams.get('code') || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6),
+  );
   const [playerName, setPlayerName] = useState(user?.displayName || '');
   const [error, setError] = useState('');
   const [isJoining, setIsJoining] = useState(false);
