@@ -43,6 +43,11 @@ export default function RecalibrationReveal({ duels, duelTotal, finalReady, fina
       }
       const d = ds[c];
       setCurrent(d); setVerdict(false);
+      // Un empate a 160ms es un parpadeo. Le damos ~800ms totales: menos que un
+      // upset (1820ms), más que un duelo resuelto (420ms).
+      const isTie = d.winner === 'tie';
+      const hold = d.isUpset ? 1200 : isTie ? 420 : 260;
+      const after = d.isUpset ? 620 : isTie ? 380 : 160;
       t = setTimeout(() => {
         if (cancelled) return;
         setVerdict(true);
@@ -51,8 +56,8 @@ export default function RecalibrationReveal({ duels, duelTotal, finalReady, fina
           cursorRef.current = c + 1;
           setCursor(c + 1);
           playNext();
-        }, d.isUpset ? 620 : 160);
-      }, d.isUpset ? 1200 : 260);
+        }, after);
+      }, hold);
     };
     playNext();
     return () => { cancelled = true; clearTimeout(t); };
@@ -107,17 +112,25 @@ export default function RecalibrationReveal({ duels, duelTotal, finalReady, fina
 
 function Duel({ d, verdict, climax }: { d: RoundDuel; verdict: boolean; climax: boolean }) {
   const winnerSide = d.winner;
+  const isTie = winnerSide === 'tie';
   const gap = Math.abs(d.a.provScore - d.b.provScore);
+  // Con veredicto: el ganador queda 'win' y el perdedor 'lose'. En un empate no hay
+  // perdedor, así que los dos van a un estado propio ('tie'), nunca a 'lose'.
+  const panel = (side: 'a' | 'b') => {
+    if (!verdict) return '';
+    if (isTie) return 'tie';
+    return winnerSide === side ? 'win' : 'lose';
+  };
   return (
     <div className={`rr-duel ${climax ? 'rr-climax' : ''}`}>
       {climax && <div className="rr-climax-tag">◆ El duelo de la ronda ◆</div>}
-      <div className={`rr-panel a ${verdict && winnerSide === 'a' ? 'win' : verdict ? 'lose' : ''}`}>
+      <div className={`rr-panel a ${panel('a')}`}>
         <div className="rr-side">Contendiente A</div>
         <div className="rr-seed">SEED #{d.a.provRank}</div>
         <div className="rr-name">{d.a.name}</div>
         <div className="rr-sc">provisional <b>{d.a.provScore}</b></div>
       </div>
-      <div className={`rr-panel b ${verdict && winnerSide === 'b' ? 'win' : verdict ? 'lose' : ''}`}>
+      <div className={`rr-panel b ${panel('b')}`}>
         <div className="rr-side">Contendiente B</div>
         <div className="rr-seed">SEED #{d.b.provRank}</div>
         <div className="rr-name">{d.b.name}</div>
@@ -125,10 +138,16 @@ function Duel({ d, verdict, climax }: { d: RoundDuel; verdict: boolean; climax: 
       </div>
       {!verdict && <div className="rr-vs">VS</div>}
       {!verdict && <div className="rr-gap">{gap <= 1 ? `Empate técnico · Δ${gap}` : `Rivales parejos · Δ${gap}`}</div>}
-      {verdict && winnerSide !== 'tie' && (
+      {verdict && !isTie && (
         <div className={`rr-verdict ${winnerSide}`}>
           <span className="rr-g">Gana {(winnerSide === 'a' ? d.a.name : d.b.name).split(' ')[0]}</span>
           {d.isUpset && <span className="rr-up">◆ Sorpresa ◆</span>}
+        </div>
+      )}
+      {verdict && isTie && (
+        <div className="rr-verdict tie">
+          <span className="rr-g">Empate</span>
+          <span className="rr-up">ninguno se impuso</span>
         </div>
       )}
     </div>
@@ -202,11 +221,13 @@ const RR_CSS = `
 .rr-panel.win.a{background:linear-gradient(100deg,rgba(56,225,255,.16),#0e1017);box-shadow:inset 8px 0 0 -2px #38e1ff,0 0 60px -8px rgba(56,225,255,.6)}
 .rr-panel.win.b{background:linear-gradient(260deg,rgba(255,90,60,.16),#0e1017);box-shadow:inset -8px 0 0 -2px #FF5A1F,0 0 60px -8px rgba(255,90,60,.6)}
 .rr-panel.lose{filter:grayscale(.85) brightness(.5);transform:scale(.97)}
+.rr-panel.tie{filter:saturate(.65) brightness(.84)}
 .rr-vs{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:Impact,sans-serif;font-size:clamp(32px,6vw,74px);
   color:#07080d;-webkit-text-stroke:2px #ffc24b;background:#07080d;border:2px solid #ffc24b;border-radius:50%;width:clamp(60px,9vw,110px);aspect-ratio:1;display:grid;place-items:center;text-shadow:0 0 26px rgba(255,194,75,.6)}
 .rr-gap{position:absolute;top:calc(50% + clamp(42px,6vw,70px));left:50%;transform:translateX(-50%);font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#ffc24b;white-space:nowrap}
 .rr-verdict{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-9deg);padding:10px 30px;border:3px solid #ffc24b;background:rgba(7,8,13,.72);text-align:center;font-family:Impact,sans-serif;text-transform:uppercase;animation:rrStamp .34s cubic-bezier(.2,1.4,.3,1)}
 .rr-verdict.a{border-color:#38e1ff;color:#38e1ff}.rr-verdict.b{border-color:#FF5A1F;color:#FF5A1F}
+.rr-verdict.tie{border-color:#ffc24b;color:#ffc24b}
 @keyframes rrStamp{from{opacity:0;transform:translate(-50%,-50%) rotate(-9deg) scale(.4)}to{opacity:1;transform:translate(-50%,-50%) rotate(-9deg) scale(1)}}
 .rr-g{font-size:clamp(28px,5vw,58px);line-height:.9;display:block}
 .rr-up{display:block;font-family:ui-monospace,monospace;font-size:12px;letter-spacing:.4em;color:#FF5A1F;margin-top:8px}
