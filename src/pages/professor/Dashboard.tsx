@@ -10,12 +10,13 @@ import {
   Plus,
   ShieldCheck,
   Users,
+  Trash2,
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { useProfessor } from '../../hooks/useProfessor';
 import { usePendingProfessorCount } from '../../hooks/usePendingProfessors';
 import { COURSES, getSessionsForCourse, type Course } from '../../lib/courses';
-import { fetchMyCourses } from '../../lib/dynamicCourses';
+import { fetchMyCourses, deleteCourse } from '../../lib/dynamicCourses';
 
 export default function Dashboard() {
   const { user, logout } = useAuth();
@@ -23,6 +24,25 @@ export default function Dashboard() {
   const pendingCount = usePendingProfessorCount();
   const navigate = useNavigate();
   const [myCourses, setMyCourses] = useState<Course[]>([]);
+  const [deleting, setDeleting] = useState<string | null>(null);
+
+  // Firestore no borra en cascada, asi que deleteCourse() barre primero las
+  // sesiones. La confirmacion nombra el curso porque no hay papelera ni deshacer.
+  const removeCourse = async (course: Course) => {
+    if (!window.confirm(
+      `Eliminar el curso "${course.name}"?\n\nSe borran tambien todas sus sesiones y los jueces personalizados. No se puede deshacer.\n\nLos juegos ya jugados siguen funcionando: cada partida guarda su propia copia.`
+    )) return;
+    setDeleting(course.id);
+    try {
+      await deleteCourse(course.id);
+      setMyCourses((prev) => prev.filter((c) => c.id !== course.id));
+    } catch (err) {
+      console.error('Error deleting course:', err);
+      window.alert('No se pudo eliminar el curso. Intenta de nuevo.');
+    } finally {
+      setDeleting(null);
+    }
+  };
 
   useEffect(() => {
     if (!user) return;
@@ -136,10 +156,19 @@ export default function Dashboard() {
             })}
 
             {myCourses.map((course) => (
+              <div key={course.id} className="relative">
+                <button
+                  onClick={() => removeCourse(course)}
+                  disabled={deleting !== null}
+                  title="Eliminar curso"
+                  aria-label={`Eliminar el curso ${course.name}`}
+                  className="absolute top-3 right-3 z-10 p-2 rounded-lg text-muted hover:text-kahoot-red hover:bg-surface-2 transition-colors disabled:opacity-40"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
               <Link
-                key={course.id}
                 to={`/professor/courses/${course.id}`}
-                className="dramatic-card p-6 hover:scale-[1.02] transition-transform cursor-pointer group"
+                className="dramatic-card p-6 hover:scale-[1.02] transition-transform cursor-pointer group block"
               >
                 <div className={`w-14 h-14 ${course.iconClass} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
                   <BookOpen className="w-7 h-7 text-onaccent" />
@@ -153,6 +182,7 @@ export default function Dashboard() {
                   </span>
                 </div>
               </Link>
+              </div>
             ))}
 
             {/* Create course card */}

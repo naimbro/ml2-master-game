@@ -1,15 +1,33 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Plus, Play, Pencil, FileText, Users } from 'lucide-react';
+import { ArrowLeft, Plus, Play, Pencil, FileText, Users, Trash2 } from 'lucide-react';
 import type { Course } from '../../lib/courses';
-import { fetchCourse, fetchSessions, type SessionWithStatus } from '../../lib/dynamicCourses';
+import { fetchCourse, fetchSessions, deleteSession, type SessionWithStatus } from '../../lib/dynamicCourses';
 
 export default function CourseHome() {
   const { courseId } = useParams<{ courseId: string }>();
   const [course, setCourse] = useState<Course | null>(null);
   const [sessions, setSessions] = useState<SessionWithStatus[]>([]);
   const [loading, setLoading] = useState(true);
+  const [busy, setBusy] = useState<string | null>(null);
+
+  // Borrar es irreversible y no hay papelera, asi que la confirmacion nombra la
+  // sesion: un "Estas seguro?" generico se acepta sin leer.
+  const removeSession = async (sessionId: string, title: string) => {
+    if (!courseId) return;
+    if (!window.confirm(`Eliminar la sesion "${title}"? No se puede deshacer.\n\nLos juegos ya jugados con ella siguen funcionando: cada partida guarda su propia copia.`)) return;
+    setBusy(sessionId);
+    try {
+      await deleteSession(courseId, sessionId);
+      setSessions((prev) => prev.filter((s) => s.id !== sessionId));
+    } catch (err) {
+      console.error('Error deleting session:', err);
+      window.alert('No se pudo eliminar la sesion. Intenta de nuevo.');
+    } finally {
+      setBusy(null);
+    }
+  };
 
   useEffect(() => {
     if (!courseId) return;
@@ -75,13 +93,24 @@ export default function CourseHome() {
                     {session.rounds} rondas · {session.duration} min por ronda
                   </p>
                 </div>
-                <Link
-                  to={`/professor/courses/${courseId}/sessions/${session.id}/edit`}
-                  className="flex items-center gap-1 px-3 py-2 bg-surface-2 hover:bg-surface-3 rounded-lg transition-colors text-sm shrink-0"
-                >
-                  <Pencil className="w-4 h-4" />
-                  Editar
-                </Link>
+                <div className="flex items-center gap-2 shrink-0">
+                  <Link
+                    to={`/professor/courses/${courseId}/sessions/${session.id}/edit`}
+                    className="flex items-center gap-1 px-3 py-2 bg-surface-2 hover:bg-surface-3 rounded-lg transition-colors text-sm"
+                  >
+                    <Pencil className="w-4 h-4" />
+                    Editar
+                  </Link>
+                  <button
+                    onClick={() => removeSession(session.id, session.title)}
+                    disabled={busy !== null}
+                    title="Eliminar sesión"
+                    aria-label={`Eliminar la sesión ${session.title}`}
+                    className="p-2 rounded-lg text-muted hover:text-kahoot-red hover:bg-surface-2 transition-colors disabled:opacity-40"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             ))}
 
