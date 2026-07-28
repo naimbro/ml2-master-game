@@ -11,7 +11,16 @@
 import type { BaselineJudge } from './judges';
 
 /** What the AI session builder writes into every new session (functions/src/lib/sessionDraft.ts). */
-export const DEFAULT_JUDGE_IDS = ['technical_expert', 'public_sector', 'professor_twin'] as const;
+/**
+ * El panel que hereda un curso que todavía no define el suyo.
+ *
+ * Son genéricos y sin nombre propio a propósito: apuntaba a los jueces de
+ * ml2-2025, así que cualquier profesor que creaba un curso empezaba con el panel
+ * de Naim, incluido un juez llamado literalmente "Profe Naim". Las personas viven
+ * en content/courses/_generic/judges.json y cada profesor las puede reescribir
+ * desde la pantalla de Jueces del curso.
+ */
+export const DEFAULT_JUDGE_IDS = ['generic_specialist', 'generic_praxis', 'generic_teacher'] as const;
 
 interface SessionLike {
   config?: { judges?: { judgeId?: string }[] };

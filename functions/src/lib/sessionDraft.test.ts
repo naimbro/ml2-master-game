@@ -26,14 +26,14 @@ function validDraft() {
       title: validInput.title,
       description: 'desc',
       judges: [
-        { judgeId: 'technical_expert', weight: 0.35 },
-        { judgeId: 'public_sector', weight: 0.35 },
-        { judgeId: 'professor_twin', weight: 0.3 },
+        { judgeId: 'generic_specialist', weight: 0.35 },
+        { judgeId: 'generic_praxis', weight: 0.35 },
+        { judgeId: 'generic_teacher', weight: 0.3 },
       ],
       judgeConfig: {
-        technical_expert: { sessionLens: 'lente de prueba para el juez en esta sesión', weightFormula: 'score = 0.4 * a + 0.3 * b + 0.3 * c' },
-        public_sector: { sessionLens: 'lente de prueba para el juez en esta sesión', weightFormula: 'score = 0.4 * a + 0.3 * b + 0.3 * c' },
-        professor_twin: { sessionLens: 'lente de prueba para el juez en esta sesión', weightFormula: 'score = 0.4 * a + 0.3 * b + 0.3 * c' },
+        generic_specialist: { sessionLens: 'lente de prueba para el juez en esta sesión', weightFormula: 'score = 0.4 * a + 0.3 * b + 0.3 * c' },
+        generic_praxis: { sessionLens: 'lente de prueba para el juez en esta sesión', weightFormula: 'score = 0.4 * a + 0.3 * b + 0.3 * c' },
+        generic_teacher: { sessionLens: 'lente de prueba para el juez en esta sesión', weightFormula: 'score = 0.4 * a + 0.3 * b + 0.3 * c' },
       },
     },
     scenarios: [
@@ -104,12 +104,12 @@ describe('validateGeneratedDraft', () => {
   });
   it('rejects judgeConfig with short sessionLens', () => {
     const d = validDraft();
-    d.config.judgeConfig.public_sector.sessionLens = 'x';
+    d.config.judgeConfig.generic_praxis.sessionLens = 'x';
     expect(validateGeneratedDraft(d, validInput)).toMatch(/sessionLens/i);
   });
   it('rejects judgeConfig without weightFormula', () => {
     const d = validDraft();
-    d.config.judgeConfig.professor_twin.weightFormula = '';
+    d.config.judgeConfig.generic_teacher.weightFormula = '';
     expect(validateGeneratedDraft(d, validInput)).toMatch(/weightFormula/i);
   });
 });
@@ -120,6 +120,6 @@ describe('buildGenerationPrompt', () => {
     expect(prompt).toContain(validInput.title);
     expect(prompt).toContain(validInput.topicDescription);
     expect(prompt).toContain('3');
-    expect(prompt).toContain('technical_expert');
+    expect(prompt).toContain('generic_specialist');
   });
 });

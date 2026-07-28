@@ -80,6 +80,14 @@ describe('mergeJudgeRoster', () => {
 
 describe('DEFAULT_JUDGE_IDS', () => {
   it('matches the trio the AI session builder writes into every new session', () => {
-    expect([...DEFAULT_JUDGE_IDS]).toEqual(['technical_expert', 'public_sector', 'professor_twin']);
+    // Debe coincidir con ALLOWED_JUDGES en functions/src/lib/sessionDraft.ts.
+    expect([...DEFAULT_JUDGE_IDS]).toEqual(['generic_specialist', 'generic_praxis', 'generic_teacher']);
+  });
+
+  it('no arrastra al curso nuevo ningun juez con nombre propio de otro profesor', () => {
+    // La razon de existir de este trio: antes apuntaba a los jueces de ml2-2025 y
+    // un curso nuevo nacia con un juez llamado "Profe Naim".
+    expect([...DEFAULT_JUDGE_IDS]).not.toContain('professor_twin');
+    expect([...DEFAULT_JUDGE_IDS]).not.toContain('professor_twin_ayd');
   });
 });

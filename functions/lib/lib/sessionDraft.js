@@ -7,7 +7,10 @@ exports.ALLOWED_JUDGES = void 0;
 exports.validateDraftInput = validateDraftInput;
 exports.validateGeneratedDraft = validateGeneratedDraft;
 exports.buildGenerationPrompt = buildGenerationPrompt;
-exports.ALLOWED_JUDGES = ['technical_expert', 'public_sector', 'professor_twin'];
+// El panel generico (content/courses/_generic/judges.json). El asistente IA lo usa
+// para CUALQUIER curso: antes referenciaba los jueces de ml2-2025, asi que toda
+// sesion creada por otro profesor nacia con el panel de Naim.
+exports.ALLOWED_JUDGES = ['generic_specialist', 'generic_praxis', 'generic_teacher'];
 function validateDraftInput(data) {
     if (!data || typeof data !== 'object')
         return 'Datos inválidos';
@@ -128,14 +131,14 @@ RESPONDE SOLO CON UN JSON VÁLIDO con esta estructura EXACTA:
     "bufferSeconds": 60,
     "conceptTags": ["3 a 6 tags en snake_case de los conceptos de la sesión"],
     "judges": [
-      { "judgeId": "technical_expert", "weight": 0.35 },
-      { "judgeId": "public_sector", "weight": 0.35 },
-      { "judgeId": "professor_twin", "weight": 0.30 }
+      { "judgeId": "generic_specialist", "weight": 0.35 },
+      { "judgeId": "generic_praxis", "weight": 0.35 },
+      { "judgeId": "generic_teacher", "weight": 0.30 }
     ],
     "judgeConfig": {
-      "technical_expert": { "sessionLens": "Instrucción de 2-4 frases que le dice a este juez qué premiar y qué penalizar EN ESTA SESIÓN, adaptada al tema", "weightFormula": "score = <pesos> usando los ids de las dimensiones de la rúbrica, ej: score = 0.40 * dim_a + 0.35 * dim_b + 0.25 * dim_c" },
-      "public_sector": { "sessionLens": "...", "weightFormula": "..." },
-      "professor_twin": { "sessionLens": "...", "weightFormula": "..." }
+      "generic_specialist": { "sessionLens": "Instrucción de 2-4 frases que le dice a este juez qué premiar y qué penalizar EN ESTA SESIÓN, adaptada al tema", "weightFormula": "score = <pesos> usando los ids de las dimensiones de la rúbrica, ej: score = 0.40 * dim_a + 0.35 * dim_b + 0.25 * dim_c" },
+      "generic_praxis": { "sessionLens": "...", "weightFormula": "..." },
+      "generic_teacher": { "sessionLens": "...", "weightFormula": "..." }
     }
   },
   "scenarios": [
@@ -164,7 +167,9 @@ REGLAS DURAS:
 - Exactamente ${input.roundCount} escenarios.
 - Exactamente 3 dimensiones en la rúbrica, con pesos que suman 1.0.
 - Los weightFormula usan los MISMOS ids de las dimensiones.
-- judges usa SOLO los judgeIds technical_expert, public_sector y professor_twin.
+- judges usa SOLO los judgeIds generic_specialist (rigor conceptual), generic_praxis
+  (aplicabilidad y restricciones reales) y generic_teacher (comprension y claridad).
+  Los sessionLens deben respetar ese reparto de lentes, no repetirse entre si.
 - Todo el texto en ${input.language}.`;
 }
 //# sourceMappingURL=sessionDraft.js.map

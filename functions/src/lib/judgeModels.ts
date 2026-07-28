@@ -68,6 +68,13 @@ export const GEMINI_THINKING_BUDGET = 128;
  * defaults to openai (the historical behavior).
  */
 const PROVIDER_BY_JUDGE_ID: Record<string, JudgeProvider> = {
+  // Panel por defecto de cursos nuevos (content/courses/_generic/judges.json).
+  // Ese archivo ya trae `provider` explícito, que gana sobre este mapa; están acá
+  // igual porque un id sin provider cae a openai y los tres jueces terminarían en
+  // el mismo modelo — el panel dejaría de decorrelacionar errores sin avisar.
+  generic_specialist: 'openai',
+  generic_praxis: 'gemini',
+  generic_teacher: 'anthropic',
   // AI y Democracia
   professor_twin_ayd: 'anthropic',
   democracy_scholar: 'openai',
