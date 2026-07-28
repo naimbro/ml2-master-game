@@ -14,6 +14,7 @@ import WaitingForRound from '../../components/WaitingForRound';
 import { resolveMediaSrc } from '../../lib/media';
 import { scoreMCQuestion, scoreMCBlock, MC_SCORING_LEGEND } from '../../lib/mcScoring';
 import { mcTimeline, mcGateSeconds } from '../../lib/mcTiming';
+import { modelLabel } from '../../lib/modelLabel';
 import type { MCResponse } from '../../types/game';
 
 // On a light ground the four Kahoot fills would be four shouting rectangles, so
@@ -925,13 +926,17 @@ export default function Round() {
                         </details>
                       )}
 
-                      {evaluation.evaluations?.map((ev: { judgeName: string; judgeAvatar?: string; score: number; feedback: string; strengths: string[]; improvements: string[]; promptUsed?: string }, i: number) => (
+                      {evaluation.evaluations?.map((ev: { judgeName: string; judgeAvatar?: string; score: number; feedback: string; strengths: string[]; improvements: string[]; promptUsed?: string; model?: string }, i: number) => (
                         <div key={i} className="mb-4 p-4 bg-surface-2 rounded-xl">
                           <div className="flex items-center gap-2 mb-2">
                             <MessageSquare className={`w-4 h-4 ${
                               i === 0 ? 'text-kahoot-red' : i === 1 ? 'text-kahoot-blue' : 'text-kahoot-green'
                             }`} />
                             <span className="font-bold">{ev.judgeAvatar ? `${ev.judgeAvatar} ` : ''}{ev.judgeName}</span>
+                            {/* Que modelo escribio este feedback. Ver Results.tsx. */}
+                            {modelLabel(ev.model) && (
+                              <span className="text-xs text-ink-soft font-normal">({modelLabel(ev.model)})</span>
+                            )}
                           </div>
                           <p className="text-ink-soft text-sm mb-3 font-medium">{ev.feedback}</p>
 

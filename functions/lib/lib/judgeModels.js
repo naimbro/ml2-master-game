@@ -141,7 +141,11 @@ function parseJudgeJson(text) {
  */
 async function callJudgeModel(clients, opts) {
     var _a, _b;
-    const { provider, model, systemPrompt, userPrompt, maxTokens } = opts;
+    const { provider, model, systemPrefix, systemSuffix, userPrompt, maxTokens } = opts;
+    // OpenAI and Gemini both cache prompt prefixes implicitly (automatic above ~1k
+    // tokens), so they get exactly the string they got before the split — the shared
+    // half is already at the front, which is all their caches need.
+    const systemPrompt = systemPrefix + systemSuffix;
     if (provider === 'openai') {
         if (!clients.openai)
             throw new Error('openai client not provided');
@@ -183,11 +187,25 @@ async function callJudgeModel(clients, opts) {
         // analysis-first JSON already carries the reasoning, keeping this judge
         // single-pass like the other two.
         const JSON_SAFETY = '\n\nIMPORTANTE: devuelve UN solo objeto JSON válido y parseable. Escapa toda comilla doble interna como \\" y no incluyas saltos de linea sin escapar dentro de los valores de texto.';
+        //
+        // Claude is the only one of the three with NO implicit prompt caching, and it is
+        // also the most expensive input of the panel ($3/MTok vs $1.25). So the system
+        // prompt goes in as two blocks with an explicit breakpoint after the shared half:
+        // the first student of a round pays a 1.25x cache write, everyone after reads it
+        // at 0.1x. Below ~1k tokens of prefix the API silently declines to cache, which
+        // is a no-op, not an error — a session with a tiny knowledge base just doesn't
+        // benefit. Default TTL is 5 minutes, comfortably longer than a round window.
+        const system = systemPrefix
+            ? [
+                { type: 'text', text: systemPrefix, cache_control: { type: 'ephemeral' } },
+                { type: 'text', text: systemSuffix },
+            ]
+            : systemPrompt;
         const runClaude = async (repair) => {
             const message = await clients.anthropic.messages.create({
                 model,
                 max_tokens: maxTokens,
-                system: systemPrompt,
+                system,
                 messages: [{ role: 'user', content: userPrompt + JSON_SAFETY + (repair ? ' Tu respuesta anterior NO era JSON parseable; corrigela.' : '') }],
             });
             return (message.content || [])

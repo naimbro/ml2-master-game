@@ -11,6 +11,7 @@ import { confettiBurst, confettiCannons } from '../../lib/confetti';
 import RecalibrationReveal from './RecalibrationReveal';
 import { useRoundDuels } from '../../hooks/useRoundDuels';
 import { MC_SCORING_LEGEND } from '../../lib/mcScoring';
+import { modelLabel } from '../../lib/modelLabel';
 import { useCountUp } from '../../hooks/useCountUp';
 import { applyRound, rachaStorageKey, readRacha, writeRacha, EMPTY_RACHA } from '../../lib/racha';
 
@@ -22,6 +23,8 @@ interface JudgeEvaluation {
   strengths: string[];
   improvements: string[];
   promptUsed?: string;
+  /** Modelo que respaldo a este juez. Ausente en evaluaciones previas a 2026-07-15. */
+  model?: string;
 }
 
 /* Los hooks no se pueden llamar dentro del .map() de las filas, asi que cada numero
@@ -746,6 +749,11 @@ export default function Results() {
                     i === 0 ? 'text-kahoot-red' : i === 1 ? 'text-kahoot-blue' : 'text-kahoot-green'
                   }`} />
                   <span className="font-bold">{evaluation.judgeAvatar ? `${evaluation.judgeAvatar} ` : ''}{evaluation.judgeName}</span>
+                  {/* Que modelo escribio este feedback. El panel son tres modelos distintos
+                      a proposito, y el alumno tiene derecho a saber cual le habla. */}
+                  {modelLabel(evaluation.model) && (
+                    <span className="text-xs text-ink-soft font-normal">({modelLabel(evaluation.model)})</span>
+                  )}
                 </div>
                 <p className="text-ink-soft text-sm mb-3 font-medium">{evaluation.feedback}</p>
 

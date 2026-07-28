@@ -198,6 +198,8 @@ export default function End() {
                 feedback: string;
                 strengths: string[];
                 improvements: string[];
+                /** Modelo que respaldo al juez; el PDF lo muestra junto al nombre. */
+                model?: string;
               }>;
             };
           }>;

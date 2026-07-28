@@ -90,7 +90,9 @@ describe('parseJudgeJson', () => {
 });
 
 describe('callJudgeModel dispatch', () => {
-  const base = { systemPrompt: 'sys', userPrompt: 'usr', maxTokens: 100 };
+  // The prompt now arrives split at the student's answer: `systemPrefix` is the
+  // half shared by every student in a round, `systemSuffix` is the rest.
+  const base = { systemPrefix: '', systemSuffix: 'sys', userPrompt: 'usr', maxTokens: 100 };
 
   it('calls a gpt-4o chat model with temperature 0 and max_tokens', async () => {
     const create = vi.fn().mockResolvedValue({
@@ -182,6 +184,48 @@ describe('callJudgeModel dispatch', () => {
       { ...base, provider: 'anthropic', model: 'claude-opus-4-8' }
     );
     expect(out).toEqual({ a: 1, b: 2 });
+  });
+
+  it('gives Anthropic a cached prefix block and an uncached suffix block', async () => {
+    // The shared half of the prompt (persona + KB + rubric + scenario) is the same
+    // for every student in a round. Claude has no implicit caching, so it only gets
+    // the discount if we mark the breakpoint ourselves.
+    const create = vi.fn().mockResolvedValue({ content: [{ type: 'text', text: '{"ok":1}' }] });
+    await callJudgeModel(
+      { anthropic: { messages: { create } } },
+      { ...base, systemPrefix: 'RUBRICA COMPARTIDA', systemSuffix: 'respuesta del alumno', provider: 'anthropic', model: 'claude-sonnet-5' }
+    );
+    expect(create.mock.calls[0][0].system).toEqual([
+      { type: 'text', text: 'RUBRICA COMPARTIDA', cache_control: { type: 'ephemeral' } },
+      { type: 'text', text: 'respuesta del alumno' },
+    ]);
+  });
+
+  it('falls back to a single Anthropic system string when there is no shared prefix', async () => {
+    const create = vi.fn().mockResolvedValue({ content: [{ type: 'text', text: '{"ok":1}' }] });
+    await callJudgeModel(
+      { anthropic: { messages: { create } } },
+      { ...base, systemPrefix: '', systemSuffix: 'todo junto', provider: 'anthropic', model: 'claude-sonnet-5' }
+    );
+    expect(create.mock.calls[0][0].system).toBe('todo junto');
+  });
+
+  it('hands OpenAI and Gemini the two halves concatenated, unchanged', async () => {
+    // Both cache prefixes implicitly, so they must receive byte-for-byte what they
+    // received before the split — the shared half is already at the front.
+    const create = vi.fn().mockResolvedValue({ choices: [{ message: { content: '{"ok":1}' } }] });
+    await callJudgeModel(
+      { openai: { chat: { completions: { create } } } },
+      { ...base, systemPrefix: 'PREFIJO\n', systemSuffix: 'SUFIJO', provider: 'openai', model: 'gpt-5' }
+    );
+    expect(create.mock.calls[0][0].messages[0].content).toBe('PREFIJO\nSUFIJO');
+
+    const generateContent = vi.fn().mockResolvedValue({ text: '{"ok":1}' });
+    await callJudgeModel(
+      { gemini: { models: { generateContent } } },
+      { ...base, systemPrefix: 'PREFIJO\n', systemSuffix: 'SUFIJO', provider: 'gemini', model: 'gemini-2.5-pro' }
+    );
+    expect(generateContent.mock.calls[0][0].config.systemInstruction).toBe('PREFIJO\nSUFIJO');
   });
 
   it('calls Gemini with systemInstruction and json mime type', async () => {

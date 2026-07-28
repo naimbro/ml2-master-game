@@ -42,6 +42,7 @@ const stats_1 = require("./lib/stats");
 const parse_1 = require("./lib/parse");
 const scoring_1 = require("./lib/scoring");
 const judgeModels_1 = require("./lib/judgeModels");
+const promptSplit_1 = require("./lib/promptSplit");
 const sessionDraft_1 = require("./lib/sessionDraft");
 const judgeOverrides_1 = require("./lib/judgeOverrides");
 admin.initializeApp();
@@ -235,16 +236,6 @@ async function evaluateWithJudge(clients, judge, scenario, studentResponse, sess
     const rubricConfig = (sessionConfig.rubric || {});
     const penaltyDefs = (0, scoring_1.loadPenalties)(rubricConfig);
     const compactRubric = buildCompactRubric(rubricConfig, penaltyDefs);
-    let prompt = judge.promptTemplate
-        .replace('{{name}}', judge.name)
-        .replace('{{personality}}', judge.personality)
-        .replace('{{evaluationStyle}}', judge.evaluationStyle)
-        .replace('{{knowledgeBase}}', relevantKB || 'No knowledge base provided')
-        .replace('{{referenceDocs}}', referenceDocs || '')
-        .replace('{{rubric}}', JSON.stringify(compactRubric, null, 2))
-        .replace('{{scenario}}', JSON.stringify(scenarioForPrompt, null, 2))
-        .replace('{{idealAnswer}}', JSON.stringify(scenario.idealAnswer || {}, null, 2))
-        .replace('{{studentResponse}}', studentResponse);
     // Dynamic session-aware replacements for dimension names, formulas, and session lens
     const rubricDimensions = (rubricConfig.dimensions || []);
     const dimensionIds = rubricDimensions.map(d => d.id);
@@ -295,7 +286,18 @@ async function evaluateWithJudge(clients, judge, scenario, studentResponse, sess
         ? JSON.stringify(scenario.evaluationGuide, null, 2)
         : JSON.stringify(scenario.idealAnswer || {}, null, 2);
     const refAnswer = scenario.referenceAnswer || '';
-    prompt = prompt
+    // Every slot except {{studentResponse}}. Applied to both halves of the split
+    // below: `replace` with a string pattern is a no-op when the slot is absent, so
+    // each placeholder is filled in whichever half actually contains it.
+    const fill = (text) => text
+        .replace('{{name}}', judge.name)
+        .replace('{{personality}}', judge.personality)
+        .replace('{{evaluationStyle}}', judge.evaluationStyle)
+        .replace('{{knowledgeBase}}', relevantKB || 'No knowledge base provided')
+        .replace('{{referenceDocs}}', referenceDocs || '')
+        .replace('{{rubric}}', JSON.stringify(compactRubric, null, 2))
+        .replace('{{scenario}}', JSON.stringify(scenarioForPrompt, null, 2))
+        .replace('{{idealAnswer}}', JSON.stringify(scenario.idealAnswer || {}, null, 2))
         .replace('{{dimensionScoresJson}}', dimensionScoresJson)
         .replace('{{penaltyList}}', penaltyList)
         // Legacy slot. Templates still carrying it (e.g. an un-reseeded config/judges
@@ -304,6 +306,14 @@ async function evaluateWithJudge(clients, judge, scenario, studentResponse, sess
         .replace('{{sessionLens}}', sessionLens)
         .replace('{{evaluationGuide}}', evalGuide)
         .replace('{{referenceAnswer}}', refAnswer ? `${refAnswer}\n\nCALIBRACION: La respuesta de referencia muestra el nivel de detalle y extension ESPERADO para una buena respuesta (~80 pts). NO penalices brevedad si los puntos clave estan cubiertos. Respuestas mas cortas que la referencia pero que cubren lo esencial pueden obtener 80+.` : '');
+    // Split at the student's answer so the expensive half can be cached. Students
+    // submit at different moments inside the round window, so the first submission
+    // writes the cache entry and the rest read it. Only the Anthropic judge needs the
+    // two halves handed over separately (Claude has no implicit caching); OpenAI and
+    // Gemini get them concatenated, byte-for-byte what they got before. See
+    // ./lib/promptSplit for the invariant.
+    const { prefix: systemPrefix, suffix: splitSuffix } = (0, promptSplit_1.splitPrompt)(judge.promptTemplate, fill, studentResponse);
+    let systemSuffix = splitSuffix;
     // NOTA: aqui se inyectaban las clausulas de RuVerBench (strictJudgingClauses,
     // en ./lib/judgePromptClauses). Se retiraron el 2026-07-27 despues de medirlas.
     //
@@ -322,7 +332,7 @@ async function evaluateWithJudge(clients, judge, scenario, studentResponse, sess
         const isEstilo = scenarioId.includes('estilo');
         if (isFeria) {
             // R4 "Feria Comprimida": implicit signal extraction from structured free text
-            prompt += `\n\nINSTRUCCIONES ADICIONALES PARA RONDA DIAGNOSTICA (FERIA):
+            systemSuffix += `\n\nINSTRUCCIONES ADICIONALES PARA RONDA DIAGNOSTICA (FERIA):
 Esta ronda NO afecta el ranking. Evalua normalmente, pero ademas extrae senales IMPLICITAS del texto del estudiante.
 Debes inferir del contenido de la respuesta los siguientes campos:
 - "family_chosen": numero de la familia que eligio (1-6)
@@ -336,7 +346,7 @@ Manten tu feedback conciso (max 120 palabras).`;
         }
         else if (isEstilo) {
             // R6 "Estilo de trabajo": semi-structured extraction from labeled fields
-            prompt += `\n\nINSTRUCCIONES ADICIONALES PARA RONDA DIAGNOSTICA (ESTILO):
+            systemSuffix += `\n\nINSTRUCCIONES ADICIONALES PARA RONDA DIAGNOSTICA (ESTILO):
 Esta ronda NO afecta el ranking. Evalua normalmente, pero ademas extrae senales del texto del estudiante.
 Busca estos campos en la respuesta (pueden estar etiquetados o en texto libre):
 - "primary_strength": su fortaleza principal (texto breve)
@@ -350,7 +360,7 @@ Manten tu feedback conciso (max 120 palabras).`;
         }
         else {
             // R5: explicit [SENALES] block extraction
-            prompt += `\n\nINSTRUCCIONES ADICIONALES PARA RONDA DIAGNOSTICA:
+            systemSuffix += `\n\nINSTRUCCIONES ADICIONALES PARA RONDA DIAGNOSTICA:
 Esta ronda NO afecta el ranking. Ademas de evaluar normalmente, debes extraer senales del estudiante.
 Si la respuesta contiene un bloque [SENALES]...[/SENALES], parsea los valores estructurados dentro de ese bloque.
 Campos esperados: PREFERENCIAS_FAMILIAS (3 numeros 1-6), SKILL_TECH/SKILL_DATOS/SKILL_SECTOR_PUBLICO/SKILL_ESCRITURA_PRESENTAR (1-5 cada uno), ROL_PREFERIDO (builder/owner/analyst/communicator), DISPONIBILIDAD_HORAS_SEMANA (numero), OUTPUT_PREFERIDO (reporte/chatbot/ambos).
@@ -369,7 +379,8 @@ Manten tu respuesta concisa (max 120 palabras de feedback + bloque de senales).`
         const response = await (0, judgeModels_1.callJudgeModel)(clients, {
             provider,
             model,
-            systemPrompt: prompt,
+            systemPrefix,
+            systemSuffix,
             userPrompt: 'Evalua la respuesta del estudiante y responde SOLO con JSON valido.',
             maxTokens: isRanked ? 1200 : 1500,
         });
@@ -410,7 +421,7 @@ Manten tu respuesta concisa (max 120 palabras de feedback + bloque de senales).`
             strengths: response.strengths || [],
             improvements: response.improvements || [],
             rawResponse: response,
-            promptUsed: prompt,
+            promptUsed: systemPrefix + systemSuffix,
         };
         // Extract parsed signals for non-ranked rounds
         if (!isRanked && response.parsedSignals) {

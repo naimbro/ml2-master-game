@@ -145,8 +145,15 @@ export interface JudgeModelClients {
 export interface JudgeCallOptions {
   provider: JudgeProvider;
   model: string;
-  /** Full instruction prompt (the old system message). */
-  systemPrompt: string;
+  /**
+   * The half of the instruction prompt that is identical for every student in a
+   * round: persona, knowledge base, rubric, scenario, ideal answer. ~5.000 tokens
+   * that used to be re-billed once per student per judge. Handed to Anthropic as a
+   * separate cached block; concatenated with the suffix for the other two.
+   */
+  systemPrefix: string;
+  /** The student's answer and everything the template puts after it. */
+  systemSuffix: string;
   /** The short user turn ("evaluate and respond with JSON only"). */
   userPrompt: string;
   maxTokens: number;
@@ -166,7 +173,12 @@ export async function callJudgeModel(
   clients: JudgeModelClients,
   opts: JudgeCallOptions
 ): Promise<Record<string, unknown>> {
-  const { provider, model, systemPrompt, userPrompt, maxTokens } = opts;
+  const { provider, model, systemPrefix, systemSuffix, userPrompt, maxTokens } = opts;
+
+  // OpenAI and Gemini both cache prompt prefixes implicitly (automatic above ~1k
+  // tokens), so they get exactly the string they got before the split — the shared
+  // half is already at the front, which is all their caches need.
+  const systemPrompt = systemPrefix + systemSuffix;
 
   if (provider === 'openai') {
     if (!clients.openai) throw new Error('openai client not provided');
@@ -208,11 +220,25 @@ export async function callJudgeModel(
     // single-pass like the other two.
     const JSON_SAFETY =
       '\n\nIMPORTANTE: devuelve UN solo objeto JSON válido y parseable. Escapa toda comilla doble interna como \\" y no incluyas saltos de linea sin escapar dentro de los valores de texto.';
+    //
+    // Claude is the only one of the three with NO implicit prompt caching, and it is
+    // also the most expensive input of the panel ($3/MTok vs $1.25). So the system
+    // prompt goes in as two blocks with an explicit breakpoint after the shared half:
+    // the first student of a round pays a 1.25x cache write, everyone after reads it
+    // at 0.1x. Below ~1k tokens of prefix the API silently declines to cache, which
+    // is a no-op, not an error — a session with a tiny knowledge base just doesn't
+    // benefit. Default TTL is 5 minutes, comfortably longer than a round window.
+    const system = systemPrefix
+      ? [
+          { type: 'text', text: systemPrefix, cache_control: { type: 'ephemeral' } },
+          { type: 'text', text: systemSuffix },
+        ]
+      : systemPrompt;
     const runClaude = async (repair: boolean): Promise<string> => {
       const message = await clients.anthropic.messages.create({
         model,
         max_tokens: maxTokens,
-        system: systemPrompt,
+        system,
         messages: [{ role: 'user', content: userPrompt + JSON_SAFETY + (repair ? ' Tu respuesta anterior NO era JSON parseable; corrigela.' : '') }],
       });
       return (message.content || [])

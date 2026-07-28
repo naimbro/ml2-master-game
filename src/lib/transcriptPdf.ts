@@ -2,6 +2,7 @@
 // bundler (node/tsx lo entrega envuelto), y este modulo tiene que poder ejecutarse desde
 // un script para poder mirar el PDF que produce.
 import { jsPDF } from 'jspdf';
+import { modelSuffix } from './modelLabel';
 
 /**
  * Arma el PDF de transcripcion del alumno: cada pregunta, lo que respondio, su
@@ -17,6 +18,8 @@ export interface TranscriptJudge {
   feedback: string;
   strengths: string[];
   improvements: string[];
+  /** Modelo que respaldo a este juez. Ausente en evaluaciones previas a 2026-07-15. */
+  model?: string;
 }
 
 export interface TranscriptRound {
@@ -197,7 +200,7 @@ export function buildTranscriptPdf(input: TranscriptInput): jsPDF {
         write('QUE DIJERON LOS JUECES', { size: 8, color: MUTED, style: 'bold', gap: 5.5 });
         judges.forEach((j) => {
           keepTogether(22);
-          write(j.judgeName || 'Juez', { size: 10, color: INK, style: 'bold', gap: 5 });
+          write(`${j.judgeName || 'Juez'}${modelSuffix(j.model)}`, { size: 10, color: INK, style: 'bold', gap: 5 });
           if (j.feedback) write(j.feedback, { size: 9.5, indent: 4, color: BODY, gap: 4.6 });
           (j.strengths || []).forEach((s) => write(`+ ${s}`, { size: 9, indent: 4, color: GOOD, gap: 4.4 }));
           (j.improvements || []).forEach((s) => write(`- ${s}`, { size: 9, indent: 4, color: WARN, gap: 4.4 }));
