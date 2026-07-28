@@ -13,12 +13,14 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { useProfessor } from '../../hooks/useProfessor';
+import { usePendingProfessorCount } from '../../hooks/usePendingProfessors';
 import { COURSES, getSessionsForCourse, type Course } from '../../lib/courses';
 import { fetchMyCourses } from '../../lib/dynamicCourses';
 
 export default function Dashboard() {
   const { user, logout } = useAuth();
   const { access } = useProfessor();
+  const pendingCount = usePendingProfessorCount();
   const navigate = useNavigate();
   const [myCourses, setMyCourses] = useState<Course[]>([]);
 
@@ -55,10 +57,24 @@ export default function Dashboard() {
             {access === 'admin' && (
               <Link
                 to="/professor/admin"
-                className="flex items-center gap-2 px-3 py-1.5 text-sm bg-surface-2 hover:bg-surface-3 rounded-lg transition-colors"
+                className="relative flex items-center gap-2 px-3 py-1.5 text-sm bg-surface-2 hover:bg-surface-3 rounded-lg transition-colors"
+                title={pendingCount > 0
+                  ? `${pendingCount} solicitud${pendingCount === 1 ? '' : 'es'} de acceso esperando`
+                  : 'Administrar profesores'}
               >
                 <ShieldCheck className="w-4 h-4 text-cyan-400" />
                 <span className="hidden sm:inline">Admin</span>
+                {/* Nadie recibe un correo cuando llega una solicitud, asi que este
+                    numero es el unico aviso que existe. Va sobre el icono para que
+                    se vea tambien en movil, donde la palabra "Admin" esta oculta. */}
+                {pendingCount > 0 && (
+                  <span
+                    className="absolute -top-1.5 -right-1.5 min-w-[1.15rem] h-[1.15rem] px-1 flex items-center justify-center rounded-full bg-kahoot-red text-white text-[0.65rem] font-bold leading-none shadow"
+                    aria-label={`${pendingCount} solicitudes pendientes`}
+                  >
+                    {pendingCount > 9 ? '9+' : pendingCount}
+                  </span>
+                )}
               </Link>
             )}
             <span className="text-ink-soft text-sm hidden sm:block">
