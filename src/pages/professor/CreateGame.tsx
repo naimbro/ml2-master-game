@@ -5,6 +5,8 @@ import { ArrowLeft, Play, BookOpen, Clock, Copy, Check } from 'lucide-react';
 import { doc, setDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { useAuth } from '../../hooks/useAuth';
+import { QRCodeSVG } from 'qrcode.react';
+import { currentJoinUrl } from '../../lib/joinUrl';
 import {
   COURSES,
   SESSIONS,
@@ -138,6 +140,25 @@ export default function CreateGame() {
             <p className="text-5xl font-mono font-bold tracking-widest text-cyan-400 mb-4">
               {createdGame.code}
             </p>
+
+            {/* El QR va tambien aca, no solo en el lobby: esta es la pantalla que dice
+                "comparte este codigo", o sea el momento en que el profesor lo muestra. */}
+            <div className="mb-4">
+              <div className="inline-block bg-white rounded-xl p-3 border-2 border-line">
+                <QRCodeSVG
+                  value={currentJoinUrl(createdGame.code)}
+                  size={160}
+                  level="M"
+                  marginSize={0}
+                  bgColor="#ffffff"
+                  fgColor="#0f172a"
+                />
+              </div>
+              <p className="text-muted text-xs mt-2">
+                o escanea para entrar desde el telefono
+              </p>
+            </div>
+
             <button
               onClick={handleCopyCode}
               className="flex items-center gap-2 mx-auto px-4 py-2 bg-surface-2 hover:bg-surface-3 rounded-lg transition-colors"
