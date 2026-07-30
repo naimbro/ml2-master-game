@@ -13,6 +13,7 @@ import { summarizeRoundScores } from '../../lib/diagnosticTotals';
 import { playPodiumFanfare, playLeaderboardTick, playDrumRoll, playApplause } from '../../lib/sounds';
 import { confettiPodium, confettiStars, confettiSmallBurst, confettiBurst } from '../../lib/confetti';
 import SupportLink from '../../components/SupportLink';
+import CourseStandingsCard from '../../components/CourseStandingsCard';
 
 interface PlayerFinalScore {
   playerId: string;
@@ -600,6 +601,11 @@ export default function End() {
               ))}
             </div>
           </motion.div>
+        )}
+
+        {/* Acumulado del curso — despues del podio de la clase */}
+        {revealStage >= 4 && (
+          <CourseStandingsCard courseId={game?.courseId} gameCode={gameCode} />
         )}
 
         {/* Professor Class Report Button */}
