@@ -9,6 +9,7 @@ import { functions } from '../../lib/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { buildTranscriptPdf } from '../../lib/transcriptPdf';
+import { summarizeRoundScores } from '../../lib/diagnosticTotals';
 import { playPodiumFanfare, playLeaderboardTick, playDrumRoll, playApplause } from '../../lib/sounds';
 import { confettiPodium, confettiStars, confettiSmallBurst, confettiBurst } from '../../lib/confetti';
 import SupportLink from '../../components/SupportLink';
@@ -17,6 +18,7 @@ interface PlayerFinalScore {
   playerId: string;
   playerName: string;
   totalScore: number;
+  averageScore: number;
   roundScores: number[];
   rank: number;
 }
@@ -41,6 +43,15 @@ export default function End() {
   // revealStage: 0=suspense → 1=3rd → 2=2nd → 3=1st → 4=done (show everything)
   const [revealStage, setRevealStage] = useState(0);
   const [announcement, setAnnouncement] = useState<string | null>(null);
+
+  // Un juego sin ninguna ronda rankeada no es una competencia: no hay podio ni
+  // posicion que mostrar, solo el propio desempeno y el feedback. Sin esto, el
+  // diagnostico de la primera clase cierra con tres nombres empatados en 0 en un
+  // orden arbitrario, y con un "y el primer lugar es..." que no premia nada.
+  const diagnosticOnly =
+    Array.isArray(game?.scenarios) &&
+    game.scenarios.length > 0 &&
+    game.scenarios.every((s: { ranked?: boolean }) => s.ranked === false);
 
   // Calculate final rankings (run once)
   useEffect(() => {
@@ -69,15 +80,18 @@ export default function End() {
 
         const rankings: PlayerFinalScore[] = Object.entries(playerScores)
           .map(([playerId, data]) => {
-            const rankedTotal = data.scores.reduce((sum, score, idx) => {
-              const isRanked = game?.scenarios?.[idx]?.ranked !== false;
-              return sum + (isRanked ? (score || 0) : 0);
-            }, 0);
+            const summary = summarizeRoundScores(
+              data.scores.map((score, idx) => ({
+                score,
+                ranked: game?.scenarios?.[idx]?.ranked !== false,
+              })),
+            );
             return {
               playerId,
               playerName: data.name,
               roundScores: data.scores,
-              totalScore: rankedTotal,
+              totalScore: summary.total,
+              averageScore: summary.average,
               rank: 0,
             };
           })
@@ -107,6 +121,17 @@ export default function End() {
   useEffect(() => {
     if (finalRankings.length > 0 && !loadingRankings && !celebrationPlayed.current) {
       celebrationPlayed.current = true;
+
+      // Un juego diagnostico no tiene primer lugar, asi que no hay ceremonia:
+      // el redoble y el "y el primer lugar es..." estarian anunciando un podio
+      // que esta oculto. Se muestra todo de inmediato, con un festejo breve
+      // porque igual terminaron.
+      if (diagnosticOnly) {
+        setRevealStage(4);
+        confettiSmallBurst();
+        return;
+      }
+
       const numPodium = Math.min(finalRankings.length, 3);
 
       // Drum roll to build tension
@@ -158,7 +183,7 @@ export default function End() {
       // Show everything else
       setTimeout(() => { setRevealStage(4); }, t);
     }
-  }, [finalRankings, loadingRankings]);
+  }, [finalRankings, loadingRankings, diagnosticOnly]);
 
   const handleDownloadReport = async () => {
     if (!gameCode || !user || !userRanking) return;
@@ -320,7 +345,8 @@ export default function End() {
           )}
         </AnimatePresence>
 
-        {/* Podium — staged reveal */}
+        {/* Podium — staged reveal. Se omite entero en un juego diagnostico. */}
+        {!diagnosticOnly && (
         <div className="flex justify-center items-end gap-3 md:gap-5 h-72 mb-8">
           <AnimatePresence>
             {/* Second Place — revealStage >= 2 */}
@@ -393,9 +419,11 @@ export default function End() {
             )}
           </AnimatePresence>
         </div>
+        )}
 
-        {/* User's Result — appears after full podium reveal */}
-        {revealStage >= 4 && userRanking && (
+        {/* User's Result — appears after full podium reveal. En un juego
+            diagnostico no hay podio que revelar, asi que no espera el reveal. */}
+        {(diagnosticOnly || revealStage >= 4) && userRanking && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -407,18 +435,20 @@ export default function End() {
               Tu Resultado Final
             </h2>
 
-            <div className="grid grid-cols-3 gap-4 text-center mb-6">
-              <div className="p-4 bg-surface-2 rounded-xl">
-                <motion.p
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ delay: 1, type: 'spring' }}
-                  className="text-3xl font-black text-kahoot-green"
-                >
-                  #{userRanking.rank}
-                </motion.p>
-                <p className="text-sm text-muted font-bold">Posicion</p>
-              </div>
+            <div className={`grid ${diagnosticOnly ? 'grid-cols-2' : 'grid-cols-3'} gap-4 text-center mb-6`}>
+              {!diagnosticOnly && (
+                <div className="p-4 bg-surface-2 rounded-xl">
+                  <motion.p
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 1, type: 'spring' }}
+                    className="text-3xl font-black text-kahoot-green"
+                  >
+                    #{userRanking.rank}
+                  </motion.p>
+                  <p className="text-sm text-muted font-bold">Posicion</p>
+                </div>
+              )}
               <div className="p-4 bg-surface-2 rounded-xl">
                 <motion.p
                   initial={{ scale: 0 }}
@@ -437,11 +467,18 @@ export default function End() {
                   transition={{ delay: 1.2, type: 'spring' }}
                   className="text-3xl font-black"
                 >
-                  {Math.round(userRanking.totalScore / (userRanking.roundScores.length || 1))}
+                  {userRanking.averageScore}
                 </motion.p>
                 <p className="text-sm text-muted font-bold">Promedio</p>
               </div>
             </div>
+
+            {diagnosticOnly && (
+              <p className="text-sm text-muted font-medium mb-6">
+                Este juego fue un diagnostico: ninguna ronda cuenta para el ranking del curso.
+                Tu puntaje es para que veas como se evalua aca.
+              </p>
+            )}
 
             <div className="mb-6">
               <p className="text-xs text-muted mb-2 font-bold uppercase tracking-wider">Puntaje por ronda:</p>
