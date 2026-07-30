@@ -1,14 +1,19 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { TrendingUp, TrendingDown, Minus, ChevronRight } from 'lucide-react';
 import { useCourseStandings } from '../hooks/useCourseStandings';
 
+/** Cuanto esperamos el recalculo antes de rendirnos y avisar. */
+const STANDINGS_TIMEOUT_MS = 10_000;
+
 interface Props {
   courseId: string | undefined;
   /**
    * Si viene, la tarjeta espera a que el acumulado incluya este juego antes de
-   * mostrar numeros: mas vale un esqueleto de dos segundos que mostrar la tabla
-   * vieja y corregirla en la cara del alumno.
+   * mostrar numeros: mas vale un esqueleto que mostrar la tabla vieja y
+   * corregirla en la cara del alumno. Si a los 10 segundos el recalculo no
+   * llego, se rinde y avisa en vez de esqueletar para siempre.
    */
   gameCode?: string;
 }
@@ -38,14 +43,38 @@ function MovementLabel({ from, to }: { from: number | null; to: number }) {
 
 export default function CourseStandingsCard({ courseId, gameCode }: Props) {
   const { standings, mine, loading } = useCourseStandings(courseId);
-
-  if (!courseId) return null;
+  const [timedOut, setTimedOut] = useState(false);
 
   const includesThisGame =
     !gameCode || Boolean(standings?.gamesCounted?.some((g) => g.gameCode === gameCode));
-  const ready = !loading && standings && mine && includesThisGame;
+  // El backend escribe el documento del curso ANTES que el de cada alumno, así
+  // que ver el juego en gamesCounted no basta: hay que confirmar que lo mío
+  // también se actualizó, o la tarjeta muestra la posición de la clase pasada
+  // y se corrige sola un instante después.
+  const mineIsCurrent =
+    Boolean(mine) && mine!.positionsByGame.length === standings?.gamesCounted.length;
+  const ready = !loading && standings && mine && mineIsCurrent && includesThisGame;
+
+  useEffect(() => {
+    if (!courseId || ready) return;
+    const timer = setTimeout(() => setTimedOut(true), STANDINGS_TIMEOUT_MS);
+    return () => clearTimeout(timer);
+  }, [courseId, gameCode, ready]);
+
+  if (!courseId) return null;
 
   if (!ready) {
+    if (timedOut) {
+      return (
+        <div className="card-play p-6">
+          <h2 className="text-xl font-black mb-4">Cómo vas en el curso</h2>
+          <p className="text-muted text-sm">
+            Todavía no podemos mostrarte cómo vas en el curso. Va a aparecer actualizado en la
+            próxima clase.
+          </p>
+        </div>
+      );
+    }
     return (
       <div className="card-play p-6">
         <h2 className="text-xl font-black mb-4">Cómo vas en el curso</h2>
