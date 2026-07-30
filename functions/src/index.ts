@@ -1943,54 +1943,76 @@ export const recomputeCourseStandings = functions
 
     const standingsRef = db.collection('standings').doc(courseId);
 
+    // Cambiar exclusiones o cerrar el semestre son actos del profesor. Un
+    // recalculo simple lo puede disparar cualquiera: es idempotente y no
+    // cambia ninguna regla.
+    if (exclude?.gameCode || final) {
+      await assertApprovedProfessor(context);
+    }
+
     // Las exclusiones viven aca y no en el documento del juego: la regla de
     // update de games/{code} es isAuthenticated(), o sea que un alumno podria
-    // sacar del acumulado la clase que le fue mal.
-    let excludedGameCodes: string[] = (await standingsRef.get()).data()?.excludedGameCodes ?? [];
+    // sacar del acumulado la clase que le fue mal. Read-modify-write dentro de
+    // una transaccion acotada a este campo: si un recalculo automatico (fin de
+    // otro juego) llega justo entre el get() y el set() del profesor, no debe
+    // pisar la exclusion con el valor viejo.
+    let excludedGameCodes: string[];
     if (exclude?.gameCode) {
-      await assertApprovedProfessor(context);
-      excludedGameCodes = exclude.excluded
-        ? [...new Set([...excludedGameCodes, exclude.gameCode])]
-        : excludedGameCodes.filter((code) => code !== exclude.gameCode);
+      excludedGameCodes = await db.runTransaction(async (tx) => {
+        const snap = await tx.get(standingsRef);
+        const current: string[] = snap.data()?.excludedGameCodes ?? [];
+        const updated = exclude.excluded
+          ? [...new Set([...current, exclude.gameCode])]
+          : current.filter((code) => code !== exclude.gameCode);
+        tx.set(standingsRef, { excludedGameCodes: updated }, { merge: true });
+        return updated;
+      });
+    } else {
+      excludedGameCodes = (await standingsRef.get()).data()?.excludedGameCodes ?? [];
     }
 
     // Dos filtros de igualdad no necesitan indice compuesto; el orden por fecha
-    // se hace en memoria justamente para no tener que crear uno.
+    // se hace en memoria justamente para no tener que crear uno. Se proyectan
+    // solo los campos que se usan mas abajo: scenarios y knowledgeBase son
+    // pesados y no hacen falta para calcular el acumulado.
     const gamesSnap = await db
       .collection('games')
       .where('courseId', '==', courseId)
       .where('status', '==', 'finished')
+      .select('finishedAt', 'updatedAt', 'players', 'sessionId', 'sessionConfig')
       .get();
 
-    const results: GameResult[] = [];
-    for (const doc of gamesSnap.docs) {
-      if (excludedGameCodes.includes(doc.id)) continue;
-      const game = doc.data();
-      const finishedAt = game.finishedAt?.toMillis?.() ?? game.updatedAt?.toMillis?.() ?? 0;
+    // Las submissions de cada juego son lecturas independientes entre si.
+    const includedDocs = gamesSnap.docs.filter((doc) => !excludedGameCodes.includes(doc.id));
+    const results: GameResult[] = await Promise.all(
+      includedDocs.map(async (doc) => {
+        const game = doc.data();
+        const finishedAt = game.finishedAt?.toMillis?.() ?? game.updatedAt?.toMillis?.() ?? 0;
 
-      // "Jugo" = envio al menos una respuesta. Entrar al lobby no cuenta.
-      const subsSnap = await db.collection('games').doc(doc.id)
-        .collection('submissions').select('playerId').get();
-      const answered = new Set(subsSnap.docs.map((s) => s.data().playerId as string));
+        // "Jugo" = envio al menos una respuesta. Entrar al lobby no cuenta.
+        const subsSnap = await db.collection('games').doc(doc.id)
+          .collection('submissions').select('playerId').get();
+        const answered = new Set(subsSnap.docs.map((s) => s.data().playerId as string));
 
-      const players: GamePlayerInput[] = Object.entries(
-        (game.players ?? {}) as Record<string, { name?: string; photoURL?: string; totalScore?: number }>
-      ).map(([uid, pl]) => ({
-        uid,
-        name: pl.name || 'Sin nombre',
-        photoURL: pl.photoURL,
-        totalScore: Number(pl.totalScore) || 0,
-        answered: answered.has(uid),
-      }));
+        const players: GamePlayerInput[] = Object.entries(
+          (game.players ?? {}) as Record<string, { name?: string; photoURL?: string; totalScore?: number }>
+        ).map(([uid, pl]) => ({
+          uid,
+          name: pl.name || 'Sin nombre',
+          photoURL: pl.photoURL,
+          totalScore: Number(pl.totalScore) || 0,
+          answered: answered.has(uid),
+        }));
 
-      results.push({
-        gameCode: doc.id,
-        sessionId: game.sessionId || '',
-        sessionTitle: game.sessionConfig?.title || game.sessionId || doc.id,
-        finishedAtMs: finishedAt,
-        players,
-      });
-    }
+        return {
+          gameCode: doc.id,
+          sessionId: game.sessionId || '',
+          sessionTitle: game.sessionConfig?.title || game.sessionId || doc.id,
+          finishedAtMs: finishedAt,
+          players,
+        };
+      })
+    );
 
     const ordered = [...results].sort((a, b) => a.finishedAtMs - b.finishedAtMs);
     const entries: StandingsEntry[] = accumulate(ordered, { dropWorst: final ? 2 : 0 });

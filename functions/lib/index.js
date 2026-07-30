@@ -1676,7 +1676,7 @@ exports.recomputeCourseStandings = functions
     .region('us-central1')
     .runWith({ timeoutSeconds: 120, memory: '512MB' })
     .https.onCall(async (data, context) => {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
+    var _a, _b;
     if (!context.auth) {
         throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
     }
@@ -1685,48 +1685,69 @@ exports.recomputeCourseStandings = functions
         throw new functions.https.HttpsError('invalid-argument', 'Missing courseId');
     }
     const standingsRef = db.collection('standings').doc(courseId);
+    // Cambiar exclusiones o cerrar el semestre son actos del profesor. Un
+    // recalculo simple lo puede disparar cualquiera: es idempotente y no
+    // cambia ninguna regla.
+    if ((exclude === null || exclude === void 0 ? void 0 : exclude.gameCode) || final) {
+        await assertApprovedProfessor(context);
+    }
     // Las exclusiones viven aca y no en el documento del juego: la regla de
     // update de games/{code} es isAuthenticated(), o sea que un alumno podria
-    // sacar del acumulado la clase que le fue mal.
-    let excludedGameCodes = (_b = (_a = (await standingsRef.get()).data()) === null || _a === void 0 ? void 0 : _a.excludedGameCodes) !== null && _b !== void 0 ? _b : [];
+    // sacar del acumulado la clase que le fue mal. Read-modify-write dentro de
+    // una transaccion acotada a este campo: si un recalculo automatico (fin de
+    // otro juego) llega justo entre el get() y el set() del profesor, no debe
+    // pisar la exclusion con el valor viejo.
+    let excludedGameCodes;
     if (exclude === null || exclude === void 0 ? void 0 : exclude.gameCode) {
-        await assertApprovedProfessor(context);
-        excludedGameCodes = exclude.excluded
-            ? [...new Set([...excludedGameCodes, exclude.gameCode])]
-            : excludedGameCodes.filter((code) => code !== exclude.gameCode);
+        excludedGameCodes = await db.runTransaction(async (tx) => {
+            var _a, _b;
+            const snap = await tx.get(standingsRef);
+            const current = (_b = (_a = snap.data()) === null || _a === void 0 ? void 0 : _a.excludedGameCodes) !== null && _b !== void 0 ? _b : [];
+            const updated = exclude.excluded
+                ? [...new Set([...current, exclude.gameCode])]
+                : current.filter((code) => code !== exclude.gameCode);
+            tx.set(standingsRef, { excludedGameCodes: updated }, { merge: true });
+            return updated;
+        });
+    }
+    else {
+        excludedGameCodes = (_b = (_a = (await standingsRef.get()).data()) === null || _a === void 0 ? void 0 : _a.excludedGameCodes) !== null && _b !== void 0 ? _b : [];
     }
     // Dos filtros de igualdad no necesitan indice compuesto; el orden por fecha
-    // se hace en memoria justamente para no tener que crear uno.
+    // se hace en memoria justamente para no tener que crear uno. Se proyectan
+    // solo los campos que se usan mas abajo: scenarios y knowledgeBase son
+    // pesados y no hacen falta para calcular el acumulado.
     const gamesSnap = await db
         .collection('games')
         .where('courseId', '==', courseId)
         .where('status', '==', 'finished')
+        .select('finishedAt', 'updatedAt', 'players', 'sessionId', 'sessionConfig')
         .get();
-    const results = [];
-    for (const doc of gamesSnap.docs) {
-        if (excludedGameCodes.includes(doc.id))
-            continue;
+    // Las submissions de cada juego son lecturas independientes entre si.
+    const includedDocs = gamesSnap.docs.filter((doc) => !excludedGameCodes.includes(doc.id));
+    const results = await Promise.all(includedDocs.map(async (doc) => {
+        var _a, _b, _c, _d, _e, _f, _g, _h;
         const game = doc.data();
-        const finishedAt = (_h = (_e = (_d = (_c = game.finishedAt) === null || _c === void 0 ? void 0 : _c.toMillis) === null || _d === void 0 ? void 0 : _d.call(_c)) !== null && _e !== void 0 ? _e : (_g = (_f = game.updatedAt) === null || _f === void 0 ? void 0 : _f.toMillis) === null || _g === void 0 ? void 0 : _g.call(_f)) !== null && _h !== void 0 ? _h : 0;
+        const finishedAt = (_f = (_c = (_b = (_a = game.finishedAt) === null || _a === void 0 ? void 0 : _a.toMillis) === null || _b === void 0 ? void 0 : _b.call(_a)) !== null && _c !== void 0 ? _c : (_e = (_d = game.updatedAt) === null || _d === void 0 ? void 0 : _d.toMillis) === null || _e === void 0 ? void 0 : _e.call(_d)) !== null && _f !== void 0 ? _f : 0;
         // "Jugo" = envio al menos una respuesta. Entrar al lobby no cuenta.
         const subsSnap = await db.collection('games').doc(doc.id)
             .collection('submissions').select('playerId').get();
         const answered = new Set(subsSnap.docs.map((s) => s.data().playerId));
-        const players = Object.entries(((_j = game.players) !== null && _j !== void 0 ? _j : {})).map(([uid, pl]) => ({
+        const players = Object.entries(((_g = game.players) !== null && _g !== void 0 ? _g : {})).map(([uid, pl]) => ({
             uid,
             name: pl.name || 'Sin nombre',
             photoURL: pl.photoURL,
             totalScore: Number(pl.totalScore) || 0,
             answered: answered.has(uid),
         }));
-        results.push({
+        return {
             gameCode: doc.id,
             sessionId: game.sessionId || '',
-            sessionTitle: ((_k = game.sessionConfig) === null || _k === void 0 ? void 0 : _k.title) || game.sessionId || doc.id,
+            sessionTitle: ((_h = game.sessionConfig) === null || _h === void 0 ? void 0 : _h.title) || game.sessionId || doc.id,
             finishedAtMs: finishedAt,
             players,
-        });
-    }
+        };
+    }));
     const ordered = [...results].sort((a, b) => a.finishedAtMs - b.finishedAtMs);
     const entries = (0, standings_1.accumulate)(ordered, { dropWorst: final ? 2 : 0 });
     const now = admin.firestore.FieldValue.serverTimestamp();
