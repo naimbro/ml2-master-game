@@ -24,6 +24,11 @@ function Movement({ from, to }: { from: number | null; to: number }) {
  */
 export default function StandingsTable({ standings, mine, myUid }: Props) {
   const inTop = Boolean(myUid && standings.top.some((r) => r.uid === myUid));
+  // Con el semestre cerrado la posicion "anterior" siempre se calcula SIN el
+  // descarte de las 2 peores clases, asi que la flecha de movimiento compara
+  // contra un ranking que nadie jugo: es un artefacto del cierre, no un cambio
+  // real. Se oculta para no mentirle al alumno.
+  const finalized = standings.finalized;
 
   return (
     <div>
@@ -50,7 +55,7 @@ export default function StandingsTable({ standings, mine, myUid }: Props) {
               {row.uid === myUid && ' (tú)'}
             </span>
             <span className="w-12 text-right text-sm">
-              <Movement from={row.previousPosition} to={row.position} />
+              {finalized ? <span className="text-muted">–</span> : <Movement from={row.previousPosition} to={row.position} />}
             </span>
             <span className="w-16 text-right font-black tabular-nums">{row.points}</span>
           </div>
@@ -64,7 +69,7 @@ export default function StandingsTable({ standings, mine, myUid }: Props) {
             <span className="w-6 text-right font-black tabular-nums">{mine.position}</span>
             <span className="flex-1 truncate font-semibold">Tú</span>
             <span className="w-12 text-right text-sm">
-              <Movement from={mine.previousPosition} to={mine.position} />
+              {finalized ? <span className="text-muted">–</span> : <Movement from={mine.previousPosition} to={mine.position} />}
             </span>
             <span className="w-16 text-right font-black tabular-nums">{mine.points}</span>
           </div>

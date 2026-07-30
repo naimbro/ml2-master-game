@@ -41,6 +41,14 @@ describe('buildTrajectoryChart', () => {
     expect(chart.lines[0].labelRight.text).toBe('Matías Fuenzalida');
   });
 
+  it('con una sola clase no duplica el nombre: solo queda el completo, a la derecha del punto', () => {
+    const chart = buildTrajectoryChart([entry('Matías Fuenzalida', [1])], 1);
+    const dot = chart.lines[0].dots[0];
+    expect(chart.lines[0].labelLeft.text).toBe('');
+    expect(chart.lines[0].labelRight.text).toBe('Matías Fuenzalida');
+    expect(chart.lines[0].labelRight.x).toBeGreaterThan(dot.x);
+  });
+
   it('devuelve una columna por clase', () => {
     const chart = buildTrajectoryChart([entry('Ana', [1, 2, 3])], 3);
     expect(chart.columns.map((c) => c.label)).toEqual(['Clase 1', 'Clase 2', 'Clase 3']);

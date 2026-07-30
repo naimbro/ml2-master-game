@@ -104,7 +104,13 @@ export default function CourseStandingsCard({ courseId, gameCode }: Props) {
           {mine.position}º <span className="text-lg font-bold text-muted">de {mine.playerCount}</span>
         </div>
         <div className="mt-2">
-          <MovementLabel from={mine.previousPosition} to={mine.position} />
+          {standings.finalized ? (
+            <span className="text-muted text-sm font-semibold">
+              El semestre está cerrado: ya se descartaron tus 2 peores clases.
+            </span>
+          ) : (
+            <MovementLabel from={mine.previousPosition} to={mine.position} />
+          )}
         </div>
         <div className="text-muted text-sm mt-1 font-semibold">{mine.points} puntos</div>
       </div>
@@ -129,9 +135,11 @@ export default function CourseStandingsCard({ courseId, gameCode }: Props) {
         Ver la tabla completa <ChevronRight className="w-4 h-4" />
       </Link>
 
-      <p className="text-muted text-xs mt-3">
-        Al cerrar el semestre se descartan tus 2 peores clases.
-      </p>
+      {!standings.finalized && (
+        <p className="text-muted text-xs mt-3">
+          Al cerrar el semestre se descartan tus 2 peores clases.
+        </p>
+      )}
     </motion.div>
   );
 }

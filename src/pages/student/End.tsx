@@ -603,8 +603,10 @@ export default function End() {
           </motion.div>
         )}
 
-        {/* Acumulado del curso — despues del podio de la clase */}
-        {revealStage >= 4 && (
+        {/* Acumulado del curso — despues del podio de la clase. Nunca al
+            anfitrion: esta pantalla es la que el profesor proyecta al curso
+            entero, y ahi no corresponde mostrar SU posicion acumulada. */}
+        {revealStage >= 4 && !isHost && (
           <CourseStandingsCard courseId={game?.courseId} gameCode={gameCode} />
         )}
 

@@ -55,10 +55,20 @@ export default function CourseRanking() {
     if (!window.confirm(
       'Esto aplica el descarte de las 2 peores clases a TODOS los alumnos del curso, ' +
       'de una vez y sin poder elegir a quien.\n\n' +
-      'Hazlo solo cuando el semestre ya terminó. Para deshacerlo, vuelve a apretar ' +
-      '"Recalcular": la tabla vuelve a sumar todo, sin descarte.'
+      'Hazlo solo cuando el semestre ya terminó. Apretar "Recalcular" despues NO lo deshace: ' +
+      'una vez cerrado, el semestre queda cerrado hasta que uses "Reabrir el semestre" aca mismo.'
     )) return;
     call({ final: true });
+  };
+
+  const reopenSemester = () => {
+    if (!window.confirm(
+      'Esto reabre el semestre: la tabla vuelve a sumar todas las clases de todos los ' +
+      'alumnos, sin descartar ninguna.\n\n' +
+      'Hazlo solo si cerraste por error o falta agregar clases. Vas a tener que volver a ' +
+      'cerrar cuando el semestre termine de verdad.'
+    )) return;
+    call({ final: false });
   };
 
   const excluded = standings?.excludedGameCodes ?? [];
@@ -168,18 +178,31 @@ export default function CourseRanking() {
                 curso sigue en marcha, la tabla tiene que sumar todo, o un alumno podría subir de puesto
                 justo en la semana que le fue mal.
               </p>
+              <p className="text-sm font-bold mb-1">
+                Estado actual: {standings.finalized ? 'cerrado, con el descarte aplicado' : 'abierto, sin descarte'}.
+              </p>
               <p className="text-muted text-xs mb-4">
                 {standings.finalized
-                  ? 'Ahora mismo la tabla está cerrada, con el descarte aplicado.'
-                  : 'Para deshacerlo después de aplicarlo, vuelve a apretar "Recalcular" arriba: la tabla vuelve a sumar todo.'}
+                  ? 'El botón "Recalcular" de arriba NO deshace el cierre: solo actualiza los puntajes manteniendo el descarte. Para volver a abrirlo, usa el botón de aquí abajo.'
+                  : 'Mientras esté abierto, "Recalcular" arriba solo actualiza los puntajes: no aplica descarte ni cierra nada.'}
               </p>
-              <button
-                onClick={closeSemester}
-                disabled={busy}
-                className="px-4 py-2 rounded-xl bg-surface hover:bg-surface-2 font-bold disabled:opacity-50 border-2 border-line"
-              >
-                Aplicar descarte y cerrar el semestre
-              </button>
+              {standings.finalized ? (
+                <button
+                  onClick={reopenSemester}
+                  disabled={busy}
+                  className="px-4 py-2 rounded-xl bg-surface hover:bg-surface-2 font-bold disabled:opacity-50 border-2 border-line"
+                >
+                  Reabrir el semestre
+                </button>
+              ) : (
+                <button
+                  onClick={closeSemester}
+                  disabled={busy}
+                  className="px-4 py-2 rounded-xl bg-surface hover:bg-surface-2 font-bold disabled:opacity-50 border-2 border-line"
+                >
+                  Aplicar descarte y cerrar el semestre
+                </button>
+              )}
             </div>
 
             <p className="text-muted text-sm">

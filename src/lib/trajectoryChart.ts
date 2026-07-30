@@ -88,9 +88,13 @@ export function buildTrajectoryChart(
   const maxRank = Math.min(MAX_RANK_SHOWN, Math.max(2, ...shown));
   const height = MARGIN_TOP + (maxRank - 1) * ROW_HEIGHT + MARGIN_BOTTOM;
 
+  // Con una sola clase no hay progresion que estirar de margen a margen: sin
+  // este caso especial el punto queda pegado al margen izquierdo y dos
+  // tercios del lienzo quedan vacios. Se centra en la banda de trazado en vez
+  // de arrancar en MARGIN_LEFT.
   const columns = Array.from({ length: gameCount }, (_, c) => ({
     x: gameCount === 1
-      ? MARGIN_LEFT
+      ? (MARGIN_LEFT + (WIDTH - MARGIN_RIGHT)) / 2
       : MARGIN_LEFT + (c * (WIDTH - MARGIN_LEFT - MARGIN_RIGHT)) / (gameCount - 1),
     label: `Clase ${c + 1}`,
   }));
@@ -121,13 +125,20 @@ export function buildTrajectoryChart(
 
     const first = dots[0];
     const last = dots[dots.length - 1];
+    // Con un solo punto visible (una sola clase, o un alumno que solo aparece
+    // en una) `first` y `last` son el mismo punto: mostrar las dos etiquetas
+    // duplica el nombre a ambos lados. Se deja solo la de la derecha, con el
+    // nombre completo.
+    const singlePoint = dots.length <= 1;
 
     return {
       name: s.name,
       color: TRAJECTORY_COLORS[k],
       segments: groups.map(smoothPath),
       dots,
-      labelLeft: { x: (first?.x ?? MARGIN_LEFT) - 16, y: (first?.y ?? 0) + 4, text: shortName(s.name) },
+      labelLeft: singlePoint
+        ? { x: 0, y: 0, text: '' }
+        : { x: (first?.x ?? MARGIN_LEFT) - 16, y: (first?.y ?? 0) + 4, text: shortName(s.name) },
       labelRight: { x: (last?.x ?? MARGIN_LEFT) + 16, y: (last?.y ?? 0) + 4, text: s.name },
     };
   });
