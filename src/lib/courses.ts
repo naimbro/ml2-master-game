@@ -46,6 +46,11 @@ import mundialKahootScenarios from '../../content/sessions/mundial_2026/kahoot_o
 import mundialKahootRubric from '../../content/sessions/mundial_2026/kahoot_only/rubric.json';
 import mundialKahootKnowledgeBase from '../../content/sessions/mundial_2026/kahoot_only/knowledge_base.md?raw';
 
+import dvC01Config from '../../content/sessions/dataviz_2026/clase_01_diagnostico/config.json';
+import dvC01Scenarios from '../../content/sessions/dataviz_2026/clase_01_diagnostico/scenarios.json';
+import dvC01Rubric from '../../content/sessions/dataviz_2026/clase_01_diagnostico/rubric.json';
+import dvC01KnowledgeBase from '../../content/sessions/dataviz_2026/clase_01_diagnostico/knowledge_base.md?raw';
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyJson = any;
 
@@ -103,6 +108,14 @@ export const COURSES: Course[] = [
     tagline: 'Demo docente — opcion multiple, imagenes y audio',
     accentClass: 'from-amber-500 to-orange-600',
     iconClass: 'bg-gradient-to-br from-amber-500 to-orange-600',
+  },
+  {
+    id: 'dataviz_2026',
+    name: 'Descripcion y Visualizacion de Datos',
+    shortName: 'DVD',
+    tagline: 'Doble titulo Sociologia - Ingenieria Comercial (UAI)',
+    accentClass: 'from-sky-500 to-indigo-600',
+    iconClass: 'bg-gradient-to-br from-sky-500 to-indigo-600',
   },
 ];
 
@@ -214,6 +227,18 @@ export const SESSIONS: SessionOption[] = [
     scenarios: mundialKahootScenarios,
     rubric: mundialKahootRubric,
     knowledgeBase: mundialKahootKnowledgeBase,
+  },
+  {
+    id: 'clase_01_diagnostico',
+    courseId: 'dataviz_2026',
+    title: dvC01Config.title,
+    description: dvC01Config.description,
+    rounds: dvC01Scenarios.length,
+    duration: Math.round(dvC01Config.roundDurationSeconds / 60),
+    config: dvC01Config,
+    scenarios: dvC01Scenarios,
+    rubric: dvC01Rubric,
+    knowledgeBase: dvC01KnowledgeBase,
   },
 ];
 
