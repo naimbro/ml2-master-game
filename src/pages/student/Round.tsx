@@ -84,6 +84,25 @@ export default function Round() {
   const mcRevealedRef = useRef<number>(-1);
   // Latest ordered responses, readable from effects declared above the memo.
   const mcResponsesRef = useRef<MCResponse[]>([]);
+  /**
+   * Cerrojo SINCRONO contra la doble submission de un bloque MC.
+   *
+   * Hay dos caminos que envian el bloque —el timeline llegando a 'done' y el
+   * host cerrando la ronda (game.status === 'round_end')— y llegan casi juntos
+   * por diseno: useGame cierra la ronda justo cuando el timeline termina. Los dos
+   * miraban `hasSubmitted`, que es ESTADO: no cambia hasta el siguiente render,
+   * asi que ambos leian `false` y escribian. Se vio en produccion: dos
+   * submissions identicas de la ronda 2, 2 ms aparte (juego YBWGQP, 2026-07-30),
+   * y el jugador aparecia dos veces en la tabla de esa ronda.
+   *
+   * No duplica puntaje —processRoundEnd indexa las actualizaciones por playerId,
+   * asi que la clave repetida se sobrescribe— pero si duplica la fila.
+   *
+   * Un ref se actualiza en el acto, asi que el segundo camino ve el cerrojo ya
+   * puesto. No hace falta resetearlo entre rondas: el componente se remonta
+   * porque el flujo pasa por la pantalla de resultados.
+   */
+  const submittedRef = useRef(false);
 
   // Check if current user has already submitted
   useEffect(() => {
@@ -102,7 +121,8 @@ export default function Round() {
       // Score over the block's TOTAL questions: averaging over answered ones
       // would let abandoning a block outscore completing it.
       const pending = mcResponsesRef.current;
-      if (currentScenarioRef.current?.type === 'multiple_choice' && !hasSubmitted && pending.length > 0) {
+      if (currentScenarioRef.current?.type === 'multiple_choice' && !submittedRef.current && pending.length > 0) {
+        submittedRef.current = true;
         const totalQuestions = currentScenarioRef.current.mcQuestions?.length ?? pending.length;
         submitMCBlock(pending, scoreMCBlock(pending, totalQuestions));
       }
@@ -305,9 +325,10 @@ export default function Round() {
 
   // MC: block finished — score over the block's TOTAL questions and submit once.
   useEffect(() => {
-    if (!isMC || !mcQuestions || hasSubmitted || mcBlockDone) return;
+    if (!isMC || !mcQuestions || submittedRef.current || mcBlockDone) return;
     if (timeline?.phase !== 'done') return;
 
+    submittedRef.current = true;
     const responses = mcResponsesRef.current;
     const blockScore = scoreMCBlock(responses, mcQuestions.length);
     setMcBlockScore(blockScore);
@@ -322,8 +343,9 @@ export default function Round() {
   }, [isMC, mcQuestions, timeline?.phase, hasSubmitted, mcBlockDone, submitMCBlock]);
 
   const handleSubmit = useCallback(async () => {
-    if (!response.trim() || hasSubmitted || isSubmitting) return;
+    if (!response.trim() || submittedRef.current || isSubmitting) return;
 
+    submittedRef.current = true;
     setIsSubmitting(true);
     try {
       await submitAnswer(response.trim());
@@ -335,10 +357,13 @@ export default function Round() {
       setTimeout(() => setScreenFlash(false), 300);
     } catch (err) {
       console.error('Submit error:', err);
+      // Se libera el cerrojo: si la escritura fallo, no hay nada enviado y el
+      // alumno tiene que poder reintentar antes de que se acabe el tiempo.
+      submittedRef.current = false;
     } finally {
       setIsSubmitting(false);
     }
-  }, [response, hasSubmitted, isSubmitting, submitAnswer]);
+  }, [response, isSubmitting, submitAnswer]);
 
   // Auto-submit when time runs out
   useEffect(() => {
