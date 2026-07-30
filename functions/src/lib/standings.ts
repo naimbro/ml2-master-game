@@ -153,6 +153,7 @@ export function accumulate(games: GameResult[], options: AccumulateOptions = {})
     uid,
     points: sumSlots(slotsOf(uid, perGame.length).map((r) => (r ? r.points : null)), dropWorst),
   }));
+  const totalPoints = new Map(totals.map((t) => [t.uid, t.points]));
   const positions = positionsFromTotals(totals);
 
   // La posicion anterior se calcula SIN descarte: es "como iba la semana pasada".
@@ -172,7 +173,7 @@ export function accumulate(games: GameResult[], options: AccumulateOptions = {})
     const entry: StandingsEntry = {
       uid,
       name: meta.name,
-      points: totals.find((t) => t.uid === uid)!.points,
+      points: totalPoints.get(uid)!,
       position: positions.get(uid)!,
       previousPosition: playedBefore.has(uid) ? previousPositions.get(uid) ?? null : null,
       pointsByGame: slots.map((r) => (r ? r.points : null)),

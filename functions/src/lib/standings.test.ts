@@ -1,5 +1,13 @@
 import { describe, it, expect } from 'vitest';
-import { pointsForPosition, POINTS_TABLE, POINTS_FLOOR } from './standings';
+import {
+  pointsForPosition,
+  POINTS_TABLE,
+  POINTS_FLOOR,
+  rankGame,
+  type GamePlayerInput,
+  accumulate,
+  type GameResult,
+} from './standings';
 
 describe('pointsForPosition', () => {
   it('reparte la tabla fija en las diez primeras posiciones', () => {
@@ -28,8 +36,6 @@ describe('pointsForPosition', () => {
     expect(() => pointsForPosition(1.5)).toThrow();
   });
 });
-
-import { rankGame, type GamePlayerInput } from './standings';
 
 const p = (uid: string, totalScore: number, answered = true): GamePlayerInput =>
   ({ uid, name: uid.toUpperCase(), totalScore, answered });
@@ -77,8 +83,6 @@ describe('rankGame', () => {
     expect(rankGame([p('a', 0, false)])).toEqual([]);
   });
 });
-
-import { accumulate, type GameResult } from './standings';
 
 const game = (
   gameCode: string,
@@ -204,5 +208,26 @@ describe('accumulate', () => {
     const beto = accumulate([g1, g2]).find((e) => e.uid === 'beto')!;
     expect(beto.positionsByGame).toEqual([null, 1]);
     expect(beto.gamesPlayed).toBe(1);
+  });
+
+  it('calcula la posicion anterior sin descarte aunque se pida descarte', () => {
+    // g1: ana 30, beto 25. g2: ana 25, beto 30. g3: ana 30, beto 25.
+    // Sin descarte, 3 clases: ana 85, beto 80.
+    // Con descarte de 2 (queda solo la mejor clase de cada uno): ana 30, beto 30
+    // -> empatan en el 1er lugar del acumulado actual.
+    // La posicion ANTERIOR se calcula solo con g1+g2 y SIN descarte (siempre,
+    // sea cual sea la opcion dropWorst que se haya pedido para el acumulado
+    // actual): ana 55, beto 55 -> tambien empatan en 1er lugar ahi.
+    const g1 = game('g1', 1000, [['ana', 300], ['beto', 100]]);
+    const g2 = game('g2', 2000, [['ana', 100], ['beto', 300]]);
+    const g3 = game('g3', 3000, [['ana', 300], ['beto', 200]]);
+
+    const conDescarte = accumulate([g1, g2, g3], { dropWorst: 2 });
+    const ana = conDescarte.find((e) => e.uid === 'ana')!;
+
+    const sinDescarte = accumulate([g1, g2]);
+    const anaPrevia = sinDescarte.find((e) => e.uid === 'ana')!.position;
+
+    expect(ana.previousPosition).toBe(anaPrevia);
   });
 });
