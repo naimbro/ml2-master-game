@@ -132,10 +132,17 @@ export function accumulate(games: GameResult[], options: AccumulateOptions = {})
 
   const perGame = ordered.map((g) => ({ ranks: rankGame(g.players), game: g }));
 
+  // Participantes = quienes respondieron en al menos un juego. Entrar al lobby y
+  // no contestar nunca no te pone en la tabla ni engorda el "de N".
+  const played = new Set(perGame.flatMap(({ ranks }) => ranks.map((r) => r.uid)));
+
   // Identidad y nombre: gana el nombre del juego mas reciente en que aparece.
   const names = new Map<string, { name: string; photoURL?: string }>();
   for (const { game: g } of perGame) {
-    for (const pl of g.players) names.set(pl.uid, { name: pl.name, photoURL: pl.photoURL });
+    for (const pl of g.players) {
+      if (!played.has(pl.uid)) continue;
+      names.set(pl.uid, { name: pl.name, photoURL: pl.photoURL });
+    }
   }
 
   const uids = [...names.keys()];

@@ -189,4 +189,20 @@ describe('accumulate', () => {
   it('devuelve vacio si no hay juegos', () => {
     expect(accumulate([])).toEqual([]);
   });
+
+  it('ignora a quien nunca respondio nada en ningun juego del curso', () => {
+    const g1 = game('g1', 1000, [['ana', 200]]);
+    g1.players.push({ uid: 'fantasma', name: 'FANTASMA', totalScore: 0, answered: false });
+    const entries = accumulate([g1]);
+    expect(entries.map((e) => e.uid)).toEqual(['ana']);
+  });
+
+  it('cuenta al alumno que en una clase no respondio pero en otra si', () => {
+    const g1 = game('g1', 1000, [['ana', 200]]);
+    g1.players.push({ uid: 'beto', name: 'BETO', totalScore: 0, answered: false });
+    const g2 = game('g2', 2000, [['ana', 100], ['beto', 300]]);
+    const beto = accumulate([g1, g2]).find((e) => e.uid === 'beto')!;
+    expect(beto.positionsByGame).toEqual([null, 1]);
+    expect(beto.gamesPlayed).toBe(1);
+  });
 });
