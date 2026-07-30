@@ -1,0 +1,26 @@
+{
+  "sessionId": "clase_01_diagnostico",
+  "courseId": "dataviz_2026",
+  "draft": true,
+  "title": "TODO: título de clase_01_diagnostico",
+  "description": "TODO: descripción de una línea, la ve el profesor al elegir la sesión",
+  "date": "TODO: YYYY-MM-DD",
+  "roundCount": 0,
+  "roundDurationSeconds": 240,
+  "bufferSeconds": 45,
+  "conceptTags": [],
+  "judges": [
+    {
+      "judgeId": "generic_specialist",
+      "weight": 0.35
+    },
+    {
+      "judgeId": "generic_praxis",
+      "weight": 0.35
+    },
+    {
+      "judgeId": "generic_teacher",
+      "weight": 0.3
+    }
+  ]
+}
