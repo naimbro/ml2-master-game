@@ -25,6 +25,7 @@ import {
   type SessionDraftInput,
 } from './lib/sessionDraft';
 import { applyJudgeOverrides, type JudgeOverrides } from './lib/judgeOverrides';
+import { buildSignalInstructions, type SignalSchema } from './lib/signalSchema';
 
 admin.initializeApp();
 const db = admin.firestore();
@@ -286,6 +287,9 @@ async function evaluateWithJudge(
   delete scenarioForPrompt.conceptTags;
   delete scenarioForPrompt.nice_to_have;
   delete scenarioForPrompt.referenceAnswer;
+  // El esquema de senales ya viaja como instrucciones en texto mas abajo; en el
+  // JSON del escenario solo seria ruido para el juez.
+  delete scenarioForPrompt.signalSchema;
 
   // Select only relevant KB sections for this round
   const conceptTags = (scenario.conceptTags || []) as string[];
@@ -405,6 +409,16 @@ async function evaluateWithJudge(
 
   // For non-ranked rounds, add signal extraction instructions
   if (!isRanked) {
+    // Camino preferido: el escenario declara QUE extraer. Antes esto estaba
+    // hardcodeado a los campos de ml2-2025 y se elegia por substring del id, asi
+    // que cualquier curso nuevo caia en el `else` de abajo y sus jueces recibian
+    // la lista de campos de otro curso, en silencio.
+    const declared = buildSignalInstructions(
+      (scenario as Record<string, unknown>).signalSchema as SignalSchema | undefined
+    );
+    if (declared) {
+      systemSuffix += declared;
+    } else {
     const scenarioId = (scenario as Record<string, unknown>).id as string || '';
     const isFeria = scenarioId.includes('feria');
     const isEstilo = scenarioId.includes('estilo');
@@ -445,6 +459,7 @@ Incluye en tu JSON de respuesta un campo adicional "parsedSignals" con los valor
 Si el bloque [SENALES] no existe o esta malformado, incluye "parsedSignals": null y agrega "extractionConfidence": 0.
 Si el bloque existe y se parseo correctamente, agrega "extractionConfidence" entre 0.5 y 1.0 segun la calidad del parseo.
 Manten tu respuesta concisa (max 120 palabras de feedback + bloque de senales).`;
+    }
     }
   }
 
