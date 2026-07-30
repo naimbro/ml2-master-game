@@ -250,6 +250,19 @@ export function useGame(gameCode: string | undefined): UseGameReturn {
     // NO fire-and-forget evaluateSubmission call for MC blocks
   }, [gameCode, user, game, currentPlayer]);
 
+  // El acumulado del curso se recalcula al cerrar el juego. Si la llamada falla
+  // (el anfitrion cerro el navegador, por ejemplo), la tabla queda vieja hasta
+  // el boton "Recalcular" de la pantalla del profesor. No bloquea el cierre.
+  const triggerStandingsRecompute = useCallback(async (courseId: string | undefined) => {
+    if (!courseId) return;
+    try {
+      const fn = httpsCallable(functions, 'recomputeCourseStandings');
+      await fn({ courseId });
+    } catch (err) {
+      console.error('No se pudo recalcular la tabla del curso:', err);
+    }
+  }, []);
+
   const nextRound = useCallback(async () => {
     if (!gameCode || !isHost || !game) return;
 
@@ -263,6 +276,7 @@ export function useGame(gameCode: string | undefined): UseGameReturn {
         finishedAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
+      await triggerStandingsRecompute(game.courseId);
     } else {
       // Start next round
       const now = Timestamp.now();
@@ -285,7 +299,7 @@ export function useGame(gameCode: string | undefined): UseGameReturn {
 
       setRoundResults(null);
     }
-  }, [gameCode, isHost, game]);
+  }, [gameCode, isHost, game, triggerStandingsRecompute]);
 
   const endGame = useCallback(async () => {
     if (!gameCode || !isHost) return;
@@ -296,7 +310,8 @@ export function useGame(gameCode: string | undefined): UseGameReturn {
       finishedAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     });
-  }, [gameCode, isHost]);
+    await triggerStandingsRecompute(game?.courseId);
+  }, [gameCode, isHost, game, triggerStandingsRecompute]);
 
   const recalibrateRound = useCallback(async (round: number) => {
     if (!gameCode) return;
