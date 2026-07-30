@@ -33,7 +33,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.generateSessionDraft = exports.seedJudges = exports.exportSignalsSummary = exports.generateClassReport = exports.generateOralTask = exports.generateStudentReport = exports.recalibrateRound = exports.processRoundEnd = exports.evaluateSubmission = void 0;
+exports.recomputeCourseStandings = exports.generateSessionDraft = exports.seedJudges = exports.exportSignalsSummary = exports.generateClassReport = exports.generateOralTask = exports.generateStudentReport = exports.recalibrateRound = exports.processRoundEnd = exports.evaluateSubmission = void 0;
 const functions = __importStar(require("firebase-functions"));
 const admin = __importStar(require("firebase-admin"));
 const recalibration_1 = require("./lib/recalibration");
@@ -46,6 +46,7 @@ const promptSplit_1 = require("./lib/promptSplit");
 const sessionDraft_1 = require("./lib/sessionDraft");
 const judgeOverrides_1 = require("./lib/judgeOverrides");
 const signalSchema_1 = require("./lib/signalSchema");
+const standings_1 = require("./lib/standings");
 admin.initializeApp();
 const db = admin.firestore();
 // Lazy-load SDKs to avoid initialization timeout (they load only when a judge of
@@ -1654,5 +1655,137 @@ exports.generateSessionDraft = functions
         updatedAt: admin.firestore.FieldValue.serverTimestamp(),
     });
     return { success: true, sessionId: sessionRef.id };
+});
+// =====================================
+// RANKING ACUMULADO POR CURSO
+// =====================================
+/** Cuantos alumnos se publican con nombre en el documento del curso. */
+const STANDINGS_PUBLIC_TOP = 10;
+async function assertApprovedProfessor(context) {
+    var _a, _b;
+    const callerEmail = ((_a = context.auth) === null || _a === void 0 ? void 0 : _a.token.email) || '';
+    const isAdmin = callerEmail === PLATFORM_ADMIN_EMAIL && ((_b = context.auth) === null || _b === void 0 ? void 0 : _b.token.email_verified) === true;
+    if (isAdmin)
+        return;
+    const profDoc = await db.collection('professors').doc(context.auth.uid).get();
+    if (!profDoc.exists || profDoc.data().status !== 'approved') {
+        throw new functions.https.HttpsError('permission-denied', 'Professor not approved');
+    }
+}
+exports.recomputeCourseStandings = functions
+    .region('us-central1')
+    .runWith({ timeoutSeconds: 120, memory: '512MB' })
+    .https.onCall(async (data, context) => {
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
+    if (!context.auth) {
+        throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
+    }
+    const { courseId, exclude, final } = data;
+    if (!courseId) {
+        throw new functions.https.HttpsError('invalid-argument', 'Missing courseId');
+    }
+    const standingsRef = db.collection('standings').doc(courseId);
+    // Las exclusiones viven aca y no en el documento del juego: la regla de
+    // update de games/{code} es isAuthenticated(), o sea que un alumno podria
+    // sacar del acumulado la clase que le fue mal.
+    let excludedGameCodes = (_b = (_a = (await standingsRef.get()).data()) === null || _a === void 0 ? void 0 : _a.excludedGameCodes) !== null && _b !== void 0 ? _b : [];
+    if (exclude === null || exclude === void 0 ? void 0 : exclude.gameCode) {
+        await assertApprovedProfessor(context);
+        excludedGameCodes = exclude.excluded
+            ? [...new Set([...excludedGameCodes, exclude.gameCode])]
+            : excludedGameCodes.filter((code) => code !== exclude.gameCode);
+    }
+    // Dos filtros de igualdad no necesitan indice compuesto; el orden por fecha
+    // se hace en memoria justamente para no tener que crear uno.
+    const gamesSnap = await db
+        .collection('games')
+        .where('courseId', '==', courseId)
+        .where('status', '==', 'finished')
+        .get();
+    const results = [];
+    for (const doc of gamesSnap.docs) {
+        if (excludedGameCodes.includes(doc.id))
+            continue;
+        const game = doc.data();
+        const finishedAt = (_h = (_e = (_d = (_c = game.finishedAt) === null || _c === void 0 ? void 0 : _c.toMillis) === null || _d === void 0 ? void 0 : _d.call(_c)) !== null && _e !== void 0 ? _e : (_g = (_f = game.updatedAt) === null || _f === void 0 ? void 0 : _f.toMillis) === null || _g === void 0 ? void 0 : _g.call(_f)) !== null && _h !== void 0 ? _h : 0;
+        // "Jugo" = envio al menos una respuesta. Entrar al lobby no cuenta.
+        const subsSnap = await db.collection('games').doc(doc.id)
+            .collection('submissions').select('playerId').get();
+        const answered = new Set(subsSnap.docs.map((s) => s.data().playerId));
+        const players = Object.entries(((_j = game.players) !== null && _j !== void 0 ? _j : {})).map(([uid, pl]) => ({
+            uid,
+            name: pl.name || 'Sin nombre',
+            photoURL: pl.photoURL,
+            totalScore: Number(pl.totalScore) || 0,
+            answered: answered.has(uid),
+        }));
+        results.push({
+            gameCode: doc.id,
+            sessionId: game.sessionId || '',
+            sessionTitle: ((_k = game.sessionConfig) === null || _k === void 0 ? void 0 : _k.title) || game.sessionId || doc.id,
+            finishedAtMs: finishedAt,
+            players,
+        });
+    }
+    const ordered = [...results].sort((a, b) => a.finishedAtMs - b.finishedAtMs);
+    const entries = (0, standings_1.accumulate)(ordered, { dropWorst: final ? 2 : 0 });
+    const now = admin.firestore.FieldValue.serverTimestamp();
+    await standingsRef.set({
+        courseId,
+        updatedAt: now,
+        playerCount: entries.length,
+        finalized: Boolean(final),
+        excludedGameCodes,
+        gamesCounted: ordered.map((g) => ({
+            gameCode: g.gameCode,
+            sessionId: g.sessionId,
+            sessionTitle: g.sessionTitle,
+            finishedAtMs: g.finishedAtMs,
+        })),
+        top: entries.slice(0, STANDINGS_PUBLIC_TOP).map((e) => {
+            var _a;
+            return ({
+                uid: e.uid,
+                name: e.name,
+                photoURL: (_a = e.photoURL) !== null && _a !== void 0 ? _a : null,
+                points: e.points,
+                position: e.position,
+                previousPosition: e.previousPosition,
+                positionsByGame: e.positionsByGame,
+            });
+        }),
+    });
+    // El resto de la tabla no se publica: cada alumno recibe SOLO lo suyo.
+    let batch = db.batch();
+    let pending = 0;
+    for (const entry of entries) {
+        const ref = db.collection('students').doc(entry.uid).collection('courseData').doc(courseId);
+        batch.set(ref, {
+            courseId,
+            updatedAt: now,
+            points: entry.points,
+            position: entry.position,
+            previousPosition: entry.previousPosition,
+            playerCount: entries.length,
+            gamesPlayed: entry.gamesPlayed,
+            pointsByGame: entry.pointsByGame,
+            positionsByGame: entry.positionsByGame,
+        }, { merge: true });
+        pending++;
+        if (pending === 400) {
+            await batch.commit();
+            batch = db.batch();
+            pending = 0;
+        }
+    }
+    if (pending > 0)
+        await batch.commit();
+    return {
+        success: true,
+        courseId,
+        gamesCounted: ordered.length,
+        playerCount: entries.length,
+        excludedGameCodes,
+    };
 });
 //# sourceMappingURL=index.js.map

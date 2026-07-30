@@ -26,6 +26,12 @@ import {
 } from './lib/sessionDraft';
 import { applyJudgeOverrides, type JudgeOverrides } from './lib/judgeOverrides';
 import { buildSignalInstructions, type SignalSchema } from './lib/signalSchema';
+import {
+  accumulate,
+  type GameResult,
+  type GamePlayerInput,
+  type StandingsEntry,
+} from './lib/standings';
 
 admin.initializeApp();
 const db = admin.firestore();
@@ -1898,4 +1904,151 @@ export const generateSessionDraft = functions
       });
 
     return { success: true, sessionId: sessionRef.id };
+  });
+
+// =====================================
+// RANKING ACUMULADO POR CURSO
+// =====================================
+
+/** Cuantos alumnos se publican con nombre en el documento del curso. */
+const STANDINGS_PUBLIC_TOP = 10;
+
+async function assertApprovedProfessor(context: functions.https.CallableContext): Promise<void> {
+  const callerEmail = context.auth?.token.email || '';
+  const isAdmin = callerEmail === PLATFORM_ADMIN_EMAIL && context.auth?.token.email_verified === true;
+  if (isAdmin) return;
+  const profDoc = await db.collection('professors').doc(context.auth!.uid).get();
+  if (!profDoc.exists || profDoc.data()!.status !== 'approved') {
+    throw new functions.https.HttpsError('permission-denied', 'Professor not approved');
+  }
+}
+
+export const recomputeCourseStandings = functions
+  .region('us-central1')
+  .runWith({ timeoutSeconds: 120, memory: '512MB' })
+  .https.onCall(async (data, context) => {
+    if (!context.auth) {
+      throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
+    }
+
+    const { courseId, exclude, final } = data as {
+      courseId?: string;
+      exclude?: { gameCode: string; excluded: boolean };
+      final?: boolean;
+    };
+
+    if (!courseId) {
+      throw new functions.https.HttpsError('invalid-argument', 'Missing courseId');
+    }
+
+    const standingsRef = db.collection('standings').doc(courseId);
+
+    // Las exclusiones viven aca y no en el documento del juego: la regla de
+    // update de games/{code} es isAuthenticated(), o sea que un alumno podria
+    // sacar del acumulado la clase que le fue mal.
+    let excludedGameCodes: string[] = (await standingsRef.get()).data()?.excludedGameCodes ?? [];
+    if (exclude?.gameCode) {
+      await assertApprovedProfessor(context);
+      excludedGameCodes = exclude.excluded
+        ? [...new Set([...excludedGameCodes, exclude.gameCode])]
+        : excludedGameCodes.filter((code) => code !== exclude.gameCode);
+    }
+
+    // Dos filtros de igualdad no necesitan indice compuesto; el orden por fecha
+    // se hace en memoria justamente para no tener que crear uno.
+    const gamesSnap = await db
+      .collection('games')
+      .where('courseId', '==', courseId)
+      .where('status', '==', 'finished')
+      .get();
+
+    const results: GameResult[] = [];
+    for (const doc of gamesSnap.docs) {
+      if (excludedGameCodes.includes(doc.id)) continue;
+      const game = doc.data();
+      const finishedAt = game.finishedAt?.toMillis?.() ?? game.updatedAt?.toMillis?.() ?? 0;
+
+      // "Jugo" = envio al menos una respuesta. Entrar al lobby no cuenta.
+      const subsSnap = await db.collection('games').doc(doc.id)
+        .collection('submissions').select('playerId').get();
+      const answered = new Set(subsSnap.docs.map((s) => s.data().playerId as string));
+
+      const players: GamePlayerInput[] = Object.entries(
+        (game.players ?? {}) as Record<string, { name?: string; photoURL?: string; totalScore?: number }>
+      ).map(([uid, pl]) => ({
+        uid,
+        name: pl.name || 'Sin nombre',
+        photoURL: pl.photoURL,
+        totalScore: Number(pl.totalScore) || 0,
+        answered: answered.has(uid),
+      }));
+
+      results.push({
+        gameCode: doc.id,
+        sessionId: game.sessionId || '',
+        sessionTitle: game.sessionConfig?.title || game.sessionId || doc.id,
+        finishedAtMs: finishedAt,
+        players,
+      });
+    }
+
+    const ordered = [...results].sort((a, b) => a.finishedAtMs - b.finishedAtMs);
+    const entries: StandingsEntry[] = accumulate(ordered, { dropWorst: final ? 2 : 0 });
+    const now = admin.firestore.FieldValue.serverTimestamp();
+
+    await standingsRef.set({
+      courseId,
+      updatedAt: now,
+      playerCount: entries.length,
+      finalized: Boolean(final),
+      excludedGameCodes,
+      gamesCounted: ordered.map((g) => ({
+        gameCode: g.gameCode,
+        sessionId: g.sessionId,
+        sessionTitle: g.sessionTitle,
+        finishedAtMs: g.finishedAtMs,
+      })),
+      top: entries.slice(0, STANDINGS_PUBLIC_TOP).map((e) => ({
+        uid: e.uid,
+        name: e.name,
+        photoURL: e.photoURL ?? null,
+        points: e.points,
+        position: e.position,
+        previousPosition: e.previousPosition,
+        positionsByGame: e.positionsByGame,
+      })),
+    });
+
+    // El resto de la tabla no se publica: cada alumno recibe SOLO lo suyo.
+    let batch = db.batch();
+    let pending = 0;
+    for (const entry of entries) {
+      const ref = db.collection('students').doc(entry.uid).collection('courseData').doc(courseId);
+      batch.set(ref, {
+        courseId,
+        updatedAt: now,
+        points: entry.points,
+        position: entry.position,
+        previousPosition: entry.previousPosition,
+        playerCount: entries.length,
+        gamesPlayed: entry.gamesPlayed,
+        pointsByGame: entry.pointsByGame,
+        positionsByGame: entry.positionsByGame,
+      }, { merge: true });
+      pending++;
+      if (pending === 400) {
+        await batch.commit();
+        batch = db.batch();
+        pending = 0;
+      }
+    }
+    if (pending > 0) await batch.commit();
+
+    return {
+      success: true,
+      courseId,
+      gamesCounted: ordered.length,
+      playerCount: entries.length,
+      excludedGameCodes,
+    };
   });

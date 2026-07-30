@@ -119,6 +119,13 @@ service cloud.firestore {
       }
     }
 
+    // Tabla acumulada del curso. Contiene SOLO los diez primeros: el fondo de la
+    // tabla no se guarda en ningun documento legible por otro alumno.
+    match /standings/{courseId} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Solo Cloud Functions
+    }
+
     // Judges configuration (read-only for frontend)
     match /judges/{judgeId} {
       allow read: if isAuthenticated();
