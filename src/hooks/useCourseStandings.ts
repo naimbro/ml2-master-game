@@ -19,7 +19,8 @@ export function useCourseStandings(courseId: string | undefined) {
   useEffect(() => {
     if (!courseId) {
       // Diferido a un microtask: setState sincrono en el cuerpo del efecto
-      // dispara react-hooks/set-state-in-effect (mismo patron que useCountUp.ts).
+      // dispara react-hooks/set-state-in-effect. useProfessor.ts y useRoundDuels.ts
+      // conviven con ese error; acá se difiere para no sumar deuda nueva.
       queueMicrotask(() => {
         setStandings(null);
         setLoading(false);
