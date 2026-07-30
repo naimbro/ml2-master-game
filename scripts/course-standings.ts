@@ -5,8 +5,15 @@
  *
  * Uso:
  *   npx tsx scripts/course-standings.ts                 # lista los cursos con datos
- *   npx tsx scripts/course-standings.ts dataviz_2026    # escribe el HTML
- *   npx tsx scripts/course-standings.ts dataviz_2026 --final   # con el descarte aplicado
+ *   npx tsx scripts/course-standings.ts dataviz_2026    # respeta standings.finalized
+ *   npx tsx scripts/course-standings.ts dataviz_2026 --final   # fuerza el descarte (hipotetico)
+ *
+ * El descarte de las 2 peores NO depende de `--final`: depende del `finalized`
+ * guardado en `standings/{courseId}`, que es el mismo campo que lee el
+ * alumno. Si el semestre ya esta cerrado, corre igual sin la bandera y
+ * muestra lo mismo que ve la app. `--final` sirve solo para FORZAR el
+ * descarte cuando el semestre sigue abierto, a modo de vista previa
+ * hipotetica de "que pasaria si cerrara ahora" — nunca para forzarlo apagado.
  *
  * Importa la MISMA aritmetica que usa la Cloud Function, para que la tabla del
  * alumno y esta no puedan discrepar.
@@ -88,18 +95,33 @@ async function loadGames(courseId: string, excluded: string[]): Promise<GameResu
   return out.sort((a, b) => a.finishedAtMs - b.finishedAtMs);
 }
 
-function renderHtml(courseId: string, games: GameResult[], entries: StandingsEntry[]): string {
-  // "worst" es la peor posicion que aparece en la tabla. Con un solo alumno, o
-  // cuando todos empataron, worst = 1: el rango entero colapsa a un punto. La
-  // resta worst-1 se protege con Math.max(1, ...) para no dividir por cero, y
-  // el color y el contraste del texto se derivan del MISMO indice de la
-  // paleta (en vez de comparar "rank" contra una fraccion de "worst" por
-  // separado), asi la decision de texto blanco/negro nunca se desalinea de lo
-  // que realmente se pinto en el fondo — incluido el caso worst=1, donde antes
-  // el fondo mas oscuro terminaba con letra negra encima.
+function renderHtml(
+  courseId: string,
+  games: GameResult[],
+  entries: StandingsEntry[],
+  modeLabel: string
+): string {
+  // "worst" es la peor posicion ACUMULADA que aparece en la tabla (e.position).
+  // paletteIndex(), en cambio, recibe posiciones POR JUEGO (e.positionsByGame),
+  // que con empates en el fondo de un juego puntual pueden superar a "worst"
+  // (p.ej. un juego sin empates reparte hasta la posicion N, pero el cierre del
+  // semestre con empates puede dejar "worst" en menos de N). Sin acotar, esa
+  // resta se va negativa y da un indice fuera de rango -> SEQ[i] es undefined
+  // -> "background:undefined". Por eso el indice se recorta a los extremos
+  // validos de la paleta con Math.min/Math.max antes de usarlo.
+  //
+  // Con un solo alumno, o cuando todos empataron, worst = 1: el rango entero
+  // colapsa a un punto. La resta worst-1 se protege con Math.max(1, ...) para
+  // no dividir por cero, y el color y el contraste del texto se derivan del
+  // MISMO indice de la paleta (en vez de comparar "rank" contra una fraccion
+  // de "worst" por separado), asi la decision de texto blanco/negro nunca se
+  // desalinea de lo que realmente se pinto en el fondo — incluido el caso
+  // worst=1, donde antes el fondo mas oscuro terminaba con letra negra encima.
   const worst = Math.max(1, ...entries.map((e) => e.position));
-  const paletteIndex = (rank: number) =>
-    Math.round((1 - (rank - 1) / Math.max(1, worst - 1)) * (SEQ.length - 1));
+  const paletteIndex = (rank: number) => {
+    const idx = Math.round((1 - (rank - 1) / Math.max(1, worst - 1)) * (SEQ.length - 1));
+    return Math.min(SEQ.length - 1, Math.max(0, idx));
+  };
   const cell = (rank: number) => SEQ[paletteIndex(rank)];
   // Umbral medido en contraste WCAG real (texto #0b0b0b o #ffffff sobre cada
   // tono, formula de luminancia relativa), no a ojo: del indice 0 al 7 el negro
@@ -140,6 +162,7 @@ function renderHtml(courseId: string, games: GameResult[], entries: StandingsEnt
 <body>
 <h1>Tabla acumulada — ${esc(courseId)}</h1>
 <p class="sub">${entries.length} alumnos · ${games.length} clases · azul oscuro = ir adelante</p>
+<p class="sub"><b>${esc(modeLabel)}</b></p>
 <table>
   <thead><tr><th></th>${head}<th>Puntos</th><th>Final</th></tr></thead>
   <tbody>${rows}</tbody>
@@ -154,7 +177,7 @@ function renderHtml(courseId: string, games: GameResult[], entries: StandingsEnt
 
 async function main(): Promise<void> {
   const courseId = process.argv[2];
-  const final = process.argv.includes('--final');
+  const forceFinal = process.argv.includes('--final');
 
   if (!courseId) {
     const snap = await db.collection('games').where('status', '==', 'finished').get();
@@ -179,11 +202,28 @@ async function main(): Promise<void> {
     return;
   }
 
-  const entries = accumulate(games, { dropWorst: final ? 2 : 0 });
-  const outPath = `course-standings-${courseId}${final ? '-final' : ''}.html`;
-  writeFileSync(outPath, renderHtml(courseId, games, entries));
+  // El descarte sigue al `finalized` guardado en standings/{courseId} — el
+  // mismo campo que lee la app — para que este script nunca muestre un
+  // numero distinto del que ve el alumno. `--final` NO es "aplicar el
+  // descarte"; es forzarlo cuando el semestre sigue abierto, para previsualizar
+  // el escenario hipotetico de "que pasaria si cerrara ahora". No existe la
+  // bandera inversa (forzar el descarte apagado sobre un semestre ya cerrado):
+  // eso mostraria un numero que la app nunca muestra.
+  const semesterClosed = Boolean(standingsDoc.data()?.finalized);
+  const applyDrop = semesterClosed || forceFinal;
+  const modeLabel = semesterClosed
+    ? 'Semestre CERRADO (standings.finalized = true): descarte de las 2 peores aplicado — esto es lo que ve el alumno.'
+    : forceFinal
+      ? 'Semestre ABIERTO todavia — vista HIPOTETICA forzada con --final (descarte de las 2 peores). Esto NO es lo que ve el alumno hoy.'
+      : 'Semestre ABIERTO (standings.finalized = false o inexistente): sin descarte — esto es lo que ve el alumno.';
+  const suffix = semesterClosed ? '-final' : forceFinal ? '-hipotetico' : '';
 
-  console.log(`\n${entries.length} alumnos · ${games.length} clases${final ? ' · con descarte' : ''}`);
+  const entries = accumulate(games, { dropWorst: applyDrop ? 2 : 0 });
+  const outPath = `course-standings-${courseId}${suffix}.html`;
+  writeFileSync(outPath, renderHtml(courseId, games, entries, modeLabel));
+
+  console.log(`\n${modeLabel}`);
+  console.log(`${entries.length} alumnos · ${games.length} clases${applyDrop ? ' · con descarte' : ''}`);
   entries.slice(0, 10).forEach((e) =>
     console.log(`  ${String(e.position).padStart(2)}º  ${e.name.padEnd(28)} ${e.points}`)
   );

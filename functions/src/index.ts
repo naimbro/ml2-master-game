@@ -1943,10 +1943,14 @@ export const recomputeCourseStandings = functions
 
     const standingsRef = db.collection('standings').doc(courseId);
 
-    // Cambiar exclusiones o cerrar el semestre son actos del profesor. Un
-    // recalculo simple lo puede disparar cualquiera: es idempotente y no
-    // cambia ninguna regla.
-    if (exclude?.gameCode || final) {
+    // `final` distingue "no vino el parametro" (undefined) de "vino en false"
+    // (cerrar/reabrir explicito). Si no vino, se conserva el estado guardado:
+    // un recalculo simple (el que dispara cualquier alumno al terminar un
+    // juego) no puede deshacer el cierre del semestre que hizo el profesor, ni
+    // tampoco reabrirlo solo. Cambiar exclusiones o el cierre explicito (en
+    // cualquiera de los dos sentidos) son actos del profesor.
+    const finalProvided = final !== undefined;
+    if (exclude?.gameCode || finalProvided) {
       await assertApprovedProfessor(context);
     }
 
@@ -1955,21 +1959,32 @@ export const recomputeCourseStandings = functions
     // sacar del acumulado la clase que le fue mal. Read-modify-write dentro de
     // una transaccion acotada a este campo: si un recalculo automatico (fin de
     // otro juego) llega justo entre el get() y el set() del profesor, no debe
-    // pisar la exclusion con el valor viejo.
+    // pisar la exclusion con el valor viejo. El `.set()` grande de mas abajo
+    // usa `merge: true` y nunca menciona `excludedGameCodes`, para que esta
+    // transaccion sea la UNICA escritora de ese campo.
     let excludedGameCodes: string[];
+    let storedFinalized: boolean;
     if (exclude?.gameCode) {
-      excludedGameCodes = await db.runTransaction(async (tx) => {
+      const result = await db.runTransaction(async (tx) => {
         const snap = await tx.get(standingsRef);
         const current: string[] = snap.data()?.excludedGameCodes ?? [];
         const updated = exclude.excluded
           ? [...new Set([...current, exclude.gameCode])]
           : current.filter((code) => code !== exclude.gameCode);
         tx.set(standingsRef, { excludedGameCodes: updated }, { merge: true });
-        return updated;
+        return { excludedGameCodes: updated, finalized: Boolean(snap.data()?.finalized) };
       });
+      excludedGameCodes = result.excludedGameCodes;
+      storedFinalized = result.finalized;
     } else {
-      excludedGameCodes = (await standingsRef.get()).data()?.excludedGameCodes ?? [];
+      const snap = await standingsRef.get();
+      excludedGameCodes = snap.data()?.excludedGameCodes ?? [];
+      storedFinalized = Boolean(snap.data()?.finalized);
     }
+
+    // El descarte de las 2 peores sigue al estado EFECTIVO de cierre, no al
+    // parametro crudo: si no vino `final`, es el guardado.
+    const finalized = finalProvided ? Boolean(final) : storedFinalized;
 
     // Dos filtros de igualdad no necesitan indice compuesto; el orden por fecha
     // se hace en memoria justamente para no tener que crear uno. Se proyectan
@@ -2015,15 +2030,19 @@ export const recomputeCourseStandings = functions
     );
 
     const ordered = [...results].sort((a, b) => a.finishedAtMs - b.finishedAtMs);
-    const entries: StandingsEntry[] = accumulate(ordered, { dropWorst: final ? 2 : 0 });
+    const entries: StandingsEntry[] = accumulate(ordered, { dropWorst: finalized ? 2 : 0 });
     const now = admin.firestore.FieldValue.serverTimestamp();
 
+    // `merge: true` y SIN `excludedGameCodes`: ese campo lo escribe unicamente
+    // la transaccion de arriba. Si este `.set()` lo repitiera con el valor leido
+    // antes, un recalculo simple concurrente podria pisar la exclusion que el
+    // profesor acaba de guardar. El resto de los campos se recalculan siempre
+    // en cada llamada, asi que `merge` no deja ninguno con un valor viejo.
     await standingsRef.set({
       courseId,
       updatedAt: now,
       playerCount: entries.length,
-      finalized: Boolean(final),
-      excludedGameCodes,
+      finalized,
       gamesCounted: ordered.map((g) => ({
         gameCode: g.gameCode,
         sessionId: g.sessionId,
@@ -2039,7 +2058,7 @@ export const recomputeCourseStandings = functions
         previousPosition: e.previousPosition,
         positionsByGame: e.positionsByGame,
       })),
-    });
+    }, { merge: true });
 
     // El resto de la tabla no se publica: cada alumno recibe SOLO lo suyo.
     let batch = db.batch();
