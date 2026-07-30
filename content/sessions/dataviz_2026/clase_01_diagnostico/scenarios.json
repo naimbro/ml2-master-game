@@ -1,1 +1,199 @@
-[]
+[
+  {
+    "id": "dv_c01_r1_lectura_directa",
+    "order": 1,
+    "title": "Cuánto cambió",
+    "category": "Lectura de gráficos",
+    "type": "multiple_choice",
+    "ranked": false,
+    "durationSeconds": 62,
+    "context": "",
+    "question": "",
+    "conceptTags": ["lectura_de_graficos", "nivel_vs_cambio"],
+    "media": [
+      {
+        "kind": "image",
+        "src": "media/dataviz/c01_esperanza_vida_siglo.png",
+        "alt": "Gráfico de líneas: esperanza de vida al nacer en Chile entre 1900 y 2023. La línea sube desde cerca de 29 años en 1900 hasta poco más de 81 años en 2023, con el eje vertical desde cero hasta noventa años.",
+        "credit": "Elaboración propia con datos de Our World in Data — CC BY 4.0"
+      }
+    ],
+    "mcQuestions": [
+      {
+        "question": "Según este gráfico, ¿cuántos AÑOS DE ESPERANZA DE VIDA ganó Chile entre 1900 y 2023?",
+        "options": [
+          { "id": "A", "text": "Unos 20 años" },
+          { "id": "B", "text": "Unos 35 años" },
+          { "id": "C", "text": "Unos 50 años" },
+          { "id": "D", "text": "Unos 80 años" }
+        ],
+        "correctOptionIndex": 2,
+        "timeLimitSeconds": 30,
+        "explanation": "De 29 años en 1900 a 81 en 2023: 52 años ganados. La alternativa D es el error más común y el más útil de todos: 80 es el NIVEL de 2023, no el CAMBIO. Todo el curso se apoya en esa distinción."
+      }
+    ]
+  },
+  {
+    "id": "dv_c01_r2_estable",
+    "order": 2,
+    "title": "Los últimos catorce años",
+    "category": "Lectura de gráficos",
+    "type": "multiple_choice",
+    "ranked": false,
+    "durationSeconds": 62,
+    "context": "",
+    "question": "",
+    "conceptTags": ["lectura_de_graficos"],
+    "media": [
+      {
+        "kind": "image",
+        "src": "media/dataviz/c01_esperanza_vida_reciente.png",
+        "alt": "Gráfico de líneas con marcadores: esperanza de vida al nacer en Chile entre 2010 y 2023, con el eje vertical desde cero hasta noventa años. A esa escala la línea se ve prácticamente plana, en torno a los 80 años.",
+        "credit": "Elaboración propia con datos de Our World in Data — CC BY 4.0"
+      }
+    ],
+    "mcQuestions": [
+      {
+        "question": "Mismo indicador, ahora solo desde 2010. ¿Qué muestra este gráfico?",
+        "options": [
+          { "id": "A", "text": "Que la esperanza de vida creció muy rápido en la última década" },
+          { "id": "B", "text": "Que se mantuvo prácticamente estable, alrededor de los 80 años" },
+          { "id": "C", "text": "Que cayó fuertemente y no se ha recuperado" },
+          { "id": "D", "text": "Que faltan los datos de los últimos años" }
+        ],
+        "correctOptionIndex": 1,
+        "timeLimitSeconds": 30,
+        "explanation": "Estable: se movió entre 79 y 81 años en catorce años. Quédate con esa impresión, porque en la próxima ronda vas a ver EXACTAMENTE los mismos datos y no te van a parecer estables para nada."
+      }
+    ]
+  },
+  {
+    "id": "dv_c01_r3_eje_truncado",
+    "order": 3,
+    "title": "El mismo dato, otro gráfico",
+    "category": "Crítica de gráficos",
+    "type": "multiple_choice",
+    "ranked": false,
+    "durationSeconds": 67,
+    "context": "",
+    "question": "",
+    "conceptTags": ["eje_truncado", "lectura_de_graficos"],
+    "media": [
+      {
+        "kind": "image",
+        "src": "media/dataviz/c01_esperanza_vida_eje_truncado.png",
+        "alt": "Gráfico de líneas con marcadores: esperanza de vida al nacer en Chile entre 2010 y 2023, con el eje vertical entre 78 y 82 años. A esa escala la baja de 2020 y 2021 se ve como una caída profunda y la subida de 2023 como un salto muy grande.",
+        "credit": "Elaboración propia con datos de Our World in Data — CC BY 4.0"
+      }
+    ],
+    "mcQuestions": [
+      {
+        "question": "Este gráfico tiene EXACTAMENTE LOS MISMOS DATOS que el anterior. ¿Por qué se ve tan distinto?",
+        "options": [
+          { "id": "A", "text": "Porque le agregaron años que el anterior no tenía" },
+          { "id": "B", "text": "Porque el eje vertical va de 78 a 82 en vez de partir en cero" },
+          { "id": "C", "text": "Porque usa una línea en vez de barras" },
+          { "id": "D", "text": "Porque corrigieron los datos de la pandemia" }
+        ],
+        "correctOptionIndex": 1,
+        "timeLimitSeconds": 35,
+        "explanation": "Lo único que cambió es el rango del eje. La baja de 2019 a 2021 es de 1,4 años sobre un nivel de 80: con el eje en cero casi no se ve, y con el eje entre 78 y 82 ocupa media figura. Recortar el eje no es siempre trampa —a veces es la única forma de ver un cambio chico que importa— pero cuando se hace hay que decirlo, porque el lector lee la ALTURA antes de leer los números."
+      }
+    ]
+  },
+  {
+    "id": "dv_c01_r4_senales",
+    "order": 4,
+    "title": "Tu proyecto: dominio, pregunta y rol",
+    "category": "Diagnóstico",
+    "difficulty": "easy",
+    "ranked": false,
+    "durationSeconds": 300,
+    "conceptTags": ["senales_proyecto", "causalidad_y_descripcion"],
+    "judgeFocus": "Esta ronda tiene dos partes y solo la SEGUNDA se evalúa. El bloque [SENALES] es administrativo: si está completo, no suma ni resta; si falta, menciónalo en una frase del feedback y nada más. Lo que evalúas son las tres o cuatro líneas finales. Prioridad absoluta: ¿la pregunta que propuso se puede responder con datos, y la persona sabe QUÉ dato haría falta? Una respuesta de 100 nombra un dato concreto y quién lo tendría (una encuesta, un registro administrativo, un censo, una base de un servicio público), y distingue lo que ese dato mostraría de lo que solo insinuaría. Segundo: reconocer que el dato no existe, no es público, o no está desagregado como se necesita, es una RESPUESTA FUERTE, no una evasión — trátala como tal si viene con la razón. Tercero: si la pregunta es del tipo 'por qué pasa X' y la persona no nota que un dato descriptivo no puede contestar un por qué, eso es el hallazgo del feedback. NO exijas vocabulario del curso: es la primera clase y no han leído nada. NO penalices que el dominio sea modesto o poco original; el dominio es un insumo para armar grupos, no una nota.",
+    "context": "El proyecto del semestre es tuyo: eliges un tema, consigues datos, los describes y construyes una plataforma web que un lector cualquiera entienda.\n\nLos grupos se arman la próxima clase, y se arman con lo que escribas acá.\n\nLos cuatro roles de un grupo:\n\n- **analista** — decide qué mirar en los datos y qué se puede concluir\n- **programador** — hace que el código y la plataforma funcionen\n- **diseñador** — decide cómo se ve y cómo se lee\n- **comunicador** — escribe y presenta, y es el que defiende el proyecto ante alguien de fuera\n\nNinguno es más importante y nadie hace solo lo suyo. Elige el que te acomode como punto de partida.",
+    "question": "Dos cosas, en este orden.\n\nPRIMERO, pega este bloque tal cual y complétalo:\n\n[SENALES]\nDOMINIO: (una línea: sobre qué te gustaría trabajar)\nPREGUNTA: (una pregunta concreta que te gustaría responder con datos sobre ese tema)\nROL: (analista / programador / disenador / comunicador)\nHERRAMIENTA_PREVIA: (ninguna / excel / r / python / otra)\nSKILL_DATOS(1-5): __\nSKILL_CODIGO(1-5): __\nSKILL_DISENO(1-5): __\nHORAS_SEMANA: __\n[/SENALES]\n\nDonde 1 es muy bajo y 5 muy alto.\n\nSEGUNDO, y esto es lo que se lee con atención: en tres o cuatro líneas, ¿qué dato concreto necesitarías para responder tu pregunta, y quién lo tendría? Si crees que ese dato no existe, no es público, o no está desagregado como lo necesitas, dilo — eso también es una respuesta, y de las buenas.",
+    "signalSchema": {
+      "instructions": "La respuesta debe traer un bloque [SENALES]...[/SENALES]. Parsea los campos que aparecen abajo y devuélvelos en parsedSignals con EXACTAMENTE las claves indicadas. Si un campo falta o es ilegible, pon null en esa clave en vez de inventarlo.",
+      "fields": [
+        { "key": "dominio", "label": "DOMINIO", "type": "texto", "description": "tema en que quiere hacer su proyecto, en pocas palabras" },
+        { "key": "pregunta", "label": "PREGUNTA", "type": "texto", "description": "la pregunta que quiere responder con datos" },
+        { "key": "rol", "label": "ROL", "type": "enum", "values": ["analista", "programador", "disenador", "comunicador"] },
+        { "key": "herramienta_previa", "label": "HERRAMIENTA_PREVIA", "type": "enum", "values": ["ninguna", "excel", "r", "python", "otra"] },
+        { "key": "skill_datos", "label": "SKILL_DATOS", "type": "entero_1_5" },
+        { "key": "skill_codigo", "label": "SKILL_CODIGO", "type": "entero_1_5" },
+        { "key": "skill_diseno", "label": "SKILL_DISENO", "type": "entero_1_5" },
+        { "key": "horas_semana", "label": "HORAS_SEMANA", "type": "numero" }
+      ]
+    },
+    "evaluationGuide": {
+      "must_hit": [
+        "Nombra un dato concreto, no 'más información': una encuesta, un registro, un censo, una base de algún servicio",
+        "Dice quién tendría ese dato, aunque sea de forma aproximada",
+        "La pregunta y el dato propuesto se corresponden: el dato podría efectivamente mover la respuesta"
+      ],
+      "nice_to_have": [
+        "Distingue lo que el dato mostraría de lo que solo insinuaría",
+        "Nota que su pregunta es de tipo causal y que un dato descriptivo no la contesta sola",
+        "Dice por qué el dato no existe o no está disponible, en vez de solo afirmar que no está"
+      ],
+      "fatal_errors": [
+        "Repite la pregunta con otras palabras en vez de decir qué dato haría falta",
+        "Pide 'datos' o 'información' sin especificar cuáles",
+        "Afirma que ya sabe la respuesta y que el dato solo la confirmaría"
+      ]
+    },
+    "idealAnswer": {
+      "keyPoints": [
+        "El bloque [SENALES] está completo y con valores diferenciados",
+        "Nombra un dato específico y una fuente plausible que lo tendría",
+        "El dato propuesto efectivamente responde la pregunta que planteó"
+      ],
+      "expectedConcepts": ["senales_proyecto", "causalidad_y_descripcion"],
+      "commonMistakes": [
+        "Dejar el bloque incompleto o poner el mismo número en todos los skills",
+        "Pedir 'datos sobre el tema' sin decir cuáles",
+        "Plantear una pregunta de por qué y proponer un dato que solo describe qué"
+      ],
+      "excellentResponseIndicators": [
+        "Dice que el dato no está desagregado como lo necesita, y explica por qué eso importa para su pregunta",
+        "Separa lo que el dato probaría de lo que solo sugeriría",
+        "Coherencia entre los skills que se autoasigna y el rol que elige"
+      ]
+    }
+  },
+  {
+    "id": "dv_c01_r5_que_no_se_concluye",
+    "order": 5,
+    "title": "La última: qué sostiene el gráfico",
+    "category": "Crítica de gráficos",
+    "type": "multiple_choice",
+    "ranked": false,
+    "durationSeconds": 67,
+    "context": "",
+    "question": "",
+    "conceptTags": ["causalidad_y_descripcion", "lectura_de_graficos"],
+    "media": [
+      {
+        "kind": "image",
+        "src": "media/dataviz/c01_esperanza_vida_reciente.png",
+        "alt": "El mismo gráfico honesto de la ronda 2: esperanza de vida al nacer en Chile entre 2010 y 2023, con el eje vertical desde cero hasta noventa años.",
+        "credit": "Elaboración propia con datos de Our World in Data — CC BY 4.0"
+      }
+    ],
+    "mcQuestions": [
+      {
+        "question": "Volvemos al gráfico honesto. Ya sabes que en 2019 fueron 80,3 años, en 2021 78,9 y en 2023 81,2. ¿Cuál de estas afirmaciones se puede sostener SOLO CON ESTE GRÁFICO?",
+        "options": [
+          { "id": "A", "text": "La pandemia causó la baja de 2020 y 2021" },
+          { "id": "B", "text": "El sistema de salud chileno mejoró entre 2021 y 2023" },
+          { "id": "C", "text": "En 2021 la esperanza de vida al nacer fue menor que en 2019" },
+          { "id": "D", "text": "En 2025 la esperanza de vida va a superar los 82 años" }
+        ],
+        "correctOptionIndex": 2,
+        "timeLimitSeconds": 35,
+        "explanation": "Solo C. Es la única que se lee del gráfico y nada más. A es probablemente cierta en el mundo, pero el gráfico no la muestra: muestra CUÁNDO bajó, no POR QUÉ. B es una explicación, no una lectura. D es una proyección más allá de donde termina el dato. Distinguir estas cuatro cosas es, básicamente, el curso."
+      }
+    ]
+  }
+]

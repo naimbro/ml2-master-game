@@ -1,26 +1,36 @@
 {
   "sessionId": "clase_01_diagnostico",
   "courseId": "dataviz_2026",
-  "draft": true,
-  "title": "TODO: título de clase_01_diagnostico",
-  "description": "TODO: descripción de una línea, la ve el profesor al elegir la sesión",
-  "date": "TODO: YYYY-MM-DD",
-  "roundCount": 0,
-  "roundDurationSeconds": 240,
+  "title": "Clase 1: Diagnóstico y proyecto",
+  "description": "5 rondas (~12 min), ninguna rankeada: tres lecturas de gráficos para saber de dónde partimos, un bloque de señales para armar los grupos del proyecto, y un cierre sobre qué se puede y qué no se puede concluir de un gráfico",
+  "date": "2026-08-03",
+  "roundCount": 5,
+  "roundDurationSeconds": 300,
   "bufferSeconds": 45,
-  "conceptTags": [],
+  "conceptTags": [
+    "lectura_de_graficos",
+    "nivel_vs_cambio",
+    "eje_truncado",
+    "causalidad_y_descripcion",
+    "senales_proyecto"
+  ],
   "judges": [
-    {
-      "judgeId": "generic_specialist",
-      "weight": 0.35
+    { "judgeId": "generic_specialist", "weight": 0.35 },
+    { "judgeId": "generic_praxis", "weight": 0.35 },
+    { "judgeId": "generic_teacher", "weight": 0.3 }
+  ],
+  "judgeConfig": {
+    "generic_specialist": {
+      "sessionLens": "Esta es la PRIMERA CLASE del curso. Los estudiantes no han leído nada todavía y no conocen el vocabulario técnico. NO penalices que no digan 'sesgo', 'escala' o 'variable': penaliza solo que afirmen cosas que el dato no sostiene. Tu lente es la construcción del gráfico y la corrección de lo que se afirma sobre él.",
+      "weightFormula": "score = 0.35 * rigor_descriptivo + 0.50 * criterio_visual + 0.15 * claridad"
     },
-    {
-      "judgeId": "generic_praxis",
-      "weight": 0.35
+    "generic_praxis": {
+      "sessionLens": "Esta es la primera clase. Tú eres la audiencia no especializada que el curso pone como estándar: un lector interesado, sin formación estadística. Tu única pregunta es si entenderías esta respuesta y si te dejaría con una idea correcta en la cabeza. Premia que traduzcan; penaliza que sobre-afirmen, porque a un lector como tú una sobre-afirmación lo deja creyendo algo falso.",
+      "weightFormula": "score = 0.30 * rigor_descriptivo + 0.20 * criterio_visual + 0.50 * claridad"
     },
-    {
-      "judgeId": "generic_teacher",
-      "weight": 0.3
+    "generic_teacher": {
+      "sessionLens": "Esta es la primera clase y esta ronda es diagnóstica: no hay ranking. Evalúa si la persona PENSÓ el caso o si rellenó los campos. Un estudiante que dice honestamente 'el dato que necesito no existe' vale más que uno que inventa una fuente. En tu feedback escribe en primera persona e incluye un 'yo habría...' concreto a esta respuesta, porque este feedback es lo primero que van a leer del curso.",
+      "weightFormula": "score = 0.50 * rigor_descriptivo + 0.30 * criterio_visual + 0.20 * claridad"
     }
-  ]
+  }
 }
