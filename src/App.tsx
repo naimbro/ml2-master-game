@@ -8,6 +8,7 @@ import Lobby from './pages/student/Lobby';
 import Round from './pages/student/Round';
 import Results from './pages/student/Results';
 import End from './pages/student/End';
+import CourseStandings from './pages/student/CourseStandings';
 
 // Professor Pages
 import Dashboard from './pages/professor/Dashboard';
@@ -90,6 +91,10 @@ function AppRoutes() {
       <Route
         path="/game/:gameCode/end"
         element={user ? <End /> : <Navigate to="/" replace />}
+      />
+      <Route
+        path="/curso/:courseId/tabla"
+        element={user ? <CourseStandings /> : <Navigate to="/" replace />}
       />
 
       {/* Professor routes */}
