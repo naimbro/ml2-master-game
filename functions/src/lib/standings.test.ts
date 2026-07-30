@@ -77,3 +77,116 @@ describe('rankGame', () => {
     expect(rankGame([p('a', 0, false)])).toEqual([]);
   });
 });
+
+import { accumulate, type GameResult } from './standings';
+
+const game = (
+  gameCode: string,
+  finishedAtMs: number,
+  players: Array<[string, number]>
+): GameResult => ({
+  gameCode,
+  sessionId: `sesion_${gameCode}`,
+  sessionTitle: `Clase ${gameCode}`,
+  finishedAtMs,
+  players: players.map(([uid, totalScore]) => ({
+    uid, name: uid.toUpperCase(), totalScore, answered: true,
+  })),
+});
+
+describe('accumulate', () => {
+  it('suma los puntos de cada juego y ordena por total', () => {
+    const entries = accumulate([
+      game('g1', 1000, [['ana', 200], ['beto', 100]]),   // ana 30, beto 25
+      game('g2', 2000, [['ana', 100], ['beto', 300]]),   // ana 25, beto 30
+    ]);
+    expect(entries.map((e) => [e.uid, e.points, e.position])).toEqual([
+      ['ana', 55, 1],
+      ['beto', 55, 1],
+    ]);
+  });
+
+  it('ordena los juegos por fecha aunque lleguen desordenados', () => {
+    const entries = accumulate([
+      game('g2', 2000, [['ana', 100]]),
+      game('g1', 1000, [['ana', 200]]),
+    ]);
+    expect(entries[0].positionsByGame).toEqual([1, 1]);
+  });
+
+  it('deja null en la clase que el alumno falto y no le suma nada', () => {
+    const entries = accumulate([
+      game('g1', 1000, [['ana', 200], ['beto', 100]]),
+      game('g2', 2000, [['ana', 200]]),
+    ]);
+    const beto = entries.find((e) => e.uid === 'beto')!;
+    expect(beto.positionsByGame).toEqual([2, null]);
+    expect(beto.pointsByGame).toEqual([25, null]);
+    expect(beto.points).toBe(25);
+    expect(beto.gamesPlayed).toBe(1);
+  });
+
+  it('calcula la posicion anterior sin el ultimo juego', () => {
+    const entries = accumulate([
+      game('g1', 1000, [['ana', 100], ['beto', 200]]),   // beto 1ro, ana 2da
+      game('g2', 2000, [['ana', 300], ['beto', 100]]),   // ana sube
+    ]);
+    const ana = entries.find((e) => e.uid === 'ana')!;
+    expect(ana.position).toBe(1);
+    expect(ana.previousPosition).toBe(2);
+  });
+
+  it('deja la posicion anterior en null cuando solo hay un juego', () => {
+    const entries = accumulate([game('g1', 1000, [['ana', 100]])]);
+    expect(entries[0].previousPosition).toBeNull();
+  });
+
+  it('deja la posicion anterior en null para quien debuta en el ultimo juego', () => {
+    const entries = accumulate([
+      game('g1', 1000, [['ana', 100]]),
+      game('g2', 2000, [['ana', 100], ['nuevo', 300]]),
+    ]);
+    const nuevo = entries.find((e) => e.uid === 'nuevo')!;
+    expect(nuevo.previousPosition).toBeNull();
+  });
+
+  it('usa el nombre mas reciente del alumno', () => {
+    const g1 = game('g1', 1000, [['ana', 100]]);
+    const g2 = game('g2', 2000, [['ana', 100]]);
+    g2.players[0].name = 'Ana Nueva';
+    expect(accumulate([g1, g2])[0].name).toBe('Ana Nueva');
+  });
+
+  it('con dropWorst descarta las peores casillas, contando las ausencias como cero', () => {
+    // ana juega 4 clases: 30, 3, 30, 30 -> descartando 2 quedan 60
+    // beto juega 2 de 4: 25, falto, 25, falto -> descartando 2 (los ceros) quedan 50
+    const games = [
+      game('g1', 1000, [['ana', 300], ['beto', 200]]),
+      game('g2', 2000, [['ana', 10], ['x1', 500], ['x2', 400], ['x3', 300], ['x4', 200],
+                        ['x5', 190], ['x6', 180], ['x7', 170], ['x8', 160], ['x9', 150],
+                        ['x10', 140], ['x11', 130], ['x12', 120], ['x13', 110], ['x14', 100],
+                        ['x15', 90], ['x16', 80], ['x17', 70]]),
+      game('g3', 3000, [['ana', 300], ['beto', 200]]),
+      game('g4', 4000, [['ana', 300]]),
+    ];
+    const sinDescarte = accumulate(games);
+    expect(sinDescarte.find((e) => e.uid === 'ana')!.points).toBe(93);   // 30+3+30+30
+    expect(sinDescarte.find((e) => e.uid === 'beto')!.points).toBe(50);  // 25+0+25+0
+
+    const conDescarte = accumulate(games, { dropWorst: 2 });
+    expect(conDescarte.find((e) => e.uid === 'ana')!.points).toBe(60);   // saca el 3 y un 30
+    expect(conDescarte.find((e) => e.uid === 'beto')!.points).toBe(50);  // saca los dos ceros
+  });
+
+  it('no descarta nada por defecto', () => {
+    const entries = accumulate([
+      game('g1', 1000, [['ana', 100]]),
+      game('g2', 2000, [['beto', 100]]),
+    ]);
+    expect(entries.find((e) => e.uid === 'ana')!.points).toBe(30);
+  });
+
+  it('devuelve vacio si no hay juegos', () => {
+    expect(accumulate([])).toEqual([]);
+  });
+});
