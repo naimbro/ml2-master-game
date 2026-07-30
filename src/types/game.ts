@@ -241,6 +241,27 @@ export interface Scenario {
   // field instead of separate `context`/`question`.
   prompt?: string;
   judgeFocus?: string;
+  /** Guia de evaluacion por pregunta; manda sobre `idealAnswer` en el prompt del juez. */
+  evaluationGuide?: {
+    must_hit?: string[];
+    nice_to_have?: string[];
+    fatal_errors?: string[];
+  };
+  /**
+   * Solo rondas `ranked: false`: que campos debe extraer el juez a `parsedSignals`.
+   * Sin esto, el motor cae a las ramas hardcodeadas de ml2-2025 y le pide al juez
+   * los campos de otro curso (functions/src/lib/signalSchema.ts).
+   */
+  signalSchema?: {
+    instructions?: string;
+    fields: Array<{
+      key: string;
+      label?: string;
+      type?: string;
+      values?: string[];
+      description?: string;
+    }>;
+  };
 }
 
 export interface IdealAnswer {

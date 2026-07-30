@@ -1,0 +1,15 @@
+{
+  "courseId": "dataviz_2026",
+  "name": "Descripción y Visualización de Datos",
+  "code": "DVD-2026-2",
+  "description": "Curso del doble título Sociología - Ingeniería Comercial de la Universidad Adolfo Ibáñez, segundo semestre 2026. 15 clases los lunes de 10:00 a 12:40. Los estudiantes aprenden a describir datos, a leerlos sin sobre-afirmar, y a construir gráficos y una plataforma web que un lector no especializado entienda. Los juegos son la actividad de cierre de clase, de 10 a 15 minutos.",
+  "professorEmail": "naim.bro@gmail.com",
+  "university": "Universidad Adolfo Ibáñez",
+  "program": "Doble título Sociología - Ingeniería Comercial",
+  "syllabusUrl": "https://naimbro.github.io/teaching/2026_descripcion_visualizacion_datos.html",
+  "startDate": "2026-08-03",
+  "endDate": "2026-11-23",
+  "sessions": [
+    "clase_01_diagnostico"
+  ]
+}

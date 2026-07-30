@@ -30,3 +30,8 @@ bt-report-*.html
 # Learnings extracted from literatura/evaluacion_llm/ are tracked in
 # docs/evaluacion_llm_literatura.md so they survive without the PDFs.
 literatura/
+
+# Materiales crudos de los cursos: PDFs de pago, capturas, fuentes sin licencia
+# para redistribuir. Este repo es publico y despliega a GitHub Pages — de aca
+# solo salen extractos destilados hacia knowledge_base.md.
+materials/

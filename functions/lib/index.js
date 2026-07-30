@@ -45,6 +45,7 @@ const judgeModels_1 = require("./lib/judgeModels");
 const promptSplit_1 = require("./lib/promptSplit");
 const sessionDraft_1 = require("./lib/sessionDraft");
 const judgeOverrides_1 = require("./lib/judgeOverrides");
+const signalSchema_1 = require("./lib/signalSchema");
 admin.initializeApp();
 const db = admin.firestore();
 // Lazy-load SDKs to avoid initialization timeout (they load only when a judge of
@@ -230,6 +231,9 @@ async function evaluateWithJudge(clients, judge, scenario, studentResponse, sess
     delete scenarioForPrompt.conceptTags;
     delete scenarioForPrompt.nice_to_have;
     delete scenarioForPrompt.referenceAnswer;
+    // El esquema de senales ya viaja como instrucciones en texto mas abajo; en el
+    // JSON del escenario solo seria ruido para el juez.
+    delete scenarioForPrompt.signalSchema;
     // Select only relevant KB sections for this round
     const conceptTags = (scenario.conceptTags || []);
     const relevantKB = selectKBSections(knowledgeBase, conceptTags);
@@ -327,12 +331,21 @@ async function evaluateWithJudge(clients, judge, scenario, studentResponse, sess
     // siguen en el repo por si se quieren retomar con otro diseno.
     // For non-ranked rounds, add signal extraction instructions
     if (!isRanked) {
-        const scenarioId = scenario.id || '';
-        const isFeria = scenarioId.includes('feria');
-        const isEstilo = scenarioId.includes('estilo');
-        if (isFeria) {
-            // R4 "Feria Comprimida": implicit signal extraction from structured free text
-            systemSuffix += `\n\nINSTRUCCIONES ADICIONALES PARA RONDA DIAGNOSTICA (FERIA):
+        // Camino preferido: el escenario declara QUE extraer. Antes esto estaba
+        // hardcodeado a los campos de ml2-2025 y se elegia por substring del id, asi
+        // que cualquier curso nuevo caia en el `else` de abajo y sus jueces recibian
+        // la lista de campos de otro curso, en silencio.
+        const declared = (0, signalSchema_1.buildSignalInstructions)(scenario.signalSchema);
+        if (declared) {
+            systemSuffix += declared;
+        }
+        else {
+            const scenarioId = scenario.id || '';
+            const isFeria = scenarioId.includes('feria');
+            const isEstilo = scenarioId.includes('estilo');
+            if (isFeria) {
+                // R4 "Feria Comprimida": implicit signal extraction from structured free text
+                systemSuffix += `\n\nINSTRUCCIONES ADICIONALES PARA RONDA DIAGNOSTICA (FERIA):
 Esta ronda NO afecta el ranking. Evalua normalmente, pero ademas extrae senales IMPLICITAS del texto del estudiante.
 Debes inferir del contenido de la respuesta los siguientes campos:
 - "family_chosen": numero de la familia que eligio (1-6)
@@ -343,10 +356,10 @@ Debes inferir del contenido de la respuesta los siguientes campos:
 - "writing_concision": 1-5, claridad y economia del lenguaje
 Incluye en tu JSON de respuesta un campo "parsedSignals" con estos valores y "extractionConfidence" entre 0.3 y 1.0.
 Manten tu feedback conciso (max 120 palabras).`;
-        }
-        else if (isEstilo) {
-            // R6 "Estilo de trabajo": semi-structured extraction from labeled fields
-            systemSuffix += `\n\nINSTRUCCIONES ADICIONALES PARA RONDA DIAGNOSTICA (ESTILO):
+            }
+            else if (isEstilo) {
+                // R6 "Estilo de trabajo": semi-structured extraction from labeled fields
+                systemSuffix += `\n\nINSTRUCCIONES ADICIONALES PARA RONDA DIAGNOSTICA (ESTILO):
 Esta ronda NO afecta el ranking. Evalua normalmente, pero ademas extrae senales del texto del estudiante.
 Busca estos campos en la respuesta (pueden estar etiquetados o en texto libre):
 - "primary_strength": su fortaleza principal (texto breve)
@@ -357,10 +370,10 @@ Busca estos campos en la respuesta (pueden estar etiquetados o en texto libre):
 - "learning_goal": que quiere aprender (texto breve)
 Incluye en tu JSON de respuesta un campo "parsedSignals" con estos valores y "extractionConfidence" entre 0.3 y 1.0.
 Manten tu feedback conciso (max 120 palabras).`;
-        }
-        else {
-            // R5: explicit [SENALES] block extraction
-            systemSuffix += `\n\nINSTRUCCIONES ADICIONALES PARA RONDA DIAGNOSTICA:
+            }
+            else {
+                // R5: explicit [SENALES] block extraction
+                systemSuffix += `\n\nINSTRUCCIONES ADICIONALES PARA RONDA DIAGNOSTICA:
 Esta ronda NO afecta el ranking. Ademas de evaluar normalmente, debes extraer senales del estudiante.
 Si la respuesta contiene un bloque [SENALES]...[/SENALES], parsea los valores estructurados dentro de ese bloque.
 Campos esperados: PREFERENCIAS_FAMILIAS (3 numeros 1-6), SKILL_TECH/SKILL_DATOS/SKILL_SECTOR_PUBLICO/SKILL_ESCRITURA_PRESENTAR (1-5 cada uno), ROL_PREFERIDO (builder/owner/analyst/communicator), DISPONIBILIDAD_HORAS_SEMANA (numero), OUTPUT_PREFERIDO (reporte/chatbot/ambos).
@@ -368,6 +381,7 @@ Incluye en tu JSON de respuesta un campo adicional "parsedSignals" con los valor
 Si el bloque [SENALES] no existe o esta malformado, incluye "parsedSignals": null y agrega "extractionConfidence": 0.
 Si el bloque existe y se parseo correctamente, agrega "extractionConfidence" entre 0.5 y 1.0 segun la calidad del parseo.
 Manten tu respuesta concisa (max 120 palabras de feedback + bloque de senales).`;
+            }
         }
     }
     const provider = (0, judgeModels_1.resolveProvider)(judge);
