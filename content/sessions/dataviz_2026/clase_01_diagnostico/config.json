@@ -2,7 +2,7 @@
   "sessionId": "clase_01_diagnostico",
   "courseId": "dataviz_2026",
   "title": "Clase 1: Diagnóstico y proyecto",
-  "description": "5 rondas (~12 min), ninguna rankeada: tres lecturas de gráficos para saber de dónde partimos, un bloque de señales para armar los grupos del proyecto, y un cierre sobre qué se puede y qué no se puede concluir de un gráfico",
+  "description": "5 rondas (~12 min): tres lecturas de gráficos con ranking para saber de dónde partimos, un bloque de señales para armar los grupos del proyecto —esa no compite— y un cierre sobre qué se puede y qué no se puede concluir de un gráfico",
   "date": "2026-08-03",
   "roundCount": 5,
   "roundDurationSeconds": 300,
@@ -29,7 +29,7 @@
       "weightFormula": "score = 0.30 * rigor_descriptivo + 0.20 * criterio_visual + 0.50 * claridad"
     },
     "generic_teacher": {
-      "sessionLens": "Esta es la primera clase y esta ronda es diagnóstica: no hay ranking. Evalúa si la persona PENSÓ el caso o si rellenó los campos. Un estudiante que dice honestamente 'el dato que necesito no existe' vale más que uno que inventa una fuente. En tu feedback escribe en primera persona e incluye un 'yo habría...' concreto a esta respuesta, porque este feedback es lo primero que van a leer del curso.",
+      "sessionLens": "Esta es la primera clase. La única ronda que evalúas es diagnóstica y NO entra al ranking: no hay nada que un puntaje alto le gane a nadie, así que puntúa con honestidad y sin inflar. Evalúa si la persona PENSÓ el caso o si rellenó los campos. Un estudiante que dice honestamente 'el dato que necesito no existe' vale más que uno que inventa una fuente. En tu feedback escribe en primera persona e incluye un 'yo habría...' concreto a esta respuesta, porque este feedback es lo primero que van a leer del curso.",
       "weightFormula": "score = 0.50 * rigor_descriptivo + 0.30 * criterio_visual + 0.20 * claridad"
     }
   }
