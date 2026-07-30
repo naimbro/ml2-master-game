@@ -21,6 +21,11 @@ const MARGIN_RIGHT = 150;
 const MARGIN_TOP = 40;
 const ROW_HEIGHT = 34;
 const MARGIN_BOTTOM = 46;
+/** Separacion entre una columna y su etiqueta, y entre la primera/ultima columna
+ * y el borde de la banda de fondo. */
+const LABEL_GAP = 16;
+/** Separacion extra entre el borde de la banda y el numero de posicion. */
+const ROW_LABEL_GAP = 10;
 
 export interface TrajectoryInput {
   name: string;
@@ -44,6 +49,15 @@ export interface TrajectoryChart {
   rows: Array<{ rank: number; y: number; banded: boolean }>;
   columns: Array<{ x: number; label: string }>;
   lines: TrajectoryLine[];
+  /**
+   * Borde izquierdo/derecho de la banda de fondo alterna, derivados de los
+   * mismos margenes que ubican las columnas. Si MARGIN_LEFT o MARGIN_RIGHT
+   * cambian, estos se mueven con ellos — el componente no vuelve a calcularlos.
+   */
+  bandLeft: number;
+  bandRight: number;
+  /** x del numero de posicion, a la izquierda del borde de la banda. */
+  rowLabelX: number;
 }
 
 /** "Matías Fuenzalida" -> "Matías F." */
@@ -118,5 +132,9 @@ export function buildTrajectoryChart(
     };
   });
 
-  return { width: WIDTH, height, maxRank, rows, columns, lines };
+  const bandLeft = MARGIN_LEFT - LABEL_GAP;
+  const bandRight = WIDTH - MARGIN_RIGHT + LABEL_GAP;
+  const rowLabelX = bandLeft - ROW_LABEL_GAP;
+
+  return { width: WIDTH, height, maxRank, rows, columns, lines, bandLeft, bandRight, rowLabelX };
 }

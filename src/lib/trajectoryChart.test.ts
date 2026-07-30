@@ -50,4 +50,16 @@ describe('buildTrajectoryChart', () => {
     const chart = buildTrajectoryChart([], 3);
     expect(chart.lines).toEqual([]);
   });
+
+  it('la banda de fondo y el numero de fila quedan dentro del lienzo, fuera de la primera y ultima columna', () => {
+    const chart = buildTrajectoryChart([entry('Ana', [1, 2, 3])], 3);
+    const firstColumnX = chart.columns[0].x;
+    const lastColumnX = chart.columns[chart.columns.length - 1].x;
+
+    expect(chart.rowLabelX).toBeGreaterThanOrEqual(0);
+    expect(chart.rowLabelX).toBeLessThan(chart.bandLeft);
+    expect(chart.bandLeft).toBeLessThanOrEqual(firstColumnX);
+    expect(chart.bandRight).toBeGreaterThanOrEqual(lastColumnX);
+    expect(chart.bandRight).toBeLessThanOrEqual(chart.width);
+  });
 });

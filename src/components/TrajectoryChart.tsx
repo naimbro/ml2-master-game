@@ -24,10 +24,10 @@ export default function TrajectoryChart({ entries, gameCount }: Props) {
         <g key={row.rank}>
           {row.banded && (
             <rect
-              x={116} y={row.y - 17} width={chart.width - 250} height={34} fill="#f4f2ec"
+              x={chart.bandLeft} y={row.y - 17} width={chart.bandRight - chart.bandLeft} height={34} fill="#f4f2ec"
             />
           )}
-          <text x={106} y={row.y + 4} fontSize={11} fontFamily="system-ui" fill="#898781" textAnchor="end">
+          <text x={chart.rowLabelX} y={row.y + 4} fontSize={11} fontFamily="system-ui" fill="#898781" textAnchor="end">
             {row.rank}º
           </text>
         </g>

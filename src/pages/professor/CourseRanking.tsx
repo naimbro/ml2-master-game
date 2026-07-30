@@ -15,9 +15,14 @@ export default function CourseRanking() {
   const [courseName, setCourseName] = useState<string>('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Distingue "todavia no llego el primer snapshot" de "el curso no tiene
+  // tabla": sin esto, un curso con historial real muestra un instante el
+  // mensaje de "Todavia no hay tabla", que es falso.
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!courseId) return;
+    setLoading(true);
     // Los cursos del repo no tienen documento en Firestore; los dinamicos si.
     // CourseHome.tsx solo sabe resolver los dinamicos — por eso esta pantalla
     // repite el mismo patron que CreateGame.tsx.
@@ -27,6 +32,7 @@ export default function CourseRanking() {
 
     return onSnapshot(doc(db, 'standings', courseId), (snap) => {
       setStandings(snap.exists() ? (snap.data() as CourseStandings) : null);
+      setLoading(false);
     });
   }, [courseId]);
 
@@ -56,6 +62,14 @@ export default function CourseRanking() {
   };
 
   const excluded = standings?.excludedGameCodes ?? [];
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-main flex items-center justify-center">
+        <div className="w-16 h-16 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-main p-4">
