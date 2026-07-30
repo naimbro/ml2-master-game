@@ -57,8 +57,28 @@ describe('summarizeRoundScores', () => {
     expect(Number.isNaN(r.average)).toBe(false);
   });
 
-  // El caso real de la clase 1 de dataviz: cinco rondas, ninguna rankeada.
-  it('el Juego 1 de dataviz no queda en cero', () => {
+  // La forma real del Juego 1 de dataviz: cuatro rondas MC que compiten y la
+  // ronda abierta de senales que no. Los numeros son los de la partida de prueba
+  // del 2026-07-30 (juego YBWGQP): 20, 92, 20, [1 no rankeada], 88.
+  it('el Juego 1 de dataviz promedia sobre las cuatro rondas que compiten', () => {
+    const r = summarizeRoundScores([
+      { score: 20, ranked: true },
+      { score: 92, ranked: true },
+      { score: 20, ranked: true },
+      { score: 1, ranked: false },
+      { score: 88, ranked: true },
+    ]);
+    expect(r.total).toBe(220);
+    // 220/4 = 55. Antes del arreglo la pantalla dividia por las 5 rondas y
+    // mostraba 44, castigando al alumno por una ronda que no competia.
+    expect(r.average).toBe(55);
+    expect(r.countedRounds).toBe(4);
+    expect(r.diagnosticOnly).toBe(false);
+  });
+
+  // Un juego enteramente diagnostico sigue siendo posible (y es lo que habria
+  // pasado si las cinco rondas quedaban sin ranking).
+  it('un juego 100% diagnostico no queda en cero', () => {
     const r = summarizeRoundScores([
       { score: 100, ranked: false },
       { score: 70, ranked: false },

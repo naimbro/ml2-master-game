@@ -82,9 +82,23 @@ describe('clase_01_diagnostico', () => {
     }
   });
 
-  it('es un diagnostico: ninguna ronda cuenta para el ranking', () => {
-    const scenarios = session().scenarios as { ranked?: boolean }[];
-    expect(scenarios.every((s) => s.ranked === false)).toBe(true);
+  // Las cuatro rondas de opcion multiple compiten; la abierta de senales no.
+  // Pedirle a alguien que declare su dominio de interes y su rol no es una
+  // competencia, y ponerle ranking incentivaria a inventar la respuesta que
+  // "puntua" en vez de la verdadera, que es justo el insumo que se necesita
+  // para armar los grupos.
+  it('las rondas MC son rankeadas y la abierta de senales no', () => {
+    const scenarios = session().scenarios as {
+      id: string;
+      type?: string;
+      ranked?: boolean;
+    }[];
+    for (const s of scenarios) {
+      const compite = s.ranked !== false;
+      expect(compite, `${s.id} deberia ${s.type === 'multiple_choice' ? '' : 'NO '}competir`)
+        .toBe(s.type === 'multiple_choice');
+    }
+    expect(scenarios.filter((s) => s.ranked !== false)).toHaveLength(4);
   });
 
   it('la rubrica tiene las tres dimensiones del curso sumando 1', () => {
