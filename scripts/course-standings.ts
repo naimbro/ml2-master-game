@@ -29,38 +29,62 @@ const SEQ = [
   '#5598e7', '#3987e5', '#2a78d6', '#256abf', '#1c5cab', '#184f95',
 ];
 
+/**
+ * Escapa para texto Y para atributos entre comillas dobles. `scripts/lib/report.ts`
+ * (el patron de bt-rescore.ts) solo escapa &, < y > porque nunca mete texto en un
+ * atributo; aca `sessionTitle` va dentro de `title="..."`, asi que las comillas
+ * tambien se escapan. Nombres de alumnos y titulos de sesion son texto que puso
+ * una persona (Google display name / titulo editado por el profesor en la UI),
+ * no datos de confianza.
+ */
+function esc(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 async function loadGames(courseId: string, excluded: string[]): Promise<GameResult[]> {
+  // Se proyectan solo los campos que se usan mas abajo: scenarios y
+  // knowledgeBase son pesados y no hacen falta para el acumulado. Mismo
+  // criterio que recomputeCourseStandings en functions/src/index.ts.
   const snap = await db
     .collection('games')
     .where('courseId', '==', courseId)
     .where('status', '==', 'finished')
+    .select('finishedAt', 'updatedAt', 'players', 'sessionId', 'sessionConfig')
     .get();
 
-  const out: GameResult[] = [];
-  for (const doc of snap.docs) {
-    if (excluded.includes(doc.id)) continue;
-    const game = doc.data();
-    const subs = await db.collection('games').doc(doc.id)
-      .collection('submissions').select('playerId').get();
-    const answered = new Set(subs.docs.map((s) => s.data().playerId as string));
+  // Las submissions de cada juego son lecturas independientes entre si: se
+  // piden en paralelo, igual que en la Cloud Function gemela.
+  const includedDocs = snap.docs.filter((doc) => !excluded.includes(doc.id));
+  const out: GameResult[] = await Promise.all(
+    includedDocs.map(async (doc) => {
+      const game = doc.data();
+      const subs = await db.collection('games').doc(doc.id)
+        .collection('submissions').select('playerId').get();
+      const answered = new Set(subs.docs.map((s) => s.data().playerId as string));
 
-    const players: GamePlayerInput[] = Object.entries(
-      (game.players ?? {}) as Record<string, { name?: string; totalScore?: number }>
-    ).map(([uid, pl]) => ({
-      uid,
-      name: pl.name || 'Sin nombre',
-      totalScore: Number(pl.totalScore) || 0,
-      answered: answered.has(uid),
-    }));
+      const players: GamePlayerInput[] = Object.entries(
+        (game.players ?? {}) as Record<string, { name?: string; totalScore?: number }>
+      ).map(([uid, pl]) => ({
+        uid,
+        name: pl.name || 'Sin nombre',
+        totalScore: Number(pl.totalScore) || 0,
+        answered: answered.has(uid),
+      }));
 
-    out.push({
-      gameCode: doc.id,
-      sessionId: game.sessionId || '',
-      sessionTitle: game.sessionConfig?.title || game.sessionId || doc.id,
-      finishedAtMs: game.finishedAt?.toMillis?.() ?? game.updatedAt?.toMillis?.() ?? 0,
-      players,
-    });
-  }
+      return {
+        gameCode: doc.id,
+        sessionId: game.sessionId || '',
+        sessionTitle: game.sessionConfig?.title || game.sessionId || doc.id,
+        finishedAtMs: game.finishedAt?.toMillis?.() ?? game.updatedAt?.toMillis?.() ?? 0,
+        players,
+      };
+    })
+  );
   return out.sort((a, b) => a.finishedAtMs - b.finishedAtMs);
 }
 
@@ -77,23 +101,30 @@ function renderHtml(courseId: string, games: GameResult[], entries: StandingsEnt
   const paletteIndex = (rank: number) =>
     Math.round((1 - (rank - 1) / Math.max(1, worst - 1)) * (SEQ.length - 1));
   const cell = (rank: number) => SEQ[paletteIndex(rank)];
-  // Desde el indice 6 en adelante (de 11 tonos, 0..10) el azul ya es lo bastante
-  // oscuro para que el negro pierda contraste; de ahi para arriba va texto blanco.
-  const dark = (rank: number) => paletteIndex(rank) >= 6;
+  // Umbral medido en contraste WCAG real (texto #0b0b0b o #ffffff sobre cada
+  // tono, formula de luminancia relativa), no a ojo: del indice 0 al 7 el negro
+  // gana o empata (5.41:1 en el 6, 4.46:1 en el 7); recien del 8 en adelante el
+  // blanco pasa a ser claramente mejor (5.39:1 y sube hasta 8.10:1 en el 10).
+  // El indice 7 es el unico que no llega a 4.5:1 con ninguno de los dos colores
+  // (negro 4.46, blanco 4.42) — es el punto medio real de la paleta, no un bug;
+  // se deja con negro por ser el mejor de los dos disponibles ahi.
+  const dark = (rank: number) => paletteIndex(rank) >= 8;
 
-  const head = games.map((g, i) => `<th title="${g.gameCode} — ${g.sessionTitle}">C${i + 1}</th>`).join('');
+  const head = games
+    .map((g, i) => `<th title="${esc(g.gameCode)} — ${esc(g.sessionTitle)}">C${i + 1}</th>`)
+    .join('');
   const rows = entries.map((e) => {
     const cells = e.positionsByGame.map((pos) =>
       pos === null
         ? '<td class="falto">faltó</td>'
         : `<td style="background:${cell(pos)};color:${dark(pos) ? '#ffffff' : '#0b0b0b'}">${pos}</td>`
     ).join('');
-    return `<tr><td class="nm">${e.name}</td>${cells}<td class="tot">${e.points}</td><td class="tot">${e.position}º</td></tr>`;
+    return `<tr><td class="nm">${esc(e.name)}</td>${cells}<td class="tot">${e.points}</td><td class="tot">${e.position}º</td></tr>`;
   }).join('\n');
 
   return `<!doctype html>
 <html lang="es"><head><meta charset="utf-8">
-<title>Tabla acumulada — ${courseId}</title>
+<title>Tabla acumulada — ${esc(courseId)}</title>
 <style>
   body { font: 14px/1.5 system-ui, sans-serif; color: #0b0b0b; background: #f9f9f7; margin: 32px; }
   h1 { font-size: 22px; margin: 0 0 4px; }
@@ -107,7 +138,7 @@ function renderHtml(courseId: string, games: GameResult[], entries: StandingsEnt
   .warn { margin-top: 28px; padding: 12px 16px; border-left: 4px solid #eb6834; background: #fff4ee; color: #52514e; }
 </style></head>
 <body>
-<h1>Tabla acumulada — ${courseId}</h1>
+<h1>Tabla acumulada — ${esc(courseId)}</h1>
 <p class="sub">${entries.length} alumnos · ${games.length} clases · azul oscuro = ir adelante</p>
 <table>
   <thead><tr><th></th>${head}<th>Puntos</th><th>Final</th></tr></thead>
