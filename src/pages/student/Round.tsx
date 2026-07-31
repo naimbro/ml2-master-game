@@ -11,6 +11,7 @@ import { confettiBurst, confettiCannons, confettiPop } from '../../lib/confetti'
 import MusicSelector from '../../components/MusicSelector';
 import MediaBlock from '../../components/MediaBlock';
 import WaitingForRound from '../../components/WaitingForRound';
+import NoCopy from '../../components/NoCopy';
 import { resolveMediaSrc } from '../../lib/media';
 import { scoreMCQuestion, scoreMCBlock, MC_SCORING_LEGEND } from '../../lib/mcScoring';
 import { mcTimeline, mcGateSeconds } from '../../lib/mcTiming';
@@ -661,7 +662,7 @@ export default function Round() {
 
                   {/* Question text + optional media — one card, so image and
                       question read as a single unit on a projected screen */}
-                  <div className="card-play p-5 sm:p-6">
+                  <NoCopy className="card-play p-5 sm:p-6">
                     <p className="text-xl sm:text-2xl font-black text-ink leading-snug">
                       {currentScenario.mcQuestions[mcCurrentQ]?.question}
                     </p>
@@ -669,7 +670,7 @@ export default function Round() {
                       media={currentScenario.mcQuestions[mcCurrentQ]?.media}
                       className="mt-4"
                     />
-                  </div>
+                  </NoCopy>
 
                   {/* Timer progress bar */}
                   <div className="h-2 bg-surface-2 rounded-full overflow-hidden">
@@ -683,7 +684,7 @@ export default function Round() {
                   </div>
 
                   {/* Option buttons */}
-                  <div className={`grid ${mcOptionGridClass} gap-3`}>
+                  <NoCopy className={`grid ${mcOptionGridClass} gap-3`}>
                     {currentScenario.mcQuestions[mcCurrentQ]?.options.map((opt, i) => {
                       const correctIdx = currentScenario.mcQuestions![mcCurrentQ]?.correctOptionIndex;
                       const isCorrectOption = i === correctIdx;
@@ -761,7 +762,7 @@ export default function Round() {
                         </motion.button>
                       );
                     })}
-                  </div>
+                  </NoCopy>
 
                   {/* Answered, waiting for the shared reveal */}
                   {mcAnswered && !mcRevealed && (
@@ -816,7 +817,7 @@ export default function Round() {
               transition={{ duration: 0.3 }}
             >
               {/* Scenario Card */}
-              <div className="card-play p-6 mb-6">
+              <NoCopy className="card-play p-6 mb-6">
                 <div className="flex items-center gap-3 mb-4">
                   {currentScenario.category && (
                     <span className="px-3 py-1 bg-kahoot-blue/25 text-blue-700 rounded-full text-xs font-bold uppercase tracking-wider">
@@ -864,7 +865,7 @@ export default function Round() {
                     </p>
                   </div>
                 )}
-              </div>
+              </NoCopy>
 
               {/* Response Area */}
               {hasSubmitted ? (
