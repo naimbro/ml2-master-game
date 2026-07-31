@@ -11,6 +11,7 @@ import {
   ShieldCheck,
   Users,
   Trash2,
+  Trophy,
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { useProfessor } from '../../hooks/useProfessor';
@@ -149,6 +150,13 @@ export default function Dashboard() {
                     >
                       <Users className="w-4 h-4" />
                       Jueces
+                    </Link>
+                    <Link
+                      to={`/professor/courses/${course.id}/tabla`}
+                      className="flex items-center gap-1 px-3 py-2 bg-surface-2 hover:bg-surface-3 rounded-lg transition-colors text-sm"
+                    >
+                      <Trophy className="w-4 h-4" />
+                      Tabla
                     </Link>
                   </div>
                 </div>

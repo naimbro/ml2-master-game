@@ -26,6 +26,9 @@ dist-ssr
 # BT-rescore generated reports (contain student data)
 bt-report-*.html
 
+# Análisis privado del ranking acumulado — no se versiona ni se proyecta
+course-standings-*.html
+
 # Course readings and research papers (copyrighted PDFs — do not redistribute).
 # Learnings extracted from literatura/evaluacion_llm/ are tracked in
 # docs/evaluacion_llm_literatura.md so they survive without the PDFs.
@@ -35,3 +38,6 @@ literatura/
 # para redistribuir. Este repo es publico y despliega a GitHub Pages — de aca
 # solo salen extractos destilados hacia knowledge_base.md.
 materials/
+
+# Visual companion de brainstorming (superpowers)
+.superpowers/
