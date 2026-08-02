@@ -85,30 +85,35 @@ Solo la primera se sostiene con el gráfico solo. Las otras tres no están
 prohibidas: hay que decir que son eso, y decir qué dato haría falta para
 sostenerlas.
 
-<!-- section: senales_proyecto -->
+<!-- section: interrogar_un_numero -->
 
-## El proyecto y los grupos
+## Qué exigirle a un número antes de creerle
 
-El proyecto del semestre: cada grupo elige un tema, consigue datos, los describe,
-y construye una plataforma web que un lector no especializado entienda. Los
-grupos se arman en la clase 2 con las señales que los estudiantes entregan en la
-clase 1.
+Un número suelto —«subió 40%», «cayó a la mitad», «el doble que hace diez
+años»— no se puede evaluar. No porque sea falso, sino porque le faltan las tres
+cosas que lo harían verificable.
 
-Los cuatro roles: **analista** (qué mirar y qué se puede concluir),
-**programador** (que el código y la plataforma funcionen), **diseñador** (cómo se
-ve y cómo se lee), **comunicador** (escribe, presenta y defiende ante alguien de
-fuera). Son puntos de partida, no compartimentos.
+**Desde cuándo.** Un 40% acumulado en un año y un 40% acumulado en quince son
+fenómenos distintos, y la frase es idéntica en los dos casos. Peor: cualquier
+porcentaje de cambio depende por completo de qué dos momentos se comparan. Con
+una serie larga a la vista casi siempre se pueden elegir dos puntos que den la
+cifra que uno quiere. Por eso pedir la serie entera no es un capricho: es la
+única forma de saber si los dos extremos elegidos son representativos.
 
-Al evaluar la parte escrita de la ronda de señales: lo que se juzga es si la
-persona sabe qué dato necesitaría para responder su propia pregunta. Un dato
-concreto con una fuente plausible es lo que se pide. **Decir que el dato no
-existe, que no es público, o que no está desagregado como hace falta —con la
-razón— es una respuesta fuerte, no una evasión.** El dominio elegido no se
-evalúa: es un insumo para armar grupos.
+**Qué se midió.** Un promedio y una mediana pueden ir en direcciones distintas
+cuando hay valores extremos. Los arriendos publicados en un portal y los
+efectivamente firmados no son la misma población: lo publicado es la aspiración
+del arrendador. Y «Santiago» puede querer decir una comuna o treinta y siete.
 
-Fuentes de datos públicas chilenas que un estudiante podría nombrar con
-propiedad, para que no las trates como inventadas: INE (censos, encuestas de
-empleo), CASEN, SIMCE y bases del Mineduc, Servel, Banco Central, DIPRES,
-datos.gob.cl, encuestas CEP y LAPOP, y las bases de transparencia activa de cada
-servicio. Que un dato exista no significa que esté desagregado como el estudiante
-lo necesita, y notar esa diferencia es exactamente lo que se premia.
+**En qué unidades.** Si los precios están en pesos de cada año, parte de
+cualquier alza es simplemente inflación. Descontar la inflación no es un
+tecnicismo: es la diferencia entre «subió» y «subió más que todo lo demás».
+
+Estas tres se resumen en un criterio que sirve para cualquier número: **una
+pregunta útil es la que, contestada de dos maneras distintas, te deja creyendo
+cosas distintas.** «¿Es confiable la fuente?» rara vez cumple eso. «¿Es promedio
+o mediana?» casi siempre lo cumple.
+
+Y sobre qué gráfico pedir: la pregunta que importa no es cuál se ve mejor, sino
+**qué tendría que mostrar ese gráfico para que la afirmación quede en pie o se
+caiga**. Un gráfico que no puede desmentir nada tampoco confirma nada.

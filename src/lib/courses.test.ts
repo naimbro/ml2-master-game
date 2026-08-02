@@ -82,23 +82,23 @@ describe('clase_01_diagnostico', () => {
     }
   });
 
-  // Las cuatro rondas de opcion multiple compiten; la abierta de senales no.
-  // Pedirle a alguien que declare su dominio de interes y su rol no es una
-  // competencia, y ponerle ranking incentivaria a inventar la respuesta que
-  // "puntua" en vez de la verdadera, que es justo el insumo que se necesita
-  // para armar los grupos.
-  it('las rondas MC son rankeadas y la abierta de senales no', () => {
+  // Las CINCO rondas compiten, incluida la abierta. Reemplaza al diseno anterior,
+  // en que la quinta era un formulario de senales del proyecto y por eso quedaba
+  // fuera del ranking: Naim lo saco el 2026-08-02 porque llenar un formulario no
+  // es jugar, y las senales para armar los grupos se recogen en la clase del 10.
+  it('las cinco rondas compiten, incluida la abierta', () => {
     const scenarios = session().scenarios as {
       id: string;
       type?: string;
       ranked?: boolean;
     }[];
     for (const s of scenarios) {
-      const compite = s.ranked !== false;
-      expect(compite, `${s.id} deberia ${s.type === 'multiple_choice' ? '' : 'NO '}competir`)
-        .toBe(s.type === 'multiple_choice');
+      expect(s.ranked !== false, `${s.id} deberia competir`).toBe(true);
     }
-    expect(scenarios.filter((s) => s.ranked !== false)).toHaveLength(4);
+    expect(scenarios.filter((s) => s.ranked !== false)).toHaveLength(5);
+    // Y sigue habiendo exactamente una abierta: si desaparece, el juego pierde
+    // la unica ronda donde los jueces leen algo escrito.
+    expect(scenarios.filter((s) => s.type !== 'multiple_choice')).toHaveLength(1);
   });
 
   it('la rubrica tiene las tres dimensiones del curso sumando 1', () => {
