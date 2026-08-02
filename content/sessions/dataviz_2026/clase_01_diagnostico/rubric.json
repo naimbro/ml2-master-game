@@ -1,94 +1,83 @@
 {
-  "_doc": "Copia de _shared/base_rubric.json para clase_01_diagnostico. Generada por scripts/scaffold-dataviz-session.cjs. Si ajustas pesos o anclas SOLO para esta clase, hazlo aquí y no en _shared/.",
+  "_doc": "Rúbrica propia de clase_01_diagnostico. NO sale de _shared/base_rubric.json: las dos únicas rondas que los jueces evalúan en esta clase son de comprensión lectora sobre el artículo de Katie Parrott, no de lectura de gráficos, así que las tres dimensiones del curso (rigor descriptivo, criterio visual, claridad) no describen lo que hay que juzgar. Las dos rondas de opción múltiple se corrigen en el cliente y no pasan por los jueces.",
   "sessionId": "clase_01_diagnostico",
-  "globalInstructions": "Evalúa SOLO lo que está escrito. No completes la respuesta con lo que el estudiante 'seguramente quiso decir'.\n\nEste curso es de pregrado, doble título Sociología - Ingeniería Comercial. El estándar es el de alguien que está aprendiendo a describir datos, no el de un estadístico. No exijas vocabulario técnico: exige que lo que se afirma se sostenga con lo que se muestra.\n\nLa audiencia del curso es explícitamente no especializada. Una respuesta correcta pero incomprensible para un lector común no cumple el objetivo del curso.\n\nLas respuestas se escriben en pocos minutos desde un teléfono: premia densidad, no extensión. Una respuesta corta y precisa vale más que una larga y vaga. No penalices la brevedad; penaliza la vaguedad.\n\nEl judgeFocus del escenario es tu prioridad absoluta y manda sobre estas instrucciones generales si hay tensión.",
+  "globalInstructions": "Evalúa SOLO lo que está escrito. No completes la respuesta con lo que el estudiante 'seguramente quiso decir'.\n\nLo que se evalúa es comprensión lectora: si la persona entendió el argumento de un artículo que tiene impreso al lado, y si sabe articularlo con sus palabras. No es una pregunta de opinión, salvo que el enunciado la pida.\n\nEL LARGO IMPORTA Y ESTÁ ACOTADO A PROPÓSITO. Cada ronda pide CUATRO LÍNEAS, escritas en tres minutos desde un teléfono. Cuatro líneas bien puestas valen 100. NO esperes párrafos, ni introducción, ni estructura, ni ortografía perfecta, ni vocabulario académico. Escribir más NO sube el puntaje: la dimensión 'Economía' existe justamente para que el relleno no se premie.\n\nEste curso es de pregrado, doble título Sociología - Ingeniería Comercial, y es la primera clase del semestre: no han leído nada del curso todavía. El único texto que se supone que leyeron es el artículo.\n\nNo penalices que escriban en un registro coloquial. Penaliza que le atribuyan al texto cosas que el texto no dice.\n\nEl judgeFocus del escenario es tu prioridad absoluta y manda sobre estas instrucciones generales si hay tensión.",
   "scoring": {
-    "scaleLevels": [
-      100,
-      80,
-      60,
-      40,
-      20,
-      0
-    ],
+    "scaleLevels": [100, 80, 60, 40, 20, 0],
     "instructions": "Elige uno de los seis niveles escritos por dimensión. No inventes valores intermedios. Si la respuesta satisface un nivel solo parcialmente, baja al nivel inferior."
   },
   "dimensions": [
     {
-      "id": "rigor_descriptivo",
-      "name": "Rigor descriptivo",
-      "weight": 0.4,
-      "description": "¿Lee lo que hay, y solo lo que hay? Distinguir la observación de la explicación, no inferir causalidad desde datos descriptivos, y declarar qué queda fuera del dato.",
-      "level_100": "Distingue con precisión lo que el dato muestra de lo que apenas sugiere. Nombra al menos un límite concreto y pertinente (qué no está medido, qué población o qué años quedan fuera, cómo se construyó la variable) y ese límite es el que de verdad afecta la pregunta.",
-      "level_80": "Lee correctamente lo que el dato muestra y no afirma causalidad, pero los límites quedan implícitos o el que nombra es secundario.",
-      "level_60": "La lectura es correcta en lo grueso, pero mezcla una inferencia con una observación sin marcar la diferencia.",
-      "level_40": "Lee el dato a grandes rasgos y salta a explicar por qué pasó, sin señalar que eso es una hipótesis.",
-      "level_20": "Afirma como hecho algo que el dato no muestra: una causa, un valor que no está en el gráfico, o una proyección hacia adelante.",
-      "level_0": "Contradice el dato que se le mostró, o responde sobre otra cosa."
+      "id": "fidelidad_al_texto",
+      "name": "Fidelidad al texto",
+      "weight": 0.45,
+      "description": "¿Dice lo que el artículo dice? Reconstruye el argumento de la autora sin atribuirle tesis que no sostiene, y sin reemplazarlo por la opinión propia cuando se pidió el argumento de ella.",
+      "level_100": "Reconstruye el argumento de la autora con precisión, incluido el matiz que contradice la lectura apurada. Nada de lo que le atribuye está fuera del texto.",
+      "level_80": "Dice correctamente lo central del argumento, pero se le escapa un matiz que el texto sí marca.",
+      "level_60": "La idea general es correcta, pero mezcla una afirmación de la autora con una interpretación propia sin distinguir cuál es cuál.",
+      "level_40": "Contesta con su propia postura sobre el tema cuando el enunciado pidió el argumento del texto.",
+      "level_20": "Le atribuye a la autora una tesis que el texto no sostiene, por ejemplo que hay que evitar la IA.",
+      "level_0": "Responde sobre otra cosa, o contradice algo que el texto dice de forma explícita."
     },
     {
-      "id": "criterio_visual",
-      "name": "Criterio visual",
+      "id": "articulacion",
+      "name": "Articulación",
       "weight": 0.35,
-      "description": "¿Conecta la forma del gráfico con lo que el lector concluye? Tipo de gráfico, escalas y ejes, color, orden de categorías y anotación, evaluados contra la pregunta que el gráfico intenta responder y contra su audiencia.",
-      "level_100": "Nombra un elemento concreto de la construcción del gráfico (el rango del eje, la geometría elegida, el orden de las categorías, la escala de color, una anotación ausente) y explica cómo ese elemento cambia lo que el lector concluye. Si propone un cambio, dice qué haría en su lugar y por qué eso responde mejor la pregunta.",
-      "level_80": "Identifica correctamente la virtud o el problema visual, pero no lo conecta explícitamente con la lectura que induce.",
-      "level_60": "Hace un comentario visual pertinente pero genérico ('es confuso', 'faltan etiquetas') sin decir qué se lee mal por eso.",
-      "level_40": "Comenta el gráfico en términos estéticos —bonito, feo, los colores— sin relación con lo que comunica.",
-      "level_20": "No comenta la forma del gráfico: solo repite el dato que muestra.",
-      "level_0": "Afirma algo falso sobre cómo está construido el gráfico."
+      "description": "¿Explica el mecanismo, o repite la conclusión? Se premia decir por qué una cosa lleva a la otra, apoyándose en lo concreto del texto.",
+      "level_100": "Explica el mecanismo —por qué una cosa lleva a la otra— y lo apoya en el detalle concreto del artículo que lo sostiene.",
+      "level_80": "Nombra el mecanismo pero sin el detalle que lo apoya, o trae el detalle y deja el porqué a medio cerrar.",
+      "level_60": "Repite la conclusión del texto con otras palabras, sin explicar por qué se sigue.",
+      "level_40": "Parafrasea o copia una frase del artículo sin agregarle nada propio.",
+      "level_20": "Menciona el tema del texto sin establecer ninguna relación entre las partes.",
+      "level_0": "No se entiende, o no tiene relación con lo que se preguntó."
     },
     {
-      "id": "claridad",
-      "name": "Claridad para un lector no especializado",
-      "weight": 0.25,
-      "description": "¿Lo entendería alguien de fuera a la primera lectura? Una afirmación principal identificable, el resto sosteniéndola, y sin jerga que no se explique.",
-      "level_100": "Un lector sin formación estadística la entiende a la primera. Hay una afirmación principal identificable y todo lo demás la sostiene. La jerga que usa, la explica.",
-      "level_80": "Se entiende bien, con una frase ambigua o un término técnico sin explicar.",
-      "level_60": "Se entiende con esfuerzo: la idea está, pero el lector tiene que reordenarla.",
-      "level_40": "Enumera observaciones sueltas sin una afirmación principal.",
-      "level_20": "Usa vocabulario técnico como sustituto del argumento, o es tan general que no se sabe de qué gráfico habla.",
-      "level_0": "Ininteligible, o no responde la pregunta que se hizo."
+      "id": "economia",
+      "name": "Economía",
+      "weight": 0.2,
+      "description": "¿Dice lo esencial dentro del largo pedido? Cuatro líneas es el estándar, no el mínimo. Escribir de más no suma; repetir la misma idea con otras palabras resta.",
+      "level_100": "Dice lo esencial dentro de las cuatro líneas y cada línea agrega algo distinto.",
+      "level_80": "Cumple el largo y casi todo agrega, con una frase de relleno o un rodeo al empezar.",
+      "level_60": "Se pasa del largo pedido, o repite dentro de la respuesta una idea que ya había dicho.",
+      "level_40": "Bastante más largo de lo pedido y cerca de la mitad es relleno o repetición.",
+      "level_20": "Texto largo que, en el fondo, dice una sola cosa.",
+      "level_0": "Vacío, o una sola frase que no responde la pregunta."
     }
   ],
   "penalties": [
     {
-      "id": "causalidad_sin_diseno",
-      "description": "Afirmar que A causa B a partir de datos puramente descriptivos, sin marcarlo como hipótesis, no puede superar 50 en 'Rigor descriptivo'.",
+      "id": "atribucion_falsa",
+      "description": "Ponerle a la autora una tesis que el texto no sostiene —el caso típico es leerla como que hay que evitar la IA— no puede superar 40 en 'Fidelidad al texto'.",
       "effect": {
         "type": "cap",
-        "value": 50,
-        "dimensions": [
-          "rigor_descriptivo"
-        ]
+        "value": 40,
+        "dimensions": ["fidelidad_al_texto"]
       }
     },
     {
-      "id": "respuesta_intercambiable",
-      "description": "Una respuesta que serviría igual para cualquier otro gráfico sin cambiarle una palabra no puede superar 50 en 'Claridad'.",
+      "id": "relleno",
+      "description": "Repetir la misma idea con otras palabras para alargar la respuesta no puede superar 50 en 'Economía'.",
       "effect": {
         "type": "cap",
         "value": 50,
-        "dimensions": [
-          "claridad"
-        ]
+        "dimensions": ["economia"]
       }
     }
   ],
   "globalPenalties": [
-    "Causalidad desde datos descriptivos: 'aumentó porque X' dicho como hecho, cuando el gráfico solo muestra que aumentó.",
-    "Vaguedad intercambiable: una respuesta que se podría pegar debajo de cualquier gráfico del curso.",
-    "Extensión como sustituto de contenido: una respuesta larga que repite la misma idea vale lo que la idea dicha una vez.",
-    "Jerga como sustituto de lectura: nombrar 'sesgo', 'correlación' o 'muestra' sin decir cuál, dónde ni por qué importa acá."
+    "Atribuirle al texto algo que no dice, aunque suene razonable.",
+    "Responder con la opinión propia cuando el enunciado pidió el argumento de la autora.",
+    "Copiar una frase del artículo y entregarla como respuesta, sin explicarla.",
+    "Extensión como sustituto de contenido: una respuesta larga que repite una idea vale lo que esa idea dicha una vez."
   ],
   "bonusIndicators": [
-    "Dice qué dato adicional necesitaría para sostener lo que está insinuando",
-    "Nota que la construcción del gráfico, y no el dato, es la que produce la impresión",
-    "Traduce el hallazgo a una frase que un lector sin formación entendería"
+    "Trae el detalle concreto del artículo que sostiene lo que afirma",
+    "Nota el matiz que contradice la lectura apurada del texto",
+    "Dice en cuatro líneas lo que otro diría en diez"
   ],
   "penaltyIndicators": [
-    "Convierte una coincidencia temporal en una explicación",
-    "Extrapola la serie más allá de donde termina el dato",
-    "Confunde el nivel de una variable con su cambio"
+    "Convierte a la autora en enemiga de la IA",
+    "Se queda en la conclusión sin explicar por qué se sigue",
+    "Rellena con frases que servirían para cualquier artículo"
   ]
 }

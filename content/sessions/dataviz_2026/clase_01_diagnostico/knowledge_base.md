@@ -41,26 +41,6 @@ ese año: es una síntesis de la mortalidad observada en ese año, aplicada a un
 cohorte hipotética. Un estudiante de primera clase no tiene por qué saber esto y
 no se le puede exigir; si alguien lo menciona correctamente, es excelente.
 
-<!-- section: eje_truncado -->
-
-## Recortar el eje
-
-Un eje vertical que no parte en cero amplifica visualmente cualquier variación.
-En la serie chilena, la baja de 2019 a 2021 es de 1,4 años sobre un nivel de 80:
-con el eje de 0 a 90 casi no se ve, y con el eje de 78 a 82 ocupa media figura.
-Los datos son idénticos en los dos casos, y el gráfico se dibujó con el mismo
-código: lo único que cambia es el rango del eje.
-
-Recortar el eje **no es siempre un error**. Cuando el cambio relevante es chico
-en relación al nivel —tasas de interés, temperaturas, participación electoral—
-partir en cero esconde lo que importa. La regla honesta no es "siempre desde
-cero", es: si recortas, dilo, y no combines el recorte con un lenguaje que
-sugiera catástrofe.
-
-Lo que hace engañoso al gráfico truncado de esta clase no es la escala en sí, es
-que la escala no está declarada y el lector lee la altura antes de leer los
-números.
-
 <!-- section: causalidad_y_descripcion -->
 
 ## Qué puede y qué no puede mostrar un gráfico descriptivo
@@ -85,35 +65,109 @@ Solo la primera se sostiene con el gráfico solo. Las otras tres no están
 prohibidas: hay que decir que son eso, y decir qué dato haría falta para
 sostenerlas.
 
-<!-- section: interrogar_un_numero -->
+<!-- section: articulo_parrott -->
 
-## Qué exigirle a un número antes de creerle
+## El artículo de Katie Parrott, que los estudiantes tienen impreso
 
-Un número suelto —«subió 40%», «cayó a la mitad», «el doble que hace diez
-años»— no se puede evaluar. No porque sea falso, sino porque le faltan las tres
-cosas que lo harían verificable.
+"How to Start a Career When AI Is Doing Your Entry-level Job", Katie Parrott,
+*Every*, 18 de mayo de 2026. Bajada: "Cuatro consejos no pedidos de una
+millennial entusiasmada con la IA". Los estudiantes lo leen y lo discuten en
+clase, y lo tienen a la vista mientras juegan. **Esto es lo que el texto dice; úsalo
+para verificar lo que el estudiante afirma, no para exigir que lo cite.**
 
-**Desde cuándo.** Un 40% acumulado en un año y un 40% acumulado en quince son
-fenómenos distintos, y la frase es idéntica en los dos casos. Peor: cualquier
-porcentaje de cambio depende por completo de qué dos momentos se comparan. Con
-una serie larga a la vista casi siempre se pueden elegir dos puntos que den la
-cifra que uno quiere. Por eso pedir la serie entera no es un capricho: es la
-única forma de saber si los dos extremos elegidos son representativos.
+**El punto de partida.** Su primer trabajo saliendo de la universidad fue de
+redactora en Fundable.com, una web de crowdfunding en Columbus, Ohio. La empresa
+no tenía plata, así que no le importó que ella no tuviera experiencia; ella no
+tenía experiencia, así que no le importó que el trabajo no pagara al principio.
+Su tarea era tomar lo que un fundador estaba construyendo, a medio formar, y
+traducirlo al lenguaje de los inversionistas, en un formato tan repetido que
+todavía se lo sabe de memoria: problema, solución, tracción, equipo, modelo de
+negocio, proyecciones, competencia, términos del financiamiento.
 
-**Qué se midió.** Un promedio y una mediana pueden ir en direcciones distintas
-cuando hay valores extremos. Los arriendos publicados en un portal y los
-efectivamente firmados no son la misma población: lo publicado es la aspiración
-del arrendador. Y «Santiago» puede querer decir una comuna o treinta y siete.
+**El giro central del texto.** Hoy la IA produce uno de esos perfiles en dos
+minutos. A los 23 ella habría pensado "gracias a Dios"; a los 36 piensa "gracias
+a Dios que no podía". Sin ese trabajo nunca habría aprendido a desarmar una
+empresa y volver a armarla como relato, ni a ordenar información para una
+audiencia que —a diferencia de sus profesores— no estaba obligada a leerla.
+Cuenta que sus primeros 50 perfiles fueron tan malos que un cliente dijo que
+había que sacarla y fusilarla. Ahí aprendió a distinguir el trabajo bueno del
+malo. **Con la IA de por medio, los malos no habrían sido lo bastante malos como
+para enseñarle nada.** Ese es el mecanismo del argumento, y es lo menos obvio del
+artículo.
 
-**En qué unidades.** Si los precios están en pesos de cada año, parte de
-cualquier alza es simplemente inflación. Descontar la inflación no es un
-tecnicismo: es la diferencia entre «subió» y «subió más que todo lo demás».
+**Los datos que cita.** Investigadores del Digital Economy Lab de Stanford
+encontraron que el empleo de los jóvenes de 22 a 25 años en los trabajos más
+expuestos a la IA cayó **13% desde fines de 2022**, mientras los trabajadores
+mayores en los mismos puestos se mantuvieron estables. Una encuesta de NACE
+(N = 44, 2026 Job Outlook Spring Update) muestra qué habilidades de IA buscan los
+empleadores en candidatos de entrada: identificar y usar la herramienta adecuada
+a la tarea (75,0%), escribir prompts que produzcan buenos resultados (72,7%),
+**analizar y revisar lo que la IA entrega (65,9%)** y desarrollar herramientas de
+IA (52,3%). La demanda de estas habilidades se triplicó. Lo que buscan, dice
+ella, es **juicio**, y el juicio solo se construye con experiencia.
 
-Estas tres se resumen en un criterio que sirve para cualquier número: **una
-pregunta útil es la que, contestada de dos maneras distintas, te deja creyendo
-cosas distintas.** «¿Es confiable la fuente?» rara vez cumple eso. «¿Es promedio
-o mediana?» casi siempre lo cumple.
+**La paradoja de siempre, agravada.** Para conseguir trabajo hace falta
+experiencia, y para tener experiencia hace falta trabajo. Además, las
+herramientas agénticas cambian las funciones en meses y no en años: no hay un
+canon que estudiar ni un colega con más años bajo el cual hacer de aprendiz.
 
-Y sobre qué gráfico pedir: la pregunta que importa no es cuál se ve mejor, sino
-**qué tendría que mostrar ese gráfico para que la afirmación quede en pie o se
-caiga**. Un gráfico que no puede desmentir nada tampoco confirma nada.
+**Los cuatro consejos:**
+
+1. **Persigue problemas, no profesiones.** Los cargos ya no son un blanco fijo:
+   el puesto que persigues hoy puede no existir en 18 meses. Elige un problema en
+   el que te sorprendas pensando aunque nadie te pague. "Analista de datos" puede
+   encogerse, partirse o desaparecer, pero el problema de fondo —cómo darle
+   sentido a un montón de números desordenados— va a seguir ahí y alguien va a
+   seguir pagando por resolverlo. Ella confiesa haber sido mala siguiendo su
+   propio consejo: pasó una década persiguiendo el título de "copywriter" por
+   industrias que no tenían nada que ver entre sí, sin preguntarse si alguna le
+   importaba. Tu valor es lo que aportas *encima* de lo que hace el modelo, y eso
+   suele ser entender el problema mejor que él — algo difícil de construir en un
+   campo que no te interesa.
+
+2. **Elige una disciplina y protégela.** Una vez elegido el problema, elige el
+   oficio: escribir, construir, investigar, diseñar, planificar, operar. La idea
+   detrás de las 10.000 horas es correcta aunque la versión popular sea una
+   simplificación: uno no es bueno en nada hasta haberlo hecho muchas veces.
+   **Protege ese oficio de la IA a toda costa.** La IA puede buscarte material,
+   explicarte cosas, tomarte la lección y mostrarte dónde tu razonamiento tiene
+   hoyos; pero si la dejas escribir tus frases o hacer tu investigación, no
+   acumulas las horas de hacerlo mal que hacen falta para hacerlo bien.
+   **Ojo, y esto es lo que más se malinterpreta: ella escribió el artículo con la
+   IA abierta en otra pestaña, y dice que Claude escribió el primer borrador de
+   la mitad de las frases de esa sección — y que ella las reescribió.** Reescribir
+   es para lo que sirve la disciplina: notar cuándo algo no pasa el examen. Puede
+   hacerlo porque lleva diez años escribiendo frases. El texto NO dice que haya
+   que evitar la IA.
+
+3. **Haz cosas antes de que alguien te las pida.** Un currículum flaco pesa menos
+   que antes, porque la contratación se está moviendo hacia lo que sabes hacer y
+   no hacia dónde estuviste. Haz algo: una herramienta chica que te habría
+   gustado que existiera, un texto sobre una pregunta que nadie te paga por
+   pensar. Cuando ese trabajo te abre la puerta, la conversación que sigue es
+   sobre **cómo** lo hiciste: para qué usaste IA y dónde decidiste no usarla, los
+   momentos en que miraste la primera respuesta del modelo y pensaste "no, esto
+   no está bien". Poder explicar esas decisiones es la segunda habilidad que
+   estás construyendo, junto con el trabajo mismo. Eso es el juicio.
+
+4. **Constrúyete el coach de carrera que te habría gustado tener.** Ella se armó
+   uno en ChatGPT y con eso consiguió el trabajo que tiene: un proyecto con su
+   currículum, ejemplos de textos de los que estaba orgullosa y un prompt largo
+   diciéndole al modelo cómo hablarle. Lo consultaba casi todos los días
+   laborales durante un mes. Lo que más le sirvió fue tener dónde poner el
+   pensamiento en vez de dar vueltas a la misma preocupación en la cabeza. Los
+   pasos que sugiere: elegir herramienta, crear un proyecto y ponerle nombre,
+   cargarlo con contexto (trabajos de los que estás orgulloso y otros que
+   quisieras que fueran mejores, avisos de empleo que te gustarían aunque te
+   queden grandes), y decirle cómo comportarse — advirtiendo que los modelos son
+   famosos por la adulación, o sea por decirte lo que quieres oír.
+
+**El cierre.** "La ventaja del principiante": no esperes. La IA está
+reorganizando el trabajo en tiempo real y hacer como que no pasa no lo frena.
+A ella le gustaría poder decir que los senior van a acordarse de que alguien los
+formó a ellos, o que los empleadores van a caer en cuenta de que los de entrada
+que no contratan hoy son los senior que no van a tener en diez años más — pero el
+mercado no se reorganiza según lo que uno querría. Lo que la IA premia es
+justamente lo que a los jóvenes les sobra: curiosidad, ganas de preguntar por qué
+las cosas se hacen de cierta manera, y algo de idealismo sobre cómo podría ser el
+trabajo.

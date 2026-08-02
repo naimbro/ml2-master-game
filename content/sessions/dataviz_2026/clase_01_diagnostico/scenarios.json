@@ -49,161 +49,9 @@
     ]
   },
   {
-    "id": "dv_c01_r2_estable",
+    "id": "dv_c01_r2_que_no_se_concluye",
     "order": 2,
-    "title": "Los últimos catorce años",
-    "category": "Lectura de gráficos",
-    "type": "multiple_choice",
-    "ranked": true,
-    "durationSeconds": 62,
-    "context": "",
-    "question": "",
-    "conceptTags": [
-      "lectura_de_graficos"
-    ],
-    "media": [
-      {
-        "kind": "image",
-        "src": "media/dataviz/c01_esperanza_vida_reciente.png",
-        "alt": "Gráfico de líneas con marcadores: esperanza de vida al nacer en Chile entre 2010 y 2023, con el eje vertical desde cero hasta noventa años. A esa escala la línea se ve prácticamente plana, en torno a los 80 años.",
-        "credit": "Elaboración propia con datos de Our World in Data — CC BY 4.0"
-      }
-    ],
-    "mcQuestions": [
-      {
-        "question": "Mismo indicador, ahora solo desde 2010. ¿Qué muestra este gráfico?",
-        "options": [
-          {
-            "id": "A",
-            "text": "Que la esperanza de vida creció muy rápido en la última década"
-          },
-          {
-            "id": "B",
-            "text": "Que se mantuvo prácticamente estable, alrededor de los 80 años"
-          },
-          {
-            "id": "C",
-            "text": "Que cayó fuertemente y no se ha recuperado"
-          },
-          {
-            "id": "D",
-            "text": "Que faltan los datos de los últimos años"
-          }
-        ],
-        "correctOptionIndex": 1,
-        "timeLimitSeconds": 30,
-        "explanation": "Estable: se movió entre 79 y 81 años en catorce años. Quédate con esa impresión, porque en la próxima ronda vas a ver EXACTAMENTE los mismos datos y no te van a parecer estables para nada."
-      }
-    ]
-  },
-  {
-    "id": "dv_c01_r3_eje_truncado",
-    "order": 3,
-    "title": "El mismo dato, otro gráfico",
-    "category": "Crítica de gráficos",
-    "type": "multiple_choice",
-    "ranked": true,
-    "durationSeconds": 67,
-    "context": "",
-    "question": "",
-    "conceptTags": [
-      "eje_truncado",
-      "lectura_de_graficos"
-    ],
-    "media": [
-      {
-        "kind": "image",
-        "src": "media/dataviz/c01_esperanza_vida_eje_truncado.png",
-        "alt": "Gráfico de líneas con marcadores: esperanza de vida al nacer en Chile entre 2010 y 2023, con el eje vertical entre 78 y 82 años. A esa escala la baja de 2020 y 2021 se ve como una caída profunda y la subida de 2023 como un salto muy grande.",
-        "credit": "Elaboración propia con datos de Our World in Data — CC BY 4.0"
-      }
-    ],
-    "mcQuestions": [
-      {
-        "question": "Este gráfico tiene EXACTAMENTE LOS MISMOS DATOS que el anterior. ¿Por qué se ve tan distinto?",
-        "options": [
-          {
-            "id": "A",
-            "text": "Porque le agregaron años que el anterior no tenía"
-          },
-          {
-            "id": "B",
-            "text": "Porque el eje vertical va de 78 a 82 en vez de partir en cero"
-          },
-          {
-            "id": "C",
-            "text": "Porque usa una línea en vez de barras"
-          },
-          {
-            "id": "D",
-            "text": "Porque corrigieron los datos de la pandemia"
-          }
-        ],
-        "correctOptionIndex": 1,
-        "timeLimitSeconds": 35,
-        "explanation": "Lo único que cambió es el rango del eje. La baja de 2019 a 2021 es de 1,4 años sobre un nivel de 80: con el eje en cero casi no se ve, y con el eje entre 78 y 82 ocupa media figura. Recortar el eje no es siempre trampa —a veces es la única forma de ver un cambio chico que importa— pero cuando se hace hay que decirlo, porque el lector lee la ALTURA antes de leer los números."
-      }
-    ]
-  },
-  {
-    "id": "dv_c01_r4_pregunta_al_dato",
-    "order": 4,
-    "title": "Tres preguntas antes de creerle",
-    "category": "Diagnóstico",
-    "difficulty": "easy",
-    "ranked": true,
-    "durationSeconds": 240,
-    "conceptTags": [
-      "interrogar_un_numero",
-      "lectura_de_graficos"
-    ],
-    "judgeFocus": "Se evalúan las dos partes y pesan parejo. Lo que separa una buena respuesta de una mala no es cuántas preguntas escribió, sino si las preguntas MUERDEN: una pregunta muerde cuando, contestada de dos maneras distintas, te deja creyendo cosas distintas. \"¿Es confiable la fuente?\" no muerde. \"¿Subió 40% en un año o en diez?\" sí. Las tres que más muerden acá son el período (desde cuándo se acumula ese 40%), qué se midió exactamente (arriendos publicados o contratos firmados; promedio o mediana; qué comunas; qué tamaño de vivienda) y si el 40% está descontada la inflación o no. NO exijas esas tres ni esas palabras: premia que la persona note que la frase está incompleta, y en qué. En la segunda parte lo que importa es la correspondencia: el gráfico pedido tiene que servir para verificar ESA afirmación, no ser un gráfico cualquiera. \"Una serie en el tiempo con la mediana en pesos reales\" es fuerte; \"un gráfico de barras\" sin decir de qué, no. NO exijas vocabulario del curso: es la primera clase y no han leído nada. Son cuatro minutos escribiendo desde un teléfono: juzga el pensamiento, no la prolijidad ni la ortografía.",
-    "context": "Un titular, sin gráfico, sin tabla y sin nota al pie. Solo la frase, como circula por WhatsApp o en la bajada de un diario:\n\n**«El arriendo en Santiago subió 40%»**\n\nEso es todo lo que te dan.\n\nUn número así puede ser verdadero, puede ser falso, o —lo más frecuente— puede ser verdadero y engañoso al mismo tiempo. Lo que decide cuál de los tres no está en el número: está en todo lo que la frase no dice.",
-    "question": "Dos cosas.\n\nPRIMERO: las **tres preguntas** que le harías a quien publicó ese número, antes de repetirlo. Una por línea. Que sean preguntas cuya respuesta cambie lo que crees: si te da lo mismo cómo te la contesten, esa pregunta no sirve.\n\nSEGUNDO, en dos líneas: ¿qué gráfico le pedirías, y qué tendría que mostrar para que le creas?",
-    "evaluationGuide": {
-      "must_hit": [
-        "Al menos una pregunta apunta al período: desde cuándo, en cuánto tiempo se acumula ese 40%",
-        "Al menos una pregunta apunta a qué se midió: qué arriendos, de qué comunas, promedio o mediana, avisos publicados o contratos firmados",
-        "El gráfico que pide sirve para verificar esta afirmación en particular, y dice qué tendría que mostrar"
-      ],
-      "nice_to_have": [
-        "Distingue el precio nominal del precio descontada la inflación",
-        "Nota que un arriendo publicado no es un arriendo firmado",
-        "Pide ver la serie completa y no solo los dos extremos que producen el 40%",
-        "Pregunta quién publica el número y qué gana con que se lea así"
-      ],
-      "fatal_errors": [
-        "Las tres preguntas son de cortesía (\"¿es confiable?\", \"¿quién lo dice?\") y ninguna cambiaría lo que cree",
-        "Acepta el 40% y discute si le parece mucho o poco, en vez de interrogar de dónde sale",
-        "Pide \"un gráfico\" sin decir qué tendría que mostrar"
-      ]
-    },
-    "idealAnswer": {
-      "keyPoints": [
-        "Pregunta en qué ventana de tiempo se acumula ese 40%",
-        "Pregunta qué se midió exactamente y de dónde sale el dato",
-        "Pide una serie en el tiempo, en pesos reales, y dice qué tendría que verse en ella"
-      ],
-      "expectedConcepts": [
-        "interrogar_un_numero",
-        "lectura_de_graficos"
-      ],
-      "commonMistakes": [
-        "Preguntas de cortesía que no cambian nada de lo que cree",
-        "Opinar sobre si 40% es mucho, en vez de preguntar cómo se calculó",
-        "Pedir un gráfico sin decir qué debería mostrar"
-      ],
-      "excellentResponseIndicators": [
-        "Nota que el 40% depende de qué dos momentos se comparan, y por eso pide la serie entera",
-        "Separa el alza del arriendo del alza general de precios",
-        "Nota que los arriendos publicados y los efectivamente pagados no son lo mismo"
-      ]
-    }
-  },
-  {
-    "id": "dv_c01_r5_que_no_se_concluye",
-    "order": 5,
-    "title": "La última: qué sostiene el gráfico",
+    "title": "Qué sostiene el gráfico",
     "category": "Crítica de gráficos",
     "type": "multiple_choice",
     "ranked": true,
@@ -224,7 +72,7 @@
     ],
     "mcQuestions": [
       {
-        "question": "Volvemos al gráfico honesto. Ya sabes que en 2019 fueron 80,3 años, en 2021 78,9 y en 2023 81,2. ¿Cuál de estas afirmaciones se puede sostener SOLO CON ESTE GRÁFICO?",
+        "question": "Este gráfico muestra la esperanza de vida al nacer en Chile entre 2010 y 2023: en 2019 fueron 80,3 años, en 2021 78,9 y en 2023 81,2. ¿Cuál de estas afirmaciones se puede sostener SOLO CON ESTE GRÁFICO?",
         "options": [
           {
             "id": "A",
@@ -248,5 +96,109 @@
         "explanation": "Solo C. Es la única que se lee del gráfico y nada más. A es probablemente cierta en el mundo, pero el gráfico no la muestra: muestra CUÁNDO bajó, no POR QUÉ. B es una explicación, no una lectura. D es una proyección más allá de donde termina el dato. Distinguir estas cuatro cosas es, básicamente, el curso."
       }
     ]
+  },
+  {
+    "id": "dv_c01_r3_por_que_se_alegra",
+    "order": 3,
+    "title": "Por qué se alegra de que no existiera",
+    "category": "Lectura",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 180,
+    "conceptTags": [
+      "articulo_parrott"
+    ],
+    "judgeFocus": "Se evalúa si entendió el MECANISMO del argumento de Parrott, que es lo menos obvio del texto: sus primeros perfiles le salieron malos —dice que los primeros 50 fueron tan malos que un cliente pidió que la sacaran—, y esos fracasos son los que le enseñaron a distinguir el trabajo bueno del malo. Con la IA de por medio, los malos no habrían sido lo bastante malos como para enseñarle algo, y ademas no habria aprendido a desarmar una empresa y volver a armarla como relato, ni a ordenar informacion para una audiencia que no esta obligada a leerla. Una respuesta de 100 nombra ese mecanismo. Una respuesta de 60 dice \"aprendió con la experiencia\" sin decir qué le enseñó el fracaso. Ojo con la trampa de la pregunta: se pidió LA RAZÓN DE ELLA, no la opinión del estudiante sobre la IA; si contesta con su propia postura, por buena que sea, no contestó lo que se preguntó. Son CUATRO LÍNEAS escritas en tres minutos desde un teléfono, con el texto impreso al lado. Cuatro líneas bien puestas valen 100: no esperes párrafos, ni estructura, ni introducción, ni ortografía perfecta. Escribir más NO sube el puntaje.",
+    "context": "El primer trabajo de Katie Parrott, saliendo de la universidad, era escribir perfiles de startups para una web de crowdfunding: tomaba lo que un fundador estaba construyendo, a medio formar, y lo traducía al lenguaje de los inversionistas.\n\nHoy la IA escribe uno de esos perfiles en dos minutos.\n\nElla dice que a los 23 años habría escuchado eso y habría pensado «gracias a Dios». Y que a los 36 piensa «gracias a Dios que no podía».",
+    "question": "Explica **su** razón —no la tuya— en no más de **cuatro líneas**.",
+    "evaluationGuide": {
+      "must_hit": [
+        "Nombra que fue el trabajo mal hecho, o la práctica repetida, lo que le enseñó algo",
+        "Dice QUÉ le enseñó: distinguir el trabajo bueno del malo, o desarmar una empresa y volver a armarla como relato, o escribir para alguien que no está obligado a leerla",
+        "Es el argumento de la autora y no la opinión propia del estudiante"
+      ],
+      "nice_to_have": [
+        "Nota que con IA los errores no habrían sido lo bastante malos como para enseñarle",
+        "Conecta ese aprendizaje con lo que el artículo llama juicio (judgment)",
+        "Marca el contraste entre lo que habría pensado a los 23 y lo que piensa a los 36"
+      ],
+      "fatal_errors": [
+        "Contesta con su propia opinión sobre la IA en vez de con la razón de la autora",
+        "Le atribuye a Parrott la tesis de que no hay que usar IA",
+        "Dice solo que \"aprendió con la experiencia\" sin decir qué aprendió ni cómo"
+      ]
+    },
+    "idealAnswer": {
+      "keyPoints": [
+        "El trabajo que la IA hoy haría en dos minutos era el que le enseñaba el oficio",
+        "Los perfiles malos del principio le enseñaron a reconocer qué era bueno y qué no",
+        "Ese juicio es lo que la IA no le habría dado, porque le habría ahorrado los errores"
+      ],
+      "expectedConcepts": [
+        "articulo_parrott"
+      ],
+      "commonMistakes": [
+        "Responder con la opinión propia sobre si la IA es buena o mala",
+        "Quedarse en \"la experiencia enseña\" sin nombrar qué le enseñó",
+        "Convertirla en enemiga de la IA, cuando el texto dice lo contrario"
+      ],
+      "excellentResponseIndicators": [
+        "Dice que los errores tienen que ser lo bastante malos para enseñar, y que la IA se los habría evitado",
+        "Distingue hacer la tarea de aprender a juzgarla",
+        "Cuatro líneas sin relleno"
+      ]
+    }
+  },
+  {
+    "id": "dv_c01_r4_que_le_entrega",
+    "order": 4,
+    "title": "Qué le entrega a la IA y qué no",
+    "category": "Lectura",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 180,
+    "conceptTags": [
+      "articulo_parrott"
+    ],
+    "judgeFocus": "Esta ronda separa a quien leyó de quien hojeó. Parrott NO dice que haya que evitar la IA: escribió el artículo con la IA al lado y cuenta que Claude escribió el primer borrador de la mitad de las frases de una sección. Lo que protege es la práctica central de su oficio —escribir sus propias frases— porque es la que le da las horas de hacerlo mal que hacen falta para hacerlo bien, y porque reescribir es donde se nota cuándo algo no pasa el examen. Le entrega buscar material, explicar cosas, tomarle la lección, mostrarle dónde su razonamiento tiene hoyos, y también borradores que después reescribe. Una respuesta de 100 tiene las dos mitades —qué sí y qué no— y el criterio que las separa. Una respuesta de 20 dice \"que no use IA\", que es lo contrario del texto. NO exijas que use la palabra \"disciplina\" ni \"juicio\". Son CUATRO LÍNEAS escritas en tres minutos desde un teléfono, con el texto impreso al lado. Cuatro líneas bien puestas valen 100: no esperes párrafos, ni estructura, ni introducción, ni ortografía perfecta. Escribir más NO sube el puntaje.",
+    "context": "Parrott escribió este artículo con la IA abierta en otra pestaña. Cuenta que Claude escribió el primer borrador de la mitad de las frases de una de las secciones, y que ella las reescribió.\n\nY aun así, uno de sus cuatro consejos es elegir una disciplina y protegerla de la IA a toda costa.",
+    "question": "En no más de **cuatro líneas**: ¿qué **sí** le entrega a la IA, qué **no**, y con qué criterio separa una cosa de la otra?",
+    "evaluationGuide": {
+      "must_hit": [
+        "Dice que sí usa IA, y para qué: buscar, explicar, tomar la lección, señalar hoyos en el razonamiento, o hacer borradores",
+        "Dice qué no le entrega: la práctica central del oficio, escribir sus propias frases (o escribir su propio código, en el ejemplo del programador)",
+        "Nombra el criterio: proteger aquello en lo que uno necesita acumular horas, incluidas las horas de hacerlo mal"
+      ],
+      "nice_to_have": [
+        "Nota que ella misma usa IA para escribir y que la protección está en la reescritura",
+        "Dice que reescribir es donde se nota cuándo algo no pasa el examen, y que puede hacerlo porque lleva diez años escribiendo",
+        "Conecta con que el atajo se paga más adelante"
+      ],
+      "fatal_errors": [
+        "Le atribuye la tesis de que no hay que usar IA",
+        "Solo dice una de las dos mitades y no la otra",
+        "Da un criterio genérico (\"usarla con responsabilidad\") que no separa nada"
+      ]
+    },
+    "idealAnswer": {
+      "keyPoints": [
+        "Sí: buscar material, explicar, quiz, mostrar hoyos, primeros borradores",
+        "No: la práctica central del oficio propio, escribir las propias frases",
+        "Criterio: se protege aquello donde hacen falta las horas, incluidas las malas"
+      ],
+      "expectedConcepts": [
+        "articulo_parrott"
+      ],
+      "commonMistakes": [
+        "Leerla como una crítica a la IA",
+        "Dar solo la mitad de la respuesta",
+        "Un criterio tan general que valdría para cualquier cosa"
+      ],
+      "excellentResponseIndicators": [
+        "Usa que ella misma escribió con IA como prueba de que no es una prohibición",
+        "Distingue delegar la tarea de delegar la práctica",
+        "Cuatro líneas sin relleno"
+      ]
+    }
   }
 ]
