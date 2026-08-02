@@ -1,9 +1,9 @@
 {
-  "_TODO": "Sesion en construccion. Reemplazar este config y los demas archivos antes de la primera clase de la unidad.",
+  "_TODO": "Sesion en construccion. Reemplazar este config y los demas archivos antes de la primera clase de la unidad. Fechas reales: lunes 16 de noviembre 08:30-09:40 y jueves 19 de noviembre 15:00-16:10. Sesion de cierre CO-IMPARTIDA con Roberto Velazquez.",
   "sessionId": "unidad_06_regulacion",
   "title": "Unidad 6: Respuestas — Regulacion de la IA",
   "description": "Modelos regulatorios: AI Act europeo, enfoque sectorial estadounidense, marcos voluntarios, sandbox. Legitimidad, eficacia y riesgos de captura. Por completar.",
-  "date": "2026-10-24",
+  "date": "2026-11-16",
   "roundCount": 1,
   "roundDurationSeconds": 240,
   "bufferSeconds": 90,

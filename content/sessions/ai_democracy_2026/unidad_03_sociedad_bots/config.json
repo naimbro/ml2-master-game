@@ -1,9 +1,9 @@
 {
-  "_TODO": "Sesion en construccion. Reemplazar este config y los demas archivos antes de la primera clase de la unidad.",
+  "_TODO": "Sesion en construccion. Reemplazar este config y los demas archivos antes de la primera clase de la unidad. Fechas reales: lunes 21 de septiembre 08:30-09:40 (presentacion) y jueves 24 de septiembre 15:00-16:10 (actividad). Imparte Naim Bro.",
   "sessionId": "unidad_03_sociedad_bots",
   "title": "Unidad 3: Amenazas — Una sociedad de bots IA",
   "description": "Saturacion del espacio publico por contenido generado: efectos sobre deliberacion, autenticidad, y formacion de opinion. Por completar.",
-  "date": "2026-09-12",
+  "date": "2026-09-21",
   "roundCount": 1,
   "roundDurationSeconds": 240,
   "bufferSeconds": 90,

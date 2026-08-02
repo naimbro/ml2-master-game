@@ -1,9 +1,9 @@
 {
-  "_TODO": "Sesion en construccion. Reemplazar este config y los demas archivos antes de la primera clase de la unidad.",
+  "_TODO": "Sesion en construccion. Reemplazar este config y los demas archivos antes de la primera clase de la unidad. Fechas reales: lunes 9 de noviembre 08:30-09:40 (presentacion) y jueves 12 de noviembre 15:00-16:10 (actividad). Imparte Naim Bro.",
   "sessionId": "unidad_05_democracia_deliberativa",
   "title": "Unidad 5: Respuestas — IA generativa y democracia deliberativa",
   "description": "IA como facilitadora de procesos deliberativos: asambleas ciudadanas, sintesis de opinion, traduccion entre publicos. Riesgos y oportunidades. Por completar.",
-  "date": "2026-10-10",
+  "date": "2026-11-09",
   "roundCount": 1,
   "roundDurationSeconds": 240,
   "bufferSeconds": 90,
