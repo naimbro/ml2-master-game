@@ -15,8 +15,7 @@ import { confettiPodium, confettiStars, confettiSmallBurst, confettiBurst } from
 import SupportLink from '../../components/SupportLink';
 import CourseStandingsCard from '../../components/CourseStandingsCard';
 import GameFeedback from '../../components/GameFeedback';
-import HostFeedbackSummary from '../../components/HostFeedbackSummary';
-import { useGameFeedbackSummary, useMyGameFeedback } from '../../hooks/useGameFeedback';
+import { useMyGameFeedback } from '../../hooks/useGameFeedback';
 
 interface PlayerFinalScore {
   playerId: string;
@@ -55,7 +54,6 @@ export default function End() {
     useMyGameFeedback(gameCode);
   const [feedbackSkipped, setFeedbackSkipped] = useState(false);
   const feedbackGateOpen = isHost || feedbackSkipped || feedbackAnswered === true;
-  const feedbackSummary = useGameFeedbackSummary(gameCode, isHost);
 
   // Un juego sin ninguna ronda rankeada no es una competencia: no hay podio ni
   // posicion que mostrar, solo el propio desempeno y el feedback. Sin esto, el
@@ -634,15 +632,11 @@ export default function End() {
           <CourseStandingsCard courseId={game?.courseId} gameCode={gameCode} />
         )}
 
-        {/* Lo que dijo el curso — solo para el anfitrion, que es quien lo lee */}
-        {revealStage >= 4 && isHost && (
-          <HostFeedbackSummary
-            entries={feedbackSummary.entries}
-            average={feedbackSummary.average}
-            ratedCount={feedbackSummary.ratedCount}
-            playerCount={finalRankings.length}
-          />
-        )}
+        {/* El feedback del juego NO se muestra en ninguna pantalla, y menos en
+            esta, que es la que el profesor proyecta al curso: verlo ahi, con
+            nombre y delante de todos, cambia lo que la gente se atreve a
+            escribir. Se procesa despues, fuera de la app, con
+            scripts/game-feedback.ts */}
 
         {/* Professor Class Report Button */}
         {revealStage >= 4 && isHost && (

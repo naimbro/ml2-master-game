@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { collection, doc, getDoc, onSnapshot, serverTimestamp, setDoc } from 'firebase/firestore';
+import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { useAuth } from './useAuth';
 import type { GameFeedbackDoc } from '../types/feedback';
@@ -56,35 +56,4 @@ export function useMyGameFeedback(gameCode: string | undefined) {
   );
 
   return { answered, saving, save };
-}
-
-export interface FeedbackEntry extends GameFeedbackDoc {
-  playerId: string;
-}
-
-/**
- * Todo el feedback del juego, para el anfitrión. Las reglas de Firestore solo
- * dejan leer esta subcolección al anfitrión, así que `enabled` evita pedirla
- * —y provocar un error de permisos en la consola— cuando el que mira es alumno.
- */
-export function useGameFeedbackSummary(gameCode: string | undefined, enabled: boolean) {
-  const [entries, setEntries] = useState<FeedbackEntry[]>([]);
-
-  useEffect(() => {
-    if (!gameCode || !enabled) return;
-    return onSnapshot(
-      collection(db, 'games', gameCode, 'feedback'),
-      (snap) => {
-        setEntries(snap.docs.map((d) => ({ playerId: d.id, ...(d.data() as GameFeedbackDoc) })));
-      },
-      (err) => console.error('Error leyendo el feedback del curso:', err)
-    );
-  }, [gameCode, enabled]);
-
-  const rated = entries.filter((e) => typeof e.rating === 'number');
-  const average = rated.length
-    ? rated.reduce((acc, e) => acc + (e.rating as number), 0) / rated.length
-    : null;
-
-  return { entries, average, ratedCount: rated.length };
 }

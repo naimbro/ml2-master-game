@@ -108,13 +108,12 @@ service cloud.firestore {
       }
 
       // Feedback del juego: una nota de 1 a 7 y un comentario, uno por alumno.
-      // Lo lee su dueno y el anfitrion; ningun alumno puede leer el de otro.
-      // NO es anonimo y en ninguna pantalla se dice que lo sea: el id del
-      // documento es el uid de quien escribe.
+      // Solo lo lee su dueno — NI SIQUIERA el profesor desde el navegador. Es a
+      // proposito: el feedback se procesa despues y fuera de la app
+      // (scripts/game-feedback.ts, con credenciales de admin), no se muestra en
+      // la pantalla que se proyecta al curso. Ver el comentario en End.tsx.
       match /feedback/{playerId} {
-        allow read: if isOwner(playerId) ||
-                    (isAuthenticated() &&
-                     get(/databases/$(database)/documents/games/$(gameCode)).data.hostId == request.auth.uid);
+        allow read: if isOwner(playerId);
         allow create, update: if isOwner(playerId);
         allow delete: if false;
       }
