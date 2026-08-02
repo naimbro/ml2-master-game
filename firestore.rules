@@ -107,6 +107,18 @@ service cloud.firestore {
         allow delete: if false;
       }
 
+      // Feedback del juego: una nota de 1 a 7 y un comentario, uno por alumno.
+      // Lo lee su dueno y el anfitrion; ningun alumno puede leer el de otro.
+      // NO es anonimo y en ninguna pantalla se dice que lo sea: el id del
+      // documento es el uid de quien escribe.
+      match /feedback/{playerId} {
+        allow read: if isOwner(playerId) ||
+                    (isAuthenticated() &&
+                     get(/databases/$(database)/documents/games/$(gameCode)).data.hostId == request.auth.uid);
+        allow create, update: if isOwner(playerId);
+        allow delete: if false;
+      }
+
       match /rounds/{roundId} {
         allow read: if isAuthenticated();
         allow write: if false; // Only Cloud Functions write
