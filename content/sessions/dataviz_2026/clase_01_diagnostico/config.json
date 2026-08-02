@@ -12,12 +12,21 @@
     "nivel_vs_cambio",
     "eje_truncado",
     "causalidad_y_descripcion",
-    "senales_proyecto"
+    "interrogar_un_numero"
   ],
   "judges": [
-    { "judgeId": "generic_specialist", "weight": 0.35 },
-    { "judgeId": "generic_praxis", "weight": 0.35 },
-    { "judgeId": "generic_teacher", "weight": 0.3 }
+    {
+      "judgeId": "generic_specialist",
+      "weight": 0.35
+    },
+    {
+      "judgeId": "generic_praxis",
+      "weight": 0.35
+    },
+    {
+      "judgeId": "generic_teacher",
+      "weight": 0.3
+    }
   ],
   "judgeConfig": {
     "generic_specialist": {
@@ -29,7 +38,7 @@
       "weightFormula": "score = 0.30 * rigor_descriptivo + 0.20 * criterio_visual + 0.50 * claridad"
     },
     "generic_teacher": {
-      "sessionLens": "Esta es la primera clase. La única ronda que evalúas es diagnóstica y NO entra al ranking: no hay nada que un puntaje alto le gane a nadie, así que puntúa con honestidad y sin inflar. Evalúa si la persona PENSÓ el caso o si rellenó los campos. Un estudiante que dice honestamente 'el dato que necesito no existe' vale más que uno que inventa una fuente. En tu feedback escribe en primera persona e incluye un 'yo habría...' concreto a esta respuesta, porque este feedback es lo primero que van a leer del curso.",
+      "sessionLens": "Esta es la primera clase. La ronda abierta que evalúas SÍ entra al ranking, así que puntúa con honestidad y sin inflar: un puntaje regalado le quita el puesto a otro. Evalúa si la persona PENSÓ el caso o si escribió lo primero que se le vino a la cabeza. Una pregunta de cortesía que no cambiaría nada de lo que cree vale menos que una sola pregunta que sí muerde. En tu feedback escribe en primera persona e incluye un 'yo habría...' concreto a esta respuesta, porque este feedback es lo primero que van a leer del curso.",
       "weightFormula": "score = 0.50 * rigor_descriptivo + 0.30 * criterio_visual + 0.20 * claridad"
     }
   }

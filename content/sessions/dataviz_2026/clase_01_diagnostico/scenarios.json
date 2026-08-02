@@ -9,7 +9,10 @@
     "durationSeconds": 62,
     "context": "",
     "question": "",
-    "conceptTags": ["lectura_de_graficos", "nivel_vs_cambio"],
+    "conceptTags": [
+      "lectura_de_graficos",
+      "nivel_vs_cambio"
+    ],
     "media": [
       {
         "kind": "image",
@@ -22,10 +25,22 @@
       {
         "question": "Según este gráfico, ¿cuántos AÑOS DE ESPERANZA DE VIDA ganó Chile entre 1900 y 2023?",
         "options": [
-          { "id": "A", "text": "Unos 20 años" },
-          { "id": "B", "text": "Unos 35 años" },
-          { "id": "C", "text": "Unos 50 años" },
-          { "id": "D", "text": "Unos 80 años" }
+          {
+            "id": "A",
+            "text": "Unos 20 años"
+          },
+          {
+            "id": "B",
+            "text": "Unos 35 años"
+          },
+          {
+            "id": "C",
+            "text": "Unos 50 años"
+          },
+          {
+            "id": "D",
+            "text": "Unos 80 años"
+          }
         ],
         "correctOptionIndex": 2,
         "timeLimitSeconds": 30,
@@ -43,7 +58,9 @@
     "durationSeconds": 62,
     "context": "",
     "question": "",
-    "conceptTags": ["lectura_de_graficos"],
+    "conceptTags": [
+      "lectura_de_graficos"
+    ],
     "media": [
       {
         "kind": "image",
@@ -56,10 +73,22 @@
       {
         "question": "Mismo indicador, ahora solo desde 2010. ¿Qué muestra este gráfico?",
         "options": [
-          { "id": "A", "text": "Que la esperanza de vida creció muy rápido en la última década" },
-          { "id": "B", "text": "Que se mantuvo prácticamente estable, alrededor de los 80 años" },
-          { "id": "C", "text": "Que cayó fuertemente y no se ha recuperado" },
-          { "id": "D", "text": "Que faltan los datos de los últimos años" }
+          {
+            "id": "A",
+            "text": "Que la esperanza de vida creció muy rápido en la última década"
+          },
+          {
+            "id": "B",
+            "text": "Que se mantuvo prácticamente estable, alrededor de los 80 años"
+          },
+          {
+            "id": "C",
+            "text": "Que cayó fuertemente y no se ha recuperado"
+          },
+          {
+            "id": "D",
+            "text": "Que faltan los datos de los últimos años"
+          }
         ],
         "correctOptionIndex": 1,
         "timeLimitSeconds": 30,
@@ -77,7 +106,10 @@
     "durationSeconds": 67,
     "context": "",
     "question": "",
-    "conceptTags": ["eje_truncado", "lectura_de_graficos"],
+    "conceptTags": [
+      "eje_truncado",
+      "lectura_de_graficos"
+    ],
     "media": [
       {
         "kind": "image",
@@ -90,10 +122,22 @@
       {
         "question": "Este gráfico tiene EXACTAMENTE LOS MISMOS DATOS que el anterior. ¿Por qué se ve tan distinto?",
         "options": [
-          { "id": "A", "text": "Porque le agregaron años que el anterior no tenía" },
-          { "id": "B", "text": "Porque el eje vertical va de 78 a 82 en vez de partir en cero" },
-          { "id": "C", "text": "Porque usa una línea en vez de barras" },
-          { "id": "D", "text": "Porque corrigieron los datos de la pandemia" }
+          {
+            "id": "A",
+            "text": "Porque le agregaron años que el anterior no tenía"
+          },
+          {
+            "id": "B",
+            "text": "Porque el eje vertical va de 78 a 82 en vez de partir en cero"
+          },
+          {
+            "id": "C",
+            "text": "Porque usa una línea en vez de barras"
+          },
+          {
+            "id": "D",
+            "text": "Porque corrigieron los datos de la pandemia"
+          }
         ],
         "correctOptionIndex": 1,
         "timeLimitSeconds": 35,
@@ -102,63 +146,57 @@
     ]
   },
   {
-    "id": "dv_c01_r4_senales",
+    "id": "dv_c01_r4_pregunta_al_dato",
     "order": 4,
-    "title": "Tu proyecto: dominio, pregunta y rol",
+    "title": "Tres preguntas antes de creerle",
     "category": "Diagnóstico",
     "difficulty": "easy",
-    "ranked": false,
-    "durationSeconds": 300,
-    "conceptTags": ["senales_proyecto", "causalidad_y_descripcion"],
-    "judgeFocus": "Esta ronda tiene dos partes y solo la SEGUNDA se evalúa. El bloque [SENALES] es administrativo: si está completo, no suma ni resta; si falta, menciónalo en una frase del feedback y nada más. Lo que evalúas son las tres o cuatro líneas finales. Prioridad absoluta: ¿la pregunta que propuso se puede responder con datos, y la persona sabe QUÉ dato haría falta? Una respuesta de 100 nombra un dato concreto y quién lo tendría (una encuesta, un registro administrativo, un censo, una base de un servicio público), y distingue lo que ese dato mostraría de lo que solo insinuaría. Segundo: reconocer que el dato no existe, no es público, o no está desagregado como se necesita, es una RESPUESTA FUERTE, no una evasión — trátala como tal si viene con la razón. Tercero: si la pregunta es del tipo 'por qué pasa X' y la persona no nota que un dato descriptivo no puede contestar un por qué, eso es el hallazgo del feedback. NO exijas vocabulario del curso: es la primera clase y no han leído nada. NO penalices que el dominio sea modesto o poco original; el dominio es un insumo para armar grupos, no una nota.",
-    "context": "El proyecto del semestre es tuyo: eliges un tema, consigues datos, los describes y construyes una plataforma web que un lector cualquiera entienda.\n\nLos grupos se arman la próxima clase, y se arman con lo que escribas acá.\n\nLos cuatro roles de un grupo:\n\n- **analista** — decide qué mirar en los datos y qué se puede concluir\n- **programador** — hace que el código y la plataforma funcionen\n- **diseñador** — decide cómo se ve y cómo se lee\n- **comunicador** — escribe y presenta, y es el que defiende el proyecto ante alguien de fuera\n\nNinguno es más importante y nadie hace solo lo suyo. Elige el que te acomode como punto de partida.",
-    "question": "Dos cosas, en este orden.\n\nPRIMERO, pega este bloque tal cual y complétalo:\n\n[SENALES]\nDOMINIO: (una línea: sobre qué te gustaría trabajar)\nPREGUNTA: (una pregunta concreta que te gustaría responder con datos sobre ese tema)\nROL: (analista / programador / disenador / comunicador)\nHERRAMIENTA_PREVIA: (ninguna / excel / r / python / otra)\nSKILL_DATOS(1-5): __\nSKILL_CODIGO(1-5): __\nSKILL_DISENO(1-5): __\nHORAS_SEMANA: __\n[/SENALES]\n\nDonde 1 es muy bajo y 5 muy alto.\n\nSEGUNDO, y esto es lo que se lee con atención: en tres o cuatro líneas, ¿qué dato concreto necesitarías para responder tu pregunta, y quién lo tendría? Si crees que ese dato no existe, no es público, o no está desagregado como lo necesitas, dilo — eso también es una respuesta, y de las buenas.",
-    "signalSchema": {
-      "instructions": "La respuesta debe traer un bloque [SENALES]...[/SENALES]. Parsea los campos que aparecen abajo y devuélvelos en parsedSignals con EXACTAMENTE las claves indicadas. Si un campo falta o es ilegible, pon null en esa clave en vez de inventarlo.",
-      "fields": [
-        { "key": "dominio", "label": "DOMINIO", "type": "texto", "description": "tema en que quiere hacer su proyecto, en pocas palabras" },
-        { "key": "pregunta", "label": "PREGUNTA", "type": "texto", "description": "la pregunta que quiere responder con datos" },
-        { "key": "rol", "label": "ROL", "type": "enum", "values": ["analista", "programador", "disenador", "comunicador"] },
-        { "key": "herramienta_previa", "label": "HERRAMIENTA_PREVIA", "type": "enum", "values": ["ninguna", "excel", "r", "python", "otra"] },
-        { "key": "skill_datos", "label": "SKILL_DATOS", "type": "entero_1_5" },
-        { "key": "skill_codigo", "label": "SKILL_CODIGO", "type": "entero_1_5" },
-        { "key": "skill_diseno", "label": "SKILL_DISENO", "type": "entero_1_5" },
-        { "key": "horas_semana", "label": "HORAS_SEMANA", "type": "numero" }
-      ]
-    },
+    "ranked": true,
+    "durationSeconds": 240,
+    "conceptTags": [
+      "interrogar_un_numero",
+      "lectura_de_graficos"
+    ],
+    "judgeFocus": "Se evalúan las dos partes y pesan parejo. Lo que separa una buena respuesta de una mala no es cuántas preguntas escribió, sino si las preguntas MUERDEN: una pregunta muerde cuando, contestada de dos maneras distintas, te deja creyendo cosas distintas. \"¿Es confiable la fuente?\" no muerde. \"¿Subió 40% en un año o en diez?\" sí. Las tres que más muerden acá son el período (desde cuándo se acumula ese 40%), qué se midió exactamente (arriendos publicados o contratos firmados; promedio o mediana; qué comunas; qué tamaño de vivienda) y si el 40% está descontada la inflación o no. NO exijas esas tres ni esas palabras: premia que la persona note que la frase está incompleta, y en qué. En la segunda parte lo que importa es la correspondencia: el gráfico pedido tiene que servir para verificar ESA afirmación, no ser un gráfico cualquiera. \"Una serie en el tiempo con la mediana en pesos reales\" es fuerte; \"un gráfico de barras\" sin decir de qué, no. NO exijas vocabulario del curso: es la primera clase y no han leído nada. Son cuatro minutos escribiendo desde un teléfono: juzga el pensamiento, no la prolijidad ni la ortografía.",
+    "context": "Un titular, sin gráfico, sin tabla y sin nota al pie. Solo la frase, como circula por WhatsApp o en la bajada de un diario:\n\n**«El arriendo en Santiago subió 40%»**\n\nEso es todo lo que te dan.\n\nUn número así puede ser verdadero, puede ser falso, o —lo más frecuente— puede ser verdadero y engañoso al mismo tiempo. Lo que decide cuál de los tres no está en el número: está en todo lo que la frase no dice.",
+    "question": "Dos cosas.\n\nPRIMERO: las **tres preguntas** que le harías a quien publicó ese número, antes de repetirlo. Una por línea. Que sean preguntas cuya respuesta cambie lo que crees: si te da lo mismo cómo te la contesten, esa pregunta no sirve.\n\nSEGUNDO, en dos líneas: ¿qué gráfico le pedirías, y qué tendría que mostrar para que le creas?",
     "evaluationGuide": {
       "must_hit": [
-        "Nombra un dato concreto, no 'más información': una encuesta, un registro, un censo, una base de algún servicio",
-        "Dice quién tendría ese dato, aunque sea de forma aproximada",
-        "La pregunta y el dato propuesto se corresponden: el dato podría efectivamente mover la respuesta"
+        "Al menos una pregunta apunta al período: desde cuándo, en cuánto tiempo se acumula ese 40%",
+        "Al menos una pregunta apunta a qué se midió: qué arriendos, de qué comunas, promedio o mediana, avisos publicados o contratos firmados",
+        "El gráfico que pide sirve para verificar esta afirmación en particular, y dice qué tendría que mostrar"
       ],
       "nice_to_have": [
-        "Distingue lo que el dato mostraría de lo que solo insinuaría",
-        "Nota que su pregunta es de tipo causal y que un dato descriptivo no la contesta sola",
-        "Dice por qué el dato no existe o no está disponible, en vez de solo afirmar que no está"
+        "Distingue el precio nominal del precio descontada la inflación",
+        "Nota que un arriendo publicado no es un arriendo firmado",
+        "Pide ver la serie completa y no solo los dos extremos que producen el 40%",
+        "Pregunta quién publica el número y qué gana con que se lea así"
       ],
       "fatal_errors": [
-        "Repite la pregunta con otras palabras en vez de decir qué dato haría falta",
-        "Pide 'datos' o 'información' sin especificar cuáles",
-        "Afirma que ya sabe la respuesta y que el dato solo la confirmaría"
+        "Las tres preguntas son de cortesía (\"¿es confiable?\", \"¿quién lo dice?\") y ninguna cambiaría lo que cree",
+        "Acepta el 40% y discute si le parece mucho o poco, en vez de interrogar de dónde sale",
+        "Pide \"un gráfico\" sin decir qué tendría que mostrar"
       ]
     },
     "idealAnswer": {
       "keyPoints": [
-        "El bloque [SENALES] está completo y con valores diferenciados",
-        "Nombra un dato específico y una fuente plausible que lo tendría",
-        "El dato propuesto efectivamente responde la pregunta que planteó"
+        "Pregunta en qué ventana de tiempo se acumula ese 40%",
+        "Pregunta qué se midió exactamente y de dónde sale el dato",
+        "Pide una serie en el tiempo, en pesos reales, y dice qué tendría que verse en ella"
       ],
-      "expectedConcepts": ["senales_proyecto", "causalidad_y_descripcion"],
+      "expectedConcepts": [
+        "interrogar_un_numero",
+        "lectura_de_graficos"
+      ],
       "commonMistakes": [
-        "Dejar el bloque incompleto o poner el mismo número en todos los skills",
-        "Pedir 'datos sobre el tema' sin decir cuáles",
-        "Plantear una pregunta de por qué y proponer un dato que solo describe qué"
+        "Preguntas de cortesía que no cambian nada de lo que cree",
+        "Opinar sobre si 40% es mucho, en vez de preguntar cómo se calculó",
+        "Pedir un gráfico sin decir qué debería mostrar"
       ],
       "excellentResponseIndicators": [
-        "Dice que el dato no está desagregado como lo necesita, y explica por qué eso importa para su pregunta",
-        "Separa lo que el dato probaría de lo que solo sugeriría",
-        "Coherencia entre los skills que se autoasigna y el rol que elige"
+        "Nota que el 40% depende de qué dos momentos se comparan, y por eso pide la serie entera",
+        "Separa el alza del arriendo del alza general de precios",
+        "Nota que los arriendos publicados y los efectivamente pagados no son lo mismo"
       ]
     }
   },
@@ -172,7 +210,10 @@
     "durationSeconds": 67,
     "context": "",
     "question": "",
-    "conceptTags": ["causalidad_y_descripcion", "lectura_de_graficos"],
+    "conceptTags": [
+      "causalidad_y_descripcion",
+      "lectura_de_graficos"
+    ],
     "media": [
       {
         "kind": "image",
@@ -185,10 +226,22 @@
       {
         "question": "Volvemos al gráfico honesto. Ya sabes que en 2019 fueron 80,3 años, en 2021 78,9 y en 2023 81,2. ¿Cuál de estas afirmaciones se puede sostener SOLO CON ESTE GRÁFICO?",
         "options": [
-          { "id": "A", "text": "La pandemia causó la baja de 2020 y 2021" },
-          { "id": "B", "text": "El sistema de salud chileno mejoró entre 2021 y 2023" },
-          { "id": "C", "text": "En 2021 la esperanza de vida al nacer fue menor que en 2019" },
-          { "id": "D", "text": "En 2025 la esperanza de vida va a superar los 82 años" }
+          {
+            "id": "A",
+            "text": "La pandemia causó la baja de 2020 y 2021"
+          },
+          {
+            "id": "B",
+            "text": "El sistema de salud chileno mejoró entre 2021 y 2023"
+          },
+          {
+            "id": "C",
+            "text": "En 2021 la esperanza de vida al nacer fue menor que en 2019"
+          },
+          {
+            "id": "D",
+            "text": "En 2025 la esperanza de vida va a superar los 82 años"
+          }
         ],
         "correctOptionIndex": 2,
         "timeLimitSeconds": 35,
