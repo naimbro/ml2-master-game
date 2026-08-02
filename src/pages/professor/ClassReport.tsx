@@ -16,6 +16,7 @@ import {
 import { httpsCallable } from 'firebase/functions';
 import { functions } from '../../lib/firebase';
 import { useAuth } from '../../hooks/useAuth';
+import GameFeedbackReport from '../../components/GameFeedbackReport';
 import jsPDF from 'jspdf';
 
 interface PlayerReport {
@@ -587,6 +588,12 @@ export default function ClassReport() {
             ))}
           </div>
         </motion.div>
+
+        {/* Lo que dijo el curso del juego. Va aca y no en la pantalla final,
+            que es la que se proyecta. */}
+        <div className="mt-8">
+          <GameFeedbackReport gameCode={gameCode} totalPlayers={report.totalPlayers} />
+        </div>
       </main>
     </div>
   );
