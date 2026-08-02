@@ -1,0 +1,44 @@
+{
+  "sessionId": "clase_01_introduccion",
+  "courseId": "ai_democracy_2026",
+  "title": "Clase 1: De la exposicion al poder",
+  "description": "4 rondas (~12 min) que cierran la clase introductoria. Dos lecturas de grafico sobre a quien acelera y a quien expone la IA, y dos preguntas abiertas que convierten ese dato economico en una pregunta democratica. Las cuatro compiten.",
+  "date": "2026-08-03",
+  "roundCount": 4,
+  "roundDurationSeconds": 240,
+  "bufferSeconds": 45,
+  "conceptTags": [
+    "exposicion_ocupacional",
+    "gradiente_de_complejidad",
+    "backlash_politico",
+    "igualdad_de_voz"
+  ],
+  "judges": [
+    {
+      "judgeId": "democracy_scholar",
+      "weight": 0.4
+    },
+    {
+      "judgeId": "policy_lawyer",
+      "weight": 0.3
+    },
+    {
+      "judgeId": "professor_twin_ayd",
+      "weight": 0.3
+    }
+  ],
+  "judgeConfig": {
+    "democracy_scholar": {
+      "sessionLens": "Tu lente es el MECANISMO POLITICO. Estas dos preguntas parten de un dato economico —quien esta expuesto a la IA y a quien acelera— y piden convertirlo en una explicacion sobre poder: quien gana voz, quien la pierde, y por que. Premia que nombren el mecanismo (acceso a medios, capital cultural, capacidad de organizarse, quien escribe las noticias). Penaliza que se queden en el juicio moral —'es injusto', 'es preocupante'— sin decir por que via ocurre. Es la PRIMERA clase del semestre y todavia no han leido a Habermas ni a Schumpeter: no exijas vocabulario del curso ni nombres de autores, exige razonamiento.",
+      "weightFormula": "score = 0.60 * argumento_politico + 0.25 * toma_de_posicion + 0.15 * economia"
+    },
+    "policy_lawyer": {
+      "sessionLens": "Tu lente es el COMPROMISO. A las dos preguntas se les puso una disyuntiva explicita —dano mayor o capacidad de protesta mayor; amplia o estrecha— y tu unica obsesion es si la persona la contesto o la esquivo. 'Depende', 'las dos cosas' y 'es complejo' valen poco aunque esten bien escritos, salvo que digan de que depende y se jueguen igual por un lado. Premia al que elige y da una razon, aunque la razon sea discutible. Es la primera clase: no castigues que la posicion sea ingenua, castiga que no haya posicion.",
+      "weightFormula": "score = 0.30 * argumento_politico + 0.55 * toma_de_posicion + 0.15 * economia"
+    },
+    "professor_twin_ayd": {
+      "sessionLens": "Estas rondas SI entran al ranking, asi que puntua sin inflar: un puntaje regalado le quita el puesto a otro. Se pidieron CUATRO LINEAS escritas en tres minutos desde un telefono, en la primera clase del semestre, a las nueve y media de la manana. Cuatro lineas bien puestas valen 100: no esperes parrafos, ni introduccion, ni ortografia perfecta, y escribir mas NO sube el puntaje. En tu feedback escribe en primera persona e incluye un 'yo habria...' concreto a esta respuesta, porque esto es lo primero que van a leer del curso.",
+      "weightFormula": "score = 0.35 * argumento_politico + 0.30 * toma_de_posicion + 0.35 * economia"
+    }
+  }
+}
