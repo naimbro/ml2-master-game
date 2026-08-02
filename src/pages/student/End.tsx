@@ -14,6 +14,9 @@ import { playPodiumFanfare, playLeaderboardTick, playDrumRoll, playApplause } fr
 import { confettiPodium, confettiStars, confettiSmallBurst, confettiBurst } from '../../lib/confetti';
 import SupportLink from '../../components/SupportLink';
 import CourseStandingsCard from '../../components/CourseStandingsCard';
+import GameFeedback from '../../components/GameFeedback';
+import HostFeedbackSummary from '../../components/HostFeedbackSummary';
+import { useGameFeedbackSummary, useMyGameFeedback } from '../../hooks/useGameFeedback';
 
 interface PlayerFinalScore {
   playerId: string;
@@ -44,6 +47,15 @@ export default function End() {
   // revealStage: 0=suspense → 1=3rd → 2=2nd → 3=1st → 4=done (show everything)
   const [revealStage, setRevealStage] = useState(0);
   const [announcement, setAnnouncement] = useState<string | null>(null);
+
+  // El feedback va ANTES del podio. Mientras esta compuerta esta cerrada no
+  // empieza la revelacion: si no, los temporizadores del podio corren detras del
+  // formulario y el alumno vuelve a una ceremonia que ya termino sin el.
+  const { answered: feedbackAnswered, saving: feedbackSaving, save: saveFeedback } =
+    useMyGameFeedback(gameCode);
+  const [feedbackSkipped, setFeedbackSkipped] = useState(false);
+  const feedbackGateOpen = isHost || feedbackSkipped || feedbackAnswered === true;
+  const feedbackSummary = useGameFeedbackSummary(gameCode, isHost);
 
   // Un juego sin ninguna ronda rankeada no es una competencia: no hay podio ni
   // posicion que mostrar, solo el propio desempeno y el feedback. Sin esto, el
@@ -120,7 +132,7 @@ export default function End() {
   // Staged podium reveal — adapts to player count, with suspense announcements
   // No cleanup — timers must survive dependency ref changes from Firestore updates
   useEffect(() => {
-    if (finalRankings.length > 0 && !loadingRankings && !celebrationPlayed.current) {
+    if (feedbackGateOpen && finalRankings.length > 0 && !loadingRankings && !celebrationPlayed.current) {
       celebrationPlayed.current = true;
 
       // Un juego diagnostico no tiene primer lugar, asi que no hay ceremonia:
@@ -184,7 +196,7 @@ export default function End() {
       // Show everything else
       setTimeout(() => { setRevealStage(4); }, t);
     }
-  }, [finalRankings, loadingRankings, diagnosticOnly]);
+  }, [finalRankings, loadingRankings, diagnosticOnly, feedbackGateOpen]);
 
   const handleDownloadReport = async () => {
     if (!gameCode || !user || !userRanking) return;
@@ -307,6 +319,18 @@ export default function End() {
           </Link>
         </div>
       </div>
+    );
+  }
+
+  // El feedback tapa el podio hasta que se conteste o se salte. Al anfitrion no,
+  // porque su pantalla es la que se proyecta al curso.
+  if (!isHost && feedbackAnswered === false && !feedbackSkipped) {
+    return (
+      <GameFeedback
+        saving={feedbackSaving}
+        onSubmit={(rating, comment) => { void saveFeedback(rating, comment); }}
+        onSkip={() => setFeedbackSkipped(true)}
+      />
     );
   }
 
@@ -608,6 +632,16 @@ export default function End() {
             entero, y ahi no corresponde mostrar SU posicion acumulada. */}
         {revealStage >= 4 && !isHost && (
           <CourseStandingsCard courseId={game?.courseId} gameCode={gameCode} />
+        )}
+
+        {/* Lo que dijo el curso — solo para el anfitrion, que es quien lo lee */}
+        {revealStage >= 4 && isHost && (
+          <HostFeedbackSummary
+            entries={feedbackSummary.entries}
+            average={feedbackSummary.average}
+            ratedCount={feedbackSummary.ratedCount}
+            playerCount={finalRankings.length}
+          />
         )}
 
         {/* Professor Class Report Button */}
