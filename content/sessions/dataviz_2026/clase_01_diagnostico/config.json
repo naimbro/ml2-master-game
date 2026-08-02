@@ -2,17 +2,16 @@
   "sessionId": "clase_01_diagnostico",
   "courseId": "dataviz_2026",
   "title": "Clase 1: Diagnóstico y proyecto",
-  "description": "5 rondas (~12 min): tres lecturas de gráficos con ranking para saber de dónde partimos, un bloque de señales para armar los grupos del proyecto —esa no compite— y un cierre sobre qué se puede y qué no se puede concluir de un gráfico",
+  "description": "4 rondas (~11 min): dos lecturas de graficos con ranking para saber de donde partimos, y dos preguntas abiertas de comprension sobre el articulo de Katie Parrott que se discute en clase. Las cuatro compiten.",
   "date": "2026-08-03",
-  "roundCount": 5,
+  "roundCount": 4,
   "roundDurationSeconds": 300,
   "bufferSeconds": 45,
   "conceptTags": [
     "lectura_de_graficos",
     "nivel_vs_cambio",
-    "eje_truncado",
     "causalidad_y_descripcion",
-    "interrogar_un_numero"
+    "articulo_parrott"
   ],
   "judges": [
     {
@@ -30,16 +29,16 @@
   ],
   "judgeConfig": {
     "generic_specialist": {
-      "sessionLens": "Esta es la PRIMERA CLASE del curso. Los estudiantes no han leído nada todavía y no conocen el vocabulario técnico. NO penalices que no digan 'sesgo', 'escala' o 'variable': penaliza solo que afirmen cosas que el dato no sostiene. Tu lente es la construcción del gráfico y la corrección de lo que se afirma sobre él.",
-      "weightFormula": "score = 0.35 * rigor_descriptivo + 0.50 * criterio_visual + 0.15 * claridad"
+      "sessionLens": "Tu lente es el TEXTO: si lo que el estudiante afirma esta efectivamente en el articulo de Parrott y si lo reconstruye sin deformarlo. Tienes el resumen del articulo en el material de referencia; usalo para verificar, no para exigir que lo citen. El error que mas te importa es atribuirle a la autora algo que no dijo, aunque suene razonable. Es la primera clase del semestre: no exijas vocabulario del curso.",
+      "weightFormula": "score = 0.55 * fidelidad_al_texto + 0.35 * articulacion + 0.10 * economia"
     },
     "generic_praxis": {
-      "sessionLens": "Esta es la primera clase. Tú eres la audiencia no especializada que el curso pone como estándar: un lector interesado, sin formación estadística. Tu única pregunta es si entenderías esta respuesta y si te dejaría con una idea correcta en la cabeza. Premia que traduzcan; penaliza que sobre-afirmen, porque a un lector como tú una sobre-afirmación lo deja creyendo algo falso.",
-      "weightFormula": "score = 0.30 * rigor_descriptivo + 0.20 * criterio_visual + 0.50 * claridad"
+      "sessionLens": "Tu eres el lector no especializado que el curso pone como estandar. Tu unica pregunta es si, leyendo estas cuatro lineas, quedarias con una idea correcta y util en la cabeza. Premia que traduzcan el argumento a algo que se entienda; penaliza el rodeo y la frase de relleno. Cuatro lineas claras valen mas que diez confusas.",
+      "weightFormula": "score = 0.30 * fidelidad_al_texto + 0.40 * articulacion + 0.30 * economia"
     },
     "generic_teacher": {
-      "sessionLens": "Esta es la primera clase. La ronda abierta que evalúas SÍ entra al ranking, así que puntúa con honestidad y sin inflar: un puntaje regalado le quita el puesto a otro. Evalúa si la persona PENSÓ el caso o si escribió lo primero que se le vino a la cabeza. Una pregunta de cortesía que no cambiaría nada de lo que cree vale menos que una sola pregunta que sí muerde. En tu feedback escribe en primera persona e incluye un 'yo habría...' concreto a esta respuesta, porque este feedback es lo primero que van a leer del curso.",
-      "weightFormula": "score = 0.50 * rigor_descriptivo + 0.30 * criterio_visual + 0.20 * claridad"
+      "sessionLens": "Esta es la primera clase y estas rondas SI entran al ranking, asi que puntua con honestidad y sin inflar: un puntaje regalado le quita el puesto a otro. Evalua si la persona leyo el texto de verdad o si contesto de memoria a partir del titulo. En tu feedback escribe en primera persona e incluye un 'yo habria...' concreto a esta respuesta, porque este feedback es lo primero que van a leer del curso.",
+      "weightFormula": "score = 0.45 * fidelidad_al_texto + 0.30 * articulacion + 0.25 * economia"
     }
   }
 }

@@ -52,7 +52,7 @@ describe('clase_01_diagnostico', () => {
   it('deriva rounds de los escenarios y duration de roundDurationSeconds', () => {
     const s = session();
     expect(s.rounds).toBe(s.scenarios.length);
-    expect(s.rounds).toBe(5);
+    expect(s.rounds).toBe(4);
     expect(s.duration).toBe(Math.round(s.config.roundDurationSeconds / 60));
   });
 
@@ -82,11 +82,10 @@ describe('clase_01_diagnostico', () => {
     }
   });
 
-  // Las CINCO rondas compiten, incluida la abierta. Reemplaza al diseno anterior,
-  // en que la quinta era un formulario de senales del proyecto y por eso quedaba
-  // fuera del ranking: Naim lo saco el 2026-08-02 porque llenar un formulario no
-  // es jugar, y las senales para armar los grupos se recogen en la clase del 10.
-  it('las cinco rondas compiten, incluida la abierta', () => {
+  // Las CUATRO rondas compiten: dos de opcion multiple sobre graficos y dos
+  // abiertas de comprension sobre el articulo de Katie Parrott que se discute en
+  // clase. Esta forma la fijo Naim el 2026-08-02.
+  it('son dos rondas de opcion multiple y dos abiertas, y las cuatro compiten', () => {
     const scenarios = session().scenarios as {
       id: string;
       type?: string;
@@ -95,22 +94,37 @@ describe('clase_01_diagnostico', () => {
     for (const s of scenarios) {
       expect(s.ranked !== false, `${s.id} deberia competir`).toBe(true);
     }
-    expect(scenarios.filter((s) => s.ranked !== false)).toHaveLength(5);
-    // Y sigue habiendo exactamente una abierta: si desaparece, el juego pierde
-    // la unica ronda donde los jueces leen algo escrito.
-    expect(scenarios.filter((s) => s.type !== 'multiple_choice')).toHaveLength(1);
+    expect(scenarios.filter((s) => s.type === 'multiple_choice')).toHaveLength(2);
+    expect(scenarios.filter((s) => s.type !== 'multiple_choice')).toHaveLength(2);
   });
 
-  it('la rubrica tiene las tres dimensiones del curso sumando 1', () => {
+  // Las dos abiertas dicen el largo esperado EN EL ENUNCIADO, y la rubrica se lo
+  // repite a los jueces. Sin eso, los jueces esperan ensayos y castigan las
+  // cuatro lineas que el enunciado pidio.
+  it('las rondas abiertas declaran el largo pedido', () => {
+    const abiertas = (session().scenarios as { type?: string; question: string }[]).filter(
+      (s) => s.type !== 'multiple_choice'
+    );
+    for (const s of abiertas) {
+      expect(s.question).toMatch(/cuatro l[ií]neas/i);
+    }
+    const rubric = session().rubric as { globalInstructions: string };
+    expect(rubric.globalInstructions).toMatch(/CUATRO L[ÍI]NEAS/);
+  });
+
+  // Esta clase NO usa las tres dimensiones del curso: las unicas rondas que los
+  // jueces evaluan son de comprension lectora, y "criterio visual" no describe
+  // nada de lo que hay que juzgar ahi.
+  it('la rubrica es la de comprension lectora y sus pesos suman 1', () => {
     const rubric = session().rubric as {
       sessionId: string;
       dimensions: { id: string; weight: number }[];
     };
     expect(rubric.sessionId).toBe('clase_01_diagnostico');
     expect(rubric.dimensions.map((d) => d.id)).toEqual([
-      'rigor_descriptivo',
-      'criterio_visual',
-      'claridad',
+      'fidelidad_al_texto',
+      'articulacion',
+      'economia',
     ]);
     expect(rubric.dimensions.reduce((sum, d) => sum + d.weight, 0)).toBeCloseTo(1, 5);
   });
