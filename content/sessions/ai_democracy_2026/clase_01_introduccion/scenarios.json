@@ -1,203 +1,186 @@
 [
   {
-    "id": "ayd_c01_r1_gradiente",
+    "id": "ayd_c01_r1_rezago",
     "order": 1,
-    "title": "A quien acelera la IA",
-    "category": "Lectura de datos",
+    "title": "Las revoluciones tardan",
+    "category": "Historia",
     "type": "multiple_choice",
     "ranked": true,
-    "durationSeconds": 72,
+    "durationSeconds": 55,
     "context": "",
     "question": "",
     "conceptTags": [
-      "gradiente_de_complejidad"
-    ],
-    "media": [
-      {
-        "kind": "image",
-        "src": "media/ai_democracy/c01_gradiente_anthropic.png",
-        "alt": "Dos paneles. En el primero, cuanto acelera la IA una tarea: sube de 9 veces mas rapido en tareas de nivel escolar (12 anos de escolaridad) a 12 veces mas rapido en tareas de nivel universitario (16 anos). En el segundo, cuantas veces le sale bien: baja de 70 por ciento a 66 por ciento entre los mismos dos niveles. Ambos ejes verticales parten en cero.",
-        "credit": "Elaboracion propia con valores reportados por el Anthropic Economic Index (enero 2026)"
-      }
+      "dilema_de_solow"
     ],
     "mcQuestions": [
       {
-        "question": "Anthropic midio como se usa Claude en tareas reales de trabajo. Segun este grafico, ¿que ocurre cuando la tarea se pone mas exigente?",
+        "question": "La máquina de vapor se inventó en 1712. ¿Cuándo aparece su efecto sobre el PIB británico?",
         "options": [
           {
             "id": "A",
-            "text": "Mientras mas sabe la persona que la usa, mas le rinde la IA"
+            "text": "Casi de inmediato, en la década de 1720"
           },
           {
             "id": "B",
-            "text": "Mientras mas exigente es la tarea, mas la acelera la IA — aunque tambien le sale bien menos veces"
+            "text": "Hacia 1776, con la mejora de Watt"
           },
           {
             "id": "C",
-            "text": "La IA reemplaza mas las tareas de alta calificacion que las de baja"
+            "text": "Recién en 1830, más de un siglo después"
           },
           {
             "id": "D",
-            "text": "La IA rinde peor en tareas universitarias, asi que conviene especializarse en ellas"
+            "text": "Nunca se pudo medir"
           }
         ],
-        "correctOptionIndex": 1,
-        "timeLimitSeconds": 40,
-        "explanation": "El eje horizontal mide la escolaridad que exige LA TAREA, no la que tiene la persona que la pide. Por eso A es tentadora y es falsa: el estudio no midio a los usuarios. C tambien es falsa, y lo dice el propio informe: la proporcion de tareas que se automatizan no depende del nivel educativo. D lee solo el segundo panel y ademas exagera: el exito baja cuatro puntos, de 70% a 66%, mientras la aceleracion sube un tercio. Ese es el punto de partir los dos ejes en cero."
+        "correctOptionIndex": 2,
+        "timeLimitSeconds": 30,
+        "explanation": "Más de un siglo. Es el «dilema de Solow»: la electricidad repite el patrón (dínamo en 1866, ampolleta en 1879, pero el despegue llega con la línea de ensamblaje de Ford en 1913) y el microprocesador también (1969, con productividad medible recién desde los noventa). La alternativa B es la trampa: 1776 sí es una fecha del vapor, pero de su mejora técnica, no de su efecto económico."
       }
     ]
   },
   {
     "id": "ayd_c01_r2_exposicion",
     "order": 2,
-    "title": "A quien expone",
-    "category": "Lectura de datos",
+    "title": "Quién está más expuesto",
+    "category": "Trabajo e IA",
     "type": "multiple_choice",
     "ranked": true,
-    "durationSeconds": 72,
+    "durationSeconds": 55,
     "context": "",
     "question": "",
     "conceptTags": [
-      "exposicion_ocupacional"
-    ],
-    "media": [
-      {
-        "kind": "image",
-        "src": "media/ai_democracy/c01_exposicion_ocupaciones.png",
-        "alt": "Grafico de barras horizontales con el porcentaje de tareas de cada ocupacion expuestas a la IA generativa. Arriba: investigadores de encuestas 84 por ciento, escritores y autores 82, interpretes y traductores 82, relacionadores publicos 81, cientificos pecuarios 78. Abajo, en cero por ciento: operadores de maquinaria agricola, mecanicos de motos, lavaplatos, ayudantes de techadores y albaniles de piedra.",
-        "credit": "Elaboracion propia con datos de Eloundou, Manning, Mishkin y Rock (2023), GPTs are GPTs"
-      }
+      "exposicion_diferencial"
     ],
     "mcQuestions": [
       {
-        "question": "Este estudio estimo que porcentaje de las tareas de cada ocupacion puede acelerar la IA generativa. Comparado con la automatizacion industrial del siglo XX, ¿que cambia?",
+        "question": "¿Cuál de estas habilidades REDUCE la exposición de una ocupación a la IA generativa?",
         "options": [
           {
             "id": "A",
-            "text": "Afecta sobre todo al trabajo manual, igual que las olas anteriores"
+            "text": "Programación"
           },
           {
             "id": "B",
-            "text": "Afecta mas o menos parejo a todas las ocupaciones"
+            "text": "Pensamiento crítico"
           },
           {
             "id": "C",
-            "text": "Afecta principalmente a ocupaciones de alta calificacion y trabajo de oficina, invirtiendo el patron historico"
+            "text": "Escritura"
           },
           {
             "id": "D",
-            "text": "Afecta sobre todo a ocupaciones que no exigen escolaridad formal"
+            "text": "Ninguna: las tres aumentan la exposición"
           }
         ],
-        "correctOptionIndex": 2,
-        "timeLimitSeconds": 40,
-        "explanation": "Se invirtio el patron. Los que trabajan con palabras —traducir, escribir, investigar, comunicar— estan arriba; los que trabajan con las manos estan en cero, y son 34 ocupaciones enteras sin ninguna tarea expuesta. Los luditas del siglo XIX rompieron telares porque la maquina venia por el trabajo manual. Esta vez viene por el trabajo de escritorio. Guarden ese dato: la ronda que sigue les va a pedir que saquen la consecuencia politica."
+        "correctOptionIndex": 1,
+        "timeLimitSeconds": 30,
+        "explanation": "Ciencia y pensamiento crítico reducen la exposición; programación y escritura la aumentan. Es lo contrario de lo que dice la intuición: escribir y programar parecen las habilidades más sofisticadas, y son justamente las más expuestas. Por eso las ocupaciones de altos salarios —ejecutivos, ingenieros especializados, profesionales de TI— aparecen arriba en el gráfico de Goldman Sachs."
       }
     ]
   },
   {
-    "id": "ayd_c01_r3_backlash",
+    "id": "ayd_c01_r3_luditas_al_reves",
     "order": 3,
-    "title": "Por que este backlash suena tanto",
-    "category": "Argumentacion",
+    "title": "Los luditas al revés",
+    "category": "Argumentación",
     "difficulty": "medium",
     "ranked": true,
-    "durationSeconds": 180,
+    "durationSeconds": 150,
     "conceptTags": [
-      "backlash_politico",
-      "exposicion_ocupacional"
+      "exposicion_diferencial",
+      "backlash_politico"
     ],
-    "judgeFocus": "Se evalua si la persona construye un MECANISMO POLITICO y no un juicio moral. La respuesta de 100 nombra por que via el ruido publico no es proporcional al dano: los expuestos esta vez son periodistas, escritores, abogados, academicos, publicistas — gente que escribe los diarios, tiene tribuna, sabe organizarse y define de que se habla. Esa es la respuesta buena, y no necesita ningun autor ni ningun concepto del curso para llegar a ella. Una respuesta de 60 dice 'porque la IA da miedo' o 'porque afecta a mas gente' sin nombrar ninguna via. Una respuesta de 40 opina sobre si la IA es buena o mala, que no es lo que se pregunto. OJO con dos cosas: (1) elegir la opcion 'dano mayor' NO es incorrecto —es defendible si argumenta que la escala o la velocidad son distintas— lo que se castiga es no elegir; (2) no exijas que citen datos, el grafico ya lo vieron. Son CUATRO LINEAS escritas en tres minutos desde un telefono en la primera clase del semestre. Cuatro lineas bien puestas valen 100. Escribir mas NO sube el puntaje.",
-    "context": "Acabas de ver que los mas expuestos a la IA generativa son los que trabajan con palabras: traductores, escritores, investigadores, relacionadores publicos, abogados, periodistas.\n\nLa automatizacion industrial del siglo XX golpeo sobre todo a obreros, y destruyo mucho mas empleo del que la IA ha destruido hasta hoy.\n\nY sin embargo, el ruido publico sobre la IA es incomparablemente mayor.",
-    "question": "Explica esa diferencia por una via **politica**, y toma posicion: el backlash actual, ¿expresa un dano mayor, o una capacidad de protesta mayor? No mas de **cuatro lineas**.",
+    "judgeFocus": "Se evalúa si el estudiante convierte la inversión del patrón en algo POLÍTICO y si se moja con un sí o un no. Una respuesta de 100 nombra una vía concreta: los afectados de hoy tienen tribuna, definen la agenda, escriben la prensa, saben organizarse, votan distinto, o tienen acceso a los que legislan. Una respuesta de 60 dice «sí cambia» sin decir por qué vía. Una respuesta de 40 opina sobre si la IA es buena o mala, que no es lo que se preguntó.\n\nDOS ADVERTENCIAS IMPORTANTES.\n\n(1) «No cambia nada» es una respuesta LEGÍTIMA y puede valer 100: si argumenta que lo que manda es el tamaño del daño y no quién lo sufre, o que las élites afectadas se reconvierten y por eso no habrá conflicto, cumplió. No premies un lado por sobre el otro.\n\n(2) El enunciado NO afirma que hoy exista más ruido público que en el siglo XIX, y tú tampoco puedes darlo por supuesto. Si el estudiante duda de alguna premisa, eso no se castiga: se evalúa lo que hace después de dudar.\n\nSon TRES LÍNEAS escritas en dos minutos y medio desde un teléfono, en la primera clase del semestre. Tres líneas bien puestas valen 100. Escribir más NO sube el puntaje. No exijas autores ni conceptos: no se ha enseñado ninguno todavía.",
+    "context": "Los luditas del siglo XIX rompieron telares porque la máquina venía por el trabajo manual.\n\nHoy los más expuestos son ejecutivos, ingenieros especializados y profesionales de TI.",
+    "question": "¿Cambia eso algo para la política? Responde en no más de **tres líneas**.",
     "evaluationGuide": {
       "must_hit": [
-        "Nombra una via concreta por la que este grupo hace mas ruido: acceso a medios, tribuna publica, capacidad de organizarse, o que son ellos quienes definen la agenda",
-        "Toma partido por una de las dos opciones en vez de quedarse en 'las dos' o 'depende'",
-        "Distingue el tamano del dano de la capacidad de hacerlo visible"
+        "Se moja: dice si cambia o no cambia, en vez de dejarlo abierto",
+        "Da una razón que conecta quiénes son los afectados con algún efecto político",
+        "La razón es específica y no sirve para cualquier tecnología"
       ],
       "nice_to_have": [
-        "Nota que los obreros del siglo XX tenian menos acceso a la prensa que los periodistas de hoy",
-        "Menciona que quienes cubren la noticia son parte del grupo afectado",
-        "Reconoce que ambas cosas pueden ser ciertas a la vez pero igual se juega por una"
+        "Nombra un recurso concreto que estos afectados tienen y los obreros del siglo XIX no: prensa, redes, abogados, acceso a quienes legislan",
+        "Nota que los afectados de hoy son parte de quienes cuentan la historia",
+        "Reconoce lo que el otro lado tiene de cierto y aun así elige uno"
       ],
       "fatal_errors": [
-        "Responde si la IA es buena o mala en vez de explicar la diferencia de ruido",
-        "Se queda en 'da miedo' o 'es preocupante' sin nombrar ninguna via",
-        "No elige ninguna de las dos opciones que se le ofrecieron"
+        "Responde si la IA es buena o mala en vez de contestar lo que se preguntó",
+        "No dice ni que sí ni que no",
+        "Da una razón genérica que valdría para cualquier cambio tecnológico"
       ]
     },
     "idealAnswer": {
       "keyPoints": [
-        "Esta vez los afectados son quienes controlan los medios donde se discute el tema",
-        "La visibilidad de un dano depende del poder de quien lo sufre, no solo de su tamano",
-        "Toma posicion explicita entre dano mayor y capacidad de protesta mayor"
+        "Los afectados de hoy tienen recursos políticos que los luditas no tenían",
+        "Quién sufre un daño puede importar tanto como el tamaño del daño",
+        "Elige un lado y lo sostiene con una razón"
       ],
       "expectedConcepts": [
-        "backlash_politico"
+        "exposicion_diferencial"
       ],
       "commonMistakes": [
-        "Convertirlo en una opinion sobre la IA",
-        "Decir 'porque afecta a mas gente', que es justamente lo que el enunciado niega",
-        "Contestar 'depende' o 'las dos cosas' sin jugarse"
+        "Convertirlo en una opinión sobre la IA",
+        "Decir «sí cambia» sin decir por qué vía",
+        "Quedarse en «depende» sin resolver"
       ],
       "excellentResponseIndicators": [
-        "Nombra que los afectados escriben los diarios y por eso el tema existe",
-        "Separa magnitud del dano de capacidad de hacerlo publico",
-        "Cuatro lineas sin relleno"
+        "Nombra el recurso político concreto que hace la diferencia",
+        "Sostiene «no cambia nada» con un argumento real, que vale lo mismo",
+        "Tres líneas sin relleno"
       ]
     }
   },
   {
-    "id": "ayd_c01_r4_igualdad_de_voz",
+    "id": "ayd_c01_r4_sectores",
     "order": 4,
-    "title": "Que se redistribuye",
-    "category": "Argumentacion",
+    "title": "Dónde te preocupa más",
+    "category": "Argumentación",
     "difficulty": "medium",
     "ranked": true,
-    "durationSeconds": 180,
+    "durationSeconds": 150,
     "conceptTags": [
-      "igualdad_de_voz",
-      "gradiente_de_complejidad"
+      "tecnologia_de_proposito_general"
     ],
-    "judgeFocus": "Esta es la ronda que convierte el dato economico en una pregunta democratica, y se evalua exactamente ese salto. La respuesta de 100 conecta la capacidad tecnica con la capacidad de PARTICIPAR: argumentar en publico, redactar una propuesta, entender una ley y responderla son las tareas exigentes del grafico, y son tambien las que definen quien pesa en una discusion politica. Si la IA multiplica esa capacidad solo para quien ya la tenia, lo que se ensancha es la brecha de voz, no la de ingreso. Acepta con el mismo puntaje la posicion contraria bien argumentada —que la IA le presta esa capacidad a quien nunca la tuvo y por eso amplia la participacion— porque es genuinamente discutible y es la tesis que el curso va a examinar en noviembre. Lo que NO se acepta es no elegir. Una respuesta de 60 repite que 'hay desigualdad' sin decir desigualdad de que ni por que via. Una respuesta de 40 se queda en el empleo, que es de lo que la pregunta trata de sacarlos. Es la primera clase: no exijas Habermas ni esfera publica, exige el razonamiento. CUATRO LINEAS, tres minutos, desde un telefono. Escribir mas NO sube el puntaje.",
-    "context": "Argumentar en publico, redactar una propuesta, leer una ley y responderla: todas son tareas exigentes, del tipo que segun el primer grafico la IA acelera mas.\n\nSupongamos que eso es cierto, y que la IA multiplica por diez la capacidad de quien ya sabe hacer esas cosas, mientras deja mas o menos igual a quien no sabe hacerlas.\n\nEntonces lo que se esta redistribuyendo no es empleo.",
-    "question": "¿Que le pasa a la igualdad **politica**? Toma posicion: la IA, ¿amplia o estrecha quien puede participar de verdad en el debate publico? No mas de **cuatro lineas**.",
+    "judgeFocus": "Se evalúa DOS cosas y nada más: que elija UN sector de la lista, y que la razón sea propia de ESE sector y no una que serviría para cualquiera.\n\nLos seis sectores valen exactamente lo mismo. No premies «política» ni «esfera pública» por ser los del curso: quien elige salud o defensa y da una buena razón vale 100 igual. Lo que distingue una respuesta buena de una mediocre es la especificidad: «en justicia, porque una condena es irreversible y nadie puede apelarle a un modelo» es una razón del sector; «en salud, porque es muy importante» no lo es.\n\nNo hay respuesta correcta y no existe un sector equivocado. Si el estudiante elige uno que no está en la lista pero da una razón específica, no lo castigues por eso: baja solo en la dimensión de posición, no en la de argumento.\n\nSon TRES LÍNEAS en dos minutos y medio, primera clase del semestre, sin lecturas previas. Escribir más NO sube el puntaje.",
+    "context": "Dijimos que una tecnología revolucionaria penetra todos los sectores: salud, educación, justicia, política, defensa, esfera pública.",
+    "question": "Elige **uno** y explica por qué ahí te preocupa más que entre la IA. No más de **tres líneas**.",
     "evaluationGuide": {
       "must_hit": [
-        "Hace el salto de capacidad tecnica a capacidad de participar en politica, y no se queda en empleo o ingresos",
-        "Elige entre ampliar y estrechar, con una razon",
-        "Dice quien gana y quien pierde voz, no solo que 'hay desigualdad'"
+        "Elige un solo sector en vez de hablar de varios o de todos",
+        "La razón es específica de ese sector: nombra qué tiene ese sector que los otros no",
+        "La preocupación es concreta y no un temor general a la tecnología"
       ],
       "nice_to_have": [
-        "Nota que la herramienta esta disponible para todos pero rinde distinto segun lo que uno ya sabe",
-        "Distingue tener acceso a la herramienta de saber usarla para algo que pese",
-        "Menciona un espacio concreto donde eso se juega: una consulta ciudadana, una carta al director, una audiencia publica"
+        "Nombra qué se pierde exactamente: quién queda sin poder reclamar, qué decisión se vuelve irreversible, quién deja de responder por el resultado",
+        "Distingue el daño de una decisión equivocada del daño de no poder apelarla",
+        "Menciona a quién le pasaría, y no solo qué pasaría"
       ],
       "fatal_errors": [
-        "Responde sobre empleo o sueldos, que es justamente de lo que el enunciado los saca",
-        "Dice 'aumenta la desigualdad' sin decir desigualdad de que",
-        "No elige entre ampliar y estrechar"
+        "No elige: habla de todos los sectores o dice que le preocupan todos por igual",
+        "La razón serviría igual para cualquier otro sector de la lista",
+        "Responde sobre la IA en general sin aterrizar en ningún sector"
       ]
     },
     "idealAnswer": {
       "keyPoints": [
-        "Las tareas que la IA mas acelera son las que dan peso en una discusion publica",
-        "Si el rendimiento depende de lo que uno ya sabe, la herramienta ensancha la brecha de voz en vez de cerrarla",
-        "La posicion contraria vale igual si argumenta que le presta voz a quien no la tenia"
+        "Un solo sector, elegido explícitamente",
+        "Una razón que solo aplica a ese sector",
+        "Algo concreto en juego: irreversibilidad, falta de apelación, nadie que responda"
       ],
       "expectedConcepts": [
-        "igualdad_de_voz"
+        "tecnologia_de_proposito_general"
       ],
       "commonMistakes": [
-        "Quedarse en el empleo",
-        "Afirmar que hay desigualdad sin especificar de que",
-        "Contestar 'depende' sin jugarse por un lado"
+        "Elegir varios sectores a la vez",
+        "Dar una razón que vale para todos",
+        "Decir que es importante sin decir qué se pierde"
       ],
       "excellentResponseIndicators": [
-        "Nombra la participacion politica y no solo el trabajo",
-        "Distingue acceso a la herramienta de capacidad de sacarle provecho",
-        "Cuatro lineas sin relleno"
+        "La razón no se podría copiar y pegar a otro sector",
+        "Nombra a quién le pasa, no solo qué pasa",
+        "Tres líneas sin relleno"
       ]
     }
   }

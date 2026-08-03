@@ -1,168 +1,111 @@
 # Material de referencia — Clase 1, IA y Democracia 2026
 
-Este material existe para que los jueces puedan **verificar** lo que un estudiante afirma, no
-para exigir que lo cite. Nadie ha leído nada del curso todavía: es la primera clase.
+**Esto es TODO el material que los estudiantes vieron.** No hay lecturas previas, no hay bibliografía
+asignada y es la primera clase del semestre. Lo que sigue es el contenido de las trece slides que se
+proyectaron justo antes del juego, y nada más.
+
+Sirve para **verificar** lo que un estudiante afirma, no para exigir que lo cite. Si algo no está en
+esta página, no se lo puedes pedir ni darlo por sabido.
 
 ---
 
-## 1. Qué se presentó en clase antes del juego
+## Las trece slides
 
-La clase 1 es la introducción del curso, co-impartida por Naim Bro (módulo de IA) y Roberto
-Velázquez (módulo de Democracia). La presentación recorre, en este orden:
+**1. Portada.** "Clase 1 — Introducción: diagnóstico y poder". Profesores Naim Bro y Roberto Velázquez.
 
-- **El gran salto**: crecimiento per cápita del año 0 al 2000 (Galor). Casi plano hasta 1800.
-- **Tres revoluciones tecnológicas**: vapor (1712, 1776), electricidad (1879), microprocesador (1969).
-- **Qué hace revolucionaria a una tecnología**: es de propósito general, genera tecnologías
-  secundarias y penetra todos los sectores.
-- **Las revoluciones tardan**: el vapor se inventa en 1712 y su efecto sobre el PIB británico
-  aparece en 1830; la dínamo es de 1866 y la ampolleta de 1879, pero el despegue llega con la
-  línea de ensamblaje de Ford en 1913; el microprocesador es de 1969 y la productividad se
-  vuelve medible recién en los noventa. Es el **dilema de Solow**.
-- **Tecnologías de la información y productividad**: el período 1995-2005 tuvo un aumento de
-  productividad de 15% atribuido a las TI.
-- **Los temores son viejos**: Keynes acuña "desempleo tecnológico" en 1930; los luditas rompen
-  telares en el siglo XIX.
-- **La evidencia sobre empleo es ambigua**: Acemoglu y Restrepo (2020) estiman que cada robot
-  industrial adicional por cada 1.000 trabajadores destruye unos 6 empleos en EE.UU.; Aghion et
-  al. (2020) encuentran que a nivel de firma en Francia la automatización *aumenta* el empleo
-  (+0,4% en diez años). El efecto neto depende del nivel de análisis, del sector y de las
-  instituciones laborales.
-- **El impacto económico potencial de la IA**: ~80% de la fuerza laboral de EE.UU. tendría al
-  menos 10% de sus tareas afectadas por LLMs; 15% de las tareas se completan significativamente
-  más rápido solo con un LLM, y sube a 47-56% con software construido encima; Goldman Sachs
-  proyecta hasta 7% adicional del PIB global en diez años.
-- **Quiénes están más expuestos** (Goldman Sachs, 2023): ciencia y pensamiento crítico reducen
-  la exposición; programación y escritura la aumentan.
-- **Cierre**: ¿hay algo que te dé miedo de la IA? ¿Y algo que te dé esperanza?
+**2. El gran salto.** Gráfico del crecimiento per cápita del año 0 al 2000. Casi plano durante
+dieciocho siglos, y despega alrededor de 1800. Fuente: Oded Galor (2022), *The Journey of Humanity*.
 
-El juego entra justo después de la última slide de contenido.
+**3. Revoluciones tecnológicas históricas.**
+- Primera revolución industrial: la máquina de vapor (1712, 1776).
+- Segunda revolución industrial: la electricidad (1879).
+- Tercera revolución industrial: el microprocesador (1969).
 
----
+**4. ¿Qué hace que una tecnología sea revolucionaria?**
+- Es una tecnología de propósito general: se vuelve insumo de toda la economía, no de un solo sector.
+- Genera tecnologías secundarias: nuevas herramientas, modelos de negocio y formas de trabajar.
+- Penetra todos los sectores: **salud, educación, justicia, política, defensa, esfera pública**.
 
-## 2. El gráfico de la ronda 1 — el gradiente de complejidad
+**5. Las revoluciones tardan.**
+- Vapor: inventado en 1712, pero su efecto sobre el PIB británico aparece **recién en 1830**.
+- Electricidad: dínamo en 1866, ampolleta en 1879, pero solo despega con la línea de ensamblaje de
+  Ford en 1913.
+- Microprocesador: 1969, con productividad medible solo a partir de los noventa — el **"dilema de
+  Solow"**.
+- Fuentes: Solow (1987); Brynjolfsson y McAfee (2014).
 
-Fuente: **Anthropic Economic Index: Economic Primitives**, publicado el 15 de enero de 2026
-(Appel, Massenkoff, McCrory y otros). Mide conversaciones reales con Claude en noviembre de 2025,
-clasificadas al nivel de tarea de O\*NET.
+**6. Tecnologías de la información y productividad.** El período 1995-2005 tuvo un aumento de
+productividad de 15%, explicado por la emergencia de las tecnologías de la información (Krugman).
 
-Valores que el informe reporta en el texto de la figura 4.1:
+**7. Cada revolución tuvo sus temores.** Keynes acuñó el término "desempleo tecnológico" en 1930.
 
-| Escolaridad que exige la tarea | Aceleración | Tasa de éxito |
-|---|---|---|
-| Menos que secundaria | — | 70% |
-| 12 años (secundaria completa) | 9x | — |
-| 16 años (título universitario) | 12x | 66% |
+**8. Temores ante revoluciones tecnológicas.**
+- Las revoluciones tecnológicas han generado temores naturales, especialmente al desempleo masivo.
+- Los luditas del siglo XIX se opusieron a la mecanización de la industria textil.
 
-"Aceleración" es el tiempo que le tomaría a un humano solo, dividido por el tiempo que le toma
-al humano trabajando con la IA. Reducir una tarea de una hora a diez minutos es 6x.
+**9. Sección: la era de la IA.** "¿Otra revolución más? ¿Y qué hay distinto esta vez?"
 
-**Lo que el gráfico NO dice, y es el error que la ronda 1 castiga:** el eje horizontal mide la
-escolaridad que **exige la tarea**, no la que **tiene la persona** que la pide. El estudio no
-midió a los usuarios. La glosa "mientras más sabes, más te sirve la IA" es una inferencia
-plausible, y el propio informe la sugiere al citar que los trabajadores de cuello y corbata
-adoptan la IA mucho más (Bick et al. 2025), pero no es lo que el gráfico mide.
+**10. Impacto económico.** El 80% de los trabajadores se desempeña en ocupaciones donde al menos el
+10% de las tareas podría verse facilitado por IA.
 
-**Otro error que la ronda castiga:** el informe reporta explícitamente que la proporción de
-tareas **automatizadas** no tiene relación con el nivel educativo requerido. Acelerar no es
-reemplazar.
+**11. Exposición diferencial.**
+- Las ocupaciones con **altos salarios** —ejecutivos, ingenieros especializados y profesionales de
+  TI— tienen **mayor** exposición.
+- **Ciencia y pensamiento crítico disminuyen** la exposición; **programación y escritura aumentan**
+  la susceptibilidad.
+
+**12. ¿Quiénes están más expuestos?** Gráfico de exposición ocupacional a la IA generativa. Fuente:
+Goldman Sachs (2023), con la misma conclusión de la slide anterior.
+
+**13. Cierre.** "¿Hay algo que te dé miedo de la inteligencia artificial? ¿Y algo que te dé
+esperanza?"
 
 ---
 
-## 3. El gráfico de la ronda 2 — exposición ocupacional
+## Las dos preguntas abiertas
 
-Fuente: **Eloundou, Manning, Mishkin y Rock (2023), "GPTs are GPTs: An Early Look at the Labor
-Market Impact Potential of Large Language Models"**, arXiv:2303.10130. "Exposición" significa
-que la IA reduce en al menos 50% el tiempo de completar la tarea. No significa automatizar.
+### Ronda 3 — Los luditas al revés
 
-Las cinco ocupaciones más expuestas (medida Human β, tabla 4), en porcentaje de sus tareas:
+Junta dos slides que los estudiantes acaban de ver: los luditas rompían telares porque la máquina
+venía por el trabajo manual (slide 8), y hoy los más expuestos son las ocupaciones de altos salarios
+(slide 11). El patrón se invirtió. La pregunta es si eso cambia algo para la política.
 
-| Ocupación | % de tareas expuestas |
-|---|---|
-| Investigadores de encuestas | 84,4 |
-| Escritores y autores | 82,5 |
-| Intérpretes y traductores | 82,4 |
-| Relacionadores públicos | 80,6 |
-| Científicos pecuarios | 77,8 |
+Las dos respuestas son defendibles y valen lo mismo:
 
-La tabla 11 lista **34 ocupaciones sin ninguna tarea expuesta**. Todas manuales: operadores de
-maquinaria agrícola, mecánicos de motos, lavaplatos, ayudantes de techadores, albañiles de
-piedra, cortadores de carne, instaladores de líneas eléctricas, atletas profesionales,
-mecánicos de camiones, estucadores, cambiadores de neumáticos, entre otras.
+- **Sí cambia.** Los afectados de hoy tienen recursos políticos que los luditas no tenían: tribuna,
+  prensa, abogados, redes, acceso a quienes legislan. Y en varios casos son ellos mismos quienes
+  cuentan la historia.
+- **No cambia.** Lo que manda es el tamaño del daño y no quién lo sufre; o bien, un ejecutivo
+  desplazado se reconvierte con recursos propios y por eso no habrá conflicto político.
 
-El gradiente también aparece agregado por nivel educativo de entrada a la ocupación (tabla 10):
+**Nada de esto está afirmado en el enunciado, y no se puede dar por cierto.** En particular, el
+enunciado NO dice que hoy exista más ruido público que en el siglo XIX: no hay ningún dato de eso en
+la clase. Un estudiante que dude de una premisa no debe ser penalizado por dudar.
 
-| Educación requerida | Ingreso mediano (USD) | Exposición media (Hβ) |
-|---|---|---|
-| Sin credencial formal | 31.900 | 0,10 |
-| Licencia de enseñanza media | 45.470 | 0,20 |
-| Título universitario | 78.375 | 0,47 |
-| Magíster | 79.605 | 0,46 |
-| Doctorado | 82.420 | 0,41 |
+### Ronda 4 — En qué sector preocupa más
 
-La exposición sube junto con el ingreso hasta el nivel universitario y ahí se aplana. El propio
-abstract del paper lo dice: los efectos abarcan todos los niveles salariales, pero **los empleos
-de mayores ingresos enfrentan potencialmente mayor exposición**.
+La lista de sectores es textual de la slide 4: salud, educación, justicia, política, defensa, esfera
+pública. **Los seis valen exactamente lo mismo.** No hay sector correcto y no se premia elegir
+"política" o "esfera pública" por ser los del curso.
 
-Esa es la inversión del patrón histórico que la ronda 2 pregunta: los luditas rompieron telares
-porque la máquina venía por el trabajo manual; esta vez el trabajo manual es lo único que queda
-en cero.
+Lo único que separa una respuesta buena de una mediocre es si la razón es propia del sector elegido.
+Comparación para calibrar:
+
+- Razón del sector: *"En justicia, porque una condena es irreversible y no hay a quién apelarle
+  cuando la decisión la tomó un modelo."*
+- Razón intercambiable: *"En salud, porque es un sector muy importante y sensible."*
+
+La segunda serviría igual para los otros cinco, y por eso no es una razón.
 
 ---
 
-## 4. Para las rondas abiertas
+## Contexto del curso, para calibrar la exigencia
 
-### Ronda 3 — por qué el backlash suena tanto
+Curso "Inteligencia Artificial y Democracia", Minor en Inteligencia Artificial, Escuela de Gobierno
+UAI, segundo semestre 2026. Dos módulos intercalados: Roberto Velázquez cubre teoría democrática
+(modelos de democracia, poder y élites, esfera pública, autoritarismo, soberanía, deliberación,
+gobernanza) y Naim Bro cubre fenómenos de IA (backlash, populismo de IA, redes de bots, vigilancia,
+geopolítica, democracia aumentada, regulación).
 
-El hecho de partida: los expuestos son quienes trabajan con palabras. Periodistas, escritores,
-traductores, publicistas, abogados, investigadores, académicos. Es decir, **el mismo grupo que
-escribe los diarios, produce los podcasts, redacta las columnas y decide qué es noticia**.
-
-La automatización industrial del siglo XX destruyó mucho más empleo. Los afectados —obreros
-textiles, operarios de línea, mineros— tenían sindicatos, pero no tribuna: no eran ellos quienes
-escribían la prensa que cubría su propia desgracia.
-
-Ambas posiciones que ofrece el enunciado son defendibles:
-
-- **Capacidad de protesta mayor**: el ruido es desproporcionado al daño porque los afectados
-  controlan los canales donde se mide el ruido.
-- **Daño mayor**: la velocidad y la amplitud son distintas: 80% de la fuerza laboral con al
-  menos 10% de sus tareas afectadas es una cobertura que ninguna ola anterior tuvo, y la
-  transición es de años, no de generaciones.
-
-Lo que se evalúa es que elija una y nombre una vía. No que acierte.
-
-Este es además el puente explícito que el syllabus declara hacia la clase de Roberto: leer el
-backlash contra la IA como una expresión política y no solo tecnológica.
-
-### Ronda 4 — qué se redistribuye
-
-El salto que la ronda pide: las tareas que la IA más acelera —argumentar, redactar, leer una ley
-y responderla, ordenar información para una audiencia— no son solo tareas laborales. Son las que
-determinan quién pesa en una discusión pública: quién puede escribir una carta al director,
-responder una consulta ciudadana, preparar una intervención en una audiencia, entender un
-reglamento y objetarlo.
-
-Si el rendimiento de la herramienta crece con lo que uno ya sabe, entonces una herramienta
-disponible para todos produce resultados desiguales, y lo que se ensancha no es la brecha de
-ingresos sino la de **voz**.
-
-La posición contraria es genuinamente sostenible y vale lo mismo: la IA le presta capacidad de
-redacción y de análisis a quien nunca la tuvo, y por esa vía amplía quién puede participar. Es,
-de hecho, la tesis que el curso examinará en noviembre con la propuesta de César Hidalgo de
-avatares ciudadanos.
-
-Lo que no se acepta es volver al empleo, ni afirmar que "aumenta la desigualdad" sin decir
-desigualdad de qué.
-
----
-
-## 5. Contexto del curso, para calibrar exigencia
-
-Curso "Inteligencia Artificial y Democracia", Minor en Inteligencia Artificial, Escuela de
-Gobierno UAI, segundo semestre 2026. Dos módulos intercalados: Roberto Velázquez cubre teoría
-democrática (modelos de democracia, poder y élites, esfera pública, autoritarismo, soberanía,
-deliberación, gobernanza) y Naim Bro cubre fenómenos de IA (backlash, populismo de IA, redes de
-bots, vigilancia, geopolítica, democracia aumentada, regulación).
-
-Ninguno de esos contenidos se ha visto todavía. Un estudiante que llegue a la respuesta correcta
+**Ninguno de esos contenidos se ha visto todavía.** Un estudiante que llegue a una buena respuesta
 sin usar una sola palabra técnica merece 100.

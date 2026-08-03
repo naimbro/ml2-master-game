@@ -1,17 +1,17 @@
 {
   "sessionId": "clase_01_introduccion",
   "courseId": "ai_democracy_2026",
-  "title": "Clase 1: De la exposicion al poder",
-  "description": "4 rondas (~12 min) que cierran la clase introductoria. Dos lecturas de grafico sobre a quien acelera y a quien expone la IA, y dos preguntas abiertas que convierten ese dato economico en una pregunta democratica. Las cuatro compiten.",
+  "title": "Clase 1: De la revolucion al poder",
+  "description": "4 rondas (~8 min) que cierran la clase introductoria. Dos preguntas rapidas sobre lo que se acaba de proyectar y dos abiertas de tres lineas que llevan ese material a una pregunta politica. Todo sale de las slides de la clase. Las cuatro compiten.",
   "date": "2026-08-03",
   "roundCount": 4,
-  "roundDurationSeconds": 240,
+  "roundDurationSeconds": 150,
   "bufferSeconds": 45,
   "conceptTags": [
-    "exposicion_ocupacional",
-    "gradiente_de_complejidad",
-    "backlash_politico",
-    "igualdad_de_voz"
+    "dilema_de_solow",
+    "exposicion_diferencial",
+    "tecnologia_de_proposito_general",
+    "backlash_politico"
   ],
   "judges": [
     {
@@ -29,16 +29,16 @@
   ],
   "judgeConfig": {
     "democracy_scholar": {
-      "sessionLens": "Tu lente es el MECANISMO POLITICO. Estas dos preguntas parten de un dato economico —quien esta expuesto a la IA y a quien acelera— y piden convertirlo en una explicacion sobre poder: quien gana voz, quien la pierde, y por que. Premia que nombren el mecanismo (acceso a medios, capital cultural, capacidad de organizarse, quien escribe las noticias). Penaliza que se queden en el juicio moral —'es injusto', 'es preocupante'— sin decir por que via ocurre. Es la PRIMERA clase del semestre y todavia no han leido a Habermas ni a Schumpeter: no exijas vocabulario del curso ni nombres de autores, exige razonamiento.",
-      "weightFormula": "score = 0.60 * argumento_politico + 0.25 * toma_de_posicion + 0.15 * economia"
+      "sessionLens": "Tu lente es la RAZON. Tu unica pregunta es si lo que el estudiante escribio explica algo, y si explica ESTO en particular. La prueba que aplicas es mental y es siempre la misma: ¿podria copiar esta razon y pegarla en otra respuesta sin que nadie lo note? Si la respuesta es si, no es una razon. Premia el rasgo concreto, la via nombrada, el 'porque en ese sector pasa tal cosa y en los otros no'. Penaliza el juicio moral sin nada detras. Es la PRIMERA clase del semestre: no exijas autores, ni teoria democratica, ni vocabulario del curso, porque no se ha ensenado nada todavia. Exige razonamiento, no erudicion.",
+      "weightFormula": "score = 0.60 * razon_especifica + 0.25 * toma_de_posicion + 0.15 * economia"
     },
     "policy_lawyer": {
-      "sessionLens": "Tu lente es el COMPROMISO. A las dos preguntas se les puso una disyuntiva explicita —dano mayor o capacidad de protesta mayor; amplia o estrecha— y tu unica obsesion es si la persona la contesto o la esquivo. 'Depende', 'las dos cosas' y 'es complejo' valen poco aunque esten bien escritos, salvo que digan de que depende y se jueguen igual por un lado. Premia al que elige y da una razon, aunque la razon sea discutible. Es la primera clase: no castigues que la posicion sea ingenua, castiga que no haya posicion.",
-      "weightFormula": "score = 0.30 * argumento_politico + 0.55 * toma_de_posicion + 0.15 * economia"
+      "sessionLens": "Tu lente es la ELECCION. A las dos preguntas se les pidio elegir —un si o un no en una, un sector en la otra— y tu unica obsesion es si eligio o lo esquivo. 'Depende', 'todas por igual' y 'las dos cosas' valen poco aunque esten bien escritas, salvo que digan de que depende y aun asi se queden con una. Importante: todas las opciones valen exactamente lo mismo. No premies una eleccion por sobre otra ni por ser la del curso ni por parecerte mas sensata; evalua solo que haya eleccion y que este sostenida. Es la primera clase: no castigues que la posicion sea ingenua, castiga que no haya posicion.",
+      "weightFormula": "score = 0.30 * razon_especifica + 0.55 * toma_de_posicion + 0.15 * economia"
     },
     "professor_twin_ayd": {
-      "sessionLens": "Estas rondas SI entran al ranking, asi que puntua sin inflar: un puntaje regalado le quita el puesto a otro. Se pidieron CUATRO LINEAS escritas en tres minutos desde un telefono, en la primera clase del semestre, a las nueve y media de la manana. Cuatro lineas bien puestas valen 100: no esperes parrafos, ni introduccion, ni ortografia perfecta, y escribir mas NO sube el puntaje. En tu feedback escribe en primera persona e incluye un 'yo habria...' concreto a esta respuesta, porque esto es lo primero que van a leer del curso.",
-      "weightFormula": "score = 0.35 * argumento_politico + 0.30 * toma_de_posicion + 0.35 * economia"
+      "sessionLens": "Estas rondas SI entran al ranking, asi que puntua sin inflar: un puntaje regalado le quita el puesto a otro. Se pidieron TRES LINEAS escritas en dos minutos y medio desde un telefono, en la primera clase del semestre, sin haber leido nada. Tres lineas bien puestas valen 100: no esperes parrafos, ni introduccion, ni ortografia perfecta, y escribir mas NO sube el puntaje. Si alguien duda de una premisa del enunciado, no lo castigues por dudar: evalua lo que hizo despues de dudar. En tu feedback escribe en primera persona e incluye un 'yo habria...' concreto a esta respuesta, porque esto es lo primero que van a leer del curso.",
+      "weightFormula": "score = 0.35 * razon_especifica + 0.30 * toma_de_posicion + 0.35 * economia"
     }
   }
 }

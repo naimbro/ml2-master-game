@@ -1,7 +1,7 @@
 {
-  "_doc": "Rubrica escrita para lo que las DOS rondas abiertas de esta sesion realmente piden, que no es lo mismo que la rubrica base del curso. Las rondas 1 y 2 son de opcion multiple y se puntuan del lado del cliente: esta rubrica no las toca. Las dimensiones NO son las de _shared/base_rubric.json porque aca no se pide disenar una institucion ni mapear actores con potestad: se pide convertir un dato en un argumento politico y jugarsela por un lado. Las tres formulas de peso viven en config.json y usan estos mismos ids.",
+  "_doc": "Rubrica escrita para lo que piden las DOS rondas abiertas de esta sesion. Las rondas 1 y 2 son de opcion multiple y se puntuan del lado del cliente: esta rubrica no las toca. Las dimensiones no son las de _shared/base_rubric.json porque aca no se pide disenar una institucion ni mapear actores: se pide elegir y dar una razon que no sirva para cualquier otra respuesta. Las tres formulas de peso viven en config.json y usan estos mismos ids.",
   "sessionId": "clase_01_introduccion",
-  "globalInstructions": "Evalua SOLO lo que esta escrito. No asumas informacion faltante. Es la PRIMERA clase del semestre del curso 'Inteligencia Artificial y Democracia' (Escuela de Gobierno UAI, 2026), y las respuestas se escriben en tres minutos desde un telefono, a media manana, sin haber leido nada del curso todavia. No exijas vocabulario tecnico, autores, ni conceptos de teoria democratica: nada de eso se ha ensenado aun. Exige razonamiento. Las dos preguntas parten de un dato economico —a quien acelera la IA y a quien expone— y piden sacar de ahi una consecuencia sobre poder y participacion. Premia: nombrar una via concreta por la que ocurre lo que se afirma, y jugarsela por una de las dos opciones que se ofrecieron. Penaliza: el juicio moral sin mecanismo, el 'depende' sin resolucion, y la respuesta larga que dice una sola cosa.",
+  "globalInstructions": "Evalua SOLO lo que esta escrito. Es la PRIMERA clase del semestre del curso 'Inteligencia Artificial y Democracia' (Escuela de Gobierno UAI, 2026) y las respuestas se escriben en dos minutos y medio desde un telefono, sin lecturas previas de ningun tipo.\n\nTODO lo que el estudiante necesita esta en el enunciado o se acaba de proyectar en clase. La clase cubrio: el crecimiento economico despega recien alrededor de 1800; las tres revoluciones industriales (vapor 1712, electricidad 1879, microprocesador 1969); que una tecnologia revolucionaria es de proposito general, genera tecnologias secundarias y penetra todos los sectores; que las revoluciones TARDAN (el vapor no se ve en el PIB hasta 1830, el microprocesador hasta los noventa: el 'dilema de Solow'); que las tecnologias de la informacion subieron la productividad 15% entre 1995 y 2005; que Keynes acuno 'desempleo tecnologico' en 1930 y los luditas rompieron telares en el siglo XIX; que el 80% de los trabajadores esta en ocupaciones donde al menos el 10% de las tareas podria facilitarse con IA; y que la exposicion es DIFERENCIAL: las ocupaciones de altos salarios estan mas expuestas, ciencia y pensamiento critico reducen la exposicion, programacion y escritura la aumentan.\n\nNO exijas nada fuera de esa lista. No pidas autores, ni teoria democratica, ni vocabulario del curso: no se ha ensenado ninguno. No des por ciertos datos que no esten ahi arriba, y si un estudiante duda de una premisa del enunciado, no lo castigues por dudar: evalua lo que hace despues de dudar.\n\nPremia: elegir en vez de dejar abierto, y dar una razon que no serviria para cualquier otra respuesta. Penaliza: la generalidad, el juicio moral sin mecanismo, y la respuesta larga que dice una sola cosa.",
   "scoring": {
     "scaleLevels": [
       100,
@@ -11,41 +11,41 @@
       20,
       0
     ],
-    "instructions": "Elige uno de los seis niveles escritos por dimension. No inventes valores intermedios. Si la respuesta satisface un nivel solo parcialmente, baja al nivel inferior. Usa el campo 'judgeFocus' del escenario como ancla principal para esa ronda."
+    "instructions": "Elige uno de los seis niveles escritos por dimension. No inventes valores intermedios. Si la respuesta satisface un nivel solo parcialmente, baja al nivel inferior. Usa el campo 'judgeFocus' del escenario como ancla principal para esa ronda: ahi estan las advertencias especificas de cada pregunta."
   },
   "dimensions": [
     {
-      "id": "argumento_politico",
-      "name": "Argumento politico",
+      "id": "razon_especifica",
+      "name": "Razon especifica",
       "weight": 0.45,
-      "description": "¿Explica por que via ocurre lo que afirma? Convierte el dato economico en un mecanismo de poder —quien tiene tribuna, quien define la agenda, quien gana o pierde capacidad de participar— en vez de quedarse en que algo es preocupante o injusto.",
-      "level_100": "Nombra un mecanismo concreto y verificable por el que el dato se traduce en poder o en voz, y ese mecanismo efectivamente explica lo que el enunciado planteo.",
-      "level_80": "Nombra un mecanismo correcto pero lo deja a medio explicar, o lo enuncia sin conectarlo del todo con el dato que se le dio.",
-      "level_60": "Afirma que hay una consecuencia politica pero no dice por que via se produce: se queda en 'aumenta la desigualdad' o 'afecta a la democracia'.",
-      "level_40": "Emite un juicio moral sobre la IA —es injusta, es peligrosa, es una oportunidad— sin ningun mecanismo detras.",
-      "level_20": "Responde sobre empleo, sueldos o productividad, que es justamente de lo que el enunciado trata de sacarlo.",
-      "level_0": "No responde a lo que se pregunto, o afirma algo que el dato entregado contradice."
+      "description": "¿La razon que da explica algo, y explica ESTO? La prueba es si se podria copiar y pegar en otra respuesta sin que nadie lo note: si sirve para cualquier sector o para cualquier tecnologia, no es una razon, es un relleno con forma de razon.",
+      "level_100": "Nombra una via o un rasgo concreto que sostiene lo que afirma, y ese rasgo es propio de lo que eligio. No se podria trasladar a otra respuesta.",
+      "level_80": "La razon es correcta y propia, pero queda a medio explicar.",
+      "level_60": "Afirma que hay una consecuencia pero no dice por que via se produce.",
+      "level_40": "Emite un juicio —es preocupante, es riesgoso, es una oportunidad— sin nada que lo sostenga.",
+      "level_20": "La razon serviria igual para cualquier otra respuesta posible.",
+      "level_0": "No responde a lo que se pregunto, o afirma algo que el enunciado contradice."
     },
     {
       "id": "toma_de_posicion",
       "name": "Toma de posicion",
       "weight": 0.35,
-      "description": "A las dos preguntas se les puso una disyuntiva explicita. ¿La contesto o la esquivo? Se evalua que elija y de una razon, no que elija la opcion 'correcta': ambos lados son defendibles y se puntuan igual si estan argumentados.",
-      "level_100": "Elige uno de los dos lados sin ambiguedad y da una razon que lo sostiene. Si reconoce que el otro lado tiene algo de cierto, igual se juega por uno.",
-      "level_80": "Elige un lado con claridad pero la razon que da es debil o queda implicita.",
-      "level_60": "Se inclina por un lado sin decirlo del todo: hay que deducir su posicion de lo que escribio.",
-      "level_40": "Dice 'depende' o 'las dos cosas' y explica de que depende, pero nunca se juega.",
-      "level_20": "Dice 'depende' o 'es complejo' sin explicar de que depende.",
-      "level_0": "No hay posicion alguna, o contesta una disyuntiva distinta de la que se le ofrecio."
+      "description": "A las dos preguntas se les pidio elegir: un si o un no en una, un sector en la otra. ¿Eligio o lo dejo abierto? Se evalua que elija, NO que elija una opcion determinada: todas las opciones valen lo mismo si estan sostenidas.",
+      "level_100": "Elige sin ambiguedad y se entiende de inmediato que eligio. Si reconoce que otra opcion tiene algo a favor, igual se queda con una.",
+      "level_80": "Elige con claridad pero deja la eleccion al final, casi como una nota al pie.",
+      "level_60": "Se inclina por una opcion sin decirlo: hay que deducirla de lo que escribio.",
+      "level_40": "Dice 'depende' o nombra varias opciones, y explica el criterio, pero nunca se queda con una.",
+      "level_20": "Dice que le preocupan todas por igual, o que la respuesta es compleja, sin nada mas.",
+      "level_0": "No hay eleccion alguna, o contesta una pregunta distinta de la que se hizo."
     },
     {
       "id": "economia",
       "name": "Economia",
       "weight": 0.2,
-      "description": "Se pidieron cuatro lineas. ¿Dice lo suyo sin relleno? Escribir mas no sube el puntaje: una respuesta larga que repite una idea vale lo que esa idea dicha una vez.",
-      "level_100": "Cuatro lineas o menos, cada una aportando algo distinto. Nada sobra.",
+      "description": "Se pidieron tres lineas. ¿Dice lo suyo sin relleno? Escribir mas no sube el puntaje: una respuesta larga que repite una idea vale lo que esa idea dicha una vez.",
+      "level_100": "Tres lineas o menos, cada una aportando algo distinto. Nada sobra.",
       "level_80": "Se ajusta al largo pedido con una frase de mas que no aporta.",
-      "level_60": "Se pasa del largo pedido, o gasta una de las cuatro lineas en repetir el enunciado.",
+      "level_60": "Se pasa del largo pedido, o gasta una linea en repetir el enunciado.",
       "level_40": "Repite la misma idea con otras palabras para llenar espacio.",
       "level_20": "Texto largo del que se puede extraer una sola afirmacion.",
       "level_0": "No se entiende que quiso decir."
@@ -53,19 +53,19 @@
   ],
   "penalties": [
     {
-      "id": "juicio_sin_mecanismo",
-      "description": "Afirmar que algo es malo, injusto o peligroso para la democracia sin nombrar ninguna via por la que ocurra no puede superar 40 en 'Argumento politico'.",
+      "id": "razon_generica",
+      "description": "Una razon que serviria igual para cualquier otra respuesta —para cualquier sector, para cualquier tecnologia— no puede superar 40 en 'Razon especifica'.",
       "effect": {
         "type": "cap",
         "value": 40,
         "dimensions": [
-          "argumento_politico"
+          "razon_especifica"
         ]
       }
     },
     {
-      "id": "no_se_juega",
-      "description": "Contestar 'depende' o 'las dos cosas' sin elegir un lado no puede superar 40 en 'Toma de posicion', por bien escrita que este la respuesta.",
+      "id": "no_elige",
+      "description": "No elegir —'depende', 'todas por igual', 'ambas cosas'— no puede superar 40 en 'Toma de posicion', por bien escrita que este la respuesta.",
       "effect": {
         "type": "cap",
         "value": 40,
@@ -87,22 +87,22 @@
     }
   ],
   "globalPenalties": [
-    "Responder sobre empleo, sueldos o productividad cuando la pregunta es sobre poder y participacion.",
-    "Sustituir el argumento por una opinion sobre si la IA es buena o mala.",
-    "Esquivar la disyuntiva que el enunciado planteo de forma explicita.",
+    "Sustituir la respuesta por una opinion sobre si la IA es buena o mala.",
+    "Esquivar la eleccion que el enunciado pidio de forma explicita.",
+    "Dar una razon que valdria igual para cualquier otra respuesta.",
     "Extension como sustituto de contenido: una respuesta larga que repite una idea vale lo que esa idea dicha una vez.",
     "Falsa erudicion: citar un autor o un concepto que no se ha visto en clase para dar peso a una afirmacion que no lo tiene."
   ],
   "bonusIndicators": [
-    "Nombra quien gana voz y quien la pierde, con nombre y apellido de grupo",
-    "Distingue el tamano de un dano de la capacidad de hacerlo visible",
-    "Se juega por un lado reconociendo lo que el otro lado tiene de cierto",
-    "Dice en cuatro lineas lo que otro diria en diez"
+    "La razon no se podria copiar y pegar a otra respuesta",
+    "Nombra a quien le pasa, y no solo que pasa",
+    "Elige reconociendo lo que la otra opcion tiene de cierto",
+    "Dice en tres lineas lo que otro diria en diez"
   ],
   "penaltyIndicators": [
-    "Se queda en 'es preocupante para la democracia' sin decir por que via",
-    "Vuelve al empleo cuando el enunciado ya lo dio por superado",
-    "Contesta 'depende' y no resuelve",
+    "Se queda en 'es preocupante' sin decir por que via",
+    "Nombra varias opciones para no quedarse con ninguna",
+    "Da una razon intercambiable con cualquier otra",
     "Rellena con frases que servirian para cualquier pregunta sobre IA"
   ]
 }
