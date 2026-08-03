@@ -222,9 +222,20 @@ export async function callJudgeModel(
     // value (observed live: a valid answer failed at char 684). We instruct it to
     // escape quotes, and retry once with an explicit repair prompt on a parse
     // failure before giving up (the retry only fires on the rare bad response).
-    // No `temperature` (sonnet-5/opus reject it with 400) and no `thinking` — the
-    // analysis-first JSON already carries the reasoning, keeping this judge
-    // single-pass like the other two.
+    // No `temperature`: sonnet-5/opus lo rechazan con 400.
+    //
+    // `thinking` va DESACTIVADO DE FORMA EXPLICITA, y tiene que ir escrito. En
+    // sonnet-4.6 omitir el campo dejaba al juez de una sola pasada; en sonnet-5
+    // omitirlo significa thinking ADAPTATIVO, y `max_tokens` es un techo duro
+    // sobre thinking + texto. Con maxTokens=1200 el razonamiento se comia el
+    // presupuesto entero, no quedaba nada para el JSON, y `content` volvia sin
+    // bloque de texto: eso es el "empty judge response" que tumbo 2 de 24
+    // evaluaciones el 2026-08-02. El reintento de mas abajo repetia la misma
+    // llamada y fallaba igual, por eso los fallos venian de a pares.
+    //
+    // El analysis-first del prompt ya carga el razonamiento, asi que el juez no
+    // necesita una pasada extra — es el mismo freno que Gemini ya tenia puesto
+    // con GEMINI_THINKING_BUDGET.
     const JSON_SAFETY =
       '\n\nIMPORTANTE: devuelve UN solo objeto JSON válido y parseable. Escapa toda comilla doble interna como \\" y no incluyas saltos de linea sin escapar dentro de los valores de texto.';
     //
@@ -245,15 +256,22 @@ export async function callJudgeModel(
       const message = await clients.anthropic.messages.create({
         model,
         max_tokens: maxTokens,
+        thinking: { type: 'disabled' },
         system,
         messages: [{ role: 'user', content: userPrompt + JSON_SAFETY + (repair ? ' Tu respuesta anterior NO era JSON parseable; corrigela.' : '') }],
       });
-      return (message.content || [])
+      const text = (message.content || [])
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .filter((b: any) => b.type === 'text')
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .map((b: any) => b.text)
         .join('');
+      // Una respuesta cortada por el techo de tokens llegaba al parser como un
+      // "empty judge response" pelado, sin decir por que. Se deja dicho.
+      if (!text.trim() && message.stop_reason === 'max_tokens') {
+        throw new Error(`empty judge response: se acabaron los ${maxTokens} tokens antes del JSON`);
+      }
+      return text;
     };
     try {
       return parseJudgeJson(await runClaude(false));
