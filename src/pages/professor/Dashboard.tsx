@@ -12,12 +12,16 @@ import {
   Users,
   Trash2,
   Trophy,
+  GripVertical,
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { useProfessor } from '../../hooks/useProfessor';
 import { usePendingProfessorCount } from '../../hooks/usePendingProfessors';
+import { useCardReorder } from '../../hooks/useCardReorder';
 import { COURSES, getSessionsForCourse, type Course } from '../../lib/courses';
 import { fetchMyCourses, deleteCourse } from '../../lib/dynamicCourses';
+import { applyCourseOrder } from '../../lib/courseOrder';
+import { fetchProfessorPrefs, saveCourseOrder } from '../../lib/professorPrefs';
 
 export default function Dashboard() {
   const { user, logout } = useAuth();
@@ -26,6 +30,7 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const [myCourses, setMyCourses] = useState<Course[]>([]);
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [courseOrder, setCourseOrder] = useState<string[] | undefined>(undefined);
 
   // Firestore no borra en cascada, asi que deleteCourse() barre primero las
   // sesiones. La confirmacion nombra el curso porque no hay papelera ni deshacer.
@@ -50,6 +55,11 @@ export default function Dashboard() {
     fetchMyCourses(user.uid).then(setMyCourses).catch((err) => {
       console.error('Error loading courses:', err);
     });
+    fetchProfessorPrefs(user.uid).then((p) => setCourseOrder(p.courseOrder)).catch((err) => {
+      // Sin preferencias se muestra el orden por defecto. Es una preferencia de
+      // presentacion: no vale la pena bloquear el panel por ella.
+      console.error('Error loading professor prefs:', err);
+    });
   }, [user]);
 
   const handleLogout = async () => {
@@ -59,6 +69,29 @@ export default function Dashboard() {
 
   // Hardcoded catalog courses are only shown to the admin (they belong to Naim)
   const builtinCourses = access === 'admin' ? COURSES : [];
+
+  // Las dos procedencias se ordenan JUNTAS. Ordenarlas por separado no serviria
+  // de nada: los del catalogo quedarian siempre antes que los propios, que es
+  // justo lo que hay que poder cambiar.
+  const cards = applyCourseOrder(
+    [
+      ...builtinCourses.map((course) => ({ id: course.id, course, builtin: true })),
+      ...myCourses.map((course) => ({ id: course.id, course, builtin: false })),
+    ],
+    courseOrder,
+  );
+
+  const persistOrder = (next: string[], committed: boolean) => {
+    setCourseOrder(next);
+    if (!committed || !user) return;
+    saveCourseOrder(user.uid, next).catch((err) => {
+      // El orden ya se movio en pantalla. Revertirlo aca seria peor: la tarjeta
+      // saltaria sola de vuelta sin explicacion.
+      console.error('Error saving course order:', err);
+    });
+  };
+
+  const { dragId, overId, handleProps } = useCardReorder(cards.map((c) => c.id), persistOrder);
 
   return (
     <div className="min-h-screen bg-gradient-main">
@@ -118,80 +151,107 @@ export default function Dashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <h2 className="text-xl font-bold flex items-center gap-2 mb-4">
+          <h2 className="text-xl font-bold flex items-center gap-2 mb-1">
             <GraduationCap className="w-5 h-5 text-cyan-400" />
             Mis Cursos
           </h2>
+          {cards.length > 1 && (
+            <p className="text-muted text-sm mb-4 flex items-center gap-1.5">
+              <GripVertical className="w-3.5 h-3.5 shrink-0" />
+              Arrastra desde el asa para cambiar el orden. Se guarda solo.
+            </p>
+          )}
           <div className="grid md:grid-cols-2 gap-6">
-            {builtinCourses.map((course) => {
-              const sessionCount = getSessionsForCourse(course.id).length;
+            {cards.map(({ id, course, builtin }) => {
+              const sessionCount = builtin ? getSessionsForCourse(id).length : null;
               return (
-                <div key={course.id} className="dramatic-card p-6 group">
-                  <div className={`w-14 h-14 ${course.iconClass} rounded-xl flex items-center justify-center mb-4`}>
-                    <BookOpen className="w-7 h-7 text-onaccent" />
-                  </div>
-                  <h3 className="text-xl font-bold mb-1">{course.name}</h3>
-                  <p className="text-muted text-sm mb-4">{course.tagline}</p>
-                  <div className="flex items-center justify-between text-sm mb-4">
-                    <span className="text-muted">
-                      {sessionCount} {sessionCount === 1 ? 'sesion' : 'sesiones'}
-                    </span>
-                  </div>
-                  <div className="flex gap-2">
-                    <Link
-                      to={`/professor/courses/${course.id}/create`}
-                      className="flex-1 py-2 text-center bg-surface-2 hover:bg-surface-3 rounded-lg transition-colors font-semibold text-sm"
+                <div
+                  key={id}
+                  data-course-id={id}
+                  className={`relative transition-opacity ${dragId === id ? 'opacity-40' : ''}`}
+                >
+                  {/* El asa. Es un boton para que llegue por tabulacion: con el
+                      foco puesto, las flechas mueven la tarjeta, que es la unica
+                      forma de reordenar sin mouse ni pantalla tactil. Con una
+                      sola tarjeta no hay nada que ordenar y no aparece. */}
+                  {cards.length > 1 && (
+                    <button
+                      {...handleProps(id, `Reordenar ${course.name}. Usa las flechas para moverlo.`)}
+                      title="Arrastra para reordenar"
+                      className="absolute top-3 right-3 z-10 p-2 rounded-lg text-faint hover:text-ink hover:bg-surface-2 transition-colors touch-none"
                     >
-                      Crear juego
-                    </Link>
-                    <Link
-                      to={`/professor/courses/${course.id}/judges`}
-                      className="flex items-center gap-1 px-3 py-2 bg-surface-2 hover:bg-surface-3 rounded-lg transition-colors text-sm"
+                      <GripVertical className="w-4 h-4" />
+                    </button>
+                  )}
+
+                  {!builtin && (
+                    <button
+                      onClick={() => removeCourse(course)}
+                      disabled={deleting !== null}
+                      title="Eliminar curso"
+                      aria-label={`Eliminar el curso ${course.name}`}
+                      className="absolute top-3 right-12 z-10 p-2 rounded-lg text-muted hover:text-kahoot-red hover:bg-surface-2 transition-colors disabled:opacity-40"
                     >
-                      <Users className="w-4 h-4" />
-                      Jueces
-                    </Link>
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  )}
+
+                  {builtin ? (
+                    <div className={`dramatic-card p-6 group ${overId === id ? 'ring-2 ring-kahoot-orange' : ''}`}>
+                      <div className={`w-14 h-14 ${course.iconClass} rounded-xl flex items-center justify-center mb-4`}>
+                        <BookOpen className="w-7 h-7 text-onaccent" />
+                      </div>
+                      <h3 className="text-xl font-bold mb-1">{course.name}</h3>
+                      <p className="text-muted text-sm mb-4">{course.tagline}</p>
+                      <div className="flex items-center justify-between text-sm mb-4">
+                        <span className="text-muted">
+                          {sessionCount} {sessionCount === 1 ? 'sesion' : 'sesiones'}
+                        </span>
+                      </div>
+                      <div className="flex gap-2">
+                        <Link
+                          to={`/professor/courses/${id}/create`}
+                          className="flex-1 py-2 text-center bg-surface-2 hover:bg-surface-3 rounded-lg transition-colors font-semibold text-sm"
+                        >
+                          Crear juego
+                        </Link>
+                        <Link
+                          to={`/professor/courses/${id}/judges`}
+                          className="flex items-center gap-1 px-3 py-2 bg-surface-2 hover:bg-surface-3 rounded-lg transition-colors text-sm"
+                        >
+                          <Users className="w-4 h-4" />
+                          Jueces
+                        </Link>
+                        <Link
+                          to={`/professor/courses/${id}/tabla`}
+                          className="flex items-center gap-1 px-3 py-2 bg-surface-2 hover:bg-surface-3 rounded-lg transition-colors text-sm"
+                        >
+                          <Trophy className="w-4 h-4" />
+                          Tabla
+                        </Link>
+                      </div>
+                    </div>
+                  ) : (
                     <Link
-                      to={`/professor/courses/${course.id}/tabla`}
-                      className="flex items-center gap-1 px-3 py-2 bg-surface-2 hover:bg-surface-3 rounded-lg transition-colors text-sm"
+                      to={`/professor/courses/${id}`}
+                      className={`dramatic-card p-6 hover:scale-[1.02] transition-transform cursor-pointer group block ${overId === id ? 'ring-2 ring-kahoot-orange' : ''}`}
                     >
-                      <Trophy className="w-4 h-4" />
-                      Tabla
+                      <div className={`w-14 h-14 ${course.iconClass} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
+                        <BookOpen className="w-7 h-7 text-onaccent" />
+                      </div>
+                      <h3 className="text-xl font-bold mb-1">{course.name}</h3>
+                      <p className="text-muted text-sm mb-4">{course.tagline}</p>
+                      <div className="flex items-center justify-end text-sm">
+                        <span className="text-cyan-400 flex items-center gap-1 font-semibold">
+                          Gestionar
+                          <ChevronRight className="w-4 h-4" />
+                        </span>
+                      </div>
                     </Link>
-                  </div>
+                  )}
                 </div>
               );
             })}
-
-            {myCourses.map((course) => (
-              <div key={course.id} className="relative">
-                <button
-                  onClick={() => removeCourse(course)}
-                  disabled={deleting !== null}
-                  title="Eliminar curso"
-                  aria-label={`Eliminar el curso ${course.name}`}
-                  className="absolute top-3 right-3 z-10 p-2 rounded-lg text-muted hover:text-kahoot-red hover:bg-surface-2 transition-colors disabled:opacity-40"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              <Link
-                to={`/professor/courses/${course.id}`}
-                className="dramatic-card p-6 hover:scale-[1.02] transition-transform cursor-pointer group block"
-              >
-                <div className={`w-14 h-14 ${course.iconClass} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-                  <BookOpen className="w-7 h-7 text-onaccent" />
-                </div>
-                <h3 className="text-xl font-bold mb-1">{course.name}</h3>
-                <p className="text-muted text-sm mb-4">{course.tagline}</p>
-                <div className="flex items-center justify-end text-sm">
-                  <span className="text-cyan-400 flex items-center gap-1 font-semibold">
-                    Gestionar
-                    <ChevronRight className="w-4 h-4" />
-                  </span>
-                </div>
-              </Link>
-              </div>
-            ))}
 
             {/* Create course card */}
             <Link

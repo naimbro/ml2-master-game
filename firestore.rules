@@ -44,6 +44,15 @@ service cloud.firestore {
       allow update, delete: if isAdmin();
     }
 
+    // Per-professor display preferences (today: the manual order of the course
+    // cards on the dashboard). Deliberately NOT a field on professors/{uid}:
+    // that document carries the access status and only the admin may write it.
+    // Letting each user write their own would let them approve themselves.
+    // Nothing here is security-relevant, so the owner reads and writes freely.
+    match /professorPrefs/{uid} {
+      allow read, write: if isOwner(uid);
+    }
+
     // Courses collection (dynamic, professor-authored)
     match /courses/{courseId} {
       allow read: if isAuthenticated();
