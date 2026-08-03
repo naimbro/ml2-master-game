@@ -2,9 +2,9 @@
   "sessionId": "clase_01_diagnostico",
   "courseId": "dataviz_2026",
   "title": "Clase 1: Diagnóstico y proyecto",
-  "description": "4 rondas (~11 min): dos lecturas de graficos con ranking para saber de donde partimos, y dos preguntas abiertas de comprension sobre el articulo de Katie Parrott que se discute en clase. Las cuatro compiten.",
+  "description": "3 rondas (~9 min): una lectura de grafico con ranking para saber de donde partimos, y dos preguntas abiertas de comprension sobre el articulo de Katie Parrott que se discute en clase. Las tres compiten.",
   "date": "2026-08-03",
-  "roundCount": 4,
+  "roundCount": 3,
   "roundDurationSeconds": 300,
   "bufferSeconds": 45,
   "conceptTags": [

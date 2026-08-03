@@ -49,57 +49,8 @@
     ]
   },
   {
-    "id": "dv_c01_r2_que_no_se_concluye",
-    "order": 2,
-    "title": "Qué sostiene el gráfico",
-    "category": "Crítica de gráficos",
-    "type": "multiple_choice",
-    "ranked": true,
-    "durationSeconds": 67,
-    "context": "",
-    "question": "",
-    "conceptTags": [
-      "causalidad_y_descripcion",
-      "lectura_de_graficos"
-    ],
-    "media": [
-      {
-        "kind": "image",
-        "src": "media/dataviz/c01_esperanza_vida_reciente.png",
-        "alt": "El mismo gráfico honesto de la ronda 2: esperanza de vida al nacer en Chile entre 2010 y 2023, con el eje vertical desde cero hasta noventa años.",
-        "credit": "Elaboración propia con datos de Our World in Data — CC BY 4.0"
-      }
-    ],
-    "mcQuestions": [
-      {
-        "question": "Este gráfico muestra la esperanza de vida al nacer en Chile entre 2010 y 2023: en 2019 fueron 80,3 años, en 2021 78,9 y en 2023 81,2. ¿Cuál de estas afirmaciones se puede sostener SOLO CON ESTE GRÁFICO?",
-        "options": [
-          {
-            "id": "A",
-            "text": "La pandemia causó la baja de 2020 y 2021"
-          },
-          {
-            "id": "B",
-            "text": "El sistema de salud chileno mejoró entre 2021 y 2023"
-          },
-          {
-            "id": "C",
-            "text": "En 2021 la esperanza de vida al nacer fue menor que en 2019"
-          },
-          {
-            "id": "D",
-            "text": "En 2025 la esperanza de vida va a superar los 82 años"
-          }
-        ],
-        "correctOptionIndex": 2,
-        "timeLimitSeconds": 35,
-        "explanation": "Solo C. Es la única que se lee del gráfico y nada más. A es probablemente cierta en el mundo, pero el gráfico no la muestra: muestra CUÁNDO bajó, no POR QUÉ. B es una explicación, no una lectura. D es una proyección más allá de donde termina el dato. Distinguir estas cuatro cosas es, básicamente, el curso."
-      }
-    ]
-  },
-  {
     "id": "dv_c01_r3_por_que_se_alegra",
-    "order": 3,
+    "order": 2,
     "title": "Por qué se alegra de que no existiera",
     "category": "Lectura",
     "difficulty": "medium",
@@ -151,7 +102,7 @@
   },
   {
     "id": "dv_c01_r4_que_le_entrega",
-    "order": 4,
+    "order": 3,
     "title": "Qué le entrega a la IA y qué no",
     "category": "Lectura",
     "difficulty": "medium",

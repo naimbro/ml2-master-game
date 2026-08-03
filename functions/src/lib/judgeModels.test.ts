@@ -131,7 +131,11 @@ describe('callJudgeModel dispatch', () => {
     expect(arg.response_format).toEqual({ type: 'json_object' });
   });
 
-  it('calls Anthropic with top-level system and NO temperature (opus rejects it)', async () => {
+  // Este test pedia lo contrario —que `thinking` NO se mandara— y por eso
+  // protegia el bug en vez de pillarlo: en sonnet-5 omitir el campo significa
+  // thinking ADAPTATIVO, no thinking apagado, y el razonamiento se comia los
+  // 1200 tokens antes de escribir el JSON. Tiene que ir escrito y desactivado.
+  it('calls Anthropic with top-level system, NO temperature, and thinking OFF', async () => {
     const create = vi.fn().mockResolvedValue({
       content: [{ type: 'text', text: '{"ok":true}' }],
     });
@@ -143,7 +147,7 @@ describe('callJudgeModel dispatch', () => {
     const arg = create.mock.calls[0][0];
     expect(arg.system).toBe('sys');
     expect(arg.temperature).toBeUndefined();
-    expect('thinking' in arg).toBe(false);
+    expect(arg.thinking).toEqual({ type: 'disabled' });
     expect(arg.messages[0].role).toBe('user');
     expect(arg.messages[0].content).toMatch(/^usr/); // user prompt + JSON-safety suffix
   });

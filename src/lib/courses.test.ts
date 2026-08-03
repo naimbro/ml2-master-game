@@ -52,7 +52,7 @@ describe('clase_01_diagnostico', () => {
   it('deriva rounds de los escenarios y duration de roundDurationSeconds', () => {
     const s = session();
     expect(s.rounds).toBe(s.scenarios.length);
-    expect(s.rounds).toBe(4);
+    expect(s.rounds).toBe(3);
     expect(s.duration).toBe(Math.round(s.config.roundDurationSeconds / 60));
   });
 
@@ -82,10 +82,11 @@ describe('clase_01_diagnostico', () => {
     }
   });
 
-  // Las CUATRO rondas compiten: dos de opcion multiple sobre graficos y dos
+  // Las TRES rondas compiten: una de opcion multiple sobre un grafico y dos
   // abiertas de comprension sobre el articulo de Katie Parrott que se discute en
-  // clase. Esta forma la fijo Naim el 2026-08-02.
-  it('son dos rondas de opcion multiple y dos abiertas, y las cuatro compiten', () => {
+  // clase. Naim fijo la forma de cuatro el 2026-08-02 y saco la segunda de
+  // opcion multiple el 2026-08-03, jugando la clase.
+  it('es una ronda de opcion multiple y dos abiertas, y las tres compiten', () => {
     const scenarios = session().scenarios as {
       id: string;
       type?: string;
@@ -94,7 +95,7 @@ describe('clase_01_diagnostico', () => {
     for (const s of scenarios) {
       expect(s.ranked !== false, `${s.id} deberia competir`).toBe(true);
     }
-    expect(scenarios.filter((s) => s.type === 'multiple_choice')).toHaveLength(2);
+    expect(scenarios.filter((s) => s.type === 'multiple_choice')).toHaveLength(1);
     expect(scenarios.filter((s) => s.type !== 'multiple_choice')).toHaveLength(2);
   });
 
