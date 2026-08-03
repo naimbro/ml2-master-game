@@ -26,10 +26,35 @@ const MARGIN_BOTTOM = 46;
 const LABEL_GAP = 16;
 /** Separacion extra entre el borde de la banda y el numero de posicion. */
 const ROW_LABEL_GAP = 10;
+/**
+ * Cuanto se separan dos nombres que caen en la misma fila. Un empate pone a dos
+ * alumnos en la misma posicion, o sea en la misma `y`; y con una sola clase
+ * jugada todas las columnas colapsan al centro, asi que tambien comparten la
+ * `x`. Sin esto los nombres se imprimen uno encima del otro y no se lee ninguno,
+ * que es lo que se proyecto el 2026-08-03 con Ivan W y Benicio Arraga empatados
+ * en el 5o puesto. 15 px para una fuente de 12,5 px.
+ */
+const LABEL_STEP = 15;
 
 export interface TrajectoryInput {
   name: string;
   positionsByGame: Array<number | null>;
+}
+
+/** Guia corta del punto a su nombre, cuando el nombre se corrio de fila. */
+export interface LabelLeader {
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+}
+
+export interface TrajectoryLabel {
+  x: number;
+  y: number;
+  text: string;
+  /** null cuando el nombre quedo en su fila y no hay nada que amarrar. */
+  leader: LabelLeader | null;
 }
 
 export interface TrajectoryLine {
@@ -38,8 +63,8 @@ export interface TrajectoryLine {
   /** Un `d` de <path> por tramo. Una ausencia corta el tramo. */
   segments: string[];
   dots: Array<{ x: number; y: number }>;
-  labelLeft: { x: number; y: number; text: string };
-  labelRight: { x: number; y: number; text: string };
+  labelLeft: TrajectoryLabel;
+  labelRight: TrajectoryLabel;
 }
 
 export interface TrajectoryChart {
@@ -79,6 +104,31 @@ function smoothPath(points: Array<{ x: number; y: number }>): string {
   return d;
 }
 
+/**
+ * Reparte verticalmente a los que caen en la misma fila. Devuelve el corrimiento
+ * de cada serie, centrado en la fila: dos empatados quedan a -7,5 y +7,5, tres a
+ * -15, 0 y +15. El orden dentro del grupo es el de `entries`, o sea el de la
+ * tabla, para que el mejor ubicado quede arriba.
+ */
+function spreadTiedLabels(ranks: Array<number | null>): number[] {
+  const groups = new Map<number, number[]>();
+  ranks.forEach((rank, i) => {
+    if (rank === null) return;
+    const bucket = groups.get(rank);
+    if (bucket) bucket.push(i);
+    else groups.set(rank, [i]);
+  });
+
+  const offsets = new Array<number>(ranks.length).fill(0);
+  for (const indices of groups.values()) {
+    if (indices.length < 2) continue;
+    indices.forEach((i, k) => {
+      offsets[i] = (k - (indices.length - 1) / 2) * LABEL_STEP;
+    });
+  }
+  return offsets;
+}
+
 export function buildTrajectoryChart(
   entries: TrajectoryInput[],
   gameCount: number
@@ -86,7 +136,30 @@ export function buildTrajectoryChart(
   const series = entries.slice(0, MAX_TRAJECTORY_SERIES);
   const shown = series.flatMap((s) => s.positionsByGame.filter((p): p is number => p !== null));
   const maxRank = Math.min(MAX_RANK_SHOWN, Math.max(2, ...shown));
-  const height = MARGIN_TOP + (maxRank - 1) * ROW_HEIGHT + MARGIN_BOTTOM;
+
+  // Posiciones visibles de cada serie, ya recortadas a la ultima fila dibujada.
+  const played = series.map((s) =>
+    s.positionsByGame.slice(0, gameCount).map((r) => (r === null ? null : Math.min(r, maxRank)))
+  );
+  const firstRank = played.map((rs) => rs.find((r) => r !== null) ?? null);
+  const lastRank = played.map((rs) => [...rs].reverse().find((r) => r !== null) ?? null);
+  // Con un solo punto visible el nombre va solo a la derecha, asi que esa serie
+  // no participa del reparto de la izquierda.
+  const dotCount = played.map((rs) => rs.filter((r) => r !== null).length);
+
+  const rightOffsets = spreadTiedLabels(lastRank);
+  const leftOffsets = spreadTiedLabels(
+    firstRank.map((r, i) => (dotCount[i] <= 1 ? null : r))
+  );
+
+  // Los nombres corridos pueden salirse del lienzo: seis empatados en el primer
+  // puesto se reparten 37,5 px hacia arriba, encima de la fila de las clases. El
+  // dibujo se baja y el alto crece lo justo para que quepan.
+  const allOffsets = [...rightOffsets, ...leftOffsets, 0];
+  const extraTop = Math.max(0, -Math.min(...allOffsets));
+  const extraBottom = Math.max(0, Math.max(...allOffsets));
+  const top = MARGIN_TOP + extraTop;
+  const height = top + (maxRank - 1) * ROW_HEIGHT + MARGIN_BOTTOM + extraBottom;
 
   // Con una sola clase no hay progresion que estirar de margen a margen: sin
   // este caso especial el punto queda pegado al margen izquierdo y dos
@@ -98,7 +171,7 @@ export function buildTrajectoryChart(
       : MARGIN_LEFT + (c * (WIDTH - MARGIN_LEFT - MARGIN_RIGHT)) / (gameCount - 1),
     label: `Clase ${c + 1}`,
   }));
-  const y = (rank: number) => MARGIN_TOP + (rank - 1) * ROW_HEIGHT;
+  const y = (rank: number) => top + (rank - 1) * ROW_HEIGHT;
 
   const rows = Array.from({ length: maxRank }, (_, i) => ({
     rank: i + 1,
@@ -131,15 +204,31 @@ export function buildTrajectoryChart(
     // nombre completo.
     const singlePoint = dots.length <= 1;
 
+    /** El nombre corrido de su fila necesita una guia que lo amarre a su punto. */
+    const leaderTo = (dot: { x: number; y: number } | undefined, offset: number, dir: 1 | -1) =>
+      dot && offset !== 0
+        ? { x1: dot.x + dir * 6, y1: dot.y, x2: dot.x + dir * 13, y2: dot.y + offset }
+        : null;
+
     return {
       name: s.name,
       color: TRAJECTORY_COLORS[k],
       segments: groups.map(smoothPath),
       dots,
       labelLeft: singlePoint
-        ? { x: 0, y: 0, text: '' }
-        : { x: (first?.x ?? MARGIN_LEFT) - 16, y: (first?.y ?? 0) + 4, text: shortName(s.name) },
-      labelRight: { x: (last?.x ?? MARGIN_LEFT) + 16, y: (last?.y ?? 0) + 4, text: s.name },
+        ? { x: 0, y: 0, text: '', leader: null }
+        : {
+            x: (first?.x ?? MARGIN_LEFT) - 16,
+            y: (first?.y ?? 0) + 4 + leftOffsets[k],
+            text: shortName(s.name),
+            leader: leaderTo(first, leftOffsets[k], -1),
+          },
+      labelRight: {
+        x: (last?.x ?? MARGIN_LEFT) + 16,
+        y: (last?.y ?? 0) + 4 + rightOffsets[k],
+        text: s.name,
+        leader: leaderTo(last, rightOffsets[k], 1),
+      },
     };
   });
 

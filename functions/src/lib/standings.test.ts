@@ -6,6 +6,7 @@ import {
   rankGame,
   type GamePlayerInput,
   accumulate,
+  pickOfficialGames,
   type GameResult,
 } from './standings';
 
@@ -229,5 +230,103 @@ describe('accumulate', () => {
     const anaPrevia = sinDescarte.find((e) => e.uid === 'ana')!.position;
 
     expect(ana.previousPosition).toBe(anaPrevia);
+  });
+});
+
+describe('pickOfficialGames', () => {
+  const game = (
+    gameCode: string,
+    sessionId: string,
+    finishedAtMs: number,
+    answeredCount: number,
+    lobbyOnly = 0,
+  ): GameResult => ({
+    gameCode,
+    sessionId,
+    sessionTitle: sessionId,
+    finishedAtMs,
+    players: [
+      ...Array.from({ length: answeredCount }, (_, i) => ({
+        uid: `${gameCode}_a${i}`, name: `A${i}`, totalScore: 10 + i, answered: true,
+      })),
+      ...Array.from({ length: lobbyOnly }, (_, i) => ({
+        uid: `${gameCode}_l${i}`, name: `L${i}`, totalScore: 0, answered: false,
+      })),
+    ],
+  });
+
+  it('el caso real de dataviz_2026: 6 juegos de la clase 1, cuenta el del curso', () => {
+    const { official, discarded } = pickOfficialGames([
+      game('YBWGQP', 'clase_01_diagnostico', 1_753_866_744_926, 1),
+      game('735ZGL', 'clase_01_diagnostico', 1_785_667_733_164, 2),
+      game('H4ATHA', 'clase_01_diagnostico', 1_785_673_207_969, 2),
+      game('BXZ8QP', 'clase_01_diagnostico', 1_785_769_280_641, 1),
+      game('EP55M5', 'clase_01_diagnostico', 1_785_769_763_611, 1),
+      game('MTF4MX', 'clase_01_diagnostico', 1_785_772_826_126, 33),
+    ]);
+    expect(official.map((g) => g.gameCode)).toEqual(['MTF4MX']);
+    expect(discarded).toHaveLength(5);
+  });
+
+  it('cuenta un juego por sesion, no uno por curso', () => {
+    const { official } = pickOfficialGames([
+      game('A1', 'clase_01', 100, 30),
+      game('A2', 'clase_01', 200, 2),
+      game('B1', 'clase_02', 300, 28),
+    ]);
+    expect(official.map((g) => g.gameCode).sort()).toEqual(['A1', 'B1']);
+  });
+
+  it('gana el que tiene mas alumnos, no el mas nuevo', () => {
+    const { official } = pickOfficialGames([
+      game('CLASE', 'clase_01', 100, 30),
+      game('PRUEBA', 'clase_01', 999, 1),
+    ]);
+    expect(official.map((g) => g.gameCode)).toEqual(['CLASE']);
+  });
+
+  it('a igual cantidad de alumnos gana el mas reciente', () => {
+    const { official } = pickOfficialGames([
+      game('VIEJO', 'clase_01', 100, 20),
+      game('NUEVO', 'clase_01', 200, 20),
+    ]);
+    expect(official.map((g) => g.gameCode)).toEqual(['NUEVO']);
+  });
+
+  it('empate total: elige siempre el mismo, para que dos recalculos no discrepen', () => {
+    const dos = [game('ZZZ', 'clase_01', 100, 20), game('AAA', 'clase_01', 100, 20)];
+    expect(pickOfficialGames(dos).official[0].gameCode).toBe('AAA');
+    expect(pickOfficialGames([...dos].reverse()).official[0].gameCode).toBe('AAA');
+  });
+
+  it('quien entro al lobby y no contesto no infla el conteo', () => {
+    // 2 que contestaron + 40 mirones no le ganan a 5 que contestaron.
+    const { official } = pickOfficialGames([
+      game('MIRONES', 'clase_01', 200, 2, 40),
+      game('REAL', 'clase_01', 100, 5),
+    ]);
+    expect(official.map((g) => g.gameCode)).toEqual(['REAL']);
+  });
+
+  it('los juegos sin sessionId cuentan todos, sin competir entre si', () => {
+    const { official, discarded } = pickOfficialGames([
+      game('X', '', 100, 3),
+      game('Y', '', 200, 9),
+    ]);
+    expect(official.map((g) => g.gameCode)).toEqual(['X', 'Y']);
+    expect(discarded).toEqual([]);
+  });
+
+  it('devuelve los oficiales en orden cronologico, listos para accumulate', () => {
+    const { official } = pickOfficialGames([
+      game('C', 'clase_03', 300, 10),
+      game('A', 'clase_01', 100, 10),
+      game('B', 'clase_02', 200, 10),
+    ]);
+    expect(official.map((g) => g.gameCode)).toEqual(['A', 'B', 'C']);
+  });
+
+  it('sin juegos no devuelve nada', () => {
+    expect(pickOfficialGames([])).toEqual({ official: [], discarded: [] });
   });
 });

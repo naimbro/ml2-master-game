@@ -22,6 +22,7 @@ import admin from 'firebase-admin';
 import { writeFileSync } from 'node:fs';
 import {
   accumulate,
+  pickOfficialGames,
   type GameResult,
   type GamePlayerInput,
   type StandingsEntry,
@@ -196,10 +197,22 @@ async function main(): Promise<void> {
   const excluded: string[] = standingsDoc.data()?.excludedGameCodes ?? [];
   if (excluded.length) console.log(`Excluidos: ${excluded.join(', ')}`);
 
-  const games = await loadGames(courseId, excluded);
-  if (games.length === 0) {
+  const candidates = await loadGames(courseId, excluded);
+  if (candidates.length === 0) {
     console.log(`No hay juegos terminados en ${courseId}.`);
     return;
+  }
+
+  // Misma regla que recomputeCourseStandings: una clase, un juego. Sin esto este
+  // script mostraria una tabla distinta de la que ve el alumno, que es
+  // exactamente lo que se queria evitar al compartir la aritmetica.
+  const { official: games, discarded } = pickOfficialGames(candidates);
+  if (discarded.length) {
+    console.log(
+      `Fuera por tener menos alumnos que el juego oficial de su clase: ${
+        discarded.map((g) => `${g.gameCode} (${g.players.filter((p) => p.answered).length})`).join(', ')
+      }`,
+    );
   }
 
   // El descarte sigue al `finalized` guardado en standings/{courseId} — el

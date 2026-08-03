@@ -11,6 +11,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.POINTS_FLOOR = exports.POINTS_TABLE = void 0;
 exports.pointsForPosition = pointsForPosition;
 exports.rankGame = rankGame;
+exports.pickOfficialGames = pickOfficialGames;
 exports.accumulate = accumulate;
 /** Puntos de las diez primeras posiciones. Fija: no depende de cuantos jugaron. */
 exports.POINTS_TABLE = [30, 25, 21, 18, 16, 15, 14, 13, 12, 11];
@@ -44,6 +45,49 @@ function rankGame(players) {
         rows.push({ uid: pl.uid, position, points: pointsForPosition(position) });
     });
     return rows;
+}
+/**
+ * Una clase = un juego. De todos los juegos terminados de una misma sesion se
+ * cuenta uno solo: el que tiene mas alumnos que respondieron.
+ *
+ * Existe porque `dataviz_2026` llego a la primera clase con SEIS juegos de
+ * `clase_01_diagnostico`, cinco de ellos pruebas de 1 o 2 cuentas, y la tabla
+ * los sumaba todos. Depender de que el profesor se acuerde de apretar "No
+ * contar" cinco veces es exactamente el paso que se olvida el dia que importa.
+ * Una prueba tiene 1 o 2 jugadores y la clase real tiene 33: se separan solas.
+ *
+ * El desempate va por fecha y despues por codigo, para que dos corridas seguidas
+ * del recalculo no elijan juegos distintos.
+ *
+ * `excludedGameCodes` se aplica ANTES que esto, asi que sigue sirviendo de
+ * anulacion manual: excluir el juego que quedo oficial promueve al siguiente.
+ */
+function pickOfficialGames(games) {
+    const answered = (g) => g.players.filter((p) => p.answered).length;
+    // Un juego sin sessionId no se puede agrupar con nadie: se agrupa consigo
+    // mismo y siempre cuenta, en vez de competir con juegos de otra clase.
+    const groups = new Map();
+    for (const g of games) {
+        const key = g.sessionId || `__sin_sesion__${g.gameCode}`;
+        const bucket = groups.get(key);
+        if (bucket)
+            bucket.push(g);
+        else
+            groups.set(key, [g]);
+    }
+    const official = [];
+    const discarded = [];
+    for (const bucket of groups.values()) {
+        const [best, ...rest] = [...bucket].sort((a, b) => answered(b) - answered(a) ||
+            b.finishedAtMs - a.finishedAtMs ||
+            a.gameCode.localeCompare(b.gameCode));
+        official.push(best);
+        discarded.push(...rest);
+    }
+    return {
+        official: official.sort((a, b) => a.finishedAtMs - b.finishedAtMs),
+        discarded: discarded.sort((a, b) => a.finishedAtMs - b.finishedAtMs),
+    };
 }
 function byTotalDescending(a, b) {
     return b.points - a.points || a.uid.localeCompare(b.uid);

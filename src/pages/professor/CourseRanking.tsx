@@ -7,6 +7,7 @@ import { db, functions } from '../../lib/firebase';
 import { getCourse } from '../../lib/courses';
 import { fetchCourse } from '../../lib/dynamicCourses';
 import TrajectoryChart from '../../components/TrajectoryChart';
+import TopSixList from '../../components/TopSixList';
 import type { CourseStandings } from '../../types/standings';
 
 export default function CourseRanking() {
@@ -72,6 +73,7 @@ export default function CourseRanking() {
   };
 
   const excluded = standings?.excludedGameCodes ?? [];
+  const singleClass = (standings?.gamesCounted.length ?? 0) <= 1;
 
   if (loading) {
     return (
@@ -113,26 +115,40 @@ export default function CourseRanking() {
             <div className="dramatic-card p-6">
               <h2 className="font-black mb-1">Los seis de arriba</h2>
               <p className="text-muted text-sm mb-4">
-                Proyectable. Quien no está entre los seis no aparece.
+                {singleClass
+                  ? 'Proyectable. Quien no está entre los seis no aparece. Desde la clase 2 esto se convierte en el gráfico de trayectorias.'
+                  : 'Proyectable. Quien no está entre los seis no aparece.'}
               </p>
-              <TrajectoryChart
-                entries={standings.top.slice(0, 6).map((r) => ({
-                  name: r.name, positionsByGame: r.positionsByGame,
-                }))}
-                gameCount={standings.gamesCounted.length}
-              />
+              {/* Con una sola clase no hay trayectoria: el grafico colapsa a una
+                  columna y los empatados quedan en el mismo pixel. Ahi va la lista. */}
+              {singleClass ? (
+                <TopSixList rows={standings.top.slice(0, 6)} />
+              ) : (
+                <TrajectoryChart
+                  entries={standings.top.slice(0, 6).map((r) => ({
+                    name: r.name, positionsByGame: r.positionsByGame,
+                  }))}
+                  gameCount={standings.gamesCounted.length}
+                />
+              )}
             </div>
 
             <div className="dramatic-card p-6">
               <h2 className="font-black mb-1">Juegos que cuentan</h2>
               <p className="text-muted text-sm mb-4">
-                Saca de la cuenta los juegos de prueba. El cambio recalcula la tabla al instante.
+                Una clase, un juego: de cada sesión cuenta el que tuvo más alumnos. Los de prueba
+                quedan afuera solos.
               </p>
               <div className="space-y-2">
                 {standings.gamesCounted.map((g) => (
                   <div key={g.gameCode} className="flex items-center gap-3 px-3 py-2 rounded-xl bg-surface-2">
                     <span className="font-mono font-bold">{g.gameCode}</span>
                     <span className="flex-1 truncate text-sm text-muted">{g.sessionTitle}</span>
+                    {g.playedCount !== undefined && (
+                      <span className="text-sm text-muted tabular-nums shrink-0">
+                        {g.playedCount} {g.playedCount === 1 ? 'alumno' : 'alumnos'}
+                      </span>
+                    )}
                     <button
                       onClick={() => call({ exclude: { gameCode: g.gameCode, excluded: true } })}
                       disabled={busy}
@@ -143,6 +159,34 @@ export default function CourseRanking() {
                   </div>
                 ))}
               </div>
+
+              {(standings.gamesShadowed?.length ?? 0) > 0 && (
+                <div className="mt-4">
+                  <div className="text-[11px] font-black uppercase tracking-wider text-muted mb-1">
+                    Fuera por tener menos alumnos
+                  </div>
+                  <p className="text-muted text-xs mb-2">
+                    Su clase ya tiene un juego oficial. Para que cuente uno de estos, aprieta
+                    &quot;No contar&quot; en el oficial de esa clase y este toma su lugar.
+                  </p>
+                  <div className="space-y-2">
+                    {standings.gamesShadowed!.map((g) => (
+                      <div
+                        key={g.gameCode}
+                        className="flex items-center gap-3 px-3 py-2 rounded-xl bg-surface-2 opacity-70"
+                      >
+                        <span className="font-mono font-bold">{g.gameCode}</span>
+                        <span className="flex-1 truncate text-sm text-muted">{g.sessionTitle}</span>
+                        {g.playedCount !== undefined && (
+                          <span className="text-sm text-muted tabular-nums shrink-0">
+                            {g.playedCount} {g.playedCount === 1 ? 'alumno' : 'alumnos'}
+                          </span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {excluded.length > 0 && (
                 <div className="mt-4">

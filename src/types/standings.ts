@@ -6,6 +6,8 @@ export interface CountedGame {
   sessionId: string;
   sessionTitle: string;
   finishedAtMs: number;
+  /** Cuantos alumnos respondieron. Ausente en tablas escritas antes del 2026-08-03. */
+  playedCount?: number;
 }
 
 /** Fila publica: solo los diez primeros del curso salen con nombre. */
@@ -27,6 +29,11 @@ export interface CourseStandings {
   finalized: boolean;
   excludedGameCodes: string[];
   gamesCounted: CountedGame[];
+  /**
+   * Juegos terminados que NO cuentan porque su clase ya tiene uno oficial — el
+   * que tuvo mas alumnos. Ausente en tablas escritas antes del 2026-08-03.
+   */
+  gamesShadowed?: CountedGame[];
   top: PublicStandingsRow[];
 }
 

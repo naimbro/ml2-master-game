@@ -10,6 +10,11 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { buildTranscriptPdf } from '../../lib/transcriptPdf';
 import { summarizeRoundScores } from '../../lib/diagnosticTotals';
+import {
+  collectPlayerRoundScores,
+  type RoundDocInput,
+  type SubmissionInput,
+} from '../../lib/finalScores';
 import { playPodiumFanfare, playLeaderboardTick, playDrumRoll, playApplause } from '../../lib/sounds';
 import { confettiPodium, confettiStars, confettiSmallBurst, confettiBurst } from '../../lib/confetti';
 import SupportLink from '../../components/SupportLink';
@@ -22,7 +27,8 @@ interface PlayerFinalScore {
   playerName: string;
   totalScore: number;
   averageScore: number;
-  roundScores: number[];
+  /** Indexado por ronda-1. `null` = no jugo esa ronda (distinto de sacar 0). */
+  roundScores: Array<number | null>;
   rank: number;
 }
 
@@ -71,42 +77,56 @@ export default function End() {
 
     const calculateFinalRankings = async () => {
       try {
-        const submissionsRef = collection(db, 'games', gameCode, 'submissions');
-        const submissionsSnapshot = await getDocs(submissionsRef);
+        // El puntaje que manda es el del doc de la ronda, no el de la submission:
+        // los duelos recalibran ahi y NO reescriben el finalScore del juez. Ver
+        // src/lib/finalScores.ts. Las submissions siguen leyendose como respaldo
+        // para juegos viejos, que no tienen subcoleccion `rounds`.
+        const [roundsSnapshot, submissionsSnapshot] = await Promise.all([
+          getDocs(collection(db, 'games', gameCode, 'rounds')),
+          getDocs(collection(db, 'games', gameCode, 'submissions')),
+        ]);
 
-        const playerScores: Record<string, { name: string; scores: number[] }> = {};
-
-        submissionsSnapshot.docs.forEach((doc) => {
+        const roundDocs: RoundDocInput[] = roundsSnapshot.docs.map((doc) => {
           const data = doc.data();
-          if (data.evaluation?.finalScore !== undefined) {
-            if (!playerScores[data.playerId]) {
-              playerScores[data.playerId] = {
-                name: data.playerName,
-                scores: [],
-              };
-            }
-            playerScores[data.playerId].scores[data.round - 1] = data.evaluation.finalScore;
-          }
+          return { round: Number(data.round), rankings: data.rankings };
+        });
+        const submissionRows: SubmissionInput[] = submissionsSnapshot.docs.map((doc) => {
+          const data = doc.data();
+          return {
+            playerId: data.playerId,
+            playerName: data.playerName,
+            round: Number(data.round),
+            finalScore: data.evaluation?.finalScore,
+          };
         });
 
-        const rankings: PlayerFinalScore[] = Object.entries(playerScores)
-          .map(([playerId, data]) => {
-            const summary = summarizeRoundScores(
-              data.scores.map((score, idx) => ({
-                score,
-                ranked: game?.scenarios?.[idx]?.ranked !== false,
-              })),
-            );
+        const totalRounds = game?.totalRounds || game?.scenarios?.length || 0;
+
+        const rankings: PlayerFinalScore[] = collectPlayerRoundScores(
+          totalRounds, roundDocs, submissionRows,
+        )
+          .map((player) => {
+            // Las rondas a las que el alumno no llego se sacan antes de resumir:
+            // si entraran como 0 le bajarian el promedio por una ronda que no
+            // jugo. Un 0 de verdad (respuesta vacia, evaluada) si entra.
+            const played = player.scores
+              .map((score, idx) => ({ score, ranked: game?.scenarios?.[idx]?.ranked !== false }))
+              .filter((r) => r.score !== null)
+              .map((r) => ({ score: r.score as number, ranked: r.ranked }));
+            const summary = summarizeRoundScores(played);
             return {
-              playerId,
-              playerName: data.name,
-              roundScores: data.scores,
+              playerId: player.playerId,
+              playerName: player.playerName,
+              roundScores: player.scores,
               totalScore: summary.total,
               averageScore: summary.average,
               rank: 0,
             };
           })
-          .sort((a, b) => b.totalScore - a.totalScore);
+          // Mismo desempate que rankGame() en functions/src/lib/standings.ts: sin
+          // el, dos empatados salen en un orden aca y en el otro en la tabla del
+          // curso, y parece que una de las dos pantallas miente.
+          .sort((a, b) => b.totalScore - a.totalScore || a.playerId.localeCompare(b.playerId));
 
         let currentRank = 1;
         rankings.forEach((player, index) => {
@@ -512,7 +532,11 @@ export default function End() {
                     <div
                       key={i}
                       className={`flex-1 p-2 rounded-xl text-center ${
-                        !isRoundRanked
+                        // Sin puntaje = no jugo esa ronda. Va en gris, no en rojo:
+                        // el rojo dice "te fue mal", y aca no hubo nada que evaluar.
+                        score === null
+                          ? 'border-2 border-line bg-surface-2 text-faint'
+                          : !isRoundRanked
                           ? 'border-2 border-dashed border-line bg-surface-2 text-muted'
                           : score >= 80
                           ? 'bg-kahoot-green/20 text-kahoot-green border-2 border-kahoot-green/30'

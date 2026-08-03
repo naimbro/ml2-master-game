@@ -40,6 +40,7 @@ const recalibration_1 = require("./lib/recalibration");
 const pairwise_1 = require("./pairwise");
 const stats_1 = require("./lib/stats");
 const parse_1 = require("./lib/parse");
+const finalScores_1 = require("./lib/finalScores");
 const scoring_1 = require("./lib/scoring");
 const judgeModels_1 = require("./lib/judgeModels");
 const promptSplit_1 = require("./lib/promptSplit");
@@ -690,6 +691,30 @@ exports.processRoundEnd = functions
         throw new functions.https.HttpsError('internal', 'Failed to process round');
     }
 });
+/**
+ * Puntaje autoritativo de cada (ronda, jugador), leido de `rounds/round_N`.
+ *
+ * El `evaluation.finalScore` de la submission es lo que dijeron los jueces ANTES
+ * de los duelos; `recalibrateRound` escribe el resultado en el doc de la ronda y
+ * nunca vuelve sobre la submission. Todo lo que reporte un puntaje tiene que
+ * pasar por aca, o el alumno ve un numero y la tabla del curso otro. Ver
+ * `functions/src/lib/finalScores.ts`.
+ */
+async function loadRoundScoreIndex(gameCode) {
+    const snap = await db.collection('games').doc(gameCode).collection('rounds').get();
+    return (0, finalScores_1.buildRoundScoreIndex)(snap.docs.map((d) => {
+        const data = d.data();
+        return { round: Number(data.round), rankings: data.rankings };
+    }));
+}
+/** El puntaje del doc de la ronda; si no hay, el del juez como respaldo. */
+function scoreOf(index, round, playerId, fallback) {
+    const authoritative = index.get((0, finalScores_1.roundScoreKey)(Number(round), playerId));
+    if (authoritative !== undefined)
+        return authoritative;
+    const judged = (0, parse_1.coerceScore)(fallback);
+    return Number.isFinite(judged) ? judged : 0;
+}
 const RECAL_B = 4; // Swiss band width (calibrated)
 const RECAL_W_ANCHOR = 0.35; // anchor weight / λ≈3 (calibrated)
 const RECAL_CONCURRENCY = 10;
@@ -884,11 +909,14 @@ exports.generateStudentReport = functions
             throw new functions.https.HttpsError('not-found', 'Game not found');
         }
         const game = gameDoc.data();
-        const submissionsSnapshot = await db.collection('games').doc(gameCode)
-            .collection('submissions')
-            .where('playerId', '==', targetPlayerId)
-            .orderBy('round')
-            .get();
+        const [submissionsSnapshot, roundScores] = await Promise.all([
+            db.collection('games').doc(gameCode)
+                .collection('submissions')
+                .where('playerId', '==', targetPlayerId)
+                .orderBy('round')
+                .get(),
+            loadRoundScoreIndex(gameCode),
+        ]);
         const roundDetails = submissionsSnapshot.docs.map(doc => {
             var _a, _b;
             const data = doc.data();
@@ -898,7 +926,15 @@ exports.generateStudentReport = functions
                 ranked: (scenarioData === null || scenarioData === void 0 ? void 0 : scenarioData.ranked) !== false,
                 scenario: (scenarioData === null || scenarioData === void 0 ? void 0 : scenarioData.title) || `Ronda ${data.round}`,
                 response: data.response,
-                evaluation: data.evaluation,
+                // El feedback de cada juez se sirve tal cual — es lo que dijo el panel —
+                // pero el `finalScore` se reemplaza por el recalibrado, que es el que
+                // cuenta. El doc de Firestore no se toca: ahi queda el registro del juez.
+                evaluation: data.evaluation
+                    ? {
+                        ...data.evaluation,
+                        finalScore: scoreOf(roundScores, data.round, targetPlayerId, data.evaluation.finalScore),
+                    }
+                    : data.evaluation,
                 // Todo lo de abajo existe para la transcripcion del PDF del alumno: sin el
                 // enunciado y sus propias respuestas, un reporte no le sirve para estudiar.
                 type: (scenarioData === null || scenarioData === void 0 ? void 0 : scenarioData.type) === 'multiple_choice' ? 'multiple_choice' : 'open',
@@ -917,7 +953,8 @@ exports.generateStudentReport = functions
                 mcResponses: data.mcResponses || [],
             };
         });
-        // Only sum ranked round scores for totalScore/averageScore
+        // Only sum ranked round scores for totalScore/averageScore. `finalScore` ya
+        // viene reemplazado por el recalibrado unas lineas mas arriba.
         const rankedRounds = roundDetails.filter(r => r.ranked);
         const totalScore = rankedRounds.reduce((sum, r) => { var _a; return sum + (((_a = r.evaluation) === null || _a === void 0 ? void 0 : _a.finalScore) || 0); }, 0);
         const avgScore = rankedRounds.length > 0 ? Math.round(totalScore / rankedRounds.length) : 0;
@@ -980,16 +1017,25 @@ exports.generateOralTask = functions
         if (!gameDoc.exists) {
             throw new functions.https.HttpsError('not-found', 'Game not found');
         }
-        const submissionsSnapshot = await db.collection('games').doc(gameCode)
-            .collection('submissions')
-            .where('playerId', '==', targetPlayerId)
-            .orderBy('round')
-            .get();
+        const [submissionsSnapshot, roundScores] = await Promise.all([
+            db.collection('games').doc(gameCode)
+                .collection('submissions')
+                .where('playerId', '==', targetPlayerId)
+                .orderBy('round')
+                .get(),
+            loadRoundScoreIndex(gameCode),
+        ]);
         const roundDetails = submissionsSnapshot.docs.map(doc => {
+            var _a;
             const data = doc.data();
-            return { round: data.round, evaluation: data.evaluation };
+            return {
+                round: data.round,
+                evaluation: data.evaluation,
+                // El puntaje recalibrado, no el del juez. Ver loadRoundScoreIndex.
+                score: scoreOf(roundScores, data.round, targetPlayerId, (_a = data.evaluation) === null || _a === void 0 ? void 0 : _a.finalScore),
+            };
         });
-        const totalScore = roundDetails.reduce((sum, r) => { var _a; return sum + (((_a = r.evaluation) === null || _a === void 0 ? void 0 : _a.finalScore) || 0); }, 0);
+        const totalScore = roundDetails.reduce((sum, r) => sum + r.score, 0);
         const avgScore = roundDetails.length > 0 ? Math.round(totalScore / roundDetails.length) : 0;
         const allImprovements = [];
         const allConcepts = [];
@@ -1089,9 +1135,10 @@ exports.generateClassReport = functions
             throw new functions.https.HttpsError('permission-denied', 'Only the host can generate class reports');
         }
         // Get all submissions for this game
-        const submissionsSnapshot = await db.collection('games').doc(gameCode)
-            .collection('submissions')
-            .get();
+        const [submissionsSnapshot, roundScores] = await Promise.all([
+            db.collection('games').doc(gameCode).collection('submissions').get(),
+            loadRoundScoreIndex(gameCode),
+        ]);
         // Group submissions by player and round
         const playerData = {};
         submissionsSnapshot.docs.forEach(doc => {
@@ -1108,7 +1155,9 @@ exports.generateClassReport = functions
                     roundDetails: [],
                 };
             }
-            const score = ((_b = data.evaluation) === null || _b === void 0 ? void 0 : _b.finalScore) || 0;
+            // El recalibrado, no el del juez: el reporte del profesor tiene que dar
+            // el mismo orden que el podio y que la tabla del curso.
+            const score = scoreOf(roundScores, data.round, playerId, (_b = data.evaluation) === null || _b === void 0 ? void 0 : _b.finalScore);
             playerData[playerId].roundScores[data.round] = score;
             // Only sum ranked round scores
             if (isRoundRanked) {
@@ -1762,7 +1811,9 @@ exports.recomputeCourseStandings = functions
             players,
         };
     }));
-    const ordered = [...results].sort((a, b) => a.finishedAtMs - b.finishedAtMs);
+    // Una clase = un juego. Sin esto la tabla suma tambien las pruebas que el
+    // profesor corrio antes de la clase, que en dataviz_2026 fueron cinco.
+    const { official: ordered, discarded } = (0, standings_1.pickOfficialGames)(results);
     const entries = (0, standings_1.accumulate)(ordered, { dropWorst: finalized ? 2 : 0 });
     const now = admin.firestore.FieldValue.serverTimestamp();
     // `merge: true` y SIN `excludedGameCodes`: ese campo lo escribe unicamente
@@ -1780,6 +1831,16 @@ exports.recomputeCourseStandings = functions
             sessionId: g.sessionId,
             sessionTitle: g.sessionTitle,
             finishedAtMs: g.finishedAtMs,
+            playedCount: g.players.filter((p) => p.answered).length,
+        })),
+        // Los que perdieron contra el oficial de su clase. Se publican para que el
+        // profesor vea QUE quedo afuera y por que, en vez de tener que confiar.
+        gamesShadowed: discarded.map((g) => ({
+            gameCode: g.gameCode,
+            sessionId: g.sessionId,
+            sessionTitle: g.sessionTitle,
+            finishedAtMs: g.finishedAtMs,
+            playedCount: g.players.filter((p) => p.answered).length,
         })),
         top: entries.slice(0, STANDINGS_PUBLIC_TOP).map((e) => {
             var _a;

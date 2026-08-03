@@ -1,5 +1,13 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { RoundDuel } from '../../types/game';
+import {
+  DUEL_AFTER_MS,
+  DUEL_HOLD_MS,
+  UPSET_AFTER_MS,
+  UPSET_HOLD_MS,
+  planMontage,
+  selectMontageDuels,
+} from '../../lib/duelMontage';
 
 interface FinalRow { playerId: string; playerName: string; score: number; rank: number; provScore?: number; provRank?: number; }
 
@@ -19,9 +27,18 @@ export default function RecalibrationReveal({ duels, duelTotal, finalReady, fina
   const [verdict, setVerdict] = useState(false);
   const [stage, setStage] = useState<Stage>('montage');
   const doneCalled = useRef(false);
+
+  // El montaje muestra una MUESTRA de los duelos, no todos: con 33 alumnos se
+  // corren 118 y reproducirlos enteros tomaba 101 s. Ver src/lib/duelMontage.ts.
+  const plan = useMemo(() => planMontage(duelTotal), [duelTotal]);
+  const shown = useMemo(
+    () => selectMontageDuels(duels, duelTotal, plan, finalReady),
+    [duels, duelTotal, plan, finalReady],
+  );
+
   // Live state via refs so newly-streamed duels never restart the current card.
-  const duelsRef = useRef(duels);
-  duelsRef.current = duels;
+  const shownRef = useRef(shown);
+  shownRef.current = shown;
   const finalReadyRef = useRef(finalReady);
   finalReadyRef.current = finalReady;
   const cursorRef = useRef(0);
@@ -34,7 +51,7 @@ export default function RecalibrationReveal({ duels, duelTotal, finalReady, fina
     let t: ReturnType<typeof setTimeout>;
     const playNext = () => {
       if (cancelled) return;
-      const ds = duelsRef.current;
+      const ds = shownRef.current;
       const c = cursorRef.current;
       if (c >= ds.length) {
         if (finalReadyRef.current) { setStage('climax'); return; }
@@ -43,11 +60,11 @@ export default function RecalibrationReveal({ duels, duelTotal, finalReady, fina
       }
       const d = ds[c];
       setCurrent(d); setVerdict(false);
-      // Un empate a 160ms es un parpadeo. Le damos ~800ms totales: menos que un
-      // upset (1820ms), más que un duelo resuelto (420ms).
-      const isTie = d.winner === 'tie';
-      const hold = d.isUpset ? 1200 : isTie ? 420 : 260;
-      const after = d.isUpset ? 620 : isTie ? 380 : 160;
+      // Cada tarjeta tiene que alcanzar a leerse: ~900ms para los dos nombres y
+      // ~400ms para el sello. Antes eran 260 + 160, o sea un parpadeo. La
+      // sorpresa se queda mas rato porque es lo que la gente vino a ver.
+      const hold = d.isUpset ? UPSET_HOLD_MS : DUEL_HOLD_MS;
+      const after = d.isUpset ? UPSET_AFTER_MS : DUEL_AFTER_MS;
       t = setTimeout(() => {
         if (cancelled) return;
         setVerdict(true);
@@ -82,8 +99,12 @@ export default function RecalibrationReveal({ duels, duelTotal, finalReady, fina
     return () => clearTimeout(t);
   }, [stage, onDone]);
 
-  const played = Math.min(cursor, duelTotal || duels.length);
-  const buscando = stage === 'montage' && cursor >= duels.length && !finalReady;
+  // El contador grande cuenta el TORNEO, no el montaje: los 118 duelos se
+  // corrieron todos y ese numero es el que respalda el reordenamiento. Las
+  // tarjetas son una muestra, y eso se dice abajo en vez de esconderlo.
+  const total = duelTotal || duels.length;
+  const resolved = Math.min(duels.length, total);
+  const buscando = stage === 'montage' && cursor >= shown.length && !finalReady;
 
   return (
     <div className="rr-stage">
@@ -91,10 +112,13 @@ export default function RecalibrationReveal({ duels, duelTotal, finalReady, fina
       <div className="rr-vignette" />
       <div className="rr-hud">
         <div className="rr-tag"><span className="rr-dot" /> Recalibrando · combate directo</div>
-        <div className="rr-count">{String(played).padStart(2, '0')}<em> / </em>{duelTotal || duels.length}
-          <small>duelos · solo rivales parejos</small></div>
+        <div className="rr-count">{String(resolved).padStart(2, '0')}<em> / </em>{total}
+          <small>
+            duelos corridos · solo rivales parejos
+            {plan.windows > 0 && plan.windows < total ? ` · en pantalla ${plan.windows}` : ''}
+          </small></div>
       </div>
-      <div className="rr-progress"><i style={{ right: `${100 - (duelTotal ? (played / duelTotal) * 100 : 0)}%` }} /></div>
+      <div className="rr-progress"><i style={{ right: `${100 - (total ? (resolved / total) * 100 : 0)}%` }} /></div>
 
       <div className="rr-arena">
         {stage === 'board' ? (

@@ -53,6 +53,16 @@ export default function TrajectoryChart({ entries, gameCount }: Props) {
           {line.dots.map((dot, i) => (
             <circle key={i} cx={dot.x} cy={dot.y} r={5.5} fill={line.color} stroke="#fcfcfb" strokeWidth={2.5} />
           ))}
+          {/* Guia del punto al nombre, solo cuando el nombre se corrio de fila
+              para no chocar con el de un empatado. */}
+          {[line.labelLeft.leader, line.labelRight.leader].map((leader, i) =>
+            leader ? (
+              <line
+                key={i} x1={leader.x1} y1={leader.y1} x2={leader.x2} y2={leader.y2}
+                stroke={line.color} strokeWidth={1.5}
+              />
+            ) : null
+          )}
           <text
             x={line.labelLeft.x} y={line.labelLeft.y} fontSize={12}
             fontFamily="system-ui" fill="#0b0b0b" fontWeight={600} textAnchor="end"

@@ -73,6 +73,56 @@ export interface GameResult {
   players: GamePlayerInput[];
 }
 
+/**
+ * Una clase = un juego. De todos los juegos terminados de una misma sesion se
+ * cuenta uno solo: el que tiene mas alumnos que respondieron.
+ *
+ * Existe porque `dataviz_2026` llego a la primera clase con SEIS juegos de
+ * `clase_01_diagnostico`, cinco de ellos pruebas de 1 o 2 cuentas, y la tabla
+ * los sumaba todos. Depender de que el profesor se acuerde de apretar "No
+ * contar" cinco veces es exactamente el paso que se olvida el dia que importa.
+ * Una prueba tiene 1 o 2 jugadores y la clase real tiene 33: se separan solas.
+ *
+ * El desempate va por fecha y despues por codigo, para que dos corridas seguidas
+ * del recalculo no elijan juegos distintos.
+ *
+ * `excludedGameCodes` se aplica ANTES que esto, asi que sigue sirviendo de
+ * anulacion manual: excluir el juego que quedo oficial promueve al siguiente.
+ */
+export function pickOfficialGames(games: GameResult[]): {
+  official: GameResult[];
+  discarded: GameResult[];
+} {
+  const answered = (g: GameResult) => g.players.filter((p) => p.answered).length;
+  // Un juego sin sessionId no se puede agrupar con nadie: se agrupa consigo
+  // mismo y siempre cuenta, en vez de competir con juegos de otra clase.
+  const groups = new Map<string, GameResult[]>();
+  for (const g of games) {
+    const key = g.sessionId || `__sin_sesion__${g.gameCode}`;
+    const bucket = groups.get(key);
+    if (bucket) bucket.push(g);
+    else groups.set(key, [g]);
+  }
+
+  const official: GameResult[] = [];
+  const discarded: GameResult[] = [];
+  for (const bucket of groups.values()) {
+    const [best, ...rest] = [...bucket].sort(
+      (a, b) =>
+        answered(b) - answered(a) ||
+        b.finishedAtMs - a.finishedAtMs ||
+        a.gameCode.localeCompare(b.gameCode),
+    );
+    official.push(best);
+    discarded.push(...rest);
+  }
+
+  return {
+    official: official.sort((a, b) => a.finishedAtMs - b.finishedAtMs),
+    discarded: discarded.sort((a, b) => a.finishedAtMs - b.finishedAtMs),
+  };
+}
+
 export interface StandingsEntry {
   uid: string;
   name: string;

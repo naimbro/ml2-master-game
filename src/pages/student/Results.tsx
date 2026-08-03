@@ -55,7 +55,9 @@ export default function Results() {
   // Leaderboard phases: show → swap (names move) → reveal (details cascade) → done
   const [lbPhase, setLbPhase] = useState<'show' | 'swap' | 'reveal' | 'done'>('show');
   const [revealedCount, setRevealedCount] = useState(0);
-  const leaderboardSoundPlayed = useRef(false);
+  /** Que corrida de la animacion ya se lanzo: `${ronda}:${fase}`. */
+  const leaderboardRunRef = useRef<string | null>(null);
+  const leaderboardTimersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
   const recalTriggered = useRef(false);
 
   // Navigate based on game status
@@ -105,8 +107,16 @@ export default function Results() {
       await processRoundEnd({ gameCode, round: game.currentRound });
       setEvaluationComplete(true);
 
-      // Last round: skip leaderboard, go straight to podium
-      if (game.currentRound >= game.totalRounds) {
+      // Ultima ronda. Antes se saltaba derecho al podio, y por eso la ronda que
+      // decide al ganador era la UNICA que se quedaba con el puntaje crudo de los
+      // jueces, sin duelos. Desde el 2026-08-03 tambien se recalibra: si esta
+      // ronda va a tener duelos, se queda en la tabla y el anfitrion cierra con
+      // "Ver Resultados Finales". Una ronda de alternativas o diagnostica no
+      // recalibra nada, asi que ahi si se va directo al podio como siempre.
+      const lastScenario = game.scenarios?.[game.currentRound - 1];
+      const willRecalibrate =
+        lastScenario?.ranked !== false && lastScenario?.type !== 'multiple_choice';
+      if (game.currentRound >= game.totalRounds && !willRecalibrate) {
         await endGame();
         // Keep isProcessing=true to show spinner until navigation fires
         return;
@@ -176,74 +186,98 @@ export default function Results() {
     return [...cumulativeRankings].sort((a, b) => b.prevAvg - a.prevAvg);
   }, [cumulativeRankings, rankedRoundsPlayed]);
 
-  // Leaderboard: animated top 10 + user position, full list after
-  // No cleanup — timers must survive dependency ref changes from Firestore updates
+  // Ronda y fase, arriba de todo lo que las usa: la animacion del leaderboard se
+  // reinicia con ellas, asi que tienen que estar declaradas antes de ese efecto.
+  const currentRound = game?.currentRound;
+  const roundPhase = (roundResults as { phase?: string } | null)?.phase;
+
+  // Leaderboard: animated top 10 + user position, full list after.
+  //
+  // Corre UNA vez por (ronda, fase). La fase es lo que hace que la tabla se
+  // revele dos veces en una ronda con duelos: primero con el orden provisional
+  // de los jueces y despues con el recalibrado, que es el momento en que las
+  // posiciones se dan vuelta. 'recalibrating' se cuenta como provisional para no
+  // relanzar la animacion en medio del montaje.
+  //
+  // Antes esto eran dos efectos: uno corria la animacion detras de un ref-guard y
+  // otro, declarado DESPUES, bajaba ese guard al detectar el cambio de fase. Como
+  // React ejecuta los efectos en orden de declaracion, en el render del cambio de
+  // fase el primero ya habia pasado de largo, y el reinicio solo ocurria si mas
+  // tarde llegaba OTRO snapshot que recalculara `cumulativeRankings` — el de
+  // `players.totalScore`, que recalibrateRound escribe justo despues. Cuando las
+  // dos escrituras llegaban en el mismo tick, React las juntaba en un solo render
+  // y la tabla se quedaba pegada en "Ranking anterior" para siempre. Eso es lo que
+  // le paso a la pantalla proyectada el 2026-08-03 y a nadie mas.
   const TOP_N = 10;
   useEffect(() => {
-    if (cumulativeRankings.length > 0 && !leaderboardSoundPlayed.current) {
-      leaderboardSoundPlayed.current = true;
-      const showN = Math.min(cumulativeRankings.length, TOP_N);
+    if (cumulativeRankings.length === 0) return;
+    const runKey = `${currentRound}:${roundPhase === 'final' ? 'final' : 'prov'}`;
+    if (leaderboardRunRef.current === runKey) return;
+    leaderboardRunRef.current = runKey;
 
-      // Phase 1 "show": previous order visible (2s)
-      setTimeout(() => playDrumRoll(), 500);
+    // Los timers de la corrida anterior se cancelan a mano: si quedaran vivos,
+    // la cascada provisional seguiria escribiendo `revealedCount` encima de la
+    // recalibrada. No se usa el return del efecto para esto porque el efecto se
+    // re-evalua en cada snapshot y se cancelaria a si mismo.
+    leaderboardTimersRef.current.forEach(clearTimeout);
+    leaderboardTimersRef.current = [];
+    const at = (fn: () => void, ms: number) => {
+      leaderboardTimersRef.current.push(setTimeout(fn, ms));
+    };
 
-      // Phase 2 "swap": names MOVE — slow spring for maximum suspense
-      setTimeout(() => {
-        setLbPhase('swap');
-        playTensionSweep();
-      }, 2200);
+    setLbPhase('show');
+    setRevealedCount(0);
 
-      // Phase 3 "reveal": cascade top N from bottom (after tween + pause)
-      let t = 6500; // 2.2s show + 3s tween + 1.3s pause to absorb
-      setTimeout(() => setLbPhase('reveal'), t);
-      for (let step = 1; step <= showN; step++) {
-        const rank = showN - step + 1;
-        const isPodium = rank <= 3;
-        setTimeout(() => {
-          setRevealedCount(step);
-          playRankReveal(rank, showN);
-        }, t);
-        t += isPodium ? 800 : 200;
-        if (rank === 2) t += 500;
-      }
+    const showN = Math.min(cumulativeRankings.length, TOP_N);
 
-      // Phase 4 "done"
-      setTimeout(() => setLbPhase('done'), t + 300);
+    // Phase 1 "show": previous order visible (2s)
+    at(() => playDrumRoll(), 500);
+
+    // Phase 2 "swap": names MOVE — slow spring for maximum suspense
+    at(() => {
+      setLbPhase('swap');
+      playTensionSweep();
+    }, 2200);
+
+    // Phase 3 "reveal": cascade top N from bottom (after tween + pause)
+    let t = 6500; // 2.2s show + 3s tween + 1.3s pause to absorb
+    at(() => setLbPhase('reveal'), t);
+    for (let step = 1; step <= showN; step++) {
+      const rank = showN - step + 1;
+      const isPodium = rank <= 3;
+      at(() => {
+        setRevealedCount(step);
+        playRankReveal(rank, showN);
+      }, t);
+      t += isPodium ? 800 : 200;
+      if (rank === 2) t += 500;
     }
-  }, [cumulativeRankings]);
+
+    // Phase 4 "done"
+    at(() => setLbPhase('done'), t + 300);
+  }, [cumulativeRankings, currentRound, roundPhase]);
 
   // Trigger recalibration (pairwise tournament) after provisional board shows (host only)
-  const currentRound = game?.currentRound;
-  const totalRounds = game?.totalRounds;
   // reset the one-shot guard whenever the round changes
   useEffect(() => { recalTriggered.current = false; }, [currentRound]);
   useEffect(() => {
-    const phase = (roundResults as { phase?: string } | null)?.phase;
     if (
       // MC rounds have no text to compare, so the pairwise tournament would
       // find <2 candidates and bail — but not before flipping the round to
       // 'recalibrating', which renders an empty duel overlay and then replays
       // the whole leaderboard reveal. Skip it outright.
-      isHost && phase === 'provisional' && isRankedRound && !isMCRound &&
-      currentRound !== undefined && totalRounds !== undefined &&
-      currentRound < totalRounds && !recalTriggered.current
+      //
+      // La ULTIMA ronda tambien se recalibra, desde el 2026-08-03. Antes se
+      // excluia (`currentRound < totalRounds`) porque el juego saltaba derecho al
+      // podio, y el resultado era que la ronda que decide al ganador era la unica
+      // que quedaba con el puntaje crudo de los jueces.
+      isHost && roundPhase === 'provisional' && isRankedRound && !isMCRound &&
+      currentRound !== undefined && !recalTriggered.current
     ) {
       recalTriggered.current = true;
       setTimeout(() => { recalibrateRound(currentRound).catch(console.error); }, 3500);
     }
-  }, [isHost, roundResults, isRankedRound, isMCRound, currentRound, totalRounds, recalibrateRound]);
-
-  // Replay the leaderboard reveal when phase flips provisional -> final
-  const prevPhaseRef = useRef<string | undefined>(undefined);
-  useEffect(() => {
-    const phase = (roundResults as { phase?: string } | null)?.phase;
-    if (phase === 'final' && prevPhaseRef.current && prevPhaseRef.current !== 'final') {
-      leaderboardSoundPlayed.current = false;
-      setLbPhase('show');
-      setRevealedCount(0);
-    }
-    prevPhaseRef.current = phase;
-  }, [roundResults]);
+  }, [isHost, roundPhase, isRankedRound, isMCRound, currentRound, recalibrateRound]);
 
   const numPlayers = cumulativeRankings.length;
   const hasPrevData = rankedRoundsPlayed > 1;
@@ -260,7 +294,6 @@ export default function Results() {
   const allRevealed = lbPhase === 'done';
   const userInTop = topRankings.some(p => p.playerId === user?.uid);
   const userRankingEntry = cumulativeRankings.find(p => p.playerId === user?.uid);
-  const roundPhase = (roundResults as { phase?: string } | null)?.phase;
 
   const roundDuels = useRoundDuels(gameCode, game?.currentRound);
   const duelTotal = (roundResults as { duelTotal?: number } | null)?.duelTotal || 0;
@@ -323,6 +356,12 @@ export default function Results() {
   const userSubmission = submissions.find(s => s.playerId === user?.uid);
   const userEvaluation = userSubmission?.evaluation;
   const userRank = roundResults?.rankings.find(r => r.playerId === user?.uid);
+  // El numero grande sale del doc de la ronda, igual que la posicion que va al
+  // lado: despues de los duelos ese doc trae el puntaje recalibrado y la
+  // submission sigue con el del juez. Mostrar los dos juntos hacia que el alumno
+  // viera "73" arriba de un "#2" que valia 89. Las barras de cada juez si siguen
+  // siendo lo que voto cada juez. Ver src/lib/finalScores.ts.
+  const userScore = Number(userRank?.score ?? userEvaluation?.finalScore ?? 0);
 
   // Judge bar colors (Kahoot answer colors)
   const JUDGE_COLORS = ['bg-kahoot-red', 'bg-kahoot-blue', 'bg-kahoot-green'];
@@ -687,14 +726,14 @@ export default function Results() {
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ type: 'spring', stiffness: 200, delay: 0.2 }}
                   className={`text-6xl font-black ${
-                    userEvaluation.finalScore >= 80
+                    userScore >= 80
                       ? 'text-kahoot-green'
-                      : userEvaluation.finalScore >= 60
+                      : userScore >= 60
                       ? 'text-amber-ink'
                       : 'text-kahoot-red'
                   }`}
                 >
-                  {userEvaluation.finalScore}
+                  {userScore}
                 </motion.div>
                 <p className="text-muted text-sm font-bold">Puntaje</p>
               </div>
