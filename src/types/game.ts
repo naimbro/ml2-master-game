@@ -23,6 +23,17 @@ export interface Game {
   sessionId: string;
   hostId: string;
   hostName: string;
+  /**
+   * Si el anfitrion entro como jugador. Se elige al crear el juego y por defecto
+   * es false: corriendo el juego con el curso, el profesor dirige y no contesta.
+   * Importa mas de lo que parece — un anfitrion dentro de `players` que no
+   * responde bloquea los dos cortes anticipados, que comparan contra
+   * `playerCount`, y cada pregunta termina quemando su reloj completo.
+   * Ausente en juegos creados antes de 2026-08-04, donde el anfitrion siempre
+   * entraba como jugador; leerlo como `game.players[hostId] != null`, no como
+   * `hostPlays === true`.
+   */
+  hostPlays?: boolean;
 
   // Status
   status: GameStatus;

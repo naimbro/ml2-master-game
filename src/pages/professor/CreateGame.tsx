@@ -32,6 +32,12 @@ export default function CreateGame() {
   const { courseId } = useParams<{ courseId?: string }>();
   const [selectedSession, setSelectedSession] = useState<SessionOption | null>(null);
   const [isCreating, setIsCreating] = useState(false);
+  // Por defecto el profesor NO juega: es lo que pasa cuando corre el juego con el
+  // curso. Si el anfitrion entra como jugador y no contesta, los dos cortes
+  // anticipados —el de pregunta (shouldCutQuestion) y el de ronda (useGame)—
+  // comparan contra playerCount y nunca se cumplen, asi que cada pregunta quema
+  // su reloj completo. Se enciende para probar un juego uno mismo.
+  const [hostPlays, setHostPlays] = useState(false);
   const [createdGame, setCreatedGame] = useState<{ code: string } | null>(null);
   const [copied, setCopied] = useState(false);
 
@@ -78,18 +84,21 @@ export default function CreateGame() {
         scenarios: selectedSession.scenarios,
         knowledgeBase: selectedSession.knowledgeBase,
 
-        players: {
-          [user.uid]: {
-            id: user.uid,
-            name: user.displayName || user.email || 'Profesor',
-            email: user.email || '',
-            photoURL: user.photoURL || undefined,
-            joinedAt: Timestamp.now(),
-            isReady: false,
-            totalScore: 0,
-          }
-        },
-        playerCount: 1,
+        hostPlays,
+        players: hostPlays
+          ? {
+              [user.uid]: {
+                id: user.uid,
+                name: user.displayName || user.email || 'Profesor',
+                email: user.email || '',
+                photoURL: user.photoURL || undefined,
+                joinedAt: Timestamp.now(),
+                isReady: false,
+                totalScore: 0,
+              }
+            }
+          : {},
+        playerCount: hostPlays ? 1 : 0,
 
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
@@ -284,6 +293,48 @@ export default function CreateGame() {
               })}
             </div>
           )}
+
+          {/* Jugar o solo dirigir. Va antes del boton porque cambia lo que hace
+              el boton, no una preferencia que se pueda ajustar despues. */}
+          <div className="dramatic-card p-5 mb-4">
+            <p className="text-xs font-bold text-muted uppercase tracking-widest mb-3">
+              En este juego yo...
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => setHostPlays(false)}
+                aria-pressed={!hostPlays}
+                className={`p-4 rounded-xl border-2 text-left transition-all ${
+                  !hostPlays
+                    ? 'border-ink bg-surface shadow-[0_3px_0_#101114]'
+                    : 'border-line bg-surface-2 opacity-70 hover:opacity-100'
+                }`}
+              >
+                <span className="block font-black">Solo dirijo</span>
+                <span className="block text-muted text-sm font-medium mt-1">
+                  Con el curso. No apareces en el podio y las rondas se cierran apenas
+                  responden todos.
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setHostPlays(true)}
+                aria-pressed={hostPlays}
+                className={`p-4 rounded-xl border-2 text-left transition-all ${
+                  hostPlays
+                    ? 'border-ink bg-surface shadow-[0_3px_0_#101114]'
+                    : 'border-line bg-surface-2 opacity-70 hover:opacity-100'
+                }`}
+              >
+                <span className="block font-black">Tambien juego</span>
+                <span className="block text-muted text-sm font-medium mt-1">
+                  Para probar un juego. Entras como jugador y contestas igual que
+                  el resto.
+                </span>
+              </button>
+            </div>
+          </div>
 
           {/* Create Button */}
           <button

@@ -38,7 +38,12 @@ export default function Round() {
   const { gameCode } = useParams<{ gameCode: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { game, loading, error, submitAnswer, submitMCBlock, submissions, isHost, markAnswered } = useGame(gameCode);
+  const { game, loading, error, submitAnswer, submitMCBlock, submissions, isHost, currentPlayer, markAnswered } = useGame(gameCode);
+
+  // Profesor que dirige sin jugar (`hostPlays: false` al crear el juego). Sigue
+  // viendo la ronda entera porque ESTA pantalla es la que se proyecta al curso;
+  // lo que no hace es contestar, enviar ni contar para los cortes anticipados.
+  const isSpectator = isHost && !currentPlayer;
 
   const [response, setResponse] = useState('');
   const [endingRound, setEndingRound] = useState(false);
@@ -228,7 +233,7 @@ export default function Round() {
   const mcRevealed = timeline?.phase === 'feedback';
   const mcSelectedOption = mcAnswers[mcCurrentQ]?.selectedOptionId ?? null;
   const mcAnswered = mcAnswers[mcCurrentQ] !== undefined;
-  const mcLocked = mcRevealed || mcAnswered || timeline?.phase !== 'question';
+  const mcLocked = isSpectator || mcRevealed || mcAnswered || timeline?.phase !== 'question';
   const mcQuestionTimeLeft = timeline?.phase === 'question' ? timeline.secondsLeft : 0;
 
   // Ordered, gap-free list for scoring and for the block summary.
@@ -325,7 +330,10 @@ export default function Round() {
   }, [isMC, mcRevealed, mcCurrentQ, mcAnswers, hasSubmitted, mcBlockDone]);
 
   // MC: block finished — score over the block's TOTAL questions and submit once.
+  // El anfitrion que solo dirige no envia bloque: una submission suya con 0 se
+  // contaria como jugador en el ranking y en el podio.
   useEffect(() => {
+    if (isSpectator) return;
     if (!isMC || !mcQuestions || submittedRef.current || mcBlockDone) return;
     if (timeline?.phase !== 'done') return;
 
@@ -341,7 +349,7 @@ export default function Round() {
       playGoodScore();
       confettiBurst();
     }
-  }, [isMC, mcQuestions, timeline?.phase, hasSubmitted, mcBlockDone, submitMCBlock]);
+  }, [isSpectator, isMC, mcQuestions, timeline?.phase, hasSubmitted, mcBlockDone, submitMCBlock]);
 
   const handleSubmit = useCallback(async () => {
     if (!response.trim() || submittedRef.current || isSubmitting) return;
@@ -1034,6 +1042,23 @@ export default function Round() {
                     </motion.div>
                   );
                 })()
+              ) : isSpectator ? (
+                /* Dirigiendo sin jugar: la pregunta y el contexto de arriba siguen
+                   proyectandose; lo unico que se reemplaza es el formulario. */
+                <div className="dramatic-card p-6">
+                  <p className="text-xs font-bold text-muted uppercase tracking-widest mb-2">
+                    Estas dirigiendo
+                  </p>
+                  <p className="text-ink-soft font-semibold">
+                    No entraste como jugador en este juego, asi que no contestas esta
+                    ronda ni apareces en el podio.
+                  </p>
+                  <p className="text-muted text-sm font-medium mt-2">
+                    La ronda se cierra sola apenas respondan los {Object.keys(game.players || {}).length}{' '}
+                    jugadores, o cuando venza el reloj. Para jugar tu tambien, crea el
+                    juego eligiendo &laquo;Tambien juego&raquo;.
+                  </p>
+                </div>
               ) : (
                 <div className="card-play p-6">
                   <label className="block text-xs font-bold text-muted uppercase tracking-widest mb-3">
