@@ -57,3 +57,25 @@ cd /tmp/functions-deploy && npx firebase deploy --only functions
 - `functions/src/` - Cloud Functions (single file: `index.ts`)
 - `content/sessions/` - Session content (scenarios, rubrics, knowledge bases)
 - `functions/lib/` - Compiled JS output (committed to repo, needed for deploy)
+- `.claude/skills/` - Skills de autoría de este proyecto (ver abajo)
+
+## Skills de autoría — usarlos, no improvisar
+
+Tres skills versionados en `.claude/skills/` cubren el trabajo de construir un
+juego. **Invocarlos con la herramienta `Skill` apenas la tarea calce**, antes de
+abrir archivos de contenido: llevan adentro reglas que salieron de fallas reales
+y que no se deducen leyendo el repo.
+
+| Skill | Cuándo |
+|---|---|
+| `autor-de-contenido` | Escribir o cambiar las preguntas de una clase, armar una sesión nueva, agregar o editar una ronda. Entrevista a Naim y le ofrece opciones; nunca entrega una sola versión. |
+| `autor-de-rubricas` | Escribir o arreglar cómo se puntúa: `judgeFocus`, `evaluationGuide`, `idealAnswer`, dimensiones de `rubric.json`, penalizaciones, `sessionLens`, `weightFormula`. Corre **después** de que las preguntas están elegidas. |
+| `pulidor-visual` | Cambiar cómo se ve el juego: pantallas bajo `src/pages/`, `src/components/`, `src/index.css`. Muestra opciones renderizadas antes de escribir código. |
+
+Orden normal para un juego nuevo: `autor-de-contenido` → Naim elige →
+`autor-de-rubricas` → `pulidor-visual` sobre las pantallas nuevas.
+
+**La regla dura que atraviesa los tres:** cada pregunta sale de una slide,
+página o minuto concreto del material que la clase vio, y el juego no afirma
+ningún hecho que no esté ahí — tampoco en un distractor. Si falta el hecho, se
+cambia la pregunta, no se agrega el hecho.
