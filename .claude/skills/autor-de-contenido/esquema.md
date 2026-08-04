@@ -82,6 +82,19 @@ las dos formas, pero `courses.ts` hace `scenarios.length` y la envuelta deja
 - `durationSeconds` es **derivado**, nunca escrito a mano: `src/lib/mcTiming.ts`.
   El validador falla el build si no alcanza para el bloque.
 - `correctOptionIndex` es base 0. Contarlo dos veces.
+- **El reloj va por tipo de pregunta, no uniforme.** `timeLimitSeconds` es por
+  pregunta justamente para esto. **20 s** para reconocer algo del texto (una
+  cifra, un término, una cita); **30 s** cuando hay que discriminar entre cuatro
+  explicaciones plausibles. En MGT300 clase 1 se usaron 30 s para las nueve y los
+  alumnos pidieron acortarlas — con razón: **solo 1 a 3 personas de 42 dejaron
+  cada pregunta sin responder**, así que el reloj sobraba en las fáciles.
+- **La carga de lectura NO predice la dificultad — no perseguirla.** Medido en
+  MGT300 clase 1: la pregunta de mayor carga (455 caracteres, 15,2 por segundo
+  de reloj) sacó **88%** de acierto, y las dos que se cayeron a 43-45% tenían
+  menos carga. Lo que las hundió fue conceptual: eran las dos únicas que pedían
+  **clasificar o explicar un mecanismo** en vez de reconocer. Escribir preguntas
+  más cortas no las habría arreglado. Una o dos de mecanismo por juego está bien
+  y son las que enseñan; tres o más convierten el juego en una prueba.
 - **Repartir las correctas entre A/B/C/D.** No hay barajado en runtime:
   `Round.tsx` renderiza `options` en orden. La clase 1 de MGT300 salió con
   A5/B4/C0/D0 y se sacaba 9 de 9 marcando siempre A o B. Al reordenar, ojo con

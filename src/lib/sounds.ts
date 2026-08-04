@@ -209,16 +209,21 @@ export function playClick() {
 
 export type MusicStyle = 'kahoot' | 'chill' | 'retro' | 'ambient';
 
+// El orden es el del menu, y el primero es el default. 'chill' quedo primero el
+// 2026-08-04: dos cursos seguidos (dataviz y MGT300) reportaron que la musica
+// desconcentraba, y en MGT300 fue uno de los tres temas del feedback — "las
+// primeras desconcentraron mucho", y el unico 1/7 la nombro. Las cuatro opciones
+// siguen estando: la energica se elige, no se hereda.
 export const MUSIC_OPTIONS: { id: MusicStyle; name: string }[] = [
-  { id: 'kahoot', name: 'Kahoot Energy' },
   { id: 'chill', name: 'Lo-fi Focus' },
-  { id: 'retro', name: 'Retro Arcade' },
   { id: 'ambient', name: 'Tension Ambiental' },
+  { id: 'kahoot', name: 'Kahoot Energy' },
+  { id: 'retro', name: 'Retro Arcade' },
 ];
 
 let musicIntervalId: ReturnType<typeof setInterval> | null = null;
 let musicGainNode: GainNode | null = null;
-let currentMusicStyle: MusicStyle = 'kahoot';
+let currentMusicStyle: MusicStyle = 'chill';
 
 export function getCurrentMusicStyle(): MusicStyle {
   return currentMusicStyle;

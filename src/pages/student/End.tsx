@@ -620,7 +620,7 @@ export default function End() {
                   <span className="flex-1 min-w-0 font-bold truncate">
                     {player.playerName}
                     {player.playerId === user?.uid && (
-                      <span className="text-kahoot-green text-sm ml-2 font-bold">(Tu)</span>
+                      <span className="text-kahoot-green text-sm ml-2 font-bold">(Tú)</span>
                     )}
                   </span>
 
