@@ -10,7 +10,11 @@
     "judgeFocus": "Prioriza que el estudiante ANALICE las 2 configs concretas, no que proponga una tercera desde cero. Debe identificar el problema especifico de Config B (corta articulos por la mitad, pierde referencia cruzada entre requisitos). Si solo dice 'Config A es mejor' sin explicar el problema concreto de Config B, max 60 en diagnostic_evaluation. Si propone una tercera config ignorando las dos presentadas, max 50 en applied_precision.",
     "context": "Tienes este fragmento de un reglamento municipal:\n\n\"Articulo 12. Los beneficiarios del programa de conectividad deberan presentar RSH vigente.\nArticulo 13. El plazo de postulacion es entre el 1 de marzo y el 30 de abril de cada ano.\nArticulo 14. La cobertura del beneficio es de 12 meses contados desde la fecha de aprobacion.\"\n\nDos practicantes proponen estrategias de chunking distintas:\n\nConfig A: Chunk por articulo (cada articulo = 1 chunk), sin overlap.\nConfig B: Chunks de 200 caracteres con overlap de 50 caracteres, ignorando la estructura de articulos.",
     "question": "Cual config es mejor para un RAG de consultas legales? Justifica tu eleccion. Que problema concreto tiene la config que NO elegiste?",
-    "conceptTags": ["chunking", "overlap", "corpus_preparacion"],
+    "conceptTags": [
+      "chunking",
+      "overlap",
+      "corpus_preparacion"
+    ],
     "referenceAnswer": "Config A es mejor. Los articulos son la unidad natural del documento legal — cada uno trata un tema (requisitos, plazos, cobertura). Cortarlos por la mitad no tiene sentido.\n\nEl problema de Config B: con chunks de 200 caracteres, el Art. 12 queda cortado a la mitad. Un chunk puede tener el final de \"...RSH vigente\" pegado con \"Articulo 13. El plazo...\". Si alguien pregunta por plazos, el chunk recuperado mezcla requisitos con plazos y confunde al LLM.",
     "evaluationGuide": {
       "must_hit": [
@@ -41,15 +45,27 @@
     "category": "Kahoot",
     "type": "multiple_choice",
     "ranked": true,
-    "durationSeconds": 87,
+    "durationSeconds": 82,
     "mcQuestions": [
       {
         "question": "La indexacion de documentos (generar embeddings) se hace:",
         "options": [
-          { "id": "A", "text": "Cada vez que un usuario hace una pregunta" },
-          { "id": "B", "text": "Una sola vez, o cuando cambia el corpus" },
-          { "id": "C", "text": "Automaticamente cuando el modelo detecta errores" },
-          { "id": "D", "text": "Solo cuando el administrador reinicia el sistema" }
+          {
+            "id": "A",
+            "text": "Cada vez que un usuario hace una pregunta"
+          },
+          {
+            "id": "B",
+            "text": "Una sola vez, o cuando cambia el corpus"
+          },
+          {
+            "id": "C",
+            "text": "Automaticamente cuando el modelo detecta errores"
+          },
+          {
+            "id": "D",
+            "text": "Solo cuando el administrador reinicia el sistema"
+          }
         ],
         "correctOptionIndex": 1,
         "timeLimitSeconds": 25
@@ -57,10 +73,22 @@
       {
         "question": "El overlap en chunking sirve para:",
         "options": [
-          { "id": "A", "text": "Reducir el tamano de los embeddings" },
-          { "id": "B", "text": "Acelerar el retrieval semantico" },
-          { "id": "C", "text": "Preservar contexto en los bordes entre chunks" },
-          { "id": "D", "text": "Evitar chunks duplicados en el corpus" }
+          {
+            "id": "A",
+            "text": "Reducir el tamano de los embeddings"
+          },
+          {
+            "id": "B",
+            "text": "Acelerar el retrieval semantico"
+          },
+          {
+            "id": "C",
+            "text": "Preservar contexto en los bordes entre chunks"
+          },
+          {
+            "id": "D",
+            "text": "Evitar chunks duplicados en el corpus"
+          }
         ],
         "correctOptionIndex": 2,
         "timeLimitSeconds": 25
@@ -68,7 +96,12 @@
     ],
     "context": "",
     "question": "",
-    "conceptTags": ["indexacion_offline", "consulta_online", "chunking", "overlap"]
+    "conceptTags": [
+      "indexacion_offline",
+      "consulta_online",
+      "chunking",
+      "overlap"
+    ]
   },
   {
     "id": "s4rag_r2_retrieval_limits",
@@ -81,7 +114,12 @@
     "judgeFocus": "Prioriza diagnostico causal: el embedding captura 'apoyo+jovenes' pero no conecta 'empleo' con 'intermediacion laboral'. No aceptar 'mejorar los embeddings' como solucion — eso no es operacional. Buscar soluciones concretas: enriquecer los chunks con keywords antes de indexar, ajustar top-k, complementar con keyword search. Si el diagnostico es vago ('el sistema no funciona bien'), max 60 en diagnostic_evaluation.",
     "context": "Un sistema RAG municipal devuelve resultados irrelevantes para la query 'apoyo para jovenes sin empleo'. Los chunks recuperados hablan de 'becas de conectividad' y 'subsidios de arriendo' pero no del programa de intermediacion laboral que SI esta indexado.",
     "question": "Diagnostica por que falla este retrieval. Propone al menos 2 mejoras concretas (una en chunking/indexacion y una en retrieval) que podrian arreglar este problema.",
-    "conceptTags": ["retrieval_semantico", "keyword_search", "embeddings", "diagnostico_rag"],
+    "conceptTags": [
+      "retrieval_semantico",
+      "keyword_search",
+      "embeddings",
+      "diagnostico_rag"
+    ],
     "referenceAnswer": "El embedding de \"apoyo para jovenes sin empleo\" queda cerca de \"becas\" y \"subsidios\" porque comparten el campo semantico de apoyo social. \"Intermediacion laboral\" usa vocabulario distinto aunque sea lo relevante.\n\nMejora en indexacion: antes de generar el embedding, agregar al chunk del programa de intermediacion laboral keywords como \"empleo\", \"jovenes\", \"trabajo\" — que son las palabras que usarian los funcionarios al buscar.\n\nMejora en retrieval: complementar con keyword search. Si la query incluye \"empleo\", buscar tambien por keyword ademas de semantico. Busqueda hibrida cubre ambos casos.",
     "evaluationGuide": {
       "must_hit": [
@@ -112,15 +150,27 @@
     "category": "Kahoot",
     "type": "multiple_choice",
     "ranked": true,
-    "durationSeconds": 87,
+    "durationSeconds": 82,
     "mcQuestions": [
       {
         "question": "Si la query 'apoyo laboral' devuelve chunks sobre 'becas', el problema mas probable es:",
         "options": [
-          { "id": "A", "text": "El modelo LLM no entiende la query" },
-          { "id": "B", "text": "Los embeddings son semanticamente cercanos entre conceptos distintos" },
-          { "id": "C", "text": "El top-k es demasiado bajo" },
-          { "id": "D", "text": "Los chunks son demasiado grandes" }
+          {
+            "id": "A",
+            "text": "El modelo LLM no entiende la query"
+          },
+          {
+            "id": "B",
+            "text": "Los embeddings son semanticamente cercanos entre conceptos distintos"
+          },
+          {
+            "id": "C",
+            "text": "El top-k es demasiado bajo"
+          },
+          {
+            "id": "D",
+            "text": "Los chunks son demasiado grandes"
+          }
         ],
         "correctOptionIndex": 1,
         "timeLimitSeconds": 25
@@ -128,10 +178,22 @@
       {
         "question": "Cual es una mejora operacional al retrieval?",
         "options": [
-          { "id": "A", "text": "Usar un modelo de lenguaje mas grande" },
-          { "id": "B", "text": "Enriquecer los chunks con keywords del dominio antes de indexar" },
-          { "id": "C", "text": "Eliminar el overlap de los chunks" },
-          { "id": "D", "text": "Reducir el numero de documentos indexados" }
+          {
+            "id": "A",
+            "text": "Usar un modelo de lenguaje mas grande"
+          },
+          {
+            "id": "B",
+            "text": "Enriquecer los chunks con keywords del dominio antes de indexar"
+          },
+          {
+            "id": "C",
+            "text": "Eliminar el overlap de los chunks"
+          },
+          {
+            "id": "D",
+            "text": "Reducir el numero de documentos indexados"
+          }
         ],
         "correctOptionIndex": 1,
         "timeLimitSeconds": 25
@@ -139,7 +201,11 @@
     ],
     "context": "",
     "question": "",
-    "conceptTags": ["retrieval_semantico", "embeddings", "keyword_search"]
+    "conceptTags": [
+      "retrieval_semantico",
+      "embeddings",
+      "keyword_search"
+    ]
   },
   {
     "id": "s4rag_r3_prompt_instructions",
@@ -152,7 +218,11 @@
     "judgeFocus": "Prioriza que el estudiante DIAGNOSTIQUE el prompt defectuoso mostrado, no que escriba uno desde cero sin analisis. Debe identificar que 'informacion disponible' es demasiado vago y no restringe al contexto recuperado. Si no identifica el problema del prompt original y solo escribe uno nuevo, max 60 en diagnostic_evaluation. Las instrucciones reescritas deben ser concretas y operacionales, no genericas.",
     "context": "Tu RAG usa este system prompt:\n\n\"Eres un asistente util. Responde las preguntas del usuario con la informacion disponible. Se amable y completo.\"\n\nCon este prompt, el RAG devolvio: \"El subsidio cubre hasta $200.000 mensuales y requiere formulario F-420 firmado ante notario.\" El chunk recuperado solo decia: \"El subsidio tiene cobertura mensual.\"\n\nEl monto y el formulario son inventados.",
     "question": "Que falla en estas instrucciones que permite la alucinacion? Reescribe el prompt en max 5 lineas para prevenir este problema.",
-    "conceptTags": ["instruccion_llm_rag", "trazabilidad", "pipeline_rag"],
+    "conceptTags": [
+      "instruccion_llm_rag",
+      "trazabilidad",
+      "pipeline_rag"
+    ],
     "referenceAnswer": "El problema es \"informacion disponible\" — no restringe al contexto recuperado. El LLM interpreta que puede usar su conocimiento general, y como el prompt dice \"se completo\", llena los vacios inventando ($200.000, formulario F-420).\n\nPrompt mejorado:\n\"Responde UNICAMENTE usando los fragmentos proporcionados abajo. No agregues datos, montos, codigos ni requisitos que no aparezcan textualmente en los fragmentos. Si los fragmentos no contienen la respuesta, di 'no tengo informacion suficiente sobre eso'. Cita el documento fuente de cada dato.\"",
     "evaluationGuide": {
       "must_hit": [
@@ -187,7 +257,11 @@
     "judgeFocus": "Prioriza que el estudiante ANALICE los 5 chunks con scores mostrados, no que hable de top-k en abstracto. Debe identificar el salto de score entre chunk 3 (0.71) y chunk 4 (0.43) como evidencia para el corte. Si no menciona los scores como evidencia, max 60 en diagnostic_evaluation. Si dice 'pasar los 5 esta bien' sin identificar que chunks 4-5 son off-topic, max 50 en pipeline_design.",
     "context": "Para la query \"requisitos beca de conectividad\", tu RAG recupero estos 5 chunks:\n\n| # | Score | Contenido (resumido) |\n|---|-------|---------------------|\n| 1 | 0.92  | \"Requisitos: RSH vigente, certificado de matricula...\" |\n| 2 | 0.85  | \"Plazo de postulacion: marzo a abril...\" |\n| 3 | 0.71  | \"Otros programas de conectividad en la region...\" |\n| 4 | 0.43  | \"Subsidio de arriendo para jovenes...\" |\n| 5 | 0.31  | \"Politica nacional de ciberseguridad...\" |",
     "question": "Con cuales chunks responderia mejor el LLM? Donde pondrias el corte y por que? Que pasa si le pasas los 5?",
-    "conceptTags": ["retrieval_semantico", "diagnostico_rag", "pipeline_rag"],
+    "conceptTags": [
+      "retrieval_semantico",
+      "diagnostico_rag",
+      "pipeline_rag"
+    ],
     "referenceAnswer": "Chunks 1-2 son directamente relevantes (requisitos y plazos de la beca). Chunk 3 es marginal (otros programas de conectividad, no la beca especifica). Chunks 4-5 son off-topic (arriendo, ciberseguridad).\n\nCorte en top-k=2 o 3. El salto de score de 0.71 a 0.43 es el gap mas grande (0.28 puntos) — indica la frontera entre contenido relevante e irrelevante.\n\nSi le paso los 5 al LLM, los chunks de arriendo y ciberseguridad son ruido. El modelo podria mezclar informacion de subsidio de arriendo con la beca de conectividad, generando una respuesta confusa o con datos cruzados.",
     "evaluationGuide": {
       "must_hit": [
@@ -218,15 +292,27 @@
     "category": "Kahoot",
     "type": "multiple_choice",
     "ranked": true,
-    "durationSeconds": 87,
+    "durationSeconds": 82,
     "mcQuestions": [
       {
         "question": "Si el RAG inventa un requisito que no esta en ningun chunk recuperado, el problema es de:",
         "options": [
-          { "id": "A", "text": "Retrieval: no encontro los chunks correctos" },
-          { "id": "B", "text": "Generacion: el LLM agrego informacion que no estaba en el contexto" },
-          { "id": "C", "text": "Chunking: los chunks son demasiado pequenos" },
-          { "id": "D", "text": "Embeddings: el modelo de embedding es de mala calidad" }
+          {
+            "id": "A",
+            "text": "Retrieval: no encontro los chunks correctos"
+          },
+          {
+            "id": "B",
+            "text": "Generacion: el LLM agrego informacion que no estaba en el contexto"
+          },
+          {
+            "id": "C",
+            "text": "Chunking: los chunks son demasiado pequenos"
+          },
+          {
+            "id": "D",
+            "text": "Embeddings: el modelo de embedding es de mala calidad"
+          }
         ],
         "correctOptionIndex": 1,
         "timeLimitSeconds": 25
@@ -234,10 +320,22 @@
       {
         "question": "Aumentar top-k de 3 a 10 probablemente causa:",
         "options": [
-          { "id": "A", "text": "Respuestas mas completas y precisas siempre" },
-          { "id": "B", "text": "Mas ruido que puede provocar alucinaciones" },
-          { "id": "C", "text": "Mayor velocidad de respuesta" },
-          { "id": "D", "text": "Menor consumo de tokens del LLM" }
+          {
+            "id": "A",
+            "text": "Respuestas mas completas y precisas siempre"
+          },
+          {
+            "id": "B",
+            "text": "Mas ruido que puede provocar alucinaciones"
+          },
+          {
+            "id": "C",
+            "text": "Mayor velocidad de respuesta"
+          },
+          {
+            "id": "D",
+            "text": "Menor consumo de tokens del LLM"
+          }
         ],
         "correctOptionIndex": 1,
         "timeLimitSeconds": 25
@@ -245,7 +343,11 @@
     ],
     "context": "",
     "question": "",
-    "conceptTags": ["diagnostico_rag", "pipeline_rag", "instruccion_llm_rag"]
+    "conceptTags": [
+      "diagnostico_rag",
+      "pipeline_rag",
+      "instruccion_llm_rag"
+    ]
   },
   {
     "id": "s4rag_r5_quality_eval",
@@ -258,7 +360,11 @@
     "judgeFocus": "Prioriza capacidad de distinguir evidencia de alucinacion linea por linea. 'Formulario municipal' y '100 Mbps' son inventados — el estudiante DEBE identificarlos. Si no puede distinguir que es evidencia y que es alucinacion, max 60 en diagnostic_evaluation. Para la parte (4), buscar mejoras al prompt/instrucciones como solucion, no 'usar mejor modelo'. Premia precision en el analisis, no extension.",
     "context": "Tu RAG devolvio esta respuesta a un ciudadano:\n\n\"Para solicitar beca de conectividad, debe presentar RSH actualizado, certificado de matricula y formulario municipal. La beca cubre hasta 12 meses de internet de 100 Mbps.\"\n\nEl chunk recuperado decia: \"Se requiere RSH vigente y certificado de matricula. La cobertura es de 12 meses.\" No mencionaba formulario municipal ni 100 Mbps.",
     "question": "Evalua esta respuesta: (1) que parte se apoya en evidencia del chunk, (2) que parte es alucinacion, (3) que informacion del chunk omitio o altero, (4) que harias para evitar esto.",
-    "conceptTags": ["diagnostico_rag", "instruccion_llm_rag", "trazabilidad"],
+    "conceptTags": [
+      "diagnostico_rag",
+      "instruccion_llm_rag",
+      "trazabilidad"
+    ],
     "referenceAnswer": "(1) Evidencia: RSH y certificado de matricula estan en el chunk. \"12 meses\" tambien. Nota: el chunk dice \"RSH vigente\" y la respuesta dice \"RSH actualizado\" — alteracion menor pero potencialmente significativa en contexto legal.\n(2) Alucinacion: \"formulario municipal\" no esta en ningun chunk — inventado. \"100 Mbps\" tampoco — inventado.\n(3) Omision: el chunk no menciona formulario ni velocidad, pero la respuesta los agrega como si fueran requisitos reales.\n(4) Solucion: mejorar la instruccion al LLM para que no agregue datos no presentes en los fragmentos. Algo como: \"no menciones requisitos, montos ni codigos que no aparezcan textualmente en el contexto.\" Pedir cita de fuente para cada dato.",
     "evaluationGuide": {
       "must_hit": [
@@ -294,7 +400,14 @@
     "judgeFocus": "Prioriza coherencia end-to-end. Las 4 decisiones deben ser compatibles entre si. Si propone chunks grandes pero top-k=1, hay contradiccion (chunks grandes con poco retrieval pierde precision). Buscar: mencion de metadata/vigencia para el corpus, chunking por seccion/protocolo, retrieval semantico con posible filtro por tipo, instrucciones que limiten al contexto y exijan trazabilidad. Si las decisiones son correctas individualmente pero incoherentes entre si, max 60 en pipeline_design. En 180 segundos, una justificacion de 1 oracion por decision es suficiente para nivel 80+. No exigir desarrollo extenso de cada punto — premia coherencia del conjunto sobre profundidad individual.",
     "context": "Una municipalidad quiere que sus funcionarios puedan consultar los 30 protocolos internos (emergencias, tramites, programas sociales). Hoy usan un Google Drive compartido y nadie encuentra nada.",
     "question": "Disena las 4 decisiones clave de este RAG: (1) como preparar el corpus, (2) estrategia de chunking, (3) tipo de retrieval, (4) que instrucciones darle al LLM. Para cada una, justifica brevemente.",
-    "conceptTags": ["pipeline_rag", "chunking", "retrieval_semantico", "instruccion_llm_rag", "corpus_preparacion", "trazabilidad"],
+    "conceptTags": [
+      "pipeline_rag",
+      "chunking",
+      "retrieval_semantico",
+      "instruccion_llm_rag",
+      "corpus_preparacion",
+      "trazabilidad"
+    ],
     "referenceAnswer": "(1) Corpus: seleccionar los 30 protocolos vigentes del Drive. Agregar metadata a cada uno: tipo (emergencia/tramite/programa social), fecha de ultima actualizacion, area responsable. Descartar versiones antiguas.\n(2) Chunking: por seccion de protocolo (cada protocolo tiene secciones naturales: objetivo, procedimiento, responsables). 30 documentos es un corpus chico, no necesita chunks ultra-pequenos.\n(3) Retrieval: semantico — los funcionarios van a preguntar en lenguaje natural (\"que hago si hay una emergencia de gas\"), no con codigos exactos.\n(4) Instrucciones LLM: \"Responde solo con informacion de los fragmentos proporcionados. Cita el protocolo y seccion fuente. Si no hay fragmentos relevantes, di 'no encontre un protocolo sobre eso'.\"",
     "evaluationGuide": {
       "must_hit": [

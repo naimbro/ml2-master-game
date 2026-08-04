@@ -6,7 +6,7 @@
     "category": "Lectura",
     "type": "multiple_choice",
     "ranked": true,
-    "durationSeconds": 125,
+    "durationSeconds": 155,
     "context": "",
     "question": "",
     "conceptTags": [
@@ -95,7 +95,7 @@
     "category": "Lectura",
     "type": "multiple_choice",
     "ranked": true,
-    "durationSeconds": 125,
+    "durationSeconds": 158,
     "context": "",
     "question": "",
     "conceptTags": [
@@ -183,7 +183,7 @@
     "category": "Lectura",
     "type": "multiple_choice",
     "ranked": true,
-    "durationSeconds": 125,
+    "durationSeconds": 158,
     "conceptTags": [
       "tres_principios"
     ],

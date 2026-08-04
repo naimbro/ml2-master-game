@@ -164,8 +164,22 @@ export default function Results() {
         const prevAvg = played > 1 ? prevTotal / (played - 1) : 0;
         return { playerId, playerName: player.name, roundScore, totalScore, avgScore: Math.round(avgScore * 10) / 10, prevAvg, rank: 0 };
       })
-      .sort((a, b) => b.avgScore - a.avgScore)
-      .map((player, index) => ({ ...player, rank: index + 1 }));
+      // Mismo desempate que End.tsx y que rankGame() en functions: sin el, dos
+      // empatados salen en un orden en esta pantalla y en otro en el podio, y
+      // parece que una de las dos miente. Ademas el orden no era estable entre
+      // renders, asi que podian intercambiarse solos.
+      .sort((a, b) => b.avgScore - a.avgScore || a.playerId.localeCompare(b.playerId));
+
+    // Posicion compartida para los empatados: 1, 2, 2, 4 — no 1, 2, 3, 4. Un
+    // alumno de MGT300 lo reporto como "cuando dos personas tienen el mismo
+    // puntaje la jerarquizacion es extraña", y tenia razon: el puntaje que ve
+    // es el redondeado a un decimal, asi que dos iguales en pantalla salian en
+    // puestos distintos sin ninguna razon visible.
+    let posicion = 1;
+    rankings.forEach((p, i) => {
+      if (i > 0 && p.avgScore < rankings[i - 1].avgScore) posicion = i + 1;
+      p.rank = posicion;
+    });
 
     return { cumulativeRankings: rankings, rankedRoundsPlayed: played };
   }, [roundResults, game?.players, game?.currentRound, game?.scenarios, isRankedRound]);

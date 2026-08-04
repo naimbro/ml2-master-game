@@ -5,7 +5,10 @@ import {
   derivedMCRoundDuration,
   MC_GATE_SECONDS,
   MC_GATE_WITH_MEDIA_SECONDS,
-  MC_FEEDBACK_SECONDS,
+  MC_FEEDBACK_MIN_SECONDS,
+  mcFeedbackSeconds,
+  MC_FEEDBACK_MAX_SECONDS,
+  MC_EXPLANATION_MAX_CHARS,
   MC_SLACK_SECONDS,
   shouldCutQuestion,
 } from './mcTiming';
@@ -65,8 +68,8 @@ describe('mcTimeline with an all-answered cutoff', () => {
   it('still plays the full shared reveal after the cutoff', () => {
     // El reveal es compartido y deliberado: cortar el reloj no puede saltarselo.
     expect(cutLine(13, 12).phase).toBe('feedback');
-    expect(cutLine(16.5, 12).phase).toBe('feedback');
-    expect(cutLine(17.5, 12).phase).toBe('done');
+    expect(cutLine(17.5, 12).phase).toBe('feedback');
+    expect(cutLine(18.5, 12).phase).toBe('done');
   });
 
   it('shortens the visible countdown instead of letting it run out', () => {
@@ -128,10 +131,11 @@ describe('mcTimeline', () => {
   });
 
   it('shows feedback, then finishes the block', () => {
+    // Sin `explanation` la ventana se queda en el piso: no hay nada que leer.
     expect(line(25).phase).toBe('feedback');
-    expect(line(25).secondsLeft).toBe(MC_FEEDBACK_SECONDS);
-    expect(line(29.9).phase).toBe('feedback');
-    expect(line(30).phase).toBe('done');
+    expect(line(25).secondsLeft).toBe(MC_FEEDBACK_MIN_SECONDS);
+    expect(line(30.9).phase).toBe('feedback');
+    expect(line(31).phase).toBe('done');
   });
 
   it('reports the same question start for everyone, so speed scoring is fair', () => {
@@ -145,9 +149,9 @@ describe('mcTimeline', () => {
     const l = (s: number) => line(s, twoQuestions);
     expect(l(5)).toMatchObject({ phase: 'question', questionIndex: 0 });
     expect(l(25)).toMatchObject({ phase: 'feedback', questionIndex: 0 });
-    expect(l(30)).toMatchObject({ phase: 'question', questionIndex: 1, secondsLeft: 30 });
-    expect(l(60)).toMatchObject({ phase: 'feedback', questionIndex: 1 });
-    expect(l(65).phase).toBe('done');
+    expect(l(31)).toMatchObject({ phase: 'question', questionIndex: 1, secondsLeft: 30 });
+    expect(l(61)).toMatchObject({ phase: 'feedback', questionIndex: 1 });
+    expect(l(67).phase).toBe('done');
   });
 
   it('falls back to the default limit for a malformed question', () => {
@@ -181,9 +185,9 @@ describe('mcTimeline', () => {
 describe('derivedMCRoundDuration', () => {
   it('outlasts the whole block so the host never guillotines it', () => {
     const gate = MC_GATE_SECONDS;
-    expect(derivedMCRoundDuration(oneQuestion)).toBe(gate + 20 + MC_FEEDBACK_SECONDS + MC_SLACK_SECONDS);
+    expect(derivedMCRoundDuration(oneQuestion)).toBe(gate + 20 + MC_FEEDBACK_MIN_SECONDS + MC_SLACK_SECONDS);
     expect(derivedMCRoundDuration(twoQuestions)).toBe(
-      gate + 50 + MC_FEEDBACK_SECONDS * 2 + MC_SLACK_SECONDS,
+      gate + 50 + MC_FEEDBACK_MIN_SECONDS * 2 + MC_SLACK_SECONDS,
     );
   });
 
@@ -206,5 +210,49 @@ describe('derivedMCRoundDuration', () => {
   it('handles an empty block without returning a negative duration', () => {
     expect(derivedMCRoundDuration([])).toBe(MC_GATE_SECONDS + MC_SLACK_SECONDS);
     expect(derivedMCRoundDuration(undefined)).toBe(MC_GATE_SECONDS + MC_SLACK_SECONDS);
+  });
+});
+
+describe('mcFeedbackSeconds', () => {
+  it('se queda en el piso cuando no hay nada que leer', () => {
+    expect(mcFeedbackSeconds(undefined)).toBe(MC_FEEDBACK_MIN_SECONDS);
+    expect(mcFeedbackSeconds('')).toBe(MC_FEEDBACK_MIN_SECONDS);
+    expect(mcFeedbackSeconds('   ')).toBe(MC_FEEDBACK_MIN_SECONDS);
+    expect(mcFeedbackSeconds(null)).toBe(MC_FEEDBACK_MIN_SECONDS);
+  });
+
+  it('crece con el largo de la explicacion', () => {
+    const corta = mcFeedbackSeconds('a'.repeat(60));
+    const larga = mcFeedbackSeconds('a'.repeat(200));
+    expect(larga).toBeGreaterThan(corta);
+    expect(corta).toBeGreaterThanOrEqual(MC_FEEDBACK_MIN_SECONDS);
+  });
+
+  it('nunca pasa del techo, por larga que sea', () => {
+    // El caso real que motivo el cambio: MGT300 clase 1 tenia explicaciones de
+    // hasta 506 caracteres y la ventana era una constante de 5 segundos.
+    expect(mcFeedbackSeconds('a'.repeat(506))).toBe(MC_FEEDBACK_MAX_SECONDS);
+    expect(mcFeedbackSeconds('a'.repeat(5000))).toBe(MC_FEEDBACK_MAX_SECONDS);
+  });
+
+  it('le da a la explicacion mas larga que cabe justo el techo', () => {
+    expect(mcFeedbackSeconds('a'.repeat(MC_EXPLANATION_MAX_CHARS))).toBe(MC_FEEDBACK_MAX_SECONDS);
+  });
+
+  it('la explicacion de 421 caracteres que nadie alcanzo a leer ahora dura el triple', () => {
+    expect(mcFeedbackSeconds('a'.repeat(421))).toBeGreaterThanOrEqual(15);
+  });
+});
+
+describe('derivedMCRoundDuration con explicaciones', () => {
+  it('suma la ventana de cada pregunta, no una constante', () => {
+    const sinExplicacion = derivedMCRoundDuration([{ timeLimitSeconds: 20 }]);
+    const conExplicacion = derivedMCRoundDuration([
+      { timeLimitSeconds: 20, explanation: 'a'.repeat(300) },
+    ]);
+    expect(conExplicacion).toBeGreaterThan(sinExplicacion);
+    expect(conExplicacion - sinExplicacion).toBe(
+      MC_FEEDBACK_MAX_SECONDS - MC_FEEDBACK_MIN_SECONDS,
+    );
   });
 });

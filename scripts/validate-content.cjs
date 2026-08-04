@@ -39,6 +39,23 @@ function err(scope, msg) {
   errorCount++;
 }
 
+// Espejo de src/lib/mcTiming.ts: la ventana de revelacion sale del largo de la
+// explicacion. Se duplica a proposito — este script corre en node sin el bundle
+// de Vite — y por eso los numeros van juntos aca abajo y alla arriba.
+const MC_READ_CHARS_PER_SECOND = 18;
+const MC_FEEDBACK_MIN_SECONDS = 6;
+const MC_FEEDBACK_MAX_SECONDS = 16;
+const MC_FEEDBACK_BEAT_SECONDS = 3;
+const MC_EXPLANATION_MAX_CHARS =
+  (MC_FEEDBACK_MAX_SECONDS - MC_FEEDBACK_BEAT_SECONDS) * MC_READ_CHARS_PER_SECOND;
+
+function mcFeedbackSeconds(explanation) {
+  const len = typeof explanation === 'string' ? explanation.trim().length : 0;
+  if (len === 0) return MC_FEEDBACK_MIN_SECONDS;
+  const needed = MC_FEEDBACK_BEAT_SECONDS + Math.ceil(len / MC_READ_CHARS_PER_SECOND);
+  return Math.min(MC_FEEDBACK_MAX_SECONDS, Math.max(MC_FEEDBACK_MIN_SECONDS, needed));
+}
+
 function warn(scope, msg) {
   console.warn(`  WARN   [${scope}] ${msg}`);
   warnCount++;
@@ -166,12 +183,22 @@ function validateMCQuestions(scope, sc) {
       err(qScope, `correctOptionIndex=${q.correctOptionIndex} fuera de rango (0..${Math.max(0, n - 1)})`);
     }
 
+    // La ventana de revelacion sale del largo de la explicacion, igual que en
+    // src/lib/mcTiming.ts (mcFeedbackSeconds). Si se cambia alla, cambiar aca.
+    const reveal = mcFeedbackSeconds(q.explanation);
+    if (typeof q.explanation === 'string' && q.explanation.trim().length > MC_EXPLANATION_MAX_CHARS) {
+      warn(
+        qScope,
+        `explicacion de ${q.explanation.trim().length} caracteres: no alcanza a leerse en los ${MC_FEEDBACK_MAX_SECONDS}s de revelacion (tope ${MC_EXPLANATION_MAX_CHARS}). Acortala o se corta a media frase.`,
+      );
+    }
+
     const limit = Number(q.timeLimitSeconds);
     if (!Number.isFinite(limit) || limit <= 0) {
       err(qScope, `timeLimitSeconds invalido: ${q.timeLimitSeconds}`);
-      expectedDuration += 20 + 5;
+      expectedDuration += 20 + reveal;
     } else {
-      expectedDuration += limit + 5;
+      expectedDuration += limit + reveal;
     }
 
     validateMedia(qScope, q.media, 'pregunta');

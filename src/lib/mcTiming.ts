@@ -27,8 +27,45 @@ export const MC_GATE_SECONDS = 5;
  */
 export const MC_GATE_WITH_MEDIA_SECONDS = 12;
 
-/** How long the correct answer stays up after a question closes. */
-export const MC_FEEDBACK_SECONDS = 5;
+/**
+ * Cuánto se queda arriba la respuesta correcta después de cerrar una pregunta.
+ *
+ * Era una constante de 5 segundos y estaba rota: en MGT300 clase 1 las nueve
+ * `explanation` medían entre 168 y 506 caracteres, y leer 421 en 5 segundos
+ * exige 84 caracteres por segundo. Una persona lee 15 o 20. O sea que ninguna
+ * explicación fue legible en el tiempo que estuvo en pantalla — el momento de
+ * enseñar existía y pasaba de largo, y los alumnos reportaron "no entendí las
+ * preguntas" cuando lo que no vieron fue el porqué.
+ *
+ * Ahora se deriva del largo del texto, igual que `durationSeconds` se deriva del
+ * bloque. El tope existe porque una revelación muy larga apaga la sala: pasado
+ * ese punto, la explicación se acorta, no la ventana se alarga.
+ */
+export const MC_READ_CHARS_PER_SECOND = 18;
+/** Piso: el golpe en que la casilla se pone verde o roja, antes de leer nada. */
+export const MC_FEEDBACK_MIN_SECONDS = 6;
+/** Techo: más allá de esto el juego pierde el pulso. */
+export const MC_FEEDBACK_MAX_SECONDS = 16;
+/** Segundos de registro antes de que empiece la lectura propiamente tal. */
+const MC_FEEDBACK_BEAT_SECONDS = 3;
+
+/**
+ * Ventana de revelación de UNA pregunta, a partir de su explicación.
+ * Sin explicación se queda en el piso: no hay nada que leer.
+ */
+export function mcFeedbackSeconds(explanation?: string | null): number {
+  const len = typeof explanation === 'string' ? explanation.trim().length : 0;
+  if (len === 0) return MC_FEEDBACK_MIN_SECONDS;
+  const needed = MC_FEEDBACK_BEAT_SECONDS + Math.ceil(len / MC_READ_CHARS_PER_SECOND);
+  return Math.min(MC_FEEDBACK_MAX_SECONDS, Math.max(MC_FEEDBACK_MIN_SECONDS, needed));
+}
+
+/**
+ * Largo de explicación que todavía cabe en el techo. Por encima de esto la
+ * revelación se corta a mitad de frase; el validador avisa.
+ */
+export const MC_EXPLANATION_MAX_CHARS =
+  (MC_FEEDBACK_MAX_SECONDS - MC_FEEDBACK_BEAT_SECONDS) * MC_READ_CHARS_PER_SECOND;
 
 /** Extra headroom so a slow phone or a late joiner never gets cut off. */
 export const MC_SLACK_SECONDS = 15;
@@ -37,6 +74,8 @@ export const MC_DEFAULT_TIME_LIMIT = 20;
 
 export interface MCTimingQuestion {
   timeLimitSeconds?: number;
+  /** La ventana de revelación se deriva de su largo — ver `mcFeedbackSeconds`. */
+  explanation?: string | null;
 }
 
 /** Only the shape mcTiming cares about; the real MediaAsset lives in types/content. */
@@ -127,7 +166,7 @@ export function mcTimeline({
       };
     }
 
-    const feedbackEnd = questionEnd + MC_FEEDBACK_SECONDS * 1000;
+    const feedbackEnd = questionEnd + mcFeedbackSeconds(questions[i]?.explanation) * 1000;
     if (nowMs < feedbackEnd) {
       return {
         phase: 'feedback',
@@ -182,9 +221,12 @@ export function shouldCutQuestion({
  * Round duration for an MC block:
  *   gate + sum(question limits) + feedback per question + slack
  *
- * e.g. 1 question x 20s, no media -> 5 + 20 +  5 + 15 = 45
- *      1 question x 20s, w/ media -> 12 + 20 +  5 + 15 = 52
- *      2 questions x 20s, no media ->  5 + 40 + 10 + 15 = 70
+ * La ventana de feedback ya no es una constante: sale del largo de cada
+ * `explanation`, entre 6 y 16 segundos. Por eso se suma pregunta a pregunta.
+ *
+ * e.g. 1 question x 20s, sin explicacion  -> 5 + 20 +  6 + 15 = 46
+ *      1 question x 20s, explicacion 180  -> 5 + 20 + 13 + 15 = 53
+ *      2 questions x 20s, explicaciones largas -> 5 + 40 + 32 + 15 = 92
  *
  * The slack matters less than it used to: on MC rounds the host closes the
  * round as soon as every player has answered (useGame.ts), so the tail is only
@@ -200,5 +242,7 @@ export function derivedMCRoundDuration(
 
   const limits = questions.reduce((sum, q) => sum + limitOf(q), 0);
 
-  return gate + limits + MC_FEEDBACK_SECONDS * questions.length + MC_SLACK_SECONDS;
+  const feedback = questions.reduce((sum, q) => sum + mcFeedbackSeconds(q?.explanation), 0);
+
+  return gate + limits + feedback + MC_SLACK_SECONDS;
 }
