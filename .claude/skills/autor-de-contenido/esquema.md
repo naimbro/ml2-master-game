@@ -68,12 +68,26 @@ las dos formas, pero `courses.ts` hace `scenarios.length` y la envuelta deja
 }
 ```
 
+- **UNA pregunta por escenario, no un bloque de tres.** Un escenario es una
+  ronda, y `Results.tsx` muestra el leaderboard acumulado **al final de cada
+  ronda**. Tres preguntas en un `mcQuestions` son una sola ronda: el ranking se
+  actualiza una vez cada tres preguntas y se pierde el latido de Kahoot. Nueve
+  preguntas se escriben como **nueve escenarios de una pregunta**, igual que
+  `mundial_2026/kahoot_only`. Cuesta ~2 minutos de reloj (cada ronda paga su
+  portada de 5 s y su holgura de 15 s) y ese es el precio del leaderboard por
+  pregunta. Salió de la clase 1 de MGT300, que se jugó con bloques de tres.
 - Se puntúa **en el cliente** (`src/lib/mcScoring.ts`), en la escala 0-100 de los
   jueces: correcta `70 + 30×velocidad`, contestada mal 20, sin contestar 0.
   **No pasa por los jueces ni por la recalibración pareada.**
 - `durationSeconds` es **derivado**, nunca escrito a mano: `src/lib/mcTiming.ts`.
   El validador falla el build si no alcanza para el bloque.
 - `correctOptionIndex` es base 0. Contarlo dos veces.
+- **Repartir las correctas entre A/B/C/D.** No hay barajado en runtime:
+  `Round.tsx` renderiza `options` en orden. La clase 1 de MGT300 salió con
+  A5/B4/C0/D0 y se sacaba 9 de 9 marcando siempre A o B. Al reordenar, ojo con
+  las `explanation` que nombran letras ("B suena bien y es lo contrario"): hay
+  que reescribirlas junto con el reorden o quedan apuntando a la alternativa
+  equivocada, proyectada delante del curso.
 - `explanation` se proyecta: es el momento de enseñar, no un pie de página.
 
 ## `media`
