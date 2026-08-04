@@ -1,0 +1,94 @@
+{
+  "_doc": "Rúbrica propia de clase_01_piensa_primero. MGT300 no tiene _shared/base_rubric.json, y aunque lo tuviera no serviría: este curso es de teoría social y argumentación, y las dos rondas juzgadas son una de mecanismo de un texto y una de aplicación a un trabajo propio. Las tres rondas de opción múltiple se corrigen en el cliente (src/lib/mcScoring.ts) y no pasan por los jueces ni por la recalibración pareada. Los ids de las dimensiones están comprometidos con las weightFormula de config.json: no renombrarlos sin tocar las dos cosas.",
+  "sessionId": "clase_01_piensa_primero",
+  "globalInstructions": "Evalúa SOLO lo que está escrito. No completes la respuesta con lo que el estudiante 'seguramente quiso decir'.\n\nEsta es la PRIMERA CLASE del semestre de un curso de teoría social y argumentación. No han leído nada del curso todavía: no manejan a Han, ni a Sen, ni ningún vocabulario que se enseñe más adelante. El único texto que se supone que leyeron es el artículo de Ines Lee, 'Piensa primero, IA después', que discutieron en clase hace un rato y que muchos tienen al lado.\n\nEL LARGO ES UNA SUGERENCIA, NO UNA REGLA. El enunciado dice 'con 3 o 4 líneas basta' para indicar el estándar, no para poner un techo. NO BAJES EL PUNTAJE POR PASARSE DEL LARGO. Escribir más no sube el puntaje ni lo baja: cuenta lo que agrega. Una respuesta de dos líneas bien puestas puede valer 100, y una de ocho también, si las ocho agregan.\n\nEstán escribiendo desde el teléfono, en cuatro minutos, al final de una clase de dos horas y media. NO EXIJAS: ortografía perfecta, tildes, introducción, estructura, conectores, ni vocabulario académico. Nadie tiene que decir 'sycophancy', 'uso activo' ni 'fricción productiva' para sacar 100: si explican la idea con sus palabras, vale igual.\n\nNUNCA PENALICES QUE OBJETEN EL ENUNCIADO O EL ARTÍCULO. Si alguien escribe que la evidencia de Lee es débil, que el estudio del MIT tenía muestra pequeña, o que el mecanismo que ella propone no lo convence, eso NO es evadir la pregunta: es exactamente lo que el artículo pide y lo que este curso enseña. Una objeción bien argumentada puede sacar puntaje alto. Lo único que se exige es que muestre haber entendido primero qué sostiene el texto.\n\nEl error de lectura que más importa cazar es leer el artículo como una crítica a la IA. El texto dice literalmente que la solución no consiste en usar menos IA sino en usarla de otra manera, y defiende usos pasivos legítimos. Quien le atribuya a Lee la tesis 'hay que usar menos IA' o 'la IA nos hace tontos' está contestando desde el titular.\n\nEl juego compite y hay podio, pero no es una nota del curso. Puntúa igual con honestidad y sin inflar: un puntaje regalado le quita el puesto a otra persona.\n\nEl judgeFocus del escenario es tu prioridad absoluta y manda sobre estas instrucciones generales si hay tensión.",
+  "scoring": {
+    "scaleLevels": [100, 80, 60, 40, 20, 0],
+    "instructions": "Elige uno de los seis niveles escritos por dimensión. No inventes valores intermedios. Si la respuesta satisface un nivel solo parcialmente, baja al nivel inferior."
+  },
+  "dimensions": [
+    {
+      "id": "fidelidad_al_texto",
+      "name": "Fidelidad al texto",
+      "weight": 0.35,
+      "description": "¿Lo que le atribuye al artículo está efectivamente ahí? Se juzga que no le ponga a Lee tesis que no sostiene, sobre todo la de que hay que usar menos IA. En la ronda de aplicación esta dimensión pesa menos: ahí solo se verifica que no invente una regla del artículo.",
+      "level_100": "Todo lo que le atribuye al artículo está en el artículo, incluido el matiz que contradice la lectura de titular: que el problema es la forma y la secuencia, no la cantidad de IA.",
+      "level_80": "Lo central es correcto, pero se le escapa un matiz que el texto sí marca.",
+      "level_60": "La idea general es correcta, pero mezcla lo que dice el artículo con una interpretación propia sin distinguir cuál es cuál.",
+      "level_40": "Contesta con su propia postura sobre la IA cuando el enunciado pedía el argumento del texto.",
+      "level_20": "Le atribuye a Lee una tesis que no sostiene: que hay que usar menos IA, que la IA nos vuelve tontos, o que el uso pasivo nunca se justifica.",
+      "level_0": "Contradice algo que el texto dice de forma explícita, o inventa un dato, una cifra o una cita que no está."
+    },
+    {
+      "id": "mecanismo",
+      "name": "Mecanismo",
+      "weight": 0.4,
+      "description": "¿Explica POR QUÉ una cosa lleva a la otra, o repite la conclusión con otras palabras? Es la dimensión que separa a quien leyó de quien hojeó. Repetir el resultado no es explicarlo.",
+      "level_100": "Explica el paso intermedio completo —por qué la causa produce el efecto— y se apoya en lo concreto del texto o del caso propio.",
+      "level_80": "Nombra el mecanismo correcto pero lo deja a medio cerrar, o trae el detalle sin terminar de decir por qué se sigue.",
+      "level_60": "Repite la conclusión con otras palabras y la presenta como si fuera la explicación.",
+      "level_40": "Da una explicación plausible pero equivocada: atribuye el efecto a otra causa de las que el texto descarta o no menciona.",
+      "level_20": "Menciona los elementos correctos sin establecer ninguna relación entre ellos.",
+      "level_0": "No hay razonamiento: solo una afirmación suelta, o algo que no responde lo que se preguntó."
+    },
+    {
+      "id": "concrecion",
+      "name": "Concreción",
+      "weight": 0.25,
+      "description": "¿Se compromete con algo específico, o dice algo que serviría igual para cualquier texto y cualquier trabajo? En la ronda aplicada esta dimensión pesa fuerte: se mide si hay un trabajo identificable y un prompt que se podría pegar tal cual en el chat.",
+      "level_100": "Todo lo que dice está anclado en algo específico: un detalle del texto que nadie más traería, o un trabajo identificable con puntos que solo aplican a ese trabajo.",
+      "level_80": "Mayormente concreto, con una parte que se queda en lo general.",
+      "level_60": "Nombra algo específico pero lo desarrolla en términos genéricos, o al revés.",
+      "level_40": "Casi todo serviría igual para otro texto o para cualquier otro trabajo sin cambiar una palabra.",
+      "level_20": "Enteramente genérico: usa las palabras del artículo como relleno, sin engancharse con nada.",
+      "level_0": "Vacío, o una sola frase que no se compromete con nada."
+    }
+  ],
+  "penalties": [
+    {
+      "id": "atribucion_falsa",
+      "description": "Atribuirle a Lee la tesis de que hay que usar menos IA, que la IA nos vuelve tontos, o que el uso pasivo nunca se justifica, no puede superar 40 en 'Fidelidad al texto'. OJO: esto NO aplica a quien critique al artículo desde afuera; aplica solo a quien se lo atribuye al artículo como si fuera su tesis.",
+      "effect": {
+        "type": "cap",
+        "value": 40,
+        "dimensions": ["fidelidad_al_texto"]
+      }
+    },
+    {
+      "id": "conclusion_disfrazada",
+      "description": "Presentar la conclusión reformulada como si fuera la explicación —del tipo 'funciona porque así la IA es más objetiva', sin decir qué la vuelve más objetiva— no puede superar 50 en 'Mecanismo'.",
+      "effect": {
+        "type": "cap",
+        "value": 50,
+        "dimensions": ["mecanismo"]
+      }
+    },
+    {
+      "id": "respuesta_intercambiable",
+      "description": "Una respuesta que serviría idéntica para cualquier otro texto o para cualquier otro trabajo, sin cambiar una palabra, no puede superar 40 en 'Concreción'. En la ronda aplicada, no nombrar ningún trabajo identificable cae acá.",
+      "effect": {
+        "type": "cap",
+        "value": 40,
+        "dimensions": ["concrecion"]
+      }
+    }
+  ],
+  "globalPenalties": [
+    "Atribuirle al artículo algo que no dice, aunque suene razonable.",
+    "Repetir la conclusión del texto y presentarla como la explicación de por qué se sigue.",
+    "Responder con algo que serviría igual para cualquier otro texto o cualquier otro trabajo.",
+    "Inventar una cifra, una cita o una fuente para no dejar el campo vacío."
+  ],
+  "bonusIndicators": [
+    "Trae el detalle concreto del artículo que sostiene lo que afirma",
+    "Nota el matiz que contradice la lectura de titular",
+    "Objeta el argumento del texto después de haber mostrado que lo entendió",
+    "Se compromete con un caso propio que nadie más habría escrito"
+  ],
+  "penaltyIndicators": [
+    "Convierte a Lee en enemiga de la IA",
+    "Se queda en la conclusión sin explicar por qué se sigue",
+    "Usa el vocabulario del artículo como sustituto del argumento",
+    "Un ejemplo tan general que no compromete a nada"
+  ]
+}

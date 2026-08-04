@@ -1,0 +1,44 @@
+{
+  "sessionId": "clase_01_piensa_primero",
+  "courseId": "mgt300_2026",
+  "title": "Clase 1: Piensa primero, IA después",
+  "description": "6 rondas (~17 min) sobre el artículo de Ines Lee que se lee y discute en clase: tres de opción múltiple y tres abiertas, una de ellas la prueba de Feynman del propio artículo. Las seis compiten. No es nota.",
+  "date": "2026-08-04",
+  "roundCount": 6,
+  "roundDurationSeconds": 240,
+  "bufferSeconds": 45,
+  "conceptTags": [
+    "estudio_mit",
+    "activo_vs_pasivo",
+    "tres_principios",
+    "articulo_lee"
+  ],
+  "judges": [
+    {
+      "judgeId": "generic_specialist",
+      "weight": 0.35
+    },
+    {
+      "judgeId": "generic_praxis",
+      "weight": 0.35
+    },
+    {
+      "judgeId": "generic_teacher",
+      "weight": 0.3
+    }
+  ],
+  "judgeConfig": {
+    "generic_specialist": {
+      "sessionLens": "Tu lente es el TEXTO: si lo que el estudiante afirma está efectivamente en el artículo de Ines Lee y si lo reconstruye sin deformarlo. Tienes un resumen fiel del artículo en el material de referencia; úsalo para verificar, no para exigir que citen. El error que más te importa es leer el artículo como una crítica a la IA: el texto dice literalmente que la solución no es usar menos IA sino usarla de otra manera. En la ronda aplicada el texto pesa menos: ahí verifica que el estudiante no le atribuya al artículo una regla que no dio, pero no le pidas fidelidad textual a una respuesta que es suya. Es la primera clase del semestre: no exijas vocabulario del curso ni las palabras del artículo.",
+      "weightFormula": "score = 0.55 * fidelidad_al_texto + 0.30 * mecanismo + 0.15 * concrecion"
+    },
+    "generic_praxis": {
+      "sessionLens": "Tu única pregunta es POR QUÉ. Casi cualquiera puede repetir a qué conclusión llega Lee; lo que separa a quien leyó de quien hojeó es poder decir por qué se sigue. En la ronda del revisor externo, el mecanismo es un cambio de destinatario —la IA deja de hablar contigo y pasa a hablar con otros editores— y no un cambio de tono, de estándar ni de formato: una respuesta que diga 'porque así es más objetiva' se quedó en la conclusión. En la ronda aplicada, tu prueba es la concreción: '30 minutos pensando en mi trabajo' no es un punto, es un titular. Premia a quien se compromete con un trabajo identificable y escribe un prompt que se podría pegar en el chat tal cual.",
+      "weightFormula": "score = 0.25 * fidelidad_al_texto + 0.45 * mecanismo + 0.30 * concrecion"
+    },
+    "generic_teacher": {
+      "sessionLens": "Es la primera clase del semestre y estas cinco rondas SÍ entran al ranking, así que puntúa con honestidad y sin inflar: un puntaje regalado le quita el puesto a otra persona. El juego no es nota, pero el feedback que escribas es lo primero que van a leer de este curso. Evalúa si la persona leyó el artículo de verdad o si está contestando desde el titular «la IA nos hace tontos» y el sentido común. En tu feedback escribe en primera persona e incluye un 'yo habría...' concreto a ESTA respuesta. Si alguien objeta el enunciado o marca una limitación del estudio del MIT, eso no es un problema: es exactamente lo que el artículo pide y lo que este curso enseña.",
+      "weightFormula": "score = 0.40 * fidelidad_al_texto + 0.35 * mecanismo + 0.25 * concrecion"
+    }
+  }
+}

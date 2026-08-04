@@ -1,0 +1,15 @@
+{
+  "courseId": "mgt300_2026",
+  "name": "Sociedad, Cultura y Política",
+  "code": "MGT300-2026-2",
+  "description": "Curso de Ingeniería Comercial de la Escuela de Negocios de la Universidad Adolfo Ibáñez, sección 6, segundo semestre 2026. 16 clases los martes de 11:30 a 14:10. Mirada interdisciplinaria sobre identidad, capitalismo, comunicación, desarrollo y poder tecnológico: teoría social y argumentación, sin datos ni código. Los juegos son la actividad de cierre de clase, de 10 a 15 minutos, y no reemplazan los controles de lectura del programa.",
+  "professorEmail": "naim.bro@gmail.com",
+  "university": "Universidad Adolfo Ibáñez",
+  "program": "Ingeniería Comercial · Escuela de Negocios",
+  "syllabusUrl": "https://naimbro.github.io/teaching/2026_mgt300.html",
+  "startDate": "2026-08-04",
+  "endDate": "2026-11-24",
+  "sessions": [
+    "clase_01_piensa_primero"
+  ]
+}

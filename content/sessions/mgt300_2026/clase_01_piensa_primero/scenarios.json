@@ -1,0 +1,444 @@
+[
+  {
+    "id": "mgt_c01_r1_contra_el_titular",
+    "order": 1,
+    "title": "Lo que decían los titulares",
+    "category": "Lectura",
+    "type": "multiple_choice",
+    "ranked": true,
+    "durationSeconds": 125,
+    "context": "",
+    "question": "",
+    "conceptTags": [
+      "estudio_mit",
+      "articulo_lee"
+    ],
+    "mcQuestions": [
+      {
+        "question": "«¿ChatGPT nos está volviendo estúpidos?», preguntaban los titulares tras el estudio del MIT. ¿Cómo replantea Ines Lee esa pregunta?",
+        "options": [
+          {
+            "id": "A",
+            "text": "La pregunta es CUÁNTA IA podemos usar antes de cruzar el umbral de dependencia"
+          },
+          {
+            "id": "B",
+            "text": "La pregunta es si el estudio del MIT resiste una revisión por pares"
+          },
+          {
+            "id": "C",
+            "text": "La pregunta no es SI debemos usar IA, sino CÓMO usarla sin perder las capacidades que nos hacen valiosos"
+          },
+          {
+            "id": "D",
+            "text": "La pregunta es si la IA acabará con el trabajo intelectual de nivel inicial"
+          }
+        ],
+        "correctOptionIndex": 2,
+        "timeLimitSeconds": 30,
+        "explanation": "«La pregunta no es si debemos usar IA. Es cómo usarla sin perder las capacidades cognitivas que nos hacen valiosos: defender nuestro razonamiento, adaptar nuestras ideas a contextos nuevos y comprender dónde podrían fallar nuestros enfoques.» Ojo: B y D también aparecen en el artículo —D es la narrativa que ella ataca con el abogado del diablo, B es una limitación que ella misma reconoce— pero ninguna es su replanteo."
+      },
+      {
+        "question": "Según la presentación del artículo, la solución NO consiste en usar menos IA, sino en:",
+        "options": [
+          {
+            "id": "A",
+            "text": "Usarla más temprano, para tener más tiempo de corregirla"
+          },
+          {
+            "id": "B",
+            "text": "Usarla solo para tareas mecánicas"
+          },
+          {
+            "id": "C",
+            "text": "Reservarla para el trabajo donde no importa el juicio"
+          },
+          {
+            "id": "D",
+            "text": "Usarla de otra manera"
+          }
+        ],
+        "correctOptionIndex": 3,
+        "timeLimitSeconds": 30,
+        "explanation": "«La solución no consiste en usar menos IA, sino en usarla de otra manera.» Todo el artículo se juega ahí: no es un problema de cantidad, es uno de secuencia y de forma."
+      },
+      {
+        "question": "¿Cuál de estos usos de la IA DEFIENDE Lee explícitamente como legítimo?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Transcribir texto desde capturas de pantalla"
+          },
+          {
+            "id": "B",
+            "text": "Escribir el primer borrador de un documento estratégico"
+          },
+          {
+            "id": "C",
+            "text": "Diseñar la secuencia de un curso que uno va a enseñar"
+          },
+          {
+            "id": "D",
+            "text": "Redactar el argumento central de un informe de investigación"
+          }
+        ],
+        "correctOptionIndex": 0,
+        "timeLimitSeconds": 30,
+        "explanation": "«Transcribir texto desde capturas de pantalla, generar informes rutinarios a partir de datos o crear varias versiones de un mismo mensaje para públicos distintos. Son como escalas y ejercicios técnicos.» Las otras tres son cosas que el artículo menciona del otro lado de la raya: B y D como productos donde importa el juicio, y C es exactamente lo que ella estuvo a punto de pedirle a ChatGPT y decidió no pedirle. El artículo no prohíbe la IA: separa dónde el uso pasivo sale barato de dónde se paga caro."
+      }
+    ]
+  },
+  {
+    "id": "mgt_c01_r2_activo_o_pasivo",
+    "order": 2,
+    "title": "Activo o pasivo",
+    "category": "Lectura",
+    "type": "multiple_choice",
+    "ranked": true,
+    "durationSeconds": 125,
+    "context": "",
+    "question": "",
+    "conceptTags": [
+      "activo_vs_pasivo"
+    ],
+    "mcQuestions": [
+      {
+        "question": "Los cuatro prompts salen del artículo. ¿Cuál es el ejemplo que Lee da de uso PASIVO?",
+        "options": [
+          {
+            "id": "A",
+            "text": "«Cuestiona mis supuestos y pide los datos que faltan antes de proponer un plan»"
+          },
+          {
+            "id": "B",
+            "text": "«Activa el modo abogado del diablo. No suavices el lenguaje ni moderes la crítica»"
+          },
+          {
+            "id": "C",
+            "text": "«Pídeme que describa este concepto como si se lo estuviera enseñando a estudiantes»"
+          },
+          {
+            "id": "D",
+            "text": "«Escríbeme una estrategia para mejorar la comunicación del equipo»"
+          }
+        ],
+        "correctOptionIndex": 3,
+        "timeLimitSeconds": 30,
+        "explanation": "D pide un producto terminado: recibimos una respuesta, quizá la implementamos, y nunca luchamos con qué significa «mejor comunicación» en nuestro equipo. A, B y C son los tres principios en acción — cada uno mete fricción en un momento distinto del pensamiento."
+      },
+      {
+        "question": "Según Lee, ¿qué define al uso ACTIVO de la IA?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Uno le entrega todo el contexto para no tener que corregir el resultado"
+          },
+          {
+            "id": "B",
+            "text": "Uno encuadra el problema y hace un primer intento; la IA lo cuestiona"
+          },
+          {
+            "id": "C",
+            "text": "Uno la usa solo para tareas mecánicas: transcribir, informes rutinarios"
+          },
+          {
+            "id": "D",
+            "text": "Uno le pide que sea diplomática y equilibrada al evaluar"
+          }
+        ],
+        "correctOptionIndex": 1,
+        "timeLimitSeconds": 30,
+        "explanation": "«Uno mismo encuadra el problema, hace un primer intento y luego utiliza la IA para cuestionar sus supuestos, descubrir puntos ciegos y afinar sus argumentos. La máquina asiste; el razonamiento nos pertenece.» A suena bien y es lo contrario: entregar todo para no tener que pensar el resultado. D es justo lo que ella prohíbe en el prompt del abogado del diablo: «No seas diplomático»."
+      },
+      {
+        "question": "Lee compara el uso pasivo con aprender una pieza de piano de memoria. ¿Qué puede hacer, en cambio, quien entendió su estructura?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Ejecutarla sin errores después de suficiente repetición"
+          },
+          {
+            "id": "B",
+            "text": "Aprenderla en menos tiempo que quien la memoriza"
+          },
+          {
+            "id": "C",
+            "text": "Transponerla, improvisar y explicar por qué un cambio funcionaría"
+          },
+          {
+            "id": "D",
+            "text": "Tocarla sin necesidad de practicar con los dedos"
+          }
+        ],
+        "correctOptionIndex": 2,
+        "timeLimitSeconds": 30,
+        "explanation": "A es lo que da la memorización, no la comprensión. D es falso en el propio texto: «En ambos casos se practica hasta que los dedos conocen los patrones» — entender no ahorra la práctica, cambia lo que se puede hacer después con ella."
+      }
+    ]
+  },
+  {
+    "id": "mgt_c01_r3_por_que_funcionan",
+    "order": 3,
+    "title": "Por qué funcionan los prompts",
+    "category": "Lectura",
+    "type": "multiple_choice",
+    "ranked": true,
+    "durationSeconds": 125,
+    "conceptTags": [
+      "tres_principios"
+    ],
+    "context": "",
+    "question": "",
+    "mcQuestions": [
+      {
+        "question": "El prompt del «revisor externo» le pide a la IA que escriba un memorando interno a un equipo editorial sobre tu texto. Según Lee, ¿por qué eso produce una crítica más franca?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Aplica el estándar, más alto, de una publicación de primer nivel"
+          },
+          {
+            "id": "B",
+            "text": "Recomendar publicar o no la obliga a tomar postura"
+          },
+          {
+            "id": "C",
+            "text": "Deja de hablarte a TI y le habla a otros editores: ya no eres su público"
+          },
+          {
+            "id": "D",
+            "text": "El formato de memorando la obliga a ser breve y a priorizar"
+          }
+        ],
+        "correctOptionIndex": 2,
+        "timeLimitSeconds": 30,
+        "explanation": "El truco no está en el estándar ni en el formato: está en QUIÉN es el público. «Ya no eres su público, de modo que abandona la cortesía protectora.» Es la respuesta directa a la adulación —o sycophancy—, que es adaptar lo que dice a lo que cree que queremos oír."
+      },
+      {
+        "question": "El prompt de apertura de Lee («Tu trabajo es PREGUNTAR, no RESPONDER») le exige a la IA:",
+        "options": [
+          {
+            "id": "A",
+            "text": "Hacer 5 preguntas y detenerse, sin proponer nada"
+          },
+          {
+            "id": "B",
+            "text": "Proponer 5 alternativas de solución ordenadas por impacto"
+          },
+          {
+            "id": "C",
+            "text": "Hacer una sola pregunta a la vez y esperar respuesta"
+          },
+          {
+            "id": "D",
+            "text": "Resumir el contexto en 5 puntos antes de proponer un plan"
+          }
+        ],
+        "correctOptionIndex": 0,
+        "timeLimitSeconds": 30,
+        "explanation": "«Haz exactamente 5 preguntas de alto impacto... Recuerda: detente después de las preguntas.» C también está en el artículo, pero es otro prompt: la regla de una sola pregunta, que sirve para frenar a quien avanza demasiado rápido por un problema complejo."
+      },
+      {
+        "question": "La prueba de comprensión del físico Richard Feynman, que Lee usa para el tercer principio, dice que no entiendes algo si no puedes:",
+        "options": [
+          {
+            "id": "A",
+            "text": "Recordar de memoria tu tesis, tu evidencia y tus dudas"
+          },
+          {
+            "id": "B",
+            "text": "Explicárselo a un niño de cinco años"
+          },
+          {
+            "id": "C",
+            "text": "Aplicarlo a un contexto distinto de aquel en que lo aprendiste"
+          },
+          {
+            "id": "D",
+            "text": "Encontrar los tres contraargumentos más fuertes en su contra"
+          }
+        ],
+        "correctOptionIndex": 1,
+        "timeLimitSeconds": 30,
+        "explanation": "Las cuatro alternativas están en el artículo, pero solo B es Feynman. A es el «prompt de recuerdo», C es una de las tres capacidades que se están volviendo escasas, y D es el abogado del diablo. El principio detrás de todas: la comprensión real aparece cuando nos obligan a articular, porque explicar revela vacíos que no sabíamos que teníamos."
+      }
+    ]
+  },
+  {
+    "id": "mgt_c01_r4_hermano_chico",
+    "order": 4,
+    "title": "Explícaselo a tu hermano chico",
+    "category": "Síntesis",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 180,
+    "conceptTags": [
+      "articulo_lee",
+      "estudio_mit",
+      "activo_vs_pasivo",
+      "tres_principios"
+    ],
+    "judgeFocus": "ACÁ SE INVIERTE LA REGLA HABITUAL: usar el vocabulario del artículo sin desarmarlo es una FALLA, no un mérito. Se pidió explicarle el argumento principal a alguien de 1º medio, unos 14 años, que no leyó nada. Si la respuesta dice 'uso activo', 'involucramiento cognitivo', 'marco interno', 'fricción productiva' o 'sycophancy' sin traducirlo, no cumplió el encargo: el hermano chico no entiende ninguna de esas palabras. Lo que se juzga es (1) si el argumento que resume es efectivamente el de Lee —que lo que importa es el ORDEN y la FORMA de usar la IA, no la cantidad— y (2) si la explicación se sostiene sola, sin el artículo al lado. Una respuesta de 100 le llega a un cabro de 14 años y sigue siendo verdadera. Una de 60 es correcta pero sigue sonando a resumen de universidad. Una de 20 le dice al hermano chico que la IA lo va a volver tonto o que no la use, que es lo contrario del texto. NO EXIJAS que usen la analogía del piano ni ninguna analogía en particular; si inventan una propia y funciona, es excelente. NO PREMIES el tono infantilizado ('mira, chiquitito'): hablarle claro a alguien de 14 no es hablarle como a un niño de 4. NO exijas que mencionen el estudio del MIT: el argumento se puede explicar sin la cifra. El largo es sugerencia y esta ronda es más corta que las otras (3 minutos), pero NO BAJES PUNTAJE POR PASARSE.",
+    "context": "El tercer principio de Ines Lee dice que la comprensión real solo aparece cuando nos obligan a articular lo que entendimos, porque explicar revela vacíos cuya existencia desconocíamos. Cita la prueba de Feynman: si no puedes explicarle algo a un niño de cinco años, en realidad no lo entiendes.\n\nAsí que la última prueba del artículo la hacemos con el artículo mismo.\n\nTu hermano chico está en 1º medio. No leyó el texto, no le interesa mucho, y usa ChatGPT para todo.",
+    "question": "Explícale **cuál es el argumento principal** del artículo, en palabras que él entienda. Sin términos que tengas que explicarle aparte. Con 3 o 4 líneas basta.",
+    "evaluationGuide": {
+      "must_hit": [
+        "El argumento que transmite es el de Lee: lo que cambia el resultado es cómo y en qué orden se usa la IA, no cuánta se usa",
+        "Está escrito en palabras que un estudiante de 1º medio entiende, sin términos del artículo sin traducir",
+        "Se sostiene solo: alguien que no leyó el texto termina entendiendo algo correcto"
+      ],
+      "partial_credit": {
+        "correcto_pero_academico": "El argumento está bien pero sigue escrito para un compañero de universidad, con vocabulario que el hermano chico no maneja: hasta 60.",
+        "accesible_pero_incompleto": "Se entiende perfecto pero se queda en 'hay que pensar antes', sin decir por qué eso cambia algo: hasta 60 en mecanismo.",
+        "analogia_sin_argumento": "Trae una comparación entretenida que no llega a decir cuál es la tesis: hasta 40 en fidelidad."
+      },
+      "nice_to_have": [
+        "Inventa una comparación propia que funcione para alguien de 14 años",
+        "Aterriza el argumento en algo que el hermano chico hace de verdad, como una tarea o una prueba",
+        "Deja claro que no le está diciendo que deje de usar ChatGPT"
+      ],
+      "fatal_errors": [
+        "Le dice al hermano chico que la IA lo vuelve tonto o que use menos IA",
+        "Usa el vocabulario del artículo sin traducirlo, de modo que un estudiante de 1º medio no entendería la respuesta",
+        "Resume el artículo por partes, sin llegar a decir cuál es el argumento principal"
+      ]
+    },
+    "idealAnswer": {
+      "keyPoints": [
+        "Si le pides a ChatGPT que lo haga antes de pensarlo tú, después no sabes ni por qué está bien ni cómo cambiarlo",
+        "Si lo piensas tú primero, aunque sea mal, y después lo usas para que te discuta, aprendes igual y te queda algo",
+        "No es usar menos ChatGPT: es en qué momento lo abres"
+      ],
+      "expectedConcepts": [
+        "articulo_lee",
+        "activo_vs_pasivo"
+      ],
+      "commonMistakes": [
+        "Convertirlo en un consejo de no usar IA",
+        "Escribirlo con las palabras del artículo, que el hermano chico no entiende",
+        "Contar de qué trata el artículo en vez de decir qué sostiene"
+      ],
+      "excellentResponseIndicators": [
+        "Un cabro de 14 años lo entendería a la primera y no quedaría creyendo algo falso",
+        "Trae un ejemplo de la vida del hermano chico, no del mundo del trabajo",
+        "Dice el argumento completo sin usar una sola palabra del artículo"
+      ]
+    }
+  },
+  {
+    "id": "mgt_c01_r5_revisor_externo",
+    "order": 5,
+    "title": "Por qué el truco funciona",
+    "category": "Argumentación",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 240,
+    "conceptTags": [
+      "tres_principios",
+      "activo_vs_pasivo"
+    ],
+    "judgeFocus": "Esta ronda mide UNA cosa: si entendieron que el mecanismo es un cambio de DESTINATARIO, no de tono, de estándar ni de formato. En el encargo normal el estudiante es el público de la IA, y la adulación opera justamente ahí: la IA adapta lo que dice a lo que cree que su interlocutor quiere oír. En el memorando el público pasa a ser el equipo editorial, el autor del texto es un tercero ausente, y la cortesía protectora se queda sin destinatario a quien proteger. Una respuesta de 100 nombra ese cambio de público Y dice por qué eso desactiva la adulación. Una de 60 dice 'porque ya no te habla a ti' sin decir por qué eso importa. Una de 40 lo atribuye a otra causa: que el estándar editorial es más alto, que el formato de memorando obliga a ser breve, o que le pidieron tomar una postura — las tres suenan razonables y las tres son las alternativas equivocadas de la misma pregunta en la ronda 3. NO EXIJAS las palabras 'adulación', 'sycophancy' ni 'destinatario': 'la IA ya no te está hablando a ti, así que no tiene a quién quedarle bien' vale 100. El largo es sugerencia: el enunciado dice que con 3 o 4 líneas basta, pero NO BAJES PUNTAJE POR PASARSE. Si alguien objeta que una IA no tiene realmente un público y que por lo tanto el mecanismo sería otro, eso es un buen argumento y puede sacar alto, siempre que muestre haber entendido primero qué sostiene Lee.",
+    "context": "Ines Lee dice que la IA está por defecto en modo complaciente: adapta sus respuestas a lo que cree que queremos oír. Si le pides que revise tu texto, te dirá que tus ideas son excelentes.\n\nSu solución no es pedirle que sea más dura. Es cambiarle el encargo:\n\n«Eres uno de los mejores editores de una publicación importante. Una persona ha enviado este texto y debes redactar un memorando interno al equipo editorial recomendando si debería publicarse.»",
+    "question": "Explica el **mecanismo**: ¿qué cambia para la IA entre las dos peticiones, y por qué eso hace que se atreva a ser franca? Con 3 o 4 líneas basta.",
+    "evaluationGuide": {
+      "must_hit": [
+        "Dice que cambia quién es el público o el interlocutor de la IA: deja de hablarle al autor y pasa a hablarle a otros editores",
+        "Explica por qué eso importa: la adulación consiste en adaptarse a lo que el interlocutor quiere oír, y el autor ya no es el interlocutor"
+      ],
+      "partial_credit": {
+        "solo_cambio_de_publico": "Nombra el cambio de destinatario pero no explica por qué desactiva la complacencia: alto en fidelidad, 60 en mecanismo.",
+        "solo_mecanismo_de_adulacion": "Explica bien qué es la adulación pero no conecta con el cambio de público: 60 en mecanismo."
+      },
+      "nice_to_have": [
+        "Nota que el autor del texto pasa a ser un tercero ausente en la conversación",
+        "Observa que pedirle directamente que sea dura no funcionaría igual, porque seguiría hablándole a él",
+        "Conecta con que el segundo principio es usar la IA como entrenadora y no como aduladora"
+      ],
+      "fatal_errors": [
+        "Atribuye el efecto al estándar de la publicación, al formato de memorando o a tener que tomar una postura",
+        "Dice que funciona porque uno le pidió a la IA que fuera más dura o más honesta, que es justo lo que Lee dice que NO es la solución",
+        "Repite que 'así es más objetiva' o 'así critica mejor' sin decir qué la vuelve más franca"
+      ]
+    },
+    "idealAnswer": {
+      "keyPoints": [
+        "En el primer encargo el autor es el público de la IA; en el segundo el público es el equipo editorial",
+        "La adulación funciona adaptándose a lo que el interlocutor quiere oír, así que solo opera cuando uno es el interlocutor",
+        "Al dejar de ser su público, la IA se queda sin nadie a quien cuidar y puede ser franca sobre el texto"
+      ],
+      "expectedConcepts": [
+        "tres_principios",
+        "activo_vs_pasivo"
+      ],
+      "commonMistakes": [
+        "Creer que el truco está en el estándar editorial o en el formato del memorando",
+        "Pensar que basta con pedirle a la IA que sea dura",
+        "Quedarse en 'es más objetiva' sin explicar qué cambió"
+      ],
+      "excellentResponseIndicators": [
+        "Nombra el cambio de destinatario y lo conecta con cómo funciona la complacencia",
+        "Nota que el autor pasa a ser un tercero del que se habla, no alguien con quien se habla",
+        "Lo dice con sus palabras, sin usar 'sycophancy'"
+      ]
+    }
+  },
+  {
+    "id": "mgt_c01_r6_tu_proximo_trabajo",
+    "order": 6,
+    "title": "Tu próximo trabajo",
+    "category": "Aplicación",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 240,
+    "conceptTags": [
+      "tres_principios",
+      "activo_vs_pasivo"
+    ],
+    "judgeFocus": "OJO CON 'FIDELIDAD AL TEXTO' EN ESTA RONDA: la respuesta es del estudiante, no del artículo, así que NO le pidas que cite a Lee ni que reconstruya su argumento — eso no se preguntó. Acá esa dimensión mide otra cosa: si lo que diseñó es efectivamente el principio de Lee o solo se le parece. Un prompt que le pide a la IA que produzca algo NO es fiel al principio, por muy bien escrito que esté, y va en 40 o menos. No repartas 100 en esta dimensión solo porque la respuesta no dice nada falso: el piso no es 'no se equivocó', es 'esto es lo que el artículo propone'. Lo que se juzga es si el principio bajó a tierra. Dos cosas concretas: (1) los puntos de los 30 minutos tienen que ser de UN trabajo identificable y tienen que ser puntos que solo apliquen a ESE trabajo — 'lo que ya sé del tema' es un titular, no un punto; 'mi grupo quiere argumentar que las redes sociales fragmentan el debate y no tenemos ningún caso chileno' sí lo es. (2) El prompt tiene que pedir cuestionamiento, y el error más común es un prompt de producción disfrazado: 'ayúdame a mejorar mi presentación' o 'dame ideas para mi informe' siguen pidiendo que la IA produzca. Un prompt que se podría pegar tal cual en el chat y que devolvería preguntas, objeciones o supuestos ocultos vale 100. NO JUZGUES si el trabajo elegido es interesante ni si el argumento del estudiante es bueno: se juzga el diseño de la interacción, no el contenido del trabajo. NO exijas que sean exactamente 30 minutos ni que el trabajo sea de este curso. NO exijas los tres principios: se preguntó por el primero. El largo es sugerencia: el enunciado dice que con 3 o 4 líneas basta, pero NO BAJES PUNTAJE POR PASARSE — acá se piden dos cosas y es esperable que se estiren un poco.",
+    "context": "El primer principio de Lee: antes de usar IA en cualquier trabajo donde importe el juicio, dedica 30 minutos a registrar tus ideas en bruto. Qué sabes ya, cuáles son tus hipótesis, qué no está claro, qué restricciones importan.\n\nRecién después abres la IA — y el primer prompt no pide un producto, pide que te cuestione.\n\nPiensa en un trabajo real que tengas este semestre: la presentación grupal de este curso, un informe de otro ramo, una postulación.",
+    "question": "Escribe dos cosas: **(1)** dos o tres puntos concretos que pondrías en esos 30 minutos, antes de abrir la IA; y **(2)** tu primer prompt, que tiene que pedir cuestionamiento, no producción. Con 3 o 4 líneas basta.",
+    "evaluationGuide": {
+      "must_hit": [
+        "Nombra un trabajo identificable, no 'un trabajo' genérico",
+        "Los puntos de los 30 minutos son específicos de ese trabajo: una hipótesis propia, algo que no tiene claro, una restricción real",
+        "El prompt pide cuestionamiento —preguntas, supuestos ocultos, contraargumentos, vacíos— y no un producto"
+      ],
+      "partial_credit": {
+        "trabajo_real_puntos_genericos": "Nombra un trabajo real pero los puntos servirían para cualquier trabajo: hasta 60 en concreción.",
+        "prompt_bueno_puntos_flojos": "El prompt está bien diseñado y los puntos son vagos, o al revés: se cumplió la mitad del encargo, hasta 60.",
+        "prompt_hibrido": "El prompt pide cuestionar y además producir algo ('cuestiona mis supuestos y después escríbeme el guión'): hasta 60 en mecanismo, porque entendió a medias qué hace el primer prompt."
+      },
+      "nice_to_have": [
+        "El prompt le entrega a la IA el material de los 30 minutos, en vez de partir de cero",
+        "Nombra un supuesto propio que sospecha que no ha declarado",
+        "Le pide explícitamente a la IA que no proponga solución todavía"
+      ],
+      "fatal_errors": [
+        "El prompt pide un producto: que escriba, arme, mejore, resuma o dé ideas",
+        "No hay ningún trabajo identificable: la respuesta valdría igual para cualquier persona del curso",
+        "Repite las palabras del artículo sin bajarlas a nada propio"
+      ]
+    },
+    "idealAnswer": {
+      "keyPoints": [
+        "Un trabajo concreto y reconocible, con su tema y su fecha o su entrega",
+        "Dos o tres puntos que solo tienen sentido para ese trabajo: la tesis que tiene en mente, lo que no sabe, la restricción que lo aprieta",
+        "Un prompt pegable que pide preguntas, supuestos no declarados o contraargumentos, y que explícitamente no pide producto todavía"
+      ],
+      "expectedConcepts": [
+        "tres_principios",
+        "activo_vs_pasivo"
+      ],
+      "commonMistakes": [
+        "Un prompt de producción disfrazado de cuestionamiento ('ayúdame a mejorar...')",
+        "Puntos de los 30 minutos que son categorías vacías ('qué sé', 'qué no sé') sin contenido",
+        "Describir el principio en vez de aplicarlo"
+      ],
+      "excellentResponseIndicators": [
+        "El prompt se podría copiar y pegar en el chat sin editar nada",
+        "Los puntos revelan que efectivamente pensó el trabajo, no la pregunta del juego",
+        "Le pasa a la IA lo que ya pensó, en vez de pedirle que empiece"
+      ]
+    }
+  }
+]

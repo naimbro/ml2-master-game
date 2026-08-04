@@ -56,6 +56,11 @@ import dvC01Scenarios from '../../content/sessions/dataviz_2026/clase_01_diagnos
 import dvC01Rubric from '../../content/sessions/dataviz_2026/clase_01_diagnostico/rubric.json';
 import dvC01KnowledgeBase from '../../content/sessions/dataviz_2026/clase_01_diagnostico/knowledge_base.md?raw';
 
+import mgtC01Config from '../../content/sessions/mgt300_2026/clase_01_piensa_primero/config.json';
+import mgtC01Scenarios from '../../content/sessions/mgt300_2026/clase_01_piensa_primero/scenarios.json';
+import mgtC01Rubric from '../../content/sessions/mgt300_2026/clase_01_piensa_primero/rubric.json';
+import mgtC01KnowledgeBase from '../../content/sessions/mgt300_2026/clase_01_piensa_primero/knowledge_base.md?raw';
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyJson = any;
 
@@ -121,6 +126,14 @@ export const COURSES: Course[] = [
     tagline: 'Doble titulo Sociologia - Ingenieria Comercial (UAI)',
     accentClass: 'from-sky-500 to-indigo-600',
     iconClass: 'bg-gradient-to-br from-sky-500 to-indigo-600',
+  },
+  {
+    id: 'mgt300_2026',
+    name: 'Sociedad, Cultura y Politica',
+    shortName: 'MGT300',
+    tagline: 'Ingenieria Comercial, Escuela de Negocios (UAI)',
+    accentClass: 'from-teal-600 to-slate-700',
+    iconClass: 'bg-gradient-to-br from-teal-600 to-slate-700',
   },
 ];
 
@@ -256,6 +269,18 @@ export const SESSIONS: SessionOption[] = [
     scenarios: dvC01Scenarios,
     rubric: dvC01Rubric,
     knowledgeBase: dvC01KnowledgeBase,
+  },
+  {
+    id: 'clase_01_piensa_primero',
+    courseId: 'mgt300_2026',
+    title: mgtC01Config.title,
+    description: mgtC01Config.description,
+    rounds: mgtC01Scenarios.length,
+    duration: Math.round(mgtC01Config.roundDurationSeconds / 60),
+    config: mgtC01Config,
+    scenarios: mgtC01Scenarios,
+    rubric: mgtC01Rubric,
+    knowledgeBase: mgtC01KnowledgeBase,
   },
 ];
 
