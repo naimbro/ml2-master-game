@@ -3,6 +3,7 @@ import { doc, onSnapshot, updateDoc, setDoc, collection, query, where, addDoc, T
 import { httpsCallable } from 'firebase/functions';
 import { db, functions } from '../lib/firebase';
 import type { Game, Player, Submission, RoundResults, GameStatus, MCResponse } from '../types/game';
+import type { TelemetriaCaptura } from '../lib/telemetriaDerived';
 import { useAuth } from './useAuth';
 import { mcTimeline, mcGateSeconds, shouldCutQuestion } from '../lib/mcTiming';
 
@@ -16,7 +17,7 @@ interface UseGameReturn {
   // Actions
   joinGame: (gameCode: string, playerName: string) => Promise<void>;
   startGame: () => Promise<void>;
-  submitAnswer: (response: string) => Promise<void>;
+  submitAnswer: (response: string, telemetria?: TelemetriaCaptura | null) => Promise<void>;
   submitMCBlock: (mcResponses: MCResponse[], blockScore: number) => Promise<void>;
   nextRound: () => Promise<void>;
   endGame: () => Promise<void>;
@@ -199,7 +200,10 @@ export function useGame(gameCode: string | undefined): UseGameReturn {
     });
   }, [gameCode, isHost, game?.roundDurationSeconds, game?.scenarios]);
 
-  const submitAnswer = useCallback(async (response: string) => {
+  const submitAnswer = useCallback(async (
+    response: string,
+    telemetria?: TelemetriaCaptura | null,
+  ) => {
     if (!gameCode || !user || !game) return;
 
     const submissionsRef = collection(db, 'games', gameCode, 'submissions');
@@ -215,6 +219,25 @@ export function useGame(gameCode: string | undefined): UseGameReturn {
     };
 
     const docRef = await addDoc(submissionsRef, submission);
+
+    // Como se escribio la respuesta. Registro descriptivo del anfitrion: NO
+    // puntua, NO penaliza y no se le muestra a ningun alumno.
+    //
+    // Va DESPUES del addDoc y con catch propio a proposito: si la regla lo
+    // rechaza, si se cae la red o si el documento ya existia, el alumno ya
+    // mando su respuesta y no se tiene que enterar de nada. La telemetria
+    // jamas puede romper ni retrasar el envio.
+    if (telemetria) {
+      const telemetriaRef = doc(
+        db, 'games', gameCode, 'telemetria', `${user.uid}_${game.currentRound}`,
+      );
+      setDoc(telemetriaRef, {
+        ...telemetria,
+        playerId: user.uid,
+        round: game.currentRound,
+        version: 1,
+      }).catch((err) => console.warn('telemetria no guardada', err));
+    }
 
     // Fire-and-forget: evaluate immediately, don't block the UI
     const evaluate = httpsCallable(functions, 'evaluateSubmission');
