@@ -54,6 +54,12 @@ export function useTypingTelemetry({ enabled, round, scenarioId, roundStartMs }:
     };
     // `roundStartMs` a proposito fuera: llega despues del montaje y reiniciaria
     // el registro a mitad de la ronda, borrando lo que el alumno ya escribio.
+    // Depender solo de `round` alcanza porque `startGame()` y `nextRound()` en
+    // useGame.ts escriben `currentRound` y `roundStartTime` en el MISMO
+    // updateDoc: siempre llegan juntos, en un solo snapshot y un solo render.
+    // Si algun dia esas dos escrituras se separan, este efecto seguiria
+    // remontando bien con el `round` nuevo, pero `roundStartOffsetMs` quedaria
+    // calculado contra un `roundStartMs` viejo o nulo, en silencio.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enabled, round, scenarioId]);
 

@@ -226,17 +226,27 @@ export function useGame(gameCode: string | undefined): UseGameReturn {
     // Va DESPUES del addDoc y con catch propio a proposito: si la regla lo
     // rechaza, si se cae la red o si el documento ya existia, el alumno ya
     // mando su respuesta y no se tiene que enterar de nada. La telemetria
-    // jamas puede romper ni retrasar el envio.
+    // jamas puede romper ni retrasar el envio. Dos guardas, no una: el `.catch`
+    // cubre que la escritura sea rechazada; el `try` cubre que `doc(...)` o el
+    // spread revienten ANTES de que la escritura siquiera se emita. Sin el
+    // `try`, esa excepcion se propagaria fuera de `submitAnswer`, la agarraria
+    // el catch de `handleSubmit` en Round.tsx, y liberaria `submittedRef`
+    // DESPUES de que el addDoc de arriba ya tuvo exito — reabriendo el boton de
+    // enviar e invitando una submission duplicada.
     if (telemetria) {
-      const telemetriaRef = doc(
-        db, 'games', gameCode, 'telemetria', `${user.uid}_${game.currentRound}`,
-      );
-      setDoc(telemetriaRef, {
-        ...telemetria,
-        playerId: user.uid,
-        round: game.currentRound,
-        version: 1,
-      }).catch((err) => console.warn('telemetria no guardada', err));
+      try {
+        const telemetriaRef = doc(
+          db, 'games', gameCode, 'telemetria', `${user.uid}_${game.currentRound}`,
+        );
+        setDoc(telemetriaRef, {
+          ...telemetria,
+          playerId: user.uid,
+          round: game.currentRound,
+          version: 1,
+        }).catch((err) => console.warn('telemetria no guardada', err));
+      } catch (err) {
+        console.warn('telemetria no guardada', err);
+      }
     }
 
     // Fire-and-forget: evaluate immediately, don't block the UI
