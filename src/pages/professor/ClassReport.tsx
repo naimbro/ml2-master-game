@@ -17,6 +17,7 @@ import { httpsCallable } from 'firebase/functions';
 import { functions } from '../../lib/firebase';
 import { useAuth } from '../../hooks/useAuth';
 import GameFeedbackReport from '../../components/GameFeedbackReport';
+import SeccionTelemetria from '../../components/telemetria/SeccionTelemetria';
 import jsPDF from 'jspdf';
 
 interface PlayerReport {
@@ -411,6 +412,11 @@ export default function ClassReport() {
             </div>
           </motion.div>
         </div>
+
+        <SeccionTelemetria
+          gameCode={report.gameCode}
+          jugadores={Object.fromEntries(report.players.map((p) => [p.playerId, p.name]))}
+        />
 
         {/* Top Improvement Areas */}
         {report.topImprovementAreas.length > 0 && (
