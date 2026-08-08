@@ -62,3 +62,69 @@ export function proporcionPegada(t: { charsPegados: number; largoFinal: number }
   if (t.largoFinal <= 0) return 0;
   return Math.min(1, t.charsPegados / t.largoFinal);
 }
+
+/** Margen interno del sparkline, para que el trazo no se coma el borde. */
+const PADDING = 2;
+
+/**
+ * Los puntos de la polilinea de una respuesta, listos para el atributo
+ * `points` de un <polyline>.
+ *
+ * Dos normalizaciones, y las dos importan:
+ *
+ * - La ALTURA se normaliza al largo maximo de esa misma respuesta. Se compara
+ *   la forma, no el tamano: una respuesta de 200 caracteres bien escrita y una
+ *   de 2000 bien escrita tienen que verse igual, porque la conducta es la
+ *   misma.
+ * - El ANCHO se normaliza a la duracion de la RONDA, no al largo de la huella.
+ *   Quien envio al minuto 2 de 5 muestra una linea que se corta a la mitad, y
+ *   eso es informacion: se fue temprano.
+ */
+export function puntosHuella(
+  t: Pick<TelemetriaCaptura, 'huella' | 'huellaIntervaloMs' | 'msEnvio' | 'largoFinal'>,
+  duracionMs: number,
+  ancho: number,
+  alto: number
+): string {
+  const muestras = [
+    { ms: 0, largo: 0 },
+    ...t.huella.map((largo, i) => ({ ms: (i + 1) * t.huellaIntervaloMs, largo })),
+    { ms: t.msEnvio, largo: t.largoFinal },
+  ];
+
+  const maxLargo = Math.max(1, ...muestras.map((m) => m.largo));
+  const span = Math.max(1, duracionMs);
+  const x0 = PADDING;
+  const x1 = ancho - PADDING;
+  const yBase = alto - PADDING;
+  const yTope = PADDING;
+
+  return muestras
+    .map((m) => {
+      const x = x0 + Math.min(1, m.ms / span) * (x1 - x0);
+      const y = yBase - (m.largo / maxLargo) * (yBase - yTope);
+      return `${Number(x.toFixed(1))},${Number(y.toFixed(1))}`;
+    })
+    .join(' ');
+}
+
+/**
+ * Donde cae una respuesta en la nube del curso. x = cuanto tardo en escribir la
+ * primera letra, y = que proporcion del texto llego pegada.
+ *
+ * Quien nunca escribio nada se ubica al final del eje: no tuvo primera tecla.
+ */
+export function posicionNube(
+  t: { msPrimeraTecla: number | null; charsPegados: number; largoFinal: number },
+  duracionMs: number,
+  ancho: number,
+  alto: number
+): { x: number; y: number } {
+  const span = Math.max(1, duracionMs);
+  const fx = t.msPrimeraTecla === null ? 1 : Math.min(1, t.msPrimeraTecla / span);
+  const fy = proporcionPegada(t);
+  return {
+    x: PADDING + fx * (ancho - 2 * PADDING),
+    y: (alto - PADDING) - fy * (alto - 2 * PADDING),
+  };
+}
