@@ -1,6 +1,6 @@
 ---
 name: autor-de-rubricas
-description: Use when writing or fixing how a game round gets scored — "escribir la rúbrica", "los jueces puntúan mal", "todos sacan el mismo puntaje", "el puntaje quedó muy alto/bajo", "ajustar las anclas", or when touching judgeFocus, evaluationGuide, idealAnswer, rubric.json dimensions, penalties, sessionLens or weightFormula. Use right after the questions of a session are chosen, and before playing it.
+description: Use when writing or fixing how a game round gets scored — "escribir la rúbrica", "los jueces puntúan mal", "todos sacan el mismo puntaje", "el puntaje quedó muy alto/bajo", "los jueces no se ponen de acuerdo", "castigaron una respuesta que estaba correcta", "ajustar las anclas", or when touching judgeFocus, evaluationGuide, idealAnswer, rubric.json dimensions, penalties, sessionLens or weightFormula. Use right after the questions of a session are chosen, and before playing it.
 ---
 
 # Autor de rúbricas
@@ -35,7 +35,7 @@ escribe una rúbrica propia y se anota el porqué en un campo `_doc`** — pasó
 dataviz clase 1, donde las dimensiones del curso describían lectura de gráficos
 y las dos rondas juzgadas eran comprensión lectora.
 
-## Las tres respuestas sintéticas
+## Las tres respuestas sintéticas, y una cuarta
 
 Para cada pregunta, escribir tres respuestas y **predecir el puntaje de cada
 juez antes de guardar**:
@@ -46,17 +46,26 @@ juez antes de guardar**:
 - **Engañosa** — espera 35-55. **La que importa.** Vocabulario correcto, lógica
   equivocada; o tan genérica que suena bien y no dice nada.
 
+Y una cuarta, **obligatoria si la pregunta admite más de una respuesta
+correcta**:
+
+- **La de al lado** — espera lo mismo que la buena. Una respuesta correcta que
+  **no es la que tenías en la cabeza**: otro límite igual de válido, otra métrica
+  que también sirve, otra lectura que el dato sostiene. Es la única de las cuatro
+  que prueba si escribiste un criterio o sólo enumeraste tu propia respuesta.
+
 Señales de que la rúbrica está mal calibrada:
 
 | Señal | Qué significa |
 |---|---|
 | La buena baja de 70 | Rúbrica demasiado dura |
 | La engañosa sube de 65 | No discrimina: premia el vocabulario |
+| **La de al lado baja de 60** | **La rúbrica enumera en vez de dar criterio** |
 | Una penalización se dispara en la buena | Penalización mal escrita |
 | Dos jueces dan casi lo mismo | Un juez sobra en esta ronda |
 
 Una rúbrica no se prueba con una respuesta brillante ni con una pésima. Se
-prueba en la zona gris.
+prueba en la zona gris, y en el borde: la respuesta correcta que no esperabas.
 
 ## Reglas duras
 
@@ -64,6 +73,16 @@ prueba en la zona gris.
   premisa suena falsa", el problema es el enunciado, no la respuesta. Ya se
   castigó a alguien por notar una premisa inventada, y esa es la falla que
   hundió un juego a 3,0/7.
+- **Toda lista de ejemplos la lee el juez como lista cerrada.** Aunque la
+  escribas como ejemplos, si enumeras las respuestas aceptables el juez castiga
+  la correcta que quedó fuera. En dataviz clase 2 el `judgeFocus` decía
+  "cualquiera de esas *cuatro* versiones del límite cuenta": un alumno nombró una
+  quinta verdadera y los tres jueces se abrieron en 46 / 80 / 94, con el más duro
+  argumentando al revés para justificarse. Escribe siempre **el criterio primero
+  y los ejemplos después**, marcados como no exhaustivos, y cierra por el otro
+  lado diciendo qué NO cuenta. Un `judgeFocus` que enumera y un
+  `evaluationGuide` cuyo `nice_to_have` acepta un caso más ya se están
+  contradiciendo: los dos se editan juntos.
 - **El largo pedido va en tres lugares**: el enunciado, el `globalInstructions`
   de la rúbrica y el `judgeFocus`. Si sale de uno, los jueces empiezan a esperar
   párrafos donde se pidieron cuatro líneas.
