@@ -2,7 +2,7 @@
   "sessionId": "clase_02_primeros_pasos_r",
   "courseId": "dataviz_2026",
   "title": "Clase 2: Primeros pasos en R y en Colab",
-  "description": "8 rondas (~12 min): 6 de alternativas sobre Colab y R básico, y 2 abiertas de 150 s — la comuna promedio y describir un gráfico. Todo sale de los cuadernos 1 y 2; nada exige haber alcanzado a ver el cuaderno 3 ni la limpieza de datos. Las 8 compiten.",
+  "description": "8 rondas (~16 min): 6 de alternativas sobre Colab y R básico, y 2 abiertas de 150 s — la comuna promedio y describir un gráfico. Las rondas solas suman 11 min; el resto se lo llevan los jueces (~35 s por ronda abierta), los duelos y las revelaciones. Todo sale de los cuadernos 1 y 2; nada exige haber alcanzado a ver el cuaderno 3 ni la limpieza de datos. Las 8 compiten.",
   "date": "2026-08-10",
   "roundCount": 8,
   "roundDurationSeconds": 150,

@@ -39,6 +39,13 @@ HarmonyOS y Otro casi nada."
 **Engañosa.** "Este gráfico refleja claramente la preferencia de los jóvenes por
 Apple, ya que la gran mayoría usa iPhone frente a Android."
 
+**Límite fuera de la lista** (agregada el 8-ago-2026, ver hallazgo 3). "La
+mayoría de los alumnos usa iOS (eso es Apple). No se puede saber si esto es así
+en cada uno de los campus." Esperado **70-85 en los tres jueces**: el límite es
+verdadero y ahora cuenta, pero "la mayoría" sin ninguna magnitud choca con
+`mayoria_sin_magnitud`, así que no debe llegar a 100. Si un juez la vuelve a
+mandar bajo 55, la lista se cerró de nuevo.
+
 ---
 
 ## Lo que la corrida a mano encontró
@@ -60,3 +67,20 @@ abiertas; no lo resuelve la rúbrica.
 
 La engañosa funciona en las dos rondas sin cambios: cae a 37-38 en R4 (la
 penalización `respuesta_intercambiable`) y a 48-56 en R8 (`amplia_el_sujeto`).
+
+**3. La lista de límites aceptables de R8 estaba cerrada, y castigó un límite
+verdadero.** Medido en la partida `JXU7CM` (8-ago-2026), no estimado. El
+`judgeFocus` decía "cualquiera de esas *cuatro* versiones del límite cuenta", y
+una respuesta que nombró una quinta —que no se puede saber si pasa lo mismo en
+cada campus— se abrió en **46 / 80 / 94** entre los tres jueces. Claude justificó
+el 46 diciendo que eso "no es un límite del gráfico, porque este no distingue
+campus para nada", que es el argumento dado vuelta: precisamente porque no los
+distingue es que no se puede concluir por campus. La lista además se contradecía
+con su propio `evaluationGuide`, cuyo `nice_to_have` ya aceptaba un quinto límite
+(que HarmonyOS y Otro son demasiado pocos). Se abrió la lista en el `judgeFocus`
+y en el `must_hit`: el criterio ahora es si el límite es cierto sobre este
+gráfico, no si aparece enumerado.
+
+Queda **sin verificar contra jueces reales**: los 70-85 de la cuarta respuesta
+son una predicción. La forma de confirmarlo es jugar la ronda 8 mandando esa
+respuesta, que es lo único que dice qué puntaje pone el panel.
