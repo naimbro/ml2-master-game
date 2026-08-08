@@ -70,7 +70,17 @@ export function useTypingTelemetry({ enabled, round, scenarioId, roundStartMs }:
   const onPaste = useCallback((e: ClipboardEvent<HTMLTextAreaElement>) => {
     // El largo se toma del portapapeles y no del delta del textarea: si habia
     // texto seleccionado, el delta seria el saldo neto y no lo que entro.
-    registro.current?.pegado(e.clipboardData.getData('text').length);
+    //
+    // Todo envuelto porque este handler corre dentro del render de React: si
+    // `clipboardData` faltara en algun navegador de celular, un throw aca
+    // reventaria la pantalla de la ronda del alumno. Ningun registro vale eso.
+    // Un pegado que llega con largo 0 significa "hubo pegado y el navegador no
+    // dijo de que tamano", que sigue siendo mas informacion que nada.
+    try {
+      registro.current?.pegado(e.clipboardData?.getData('text').length ?? 0);
+    } catch (err) {
+      console.warn('pegado no registrado', err);
+    }
   }, []);
 
   const snapshot = useCallback((): TelemetriaCaptura | null => {
