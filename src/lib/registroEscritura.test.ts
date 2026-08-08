@@ -160,4 +160,53 @@ describe('RegistroEscritura', () => {
     // los pegados que no caben igual suman al total
     expect(cerrado.charsPegados).toBe(90);
   });
+
+  it('cerrar() es seguro de llamar mas de una vez, incluso tras cerrar una salida abierta', () => {
+    const { reloj, registro } = nuevoRegistro();
+    registro.muestra();
+    registro.pegado(10);
+    registro.cambio('x'.repeat(10));
+    registro.seOculto();
+    reloj.avanzar(7000);
+    // El primer cerrar() cierra la salida en curso. El segundo, con el reloj
+    // congelado, no deberia sumar nada de nuevo.
+    const primero = registro.cerrar();
+    const segundo = registro.cerrar();
+    expect(segundo.msFueraDeApp).toBe(primero.msFueraDeApp);
+    expect(segundo.salidas).toBe(primero.salidas);
+    expect(segundo.huella).toEqual(primero.huella);
+    expect(segundo.pegados).toEqual(primero.pegados);
+  });
+
+  it('las llamadas repetidas de visibilidad no cuentan doble en ninguna direccion', () => {
+    const { reloj, registro } = nuevoRegistro();
+    // seOculto() repetido sin un seMostro() de por medio: la segunda llamada
+    // no debe sumar otra salida ni reiniciar el intervalo que ya empezo.
+    registro.seOculto();
+    reloj.avanzar(3000);
+    registro.seOculto();
+    reloj.avanzar(4000);
+    registro.seMostro();
+    // seMostro() repetido sin un seOculto() de por medio: la segunda llamada
+    // no debe sumar tiempo de nuevo.
+    registro.seOculto();
+    reloj.avanzar(5000);
+    registro.seMostro();
+    registro.seMostro();
+    const cerrado = registro.cerrar();
+    expect(cerrado.msFueraDeApp).toBe(12_000); // 7000 (3000+4000, sin reinicio) + 5000
+    expect(cerrado.salidas).toBe(2);
+  });
+
+  it('cerrar() devuelve copias, no las listas internas', () => {
+    const { registro } = nuevoRegistro();
+    registro.muestra();
+    registro.pegado(5);
+    const primero = registro.cerrar();
+    primero.huella.push(999);
+    primero.pegados.push({ ms: 0, chars: 1 });
+    const segundo = registro.cerrar();
+    expect(segundo.huella).toEqual([0]);
+    expect(segundo.pegados).toEqual([{ ms: 0, chars: 5 }]);
+  });
 });
