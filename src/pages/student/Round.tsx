@@ -1081,6 +1081,7 @@ export default function Round() {
                       telemetria.noteChange(e.target.value);
                     }}
                     onPaste={telemetria.onPaste}
+                    ref={telemetria.refTextarea}
                     placeholder="Escribe tu respuesta aqui..."
                     rows={8}
                     className="input-field resize-none mb-4"

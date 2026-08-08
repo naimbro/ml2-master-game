@@ -34,6 +34,14 @@ export interface TelemetriaCaptura {
   largoFinal: number;
   charsPegados: number;
   charsEditadosTrasUltimoPegado: number;
+  /**
+   * El crecimiento mas grande en un solo cambio del textarea, venga de donde
+   * venga. Es la red para las entradas que no disparan ningun evento de
+   * pegado: el hecho queda anotado aunque no sepamos clasificarlo.
+   *
+   * Opcional porque los documentos escritos antes del 8-ago-2026 no lo traen.
+   */
+  maxInsercionDeGolpe?: number;
 }
 
 /** El documento tal como queda en Firestore. */
@@ -182,6 +190,17 @@ export function hechosDetalle(t: TelemetriaCaptura, duracionMs: number): HechoDe
     hechos.push({
       etiqueta: 'Editó después de pegar',
       valor: `${t.charsEditadosTrasUltimoPegado} caracteres`,
+    });
+  }
+
+  // Se muestra siempre que el documento lo traiga, haya habido pegado o no.
+  // Cuando no hubo ningun evento de pegado, esta linea es lo unico que queda
+  // del texto que entro de golpe — y sigue siendo un hecho, no un veredicto:
+  // un salto grande tambien lo produce el dictado o un teclado deslizante.
+  if (t.maxInsercionDeGolpe !== undefined) {
+    hechos.push({
+      etiqueta: 'Mayor salto de una vez',
+      valor: `${t.maxInsercionDeGolpe} caracteres`,
     });
   }
 

@@ -77,10 +77,48 @@ export function useTypingTelemetry({ enabled, round, scenarioId, roundStartMs }:
     // Un pegado que llega con largo 0 significa "hubo pegado y el navegador no
     // dijo de que tamano", que sigue siendo mas informacion que nada.
     try {
-      registro.current?.pegado(e.clipboardData?.getData('text').length ?? 0);
+      const texto = e.clipboardData?.getData('text');
+      registro.current?.pegado(texto === undefined ? null : texto.length);
     } catch (err) {
       console.warn('pegado no registrado', err);
     }
+  }, []);
+
+  /**
+   * Engancha en el textarea el OTRO camino por el que entra un pegado, y que en
+   * el celular es EL camino.
+   *
+   * El 8-ago-2026, jugando en un Android real, ningun pegado quedo registrado:
+   * el chip del portapapeles de Gboard inserta por el metodo de entrada y no
+   * dispara `paste`. 465 caracteres entraron de golpe y quedaron contados como
+   * tecleados. `beforeinput` si llega, y trae `inputType`, que es el navegador
+   * diciendo de que tipo de insercion se trata.
+   *
+   * Sigue siendo el navegador quien clasifica, no nosotros: por eso solo se
+   * acepta `insertFromPaste` y no se infiere nada del tamano del salto. Dictar
+   * es `insertCompositionText` y no entra por aca.
+   *
+   * Se engancha al DOM a mano y NO por `onBeforeInput` de React: React sintetiza
+   * ese evento a partir de composicion y `textInput`, no del `beforeinput`
+   * nativo, asi que `inputType` llegaria vacio y este handler saldria por la
+   * puerta de atras en cada pegado — sin fallar, que es lo peor.
+   */
+  const refTextarea = useCallback((nodo: HTMLTextAreaElement | null) => {
+    if (!nodo) return;
+
+    const alInsertar = (ev: Event) => {
+      const e = ev as InputEvent;
+      if (e.inputType !== 'insertFromPaste') return;
+      try {
+        const texto = e.dataTransfer?.getData('text');
+        registro.current?.pegadoPorInsercion(texto === undefined ? null : texto.length);
+      } catch (err) {
+        console.warn('pegado no registrado', err);
+      }
+    };
+
+    nodo.addEventListener('beforeinput', alInsertar);
+    return () => nodo.removeEventListener('beforeinput', alInsertar);
   }, []);
 
   const snapshot = useCallback((): TelemetriaCaptura | null => {
@@ -91,5 +129,8 @@ export function useTypingTelemetry({ enabled, round, scenarioId, roundStartMs }:
   // el efecto de auto-envio por tiempo agotado depende de `handleSubmit`. Un
   // objeto nuevo en cada render volveria a montar ese efecto en cada tecla que
   // escribe el alumno.
-  return useMemo(() => ({ noteChange, onPaste, snapshot }), [noteChange, onPaste, snapshot]);
+  return useMemo(
+    () => ({ noteChange, onPaste, refTextarea, snapshot }),
+    [noteChange, onPaste, refTextarea, snapshot]
+  );
 }

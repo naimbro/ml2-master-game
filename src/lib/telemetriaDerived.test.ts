@@ -174,3 +174,28 @@ describe('hechosDetalle', () => {
     expect(hechos.find((h) => h.etiqueta === 'Editó después de pegar')?.valor).toBe('340 caracteres');
   });
 });
+
+describe('hechosDetalle — el mayor salto de una vez', () => {
+  it('lo muestra cuando el documento lo trae', () => {
+    const hechos = hechosDetalle({ ...captura, maxInsercionDeGolpe: 465 }, 240_000);
+    expect(hechos.find((h) => h.etiqueta === 'Mayor salto de una vez')?.valor).toBe(
+      '465 caracteres'
+    );
+  });
+
+  it('lo muestra aunque no se haya registrado ningun pegado', () => {
+    // El caso del Android del 8-ago-2026: el texto entro entero y ningun
+    // evento de pegado disparo. El salto es lo unico que queda.
+    const hechos = hechosDetalle(
+      { ...captura, pegados: [], charsPegados: 0, maxInsercionDeGolpe: 465 },
+      240_000
+    );
+    expect(hechos.map((h) => h.etiqueta)).not.toContain('Pegados');
+    expect(hechos.map((h) => h.etiqueta)).toContain('Mayor salto de una vez');
+  });
+
+  it('se omite en los documentos viejos que no lo traen', () => {
+    const hechos = hechosDetalle(captura, 240_000);
+    expect(hechos.map((h) => h.etiqueta)).not.toContain('Mayor salto de una vez');
+  });
+});

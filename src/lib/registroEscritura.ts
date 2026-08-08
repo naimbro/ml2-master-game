@@ -5,6 +5,12 @@ export const HUELLA_INTERVALO_MS = 2000;
 const MAX_MUESTRAS = 600;
 /** Un documento con 40 pegados ya conto la historia. */
 const MAX_PEGADOS = 40;
+/**
+ * Ventana para tratar el evento `paste` y la insercion que lo sigue como UN
+ * pegado. Los dos llegan en el mismo tick del navegador; 200 ms es holgado
+ * para eso y sigue siendo mas rapido de lo que una persona pega dos veces.
+ */
+const DEDUPE_PEGADO_MS = 200;
 
 interface Opciones {
   ahora: () => number;
@@ -51,6 +57,13 @@ export class RegistroEscritura {
    * tamano, que es exactamente al reves de lo que el campo quiere decir.
    */
   private saltarProximoCambio = false;
+  /** Para deduplicar: el menu del navegador dispara los DOS eventos. */
+  private msUltimoPegado: number | null = null;
+  /** El navegador no dijo el tamano; lo mide el cambio que viene. */
+  private esperandoMedida = false;
+  /** Donde quedo el pegado a medir, o null si no cupo por el tope. */
+  private idxPendiente: number | null = null;
+  private maxInsercion = 0;
 
   constructor(opciones: Opciones) {
     this.ahora = opciones.ahora;
@@ -66,7 +79,14 @@ export class RegistroEscritura {
   /** Cada `onChange` del textarea. */
   cambio(valor: string): void {
     const nuevo = valor.length;
-    const delta = Math.abs(nuevo - this.largo);
+    const crecimiento = nuevo - this.largo;
+    const delta = Math.abs(crecimiento);
+
+    // El salto mas grande se anota SIEMPRE, venga de donde venga. Es la red
+    // para el dia en que aparezca un camino de entrada que no dispare ninguno
+    // de los dos eventos de pegado: el hecho queda registrado igual, y el panel
+    // lo muestra como hecho sin afirmar nada sobre el.
+    if (crecimiento > this.maxInsercion) this.maxInsercion = crecimiento;
 
     if (this.msPrimeraTecla === null && nuevo > 0) {
       this.msPrimeraTecla = this.transcurrido();
@@ -74,6 +94,15 @@ export class RegistroEscritura {
 
     if (this.saltarProximoCambio) {
       this.saltarProximoCambio = false;
+      if (this.esperandoMedida) {
+        // El navegador aviso del pegado pero no dijo de que tamano. Este cambio
+        // ES el pegado, asi que su crecimiento es la medida.
+        this.esperandoMedida = false;
+        const medido = Math.max(0, crecimiento);
+        this.charsPegados += medido;
+        if (this.idxPendiente !== null) this.pegados[this.idxPendiente].chars = medido;
+        this.idxPendiente = null;
+      }
     } else if (this.huboPegado) {
       this.editadosTrasPegado += delta;
     }
@@ -81,16 +110,58 @@ export class RegistroEscritura {
     this.largo = nuevo;
   }
 
-  /** Cada evento `paste`, con el largo real del portapapeles. */
-  pegado(chars: number): void {
+  /**
+   * Un pegado, venga del evento `paste` o de una insercion del metodo de
+   * entrada. `chars` en null significa "hubo pegado y el navegador no dijo de
+   * que tamano": lo mide el cambio siguiente.
+   */
+  private registrarPegado(chars: number | null): void {
+    this.idxPendiente = null;
     if (this.pegados.length < MAX_PEGADOS) {
-      this.pegados.push({ ms: this.transcurrido(), chars });
+      this.idxPendiente = this.pegados.length;
+      this.pegados.push({ ms: this.transcurrido(), chars: chars ?? 0 });
     }
-    this.charsPegados += chars;
+
+    if (chars === null) {
+      this.esperandoMedida = true;
+    } else {
+      this.charsPegados += chars;
+      this.idxPendiente = null;
+    }
+
+    this.msUltimoPegado = this.transcurrido();
     this.huboPegado = true;
     // La edicion posterior se cuenta desde el ULTIMO pegado.
     this.editadosTrasPegado = 0;
     this.saltarProximoCambio = true;
+  }
+
+  /** El evento `paste` del navegador, con el largo real del portapapeles. */
+  pegado(chars: number | null): void {
+    this.registrarPegado(chars);
+  }
+
+  /**
+   * Una insercion marcada por el navegador como pegado (`beforeinput` con
+   * inputType `insertFromPaste`).
+   *
+   * Existe porque el 8-ago-2026, en un Android real, NINGUN pegado quedo
+   * registrado: el chip del portapapeles de Gboard inserta por el metodo de
+   * entrada y no dispara `paste`. 465 caracteres entraron de golpe y el
+   * registro los conto como tecleados — que es justo la lectura que este
+   * sistema no puede permitirse.
+   *
+   * El menu tactil del navegador, en cambio, dispara los DOS eventos. De ahi la
+   * ventana de deduplicacion: sin ella ese caso contaria doble.
+   */
+  pegadoPorInsercion(chars: number | null): void {
+    if (
+      this.msUltimoPegado !== null &&
+      this.transcurrido() - this.msUltimoPegado < DEDUPE_PEGADO_MS
+    ) {
+      return;
+    }
+    this.registrarPegado(chars);
   }
 
   /** Un tic del muestreo periodico. */
@@ -132,6 +203,7 @@ export class RegistroEscritura {
       largoFinal: this.largo,
       charsPegados: this.charsPegados,
       charsEditadosTrasUltimoPegado: this.editadosTrasPegado,
+      maxInsercionDeGolpe: this.maxInsercion,
     };
   }
 }
