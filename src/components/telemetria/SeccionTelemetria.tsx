@@ -126,7 +126,7 @@ export default function SeccionTelemetria({
 
         <div>
           <p className="text-[11px] font-semibold text-muted mb-2">
-            Por alumno · rampa = tecleó · acantilado = pegó
+            Por alumno · rampa = fue escribiendo · acantilado = llegó de una vez
           </p>
           <RejillaHuellas
             filas={filas}

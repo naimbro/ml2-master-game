@@ -108,12 +108,17 @@ export function useTypingTelemetry({ enabled, round, scenarioId, roundStartMs }:
 
     const alInsertar = (ev: Event) => {
       const e = ev as InputEvent;
-      if (e.inputType !== 'insertFromPaste') return;
       try {
+        // Se anota el nombre de TODA insercion, no solo la que reconocemos. En
+        // el Android real no disparo `insertFromPaste` y no habia forma de
+        // saber como se llama lo que si dispara; esto lo deja escrito en vez de
+        // obligar a adivinar otra vez.
+        if (e.inputType) registro.current?.insercion(e.inputType);
+        if (e.inputType !== 'insertFromPaste') return;
         const texto = e.dataTransfer?.getData('text');
         registro.current?.pegadoPorInsercion(texto === undefined ? null : texto.length);
       } catch (err) {
-        console.warn('pegado no registrado', err);
+        console.warn('insercion no registrada', err);
       }
     };
 

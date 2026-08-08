@@ -11,6 +11,8 @@ const MAX_PEGADOS = 40;
  * para eso y sigue siendo mas rapido de lo que una persona pega dos veces.
  */
 const DEDUPE_PEGADO_MS = 200;
+/** Un teclado no tiene doce nombres distintos para insertar texto. */
+const MAX_TIPOS_INSERCION = 12;
 
 interface Opciones {
   ahora: () => number;
@@ -64,6 +66,7 @@ export class RegistroEscritura {
   /** Donde quedo el pegado a medir, o null si no cupo por el tope. */
   private idxPendiente: number | null = null;
   private maxInsercion = 0;
+  private tiposDeInsercion: string[] = [];
 
   constructor(opciones: Opciones) {
     this.ahora = opciones.ahora;
@@ -164,6 +167,24 @@ export class RegistroEscritura {
     this.registrarPegado(chars);
   }
 
+  /**
+   * El `inputType` de cada insercion, tal como lo nombra el navegador.
+   *
+   * Existe porque en el Android real no disparo ni `paste` ni
+   * `insertFromPaste`, y no habia manera de saber COMO llama el teclado a esa
+   * insercion. En vez de proponer una tercera hipotesis, se anota el nombre.
+   *
+   * Es dato sobre el navegador, no sobre la persona: la lista de tipos que un
+   * teclado usa no dice nada de quien escribe. Se guarda un conjunto, no una
+   * secuencia, porque `insertText` llega en cada tecla y la secuencia seria el
+   * texto mismo contado de otra forma.
+   */
+  insercion(inputType: string): void {
+    if (this.tiposDeInsercion.length >= MAX_TIPOS_INSERCION) return;
+    if (this.tiposDeInsercion.includes(inputType)) return;
+    this.tiposDeInsercion.push(inputType);
+  }
+
   /** Un tic del muestreo periodico. */
   muestra(): void {
     if (this.huella.length < MAX_MUESTRAS) this.huella.push(this.largo);
@@ -204,6 +225,7 @@ export class RegistroEscritura {
       charsPegados: this.charsPegados,
       charsEditadosTrasUltimoPegado: this.editadosTrasPegado,
       maxInsercionDeGolpe: this.maxInsercion,
+      tiposDeInsercion: this.tiposDeInsercion.slice(),
     };
   }
 }

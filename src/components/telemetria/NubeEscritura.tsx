@@ -10,7 +10,14 @@ const MARGEN_DER = 12;
 
 /**
  * Una respuesta por punto: x = cuanto tardo en escribir la primera letra,
- * y = que proporcion del texto llego pegada.
+ * y = que proporcion del texto llego de una vez.
+ *
+ * El eje vertical NO dice "pego". Dice cuanto texto entro de un golpe, que es
+ * lo que efectivamente se midio: en Android no dispara ningun evento de pegado
+ * —ni `paste` ni `insertFromPaste`— y una respuesta traida entera desde otra
+ * app se dibujaba abajo del todo, entre las tecleadas. Dictar y el teclado
+ * deslizante insertan palabras sueltas, asi que se quedan abajo solos, sin que
+ * haya que fijar ningun umbral.
  *
  * Dos decisiones que NO se pueden cambiar sin rediscutir el diseno:
  *
@@ -47,7 +54,7 @@ export default function NubeEscritura({
       </text>
       <text x={12} y={ALTO / 2} textAnchor="middle" fontSize={10} fill="currentColor" opacity={0.65}
             transform={`rotate(-90 12 ${ALTO / 2})`}>
-        % pegado
+        % que llegó de una vez
       </text>
 
       <text x={MARGEN_IZQ} y={ALTO - MARGEN_ABAJO + 12} textAnchor="middle" fontSize={8.5}

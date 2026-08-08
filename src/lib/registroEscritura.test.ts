@@ -309,3 +309,30 @@ describe('RegistroEscritura', () => {
     expect(segundo.pegados).toEqual([{ ms: 0, chars: 5 }]);
   });
 });
+
+/**
+ * En el Android real ni `paste` ni `insertFromPaste` disparaban, y no habia
+ * forma de saber COMO llamaba el teclado a esa insercion. Esto lo anota, para
+ * dejar de proponer hipotesis: es dato sobre el navegador, no sobre la persona.
+ */
+describe('RegistroEscritura — que tipos de insercion manda el teclado', () => {
+  it('anota cada tipo una sola vez, en el orden en que aparecio', () => {
+    const { registro } = nuevoRegistro();
+    registro.insercion('insertText');
+    registro.insercion('insertText');
+    registro.insercion('insertCompositionText');
+    registro.insercion('insertText');
+    expect(registro.cerrar().tiposDeInsercion).toEqual(['insertText', 'insertCompositionText']);
+  });
+
+  it('empieza vacio', () => {
+    const { registro } = nuevoRegistro();
+    expect(registro.cerrar().tiposDeInsercion).toEqual([]);
+  });
+
+  it('no crece sin limite si el navegador inventa tipos', () => {
+    const { registro } = nuevoRegistro();
+    for (let i = 0; i < 40; i++) registro.insercion(`tipo${i}`);
+    expect(registro.cerrar().tiposDeInsercion).toHaveLength(12);
+  });
+});

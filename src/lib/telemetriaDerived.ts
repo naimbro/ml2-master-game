@@ -42,6 +42,15 @@ export interface TelemetriaCaptura {
    * Opcional porque los documentos escritos antes del 8-ago-2026 no lo traen.
    */
   maxInsercionDeGolpe?: number;
+  /**
+   * Los `inputType` que el navegador uso para insertar, sin repetir. Es dato
+   * sobre el teclado, no sobre la persona: se anota porque en Android no
+   * disparo ni `paste` ni `insertFromPaste` y hacia falta saber como se llama
+   * lo que si dispara.
+   *
+   * Opcional: los documentos anteriores al 8-ago-2026 no lo traen.
+   */
+  tiposDeInsercion?: string[];
 }
 
 /** El documento tal como queda en Firestore. */
@@ -69,6 +78,34 @@ export function formatoReloj(ms: number): string {
 export function proporcionPegada(t: { charsPegados: number; largoFinal: number }): number {
   if (t.largoFinal <= 0) return 0;
   return Math.min(1, t.charsPegados / t.largoFinal);
+}
+
+/**
+ * Que fraccion del texto final llego en un solo golpe, entre 0 y 1.
+ *
+ * Reemplaza a `proporcionPegada` como eje de la nube desde el 8-ago-2026, y la
+ * razon es que en Android no dispara NINGUN evento de pegado: ni `paste` ni
+ * `beforeinput` con `insertFromPaste`. Una respuesta traida entera desde otra
+ * app se dibujaba abajo del todo, entre las tecleadas — el peor error posible
+ * para este panel.
+ *
+ * Ojo con lo que este numero dice y lo que no. NO dice "pego": dice cuanto
+ * texto entro de una vez, que es literalmente lo que se midio. Dictar o el
+ * teclado deslizante insertan palabras sueltas, asi que sobre una respuesta de
+ * varios cientos de caracteres se quedan abajo solos, sin que haya que poner
+ * ningun umbral. La etiqueta del eje dice eso mismo.
+ *
+ * Los documentos anteriores no traen el salto: para esos cae en la proporcion
+ * pegada, que era la medida que si tenian.
+ */
+export function proporcionDeGolpe(t: {
+  maxInsercionDeGolpe?: number;
+  charsPegados: number;
+  largoFinal: number;
+}): number {
+  if (t.maxInsercionDeGolpe === undefined) return proporcionPegada(t);
+  if (t.largoFinal <= 0) return 0;
+  return Math.min(1, t.maxInsercionDeGolpe / t.largoFinal);
 }
 
 /** Margen interno del sparkline, para que el trazo no se coma el borde. */
@@ -118,19 +155,24 @@ export function puntosHuella(
 
 /**
  * Donde cae una respuesta en la nube del curso. x = cuanto tardo en escribir la
- * primera letra, y = que proporcion del texto llego pegada.
+ * primera letra, y = que proporcion del texto llego de una vez.
  *
  * Quien nunca escribio nada se ubica al final del eje: no tuvo primera tecla.
  */
 export function posicionNube(
-  t: { msPrimeraTecla: number | null; charsPegados: number; largoFinal: number },
+  t: {
+    msPrimeraTecla: number | null;
+    charsPegados: number;
+    largoFinal: number;
+    maxInsercionDeGolpe?: number;
+  },
   duracionMs: number,
   ancho: number,
   alto: number
 ): { x: number; y: number } {
   const span = Math.max(1, duracionMs);
   const fx = t.msPrimeraTecla === null ? 1 : Math.min(1, t.msPrimeraTecla / span);
-  const fy = proporcionPegada(t);
+  const fy = proporcionDeGolpe(t);
   return {
     x: PADDING + fx * (ancho - 2 * PADDING),
     y: (alto - PADDING) - fy * (alto - 2 * PADDING),

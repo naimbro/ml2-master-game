@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { formatoReloj, proporcionPegada, posicionNube, puntosHuella, hechosDetalle } from './telemetriaDerived';
+import { formatoReloj, proporcionPegada, proporcionDeGolpe, posicionNube, puntosHuella, hechosDetalle } from './telemetriaDerived';
 
 describe('formatoReloj', () => {
   it('bajo el minuto muestra solo segundos', () => {
@@ -197,5 +197,43 @@ describe('hechosDetalle — el mayor salto de una vez', () => {
   it('se omite en los documentos viejos que no lo traen', () => {
     const hechos = hechosDetalle(captura, 240_000);
     expect(hechos.map((h) => h.etiqueta)).not.toContain('Mayor salto de una vez');
+  });
+});
+
+describe('proporcionDeGolpe', () => {
+  it('es la fraccion del texto final que llego en el salto mas grande', () => {
+    expect(proporcionDeGolpe({ maxInsercionDeGolpe: 348, charsPegados: 0, largoFinal: 380 }))
+      .toBeCloseTo(0.9158, 3);
+  });
+
+  it('es baja para un texto tecleado, aunque el teclado inserte palabras enteras', () => {
+    expect(proporcionDeGolpe({ maxInsercionDeGolpe: 12, charsPegados: 0, largoFinal: 380 }))
+      .toBeLessThan(0.05);
+  });
+
+  it('cae en la proporcion pegada para los documentos viejos que no traen el salto', () => {
+    expect(proporcionDeGolpe({ charsPegados: 200, largoFinal: 400 })).toBe(0.5);
+  });
+
+  it('es 0 con respuesta vacia', () => {
+    expect(proporcionDeGolpe({ maxInsercionDeGolpe: 0, charsPegados: 0, largoFinal: 0 })).toBe(0);
+  });
+});
+
+describe('posicionNube — usa el salto, no el pegado', () => {
+  it('sube al tope la respuesta que llego de golpe aunque ningun pegado se registrara', () => {
+    const p = posicionNube(
+      { msPrimeraTecla: 0, charsPegados: 0, largoFinal: 380, maxInsercionDeGolpe: 380 },
+      240_000, 100, 100
+    );
+    expect(p.y).toBe(2);
+  });
+
+  it('deja abajo la tecleada', () => {
+    const p = posicionNube(
+      { msPrimeraTecla: 0, charsPegados: 0, largoFinal: 380, maxInsercionDeGolpe: 12 },
+      240_000, 100, 100
+    );
+    expect(p.y).toBeGreaterThan(90);
   });
 });
