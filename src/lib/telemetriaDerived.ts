@@ -144,9 +144,14 @@ function lista(partes: string[]): string {
  * Los hechos de una respuesta, para el cajon de detalle.
  *
  * Devuelve HECHOS, no conclusiones: cuando paso cada cosa y de que tamano fue.
- * En ningun caso emite una etiqueta sobre la persona. Las lineas que no
- * aplican se omiten en vez de mostrarse en cero, para que lo que quede en
- * pantalla sea lo que efectivamente ocurrio.
+ * En ningun caso emite una etiqueta sobre la persona. Las categorias enteras
+ * que no aplican se omiten en vez de mostrarse en cero (nadie salio de la
+ * app, nadie pego nada) para que lo que quede en pantalla sea lo que
+ * efectivamente ocurrio. Eso NO alcanza a un numero derivado que da cero
+ * dentro de una categoria que si aplica: "Editó después de pegar" se muestra
+ * aunque diga "0 caracteres", porque el cero ahi es un hecho en si mismo —
+ * distingue a quien pego y no toco mas el texto de quien pego y siguio
+ * editando, y esa distincion se pierde si la linea desaparece.
  */
 export function hechosDetalle(t: TelemetriaCaptura, duracionMs: number): HechoDetalle[] {
   const hechos: HechoDetalle[] = [];

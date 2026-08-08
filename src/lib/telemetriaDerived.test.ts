@@ -81,6 +81,16 @@ describe('puntosHuella', () => {
     const pts = parse(puntosHuella({ ...base, huella: [10, 20, 30], msEnvio: 30_000, largoFinal: 30 }, 4000, 100, 20));
     expect(Math.max(...pts.map(([x]) => x))).toBe(98);
   });
+
+  it('dibuja solo el origen y el envio cuando no alcanzo a haber ni una muestra', () => {
+    const pts = parse(puntosHuella({ ...base, huella: [], msEnvio: 800, largoFinal: 12 }, 10_000, 100, 20));
+    expect(pts).toHaveLength(2);
+  });
+
+  it('la caida se dibuja mas abajo que el pico cuando el texto final quedo mas corto', () => {
+    const pts = parse(puntosHuella({ ...base, huella: [500], msEnvio: 5000, largoFinal: 200 }, 10_000, 100, 20));
+    expect(pts[2][1]).toBeGreaterThan(pts[1][1]); // mayor y = mas abajo = mas corto
+  });
 });
 
 describe('posicionNube', () => {
@@ -157,5 +167,10 @@ describe('hechosDetalle', () => {
     expect(hechos.find((h) => h.etiqueta === 'Pegados')?.valor).toBe(
       '2 · de 300 y 482 caracteres · a los 20 s y 1 min'
     );
+  });
+
+  it('muestra cuanto se edito despues de pegar cuando hubo edicion', () => {
+    const hechos = hechosDetalle({ ...captura, charsEditadosTrasUltimoPegado: 340 }, 240_000);
+    expect(hechos.find((h) => h.etiqueta === 'Editó después de pegar')?.valor).toBe('340 caracteres');
   });
 });
