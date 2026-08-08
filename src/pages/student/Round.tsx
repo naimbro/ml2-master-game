@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Clock, Send, AlertCircle, StopCircle, Info, MessageSquare, Code, CheckCircle, XCircle, Zap } from 'lucide-react';
 import { useGame } from '../../hooks/useGame';
 import { useAuth } from '../../hooks/useAuth';
+import { useTypingTelemetry } from '../../hooks/useTypingTelemetry';
 import { doc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { playCountdownTick, playCriticalTick, playSubmitSuccess, playScoreReveal, playGoodScore, playBadScore, startBackgroundMusic, stopBackgroundMusic, getMuted, getCurrentMusicStyle } from '../../lib/sounds';
@@ -200,6 +201,15 @@ export default function Round() {
   const isMC = currentScenarioRef.current?.type === 'multiple_choice';
   const mcQuestions = currentScenarioRef.current?.mcQuestions;
 
+  // Como se escribe la respuesta abierta. Apagado en las rondas de seleccion
+  // multiple (no hay textarea) y para el profesor que dirige sin jugar.
+  const telemetria = useTypingTelemetry({
+    enabled: !isMC && !isSpectator,
+    round: game?.currentRound ?? 0,
+    scenarioId: currentScenarioRef.current?.id ?? '',
+    roundStartMs: game?.roundStartTime?.toMillis() ?? null,
+  });
+
   // MC: the only clock left. Everything visible is a pure function of the
   // shared round start and this tick, so no screen can drift from another.
   useEffect(() => {
@@ -357,7 +367,7 @@ export default function Round() {
     submittedRef.current = true;
     setIsSubmitting(true);
     try {
-      await submitAnswer(response.trim());
+      await submitAnswer(response.trim(), telemetria.snapshot());
       setHasSubmitted(true);
       playSubmitSuccess();
       confettiPop();
@@ -372,7 +382,7 @@ export default function Round() {
     } finally {
       setIsSubmitting(false);
     }
-  }, [response, isSubmitting, submitAnswer]);
+  }, [response, isSubmitting, submitAnswer, telemetria]);
 
   // Auto-submit when time runs out
   useEffect(() => {
@@ -1066,7 +1076,11 @@ export default function Round() {
                   </label>
                   <textarea
                     value={response}
-                    onChange={(e) => setResponse(e.target.value)}
+                    onChange={(e) => {
+                      setResponse(e.target.value);
+                      telemetria.noteChange(e.target.value);
+                    }}
+                    onPaste={telemetria.onPaste}
                     placeholder="Escribe tu respuesta aqui..."
                     rows={8}
                     className="input-field resize-none mb-4"

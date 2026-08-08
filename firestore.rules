@@ -135,6 +135,33 @@ service cloud.firestore {
         allow delete: if false;
       }
 
+      // Como se escribio cada respuesta abierta: tiempo a la primera tecla,
+      // pegados, salidas de la app y la huella del texto.
+      //
+      // Registro privado del anfitrion. NO puntua, NO penaliza y NO se le
+      // muestra a ningun alumno — ni siquiera la suya: leerla ensena
+      // exactamente que hay que enganar.
+      //
+      // El id del doc es {uid}_{ronda}, y eso hace el trabajo pesado: un alumno
+      // no puede escribir el registro de otro sin que el id lo delate, y no
+      // puede reescribir el suyo (crear falla si ya existe, y update esta
+      // cerrado). Lo que NINGUNA regla puede impedir es que mande numeros
+      // inventados: los produce su propio navegador. Esto mide a la mayoria
+      // honesta, no atrapa a quien se lo propone.
+      //
+      // `matches` en vez de armar el id con string(...data.round): el cast de
+      // un numero en las reglas devuelve "3.0" si viajo como double, y la
+      // comparacion fallaria en silencio. Los uid de Firebase son
+      // alfanumericos, asi que no hay nada que escapar en la expresion.
+      match /telemetria/{telemetriaId} {
+        allow read: if isAuthenticated() &&
+                    get(/databases/$(database)/documents/games/$(gameCode)).data.hostId == request.auth.uid;
+        allow create: if isAuthenticated()
+                      && request.resource.data.playerId == request.auth.uid
+                      && telemetriaId.matches(request.auth.uid + '_[0-9]+');
+        allow update, delete: if false;
+      }
+
       match /rounds/{roundId} {
         allow read: if isAuthenticated();
         allow write: if false; // Only Cloud Functions write
