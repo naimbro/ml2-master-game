@@ -85,7 +85,9 @@ games/{gameCode}/telemetria/{uid}_{ronda}
   // eventos de pegado reales, del evento `paste` del navegador
   pegados               Array<{ ms: number, chars: number }>
 
-  // la huella: largo del texto muestreado cada 2 s
+  // la huella: largo del texto muestreado cada 2 s.
+  // huella[i] es el largo a los (i+1) * huellaIntervaloMs ms. El instante 0 con
+  // largo 0 no se guarda: se sabe.
   huella                number[]        ~150 enteros en una ronda de 5 min
   huellaIntervaloMs     number          2000
 
@@ -135,10 +137,15 @@ match /telemetria/{telemetriaId} {
               get(/databases/$(database)/documents/games/$(gameCode)).data.hostId == request.auth.uid;
   allow create: if isAuthenticated()
                 && request.resource.data.playerId == request.auth.uid
-                && telemetriaId == request.auth.uid + '_' + string(request.resource.data.round);
+                && telemetriaId.matches(request.auth.uid + '_[0-9]+');
   allow update, delete: if false;
 }
 ```
+
+El `matches()` en vez de armar el id con `string(request.resource.data.round)`: el cast de un
+número a string en las reglas devuelve `"3.0"` si el valor viajó como double, y la
+comparación fallaría en silencio. Los uid de Firebase son alfanuméricos, así que no hay nada
+que escapar en la expresión regular.
 
 El `get()` sobre el documento del juego es el mismo patrón que ya usa la regla de `feedback`
 unas líneas más arriba.
@@ -212,6 +219,16 @@ if (telemetria) {
 **Fire-and-forget con `catch`, y después del `addDoc`.** Si la escritura falla —regla
 rechazada, red caída, el documento ya existía— el alumno igual mandó su respuesta y no se
 entera de nada. La telemetría jamás puede romper el envío ni retrasarlo.
+
+### Módulo nuevo: `src/lib/registroEscritura.ts`
+
+Toda la contabilidad —cuándo fue la primera tecla, cuánto se pegó, cuánto se editó después,
+cuánto rato estuvo fuera— vive en una clase pura `RegistroEscritura` que recibe su reloj por
+constructor. El hook sólo la instancia en un ref y le conecta los eventos del navegador y el
+`setInterval`.
+
+Esa separación es lo que hace testeable la parte difícil: la clase se prueba con un reloj
+falso y sin React, y al hook no le queda lógica que equivocar.
 
 ### Módulo nuevo: `src/lib/telemetriaDerived.ts`
 
