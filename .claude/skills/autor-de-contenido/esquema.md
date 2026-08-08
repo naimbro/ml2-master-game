@@ -101,6 +101,22 @@ las dos formas, pero `courses.ts` hace `scenarios.length` y la envuelta deja
   las `explanation` que nombran letras ("B suena bien y es lo contrario"): hay
   que reescribirlas junto con el reorden o quedan apuntando a la alternativa
   equivocada, proyectada delante del curso.
+- **La correcta tampoco puede ser la más larga.** Hermana del punto anterior y
+  más difícil de ver: la alternativa correcta tiende a salir larga porque uno la
+  escribe explicando, y las incorrectas salen cortas porque uno las despacha. En
+  dataviz clase 2 quedó **la más larga en 5 de 6 rondas** — se sacaba 5 de 6
+  marcando la más larga sin saber nada de la materia. Se arregla acortando la
+  correcta y engordando un distractor, no al revés. Empatar largos está bien: lo
+  que delata es que haya *una* más larga identificable. El chequeo, por ronda:
+
+  ```js
+  const L = q.options.map(o => o.text.length);
+  L[q.correctOptionIndex] === Math.max(...L)   // si es true en varias rondas, hay que rebalancear
+  ```
+
+  De paso, comparar el largo máximo contra lo ya jugado: **104 caracteres** es la
+  opción más larga que se ha proyectado (MGT300 clase 1). Por encima de eso no
+  hay antecedente de que se lea en un teléfono.
 - `explanation` se proyecta: es el momento de enseñar, no un pie de página.
 
 ## `media`

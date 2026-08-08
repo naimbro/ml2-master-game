@@ -1,0 +1,47 @@
+{
+  "sessionId": "clase_02_primeros_pasos_r",
+  "courseId": "dataviz_2026",
+  "title": "Clase 2: Primeros pasos en R y en Colab",
+  "description": "8 rondas (~12 min): 6 de alternativas sobre Colab y R básico, y 2 abiertas de 150 s — la comuna promedio y describir un gráfico. Todo sale de los cuadernos 1 y 2; nada exige haber alcanzado a ver el cuaderno 3 ni la limpieza de datos. Las 8 compiten.",
+  "date": "2026-08-10",
+  "roundCount": 8,
+  "roundDurationSeconds": 150,
+  "bufferSeconds": 45,
+  "conceptTags": [
+    "colab_como_herramienta",
+    "entorno_de_ejecucion",
+    "objetos_y_tipos_en_r",
+    "la_base_de_datos",
+    "tipos_de_variable",
+    "frecuencias_y_porcentajes",
+    "describir_una_muestra"
+  ],
+  "judges": [
+    {
+      "judgeId": "generic_specialist",
+      "weight": 0.35
+    },
+    {
+      "judgeId": "generic_praxis",
+      "weight": 0.35
+    },
+    {
+      "judgeId": "generic_teacher",
+      "weight": 0.3
+    }
+  ],
+  "judgeConfig": {
+    "generic_specialist": {
+      "sessionLens": "Tu lente es LO QUE SE ENSEÑÓ HOY: si lo que el estudiante afirma se sostiene con el material de la clase 2 y si usa bien la distinción entre una variable numérica y una de texto. Tienes los cuadernos resumidos en el material de referencia; úsalo para verificar, no para exigir que citen. El error que más te importa es afirmar sobre los datos algo que los datos no muestran: ampliar el sujeto de la frase, o darle a una variable una pregunta que no admite. Es la SEGUNDA clase del semestre y la primera vez que programan: no exijas nombres de funciones ni vocabulario técnico.",
+      "weightFormula": "score = 0.55 * rigor_descriptivo + 0.25 * criterio_de_datos + 0.20 * claridad"
+    },
+    "generic_praxis": {
+      "sessionLens": "Tú eres el lector no especializado que el curso pone como estándar: alguien que entra a la plataforma del grupo sin saber nada de R. Tu única pregunta es si, leyendo estas tres líneas, quedarías con una idea correcta y útil en la cabeza. Premia que traduzcan el criterio a algo que se entienda; penaliza el rodeo y la frase de relleno. Tres líneas claras valen más que diez confusas, y una respuesta que serviría igual para cualquier otra pregunta no sirve para ninguna.",
+      "weightFormula": "score = 0.30 * rigor_descriptivo + 0.30 * criterio_de_datos + 0.40 * claridad"
+    },
+    "generic_teacher": {
+      "sessionLens": "Estas rondas SÍ entran al ranking, así que puntúa con honestidad y sin inflar: un puntaje regalado le quita el puesto a otro. Evalúa si la persona entendió la idea o si repitió una palabra que escuchó pasar. Recuerda que es la primera clase de sus vidas en que programan: un razonamiento correcto dicho sin una sola palabra técnica vale 100. En tu feedback escribe en primera persona e incluye un 'yo habría...' concreto a ESTA respuesta, con la frase exacta que le habría agregado.",
+      "weightFormula": "score = 0.45 * rigor_descriptivo + 0.25 * criterio_de_datos + 0.30 * claridad"
+    }
+  }
+}

@@ -1,0 +1,366 @@
+[
+  {
+    "id": "dv_c02_r1_cuaderno_del_profesor",
+    "order": 1,
+    "title": "Dónde quedó lo que escribiste",
+    "category": "Colab",
+    "type": "multiple_choice",
+    "ranked": true,
+    "durationSeconds": 60,
+    "context": "",
+    "question": "",
+    "conceptTags": [
+      "colab_como_herramienta"
+    ],
+    "mcQuestions": [
+      {
+        "question": "Abriste el cuaderno desde el link de la clase, escribiste tus respuestas en varias celdas y cerraste la pestaña. Hoy vuelves al mismo link y no está nada de lo que escribiste. ¿Qué pasó?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Se desconectó el entorno de ejecución, y al desconectarse se pierde todo lo escrito"
+          },
+          {
+            "id": "B",
+            "text": "Ejecutaste las celdas en desorden y el cuaderno se descuadró"
+          },
+          {
+            "id": "C",
+            "text": "Era el cuaderno del profesor: no guardaste una copia tuya en Drive"
+          },
+          {
+            "id": "D",
+            "text": "El cuaderno estaba en Python, y al abrirlo en R se reinició todo"
+          }
+        ],
+        "correctOptionIndex": 2,
+        "timeLimitSeconds": 25,
+        "explanation": "El cuaderno del link es del profesor: se puede ejecutar, pero lo que escribas ahí no se guarda en ninguna parte. Por eso lo primero de cada clase es Archivo → Guardar una copia en Drive, y trabajar en la tuya."
+      }
+    ]
+  },
+  {
+    "id": "dv_c02_r2_object_not_found",
+    "order": 2,
+    "title": "El error que no significa lo que crees",
+    "category": "Colab",
+    "type": "multiple_choice",
+    "ranked": true,
+    "durationSeconds": 64,
+    "context": "",
+    "question": "",
+    "conceptTags": [
+      "entorno_de_ejecucion"
+    ],
+    "mcQuestions": [
+      {
+        "question": "Ejecutas una celda y aparece en rojo: object 'mi_numero' not found. Tu compañero te dice «te quedó malo el código, bórralo y escríbelo de nuevo». ¿Tiene razón?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Sí: ese error siempre significa que la línea está mal escrita"
+          },
+          {
+            "id": "B",
+            "text": "No: el código puede estar bien, falta ejecutar la celda que lo crea"
+          },
+          {
+            "id": "C",
+            "text": "No, pero se arregla cambiando el cuaderno de Python a R"
+          },
+          {
+            "id": "D",
+            "text": "Sí, y además hay que reiniciar el entorno porque la memoria se dañó"
+          }
+        ],
+        "correctOptionIndex": 1,
+        "timeLimitSeconds": 30,
+        "explanation": "El cuaderno lo dice con esas palabras: no significa que el código esté malo, sino que ese objeto todavía no existe. El entorno tiene memoria, y el orden que manda es el orden en que TÚ ejecutas."
+      }
+    ]
+  },
+  {
+    "id": "dv_c02_r3_cambiar_a_r",
+    "order": 3,
+    "title": "Viene en Python",
+    "category": "Colab",
+    "type": "multiple_choice",
+    "ranked": true,
+    "durationSeconds": 55,
+    "context": "",
+    "question": "",
+    "conceptTags": [
+      "colab_como_herramienta"
+    ],
+    "mcQuestions": [
+      {
+        "question": "Abres un cuaderno nuevo en Colab y viene en Python. ¿Dónde se cambia a R?",
+        "options": [
+          {
+            "id": "A",
+            "text": "En Archivo → Guardar una copia en Drive, y elegir R al guardar"
+          },
+          {
+            "id": "B",
+            "text": "Escribiendo R.version.string al principio del cuaderno"
+          },
+          {
+            "id": "C",
+            "text": "En el panel lateral izquierdo, en el ícono de Archivos"
+          },
+          {
+            "id": "D",
+            "text": "En Entorno de ejecución → Cambiar tipo de entorno de ejecución"
+          }
+        ],
+        "correctOptionIndex": 3,
+        "timeLimitSeconds": 20,
+        "explanation": "R.version.string sirve para saber en cuál estás, no para cambiarlo. Y ojo: cambiar de lenguaje reinicia el cuaderno y borra todo lo calculado. El código escrito queda, pero hay que ejecutarlo de nuevo."
+      }
+    ]
+  },
+  {
+    "id": "dv_c02_r4_comuna_promedio",
+    "order": 4,
+    "title": "La comuna promedio",
+    "category": "Describir datos",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 150,
+    "conceptTags": [
+      "tipos_de_variable"
+    ],
+    "judgeFocus": "Esta ronda mide UNA cosa: si entendió que el tipo de variable define qué pregunta admite. La respuesta completa tiene DOS MITADES y hay que puntuarlas por separado: (1) por qué el promedio no aplica —comuna es texto, una categoría, no una cantidad— y (2) qué corresponde reportar en su lugar: la comuna que más se repite, o cuánta gente vive en cada una. Quien sólo dice 'no se puede' se queda en la mitad y no debería pasar de 60. Quien dice 'reporten la más frecuente' sin explicar por qué el promedio no aplica, tampoco.\n\nNO EXIJAS LA PALABRA 'MODA' NI 'CATEGÓRICA' NI EL NOMBRE DE NINGUNA FUNCIÓN. 'La comuna que más se repite' vale exactamente lo mismo que 'la moda', y 'contar cuántos hay de cada una' vale lo mismo que 'una tabla de frecuencias'. Es la primera clase de sus vidas en que programan.\n\nLa respuesta engañosa que tienes que cazar es la que suena prudente y no dice nada: 'hay que revisar bien la variable antes de calcular el promedio'. Esa no detectó el problema, sólo pidió cuidado.\n\nOJO con la que propone convertir las comunas en números (1, 2, 3...) para poder promediarlas: suena técnica y es el mismo error, porque ese promedio sigue sin significar nada.\n\nSon TRES LÍNEAS escritas en dos minutos y medio desde un teléfono. Tres líneas bien puestas valen 100. Escribir más NO sube el puntaje.",
+    "context": "Tu grupo ya cargó en R las respuestas que el curso dio hoy. Una de las columnas es **comuna**: cada persona escribió con sus palabras dónde vive.\n\nUn compañero propone poner en la plataforma del grupo **«la comuna promedio del curso»**.",
+    "question": "¿Qué le dices, y qué reportarías tú en su lugar? **En 3 líneas basta.**",
+    "evaluationGuide": {
+      "must_hit": [
+        "Dice que no se puede promediar comuna porque es texto o una categoría, no una cantidad",
+        "Propone lo que sí corresponde: la comuna más frecuente, o cuánta gente vive en cada comuna"
+      ],
+      "nice_to_have": [
+        "Nota que ni siquiera existiría un valor posible: no hay una comuna a medio camino entre dos",
+        "Dice que la más frecuente sale de contar cuántos hay de cada una",
+        "Agrega que al reportarla hay que decir sobre cuántas personas está calculada",
+        "Menciona que str() la mostraría como texto, o usa la palabra categórica sin que se la pidan"
+      ],
+      "fatal_errors": [
+        "Acepta la propuesta y da una forma de calcular el promedio de las comunas",
+        "Propone asignarle números a las comunas para poder promediarlas",
+        "Responde sobre otra variable, o sobre cómo limpiar el dato en vez de qué preguntarle"
+      ],
+      "partial_credit": {
+        "solo_detecta": "Dice correctamente que no se puede promediar, pero no propone nada en su lugar: techo 60.",
+        "solo_propone": "Propone la más frecuente o una tabla, pero no explica por qué el promedio no aplica: techo 60.",
+        "prudencia_generica": "Pide 'revisar bien la variable' o 'tener cuidado con los datos' sin nombrar que es texto: techo 40."
+      }
+    },
+    "idealAnswer": {
+      "keyPoints": [
+        "Comuna es texto, no un número: un promedio ahí no significa nada",
+        "Lo que corresponde es contar: cuánta gente vive en cada comuna y cuál es la más frecuente",
+        "Al reportarlo, decir sobre cuántas respuestas está calculado"
+      ],
+      "expectedConcepts": [
+        "tipos_de_variable"
+      ],
+      "commonMistakes": [
+        "Quedarse en 'no se puede' sin decir qué reportar",
+        "Proponer convertir las comunas a números para promediarlas",
+        "Contestar con una recomendación general de cuidado que no detecta nada"
+      ],
+      "excellentResponseIndicators": [
+        "Nombra las dos mitades: por qué no aplica, y qué sí",
+        "Dice la magnitud o el n sin que se lo pidan",
+        "Tres líneas sin relleno y sin una sola palabra técnica innecesaria"
+      ]
+    }
+  },
+  {
+    "id": "dv_c02_r5_filas_y_columnas",
+    "order": 5,
+    "title": "Dos números",
+    "category": "R básico",
+    "type": "multiple_choice",
+    "ranked": true,
+    "durationSeconds": 58,
+    "context": "",
+    "question": "",
+    "conceptTags": [
+      "la_base_de_datos"
+    ],
+    "mcQuestions": [
+      {
+        "question": "Cargaste las respuestas del curso con read.csv(). Ejecutas nrow(respuestas) y ncol(respuestas), y R devuelve dos números. ¿Qué son?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Cuántas personas respondieron, y cuántas preguntas tenía el formulario"
+          },
+          {
+            "id": "B",
+            "text": "Cuántas preguntas tenía el formulario, y cuántas personas respondieron"
+          },
+          {
+            "id": "C",
+            "text": "Cuántas respuestas están completas, y cuántas quedaron a medio llenar"
+          },
+          {
+            "id": "D",
+            "text": "Cuántos datos tiene la tabla en total, y cuántos de ellos son números"
+          }
+        ],
+        "correctOptionIndex": 0,
+        "timeLimitSeconds": 25,
+        "explanation": "Un data frame es una tabla: cada FILA es una persona y cada COLUMNA es una pregunta. nrow cuenta filas, ncol cuenta columnas. Esa estructura es la de todo el semestre."
+      }
+    ]
+  },
+  {
+    "id": "dv_c02_r6_conteos_vs_porcentajes",
+    "order": 6,
+    "title": "Los mismos diez",
+    "category": "Describir datos",
+    "type": "multiple_choice",
+    "ranked": true,
+    "durationSeconds": 65,
+    "context": "",
+    "question": "",
+    "conceptTags": [
+      "frecuencias_y_porcentajes"
+    ],
+    "mcQuestions": [
+      {
+        "question": "La sección 1 tiene 40 estudiantes y la sección 2 tiene 25. En las dos, 10 personas vienen en Metro. Tu compañera dice: «el Metro se usa igual en las dos secciones». ¿Tiene razón?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Sí: son 10 personas y 10 personas, exactamente el mismo número en las dos"
+          },
+          {
+            "id": "B",
+            "text": "No: 10 de 40 es 25% y 10 de 25 es 40%, o sea en la sección 2 se usa más"
+          },
+          {
+            "id": "C",
+            "text": "No se puede saber sin conocer cuánta gente usa cada uno de los otros medios"
+          },
+          {
+            "id": "D",
+            "text": "Sí, porque las dos secciones son del mismo curso y del mismo año"
+          }
+        ],
+        "correctOptionIndex": 1,
+        "timeLimitSeconds": 30,
+        "explanation": "El mismo conteo sobre grupos de distinto tamaño significa cosas distintas. Por eso el cuaderno pasa de table() a prop.table() casi siempre: antes de comparar grupos, hay que normalizar por su tamaño."
+      }
+    ]
+  },
+  {
+    "id": "dv_c02_r7_comillas",
+    "order": 7,
+    "title": "Con comillas y sin comillas",
+    "category": "R básico",
+    "type": "multiple_choice",
+    "ranked": true,
+    "durationSeconds": 54,
+    "context": "",
+    "question": "",
+    "conceptTags": [
+      "objetos_y_tipos_en_r"
+    ],
+    "mcQuestions": [
+      {
+        "question": "En el cuaderno, altura <- 1.72 va sin comillas y comuna <- \"Ñuñoa\" va con comillas. ¿Por qué?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Porque comuna es un nombre más largo que altura"
+          },
+          {
+            "id": "B",
+            "text": "Porque las comillas marcan lo que R tiene que mostrar en pantalla"
+          },
+          {
+            "id": "C",
+            "text": "Porque los números van pelados y el texto siempre va entre comillas"
+          },
+          {
+            "id": "D",
+            "text": "Porque Ñuñoa lleva tilde y eñe, y R necesita las comillas para leerlas"
+          }
+        ],
+        "correctOptionIndex": 2,
+        "timeLimitSeconds": 20,
+        "explanation": "Números pelados, texto entre comillas. No es un capricho: es como R sabe si algo es una cantidad o una palabra, y de eso depende qué le puedes preguntar después. class() te lo confirma."
+      }
+    ]
+  },
+  {
+    "id": "dv_c02_r8_describe_el_grafico",
+    "order": 8,
+    "title": "Describe este gráfico",
+    "category": "Describir datos",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 150,
+    "conceptTags": [
+      "describir_una_muestra",
+      "frecuencias_y_porcentajes"
+    ],
+    "media": [
+      {
+        "kind": "image",
+        "src": "media/dataviz/c02_sistema_operativo.png",
+        "alt": "Gráfico de barras verticales: sistema operativo del celular en una encuesta a 458 estudiantes UAI de 2022 y 2023. Cada barra lleva su valor escrito encima: iOS 360, Android 92, HarmonyOS 5 y Otro 1. La barra de iOS es casi cuatro veces la de Android, y las dos últimas son casi invisibles.",
+        "credit": "Elaboración propia con la encuesta a estudiantes UAI 2022-2023 del cuaderno 3"
+      }
+    ],
+    "judgeFocus": "La pregunta pide DOS COSAS y hay que puntuar las dos: qué muestra el gráfico, y qué NO se puede concluir de él.\n\nLa primera mitad es fácil y casi todos la van a tener: una barra aplasta a las demás. iOS llega a 360 de 458 —casi 8 de cada 10—, Android a 92, y HarmonyOS y Otro son casi cero. NO EXIJAS LOS NÚMEROS EXACTOS: 'la gran mayoría usa iPhone y Android queda muy atrás' es una lectura correcta. Sí premia a quien aterriza la magnitud con un porcentaje, una proporción o una comparación concreta, en vez de quedarse en 'la mayoría'.\n\nLA SEGUNDA MITAD ES LA QUE SEPARA. El límite que importa es a QUIÉN describe esto: 458 estudiantes de una universidad, de dos campus, que quisieron contestar una encuesta en 2022-2023. No describe a los jóvenes chilenos, ni a 'la gente', ni al curso de este año. Cualquiera de esas cuatro versiones del límite cuenta: la población, el que respondió voluntariamente, la fecha, o que no dice nada de por qué. Una sola bien dicha basta para 100 en esa mitad.\n\nQuien sólo describe y no nombra ningún límite se queda en la mitad de la pregunta: no debería pasar de 60. Es la respuesta más común y hay que puntuarla como lo que es, no perdonarla.\n\nLa engañosa que tienes que cazar suena así: 'esto refleja la preferencia de los jóvenes por Apple'. Vocabulario correcto y sujeto ampliado, que es exactamente el error que la ronda persigue.\n\nSi alguien objeta el gráfico —que no tiene porcentajes, que el eje no ayuda, que faltan los que no contestaron— eso SUMA, no resta.\n\nSon TRES LÍNEAS escritas en dos minutos y medio desde un teléfono, mirando el gráfico en la pantalla chica. Tres líneas bien puestas valen 100. Escribir más NO sube el puntaje.",
+    "context": "Este gráfico salió de una encuesta a **458 estudiantes de la UAI**, de los campus de Santiago y Viña, respondida en **2022 y 2023** por quienes quisieron contestarla.",
+    "question": "Descríbelo: **qué muestra**, y **qué NO se puede concluir** a partir de él. **En 3 líneas basta.**",
+    "evaluationGuide": {
+      "must_hit": [
+        "Lee bien lo que muestra: iOS domina de lejos, Android queda muy atrás, y las otras dos categorías son casi cero",
+        "Nombra al menos un límite real de lo que NO se puede concluir: a quién describe la encuesta y a quién no, que responder era voluntario, o que los datos son de hace tres o cuatro años"
+      ],
+      "nice_to_have": [
+        "Aterriza la magnitud: un porcentaje, una proporción como '8 de cada 10', o la comparación entre las dos barras principales",
+        "Dice el n sobre el que está calculado",
+        "Nota que el gráfico no dice nada de por qué, sólo de cuántos",
+        "Nota que las dos categorías chicas son tan pocas que no dan para afirmar nada sobre ellas"
+      ],
+      "fatal_errors": [
+        "Afirma como hecho que los jóvenes chilenos, o 'la gente', usan mayoritariamente iPhone",
+        "Explica la causa —el precio, el nivel socioeconómico, la moda— como si el gráfico la mostrara",
+        "Lee mal el gráfico: dice que Android domina, o que las categorías están parejas"
+      ],
+      "partial_credit": {
+        "solo_describe": "Describe bien lo que muestra pero no nombra ningún límite: techo 60.",
+        "solo_limita": "Nombra el límite pero no describe lo que el gráfico muestra: techo 55.",
+        "mayoria_sin_magnitud": "Dice 'la mayoría usa iPhone' sin ninguna magnitud ni comparación, aunque nombre el límite: no puede llegar a 100 en criterio sobre qué admite el dato."
+      }
+    },
+    "idealAnswer": {
+      "keyPoints": [
+        "Casi 8 de cada 10 usan iPhone: 360 de 458, contra 92 de Android y casi nada en las otras dos",
+        "Describe a esos 458 estudiantes UAI de Santiago y Viña que quisieron responder, no a los jóvenes en general",
+        "Tampoco dice por qué: sólo cuántos"
+      ],
+      "expectedConcepts": [
+        "describir_una_muestra",
+        "frecuencias_y_porcentajes"
+      ],
+      "commonMistakes": [
+        "Describir bien y olvidar por completo la segunda mitad de la pregunta",
+        "Pasar de 'estudiantes UAI encuestados' a 'los jóvenes' o 'los chilenos'",
+        "Explicar la causa del resultado como si el gráfico la mostrara"
+      ],
+      "excellentResponseIndicators": [
+        "Da una magnitud concreta en vez de 'la mayoría'",
+        "Nombra a quién describe la muestra y a quién no, en una frase",
+        "Tres líneas sin relleno"
+      ]
+    }
+  }
+]

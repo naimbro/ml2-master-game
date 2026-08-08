@@ -55,6 +55,10 @@ import dvC01Config from '../../content/sessions/dataviz_2026/clase_01_diagnostic
 import dvC01Scenarios from '../../content/sessions/dataviz_2026/clase_01_diagnostico/scenarios.json';
 import dvC01Rubric from '../../content/sessions/dataviz_2026/clase_01_diagnostico/rubric.json';
 import dvC01KnowledgeBase from '../../content/sessions/dataviz_2026/clase_01_diagnostico/knowledge_base.md?raw';
+import dvC02Config from '../../content/sessions/dataviz_2026/clase_02_primeros_pasos_r/config.json';
+import dvC02Scenarios from '../../content/sessions/dataviz_2026/clase_02_primeros_pasos_r/scenarios.json';
+import dvC02Rubric from '../../content/sessions/dataviz_2026/clase_02_primeros_pasos_r/rubric.json';
+import dvC02KnowledgeBase from '../../content/sessions/dataviz_2026/clase_02_primeros_pasos_r/knowledge_base.md?raw';
 
 import mgtC01Config from '../../content/sessions/mgt300_2026/clase_01_piensa_primero/config.json';
 import mgtC01Scenarios from '../../content/sessions/mgt300_2026/clase_01_piensa_primero/scenarios.json';
@@ -269,6 +273,18 @@ export const SESSIONS: SessionOption[] = [
     scenarios: dvC01Scenarios,
     rubric: dvC01Rubric,
     knowledgeBase: dvC01KnowledgeBase,
+  },
+  {
+    id: 'clase_02_primeros_pasos_r',
+    courseId: 'dataviz_2026',
+    title: dvC02Config.title,
+    description: dvC02Config.description,
+    rounds: dvC02Scenarios.length,
+    duration: Math.round(dvC02Config.roundDurationSeconds / 60),
+    config: dvC02Config,
+    scenarios: dvC02Scenarios,
+    rubric: dvC02Rubric,
+    knowledgeBase: dvC02KnowledgeBase,
   },
   {
     id: 'clase_01_piensa_primero',

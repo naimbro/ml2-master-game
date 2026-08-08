@@ -12,6 +12,13 @@ dist
 dist-ssr
 *.local
 
+# Claves de API. El repo es PUBLICO: `*.local` ya cubre .env.local, pero un
+# `.env` a secas se publicaba. Las claves de los jueces (OPENAI/ANTHROPIC/GEMINI)
+# viven en Firebase Secret Manager, no acá.
+.env
+.env.*
+!.env.example
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

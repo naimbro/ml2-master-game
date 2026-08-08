@@ -1,0 +1,83 @@
+{
+  "_doc": "Rúbrica PROPIA de clase_02_primeros_pasos_r, NO la copia de _shared/base_rubric.json. Se apartó del curso a propósito: la dimensión 'criterio_visual' del base describe la construcción de un gráfico (escalas, geometría, orden de categorías) y de las dos rondas juzgadas de esta clase, sólo una muestra un gráfico —y ni siquiera pide criticarlo, sino describirlo—. La otra, la comuna promedio, no tiene nada visual: pesarla 35% en criterio visual le habría dado un tercio del puntaje a una dimensión inaplicable. En su lugar va 'criterio_de_datos': qué operación admite la variable o el gráfico que tengo al frente. Cuando la clase llegue a rondas de construir gráficos (clase 8 en adelante), esa sesión vuelve al base_rubric del curso.",
+  "sessionId": "clase_02_primeros_pasos_r",
+  "globalInstructions": "Evalúa SOLO lo que está escrito. No completes la respuesta con lo que el estudiante 'seguramente quiso decir'.\n\nEsta es la SEGUNDA clase del semestre y la PRIMERA VEZ EN SUS VIDAS que estos estudiantes programan. Son de primer año, de sociología y negocios, y hasta hoy no sabían qué era una variable ni un archivo .csv. El estándar es el de alguien que está aprendiendo a mirar datos, no el de un estadístico.\n\nNO EXIJAS VOCABULARIO TÉCNICO NI NOMBRES DE FUNCIONES. Un razonamiento correcto dicho sin una sola palabra técnica vale 100. Decir 'la comuna que más se repite' vale exactamente lo mismo que decir 'la moda'. Nadie tiene que recordar cómo se escribe una función, y citar sintaxis de memoria no suma nada.\n\nEste curso NO enseña inferencia estadística en ningún momento: nada de tests, valores-p, intervalos de confianza ni regresión. Si una respuesta invoca un test, no está siendo sofisticada: está fuera de lo que se enseñó, y no suma.\n\nSE PIDIERON TRES LÍNEAS, escritas en dos minutos y medio desde un teléfono. Tres líneas bien puestas valen 100: no esperes párrafos, ni estructura, ni introducción, ni ortografía perfecta, ni tildes. ESCRIBIR MÁS NO SUBE EL PUNTAJE. Premia densidad, no extensión. No penalices la brevedad; penaliza la vaguedad.\n\nSi un estudiante objeta el enunciado —dice que la premisa le suena falsa o que falta información para responder— eso NO se penaliza nunca. Si tiene razón, el problema es del enunciado.\n\nEl judgeFocus del escenario es tu prioridad absoluta y manda sobre estas instrucciones generales si hay tensión.",
+  "scoring": {
+    "scaleLevels": [100, 80, 60, 40, 20, 0],
+    "instructions": "Elige uno de los seis niveles escritos por dimensión. No inventes valores intermedios. Si la respuesta satisface un nivel solo parcialmente, baja al nivel inferior."
+  },
+  "dimensions": [
+    {
+      "id": "rigor_descriptivo",
+      "name": "Rigor descriptivo",
+      "weight": 0.4,
+      "description": "¿Dice sólo lo que el dato sostiene? Distinguir lo que se observa de lo que se supone, no ampliar el sujeto de la frase más allá de a quién describen los datos, y no darle a una variable una pregunta que no admite.",
+      "level_100": "Todo lo que afirma se sostiene con lo que tiene al frente, y además nombra explícitamente un límite concreto y pertinente: a quién describen estos datos y a quién no, quién quedó fuera, o por qué esta variable no admite lo que le están pidiendo. El límite que nombra es el que de verdad afecta la pregunta.",
+      "level_80": "Lo que afirma se sostiene y no sobre-afirma, pero el límite queda implícito o el que nombra es secundario.",
+      "level_60": "En lo grueso es correcto, pero mezcla algo que observó con algo que supuso sin marcar la diferencia.",
+      "level_40": "Lee bien pero salta a explicar por qué pasa, o generaliza a un grupo más amplio, sin señalar que eso es una suposición.",
+      "level_20": "Afirma como hecho algo que el dato no muestra: una causa, una población que la encuesta no cubre, o un número que no está.",
+      "level_0": "Contradice lo que tiene al frente, o responde sobre otra cosa."
+    },
+    {
+      "id": "criterio_de_datos",
+      "name": "Criterio sobre qué admite el dato",
+      "weight": 0.35,
+      "description": "¿Sabe qué operación o qué lectura corresponde a lo que tiene al frente? Distinguir una variable numérica de una categórica, saber qué se le pregunta a cada una, leer una distribución en su magnitud, y proponer la alternativa correcta cuando la que le ofrecen no aplica.",
+      "level_100": "Identifica correctamente qué tipo de dato tiene al frente y qué se le puede preguntar, y lo aterriza: propone la operación o la lectura que sí corresponde, y da la magnitud o la comparación concreta en vez de quedarse en 'la mayoría'.",
+      "level_80": "Identifica bien el tipo de dato y qué corresponde hacer con él, pero se queda en lo cualitativo o no aterriza la alternativa.",
+      "level_60": "Acierta a medias: detecta el problema pero no dice qué hacer en su lugar, o dice qué hacer sin explicar por qué lo otro no aplica.",
+      "level_40": "Comenta el dato sin distinguir qué tipo de variable es ni qué preguntas admite.",
+      "level_20": "Propone una operación que no corresponde al tipo de dato, o lee mal lo que el gráfico muestra.",
+      "level_0": "Su propuesta es imposible de ejecutar sobre este dato, o afirma algo falso sobre lo que el dato contiene."
+    },
+    {
+      "id": "claridad",
+      "name": "Claridad para un lector no especializado",
+      "weight": 0.25,
+      "description": "¿Lo entendería alguien de fuera a la primera lectura? Una afirmación principal identificable, el resto sosteniéndola, y sin jerga que no se explique.",
+      "level_100": "Un lector sin formación estadística la entiende a la primera. Hay una afirmación principal identificable y todo lo demás la sostiene. La jerga que usa, la explica.",
+      "level_80": "Se entiende bien, con una frase ambigua o un término técnico sin explicar.",
+      "level_60": "Se entiende con esfuerzo: la idea está, pero el lector tiene que reordenarla.",
+      "level_40": "Enumera observaciones sueltas sin una afirmación principal.",
+      "level_20": "Usa vocabulario técnico como sustituto del argumento, o es tan general que no se sabe de qué está hablando.",
+      "level_0": "Ininteligible, o no responde la pregunta que se hizo."
+    }
+  ],
+  "penalties": [
+    {
+      "id": "amplia_el_sujeto",
+      "description": "Atribuirle el resultado a una población que la encuesta no cubre —'los jóvenes', 'los chilenos', 'la gente'— dicho como hecho y no como sospecha, no puede superar 40 en 'Rigor descriptivo'.",
+      "effect": { "type": "cap", "value": 40, "dimensions": ["rigor_descriptivo"] }
+    },
+    {
+      "id": "media_pregunta",
+      "description": "Estas dos preguntas piden DOS COSAS cada una: la ronda de la comuna pide qué le dices Y qué reportarías en su lugar; la del gráfico pide qué muestra Y qué no se puede concluir. Responder sólo una de las dos mitades no puede superar 60 en 'Rigor descriptivo' ni 60 en 'Criterio sobre qué admite el dato', por correcta que sea la mitad que contestó.",
+      "effect": { "type": "cap", "value": 60, "dimensions": ["rigor_descriptivo", "criterio_de_datos"] }
+    },
+    {
+      "id": "respuesta_intercambiable",
+      "description": "Una respuesta que serviría igual para cualquier otra ronda de este juego sin cambiarle una palabra —'hay que revisar bien los datos antes de sacar conclusiones'— no puede superar 50 en 'Claridad'.",
+      "effect": { "type": "cap", "value": 50, "dimensions": ["claridad"] }
+    }
+  ],
+  "globalPenalties": [
+    "Ampliar el sujeto: pasar de 'estos 458 estudiantes UAI' a 'los jóvenes' o 'los chilenos' sin marcarlo.",
+    "Causalidad desde datos descriptivos: 'usan iPhone porque X', dicho como hecho, cuando el dato sólo muestra cuántos usan iPhone.",
+    "Vaguedad intercambiable: una respuesta que se podría pegar debajo de cualquier pregunta del curso.",
+    "Extensión como sustituto de contenido: una respuesta larga que repite la misma idea vale lo que la idea dicha una vez.",
+    "Jerga como sustituto de razonamiento: nombrar 'sesgo', 'muestra' o 'variable categórica' sin decir cuál, dónde ni por qué importa acá."
+  ],
+  "bonusIndicators": [
+    "Aterriza la magnitud en vez de quedarse en 'la mayoría': un porcentaje, una proporción o una comparación concreta",
+    "Dice sobre cuánta gente está calculado lo que reporta",
+    "Nota que los datos tienen tres o cuatro años, o que responder era voluntario",
+    "Traduce el criterio a una frase que alguien de fuera del curso entendería"
+  ],
+  "penaltyIndicators": [
+    "Le pide a una variable de texto una operación que sólo admite un número",
+    "Generaliza a una población que la encuesta no cubre",
+    "Convierte lo que el dato muestra en una explicación de por qué ocurre",
+    "Cita nombres de funciones de memoria en vez de decir qué haría y por qué"
+  ]
+}

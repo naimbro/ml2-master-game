@@ -38,6 +38,37 @@ cd /tmp/functions-deploy && npx firebase deploy --only functions
 > Firestore rules deploy fine directly from the project dir (they don't load functions):
 > `npx firebase deploy --only firestore:rules`.
 
+## Calibrar una rúbrica: no hace falta ninguna clave de API
+
+Al escribir una sesión aparece la tentación de correr respuestas sintéticas por
+los jueces desde un script local, y para eso pedir las claves con
+`firebase functions:secrets:access`. **No se hace, por dos razones.**
+
+La primera es que **no mediría lo que se cree que mide**. El prompt del juez se
+arma inline dentro de `evaluateSubmission` en `functions/src/index.ts` y no está
+exportado: `functions/lib` sólo expone `splitPrompt` y `resolveDimensionWeights`.
+Un script local tendría que reconstruirlo, y a la primera edición del prompt
+desplegado quedaría midiendo otra cosa — en silencio, que es la peor forma.
+
+La segunda es que las claves de OPENAI/ANTHROPIC/GEMINI facturan de verdad y
+quedarían escritas en el transcript de la sesión.
+
+**La forma correcta de medir una rúbrica es a través de `evaluateSubmission`
+desplegado**, que no necesita ninguna clave del lado del cliente: es una
+`https.onCall` autenticada y las claves las inyecta Firebase. En la práctica eso
+son dos caminos:
+
+- **Jugar la sesión y mandar a propósito las respuestas sintéticas.** Es lo más
+  rápido y de paso prueba el camino completo. `respuestas_sinteticas.md` en la
+  carpeta de la sesión trae las respuestas ya escritas.
+- Un script que cree una partida de prueba, escriba las submissions y llame a
+  `evaluateSubmission`. Necesita un ID token de Firebase Auth, no una API key.
+
+Lo que sí queda escrito offline —y lo cubre
+`scripts/verify-session-prompt.cjs`— es el **cableado**: que el knowledge base
+llegue, que los pesos difieran, que los techos sean ejecutables. Lo que ningún
+chequeo offline puede decir es **qué puntaje va a poner el panel**.
+
 ## Project Overview
 
 - **Stack**: React + TypeScript + Vite (frontend), Firebase Cloud Functions (backend), Firestore (database)
