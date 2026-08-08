@@ -128,3 +128,60 @@ export function posicionNube(
     y: (alto - PADDING) - fy * (alto - 2 * PADDING),
   };
 }
+
+export interface HechoDetalle {
+  etiqueta: string;
+  valor: string;
+}
+
+/** "300 y 482", "20 s, 1 min y 2 min 10 s" */
+function lista(partes: string[]): string {
+  if (partes.length <= 1) return partes[0] ?? '';
+  return `${partes.slice(0, -1).join(', ')} y ${partes[partes.length - 1]}`;
+}
+
+/**
+ * Los hechos de una respuesta, para el cajon de detalle.
+ *
+ * Devuelve HECHOS, no conclusiones: cuando paso cada cosa y de que tamano fue.
+ * En ningun caso emite una etiqueta sobre la persona. Las lineas que no
+ * aplican se omiten en vez de mostrarse en cero, para que lo que quede en
+ * pantalla sea lo que efectivamente ocurrio.
+ */
+export function hechosDetalle(t: TelemetriaCaptura, duracionMs: number): HechoDetalle[] {
+  const hechos: HechoDetalle[] = [];
+
+  hechos.push({
+    etiqueta: 'Primera tecla',
+    valor:
+      t.msPrimeraTecla === null
+        ? 'nunca escribió'
+        : `a los ${formatoReloj(t.msPrimeraTecla)} de los ${formatoReloj(duracionMs)} de ronda`,
+  });
+
+  if (t.salidas > 0) {
+    const cuantas = `${t.salidas} ${t.salidas === 1 ? 'salida' : 'salidas'}`;
+    hechos.push({
+      etiqueta: 'Fuera de la app',
+      valor: t.msFueraAntesDeEscribir > 0
+        ? `${formatoReloj(t.msFueraAntesDeEscribir)} antes de escribir (${cuantas})`
+        : `${formatoReloj(t.msFueraDeApp)} en total (${cuantas})`,
+    });
+  }
+
+  if (t.pegados.length > 0) {
+    hechos.push({
+      etiqueta: 'Pegados',
+      valor: `${t.pegados.length} · de ${lista(t.pegados.map((p) => String(p.chars)))} caracteres · a los ${lista(t.pegados.map((p) => formatoReloj(p.ms)))}`,
+    });
+    hechos.push({
+      etiqueta: 'Editó después de pegar',
+      valor: `${t.charsEditadosTrasUltimoPegado} caracteres`,
+    });
+  }
+
+  hechos.push({ etiqueta: 'Largo final', valor: `${t.largoFinal} caracteres` });
+  hechos.push({ etiqueta: 'Envió', valor: `a los ${formatoReloj(t.msEnvio)}` });
+
+  return hechos;
+}

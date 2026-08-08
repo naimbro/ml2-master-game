@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { formatoReloj, proporcionPegada, posicionNube, puntosHuella } from './telemetriaDerived';
+import { formatoReloj, proporcionPegada, posicionNube, puntosHuella, hechosDetalle } from './telemetriaDerived';
 
 describe('formatoReloj', () => {
   it('bajo el minuto muestra solo segundos', () => {
@@ -98,5 +98,64 @@ describe('posicionNube', () => {
     const p = posicionNube({ msPrimeraTecla: null, charsPegados: 0, largoFinal: 0 }, 240_000, 100, 100);
     expect(p.x).toBe(98);
     expect(p.y).toBe(98);
+  });
+});
+
+const captura = {
+  scenarioId: 'r3',
+  msPrimeraTecla: 138_000,
+  msEnvio: 151_000,
+  roundStartOffsetMs: 0,
+  pegados: [{ ms: 138_000, chars: 782 }],
+  huella: [0, 0, 0],
+  huellaIntervaloMs: 2000,
+  msFueraDeApp: 41_000,
+  salidas: 1,
+  msFueraAntesDeEscribir: 41_000,
+  largoFinal: 782,
+  charsPegados: 782,
+  charsEditadosTrasUltimoPegado: 0,
+};
+
+describe('hechosDetalle', () => {
+  it('describe la respuesta como hechos, sin ningun juicio', () => {
+    const hechos = hechosDetalle(captura, 240_000);
+    expect(hechos).toEqual([
+      { etiqueta: 'Primera tecla', valor: 'a los 2 min 18 s de los 4 min de ronda' },
+      { etiqueta: 'Fuera de la app', valor: '41 s antes de escribir (1 salida)' },
+      { etiqueta: 'Pegados', valor: '1 · de 782 caracteres · a los 2 min 18 s' },
+      { etiqueta: 'Editó después de pegar', valor: '0 caracteres' },
+      { etiqueta: 'Largo final', valor: '782 caracteres' },
+      { etiqueta: 'Envió', valor: 'a los 2 min 31 s' },
+    ]);
+  });
+
+  it('dice que nunca escribio cuando no hubo primera tecla', () => {
+    const hechos = hechosDetalle({ ...captura, msPrimeraTecla: null }, 240_000);
+    expect(hechos[0]).toEqual({ etiqueta: 'Primera tecla', valor: 'nunca escribió' });
+  });
+
+  it('omite la linea de pegados cuando no hubo ninguno', () => {
+    const hechos = hechosDetalle(
+      { ...captura, pegados: [], charsPegados: 0, charsEditadosTrasUltimoPegado: 0 },
+      240_000
+    );
+    expect(hechos.map((h) => h.etiqueta)).not.toContain('Pegados');
+    expect(hechos.map((h) => h.etiqueta)).not.toContain('Editó después de pegar');
+  });
+
+  it('omite la linea de salidas cuando nunca salio de la app', () => {
+    const hechos = hechosDetalle({ ...captura, msFueraDeApp: 0, salidas: 0, msFueraAntesDeEscribir: 0 }, 240_000);
+    expect(hechos.map((h) => h.etiqueta)).not.toContain('Fuera de la app');
+  });
+
+  it('lista varios pegados con sus tiempos', () => {
+    const hechos = hechosDetalle(
+      { ...captura, pegados: [{ ms: 20_000, chars: 300 }, { ms: 60_000, chars: 482 }] },
+      240_000
+    );
+    expect(hechos.find((h) => h.etiqueta === 'Pegados')?.valor).toBe(
+      '2 · de 300 y 482 caracteres · a los 20 s y 1 min'
+    );
   });
 });
