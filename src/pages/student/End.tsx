@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, Medal, Star, Home, Download, FileText, FileJson } from 'lucide-react';
 import { useGame } from '../../hooks/useGame';
+import VueltaAlJuego from '../../components/VueltaAlJuego';
 import { useAuth } from '../../hooks/useAuth';
 import { httpsCallable } from 'firebase/functions';
 import { functions } from '../../lib/firebase';
@@ -722,6 +723,8 @@ export default function End() {
           </motion.div>
         )}
       </main>
+
+      {gameCode && <VueltaAlJuego gameCode={gameCode} proyectada={isHost} />}
     </div>
   );
 }
