@@ -116,7 +116,7 @@ function sumSlots(slots, dropWorst) {
     return values.reduce((acc, v) => acc + v, 0);
 }
 function accumulate(games, options = {}) {
-    var _a;
+    var _a, _b;
     const dropWorst = (_a = options.dropWorst) !== null && _a !== void 0 ? _a : 0;
     const ordered = [...games].sort((a, b) => a.finishedAtMs - b.finishedAtMs);
     if (ordered.length === 0)
@@ -150,6 +150,24 @@ function accumulate(games, options = {}) {
         })))
         : new Map();
     const playedBefore = new Set(perGame.slice(0, -1).flatMap(({ ranks }) => ranks.map((r) => r.uid)));
+    // La tabla del curso congelada despues de cada clase. Se recalcula entera k
+    // veces en vez de acumularse de a poco a proposito: las posiciones salen de
+    // `positionsFromTotals`, que resuelve los empates con ranking de competencia
+    // estandar, y reimplementar eso aca en un acumulador seria la forma de que
+    // esta figura y la tabla dejen de coincidir sin que nadie se de cuenta.
+    const cumulativeByGame = new Map(uids.map((uid) => [uid, []]));
+    for (let k = 1; k <= perGame.length; k++) {
+        const hastaAqui = positionsFromTotals(uids.map((uid) => ({
+            uid,
+            points: sumSlots(slotsOf(uid, k).map((r) => (r ? r.points : null)), 0),
+        })));
+        // Quien todavia no habia jugado ninguna clase no tiene puesto: la linea
+        // arranca en su primera clase en vez de venir arrastrada desde el fondo.
+        const yaJugo = new Set(perGame.slice(0, k).flatMap(({ ranks }) => ranks.map((r) => r.uid)));
+        for (const uid of uids) {
+            cumulativeByGame.get(uid).push(yaJugo.has(uid) ? (_b = hastaAqui.get(uid)) !== null && _b !== void 0 ? _b : null : null);
+        }
+    }
     const entries = uids.map((uid) => {
         var _a;
         const slots = slotsOf(uid, perGame.length);
@@ -162,6 +180,7 @@ function accumulate(games, options = {}) {
             previousPosition: playedBefore.has(uid) ? (_a = previousPositions.get(uid)) !== null && _a !== void 0 ? _a : null : null,
             pointsByGame: slots.map((r) => (r ? r.points : null)),
             positionsByGame: slots.map((r) => (r ? r.position : null)),
+            cumulativePositionsByGame: cumulativeByGame.get(uid),
             gamesPlayed: slots.filter(Boolean).length,
         };
         if (meta.photoURL)

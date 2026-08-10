@@ -672,44 +672,79 @@ exports.processRoundEnd = functions
                 });
             }
         });
-        // Quienes faltan en la tabla. Con el documento recien creado son todos, y
-        // entonces esto arma la tabla completa igual que siempre; con un
-        // documento ya escrito son solo los rezagados, y a los que ya estaban no
-        // se les toca el acumulado (ya incluye esta ronda).
-        const rezagados = (0, lateRankings_1.missingFromRankings)(existingRankings, scores).map((s) => {
-            var _a, _b;
-            return ({
-                ...s,
-                prevTotal: ((_b = (_a = game.players) === null || _a === void 0 ? void 0 : _a[s.playerId]) === null || _b === void 0 ? void 0 : _b.totalScore) || 0,
+        // La tabla se escribe en una TRANSACCION que vuelve a leer el documento.
+        //
+        // `existingData` se leyo al entrar, y entre esa lectura y este punto pasa
+        // toda la espera de los jueces — 119 segundos en la ronda 8 de XNTUHB
+        // (2026-08-10). En esa ventana caben dos cosas que ya pasaron de verdad:
+        //
+        //   1. Otra invocacion de esta misma funcion crea el documento. La lenta
+        //      todavia cree que no existe y termina haciendo `set()`, que borra
+        //      la tabla de la rapida en vez de enmendarla.
+        //   2. `recalibrateRound` corre los duelos y escribe el puntaje
+        //      recalibrado. La lenta lo pisa con el puntaje crudo de los jueces.
+        //
+        // Las dos ocurrieron juntas en XNTUHB ronda 8: los 118 duelos corrieron
+        // (quedaron huerfanos en la subcoleccion `duels`), y 29 s despues este
+        // `set()` dejo la ronda en `provisional`, sin `recalibratedAt`. El podio
+        // de la clase se proyecto con el puntaje de antes de los duelos.
+        //
+        // El chequeo de `recalibratedAt` de mas arriba no alcanza porque se
+        // evalua al LEER, no al ESCRIBIR. Aca se relee dentro de la transaccion,
+        // asi que la decision de crear / enmendar / no tocar se toma contra el
+        // estado real en el instante de la escritura.
+        const nowTs = admin.firestore.Timestamp.now();
+        const outcome = await db.runTransaction(async (tx) => {
+            var _a, _b, _c;
+            const fresh = (_a = (await tx.get(roundDocRef)).data()) !== null && _a !== void 0 ? _a : null;
+            // Una ronda ya recalibrada —o con los duelos corriendo ahora mismo— no
+            // se toca: su puntaje sale de comparar respuestas entre si y no vive en
+            // la misma escala que uno crudo. El rezagado pierde esa ronda y queda
+            // en el log, que es mejor que una tabla que no significa nada.
+            if ((fresh === null || fresh === void 0 ? void 0 : fresh.recalibratedAt) || (fresh === null || fresh === void 0 ? void 0 : fresh.phase) === 'recalibrating') {
+                return { rankings: ((_b = fresh.rankings) !== null && _b !== void 0 ? _b : []), rezagados: [], clobberEvitado: true };
+            }
+            const frescas = ((_c = fresh === null || fresh === void 0 ? void 0 : fresh.rankings) !== null && _c !== void 0 ? _c : []);
+            const rezagados = (0, lateRankings_1.missingFromRankings)(frescas, scores).map((s) => {
+                var _a, _b;
+                return ({
+                    ...s,
+                    prevTotal: ((_b = (_a = game.players) === null || _a === void 0 ? void 0 : _a[s.playerId]) === null || _b === void 0 ? void 0 : _b.totalScore) || 0,
+                });
             });
+            const rankings = (0, lateRankings_1.mergeLateScores)(frescas, rezagados, isRanked);
+            if (fresh) {
+                tx.update(roundDocRef, { rankings, amendedAt: nowTs });
+            }
+            else {
+                tx.set(roundDocRef, {
+                    round,
+                    ranked: isRanked,
+                    // Non-ranked rounds are never recalibrated — mark them final so the
+                    // client does not wait for a Phase 2 that will not come.
+                    phase: isRanked ? 'provisional' : 'final',
+                    rankings,
+                    processedAt: nowTs,
+                });
+            }
+            return { rankings, rezagados, clobberEvitado: false };
         });
-        const rankings = (0, lateRankings_1.mergeLateScores)(existingRankings, rezagados, isRanked);
-        if (existingData) {
-            await roundDocRef.update({
-                rankings,
-                amendedAt: admin.firestore.Timestamp.now(),
-            });
-            console.log(`Ronda ${round} de ${gameCode}: enmendada con ${rezagados.length} rezagado(s): ` +
-                rezagados.map((r) => r.playerName).join(', '));
+        if (outcome.clobberEvitado) {
+            console.error(`Ronda ${round} de ${gameCode}: la tabla ya paso por duelos mientras esta ` +
+                `invocacion evaluaba; no se sobrescribe.`);
+            return { success: true, rankings: outcome.rankings, ranked: isRanked, alreadyProcessed: true };
         }
-        else {
-            await roundDocRef.set({
-                round,
-                ranked: isRanked,
-                // Non-ranked rounds are never recalibrated — mark them final so the
-                // client does not wait for a Phase 2 that will not come.
-                phase: isRanked ? 'provisional' : 'final',
-                rankings,
-                processedAt: admin.firestore.Timestamp.now(),
-            });
+        if (outcome.rezagados.length > 0 && existingData) {
+            console.log(`Ronda ${round} de ${gameCode}: enmendada con ${outcome.rezagados.length} rezagado(s): ` +
+                outcome.rezagados.map((r) => r.playerName).join(', '));
         }
         // Only update player totalScores for ranked rounds. Solo los rezagados:
         // el acumulado de los demas ya se escribio cuando entraron a la tabla, y
         // volver a sumarles esta ronda les pagaria dos veces.
-        if (isRanked && rezagados.length > 0) {
-            const enTabla = new Map(rankings.map((r) => [r.playerId, r]));
+        if (isRanked && outcome.rezagados.length > 0) {
+            const enTabla = new Map(outcome.rankings.map((r) => [r.playerId, r]));
             const playerUpdates = {};
-            for (const r of rezagados) {
+            for (const r of outcome.rezagados) {
                 const fila = enTabla.get(r.playerId);
                 if (fila)
                     playerUpdates[`players.${r.playerId}.totalScore`] = fila.totalScore;
@@ -718,7 +753,7 @@ exports.processRoundEnd = functions
                 await db.collection('games').doc(gameCode).update(playerUpdates);
             }
         }
-        return { success: true, rankings, ranked: isRanked };
+        return { success: true, rankings: outcome.rankings, ranked: isRanked };
     }
     catch (error) {
         console.error('Process round error:', error);
@@ -1886,6 +1921,7 @@ exports.recomputeCourseStandings = functions
                 position: e.position,
                 previousPosition: e.previousPosition,
                 positionsByGame: e.positionsByGame,
+                cumulativePositionsByGame: e.cumulativePositionsByGame,
             });
         }),
     }, { merge: true });
