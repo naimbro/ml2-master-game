@@ -83,18 +83,67 @@ las dos formas, pero `courses.ts` hace `scenarios.length` y la envuelta deja
   El validador falla el build si no alcanza para el bloque.
 - `correctOptionIndex` es base 0. Contarlo dos veces.
 - **El reloj va por tipo de pregunta, no uniforme.** `timeLimitSeconds` es por
-  pregunta justamente para esto. **20 s** para reconocer algo del texto (una
-  cifra, un término, una cita); **30 s** cuando hay que discriminar entre cuatro
-  explicaciones plausibles. En MGT300 clase 1 se usaron 30 s para las nueve y los
-  alumnos pidieron acortarlas — con razón: **solo 1 a 3 personas de 42 dejaron
-  cada pregunta sin responder**, así que el reloj sobraba en las fáciles.
-- **La carga de lectura NO predice la dificultad — no perseguirla.** Medido en
-  MGT300 clase 1: la pregunta de mayor carga (455 caracteres, 15,2 por segundo
-  de reloj) sacó **88%** de acierto, y las dos que se cayeron a 43-45% tenían
-  menos carga. Lo que las hundió fue conceptual: eran las dos únicas que pedían
-  **clasificar o explicar un mecanismo** en vez de reconocer. Escribir preguntas
-  más cortas no las habría arreglado. Una o dos de mecanismo por juego está bien
-  y son las que enseñan; tres o más convierten el juego en una prueba.
+  pregunta justamente para esto. Tres tramos, y el tercero salió caro:
+
+  | Qué pide la pregunta | Reloj |
+  |---|---|
+  | Reconocer algo del texto (una cifra, un término, una cita) | **20 s** |
+  | Discriminar entre cuatro explicaciones plausibles | **30 s** |
+  | Distinguir un **par mínimo** (ver abajo) o hacer una cuenta | **40 s** |
+
+  En MGT300 clase 1 se usaron 30 s para las nueve y los alumnos pidieron
+  acortarlas — con razón: solo 1 a 3 personas de 42 dejaron cada pregunta sin
+  responder. **Esa conclusión no se puede generalizar y se generalizó:** dataviz
+  clase 2 salió con relojes de 20 a 30 s y perdió **27 respuestas de 222**.
+
+- **El par mínimo: dos alternativas hechas de las mismas palabras.** Es la
+  trampa que ningún conteo de caracteres detecta. En dataviz clase 2:
+
+  > **A** ✔ «Cuántas personas respondieron, y cuántas preguntas tenía el formulario»
+  > **B** «Cuántas preguntas tenía el formulario, y cuántas personas respondieron»
+
+  Con 25 s la mediana del curso consumió el **89% del reloj**, 16 de los 28 que
+  contestaron apretaron en los últimos 3 segundos, 8 no alcanzaron, y el acierto
+  se hundió al **43%** — indistinguible de tirar una moneda entre A y B.
+
+  **Un par mínimo no es un defecto: es la pregunta que mejor separa a quien
+  entendió de quien reconoció.** Lo que no puede es correr contra un reloj corto,
+  porque obliga a releer las dos alternativas enteras y compararlas término a
+  término. `scripts/validate-content.cjs` **falla el build** si un par mínimo
+  lleva menos de 40 s.
+
+- **La carga de lectura NO predice la dificultad — no perseguirla.** Medido dos
+  veces, en cursos distintos, y las dos veces igual. En MGT300 clase 1 la
+  pregunta de mayor carga (455 caracteres) sacó **88%** de acierto y las dos que
+  se cayeron a 43-45% tenían menos carga. En dataviz clase 2 la pregunta con más
+  caracteres por segundo de reloj (R1, 18,4) fue **la más fácil del juego**: 97%
+  de acierto usando la mitad del reloj; la que se cayó al 43% tenía *menos*
+  carga. Escribir preguntas más cortas no arregla nada, y peor: indexar el reloj
+  al largo le habría dado más tiempo justo a la que no lo necesitaba.
+
+  Lo que las hunde es conceptual — pedir **clasificar o explicar un mecanismo**
+  en vez de reconocer. Una o dos de mecanismo por juego está bien y son las que
+  enseñan; tres o más convierten el juego en una prueba.
+
+- **Después de jugar, medir el reloj. Esto no es opcional.** El reloj se escribe
+  a ojo y no hay forma de saber si estuvo bien hasta que treinta personas lo
+  corran. Correr **`npx tsx scripts/mc-clock.ts <CODIGO>`** después de cada clase.
+
+  **El número que manda es qué fracción del límite consumió la mediana del
+  curso. Sobre el 60%, el reloj quedó corto.** El corte se ve limpio en dataviz
+  clase 2 — las tres rondas bajo el umbral perdieron 2, 3 y 3 respuestas; las
+  tres sobre el umbral perdieron 5, 6 y 8:
+
+  | | R2 | R3 | R1 | R7 | R6 | R5 |
+  |---|---|---|---|---|---|---|
+  | % del reloj usado | 45% | 50% | 52% | 63% | 69% | **89%** |
+  | respuestas perdidas | 3 | 2 | 3 | 6 | 5 | **8** |
+  | acierto | 88% | 94% | 97% | 83% | 74% | **43%** |
+
+  Subir el reloj **no alarga la clase**: el corte anticipado ya cierra la
+  pregunta cuando contestaron todos. Sólo deja de castigar al que lee despacio.
+  Después de editar `timeLimitSeconds`, correr
+  `node scripts/recompute-mc-durations.cjs --write`.
 - **Repartir las correctas entre A/B/C/D.** No hay barajado en runtime:
   `Round.tsx` renderiza `options` en orden. La clase 1 de MGT300 salió con
   A5/B4/C0/D0 y se sacaba 9 de 9 marcando siempre A o B. Al reordenar, ojo con

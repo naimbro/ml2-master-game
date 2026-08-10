@@ -88,6 +88,21 @@ npm run build                                     # registro de cursos
 Los tres pueden pasar sobre un juego que juega mal. **El chequeo que cuenta es
 Naim jugándolo en el teléfono.** Decírselo, no darlo por hecho.
 
+### 8. Después de la clase, medir el reloj
+
+```bash
+npx tsx scripts/mc-clock.ts <CODIGO>              # ¿alcanzó el tiempo?
+npx tsx scripts/game-feedback.ts <courseId>       # qué dijeron los alumnos
+```
+
+`timeLimitSeconds` se escribe a ojo y **ningún chequeo previo puede saber si
+estuvo bien**: hace falta que treinta personas lo corran. Si la mediana del curso
+consumió más del 60% del límite, el reloj quedó corto y hay que subirlo antes de
+volver a jugar esa sesión. El detalle y los números están en `esquema.md`.
+
+Dataviz clase 2 se jugó sin este paso y perdió **27 respuestas de 222** — una de
+cada ocho.
+
 ## Reglas de escritura
 
 - **Chileno neutro.** Nada de voseo argentino ("elegí", "decime") ni chilenismo
@@ -118,3 +133,5 @@ Naim jugándolo en el teléfono.** Decírselo, no darlo por hecho.
 | `conceptTag` que no calza una sección del `knowledge_base.md` | Los jueces evalúan **sin material y sin dar error** |
 | `scenarios.json` envuelto en `{sessionId, scenarios: []}` | El validador lo acepta y `rounds` queda en `undefined` |
 | Sesión nueva sin `weightFormula` para los `generic_*` | Los tres jueces quedan indistinguibles, en silencio |
+| Par mínimo (dos alternativas con las mismas palabras) con reloj de 25 s | 89% del reloj consumido, 8 sin responder y 43% de acierto: una moneda al aire. Hoy el validador lo rechaza |
+| Acortar el reloj porque "la clase pasada sobraba" | Sobraba en MGT300, faltó en dataviz. El reloj se mide por sesión, no se hereda |

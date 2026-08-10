@@ -56,6 +56,67 @@ function mcFeedbackSeconds(explanation) {
   return Math.min(MC_FEEDBACK_MAX_SECONDS, Math.max(MC_FEEDBACK_MIN_SECONDS, needed));
 }
 
+/**
+ * Cuanto reloj necesita, como minimo, una pregunta cuyos distractores son un
+ * PAR MINIMO: dos alternativas hechas de las mismas palabras, cambiadas de
+ * orden o de relacion.
+ *
+ * Sale de la ronda 5 de dataviz clase 2 (juego XNTUHB, 2026-08-10), donde A y B
+ * eran literalmente la misma frase invertida:
+ *
+ *   A  "Cuantas personas respondieron, y cuantas preguntas tenia el formulario"
+ *   B  "Cuantas preguntas tenia el formulario, y cuantas personas respondieron"
+ *
+ * Con 25 segundos el curso uso el 89% del reloj (mediana 22,3 s), 16 de los 28
+ * que contestaron apretaron en los ultimos 3 segundos, ocho no alcanzaron, y el
+ * acierto se hundio al 43%. Para dejar la mediana bajo el 60% del limite hacian
+ * falta ~37 s; 40 deja margen.
+ *
+ * Un par minimo NO es un defecto — es la pregunta que mejor distingue a quien
+ * entendio de quien reconocio. Lo que no puede es correr contra un reloj corto:
+ * obliga a releer las dos alternativas enteras y compararlas termino a termino,
+ * y ese costo no se ve contando caracteres.
+ */
+const MC_PAR_MINIMO_MIN_SECONDS = 40;
+
+/** Palabras comparables: sin tildes, sin puntuacion, en minuscula. */
+function palabrasNormalizadas(texto) {
+  return String(texto)
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .split(/\s+/)
+    .filter(Boolean);
+}
+
+/**
+ * ¿Estas dos alternativas son un par minimo?
+ *
+ * Dos criterios, y el segundo existe porque el primero es fragil: cambiar una
+ * sola palabra ("mas" por "menos") rompe la igualdad exacta y deja pasar un par
+ * igual de dificil.
+ *
+ * Se exigen 5 palabras minimo: dos alternativas de tres palabras comparten
+ * vocabulario por casualidad todo el tiempo ("Si", "No, al reves").
+ */
+function esParMinimo(a, b) {
+  if (a.trim() === b.trim()) return false; // identicas es otro problema
+  const pa = palabrasNormalizadas(a);
+  const pb = palabrasNormalizadas(b);
+  if (pa.length < 5 || pb.length < 5) return false;
+
+  // Mismas palabras, otro orden.
+  if ([...pa].sort().join(' ') === [...pb].sort().join(' ')) return true;
+
+  // Casi las mismas: se comparten al menos el 80% del vocabulario.
+  const sa = new Set(pa);
+  const sb = new Set(pb);
+  const comunes = [...sa].filter((w) => sb.has(w)).length;
+  const union = new Set([...sa, ...sb]).size;
+  return union > 0 && comunes / union >= 0.8;
+}
+
 function warn(scope, msg) {
   console.warn(`  WARN   [${scope}] ${msg}`);
   warnCount++;
@@ -199,6 +260,26 @@ function validateMCQuestions(scope, sc) {
       expectedDuration += 20 + reveal;
     } else {
       expectedDuration += limit + reveal;
+
+      // Un par minimo con reloj corto es la unica forma conocida de que una
+      // pregunta buena se convierta en una loteria. Ver la constante arriba.
+      if (Array.isArray(q.options) && limit < MC_PAR_MINIMO_MIN_SECONDS) {
+        for (let i = 0; i < q.options.length; i++) {
+          for (let j = i + 1; j < q.options.length; j++) {
+            const ta = q.options[i] && q.options[i].text;
+            const tb = q.options[j] && q.options[j].text;
+            if (typeof ta !== 'string' || typeof tb !== 'string') continue;
+            if (!esParMinimo(ta, tb)) continue;
+            err(
+              qScope,
+              `las alternativas ${q.options[i].id} y ${q.options[j].id} son un par minimo ` +
+              `(las mismas palabras, distinto orden o relacion) y el reloj es de ${limit}s. ` +
+              `Distinguirlas obliga a releer las dos enteras: necesita ${MC_PAR_MINIMO_MIN_SECONDS}s o mas. ` +
+              `Sube timeLimitSeconds y recalcula durationSeconds, o separa las alternativas.`,
+            );
+          }
+        }
+      }
     }
 
     validateMedia(qScope, q.media, 'pregunta');
@@ -376,4 +457,11 @@ function main() {
   process.exit(errorCount > 0 ? 1 : 0);
 }
 
-main();
+// `main()` corre solo cuando el script se invoca directo. Sin esta guarda,
+// importarlo desde un test dispara la validacion entera y termina el proceso
+// antes de la primera aseveracion.
+if (require.main === module) {
+  main();
+}
+
+module.exports = { esParMinimo, palabrasNormalizadas, MC_PAR_MINIMO_MIN_SECONDS };

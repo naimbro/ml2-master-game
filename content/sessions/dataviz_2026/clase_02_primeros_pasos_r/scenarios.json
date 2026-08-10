@@ -183,7 +183,7 @@
     "category": "R básico",
     "type": "multiple_choice",
     "ranked": true,
-    "durationSeconds": 58,
+    "durationSeconds": 73,
     "context": "",
     "question": "",
     "conceptTags": [
@@ -211,7 +211,7 @@
           }
         ],
         "correctOptionIndex": 0,
-        "timeLimitSeconds": 25,
+        "timeLimitSeconds": 40,
         "explanation": "Un data frame es una tabla: cada FILA es una persona y cada COLUMNA es una pregunta. nrow cuenta filas, ncol cuenta columnas. Esa estructura es la de todo el semestre."
       }
     ]
@@ -223,7 +223,7 @@
     "category": "Describir datos",
     "type": "multiple_choice",
     "ranked": true,
-    "durationSeconds": 65,
+    "durationSeconds": 75,
     "context": "",
     "question": "",
     "conceptTags": [
@@ -251,7 +251,7 @@
           }
         ],
         "correctOptionIndex": 1,
-        "timeLimitSeconds": 30,
+        "timeLimitSeconds": 40,
         "explanation": "El mismo conteo sobre grupos de distinto tamaño significa cosas distintas. Por eso el cuaderno pasa de table() a prop.table() casi siempre: antes de comparar grupos, hay que normalizar por su tamaño."
       }
     ]
@@ -263,7 +263,7 @@
     "category": "R básico",
     "type": "multiple_choice",
     "ranked": true,
-    "durationSeconds": 54,
+    "durationSeconds": 59,
     "context": "",
     "question": "",
     "conceptTags": [
@@ -291,7 +291,7 @@
           }
         ],
         "correctOptionIndex": 2,
-        "timeLimitSeconds": 20,
+        "timeLimitSeconds": 25,
         "explanation": "Números pelados, texto entre comillas. No es un capricho: es como R sabe si algo es una cantidad o una palabra, y de eso depende qué le puedes preguntar después. class() te lo confirma."
       }
     ]
