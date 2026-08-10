@@ -6,6 +6,10 @@ import { ranksDescending } from './lib/stats';
 import { coerceScore } from './lib/parse';
 import { buildRoundScoreIndex, roundScoreKey } from './lib/finalScores';
 import {
+  missingFromRankings, mergeLateScores,
+  type RankingRow, type PlayerScore,
+} from './lib/lateRankings';
+import {
   computeJudgeScore,
   loadPenalties,
   resolveDimensionWeights,
@@ -703,19 +707,45 @@ export const processRoundEnd = functions
     }
 
     try {
-      // Idempotency check: if round was already processed, return existing results
       const roundDocRef = db.collection('games').doc(gameCode)
         .collection('rounds').doc(`round_${round}`);
       const existingRound = await roundDocRef.get();
-      if (existingRound.exists) {
-        const data = existingRound.data()!;
-        return { success: true, rankings: data.rankings, ranked: data.ranked, alreadyProcessed: true };
-      }
+      const existingData = existingRound.exists ? existingRound.data()! : null;
+      const existingRankings: RankingRow[] = (existingData?.rankings ?? []) as RankingRow[];
 
       const submissionsSnapshot = await db.collection('games').doc(gameCode)
         .collection('submissions')
         .where('round', '==', round)
         .get();
+
+      // La tabla ya escrita no es el final de la historia: se vuelve a mirar
+      // por si alguien envio despues. Ver `lib/lateRankings.ts` — hasta el
+      // 2026-08-10 aca habia un corte seco que devolvia lo escrito y el
+      // rezagado perdia la ronda entera.
+      const yaRankeados = new Set(existingRankings.map((r) => r.playerId));
+      const hayRezagados = submissionsSnapshot.docs.some((d) => !yaRankeados.has(d.data().playerId));
+
+      if (existingData && !hayRezagados) {
+        return {
+          success: true, rankings: existingData.rankings,
+          ranked: existingData.ranked, alreadyProcessed: true,
+        };
+      }
+
+      // Una ronda ya recalibrada por duelos no se enmienda. Sus puntajes salen
+      // de comparar cada respuesta contra las que compitieron, asi que meter
+      // ahi un puntaje crudo de los jueces mezclaria dos escalas distintas. El
+      // rezagado queda fuera de esa ronda y el hecho queda en el log, que es
+      // mejor que una tabla que no significa nada.
+      if (existingData?.recalibratedAt) {
+        console.error(
+          `Ronda ${round} de ${gameCode}: llegaron submissions despues de la recalibracion; no se enmienda la tabla.`
+        );
+        return {
+          success: true, rankings: existingData.rankings,
+          ranked: existingData.ranked, alreadyProcessed: true,
+        };
+      }
 
       const gameDoc = await db.collection('games').doc(gameCode).get();
       if (!gameDoc.exists) {
@@ -737,46 +767,51 @@ export const processRoundEnd = functions
       const isRanked = scenario.ranked !== false;
       const unevaluatedDocs = submissionsSnapshot.docs.filter(doc => !doc.data().evaluated);
 
-      // Judges are constant across this round's submissions — resolve them and
-      // build the provider clients once.
-      const activeJudges = judgeWeights
-        .map((jw) => judgesConfig?.judges?.find((j: Judge) => j.judgeId === jw.judgeId) as Judge | undefined)
-        .filter((j): j is Judge => !!j);
-      const judgeOverrides = await loadJudgeOverrides(game.courseId);
-      const mergedJudges = applyJudgeOverrides(activeJudges, judgeOverrides);
-      const clients = await buildJudgeClients(mergedJudges);
+      // Sin nada que evaluar no se arman los clientes: una enmienda de una
+      // ronda de alternativas entra por aca y no tiene por que ir a buscar las
+      // claves de los proveedores.
+      if (unevaluatedDocs.length > 0) {
+        // Judges are constant across this round's submissions — resolve them and
+        // build the provider clients once.
+        const activeJudges = judgeWeights
+          .map((jw) => judgesConfig?.judges?.find((j: Judge) => j.judgeId === jw.judgeId) as Judge | undefined)
+          .filter((j): j is Judge => !!j);
+        const judgeOverrides = await loadJudgeOverrides(game.courseId);
+        const mergedJudges = applyJudgeOverrides(activeJudges, judgeOverrides);
+        const clients = await buildJudgeClients(mergedJudges);
 
-      for (const doc of unevaluatedDocs) {
-        const submission = doc.data();
+        for (const doc of unevaluatedDocs) {
+          const submission = doc.data();
 
-        const evaluationPromises = mergedJudges.map((judge) =>
-          evaluateWithJudge(
-            clients, judge, scenario, submission.response,
-            sessionConfig, game.knowledgeBase || '', game.referenceDocs || '',
-            isRanked
-          )
-        );
+          const evaluationPromises = mergedJudges.map((judge) =>
+            evaluateWithJudge(
+              clients, judge, scenario, submission.response,
+              sessionConfig, game.knowledgeBase || '', game.referenceDocs || '',
+              isRanked
+            )
+          );
 
-        const evaluations = (await Promise.all(evaluationPromises)).filter(Boolean) as Evaluation[];
+          const evaluations = (await Promise.all(evaluationPromises)).filter(Boolean) as Evaluation[];
 
-        const { finalScore, conceptsIdentified, failedJudges } = aggregateEvaluations(evaluations, judgeWeights);
-        if (failedJudges.length > 0) {
-          console.error(`Submission ${doc.id} scored with failed judges: ${failedJudges.join(', ')}`);
+          const { finalScore, conceptsIdentified, failedJudges } = aggregateEvaluations(evaluations, judgeWeights);
+          if (failedJudges.length > 0) {
+            console.error(`Submission ${doc.id} scored with failed judges: ${failedJudges.join(', ')}`);
+          }
+
+          await doc.ref.update({
+            evaluation: {
+              finalScore,
+              failedJudges,
+              evaluations,
+              conceptsIdentified,
+              processedAt: admin.firestore.Timestamp.now(),
+            },
+            evaluated: true,
+          });
         }
-
-        await doc.ref.update({
-          evaluation: {
-            finalScore,
-            failedJudges,
-            evaluations,
-            conceptsIdentified,
-            processedAt: admin.firestore.Timestamp.now(),
-          },
-          evaluated: true,
-        });
       }
 
-      const scores: { playerId: string; playerName: string; score: number }[] = [];
+      const scores: PlayerScore[] = [];
 
       const evaluatedSnapshot = await db.collection('games').doc(gameCode)
         .collection('submissions')
@@ -794,43 +829,46 @@ export const processRoundEnd = functions
         }
       });
 
-      scores.sort((a, b) => b.score - a.score);
+      // Quienes faltan en la tabla. Con el documento recien creado son todos, y
+      // entonces esto arma la tabla completa igual que siempre; con un
+      // documento ya escrito son solo los rezagados, y a los que ya estaban no
+      // se les toca el acumulado (ya incluye esta ronda).
+      const rezagados = missingFromRankings(existingRankings, scores).map((s) => ({
+        ...s,
+        prevTotal: game.players?.[s.playerId]?.totalScore || 0,
+      }));
+      const rankings = mergeLateScores(existingRankings, rezagados, isRanked);
 
-      let currentRank = 1;
-      const rankings = scores.map((s, index) => {
-        if (index > 0 && s.score < scores[index - 1].score) {
-          currentRank = index + 1;
-        }
-        // Include cumulative totalScore so frontend doesn't depend on game doc race
-        const prevTotal = game.players?.[s.playerId]?.totalScore || 0;
-        const cumulativeTotal = isRanked ? prevTotal + s.score : prevTotal;
-        return { ...s, rank: currentRank, totalScore: cumulativeTotal };
-      });
-
-      await db.collection('games').doc(gameCode)
-        .collection('rounds').doc(`round_${round}`).set({
+      if (existingData) {
+        await roundDocRef.update({
+          rankings,
+          amendedAt: admin.firestore.Timestamp.now(),
+        });
+        console.log(
+          `Ronda ${round} de ${gameCode}: enmendada con ${rezagados.length} rezagado(s): ` +
+          rezagados.map((r) => r.playerName).join(', ')
+        );
+      } else {
+        await roundDocRef.set({
           round,
           ranked: isRanked,
-          phase: 'provisional',
+          // Non-ranked rounds are never recalibrated — mark them final so the
+          // client does not wait for a Phase 2 that will not come.
+          phase: isRanked ? 'provisional' : 'final',
           rankings,
           processedAt: admin.firestore.Timestamp.now(),
         });
-
-      // Non-ranked rounds are never recalibrated — mark them final so the client
-      // does not wait for a Phase 2 that will not come.
-      if (!isRanked) {
-        await db.collection('games').doc(gameCode)
-          .collection('rounds').doc(`round_${round}`)
-          .update({ phase: 'final' });
       }
 
-      // Only update player totalScores for ranked rounds
-      if (isRanked) {
+      // Only update player totalScores for ranked rounds. Solo los rezagados:
+      // el acumulado de los demas ya se escribio cuando entraron a la tabla, y
+      // volver a sumarles esta ronda les pagaria dos veces.
+      if (isRanked && rezagados.length > 0) {
+        const enTabla = new Map(rankings.map((r) => [r.playerId, r]));
         const playerUpdates: Record<string, number> = {};
-        for (const score of scores) {
-          const currentPlayer = game.players?.[score.playerId];
-          const currentTotal = currentPlayer?.totalScore || 0;
-          playerUpdates[`players.${score.playerId}.totalScore`] = currentTotal + score.score;
+        for (const r of rezagados) {
+          const fila = enTabla.get(r.playerId);
+          if (fila) playerUpdates[`players.${r.playerId}.totalScore`] = fila.totalScore;
         }
 
         if (Object.keys(playerUpdates).length > 0) {

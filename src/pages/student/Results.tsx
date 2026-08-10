@@ -98,6 +98,48 @@ export default function Results() {
     }
   }, [isHost, game?.status, roundResults, isProcessing]);
 
+  /**
+   * El rezagado: quien envio despues de que el anfitrion cerro la tabla.
+   *
+   * `processRoundEnd` arma la tabla con las submissions que ve en ese
+   * instante, y el anfitrion la dispara apenas el juego pasa a `round_end` —
+   * o sea, milisegundos despues de su propia submission. Al alumno cuya
+   * escritura llega 0,6 s mas tarde no lo esperaba nadie: en el juego PEB9FL
+   * quedo fuera de 5 de 6 rondas de alternativas, y como el acumulado se
+   * arrastra desde la tabla, perdio tambien todo lo que venia despues. En
+   * MGT300 clase 1, con 42 alumnos, le paso a uno en la ronda 2.
+   *
+   * Asi que el anfitrion sigue mirando: si aparece una submission YA EVALUADA
+   * que la tabla no tiene, vuelve a llamar y la funcion la mete. Se exige que
+   * este evaluada a proposito — llamar con una submission a medio evaluar
+   * mandaria a los jueces a puntuarla por segunda vez.
+   */
+  const amendedForRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!isHost || !roundResults || isProcessing) return;
+    // Una ronda que ya paso por duelos no se enmienda: sus puntajes salen de
+    // comparar unas respuestas con otras y no se mezclan con uno crudo.
+    if (roundResults.recalibratedAt) return;
+
+    const enTabla = new Set(roundResults.rankings.map(r => r.playerId));
+    const rezagados = submissions
+      .filter(s => s.evaluation && !enTabla.has(s.playerId))
+      .map(s => s.playerId)
+      .sort();
+    if (rezagados.length === 0) return;
+
+    // Una sola llamada por conjunto de rezagados, o el snapshot que llega
+    // despues de enmendar vuelve a dispararla.
+    const intento = `${roundResults.round}:${rezagados.join(',')}`;
+    if (amendedForRef.current === intento) return;
+    amendedForRef.current = intento;
+
+    console.warn(`Ronda ${roundResults.round}: ${rezagados.length} submission(es) fuera de la tabla; reprocesando.`);
+    const processRoundEnd = httpsCallable(functions, 'processRoundEnd');
+    processRoundEnd({ gameCode, round: roundResults.round })
+      .catch(err => console.error('No se pudo enmendar la tabla:', err));
+  }, [isHost, roundResults, submissions, isProcessing, gameCode]);
+
   const processRound = async () => {
     if (!gameCode || !game) return;
 

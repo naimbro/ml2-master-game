@@ -137,6 +137,10 @@ export interface RoundResults {
   processedAt: Timestamp;
   phase?: 'provisional' | 'final';
   duelTotal?: number;
+  /** Cuando entro a la tabla alguien que envio despues de que se cerro. */
+  amendedAt?: Timestamp;
+  /** Presente solo si la ronda paso por duelos; entonces ya no se enmienda. */
+  recalibratedAt?: Timestamp;
 }
 
 // =====================================
