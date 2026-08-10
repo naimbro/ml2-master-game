@@ -116,6 +116,25 @@ service cloud.firestore {
         allow delete: if false;
       }
 
+      // "Y elegi la C" — la otra mitad, separada de /answers justamente por
+      // esto: la LEE SOLO EL ANFITRION. Publicada como /answers, cualquier
+      // alumno con la consola abierta podria mirar lo que marcaron sus
+      // companeros mientras la pregunta todavia corre, que es la respuesta
+      // correcta servida en bandeja.
+      //
+      // El anfitrion la agrega y publica el RECUENTO en el doc del juego
+      // (`mcStats`) cuando la pregunta cierra — o sea cuando la respuesta
+      // correcta ya es publica y no queda nada que proteger. Eso es lo que
+      // dibuja el grafico de aciertos, y por eso el grafico no necesita que
+      // nadie mas pueda leer esta subcoleccion.
+      match /choices/{choiceId} {
+        allow read: if isAuthenticated()
+          && get(/databases/$(database)/documents/games/$(gameCode)).data.hostId == request.auth.uid;
+        allow create, update: if isAuthenticated()
+          && request.resource.data.playerId == request.auth.uid;
+        allow delete: if false;
+      }
+
       // Feedback del juego: una nota de 1 a 7 y un comentario, uno por alumno.
       // Lo leen su dueno y el anfitrion de ESE juego; ningun alumno puede leer el
       // de otro, y ningun profesor puede leer el de una partida ajena.

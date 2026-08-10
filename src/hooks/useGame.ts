@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { doc, onSnapshot, updateDoc, setDoc, collection, query, where, addDoc, Timestamp, serverTimestamp, deleteField } from 'firebase/firestore';
 import { httpsCallable } from 'firebase/functions';
 import { db, functions } from '../lib/firebase';
@@ -6,6 +6,7 @@ import type { Game, Player, Submission, RoundResults, GameStatus, MCResponse } f
 import type { TelemetriaCaptura } from '../lib/telemetriaDerived';
 import { useAuth } from './useAuth';
 import { mcTimeline, mcGateSeconds, shouldCutQuestion } from '../lib/mcTiming';
+import { aggregateChoices, mcStatsKey, type ChoiceInput } from '../lib/mcStats';
 
 interface UseGameReturn {
   game: Game | null;
@@ -22,12 +23,23 @@ interface UseGameReturn {
   nextRound: () => Promise<void>;
   endGame: () => Promise<void>;
   recalibrateRound: (round: number) => Promise<void>;
-  /** MC: avisa que este jugador ya contesto una pregunta, para que el host corte. */
-  markAnswered: (questionIndex: number) => Promise<void>;
+  /**
+   * MC: avisa que este jugador ya contesto una pregunta, para que el host corte.
+   * `choice` ademas guarda QUE eligio, en una subcoleccion que solo lee el
+   * anfitrion, para el grafico de aciertos de la revelacion.
+   */
+  markAnswered: (questionIndex: number, choice?: { optionId: string; correct: boolean }) => Promise<void>;
 
   // Round data
   submissions: Submission[];
   roundResults: RoundResults | null;
+  /**
+   * MC: quienes ya contestaron cada pregunta de la ronda en curso, por indice.
+   * Es la unica fuente viva mientras corre un bloque — la submission del bloque
+   * se escribe una sola vez, al final. La usan el corte anticipado del anfitrion
+   * y el contador de respuestas de la pantalla.
+   */
+  answeredByQuestion: Record<number, string[]>;
 }
 
 export function useGame(gameCode: string | undefined): UseGameReturn {
@@ -38,6 +50,12 @@ export function useGame(gameCode: string | undefined): UseGameReturn {
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   /** Quienes contestaron cada pregunta de la ronda actual, por indice de pregunta. */
   const [answeredByQuestion, setAnsweredByQuestion] = useState<Record<number, string[]>>({});
+  const [choicesByQuestion, setChoicesByQuestion] = useState<Record<number, ChoiceInput[]>>({});
+
+  // Declarado aca arriba y no junto al resto de los valores derivados: los
+  // efectos que suscriben a `choices` y publican `mcStats` son solo del
+  // anfitrion y se declaran antes.
+  const isHost = user?.uid === game?.hostId;
   const [roundResults, setRoundResults] = useState<RoundResults | null>(null);
 
   // Subscribe to game document
@@ -119,20 +137,148 @@ export function useGame(gameCode: string | undefined): UseGameReturn {
     return () => unsubscribe();
   }, [gameCode, game?.currentRound]);
 
-  /** Marca que este jugador ya contesto una pregunta concreta. Idempotente. */
-  const markAnswered = useCallback(async (questionIndex: number) => {
+  /**
+   * Lo que eligio cada uno, en vivo — SOLO para el anfitrion.
+   *
+   * Las reglas de Firestore no dejan leer `choices` a nadie mas, asi que este
+   * listener daria permission-denied en el telefono del alumno. Por eso ni
+   * siquiera se suscribe: no es una optimizacion, es que no tiene permiso.
+   */
+  useEffect(() => {
+    if (!isHost || !gameCode || !game) return;
+
+    const q = query(
+      collection(db, 'games', gameCode, 'choices'),
+      where('round', '==', game.currentRound),
+    );
+    const unsubscribe = onSnapshot(
+      q,
+      (snap) => {
+        const perQuestion: Record<number, ChoiceInput[]> = {};
+        snap.docs.forEach((d) => {
+          const { questionIndex, playerId, optionId } = d.data() as {
+            questionIndex?: unknown; playerId?: unknown; optionId?: unknown;
+          };
+          const qi = Number(questionIndex);
+          if (!Number.isFinite(qi) || typeof playerId !== 'string' || typeof optionId !== 'string') return;
+          (perQuestion[qi] ||= []).push({ playerId, optionId });
+        });
+        setChoicesByQuestion(perQuestion);
+      },
+      // Quedarse sin el grafico no puede tumbar la ronda.
+      (e) => console.error('choices:', e),
+    );
+    return () => unsubscribe();
+  }, [isHost, gameCode, game?.currentRound]);
+
+  /**
+   * Publica el recuento de una pregunta cuando esa pregunta cierra.
+   *
+   * El instante importa: se publica en 'feedback', que es cuando la respuesta
+   * correcta ya se le revelo a todo el mundo. Antes de eso el recuento seria un
+   * mapa hacia la alternativa correcta.
+   *
+   * Va sobre un intervalo de 1 s y no sobre las dependencias del efecto porque
+   * el cambio que hay que detectar —la pregunta pasando de 'question' a
+   * 'feedback'— NO cambia ningun dato: la timeline se deriva de
+   * `roundStartTime` y del reloj. Sin el intervalo, la ultima persona en
+   * contestar disparaba un render y despues no pasaba nada mas, y el recuento
+   * no se publicaba nunca. Es el mismo reloj de un segundo que ya corre en la
+   * pantalla de la ronda.
+   */
+  const mcStatsPublicadasRef = useRef<Set<string>>(new Set());
+  useEffect(() => {
+    if (!isHost || !gameCode || !game || !game.roundStartTime) return;
+
+    const scenario = game.scenarios?.[game.currentRound - 1];
+    if (scenario?.type !== 'multiple_choice' || !scenario.mcQuestions?.length) return;
+
+    const roundStartMs = game.roundStartTime.toMillis();
+    const gateSeconds = mcGateSeconds(scenario.media);
+    const allAnsweredAtMs = game.mcAllAnsweredAt?.toMillis() ?? null;
+    const questions = scenario.mcQuestions;
+    const players = new Set(Object.keys(game.players || {}));
+
+    const publicar = () => {
+      const { phase, questionIndex } = mcTimeline({
+        roundStartMs, nowMs: Date.now(), gateSeconds, questions, allAnsweredAtMs,
+      });
+      if (phase !== 'feedback' && phase !== 'done') return;
+
+      // En 'done' se cierran las que hayan quedado sin publicar: si el anfitrion
+      // abrio la pantalla a mitad de bloque, las preguntas anteriores nunca
+      // pasaron por un tick en 'feedback'.
+      const hasta = phase === 'done' ? questions.length - 1 : questionIndex;
+      const updates: Record<string, unknown> = {};
+
+      for (let qi = 0; qi <= hasta; qi++) {
+        const key = mcStatsKey(game.currentRound, qi);
+        // Dos guardas, y las dos hacen falta. El doc dice lo que ya esta
+        // publicado, pero tarda un snapshot en volver; el ref evita que el tick
+        // siguiente escriba lo mismo en esa ventana.
+        if (game.mcStats?.[key] || mcStatsPublicadasRef.current.has(key)) continue;
+        const choices = choicesByQuestion[qi];
+        if (!choices?.length) continue;
+        const optionIds = (questions[qi]?.options ?? []).map((o) => o.id);
+        updates[`mcStats.${key}`] = aggregateChoices(choices, optionIds, players);
+        mcStatsPublicadasRef.current.add(key);
+      }
+
+      if (Object.keys(updates).length === 0) return;
+      updateDoc(doc(db, 'games', gameCode), updates).catch((e) => {
+        console.error('mcStats:', e);
+        // Si la escritura fallo, el proximo tick tiene que volver a intentarlo.
+        Object.keys(updates).forEach((k) => mcStatsPublicadasRef.current.delete(k.slice('mcStats.'.length)));
+      });
+    };
+
+    publicar();
+    const t = setInterval(publicar, 1000);
+    return () => clearInterval(t);
+  }, [isHost, gameCode, game?.currentRound, game?.roundStartTime, game?.mcAllAnsweredAt,
+      game?.scenarios, game?.players, game?.mcStats, choicesByQuestion]);
+
+  /**
+   * Marca que este jugador ya contesto una pregunta concreta. Idempotente.
+   *
+   * Escribe en DOS lugares, y estan separados a proposito:
+   *
+   * - `answers` dice solo QUIEN contesto. Lo lee cualquier alumno (asi el
+   *   contador de la pantalla y el corte anticipado funcionan en vivo) y no
+   *   revela nada: saber que Juan ya apreto no dice que apreto.
+   * - `choices` dice QUE eligio. Lo lee unicamente el anfitrion. Si esto
+   *   viviera en `answers`, cualquier alumno con la consola abierta podria
+   *   mirar lo que marco el resto MIENTRAS la pregunta corre, que es la
+   *   respuesta correcta servida en bandeja. El recuento agregado se publica
+   *   para todos al cerrar la pregunta, cuando ya no hay nada que proteger.
+   */
+  const markAnswered = useCallback(async (
+    questionIndex: number,
+    choice?: { optionId: string; correct: boolean },
+  ) => {
     if (!gameCode || !user || !game) return;
     const id = `${game.currentRound}_${questionIndex}_${user.uid}`;
+    const base = {
+      playerId: user.uid,
+      round: game.currentRound,
+      questionIndex,
+      at: serverTimestamp(),
+    };
     try {
-      await setDoc(doc(db, 'games', gameCode, 'answers', id), {
-        playerId: user.uid,
-        round: game.currentRound,
-        questionIndex,
-        at: serverTimestamp(),
-      });
+      await Promise.all([
+        setDoc(doc(db, 'games', gameCode, 'answers', id), base),
+        choice
+          ? setDoc(doc(db, 'games', gameCode, 'choices', id), {
+              ...base,
+              optionId: choice.optionId,
+              correct: choice.correct,
+            })
+          : Promise.resolve(),
+      ]);
     } catch (e) {
       // Perder este aviso solo significa que la ronda espera al reloj, que es el
-      // respaldo de siempre. No puede romperle la ronda al jugador.
+      // respaldo de siempre, y que esa pregunta se queda sin grafico. No puede
+      // romperle la ronda al jugador.
       console.error('markAnswered:', e);
     }
   }, [gameCode, user, game?.currentRound]);
@@ -152,7 +298,6 @@ export function useGame(gameCode: string | undefined): UseGameReturn {
   }, [gameCode, game?.currentRound, game?.status]);
 
   // Computed values
-  const isHost = user?.uid === game?.hostId;
   const currentPlayer = user && game?.players?.[user.uid] ? game.players[user.uid] : null;
 
   // Actions
@@ -468,5 +613,6 @@ export function useGame(gameCode: string | undefined): UseGameReturn {
     submissions,
     roundResults,
     markAnswered,
+    answeredByQuestion,
   };
 }

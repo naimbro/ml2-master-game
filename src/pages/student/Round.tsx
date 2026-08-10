@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Clock, Send, AlertCircle, StopCircle, Info, MessageSquare, Code, CheckCircle, XCircle, Zap } from 'lucide-react';
 import { useGame } from '../../hooks/useGame';
+import VueltaAlJuego from '../../components/VueltaAlJuego';
 import { useAuth } from '../../hooks/useAuth';
 import { useTypingTelemetry } from '../../hooks/useTypingTelemetry';
 import { doc, updateDoc, serverTimestamp } from 'firebase/firestore';
@@ -16,6 +17,7 @@ import NoCopy from '../../components/NoCopy';
 import { resolveMediaSrc } from '../../lib/media';
 import { scoreMCQuestion, scoreMCBlock, MC_SCORING_LEGEND } from '../../lib/mcScoring';
 import { mcTimeline, mcGateSeconds } from '../../lib/mcTiming';
+import { mcStatsKey } from '../../lib/mcStats';
 import { modelLabel } from '../../lib/modelLabel';
 import type { MCResponse } from '../../types/game';
 
@@ -39,7 +41,7 @@ export default function Round() {
   const { gameCode } = useParams<{ gameCode: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { game, loading, error, submitAnswer, submitMCBlock, submissions, isHost, currentPlayer, markAnswered } = useGame(gameCode);
+  const { game, loading, error, submitAnswer, submitMCBlock, submissions, isHost, currentPlayer, markAnswered, answeredByQuestion } = useGame(gameCode);
 
   // Profesor que dirige sin jugar (`hostPlays: false` al crear el juego). Sigue
   // viendo la ronda entera porque ESTA pantalla es la que se proyecta al curso;
@@ -246,6 +248,44 @@ export default function Round() {
   const mcLocked = isSpectator || mcRevealed || mcAnswered || timeline?.phase !== 'question';
   const mcQuestionTimeLeft = timeline?.phase === 'question' ? timeline.secondsLeft : 0;
 
+  /**
+   * Cuantos han contestado, ahora mismo.
+   *
+   * En una ronda abierta es `submissions`, que se escribe al enviar. En un
+   * bloque de alternativas NO se puede usar: la submission de un bloque se
+   * escribe una sola vez, cuando la timeline llega a 'done', asi que el
+   * contador marcaba 0/37 durante todo el bloque y saltaba a 37/37 al final —
+   * que es exactamente lo que se vio en XNTUHB. El dato vive en la
+   * subcoleccion `answers`, un doc por jugador y pregunta escrito en el clic,
+   * la misma fuente que usa el corte anticipado del anfitrion.
+   *
+   * Se cuenta la pregunta en curso, no el bloque entero: es lo que importa
+   * mientras corre el reloj, y coincide con el criterio del corte. Ya cerrado
+   * el bloque ('done') vuelve a mandar `submissions`, que ahi si esta escrita.
+   * Se descarta a quien no este en `players` (el profesor que dirige sin jugar
+   * no cuenta) y se deduplica por si un doc se reescribio.
+   */
+  const answeredNow = useMemo(() => {
+    if (!isMC || !timeline || timeline.phase === 'done') return submissions.length;
+    const players = game?.players || {};
+    const ids = answeredByQuestion[mcCurrentQ] || [];
+    return new Set(ids.filter((id: string) => id in players)).size;
+  }, [isMC, timeline, submissions.length, answeredByQuestion, mcCurrentQ, game?.players]);
+
+  /**
+   * El recuento de la pregunta que se esta revelando, si el anfitrion alcanzo a
+   * publicarlo. Llega por el doc del juego, ya agregado: los datos crudos viven
+   * en `choices` y solo el anfitrion puede leerlos (ver src/lib/mcStats.ts).
+   *
+   * Puede no estar: un juego viejo no lo tiene, y en uno nuevo la escritura
+   * llega uno o dos snapshots despues del inicio de la revelacion. Cuando falta,
+   * la pantalla se ve exactamente como antes.
+   */
+  const mcStats = useMemo(() => {
+    if (!isMC || !game?.currentRound) return undefined;
+    return game.mcStats?.[mcStatsKey(game.currentRound, mcCurrentQ)];
+  }, [isMC, game?.mcStats, game?.currentRound, mcCurrentQ]);
+
   // Ordered, gap-free list for scoring and for the block summary.
   const mcResponses = useMemo(
     () =>
@@ -290,7 +330,7 @@ export default function Round() {
     // proposito: la submission se escribe recien en 'done', o sea siempre despues
     // del instante en que habria que cortar. Solo dice quien, que ronda y que
     // pregunta — la respuesta y el puntaje siguen viajando en /submissions.
-    markAnswered(qi);
+    markAnswered(qi, { optionId, correct });
   }, [mcQuestions, timeline, mcAnswers, markAnswered]);
 
   // MC: a question the timeline has already closed and we never answered is
@@ -471,7 +511,7 @@ export default function Round() {
             <div className="text-right">
               <span className="text-muted text-xs font-bold uppercase tracking-wider">Respuestas</span>
               <p className="text-xl font-black text-kahoot-green">
-                {submissions.length} <span className="text-faint font-bold">/ {Object.keys(game.players || {}).length}</span>
+                {answeredNow} <span className="text-faint font-bold">/ {Object.keys(game.players || {}).length}</span>
               </p>
             </div>
           </div>
@@ -564,7 +604,7 @@ export default function Round() {
                   </p>
                   <div className="mt-6">
                     <WaitingForRound
-                      answered={submissions.length}
+                      answered={answeredNow}
                       total={Object.keys(game.players || {}).length}
                     />
                   </div>
@@ -646,7 +686,7 @@ export default function Round() {
 
                   <div className="mt-6 pt-4 border-t border-line">
                     <WaitingForRound
-                      answered={submissions.length}
+                      answered={answeredNow}
                       total={Object.keys(game.players || {}).length}
                     />
                   </div>
@@ -709,6 +749,15 @@ export default function Round() {
                       const isSelected = mcSelectedOption === opt.id;
                       const showResult = mcRevealed;
 
+                      // Cuantos eligieron ESTA alternativa. La barra va sobre la
+                      // misma casilla —no en un grafico aparte— porque la casilla
+                      // ya trae la letra y el texto: repetirlos al lado seria
+                      // leer dos veces lo mismo en la pantalla de un telefono.
+                      const nEsta = showResult ? mcStats?.byOption?.[opt.id] : undefined;
+                      const pctEsta = nEsta !== undefined && mcStats && mcStats.total > 0
+                        ? Math.round((nEsta / mcStats.total) * 100)
+                        : undefined;
+
                       // Green means correct and nothing else in this palette.
                       let btnClass = MC_TILE_BASE;
                       let textClass = 'text-ink';
@@ -741,7 +790,7 @@ export default function Round() {
                           disabled={mcLocked}
                           whileHover={!mcLocked ? { scale: 1.02 } : {}}
                           whileTap={!mcLocked ? { scale: 0.98 } : {}}
-                          className={`${btnClass} ${textClass} p-4 sm:p-5 rounded-xl text-left transition-all font-bold text-base sm:text-lg leading-snug min-h-[76px] sm:min-h-[84px] flex ${
+                          className={`${btnClass} ${textClass} relative overflow-hidden p-4 sm:p-5 rounded-xl text-left transition-all font-bold text-base sm:text-lg leading-snug min-h-[76px] sm:min-h-[84px] flex ${
                             opt.imageSrc ? 'flex-col items-stretch gap-3' : 'items-center gap-3'
                           }`}
                         >
@@ -770,6 +819,14 @@ export default function Round() {
                               {opt.id}
                             </span>
                             <span className="flex-1">{opt.text}</span>
+                            {nEsta !== undefined && (
+                              <span
+                                className="shrink-0 tabular-nums text-sm font-black px-2 py-0.5 rounded-full bg-ink/15"
+                                aria-label={`${nEsta} ${nEsta === 1 ? 'persona eligió' : 'personas eligieron'} esta alternativa`}
+                              >
+                                {nEsta}
+                              </span>
+                            )}
                             {showResult && isCorrectOption && (
                               <CheckCircle className="w-6 h-6 text-onaccent shrink-0" />
                             )}
@@ -777,10 +834,49 @@ export default function Round() {
                               <XCircle className="w-6 h-6 text-onaccent shrink-0" />
                             )}
                           </span>
+
+                          {/* La barra va pegada al borde de abajo de la casilla,
+                              como en Kahoot: se lee de reojo desde el proyector y
+                              no le roba alto a la casilla en el telefono. */}
+                          {pctEsta !== undefined && (
+                            <motion.span
+                              aria-hidden="true"
+                              initial={{ width: 0 }}
+                              animate={{ width: `${pctEsta}%` }}
+                              transition={{ duration: 0.7, ease: 'easeOut' }}
+                              className="absolute left-0 bottom-0 h-2 bg-ink/30"
+                            />
+                          )}
                         </motion.button>
                       );
                     })}
                   </NoCopy>
+
+                  {/* Cuantos acertaron. El numero que el profesor mira para
+                      decidir si sigue o vuelve atras, y por eso se dice en
+                      palabras y no solo en barras. Aparece cuando el anfitrion
+                      publico el recuento; si no llego, no hay hueco. */}
+                  {mcRevealed && mcStats && mcStats.total > 0 && (() => {
+                    const idCorrecta = currentScenario.mcQuestions?.[mcCurrentQ]
+                      ?.options[currentScenario.mcQuestions[mcCurrentQ].correctOptionIndex]?.id;
+                    const aciertos = idCorrecta ? mcStats.byOption[idCorrecta] ?? 0 : 0;
+                    const pct = Math.round((aciertos / mcStats.total) * 100);
+                    return (
+                      <motion.div
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.4 }}
+                        className="mt-4 flex items-baseline justify-center gap-2 text-center"
+                      >
+                        <span className="font-display text-2xl text-kahoot-green tabular-nums">
+                          {aciertos} de {mcStats.total}
+                        </span>
+                        <span className="text-muted font-bold text-sm">
+                          la tuvieron bien ({pct}%)
+                        </span>
+                      </motion.div>
+                    );
+                  })()}
 
                   {/* Answered, waiting for the shared reveal */}
                   {mcAnswered && !mcRevealed && (
@@ -1027,7 +1123,7 @@ export default function Round() {
 
                       <div className="mt-4 pt-4 border-t border-line text-center">
                         <WaitingForRound
-                          answered={submissions.length}
+                          answered={answeredNow}
                           total={Object.keys(game.players || {}).length}
                         />
                       </div>
@@ -1122,6 +1218,8 @@ export default function Round() {
           </div>
         )}
       </main>
+
+      {gameCode && <VueltaAlJuego gameCode={gameCode} proyectada={isHost} />}
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import { Timestamp } from 'firebase/firestore';
+import type { MCQuestionStats } from '../lib/mcStats';
 
 // =====================================
 // GAME STATE TYPES
@@ -50,6 +51,14 @@ export interface Game {
    * the same moment (see mcTimeline). Cleared when the round advances.
    */
   mcAllAnsweredAt?: Timestamp;
+  /**
+   * MC only: cuantos eligieron cada alternativa, por pregunta ya cerrada.
+   * Clave `r{ronda}q{indice}` (ver `src/lib/mcStats.ts`). Lo escribe el
+   * anfitrion al entrar la pregunta en 'feedback', agregando la subcoleccion
+   * `choices`, que solo el puede leer. Es la unica forma publica de saber que
+   * eligio el curso: los datos crudos nunca salen de ahi.
+   */
+  mcStats?: Record<string, MCQuestionStats>;
 
   // Config from session
   sessionConfig: SessionConfig;
