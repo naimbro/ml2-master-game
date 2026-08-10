@@ -119,8 +119,23 @@ export default function SeccionTelemetria({
             duracionMaxMs={duracionMax}
             onSeleccion={(t, nombre) => setSeleccion({ t, nombre })}
           />
+          <div className="flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-muted mt-1">
+            <span className="inline-flex items-center gap-1">
+              <i className="w-2 h-2 rounded-full bg-[var(--wrong)]" aria-hidden="true" />
+              sospechoso
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <i className="w-2 h-2 rounded-full bg-[var(--blue)]" aria-hidden="true" />
+              no sospechoso
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <i className="w-2 h-2 rounded-full bg-[var(--faint)]" aria-hidden="true" />
+              no se pudo medir
+            </span>
+          </div>
           <p className="text-[11px] text-muted mt-1">
-            Sin nombres. Haz clic en un punto para saber de quién es.
+            Rojo = la mitad o más del texto entró de una vez. No dice de dónde salió.
+            Sin nombres: haz clic en un punto para saber de quién es.
           </p>
         </div>
 

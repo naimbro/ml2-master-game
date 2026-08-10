@@ -1,4 +1,4 @@
-import { formatoReloj, posicionNube } from '../../lib/telemetriaDerived';
+import { formatoReloj, posicionNube, clasificarPunto } from '../../lib/telemetriaDerived';
 import type { TelemetriaDoc } from '../../lib/telemetriaDerived';
 
 const ANCHO = 380;
@@ -8,6 +8,12 @@ const MARGEN_ABAJO = 37;
 const MARGEN_ARRIBA = 14;
 const MARGEN_DER = 12;
 
+const COLOR: Record<ReturnType<typeof clasificarPunto>, string> = {
+  sospechoso: 'var(--wrong)',
+  'no-sospechoso': 'var(--blue)',
+  'sin-medicion': 'var(--faint)',
+};
+
 /**
  * Una respuesta por punto: x = cuanto tardo en escribir la primera letra,
  * y = que proporcion del texto llego de una vez.
@@ -15,17 +21,18 @@ const MARGEN_DER = 12;
  * El eje vertical NO dice "pego". Dice cuanto texto entro de un golpe, que es
  * lo que efectivamente se midio: en Android no dispara ningun evento de pegado
  * —ni `paste` ni `insertFromPaste`— y una respuesta traida entera desde otra
- * app se dibujaba abajo del todo, entre las tecleadas. Dictar y el teclado
- * deslizante insertan palabras sueltas, asi que se quedan abajo solos, sin que
- * haya que fijar ningun umbral.
+ * app se dibujaba abajo del todo, entre las tecleadas.
  *
- * Dos decisiones que NO se pueden cambiar sin rediscutir el diseno:
+ * **Los puntos van de color desde el 2026-08-10.** Antes iban todos iguales, a
+ * proposito, para que el panel describiera sin clasificar; Naim pidio el rojo y
+ * el azul. El umbral vive en `clasificarPunto`, con el porque escrito al lado.
+ * Lo unico que este componente decide es que el gris de `sin-medicion` sea gris
+ * y no azul: son las respuestas que el navegador no entrego medidas, y decir
+ * "no sospechoso" de algo que nadie midio es la unica forma en que este panel
+ * puede mentir de verdad.
  *
- * 1. TODOS los puntos van del mismo color. Pintar de otro color a los de arriba
- *    a la derecha seria aplicar un umbral, o sea clasificar. La nube deja ver
- *    donde esta la masa; no dibuja la frontera por ti.
- * 2. NO se muestran nombres. El nombre aparece solo al hacer clic, que es un
- *    gesto deliberado de ir a buscarlo.
+ * La decision que sigue en pie: NO se muestran nombres. El nombre aparece solo
+ * al hacer clic, que es un gesto deliberado de ir a buscarlo.
  */
 export default function NubeEscritura({
   puntos,
@@ -68,18 +75,28 @@ export default function NubeEscritura({
 
       {puntos.map(({ telemetria, nombre }) => {
         const { x, y } = posicionNube(telemetria, duracionMaxMs, anchoTrazo, altoTrazo);
+        const estado = clasificarPunto(telemetria);
+        const color = COLOR[estado];
         return (
           <circle
             key={`${telemetria.playerId}_${telemetria.round}`}
             cx={MARGEN_IZQ + x}
             cy={MARGEN_ARRIBA + y}
-            r={4}
-            fill="currentColor"
-            fillOpacity={0.45}
+            r={4.2}
+            fill={color}
+            fillOpacity={0.6}
+            // El borde, y no solo el relleno, porque dos puntos superpuestos de
+            // colores distintos se leen como uno solo de un tercer color.
+            stroke={color}
+            strokeOpacity={0.9}
             className="cursor-pointer"
             onClick={() => onSeleccion(telemetria, nombre)}
           >
-            <title>Ronda {telemetria.round}</title>
+            {/* Una sola cadena: React no acepta varios hijos en un <title>, y el
+                navegador convierte todos los nodos a un texto plano igual. */}
+            <title>
+              {`Ronda ${telemetria.round}${estado === 'sin-medicion' ? ' · sin medición' : ''}`}
+            </title>
           </circle>
         );
       })}

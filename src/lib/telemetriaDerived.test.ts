@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { formatoReloj, proporcionPegada, proporcionDeGolpe, posicionNube, puntosHuella, hechosDetalle } from './telemetriaDerived';
+import { formatoReloj, proporcionPegada, proporcionDeGolpe, posicionNube, puntosHuella, hechosDetalle, clasificarPunto, UMBRAL_DE_GOLPE } from './telemetriaDerived';
 
 describe('formatoReloj', () => {
   it('bajo el minuto muestra solo segundos', () => {
@@ -235,5 +235,44 @@ describe('posicionNube — usa el salto, no el pegado', () => {
       240_000, 100, 100
     );
     expect(p.y).toBeGreaterThan(90);
+  });
+});
+
+describe('clasificarPunto', () => {
+  const base = { charsPegados: 0, largoFinal: 400, pegados: [] as Array<{ ms: number; chars: number }> };
+
+  it('es sospechoso cuando la mitad o mas del texto entro de una vez', () => {
+    expect(clasificarPunto({ ...base, maxInsercionDeGolpe: 200 })).toBe('sospechoso');
+    expect(clasificarPunto({ ...base, maxInsercionDeGolpe: 400 })).toBe('sospechoso');
+  });
+
+  it('no es sospechoso justo debajo del umbral', () => {
+    expect(clasificarPunto({ ...base, maxInsercionDeGolpe: 199 })).toBe('no-sospechoso');
+  });
+
+  it('el umbral es la mitad', () => {
+    expect(UMBRAL_DE_GOLPE).toBe(0.5);
+  });
+
+  it('sin salto registrado y sin ningun pegado, no se midio nada', () => {
+    // Documentos anteriores al 8-ago-2026, y navegadores que no disparan
+    // ningun evento de insercion. Pintarlos de "no sospechoso" seria afirmar
+    // algo que nadie midio.
+    expect(clasificarPunto({ ...base })).toBe('sin-medicion');
+  });
+
+  it('un pegado registrado SI es medicion, aunque falte el salto', () => {
+    expect(clasificarPunto({ ...base, charsPegados: 300, pegados: [{ ms: 1000, chars: 300 }] }))
+      .toBe('sospechoso');
+    expect(clasificarPunto({ ...base, charsPegados: 40, pegados: [{ ms: 1000, chars: 40 }] }))
+      .toBe('no-sospechoso');
+  });
+
+  it('un salto de cero tambien es medicion: se midio y no hubo salto', () => {
+    expect(clasificarPunto({ ...base, maxInsercionDeGolpe: 0 })).toBe('no-sospechoso');
+  });
+
+  it('una respuesta vacia no se declara sospechosa', () => {
+    expect(clasificarPunto({ ...base, largoFinal: 0, maxInsercionDeGolpe: 0 })).toBe('no-sospechoso');
   });
 });

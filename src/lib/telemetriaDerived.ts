@@ -108,6 +108,53 @@ export function proporcionDeGolpe(t: {
   return Math.min(1, t.maxInsercionDeGolpe / t.largoFinal);
 }
 
+/**
+ * Cuanto del texto tiene que haber entrado de una vez para que el punto salga
+ * rojo. La mitad.
+ *
+ * El numero es arbitrario y no hay forma de que no lo sea: nadie tiene un set
+ * etiquetado de respuestas copiadas contra el cual calibrarlo (ver el pendiente
+ * del set de jueces). Se elige la mitad porque es el punto donde la frase «la
+ * respuesta la escribio otra cosa» empieza a describir mejor lo que paso que
+ * «la escribio el alumno», y porque es un numero que se puede decir en voz alta
+ * ante un alumno que pregunte.
+ */
+export const UMBRAL_DE_GOLPE = 0.5;
+
+/**
+ * En que color va un punto de la nube.
+ *
+ * Hasta el 2026-08-10 todos los puntos iban del mismo color, a proposito: el
+ * panel describia y no clasificaba. Naim decidio colorearlos. El umbral existe
+ * ahora y esta escrito arriba, en vez de estar en la cabeza de quien mira la
+ * nube — que es lo unico que cambio de verdad, porque el que miraba ya trazaba
+ * la frontera con el ojo.
+ *
+ * El tercer estado es la parte que importa. `sin-medicion` NO es «limpio»: son
+ * las respuestas donde el navegador no entrego con que medir — documentos
+ * anteriores al 8-ago-2026, y los casos de Android donde no dispara ni `paste`
+ * ni `beforeinput`. De las 12 respuestas que habia en Firestore el 10-ago-2026,
+ * CUATRO caian ahi, y dos de esas cuatro habian pasado mas de 30 segundos fuera
+ * de la app. Pintarlas de azul habria sido afirmar que estaban limpias cuando
+ * nadie las midio, y un falso azul es peor que un falso rojo: el rojo se
+ * revisa, el azul se cree.
+ *
+ * Lo que el rojo NO dice, y por eso el panel sigue sin escribir la palabra
+ * «copio» en ningun lado: de donde salio el texto. Un LLM, los apuntes propios
+ * y el mensaje de un companero entran todos por el portapapeles y se ven
+ * exactamente iguales desde el navegador.
+ */
+export function clasificarPunto(t: {
+  maxInsercionDeGolpe?: number;
+  charsPegados: number;
+  largoFinal: number;
+  pegados: Array<{ ms: number; chars: number }>;
+}): 'sospechoso' | 'no-sospechoso' | 'sin-medicion' {
+  const seMidio = t.maxInsercionDeGolpe !== undefined || t.pegados.length > 0;
+  if (!seMidio) return 'sin-medicion';
+  return proporcionDeGolpe(t) >= UMBRAL_DE_GOLPE ? 'sospechoso' : 'no-sospechoso';
+}
+
 /** Margen interno del sparkline, para que el trazo no se coma el borde. */
 const PADDING = 2;
 
