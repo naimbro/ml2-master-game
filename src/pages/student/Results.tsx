@@ -1,8 +1,9 @@
 import { useEffect, useState, useRef, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Trophy, TrendingUp, ArrowRight, MessageSquare, Info, Code, CheckCircle, XCircle, Zap } from 'lucide-react';
+import { Trophy, TrendingUp, ArrowRight, MessageSquare, Info, Code, CheckCircle, XCircle, Zap, Swords } from 'lucide-react';
 import { useGame } from '../../hooks/useGame';
+import VueltaAlJuego from '../../components/VueltaAlJuego';
 import { useAuth } from '../../hooks/useAuth';
 import { httpsCallable } from 'firebase/functions';
 import { functions } from '../../lib/firebase';
@@ -36,6 +37,17 @@ function AvgCounter({ from, to }: { from: number; to: number }) {
   const value = useCountUp(from, to, { decimals: 1 });
   return <>{value}</>;
 }
+
+/**
+ * Cuanto se espera, despues de que la tabla provisional existe, antes de llamar
+ * a los duelos.
+ *
+ * Eran 3.500 ms elegidos para dejar ver la tabla provisional. Desde el
+ * 2026-08-11 esa tabla ya no se anima en las rondas con duelos, asi que la
+ * espera solo tiene que alcanzar para leer el cartel de transicion. Lo que
+ * queda despues de esto es puro arranque de la funcion (~1 s en frio).
+ */
+const RECAL_DELAY_MS = 1200;
 
 /** Puntaje de la ronda, contando desde cero. */
 function RoundCounter({ to }: { to: number }) {
@@ -265,8 +277,25 @@ export default function Results() {
   // y la tabla se quedaba pegada en "Ranking anterior" para siempre. Eso es lo que
   // le paso a la pantalla proyectada el 2026-08-03 y a nadie mas.
   const TOP_N = 10;
+
+  /**
+   * Una ronda abierta y rankeada va a pasar por duelos, asi que su tabla
+   * provisional tiene 30 segundos de vida.
+   *
+   * Hasta el 2026-08-11 se animaba igual: 11,1 s de montaje que el overlay de
+   * duelos tapaba a los 4,8 s, siempre a media animacion. Nadie la vio nunca
+   * terminar — ni el curso ni Naim. Se cuenta media historia y se corta.
+   *
+   * Ahora esa ronda no anima la tabla provisional: un cartel corto y derecho a
+   * los duelos. La unica tabla que se anima es la definitiva, que es la que
+   * significa algo. Las rondas de alternativas y las no rankeadas no tienen
+   * duelos, asi que animan su tabla como siempre.
+   */
+  const esperaDuelos = isRankedRound && !isMCRound && roundPhase !== 'final';
+
   useEffect(() => {
     if (cumulativeRankings.length === 0) return;
+    if (esperaDuelos) return;
     const runKey = `${currentRound}:${roundPhase === 'final' ? 'final' : 'prov'}`;
     if (leaderboardRunRef.current === runKey) return;
     leaderboardRunRef.current = runKey;
@@ -311,7 +340,7 @@ export default function Results() {
 
     // Phase 4 "done"
     at(() => setLbPhase('done'), t + 300);
-  }, [cumulativeRankings, currentRound, roundPhase]);
+  }, [cumulativeRankings, currentRound, roundPhase, esperaDuelos]);
 
   // Trigger recalibration (pairwise tournament) after provisional board shows (host only)
   // reset the one-shot guard whenever the round changes
@@ -331,7 +360,7 @@ export default function Results() {
       currentRound !== undefined && !recalTriggered.current
     ) {
       recalTriggered.current = true;
-      setTimeout(() => { recalibrateRound(currentRound).catch(console.error); }, 3500);
+      setTimeout(() => { recalibrateRound(currentRound).catch(console.error); }, RECAL_DELAY_MS);
     }
   }, [isHost, roundPhase, isRankedRound, isMCRound, currentRound, recalibrateRound]);
 
@@ -454,8 +483,30 @@ export default function Results() {
         />
       )}
 
+      {/* El puente hasta los duelos. Reemplaza a la tabla provisional en las
+          rondas que van a recalibrarse: dice que los jueces ya terminaron y que
+          falta una vuelta mas, en vez de mostrar un ranking que en 30 s va a
+          ser otro. Dura lo que tarda `recalibrateRound` en marcar la ronda como
+          'recalibrating' (~1,2 s + arranque), y ahi lo tapa el montaje. */}
+      {roundResults && isRankedRound && esperaDuelos && (
+        <div className="min-h-[60vh] flex flex-col items-center justify-center px-4 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35 }}
+            className="card-play p-8 max-w-md"
+          >
+            <Swords className="w-12 h-12 text-kahoot-orange mx-auto mb-4" />
+            <h2 className="text-2xl font-black mb-2">Los jueces ya puntuaron</h2>
+            <p className="text-ink-soft font-semibold">
+              Ahora las respuestas se comparan entre sí.
+            </p>
+          </motion.div>
+        </div>
+      )}
+
       {/* Full-Screen Dramatic Leaderboard (ranked rounds only) — shown first for impact */}
-      {roundResults && game.players && isRankedRound && (
+      {roundResults && game.players && isRankedRound && !esperaDuelos && (
         <div className="min-h-[80vh] flex flex-col justify-center py-8 px-4">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
@@ -964,6 +1015,8 @@ export default function Results() {
           </motion.div>
         )}
       </main>
+
+      {gameCode && <VueltaAlJuego gameCode={gameCode} proyectada={isHost} />}
     </div>
   );
 }
