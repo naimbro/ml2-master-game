@@ -119,6 +119,50 @@ describe('accumulate', () => {
     expect(entries[0].positionsByGame).toEqual([1, 1]);
   });
 
+  it('el puesto acumulado no es el puesto dentro de cada juego', () => {
+    // La forma del caso real de dataviz_2026: Lucas gana la clase 1 (30 pts) y
+    // se hunde al ultimo puesto en la clase 2 (21 pts). Su linea POR JUEGO cae
+    // de 1o a 3o, como si se hubiera desplomado; en la tabla del curso baja un
+    // solo puesto, de 1o a 2o, que es lo que realmente le paso.
+    const entries = accumulate([
+      game('g1', 1000, [['lucas', 300], ['ana', 200], ['beto', 100]]),
+      game('g2', 2000, [['ana', 300], ['beto', 200], ['lucas', 100]]),
+    ]);
+    const lucas = entries.find((e) => e.uid === 'lucas')!;
+    expect(lucas.positionsByGame).toEqual([1, 3]);
+    expect(lucas.cumulativePositionsByGame).toEqual([1, 2]);
+    expect(lucas.points).toBe(51);
+
+    const ana = entries.find((e) => e.uid === 'ana')!;
+    expect(ana.positionsByGame).toEqual([2, 1]);
+    expect(ana.cumulativePositionsByGame).toEqual([2, 1]);
+    expect(ana.points).toBe(55);
+  });
+
+  it('la linea acumulada arranca en la primera clase que jugo, no en el fondo', () => {
+    // Joaco falto a la clase 1: antes de eso no estaba en la tabla, que no es
+    // lo mismo que ir ultimo.
+    const entries = accumulate([
+      game('g1', 1000, [['ana', 200], ['beto', 100]]),
+      game('g2', 2000, [['ana', 300], ['beto', 200], ['joaco', 100]]),
+    ]);
+    const joaco = entries.find((e) => e.uid === 'joaco')!;
+    expect(joaco.cumulativePositionsByGame).toEqual([null, 3]);
+    expect(joaco.positionsByGame).toEqual([null, 3]);
+  });
+
+  it('el puesto acumulado ignora el descarte de las 2 peores', () => {
+    // Igual que previousPosition: es "como iba en ese momento", y en ese
+    // momento el semestre no estaba cerrado.
+    const entries = accumulate([
+      game('g1', 1000, [['ana', 200], ['beto', 100]]),
+      game('g2', 2000, [['ana', 100], ['beto', 200]]),
+      game('g3', 3000, [['ana', 200], ['beto', 100]]),
+    ], { dropWorst: 2 });
+    const ana = entries.find((e) => e.uid === 'ana')!;
+    expect(ana.cumulativePositionsByGame).toEqual([1, 1, 1]);
+  });
+
   it('deja null en la clase que el alumno falto y no le suma nada', () => {
     const entries = accumulate([
       game('g1', 1000, [['ana', 200], ['beto', 100]]),

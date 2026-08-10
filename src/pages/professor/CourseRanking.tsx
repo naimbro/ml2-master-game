@@ -117,7 +117,7 @@ export default function CourseRanking() {
               <p className="text-muted text-sm mb-4">
                 {singleClass
                   ? 'Proyectable. Quien no está entre los seis no aparece. Desde la clase 2 esto se convierte en el gráfico de trayectorias.'
-                  : 'Proyectable. Quien no está entre los seis no aparece.'}
+                  : 'Proyectable. Quien no está entre los seis no aparece. Cada línea es el puesto en esta tabla después de cada clase, no el puesto que sacó dentro de ese juego.'}
               </p>
               {/* Con una sola clase no hay trayectoria: el grafico colapsa a una
                   columna y los empatados quedan en el mismo pixel. Ahi va la lista. */}
@@ -126,7 +126,14 @@ export default function CourseRanking() {
               ) : (
                 <TrajectoryChart
                   entries={standings.top.slice(0, 6).map((r) => ({
-                    name: r.name, positionsByGame: r.positionsByGame,
+                    name: r.name,
+                    // El puesto en la TABLA del curso despues de cada clase, no
+                    // el que sacaron dentro de cada juego. Toda esta pantalla
+                    // promete el acumulado; el eje tiene que decir lo mismo.
+                    // Las tablas escritas antes del 2026-08-11 no traen el
+                    // campo: hasta el proximo "Recalcular" se sigue viendo el
+                    // grafico viejo, que es preferible a una figura vacia.
+                    positionsByGame: r.cumulativePositionsByGame ?? r.positionsByGame,
                   }))}
                   gameCount={standings.gamesCounted.length}
                 />

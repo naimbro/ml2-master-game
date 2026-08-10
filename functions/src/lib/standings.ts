@@ -134,6 +134,20 @@ export interface StandingsEntry {
   /** Alineados con los juegos ordenados por fecha. null = falto a esa clase. */
   pointsByGame: Array<number | null>;
   positionsByGame: Array<number | null>;
+  /**
+   * En que puesto de la TABLA DEL CURSO iba despues de cada clase — no el
+   * puesto que saco dentro de ese juego, que es `positionsByGame`.
+   *
+   * Son dos historias distintas y la figura proyectada promete la segunda:
+   * despues de la clase 2 de dataviz, Lucas salio 10o en ese juego pero seguia
+   * 2o del curso, y Consuelo 13a en el juego y 4a del curso. Graficar el puesto
+   * por juego hacia que los dos parecieran desplomarse.
+   *
+   * null hasta la primera clase en que el alumno jugo: antes de eso no estaba
+   * en la tabla, que no es lo mismo que ir ultimo. Nunca aplica el descarte de
+   * las 2 peores, igual que `previousPosition`: es "como iba en ese momento".
+   */
+  cumulativePositionsByGame: Array<number | null>;
   gamesPlayed: number;
 }
 
@@ -217,6 +231,27 @@ export function accumulate(games: GameResult[], options: AccumulateOptions = {})
     perGame.slice(0, -1).flatMap(({ ranks }) => ranks.map((r) => r.uid))
   );
 
+  // La tabla del curso congelada despues de cada clase. Se recalcula entera k
+  // veces en vez de acumularse de a poco a proposito: las posiciones salen de
+  // `positionsFromTotals`, que resuelve los empates con ranking de competencia
+  // estandar, y reimplementar eso aca en un acumulador seria la forma de que
+  // esta figura y la tabla dejen de coincidir sin que nadie se de cuenta.
+  const cumulativeByGame = new Map<string, Array<number | null>>(uids.map((uid) => [uid, []]));
+  for (let k = 1; k <= perGame.length; k++) {
+    const hastaAqui = positionsFromTotals(
+      uids.map((uid) => ({
+        uid,
+        points: sumSlots(slotsOf(uid, k).map((r) => (r ? r.points : null)), 0),
+      }))
+    );
+    // Quien todavia no habia jugado ninguna clase no tiene puesto: la linea
+    // arranca en su primera clase en vez de venir arrastrada desde el fondo.
+    const yaJugo = new Set(perGame.slice(0, k).flatMap(({ ranks }) => ranks.map((r) => r.uid)));
+    for (const uid of uids) {
+      cumulativeByGame.get(uid)!.push(yaJugo.has(uid) ? hastaAqui.get(uid) ?? null : null);
+    }
+  }
+
   const entries: StandingsEntry[] = uids.map((uid) => {
     const slots = slotsOf(uid, perGame.length);
     const meta = names.get(uid)!;
@@ -228,6 +263,7 @@ export function accumulate(games: GameResult[], options: AccumulateOptions = {})
       previousPosition: playedBefore.has(uid) ? previousPositions.get(uid) ?? null : null,
       pointsByGame: slots.map((r) => (r ? r.points : null)),
       positionsByGame: slots.map((r) => (r ? r.position : null)),
+      cumulativePositionsByGame: cumulativeByGame.get(uid)!,
       gamesPlayed: slots.filter(Boolean).length,
     };
     if (meta.photoURL) entry.photoURL = meta.photoURL;

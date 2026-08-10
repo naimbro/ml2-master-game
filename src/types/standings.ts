@@ -19,6 +19,12 @@ export interface PublicStandingsRow {
   position: number;
   previousPosition: number | null;
   positionsByGame: Array<number | null>;
+  /**
+   * Puesto en la tabla del curso despues de cada clase — no el puesto dentro de
+   * ese juego. Es lo que grafica la figura de los seis primeros. Ausente en
+   * tablas escritas antes del 2026-08-11: ahi se cae a `positionsByGame`.
+   */
+  cumulativePositionsByGame?: Array<number | null>;
 }
 
 /** Documento standings/{courseId}. Lo escribe solo Cloud Functions. */
