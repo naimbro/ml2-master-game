@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { doc, getDoc } from 'firebase/firestore';
-import { ArrowLeft, Plus, Play, Pencil, FileText, Users, Trash2, BarChart3 } from 'lucide-react';
-import type { Course } from '../../lib/courses';
+import { ArrowLeft, Plus, Play, Pencil, FileText, Users, Trash2, BarChart3, Trophy } from 'lucide-react';
+import { getCourse, getSessionsForCourse, type Course } from '../../lib/courses';
 import { fetchCourse, fetchSessions, deleteSession, type SessionWithStatus } from '../../lib/dynamicCourses';
 import { db } from '../../lib/firebase';
 import type { CourseStandings } from '../../types/standings';
@@ -38,8 +38,37 @@ export default function CourseHome() {
     }
   };
 
+  /**
+   * Los cursos viven en dos lados y esta pagina tiene que servir a los dos.
+   *
+   * Un curso DEL REPO (`src/lib/courses.ts`) no tiene documento en Firestore y
+   * sus sesiones son archivos bajo `content/sessions/`: se resuelven en
+   * sincrono y son de solo lectura aca — se escriben con Claude Code y los
+   * skills de autoria, no desde el navegador. Un curso CREADO DESDE LA UI vive
+   * en `courses/{id}` con sus sesiones en una subcoleccion, y esas si se editan
+   * y se borran.
+   *
+   * Hasta el 2026-08-11 esta pagina solo sabia resolver los segundos, y el
+   * panel lo tapaba dibujando dos tarjetas distintas: la de un curso del repo
+   * no tenia ningun enlace hasta aca. El resultado era que los seis cursos
+   * reales no podian llegar a su propia pagina, y todo lo que se agregaba aca
+   * —la lista de juegos jugados, por ejemplo— nacia inalcanzable.
+   */
+  const [esDelRepo, setEsDelRepo] = useState(false);
   useEffect(() => {
     if (!courseId) return;
+    const delRepo = getCourse(courseId);
+    if (delRepo) {
+      setCourse(delRepo);
+      // Una sesion del repo esta publicada por definicion: si esta en SESSIONS,
+      // se puede jugar. El estado 'draft' solo existe en las de la UI, que
+      // pueden quedar a medio escribir por el asistente.
+      setSessions(getSessionsForCourse(courseId).map((s) => ({ ...s, status: 'ready' as const })));
+      setEsDelRepo(true);
+      setLoading(false);
+      return;
+    }
+    setEsDelRepo(false);
     Promise.all([fetchCourse(courseId), fetchSessions(courseId)])
       .then(([c, s]) => { setCourse(c); setSessions(s); })
       .catch((err) => console.error('Error loading course:', err))
@@ -105,54 +134,96 @@ export default function CourseHome() {
                 <div className="min-w-0">
                   <div className="flex items-center gap-2 mb-1">
                     <h3 className="font-bold truncate">{session.title}</h3>
-                    <span className={`text-xs px-2 py-0.5 rounded-full shrink-0 ${
-                      session.status === 'ready'
-                        ? 'bg-emerald-500/20 text-emerald-700'
-                        : 'bg-amber-500/20 text-amber-700'
-                    }`}>
-                      {session.status === 'ready' ? 'Publicada' : 'Borrador'}
-                    </span>
+                    {esDelRepo ? (
+                      <span
+                        className="text-xs px-2 py-0.5 rounded-full shrink-0 border border-line text-muted"
+                        title="Vive en content/sessions/. Se escribe con Claude Code, no desde acá."
+                      >
+                        Del repo
+                      </span>
+                    ) : (
+                      <span className={`text-xs px-2 py-0.5 rounded-full shrink-0 ${
+                        session.status === 'ready'
+                          ? 'bg-emerald-500/20 text-emerald-700'
+                          : 'bg-amber-500/20 text-amber-700'
+                      }`}>
+                        {session.status === 'ready' ? 'Publicada' : 'Borrador'}
+                      </span>
+                    )}
                   </div>
                   <p className="text-muted text-sm truncate">
                     {session.rounds} rondas · {session.duration} min por ronda
                   </p>
                 </div>
-                <div className="flex items-center gap-2 shrink-0">
-                  <Link
-                    to={`/professor/courses/${courseId}/sessions/${session.id}/edit`}
-                    className="flex items-center gap-1 px-3 py-2 bg-surface-2 hover:bg-surface-3 rounded-lg transition-colors text-sm"
-                  >
-                    <Pencil className="w-4 h-4" />
-                    Editar
-                  </Link>
-                  <button
-                    onClick={() => removeSession(session.id, session.title)}
-                    disabled={busy !== null}
-                    title="Eliminar sesión"
-                    aria-label={`Eliminar la sesión ${session.title}`}
-                    className="p-2 rounded-lg text-muted hover:text-kahoot-red hover:bg-surface-2 transition-colors disabled:opacity-40"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
+                {/* Editar y eliminar son solo de las sesiones de la UI. Una del
+                    repo es un archivo versionado: el editor no sabe escribirla y
+                    "eliminar" no tendria a que apuntar. */}
+                {!esDelRepo && (
+                  <div className="flex items-center gap-2 shrink-0">
+                    <Link
+                      to={`/professor/courses/${courseId}/sessions/${session.id}/edit`}
+                      className="flex items-center gap-1 px-3 py-2 bg-surface-2 hover:bg-surface-3 rounded-lg transition-colors text-sm"
+                    >
+                      <Pencil className="w-4 h-4" />
+                      Editar
+                    </Link>
+                    <button
+                      onClick={() => removeSession(session.id, session.title)}
+                      disabled={busy !== null}
+                      title="Eliminar sesión"
+                      aria-label={`Eliminar la sesión ${session.title}`}
+                      className="p-2 rounded-lg text-muted hover:text-kahoot-red hover:bg-surface-2 transition-colors disabled:opacity-40"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                )}
               </div>
             ))}
 
             {sessions.length === 0 && (
               <div className="dramatic-card p-8 text-center text-muted">
                 <FileText className="w-10 h-10 mx-auto mb-3 opacity-50" />
-                Aún no hay sesiones. Crea la primera con el asistente IA.
+                {esDelRepo
+                  ? 'Este curso todavía no tiene sesiones escritas en el repo.'
+                  : 'Aún no hay sesiones. Crea la primera con el asistente IA.'}
               </div>
             )}
           </div>
 
           <div className="space-y-3">
+            {/* "Crear juego" primero: es lo que el profesor viene a apretar.
+                Antes era el tercero porque el primero era escribir una sesion
+                nueva, que en un curso del repo ni siquiera existe. */}
+            {readyCount > 0 && (
+              <Link
+                to={`/professor/courses/${courseId}/create`}
+                className="primary-button w-full py-4 text-lg flex items-center justify-center gap-3"
+              >
+                <Play className="w-5 h-5" />
+                Crear juego
+              </Link>
+            )}
+            {/* El asistente escribe en `courses/{id}/sessions`. Un curso del
+                repo no tiene esa subcoleccion: la sesion quedaria colgando en
+                Firestore sin que nada la lea. */}
+            {!esDelRepo && (
+              <Link
+                to={`/professor/courses/${courseId}/sessions/new`}
+                className={`w-full py-4 text-lg flex items-center justify-center gap-3 rounded-xl transition-colors font-semibold ${
+                  readyCount > 0 ? 'bg-surface-2 hover:bg-surface-3' : 'primary-button'
+                }`}
+              >
+                <Plus className="w-5 h-5" />
+                Nueva sesión con asistente IA
+              </Link>
+            )}
             <Link
-              to={`/professor/courses/${courseId}/sessions/new`}
-              className="primary-button w-full py-4 text-lg flex items-center justify-center gap-3"
+              to={`/professor/courses/${courseId}/tabla`}
+              className="w-full py-4 text-lg flex items-center justify-center gap-3 bg-surface-2 hover:bg-surface-3 rounded-xl transition-colors font-semibold"
             >
-              <Plus className="w-5 h-5" />
-              Nueva sesión con asistente IA
+              <Trophy className="w-5 h-5" />
+              Tabla acumulada
             </Link>
             <Link
               to={`/professor/courses/${courseId}/judges`}
@@ -161,15 +232,6 @@ export default function CourseHome() {
               <Users className="w-5 h-5" />
               Jueces del curso
             </Link>
-            {readyCount > 0 && (
-              <Link
-                to={`/professor/courses/${courseId}/create`}
-                className="w-full py-4 text-lg flex items-center justify-center gap-3 bg-surface-2 hover:bg-surface-3 rounded-xl transition-colors font-semibold"
-              >
-                <Play className="w-5 h-5" />
-                Crear juego
-              </Link>
-            )}
           </div>
 
           {/* Juegos ya jugados. Va DESPUES de los botones a proposito: con 15

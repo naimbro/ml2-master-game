@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import {
   Gamepad2,
   BookOpen,
-  ChevronRight,
+  FileText,
   LogOut,
   GraduationCap,
   Plus,
@@ -196,59 +196,63 @@ export default function Dashboard() {
                     </button>
                   )}
 
-                  {builtin ? (
-                    <div className={`dramatic-card p-6 group ${overId === id ? 'ring-2 ring-kahoot-orange' : ''}`}>
-                      <div className={`w-14 h-14 ${course.iconClass} rounded-xl flex items-center justify-center mb-4`}>
-                        <BookOpen className="w-7 h-7 text-onaccent" />
-                      </div>
-                      <h3 className="text-xl font-bold mb-1">{course.name}</h3>
-                      <p className="text-muted text-sm mb-4">{course.tagline}</p>
-                      <div className="flex items-center justify-between text-sm mb-4">
-                        <span className="text-muted">
-                          {sessionCount} {sessionCount === 1 ? 'sesion' : 'sesiones'}
-                        </span>
-                      </div>
-                      <div className="flex gap-2">
-                        <Link
-                          to={`/professor/courses/${id}/create`}
-                          className="flex-1 py-2 text-center bg-surface-2 hover:bg-surface-3 rounded-lg transition-colors font-semibold text-sm"
-                        >
-                          Crear juego
-                        </Link>
-                        <Link
-                          to={`/professor/courses/${id}/judges`}
-                          className="flex items-center gap-1 px-3 py-2 bg-surface-2 hover:bg-surface-3 rounded-lg transition-colors text-sm"
-                        >
-                          <Users className="w-4 h-4" />
-                          Jueces
-                        </Link>
-                        <Link
-                          to={`/professor/courses/${id}/tabla`}
-                          className="flex items-center gap-1 px-3 py-2 bg-surface-2 hover:bg-surface-3 rounded-lg transition-colors text-sm"
-                        >
-                          <Trophy className="w-4 h-4" />
-                          Tabla
-                        </Link>
-                      </div>
+                  {/* UNA sola forma de tarjeta para los dos tipos de curso.
+                      Antes eran dos: la de un curso del repo era un div con
+                      botones y la de uno creado desde la UI era un link entero a
+                      `CourseHome`. Cada tipo llegaba a una pagina distinta y no
+                      a la del otro — asi es como la lista de juegos jugados
+                      nacio inalcanzable para los seis cursos reales.
+
+                      El nombre del curso lleva a `CourseHome`, que ahora
+                      resuelve los dos. Los atajos siguen en la tarjeta para no
+                      cobrarle un click de mas a "Crear juego", que es lo que el
+                      profesor viene a apretar. Van como links sueltos y no
+                      envolviendo la tarjeta: un <a> dentro de otro <a> no es
+                      HTML valido y el lector de pantalla anuncia cualquier
+                      cosa. */}
+                  <div className={`dramatic-card p-6 ${overId === id ? 'ring-2 ring-kahoot-orange' : ''}`}>
+                    <div className={`w-14 h-14 ${course.iconClass} rounded-xl flex items-center justify-center mb-4`}>
+                      <BookOpen className="w-7 h-7 text-onaccent" />
                     </div>
-                  ) : (
-                    <Link
-                      to={`/professor/courses/${id}`}
-                      className={`dramatic-card p-6 hover:scale-[1.02] transition-transform cursor-pointer group block ${overId === id ? 'ring-2 ring-kahoot-orange' : ''}`}
-                    >
-                      <div className={`w-14 h-14 ${course.iconClass} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-                        <BookOpen className="w-7 h-7 text-onaccent" />
-                      </div>
-                      <h3 className="text-xl font-bold mb-1">{course.name}</h3>
-                      <p className="text-muted text-sm mb-4">{course.tagline}</p>
-                      <div className="flex items-center justify-end text-sm">
-                        <span className="text-cyan-400 flex items-center gap-1 font-semibold">
-                          Gestionar
-                          <ChevronRight className="w-4 h-4" />
-                        </span>
-                      </div>
+                    <Link to={`/professor/courses/${id}`} className="group block">
+                      <h3 className="text-xl font-bold mb-1 group-hover:underline">{course.name}</h3>
+                      <p className="text-muted text-sm mb-1">{course.tagline}</p>
                     </Link>
-                  )}
+                    <p className="text-muted text-sm mb-4">
+                      {sessionCount !== null
+                        ? `${sessionCount} ${sessionCount === 1 ? 'sesion' : 'sesiones'}`
+                        : 'Creado desde la app'}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      <Link
+                        to={`/professor/courses/${id}/create`}
+                        className="flex-1 min-w-[110px] py-2 text-center bg-surface-2 hover:bg-surface-3 rounded-lg transition-colors font-semibold text-sm"
+                      >
+                        Crear juego
+                      </Link>
+                      <Link
+                        to={`/professor/courses/${id}`}
+                        className="flex items-center gap-1 px-3 py-2 bg-surface-2 hover:bg-surface-3 rounded-lg transition-colors text-sm"
+                      >
+                        <FileText className="w-4 h-4" />
+                        Sesiones
+                      </Link>
+                      <Link
+                        to={`/professor/courses/${id}/judges`}
+                        className="flex items-center gap-1 px-3 py-2 bg-surface-2 hover:bg-surface-3 rounded-lg transition-colors text-sm"
+                      >
+                        <Users className="w-4 h-4" />
+                        Jueces
+                      </Link>
+                      <Link
+                        to={`/professor/courses/${id}/tabla`}
+                        className="flex items-center gap-1 px-3 py-2 bg-surface-2 hover:bg-surface-3 rounded-lg transition-colors text-sm"
+                      >
+                        <Trophy className="w-4 h-4" />
+                        Tabla
+                      </Link>
+                    </div>
+                  </div>
                 </div>
               );
             })}

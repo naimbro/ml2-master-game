@@ -90,7 +90,10 @@ export default function CourseJudges() {
     );
   }
 
-  const backHref = courseId && getCourse(courseId) ? '/professor' : `/professor/courses/${courseId}`;
+  // Se vuelve a la pagina del curso, venga de donde venga. Hasta el 2026-08-11
+  // un curso del repo volvia al panel porque `CourseHome` no sabia resolverlo;
+  // ahora resuelve los dos y el camino de vuelta es el mismo para todos.
+  const backHref = `/professor/courses/${courseId}`;
 
   return (
     <div className="min-h-screen bg-gradient-main">
