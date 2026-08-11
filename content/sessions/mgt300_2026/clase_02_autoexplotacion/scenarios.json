@@ -7,7 +7,7 @@
     "difficulty": "medium",
     "type": "multiple_choice",
     "ranked": true,
-    "durationSeconds": 66,
+    "durationSeconds": 65,
     "conceptTags": [
       "han_rendimiento"
     ],
@@ -35,7 +35,7 @@
         ],
         "correctOptionIndex": 2,
         "timeLimitSeconds": 30,
-        "explanation": "«El exceso de trabajo se convierte en autoexplotación. Esta es mucho más eficaz que la explotación por otros, pues va acompañada de un sentimiento de libertad.» No es que duela más: rinde más, porque no hay a quién desobedecer."
+        "explanation": "«Mucho más eficaz que la explotación por otros, pues va acompañada de un sentimiento de libertad.» Ahorrarle supervisión a la empresa suena bien y es la trampa: mete una empresa, y en Han no hay ninguna."
       }
     ]
   },
