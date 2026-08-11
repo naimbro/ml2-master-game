@@ -138,6 +138,68 @@ gerente, ningún consultor—. La coacción existe **sin emisor** y la explotaci
 ocurre «sin dominio». El segundo texto es un reportaje sobre exactamente las
 personas y las empresas que faltan en ese cuadro.
 
+<!-- section: sociedad_disciplinaria, han_rendimiento -->
+
+## La sociedad disciplinaria (Foucault), y el tránsito
+
+**Esto sale de la presentación que el curso proyecta en esta misma clase**, antes
+del juego, no de la guía de lectura. Las citas de abajo son de esas slides, y son
+todo lo que el curso vio sobre Foucault: no leyeron *Vigilar y castigar*.
+
+- **Definición (slide 6):** «La sociedad disciplinaria. Definición: un modelo de
+  control social donde el poder se ejerce a través de **instituciones que vigilan
+  y corrigen** el comportamiento de los individuos.»
+  - «Cárceles y escuelas: **castigo y reformación; adiestramiento y
+    normalización**.»
+  - «Fábricas: **disciplina laboral y eficiencia**.»
+  - Referencia: **Michel Foucault, *Vigilar y castigar* (1975)**.
+- **Slide 7:** «Foucault: **las instituciones que producen sujetos**» — *Vigilar
+  y castigar* (1975), *Historia de la sexualidad I* (1976), *El nacimiento de la
+  clínica* (1963).
+- **Slide 8:** «**Mayo del 68**: rebelión contra la sociedad disciplinaria.»
+  Protesta masiva en Francia y otros países contra la rigidez institucional y las
+  normas sociales opresivas; resistencia a las normas de género, sexuales y de
+  clase que regulaban la vida cotidiana.
+- **Slide 9, el tránsito:** «El control **se interioriza**: ya no viene tanto de
+  fuera, sino de dentro de los propios individuos.» «**Libertad aparente**: los
+  roles tradicionales y las instituciones disciplinarias pierden rigidez, y cada
+  uno queda libre de perseguir sus sueños.» «**Autorrealización**: ya no se trata
+  de **obedecer**, sino de **destacarse y superarse** constantemente.»
+
+**El tránsito va en un solo sentido.** Foucault describe la sociedad
+disciplinaria; Han sostiene que ya fue reemplazada por la de rendimiento.
+Atribuirle a Foucault la sociedad de rendimiento, o a Han la disciplinaria, es un
+error de lectura, no un matiz.
+
+### En qué se distinguen de verdad las dos listas
+
+Es la pregunta de la ronda 5, y la trampa es que **las dos vigilan**. Un gimnasio
+efectivamente vigila, corrige y normaliza, así que «una vigila y la otra no» no
+separa nada. Lo que el material sí sostiene, y cualquiera de estas rutas basta:
+
+- **Cómo se entra.** A la cárcel, al cuartel y al psiquiátrico te mandan. Al
+  gimnasio, a la torre de oficinas y al mall vas tú — y al gimnasio, además,
+  pagas. La institución disciplinaria te encierra; la nueva te cobra la entrada.
+- **Prohibición contra «poder sin límites».** Han: la sociedad disciplinaria «es
+  una sociedad de la negatividad», definida por «la negatividad de la
+  prohibición»; a ella «la rige el no». La de rendimiento «se caracteriza por el
+  verbo modal positivo **poder sin límites**», y su lema es «Yes, we can». Una te
+  dice hasta dónde no; la otra no te dice hasta dónde sí, y por eso no hay punto
+  de llegada.
+- **Qué produce cada una.** La negatividad de la disciplinaria «genera **locos y
+  criminales**»; la sociedad de rendimiento «produce **depresivos y
+  fracasados**». La primera fabrica desviados respecto de una norma; la segunda
+  no tiene norma que cumplir, así que el que no llega no desobedeció a nadie: no
+  le alcanzó a sí mismo.
+- **Quién vigila.** En la disciplinaria el vigilante es otro. En la de
+  rendimiento, en palabras de Han, «se es prisionero y celador, víctima y
+  verdugo, a la vez».
+
+**Objetar esto es legítimo y puede puntuar alto.** Sostener que la diferencia es
+de grado y no de tipo —que una torre de oficinas disciplina igual que una
+fábrica, solo que sin decirlo— es un argumento que el material admite, siempre
+que quien lo haga muestre primero que entendió las dos definiciones.
+
 <!-- section: han_potencia_negativa, puentes -->
 
 ## La potencia negativa

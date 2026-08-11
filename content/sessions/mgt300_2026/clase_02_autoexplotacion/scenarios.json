@@ -154,42 +154,51 @@
     ]
   },
   {
-    "id": "mgt_c02_r5_negatividad",
+    "id": "mgt_c02_r5_sociedad_disciplinaria",
     "order": 5,
-    "title": "La misma palabra, al revés",
-    "category": "Los dos textos",
+    "title": "El gimnasio también te vigila",
+    "category": "Foucault y Han",
     "difficulty": "hard",
     "ranked": true,
     "durationSeconds": 240,
     "conceptTags": [
-      "puentes",
-      "han_potencia_negativa",
-      "ehrenreich_motivacion"
+      "sociedad_disciplinaria",
+      "han_rendimiento"
     ],
-    "judgeFocus": "El criterio: ¿dice qué deja de ser posible, o qué se vuelve innecesario, cuando objetar pasa a ser un rasgo de carácter en vez de un derecho? Rutas válidas, lista NO cerrada: la objeción queda descalificada antes de que se discuta su contenido, o sea que no se responde, se diagnostica; la empresa se ahorra la negociación entera y el conflicto colectivo; el costo de vigilar se traslada al propio trabajador, que ahora se vigila solo; reclamar se vuelve causal de despido, así que callarse pasa a ser lo racional. Cualquier otra que cierre el mismo paso vale exactamente igual. NO cuenta: «para manipular», «para lavarles el cerebro» o «para que trabajen más» sin decir cómo; ni parafrasear las dos definiciones sin sacar nada de ellas —la comparación ya está hecha en el enunciado, lo que se pide es la consecuencia. Se pidieron 3 o 4 líneas como sugerencia: NO bajes el puntaje por pasarse.",
-    "context": "Para Han, la **potencia negativa** —la capacidad de no hacer, de decir No— es la condición misma de la libertad: sin ella «se caería en una hiperactividad mortal».\n\nEn Amway, a los vendedores se les enseña que «Dios es Positivo y el Diablo es Negativo», y que «negarse a comprar una cinta cuando la recomienda tu línea superior es Negativo».\n\nHan y Ehrenreich nunca se leyeron.",
-    "question": "La misma palabra significa lo contrario en cada texto: para uno es la libertad, para el otro es un defecto de carácter. Explica **qué gana una empresa** cuando logra dar vuelta ese significado. Con 3 o 4 líneas basta.",
+    "media": [
+      {
+        "kind": "image",
+        "src": "media/mgt300/foucault-1968.jpg",
+        "alt": "Retrato de Michel Foucault publicado en el Diario de Lisboa en abril de 1968, reproducido en la trama de medio tono de un diario.",
+        "credit": "Michel Foucault · Diário de Lisboa, 28 de abril de 1968 · dominio público"
+      }
+    ],
+    "judgeFocus": "El criterio: ¿encuentra una diferencia que sobreviva a la objeción del enunciado? El gimnasio SÍ vigila, corrige y normaliza —eso está concedido y no hay que discutirlo—, así que la respuesta tiene que apuntar a otra cosa. Rutas válidas, lista NO cerrada: que a la cárcel y al cuartel te mandan y al gimnasio vas tú, y encima pagas; que la institución disciplinaria funciona prohibiendo y la nueva funciona con el «poder sin límites», sin techo que cumplir; que la disciplinaria te normaliza hacia un estándar y del que se desvía hace un loco o un criminal, mientras que la de rendimiento no tiene estándar y del que no llega hace un deprimido o un fracasado; que en una el vigilante es otro y en la otra eres tú. Cualquier otra que separe de verdad las dos listas vale exactamente igual. TAMBIÉN VALE OBJETAR: quien argumente que la diferencia es de grado y no de tipo —que la torre de oficinas disciplina igual que la fábrica, solo que disimulado— puntúa igual de alto si lo sostiene con las dos definiciones y no con una intuición. NO cuenta: repetir las dos listas de instituciones sin decir qué las separa; decir «antes era físico y ahora es mental» sin nada más; ni contestar que el gimnasio no vigila, que es justo lo que el enunciado concede. Se pidieron 3 o 4 líneas como sugerencia: NO bajes el puntaje por pasarse.",
+    "context": "Foucault define la sociedad disciplinaria como un modelo de control social donde el poder se ejerce a través de **instituciones que vigilan y corrigen** el comportamiento de los individuos: cárceles y escuelas, cuarteles, fábricas.\n\nHan dice que esa sociedad «ya no se corresponde con la sociedad de hoy en día», y pone otra en su lugar: **gimnasios, torres de oficinas, bancos, aviones, grandes centros comerciales y laboratorios genéticos**.",
+    "question": "Un gimnasio también te vigila, te corrige y te normaliza. Entonces, **¿qué cambió de verdad entre las dos listas?** Con 3 o 4 líneas basta.",
     "evaluationGuide": {
       "must_hit": [
-        "Nombra una consecuencia concreta de dar vuelta el significado, no solo que las dos definiciones son opuestas.",
-        "Dice a favor de quién opera esa consecuencia y por qué."
+        "Nombra una diferencia que no sea «una vigila y la otra no»: el enunciado ya concedió que las dos vigilan.",
+        "Dice por qué esa diferencia cambia el efecto sobre la persona, y no solo el decorado."
       ],
       "fatal_errors": [
-        "Invierte a Han: le atribuye que la potencia negativa es pasividad, desmotivación o un defecto. Para él es la condición de la libertad.",
-        "Inventa otro caso, otra empresa u otra cita para sostener el punto."
+        "Contesta que el gimnasio no vigila ni normaliza: el enunciado lo concede y la pregunta empieza después de eso.",
+        "Le atribuye a Foucault la sociedad de rendimiento, o a Han la disciplinaria: el tránsito va en un solo sentido.",
+        "Inventa instituciones, fechas u obras que no están ni en la guía ni en la clase."
       ],
       "partial_credit": {
-        "solo_parafrasea": "Repite las dos definiciones con otras palabras sin sacar la consecuencia: 'Mecanismo' hasta 60.",
-        "manipulacion_generica": "Se queda en «para manipular» o «es control social» sin el paso intermedio: 'Mecanismo' hasta 50.",
-        "consecuencia_sin_beneficiario": "Nombra la consecuencia pero no dice qué se ahorra o qué gana la empresa con ella: 'Mecanismo' hasta 60."
+        "solo_repite_listas": "Enumera las dos listas de instituciones sin decir qué las separa: 'Mecanismo' hasta 40.",
+        "fisico_vs_mental": "Se queda en «antes era físico, ahora es mental» sin desarrollarlo: 'Mecanismo' hasta 60.",
+        "diferencia_sin_efecto": "Nombra bien la diferencia —que uno va voluntariamente, por ejemplo— pero no dice qué produce eso: 'Mecanismo' hasta 60."
       },
       "nice_to_have": [
-        "Nombra que así se produce lo que Han llama explotación sin dominio: la coacción funciona sin que nadie ordene nada.",
-        "Nota que los seminarios de Amway los paga de su bolsillo el propio vendedor.",
-        "Objeta el puente: que la coincidencia de palabra puede ser casual, porque los dos autores no se leyeron."
+        "Nota que uno paga por entrar al gimnasio y a la cárcel lo llevan.",
+        "Conecta con que una sociedad produce locos y criminales y la otra depresivos y fracasados.",
+        "Usa que la disciplinaria funciona con la prohibición y la de rendimiento con el «poder sin límites».",
+        "Objeta que la diferencia es de grado y no de tipo, después de mostrar que entendió las dos definiciones."
       ]
     },
-    "idealAnswer": "Gana no tener que discutir. Si decir que no es un derecho, la empresa tiene que responder el contenido del reclamo: por qué esa meta, por qué esa cinta, por qué ese despido. Si decir que no pasa a ser un defecto tuyo, el reclamo ya no se responde, se diagnostica: el problema es tu actitud, no lo que dijiste. Con eso se ahorra la negociación completa, y de paso el empleado empieza a vigilarse solo para no parecer negativo, que es justo la explotación sin dominio de Han."
+    "idealAnswer": "Que a la cárcel te llevan y al gimnasio vas tú, y encima pagas. Las dos te corrigen, pero la institución de Foucault lo hace prohibiendo y con un estándar que cumplir: te normaliza hasta que encajas, y el que se sale es un loco o un criminal. El gimnasio no te prohíbe nada y tampoco te da un punto de llegada, porque siempre se puede un poco más. Por eso el que no da el ancho ahí no sale desviado, sale deprimido: no desobedeció a nadie, no le alcanzó a sí mismo."
   },
   {
     "id": "mgt_c02_r6_42_horas",
