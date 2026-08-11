@@ -1,6 +1,6 @@
 ---
 name: pulidor-visual
-description: Use when changing how the game looks — "se ve feo", "que se vea mejor", "no se lee en el teléfono", "arreglar el layout", "esta pantalla quedó apretada", or when editing any screen under src/pages/student, src/pages/professor, src/components or src/index.css. Also use before shipping a new session, to check its rounds on a phone-sized screen.
+description: Use when changing how the game looks — "se ve feo", "que se vea mejor", "no se lee en el teléfono", "arreglar el layout", "esta pantalla quedó apretada", or when editing any screen under src/pages/student, src/pages/professor, src/components or src/index.css. Also use before shipping a new session, to check its rounds on a phone-sized screen, and to decide which of its questions deserve una imagen and to go find one.
 ---
 
 # Pulidor visual
@@ -63,6 +63,84 @@ el lugar.
 
 La trama de puntos del fondo está al 5% justamente por esto: se nota a treinta
 centímetros y desaparece proyectada.
+
+## Ponerle imágenes a una sesión
+
+Va en **dos pasadas**, y la primera es barata a propósito: buscar imágenes para
+seis rondas es caro, y la mayoría de las rondas no las necesita.
+
+### Pasada 1 — cuáles rondas la merecen, y ofrecerle el número a Naim
+
+Recorrer los escenarios y clasificar cada uno en una de tres:
+
+| Clase | Qué es | Qué hacer |
+|---|---|---|
+| **La imagen ES la pregunta** | Sin ella la pregunta no existe: un gráfico que hay que leer, una foto que hay que comparar, un audio que hay que oír | Imagen obligatoria |
+| **La imagen ancla a una persona, un lugar o un objeto** | La ronda nombra a alguien y verle la cara lo fija: Foucault, Maradona, una portada, un afiche | Imagen si aparece una legítima; si no, no pasa nada |
+| **La imagen sería decoración** | Un concepto abstracto —autoexplotación, potencia negativa, incentivos— donde cualquier foto es una metáfora que el autor eligió | **No poner ninguna** |
+
+La tercera fila es la que hay que defender. Una foto de alguien cansado frente a
+un notebook no aporta evidencia: aporta la interpretación de quien la eligió, y
+en una pregunta abierta eso le sopla la respuesta al curso.
+
+**Entregarle a Naim una tabla con las rondas, su clase, y qué imagen se buscaría
+para cada una — y un número recomendado.** Dos o tres imágenes en un juego de
+seis rondas es lo normal. Seis de seis significa que se pusieron por poner.
+
+Recién con su visto bueno se sale a buscar.
+
+### La regla dura, que acá también manda
+
+**Una imagen no puede introducir un hecho que la clase no vio.** Vale para las
+imágenes igual que para los distractores. Un retrato de un autor identifica a una
+persona que el material ya nombra: eso está bien. Un gráfico, un mapa o una
+tabla que el curso nunca proyectó es un hecho nuevo, y ahí se cambia la pregunta,
+no se agrega la imagen.
+
+### Pasada 2 — buscar, y verificar la licencia una por una
+
+**Este repo es público y se publica en GitHub Pages.** Una imagen mal licenciada
+no es un detalle: queda publicada con el nombre de Naim encima.
+
+Buscar en Wikimedia Commons, en los archivos nacionales y en las colecciones
+abiertas de museos. Y después, **por cada archivo, abrir su ficha y leer la
+etiqueta de licencia**. Trampas verificadas, todas encontradas en una sola
+búsqueda de una foto de Foucault en agosto de 2026:
+
+- **El listado de la categoría no dice la licencia.** Hay que abrir
+  `commons.wikimedia.org/wiki/File:<nombre>` y leer el tag: `PD-old`,
+  `PD-US-expired`, `PD-Brazil-Gov`, `CC0`, `CC-BY-SA`…
+- **«Own work» sobre una persona muerta hace décadas es sospechoso.** Había un
+  retrato de Foucault subido como obra propia en 2013, con Foucault muerto en
+  1984. Descartado.
+- **El nombre del archivo no garantiza el sujeto.** Otro resultado era un
+  medallón del siglo XVIII de un Michel Foucault distinto.
+- **Mirar las dimensiones antes de celebrar.** 207 px de ancho se ve blando
+  proyectado; por debajo de ~450 px de ancho, buscar otra.
+- **Descargar con un `User-Agent` propio.** Wikimedia rechaza el de curl por
+  defecto.
+
+Anotar en el commit de dónde salió y con qué licencia. Cuesta una línea y es lo
+único que hace auditable la decisión seis meses después.
+
+### Cómo se escribe en el contenido
+
+Las trampas de mecánica están en `esquema.md` de `autor-de-contenido`; lo que
+importa repetir acá:
+
+- El archivo va bajo **`public/media/<curso>/`** y el `src` se escribe **sin
+  slash inicial** (`media/mgt300/foucault-1968.jpg`). Con slash, 404ea **sólo en
+  producción**. `validate-content.cjs` verifica que el archivo exista.
+- **`alt` obligatorio**, y `credit` con fuente, fecha y licencia — se muestra bajo
+  la imagen.
+- Después de agregarla, **`npm run build` y confirmar que quedó en `dist/media/`**.
+  Ese es el error que no aparece en `npm run dev`.
+
+### Y después, mirarla a ancho de teléfono
+
+Con la imagen puesta, publicar la ronda renderizada a **390 px** con `Artifact` y
+mirarla ahí antes de darla por buena. Una foto que se ve bien en el monitor puede
+comerse la pantalla del teléfono y empujar la pregunta bajo el pliegue.
 
 ## Verificar mirando, no con tests
 
