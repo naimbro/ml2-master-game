@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { ArrowLeft, RefreshCw, Lock } from 'lucide-react';
+import { ArrowLeft, RefreshCw, Lock, BarChart3 } from 'lucide-react';
 import { httpsCallable } from 'firebase/functions';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db, functions } from '../../lib/firebase';
@@ -9,6 +9,33 @@ import { fetchCourse } from '../../lib/dynamicCourses';
 import TrajectoryChart from '../../components/TrajectoryChart';
 import TopSixList from '../../components/TopSixList';
 import type { CourseStandings } from '../../types/standings';
+
+/**
+ * El camino al reporte de un juego, desde la unica pantalla por curso a la que
+ * llega un curso del repo.
+ *
+ * `CourseHome` tiene una lista de juegos jugados mejor que esta, pero el panel
+ * dibuja las tarjetas de curso de dos formas distintas: la de un curso creado
+ * desde la UI es un link a `CourseHome`, y la de un curso del repo es un div con
+ * tres botones —Crear juego, Jueces, Tabla— que no incluye ninguno hacia alla.
+ * Como los seis cursos reales son del repo, esa lista no tiene un solo camino
+ * desde la interfaz y el reporte quedaba inalcanzable sin teclear la URL.
+ *
+ * Va en cada fila de juego en vez de en una lista aparte: la fila ya nombra el
+ * juego y ya ofrece sacarlo de la tabla. Poder excluir un juego y no poder
+ * mirarlo era lo raro.
+ */
+function VerReporte({ gameCode }: { gameCode: string }) {
+  return (
+    <Link
+      to={`/professor/report/${gameCode}`}
+      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-3 hover:bg-surface-2 text-sm font-bold shrink-0 transition-colors"
+    >
+      <BarChart3 className="w-4 h-4" />
+      Reporte
+    </Link>
+  );
+}
 
 export default function CourseRanking() {
   const { courseId } = useParams<{ courseId: string }>();
@@ -107,8 +134,14 @@ export default function CourseRanking() {
         {error && <p className="text-orange-ink font-semibold">{error}</p>}
 
         {!standings ? (
+          /* Un curso puede tener juegos terminados y no tener tabla: se escribe
+             recien al apretar "Recalcular". Como los reportes de clase cuelgan
+             de esta lista, el mensaje tiene que decir que ahi tambien estan — si
+             no, un curso con juegos jugados se ve identico a uno que nunca jugo,
+             y el reporte parece no existir. */
           <div className="dramatic-card p-6 text-muted">
-            Todavía no hay tabla para este curso. Apreta &quot;Recalcular&quot; después de la primera clase.
+            Todavía no hay tabla para este curso. Apreta &quot;Recalcular&quot; para armarla:
+            de paso aparecen acá los juegos ya jugados, con el reporte de cada uno.
           </div>
         ) : (
           <>
@@ -141,10 +174,11 @@ export default function CourseRanking() {
             </div>
 
             <div className="dramatic-card p-6">
-              <h2 className="font-black mb-1">Juegos que cuentan</h2>
+              <h2 className="font-black mb-1">Juegos de este curso</h2>
               <p className="text-muted text-sm mb-4">
                 Una clase, un juego: de cada sesión cuenta el que tuvo más alumnos. Los de prueba
-                quedan afuera solos.
+                quedan afuera solos. <strong>El reporte de cada juego</strong> —puntajes, feedback
+                de los jueces y cómo se escribió cada respuesta— se abre desde acá.
               </p>
               <div className="space-y-2">
                 {standings.gamesCounted.map((g) => (
@@ -156,6 +190,7 @@ export default function CourseRanking() {
                         {g.playedCount} {g.playedCount === 1 ? 'alumno' : 'alumnos'}
                       </span>
                     )}
+                    <VerReporte gameCode={g.gameCode} />
                     <button
                       onClick={() => call({ exclude: { gameCode: g.gameCode, excluded: true } })}
                       disabled={busy}
@@ -189,6 +224,7 @@ export default function CourseRanking() {
                             {g.playedCount} {g.playedCount === 1 ? 'alumno' : 'alumnos'}
                           </span>
                         )}
+                        <VerReporte gameCode={g.gameCode} />
                       </div>
                     ))}
                   </div>
@@ -205,6 +241,7 @@ export default function CourseRanking() {
                       <div key={code} className="flex items-center gap-3 px-3 py-2 rounded-xl bg-surface-2 opacity-70">
                         <span className="font-mono font-bold">{code}</span>
                         <span className="flex-1" />
+                        <VerReporte gameCode={code} />
                         <button
                           onClick={() => call({ exclude: { gameCode: code, excluded: false } })}
                           disabled={busy}
