@@ -1,258 +1,62 @@
 import { describe, it, expect } from 'vitest';
-import {
-  mcTimeline,
-  mcGateSeconds,
-  derivedMCRoundDuration,
-  MC_GATE_SECONDS,
-  MC_GATE_WITH_MEDIA_SECONDS,
-  MC_FEEDBACK_MIN_SECONDS,
-  mcFeedbackSeconds,
-  MC_FEEDBACK_MAX_SECONDS,
-  MC_EXPLANATION_MAX_CHARS,
-  MC_SLACK_SECONDS,
-  shouldCutQuestion,
-} from './mcTiming';
+import { mcAnswerRevealed, mcFeedbackSeconds } from './mcTiming';
 
-const T0 = 1_700_000_000_000; // fixed epoch — no Date.now() anywhere in these tests
-const at = (seconds: number) => T0 + seconds * 1000;
-const oneQuestion = [{ timeLimitSeconds: 20 }];
-const twoQuestions = [{ timeLimitSeconds: 20 }, { timeLimitSeconds: 30 }];
+/**
+ * La revelacion en dos tiempos. Lo que se prueba aca no es el diseno sino la
+ * frontera: que el verde NUNCA se encienda en el primer instante (ahi se pierde
+ * el efecto entero) y que SIEMPRE se encienda antes de que la ventana cierre
+ * (ahi el curso se queda sin saber cual era la correcta, que es mucho peor).
+ */
+describe('mcAnswerRevealed', () => {
+  // 203 caracteres: la explicacion real de la R1 de MGT300 clase 2.
+  const expl = 'x'.repeat(203);
+  const total = mcFeedbackSeconds(expl); // 3 + ceil(203/18) = 15
 
-const line = (seconds: number, questions = oneQuestion, gateSeconds = 5) =>
-  mcTimeline({ roundStartMs: T0, nowMs: at(seconds), gateSeconds, questions });
-
-/** Same, with the "everybody already answered" cutoff written at `cutSeconds`. */
-const cutLine = (seconds: number, cutSeconds: number, questions = oneQuestion, gateSeconds = 5) =>
-  mcTimeline({ roundStartMs: T0, nowMs: at(seconds), gateSeconds, questions, allAnsweredAtMs: at(cutSeconds) });
-
-describe('shouldCutQuestion', () => {
-  const base = { phase: 'question' as const, answeredCount: 2, playerCount: 2, alreadyCut: false };
-
-  it('corta cuando ya respondieron todos', () => {
-    expect(shouldCutQuestion(base)).toBe(true);
+  it('la ventana de esa explicacion son 15 s', () => {
+    expect(total).toBe(15);
   });
 
-  it('no corta si falta alguien', () => {
-    expect(shouldCutQuestion({ ...base, answeredCount: 1 })).toBe(false);
+  it('en el primer instante muestra el reparto, no la respuesta', () => {
+    expect(mcAnswerRevealed(expl, total)).toBe(false);
   });
 
-  it('no corta dos veces', () => {
-    expect(shouldCutQuestion({ ...base, alreadyCut: true })).toBe(false);
+  it('aguanta los 3 segundos del compas', () => {
+    expect(mcAnswerRevealed(expl, total - 1)).toBe(false); // 1 s corrido
+    expect(mcAnswerRevealed(expl, total - 2)).toBe(false); // 2 s
   });
 
-  it('no corta una pregunta que ya cerro', () => {
-    // Esta es la regresion que dejo el corte muerto: la senal que se contaba
-    // (las submissions) solo existia en 'done', o sea nunca durante 'question'.
-    for (const phase of ['gate', 'feedback', 'done'] as const) {
-      expect(shouldCutQuestion({ ...base, phase })).toBe(false);
+  it('enciende la correcta al tercer segundo', () => {
+    expect(mcAnswerRevealed(expl, total - 3)).toBe(true);
+  });
+
+  it('sigue encendida hasta el final de la ventana', () => {
+    for (let left = total - 3; left >= 0; left--) {
+      expect(mcAnswerRevealed(expl, left)).toBe(true);
     }
   });
 
-  it('no corta con el lobby vacio', () => {
-    expect(shouldCutQuestion({ ...base, answeredCount: 0, playerCount: 0 })).toBe(false);
+  it('sin explicacion la ventana cae al piso y el compas se recorta a la mitad', () => {
+    const piso = mcFeedbackSeconds(null); // 6
+    expect(piso).toBe(6);
+    expect(mcAnswerRevealed(null, 6)).toBe(false); // recien empieza
+    expect(mcAnswerRevealed(null, 4)).toBe(false); // 2 s corridos
+    expect(mcAnswerRevealed(null, 3)).toBe(true); // 3 s: mitad de la ventana
+    expect(mcAnswerRevealed(null, 0)).toBe(true);
   });
 
-  it('tolera contar de mas', () => {
-    // Un jugador que se va despues de responder deja answeredCount > playerCount.
-    expect(shouldCutQuestion({ ...base, answeredCount: 3, playerCount: 2 })).toBe(true);
-  });
-});
-
-describe('mcTimeline with an all-answered cutoff', () => {
-  // Gate 0-5s, question 5-25s, feedback 25-30s. Everyone answers at 12s.
-  it('closes the question the moment the cutoff lands', () => {
-    expect(line(14).phase).toBe('question');       // sin corte seguiria preguntando
-    expect(cutLine(14, 12).phase).toBe('feedback');
-  });
-
-  it('still plays the full shared reveal after the cutoff', () => {
-    // El reveal es compartido y deliberado: cortar el reloj no puede saltarselo.
-    expect(cutLine(13, 12).phase).toBe('feedback');
-    expect(cutLine(17.5, 12).phase).toBe('feedback');
-    expect(cutLine(18.5, 12).phase).toBe('done');
-  });
-
-  it('shortens the visible countdown instead of letting it run out', () => {
-    // El corte se escribe cuando responde el ultimo, asi que en la practica nunca
-    // esta en el futuro; pero si lo estuviera, el reloj tiene que apuntar a el.
-    expect(cutLine(8, 12).phase).toBe('question');
-    expect(cutLine(8, 12).secondsLeft).toBe(4);
-    expect(line(8).secondsLeft).toBe(17);
-  });
-
-  it('ignores a cutoff that lands after the question would have ended anyway', () => {
-    expect(cutLine(26, 40)).toEqual(line(26));
-  });
-
-  it('ignores a cutoff from before the question started', () => {
-    expect(cutLine(14, 2)).toEqual(line(14));
-  });
-
-  it('is a no-op when no cutoff is given', () => {
-    expect(mcTimeline({ roundStartMs: T0, nowMs: at(14), gateSeconds: 5, questions: oneQuestion, allAnsweredAtMs: null }))
-      .toEqual(line(14));
-  });
-});
-
-describe('mcGateSeconds', () => {
-  it('gives a media clue room to play', () => {
-    expect(mcGateSeconds([{ kind: 'audio', src: 'a.mp3' }])).toBe(MC_GATE_WITH_MEDIA_SECONDS);
-  });
-
-  it('keeps the gate short when there is nothing to show', () => {
-    expect(mcGateSeconds(undefined)).toBe(MC_GATE_SECONDS);
-    expect(mcGateSeconds([])).toBe(MC_GATE_SECONDS);
-  });
-});
-
-describe('mcTimeline', () => {
-  it('holds every screen on the gate until it expires', () => {
-    expect(line(0).phase).toBe('gate');
-    expect(line(0).secondsLeft).toBe(5);
-    expect(line(4.5).phase).toBe('gate');
-    expect(line(4.5).secondsLeft).toBe(1);
-  });
-
-  it('never reports question 0 as expired at the start of the round', () => {
-    // The bug this replaces: a local countdown starting at 0 made question 0 of
-    // every block time out in the render before the real limit had loaded.
-    for (const s of [0, 0.1, 1, 4.9]) {
-      expect(line(s).phase).toBe('gate');
-    }
-    expect(line(5).phase).toBe('question');
-    expect(line(5).secondsLeft).toBe(20);
-  });
-
-  it('runs the question for exactly its time limit', () => {
-    expect(line(5).phase).toBe('question');
-    expect(line(15).secondsLeft).toBe(10);
-    expect(line(24.9).phase).toBe('question');
-    expect(line(25).phase).toBe('feedback');
-  });
-
-  it('shows feedback, then finishes the block', () => {
-    // Sin `explanation` la ventana se queda en el piso: no hay nada que leer.
-    expect(line(25).phase).toBe('feedback');
-    expect(line(25).secondsLeft).toBe(MC_FEEDBACK_MIN_SECONDS);
-    expect(line(30.9).phase).toBe('feedback');
-    expect(line(31).phase).toBe('done');
-  });
-
-  it('reports the same question start for everyone, so speed scoring is fair', () => {
-    expect(line(6).questionStartMs).toBe(at(5));
-    expect(line(20).questionStartMs).toBe(at(5));
-    // ...and during feedback it still points at the question that just ran
-    expect(line(26).questionStartMs).toBe(at(5));
-  });
-
-  it('walks a multi-question block, honouring per-question limits', () => {
-    const l = (s: number) => line(s, twoQuestions);
-    expect(l(5)).toMatchObject({ phase: 'question', questionIndex: 0 });
-    expect(l(25)).toMatchObject({ phase: 'feedback', questionIndex: 0 });
-    expect(l(31)).toMatchObject({ phase: 'question', questionIndex: 1, secondsLeft: 30 });
-    expect(l(61)).toMatchObject({ phase: 'feedback', questionIndex: 1 });
-    expect(l(67).phase).toBe('done');
-  });
-
-  it('falls back to the default limit for a malformed question', () => {
-    const l = mcTimeline({
-      roundStartMs: T0, nowMs: at(5), gateSeconds: 5,
-      questions: [{ timeLimitSeconds: undefined }],
-    });
-    expect(l).toMatchObject({ phase: 'question', secondsLeft: 20 });
-  });
-
-  it('stays on the gate when the round start has not arrived yet', () => {
-    // roundStartTime is briefly absent right after the host advances.
-    const l = mcTimeline({ roundStartMs: 0, nowMs: at(99), gateSeconds: 5, questions: oneQuestion });
-    expect(l).toMatchObject({ phase: 'gate', secondsLeft: 5 });
-  });
-
-  it('is done immediately for a block with no questions', () => {
-    const l = mcTimeline({ roundStartMs: T0, nowMs: at(6), gateSeconds: 5, questions: [] });
-    expect(l.phase).toBe('done');
-  });
-
-  it('is a pure function of now — two screens one second apart agree on the phase', () => {
-    const a = mcTimeline({ roundStartMs: T0, nowMs: at(12), gateSeconds: 5, questions: twoQuestions });
-    const b = mcTimeline({ roundStartMs: T0, nowMs: at(12.4), gateSeconds: 5, questions: twoQuestions });
-    expect(a.questionIndex).toBe(b.questionIndex);
-    expect(a.phase).toBe(b.phase);
-    expect(a.questionStartMs).toBe(b.questionStartMs);
-  });
-});
-
-describe('derivedMCRoundDuration', () => {
-  it('outlasts the whole block so the host never guillotines it', () => {
-    const gate = MC_GATE_SECONDS;
-    expect(derivedMCRoundDuration(oneQuestion)).toBe(gate + 20 + MC_FEEDBACK_MIN_SECONDS + MC_SLACK_SECONDS);
-    expect(derivedMCRoundDuration(twoQuestions)).toBe(
-      gate + 50 + MC_FEEDBACK_MIN_SECONDS * 2 + MC_SLACK_SECONDS,
-    );
-  });
-
-  it('accounts for the longer gate when the round carries media', () => {
-    const media = [{ kind: 'audio', src: 'a.mp3' }];
-    expect(derivedMCRoundDuration(oneQuestion, media) - derivedMCRoundDuration(oneQuestion))
-      .toBe(MC_GATE_WITH_MEDIA_SECONDS - MC_GATE_SECONDS);
-  });
-
-  it('covers the full timeline: the block is over before the round is', () => {
-    for (const questions of [oneQuestion, twoQuestions]) {
-      const duration = derivedMCRoundDuration(questions);
-      const end = mcTimeline({
-        roundStartMs: T0, nowMs: at(duration), gateSeconds: MC_GATE_SECONDS, questions,
-      });
-      expect(end.phase).toBe('done');
+  it('la correcta nunca se queda sin mostrarse: al cerrar la ventana ya esta', () => {
+    for (const e of [null, '', 'corta', 'x'.repeat(120), 'x'.repeat(400)]) {
+      expect(mcAnswerRevealed(e, 0)).toBe(true);
     }
   });
 
-  it('handles an empty block without returning a negative duration', () => {
-    expect(derivedMCRoundDuration([])).toBe(MC_GATE_SECONDS + MC_SLACK_SECONDS);
-    expect(derivedMCRoundDuration(undefined)).toBe(MC_GATE_SECONDS + MC_SLACK_SECONDS);
-  });
-});
-
-describe('mcFeedbackSeconds', () => {
-  it('se queda en el piso cuando no hay nada que leer', () => {
-    expect(mcFeedbackSeconds(undefined)).toBe(MC_FEEDBACK_MIN_SECONDS);
-    expect(mcFeedbackSeconds('')).toBe(MC_FEEDBACK_MIN_SECONDS);
-    expect(mcFeedbackSeconds('   ')).toBe(MC_FEEDBACK_MIN_SECONDS);
-    expect(mcFeedbackSeconds(null)).toBe(MC_FEEDBACK_MIN_SECONDS);
+  it('nunca abre la respuesta en el instante cero, sea cual sea la explicacion', () => {
+    for (const e of ['', 'corta', 'x'.repeat(120), 'x'.repeat(400)]) {
+      expect(mcAnswerRevealed(e, mcFeedbackSeconds(e))).toBe(false);
+    }
   });
 
-  it('crece con el largo de la explicacion', () => {
-    const corta = mcFeedbackSeconds('a'.repeat(60));
-    const larga = mcFeedbackSeconds('a'.repeat(200));
-    expect(larga).toBeGreaterThan(corta);
-    expect(corta).toBeGreaterThanOrEqual(MC_FEEDBACK_MIN_SECONDS);
-  });
-
-  it('nunca pasa del techo, por larga que sea', () => {
-    // El caso real que motivo el cambio: MGT300 clase 1 tenia explicaciones de
-    // hasta 506 caracteres y la ventana era una constante de 5 segundos.
-    expect(mcFeedbackSeconds('a'.repeat(506))).toBe(MC_FEEDBACK_MAX_SECONDS);
-    expect(mcFeedbackSeconds('a'.repeat(5000))).toBe(MC_FEEDBACK_MAX_SECONDS);
-  });
-
-  it('le da a la explicacion mas larga que cabe justo el techo', () => {
-    expect(mcFeedbackSeconds('a'.repeat(MC_EXPLANATION_MAX_CHARS))).toBe(MC_FEEDBACK_MAX_SECONDS);
-  });
-
-  it('la explicacion de 421 caracteres que nadie alcanzo a leer ahora dura el triple', () => {
-    expect(mcFeedbackSeconds('a'.repeat(421))).toBeGreaterThanOrEqual(15);
-  });
-});
-
-describe('derivedMCRoundDuration con explicaciones', () => {
-  it('suma la ventana de cada pregunta, no una constante', () => {
-    const sinExplicacion = derivedMCRoundDuration([{ timeLimitSeconds: 20 }]);
-    const conExplicacion = derivedMCRoundDuration([
-      { timeLimitSeconds: 20, explanation: 'a'.repeat(300) },
-    ]);
-    expect(conExplicacion).toBeGreaterThan(sinExplicacion);
-    expect(conExplicacion - sinExplicacion).toBe(
-      MC_FEEDBACK_MAX_SECONDS - MC_FEEDBACK_MIN_SECONDS,
-    );
+  it('un secondsLeft mayor que la ventana (reloj desfasado) no adelanta el verde', () => {
+    expect(mcAnswerRevealed(expl, total + 5)).toBe(false);
   });
 });

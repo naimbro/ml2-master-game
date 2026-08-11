@@ -16,7 +16,7 @@ import WaitingForRound from '../../components/WaitingForRound';
 import NoCopy from '../../components/NoCopy';
 import { resolveMediaSrc } from '../../lib/media';
 import { scoreMCQuestion, scoreMCBlock, MC_SCORING_LEGEND } from '../../lib/mcScoring';
-import { mcTimeline, mcGateSeconds } from '../../lib/mcTiming';
+import { mcTimeline, mcGateSeconds, mcAnswerRevealed } from '../../lib/mcTiming';
 import { mcStatsKey } from '../../lib/mcStats';
 import { modelLabel } from '../../lib/modelLabel';
 import { RichText } from '../../components/RichText';
@@ -244,6 +244,21 @@ export default function Round() {
   // closes, not when they personally clicked. Answering early locks your tile
   // and nothing else — otherwise a fast player would be a round ahead.
   const mcRevealed = timeline?.phase === 'feedback';
+  /**
+   * Segundo compas de la revelacion: la correcta ya encendida.
+   *
+   * `mcRevealed` abre el reparto de votos con las casillas todavia en neutro;
+   * esto abre el verde tres segundos despues (ver `mcAnswerRevealed`). Sale del
+   * mismo reloj compartido, asi que el proyector y todos los telefonos pasan de
+   * un compas al otro en el mismo instante.
+   *
+   * Sale de `mcQuestions` y no de `currentScenario`: este ultimo se declara mas
+   * abajo en el componente, y leerlo aca reventaria por zona muerta temporal
+   * justo en la ronda de alternativas.
+   */
+  const mcAnswerShown =
+    mcRevealed &&
+    mcAnswerRevealed(mcQuestions?.[mcCurrentQ]?.explanation, timeline?.secondsLeft ?? 0);
   const mcSelectedOption = mcAnswers[mcCurrentQ]?.selectedOptionId ?? null;
   const mcAnswered = mcAnswers[mcCurrentQ] !== undefined;
   const mcLocked = isSpectator || mcRevealed || mcAnswered || timeline?.phase !== 'question';
@@ -367,9 +382,10 @@ export default function Round() {
     });
   }, [isMC, mcQuestions, timeline, hasSubmitted, mcBlockDone]);
 
-  // MC: right/wrong reveal, once per question, when the shared clock closes it.
+  // MC: right/wrong reveal, once per question. Suena en el SEGUNDO compas, con
+  // el verde: el aplauso durante el grafico delataria la respuesta a la sala.
   useEffect(() => {
-    if (!isMC || !mcRevealed || hasSubmitted || mcBlockDone) return;
+    if (!isMC || !mcAnswerShown || hasSubmitted || mcBlockDone) return;
     if (mcRevealedRef.current === mcCurrentQ) return;
     mcRevealedRef.current = mcCurrentQ;
     if (mcAnswers[mcCurrentQ]?.correct) {
@@ -378,7 +394,7 @@ export default function Round() {
     } else {
       playBadScore();
     }
-  }, [isMC, mcRevealed, mcCurrentQ, mcAnswers, hasSubmitted, mcBlockDone]);
+  }, [isMC, mcAnswerShown, mcCurrentQ, mcAnswers, hasSubmitted, mcBlockDone]);
 
   // MC: block finished — score over the block's TOTAL questions and submit once.
   // El anfitrion que solo dirige no envia bloque: una submission suya con 0 se
@@ -748,13 +764,19 @@ export default function Round() {
                       const correctIdx = currentScenario.mcQuestions![mcCurrentQ]?.correctOptionIndex;
                       const isCorrectOption = i === correctIdx;
                       const isSelected = mcSelectedOption === opt.id;
-                      const showResult = mcRevealed;
+                      // El color sale en el SEGUNDO compas. En el primero las
+                      // casillas siguen en neutro y solo crece el reparto de
+                      // votos: si el verde ya esta puesto, nadie mira el grafico.
+                      const showResult = mcAnswerShown;
 
                       // Cuantos eligieron ESTA alternativa. La barra va sobre la
                       // misma casilla —no en un grafico aparte— porque la casilla
                       // ya trae la letra y el texto: repetirlos al lado seria
                       // leer dos veces lo mismo en la pantalla de un telefono.
-                      const nEsta = showResult ? mcStats?.byOption?.[opt.id] : undefined;
+                      // El recuento va en el PRIMER compas —`mcRevealed`, no
+                      // `showResult`—: es lo unico que se muestra mientras la
+                      // correcta sigue apagada.
+                      const nEsta = mcRevealed ? mcStats?.byOption?.[opt.id] : undefined;
                       const pctEsta = nEsta !== undefined && mcStats && mcStats.total > 0
                         ? Math.round((nEsta / mcStats.total) * 100)
                         : undefined;
@@ -775,6 +797,17 @@ export default function Round() {
                           btnClass = 'bg-surface-2 border-2 border-line opacity-60';
                           textClass = 'text-muted';
                         }
+                      } else if (mcRevealed) {
+                        // Primer compas: se cerro la pregunta y esta creciendo el
+                        // reparto de votos. Todas las casillas van en neutro y a
+                        // opacidad plena — la barra tiene que leerse en las
+                        // cuatro, y cualquier atenuacion aca ya insinuaria una
+                        // respuesta. Solo se marca la propia, que el jugador ya
+                        // sabe cual es.
+                        btnClass = isSelected
+                          ? 'bg-surface border-2 border-kahoot-blue shadow-[0_3px_0_#1368CE] ring-2 ring-kahoot-blue/30'
+                          : 'bg-surface border-2 border-line';
+                        textClass = 'text-ink';
                       } else if (mcAnswered) {
                         // Answered, reveal not due yet: confirm the pick without
                         // leaking whether it was right — the reveal is shared.
@@ -838,14 +871,19 @@ export default function Round() {
 
                           {/* La barra va pegada al borde de abajo de la casilla,
                               como en Kahoot: se lee de reojo desde el proyector y
-                              no le roba alto a la casilla en el telefono. */}
+                              no le roba alto a la casilla en el telefono.
+
+                              Crece durante el primer compas, sobre la casilla
+                              todavia en neutro. Ahi es donde tiene que leerse: una
+                              vez que la correcta se pone verde, esta barra pasa a
+                              ser un dato secundario sobre un fondo saturado. */}
                           {pctEsta !== undefined && (
                             <motion.span
                               aria-hidden="true"
                               initial={{ width: 0 }}
                               animate={{ width: `${pctEsta}%` }}
-                              transition={{ duration: 0.7, ease: 'easeOut' }}
-                              className="absolute left-0 bottom-0 h-2 bg-ink/30"
+                              transition={{ duration: 0.9, ease: 'easeOut' }}
+                              className="absolute left-0 bottom-0 h-3 bg-ink/30"
                             />
                           )}
                         </motion.button>
@@ -857,7 +895,7 @@ export default function Round() {
                       decidir si sigue o vuelve atras, y por eso se dice en
                       palabras y no solo en barras. Aparece cuando el anfitrion
                       publico el recuento; si no llego, no hay hueco. */}
-                  {mcRevealed && mcStats && mcStats.total > 0 && (() => {
+                  {mcAnswerShown && mcStats && mcStats.total > 0 && (() => {
                     const idCorrecta = currentScenario.mcQuestions?.[mcCurrentQ]
                       ?.options[currentScenario.mcQuestions[mcCurrentQ].correctOptionIndex]?.id;
                     const aciertos = idCorrecta ? mcStats.byOption[idCorrecta] ?? 0 : 0;
@@ -895,8 +933,10 @@ export default function Round() {
                     </motion.div>
                   )}
 
-                  {/* Shared reveal, once the question closes for everyone */}
-                  {mcRevealed && (
+                  {/* Shared reveal, once the question closes for everyone.
+                      Va en el segundo compas: decirle "Correcto" a alguien ya es
+                      revelar cual era la correcta. */}
+                  {mcAnswerShown && (
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}

@@ -46,7 +46,14 @@ export const MC_READ_CHARS_PER_SECOND = 18;
 export const MC_FEEDBACK_MIN_SECONDS = 6;
 /** Techo: más allá de esto el juego pierde el pulso. */
 export const MC_FEEDBACK_MAX_SECONDS = 16;
-/** Segundos de registro antes de que empiece la lectura propiamente tal. */
+/**
+ * Segundos de registro antes de que empiece la lectura propiamente tal.
+ *
+ * Es tambien, exactamente, el compas en que se muestra el reparto de votos SIN
+ * marcar todavia cual era la correcta — ver `mcAnswerRevealed`. Que las dos
+ * cosas sean el mismo numero no es coincidencia: este golpe existe justamente
+ * para que la sala registre algo antes de ponerse a leer.
+ */
 const MC_FEEDBACK_BEAT_SECONDS = 3;
 
 /**
@@ -58,6 +65,38 @@ export function mcFeedbackSeconds(explanation?: string | null): number {
   if (len === 0) return MC_FEEDBACK_MIN_SECONDS;
   const needed = MC_FEEDBACK_BEAT_SECONDS + Math.ceil(len / MC_READ_CHARS_PER_SECOND);
   return Math.min(MC_FEEDBACK_MAX_SECONDS, Math.max(MC_FEEDBACK_MIN_SECONDS, needed));
+}
+
+/**
+ * La revelación va en DOS TIEMPOS, como en Kahoot.
+ *
+ * Primero se llena el reparto de votos con las casillas en neutro: la sala ve
+ * dónde está parada y todavía nadie sabe quién acertó. Recién después se
+ * enciende la correcta. Ese segundo de suspenso es un momento colectivo, y es
+ * todo el efecto; abriendo las dos cosas a la vez el gráfico pasa desapercibido
+ * —de hecho pasó, porque la barra queda debajo de una casilla ya inundada de
+ * verde—.
+ *
+ * `false` mientras corre el primer compás, `true` desde el segundo.
+ *
+ * No toca `mcTimeline` a propósito. Se deriva de `secondsLeft` en la fase
+ * `feedback`, que ya sale del reloj compartido, así que el proyector y los
+ * treinta teléfonos cambian de compás en el mismo instante sin que haya que
+ * escribir ni leer nada nuevo en Firestore.
+ *
+ * @param secondsLeft lo que `mcTimeline` reporta en fase `feedback`.
+ */
+export function mcAnswerRevealed(
+  explanation: string | null | undefined,
+  secondsLeft: number,
+): boolean {
+  const total = mcFeedbackSeconds(explanation);
+  // Sin explicación la ventana cae al piso de 6 s: ahí el compás se recorta para
+  // no comerse la mitad de la revelación. Nunca deja al verde con menos de la
+  // mitad de la ventana.
+  const beat = Math.min(MC_FEEDBACK_BEAT_SECONDS, Math.floor(total / 2));
+  const elapsed = total - secondsLeft;
+  return elapsed >= beat;
 }
 
 /**
