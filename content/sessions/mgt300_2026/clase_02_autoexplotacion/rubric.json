@@ -1,0 +1,94 @@
+{
+  "_doc": "Rúbrica propia de clase_02_autoexplotacion. MGT300 no tiene _shared/base_rubric.json. Las cuatro rondas juzgadas son de teoría social: dos de mecanismo dentro de un texto (R2 Han, R3 Ehrenreich), una de puente entre los dos (R5) y una de aplicación a un dato chileno (R6). Las dos rondas de opción múltiple (R1, R4) se corrigen en el cliente (src/lib/mcScoring.ts) y no pasan por los jueces ni por la recalibración pareada. Los ids de las dimensiones están comprometidos con las weightFormula de config.json: no renombrarlos sin tocar las dos cosas.",
+  "sessionId": "clase_02_autoexplotacion",
+  "globalInstructions": "Evalúa SOLO lo que está escrito. No completes la respuesta con lo que el estudiante 'seguramente quiso decir'.\n\nEs la SEGUNDA CLASE del semestre de un curso de teoría social y argumentación. Lo único que leyeron de este curso es el artículo de Ines Lee de la clase pasada y, hoy mismo, una guía de lectura en papel con dos extractos: Byung-Chul Han (La sociedad del cansancio) y Barbara Ehrenreich (Smile or Die, cap. 4). La leyeron en silencio veinte minutos, justo antes de jugar, y la tienen al lado. No manejan nada más del curso.\n\nEL LARGO ES UNA SUGERENCIA, NO UNA REGLA. El enunciado dice 'con 3 o 4 líneas basta' para indicar el estándar, no para poner un techo. NO BAJES EL PUNTAJE POR PASARSE DEL LARGO. Escribir más no sube ni baja el puntaje: cuenta lo que agrega. Una respuesta de dos líneas bien puestas puede valer 100, y una de ocho también, si las ocho agregan.\n\nEstán escribiendo desde el teléfono, en tres o cuatro minutos, al final de una clase de dos horas y media. NO EXIJAS: ortografía perfecta, tildes, introducción, estructura, conectores ni vocabulario académico. Nadie tiene que decir 'sujeto de rendimiento', 'potencia negativa', 'autoexplotación' ni 'despolitización' para sacar 100: si explican la idea con sus palabras, vale exactamente igual.\n\nNUNCA PENALICES QUE OBJETEN EL ENUNCIADO O A LOS AUTORES. Si alguien escribe que Han exagera, que no nombrar a nadie es una debilidad de su diagnóstico, que Ehrenreich generaliza desde casos de los noventa, o que bajar la jornada legal sí va a servir, eso NO es evadir la pregunta: es exactamente lo que este curso enseña. Una objeción bien argumentada puede sacar puntaje alto. Lo único que se exige es que muestre haber entendido primero qué sostiene el texto.\n\nEL ERROR DE LECTURA QUE MÁS IMPORTA CAZAR es leer a Han como un texto sobre el burnout: 'hoy trabajamos demasiado y terminamos quemados'. Esa es la mitad del fenómeno y se pierde la tesis. Han sostiene que la autoexplotación es MÁS EFICAZ que la explotación por otros precisamente porque va acompañada de un sentimiento de libertad: no hay a quién desobedecer, y por eso rinde más. Quien se queda en el cansancio está describiendo el síntoma.\n\nOJO CON LAS CIFRAS. El extracto de Han no contiene una sola cifra, un solo nombre de empresa ni un solo caso. Todas las cifras del juego —las de Ehrenreich y las tres chilenas— están en el material de referencia. Si aparece una que no está ahí, la inventaron.\n\nEl juego compite y hay podio, pero no es una nota del curso. Puntúa igual con honestidad y sin inflar: un puntaje regalado le quita el puesto a otra persona.\n\nEl judgeFocus del escenario es tu prioridad absoluta y manda sobre estas instrucciones generales si hay tensión.",
+  "scoring": {
+    "scaleLevels": [100, 80, 60, 40, 20, 0],
+    "instructions": "Elige uno de los seis niveles escritos por dimensión. No inventes valores intermedios. Si la respuesta satisface un nivel solo parcialmente, baja al nivel inferior."
+  },
+  "dimensions": [
+    {
+      "id": "fidelidad_al_texto",
+      "name": "Fidelidad al texto",
+      "weight": 0.35,
+      "description": "¿Lo que le atribuye a Han o a Ehrenreich está efectivamente en la guía? Se juzga sobre todo que no le ponga a Han la tesis del burnout ni un culpable externo, y que no le atribuya a ninguno de los dos una cifra, un caso o una opinión que el material no trae. En la ronda de Chile esta dimensión pesa menos: ahí solo se verifica que no le atribuya a Han una opinión sobre la jornada legal chilena, de la que no habla.",
+      "level_100": "Todo lo que le atribuye a los textos está en los textos, incluido el matiz que contradice la lectura de titular: que la coacción se volvió más eficaz al perder emisor, no que haya más trabajo.",
+      "level_80": "Lo central es correcto, pero se le escapa un matiz que el texto sí marca.",
+      "level_60": "La idea general es correcta, pero mezcla lo que dicen los textos con una interpretación propia sin distinguir cuál es cuál.",
+      "level_40": "Contesta con su propia postura sobre el trabajo o el capitalismo cuando el enunciado pedía el argumento del texto.",
+      "level_20": "Le atribuye a Han una tesis que no sostiene: que el problema es la cantidad de trabajo, que la culpa es de las empresas o de los jefes, o una opinión sobre Chile y la jornada legal.",
+      "level_0": "Contradice algo que el texto dice de forma explícita, o inventa una cifra, un caso, una empresa o una cita que no está en la guía."
+    },
+    {
+      "id": "mecanismo",
+      "name": "Mecanismo",
+      "weight": 0.4,
+      "description": "¿Explica POR QUÉ una cosa lleva a la otra, o repite la conclusión con otras palabras? Es la dimensión que separa a quien leyó de quien hojeó. Nombrar el fenómeno ('autoexplotación', 'control social', 'manipulación') no es explicarlo: el mecanismo es el paso intermedio, qué deja de ser posible o qué se abarata cuando ocurre lo que describe.",
+      "level_100": "Cierra el paso intermedio completo —por qué la causa produce el efecto— y nombra qué se vuelve imposible, innecesario o gratuito como consecuencia.",
+      "level_80": "Nombra el mecanismo correcto pero lo deja a medio cerrar, o trae el detalle sin terminar de decir por qué se sigue.",
+      "level_60": "Repite la conclusión con otras palabras, o pone el nombre del fenómeno en lugar de su explicación.",
+      "level_40": "Da una explicación plausible pero equivocada: atribuye el efecto a una causa que el texto descarta o no menciona.",
+      "level_20": "Menciona los elementos correctos sin establecer ninguna relación entre ellos.",
+      "level_0": "No hay razonamiento: solo una afirmación suelta, un juicio moral, o algo que no responde lo que se preguntó."
+    },
+    {
+      "id": "concrecion",
+      "name": "Concreción",
+      "weight": 0.25,
+      "description": "¿Se compromete con algo específico, o dice algo que serviría igual para cualquier texto sobre el capitalismo? Se mide si trae el detalle de ESTA guía —el evento el mismo día, la palabra que cambia de signo, el tope de horas— o si escribe una crítica genérica al sistema que no necesitaba haber leído nada.",
+      "level_100": "Todo lo que dice está anclado en algo específico de la guía o del caso del enunciado: un detalle que nadie que no lo haya leído podría traer.",
+      "level_80": "Mayormente concreto, con una parte que se queda en lo general.",
+      "level_60": "Nombra algo específico pero lo desarrolla en términos genéricos, o al revés.",
+      "level_40": "Casi todo serviría igual para cualquier otro texto sobre trabajo y capitalismo sin cambiar una palabra.",
+      "level_20": "Enteramente genérico: usa las palabras de los autores como relleno, sin engancharse con nada.",
+      "level_0": "Vacío, o una sola frase que no se compromete con nada."
+    }
+  ],
+  "penalties": [
+    {
+      "id": "atribucion_falsa",
+      "description": "Atribuirle a Han la tesis de que el problema es que trabajamos demasiado, o que la culpa es de las empresas, los jefes o el sistema como emisor externo, no puede superar 40 en 'Fidelidad al texto'. Lo mismo si le atribuye a Han una posición sobre Chile o la jornada legal, de las que su texto no habla. OJO: esto NO aplica a quien critique a Han desde afuera —decir 'me parece que Han se equivoca y sí hay jefes que exigen' es una objeción legítima y puede puntuar alto—; aplica solo a quien se lo atribuye al texto como si fuera su tesis.",
+      "effect": {
+        "type": "cap",
+        "value": 40,
+        "dimensions": ["fidelidad_al_texto"]
+      }
+    },
+    {
+      "id": "nombre_en_vez_de_mecanismo",
+      "description": "Poner el nombre del fenómeno en lugar de su explicación —'porque es autoexplotación', 'porque es control social', 'para manipular a los empleados', 'fue puro cinismo'— sin decir qué se vuelve imposible o innecesario como consecuencia, no puede superar 50 en 'Mecanismo'.",
+      "effect": {
+        "type": "cap",
+        "value": 50,
+        "dimensions": ["mecanismo"]
+      }
+    },
+    {
+      "id": "critica_intercambiable",
+      "description": "Una respuesta que serviría idéntica para cualquier otro texto sobre trabajo y capitalismo, sin cambiar una palabra y sin necesitar haber leído esta guía, no puede superar 40 en 'Concreción'.",
+      "effect": {
+        "type": "cap",
+        "value": 40,
+        "dimensions": ["concrecion"]
+      }
+    }
+  ],
+  "globalPenalties": [
+    "Atribuirle a un texto algo que no dice, aunque suene razonable.",
+    "Poner el nombre del fenómeno donde iba la explicación de por qué se sigue.",
+    "Responder con una crítica al capitalismo que serviría igual sin haber leído la guía.",
+    "Inventar una cifra, un caso, una empresa o una cita para no dejar el campo vacío."
+  ],
+  "bonusIndicators": [
+    "Trae el detalle concreto de la guía que sostiene lo que afirma",
+    "Nota que la tesis es sobre eficacia, no sobre cantidad de trabajo",
+    "Cierra el mecanismo diciendo qué se vuelve imposible, innecesario o gratuito",
+    "Objeta a Han o a Ehrenreich después de haber mostrado que entendió qué sostienen"
+  ],
+  "penaltyIndicators": [
+    "Convierte a Han en un texto sobre el burnout",
+    "Se queda en el juicio moral ('qué cínicos') sin explicar el mecanismo",
+    "Usa el vocabulario de los autores como sustituto del argumento",
+    "Una crítica tan general que no necesitaba la lectura"
+  ]
+}

@@ -19,6 +19,7 @@ import { scoreMCQuestion, scoreMCBlock, MC_SCORING_LEGEND } from '../../lib/mcSc
 import { mcTimeline, mcGateSeconds } from '../../lib/mcTiming';
 import { mcStatsKey } from '../../lib/mcStats';
 import { modelLabel } from '../../lib/modelLabel';
+import { RichText } from '../../components/RichText';
 import type { MCResponse } from '../../types/game';
 
 // On a light ground the four Kahoot fills would be four shouting rectangles, so
@@ -964,7 +965,7 @@ export default function Round() {
                     Contexto
                   </h3>
                   <p className="text-ink-soft leading-relaxed whitespace-pre-wrap font-medium">
-                    {currentScenario.context ?? currentScenario.prompt}
+                    <RichText text={currentScenario.context ?? currentScenario.prompt} />
                   </p>
                   <MediaBlock media={currentScenario.media} className="mt-4" />
                 </div>
@@ -975,7 +976,7 @@ export default function Round() {
                       Pregunta
                     </h3>
                     <p className="text-ink leading-relaxed font-semibold">
-                      {currentScenario.question}
+                      <RichText text={currentScenario.question} />
                     </p>
                   </div>
                 )}

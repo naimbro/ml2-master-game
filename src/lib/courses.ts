@@ -64,6 +64,10 @@ import mgtC01Config from '../../content/sessions/mgt300_2026/clase_01_piensa_pri
 import mgtC01Scenarios from '../../content/sessions/mgt300_2026/clase_01_piensa_primero/scenarios.json';
 import mgtC01Rubric from '../../content/sessions/mgt300_2026/clase_01_piensa_primero/rubric.json';
 import mgtC01KnowledgeBase from '../../content/sessions/mgt300_2026/clase_01_piensa_primero/knowledge_base.md?raw';
+import mgtC02Config from '../../content/sessions/mgt300_2026/clase_02_autoexplotacion/config.json';
+import mgtC02Scenarios from '../../content/sessions/mgt300_2026/clase_02_autoexplotacion/scenarios.json';
+import mgtC02Rubric from '../../content/sessions/mgt300_2026/clase_02_autoexplotacion/rubric.json';
+import mgtC02KnowledgeBase from '../../content/sessions/mgt300_2026/clase_02_autoexplotacion/knowledge_base.md?raw';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyJson = any;
@@ -297,6 +301,18 @@ export const SESSIONS: SessionOption[] = [
     scenarios: mgtC01Scenarios,
     rubric: mgtC01Rubric,
     knowledgeBase: mgtC01KnowledgeBase,
+  },
+  {
+    id: 'clase_02_autoexplotacion',
+    courseId: 'mgt300_2026',
+    title: mgtC02Config.title,
+    description: mgtC02Config.description,
+    rounds: mgtC02Scenarios.length,
+    duration: Math.round(mgtC02Config.roundDurationSeconds / 60),
+    config: mgtC02Config,
+    scenarios: mgtC02Scenarios,
+    rubric: mgtC02Rubric,
+    knowledgeBase: mgtC02KnowledgeBase,
   },
 ];
 

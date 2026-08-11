@@ -1,0 +1,231 @@
+[
+  {
+    "id": "mgt_c02_r1_mas_eficaz",
+    "order": 1,
+    "title": "Más eficaz, no más triste",
+    "category": "Han",
+    "difficulty": "medium",
+    "type": "multiple_choice",
+    "ranked": true,
+    "durationSeconds": 66,
+    "conceptTags": [
+      "han_rendimiento"
+    ],
+    "context": "La frase donde se juega todo el texto de Han.",
+    "mcQuestions": [
+      {
+        "question": "Han escribe que la autoexplotación es «mucho más eficaz que la explotación por otros». ¿Por qué es MÁS eficaz?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Porque le ahorra a la empresa el costo de supervisar"
+          },
+          {
+            "id": "B",
+            "text": "Porque uno conoce sus propios límites mejor que un jefe"
+          },
+          {
+            "id": "C",
+            "text": "Porque va acompañada de un sentimiento de libertad"
+          },
+          {
+            "id": "D",
+            "text": "Porque las jornadas de trabajo se hicieron más largas"
+          }
+        ],
+        "correctOptionIndex": 2,
+        "timeLimitSeconds": 30,
+        "explanation": "«El exceso de trabajo se convierte en autoexplotación. Esta es mucho más eficaz que la explotación por otros, pues va acompañada de un sentimiento de libertad.» No es que duela más: rinde más, porque no hay a quién desobedecer."
+      }
+    ]
+  },
+  {
+    "id": "mgt_c02_r2_titular_equivocado",
+    "order": 2,
+    "title": "El titular equivocado",
+    "category": "Han",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 180,
+    "conceptTags": [
+      "han_rendimiento"
+    ],
+    "judgeFocus": "El criterio es uno solo: ¿explica por qué la desaparición del que manda AUMENTA lo que se extrae, y no solo lo que se sufre? La respuesta tiene que cerrar ese paso. Hay varias rutas que lo cierran y esta lista NO es cerrada: que al sentirse como libertad la exigencia no se registra como coacción y por eso no se resiste; que no queda nadie a quien desobedecer ni contra quién organizarse; que víctima y verdugo son la misma persona, así que la vigilancia es permanente y no le cuesta nada a nadie; que al no haber un límite externo tampoco hay un tope que negociar. Cualquier otra ruta que cierre el mismo paso vale exactamente igual. NO cuenta: repetir que «nos autoexplotamos» —ese es el nombre del fenómeno, no su explicación—; describir el cansancio, la ansiedad o las redes sociales; ni traer una causa que el texto no menciona. El enunciado le puso el titular equivocado en la boca a un tercero: la tarea es corregirlo, no repetirlo. Se pidieron 3 o 4 líneas como sugerencia: NO bajes el puntaje por pasarse.",
+    "context": "Han: «El sujeto de rendimiento está libre de un dominio externo que lo obligue a trabajar o incluso lo explote. Es dueño y soberano de sí mismo. La supresión de un dominio externo no conduce hacia la libertad; más bien hace que libertad y coacción coincidan. El exceso de trabajo y rendimiento se agudiza y se convierte en autoexplotación. Esta es mucho más eficaz que la explotación por otros, pues va acompañada de un sentimiento de libertad. El explotador es al mismo tiempo el explotado. Víctima y verdugo ya no pueden diferenciarse.»",
+    "question": "Un compañero resume el texto así: **«Han dice que hoy trabajamos demasiado y terminamos quemados».** Está a medias. Explica qué se le está escapando: **¿por qué el mismo esfuerzo rinde MÁS cuando nadie te lo ordena?** Con 3 o 4 líneas basta.",
+    "evaluationGuide": {
+      "must_hit": [
+        "Marca que la exigencia ya no viene de un dominio externo: nadie la ordena.",
+        "Explica por qué esa ausencia hace que el mismo esfuerzo RINDA MÁS, no solo que duela más."
+      ],
+      "fatal_errors": [
+        "Le atribuye a Han que el problema es la cantidad de trabajo o el número de horas.",
+        "Le atribuye a Han un culpable externo —las empresas, los jefes, el sistema como emisor—: el texto dice literalmente que el sujeto está libre de un dominio externo.",
+        "Inventa cifras, casos o nombres de empresa: el extracto de Han no contiene ninguno."
+      ],
+      "partial_credit": {
+        "libertad_sin_consecuencia": "Nombra que se siente como libertad pero no dice qué produce eso: 'Mecanismo' hasta 60.",
+        "victima_y_verdugo_suelto": "Cita que víctima y verdugo ya no se distinguen sin decir qué se sigue de ahí: 'Mecanismo' hasta 60.",
+        "solo_sintoma": "Describe bien el agotamiento y para ahí: es el titular que el enunciado pedía corregir. 'Mecanismo' hasta 40."
+      },
+      "nice_to_have": [
+        "Nota que por eso la sociedad de rendimiento produce depresivos y fracasados, y no locos y criminales.",
+        "Trae «cada cual lleva consigo su campo de trabajos forzados» y lo usa, no solo lo cita.",
+        "Objeta a Han —que sí hay jefes que exigen— después de mostrar que entendió su tesis."
+      ]
+    },
+    "idealAnswer": "Lo que se le escapa es que Han no está diciendo que el problema sea la cantidad. Cuando el que exige es un jefe, uno puede desobedecerlo, negociar o juntarse con otros: la coacción se ve y tiene tope. Cuando la exigencia viene de uno mismo se siente como libertad, así que ni siquiera se registra como algo que haya que resistir, y no hay contra quién. Por eso dice que es más eficaz, no más triste: uno se vigila gratis y sin horario, porque es prisionero y celador a la vez."
+  },
+  {
+    "id": "mgt_c02_r3_exito_1994",
+    "order": 3,
+    "title": "Éxito 1994",
+    "category": "Ehrenreich",
+    "difficulty": "hard",
+    "ranked": true,
+    "durationSeconds": 180,
+    "conceptTags": [
+      "ehrenreich_motivacion",
+      "ehrenreich_despidos"
+    ],
+    "judgeFocus": "El criterio: ¿nombra un problema concreto de la empresa y dice CÓMO el evento lo resuelve? Un juicio moral no es una respuesta. Rutas válidas, lista NO cerrada: desactivar la rabia de los quince mil antes de que se organice o contagie; sostener produciendo a los que se quedan, que son el público que de verdad importa; trasladar la causa del daño desde la empresa al propio trabajador («es culpa tuya»), con lo que el reclamo pierde destinatario; comprar un cambio de percepción porque cambiar la realidad —indemnizaciones, recontratar, una red de protección— costaba mucho más. Cualquier otra que nombre el problema y cierre el cómo vale exactamente igual. NO cuenta: «quiso levantar el ánimo» sin decir para qué le servía eso a AT&T; «fue cínico», «fue inmoral» o «los usó» como respuesta completa; ni volver a describir el evento. Que alguien objete a Ehrenreich —que da por probada una intención que no prueba— es legítimo y puede puntuar alto, siempre que primero muestre qué sostiene ella. Se pidieron 3 o 4 líneas como sugerencia: NO bajes el puntaje por pasarse.",
+    "context": "AT&T mandó a su personal de San Francisco a un multitudinario evento motivacional llamado «Éxito 1994» **el mismo día** en que la empresa anunció que despediría a quince mil trabajadores en los dos años siguientes. El mensaje del orador estelar, el motivador Zig Ziglar, fue: «Es culpa tuya; no culpes al sistema; no culpes al jefe: trabaja más duro y reza más».",
+    "question": "**¿Qué compró AT&T ese día, exactamente?** No basta con decir que fue cínico: di qué **problema concreto** le resolvía el evento a la empresa. Con 3 o 4 líneas basta.",
+    "evaluationGuide": {
+      "must_hit": [
+        "Nombra un problema concreto de AT&T, no un defecto moral de AT&T.",
+        "Dice cómo el evento lo resuelve: qué deja de pasar, o qué se vuelve innecesario o más barato."
+      ],
+      "fatal_errors": [
+        "Sostiene, como lectura del capítulo, que AT&T buscaba genuinamente ayudar a los despedidos y le salió mal. El texto dice lo contrario: «esto es exactamente lo que las corporaciones le estaban pagando a la industria de la motivación por hacer». Objetar esa tesis desde afuera NO es un error y no cae acá.",
+        "Inventa cifras, fechas o declaraciones de AT&T que no están en la guía."
+      ],
+      "partial_credit": {
+        "solo_juicio_moral": "Dice que fue cínico o manipulador y nada más: 'Mecanismo' hasta 50.",
+        "moral_sin_publico": "Habla de «levantar la moral» sin decir a quién le servía sostenerla ni para qué: 'Mecanismo' hasta 60.",
+        "reputacion_sin_paso": "Dice que fue para cuidar la imagen sin explicar frente a quién ni qué evitaba: 'Mecanismo' hasta 60."
+      },
+      "nice_to_have": [
+        "Distingue a los despedidos de los sobrevivientes y dice cuál de los dos era el público que importaba.",
+        "Conecta con que los despidos se anunciaban de golpe para que las quejas no contagiaran a los que se quedaban.",
+        "Nota que la frase de Ziglar hace el trabajo entero: mueve la causa desde el sistema hacia la persona."
+      ]
+    },
+    "idealAnswer": "Compró que nadie le echara la culpa a la empresa. Quince mil despidos producen rabia, y la rabia se junta y se contagia a los que se quedan, que son justamente los que tienen que seguir produciendo. El evento no arregla nada de eso, pero cambia dónde queda puesta la causa: si es culpa tuya por no trabajar más duro ni rezar más, el reclamo se queda sin destinatario y no hay contra quién organizarse. Cambiarles la percepción le salía mucho más barato que cambiarles la situación."
+  },
+  {
+    "id": "mgt_c02_r4_productividad_o_accion",
+    "order": 4,
+    "title": "El estudio que no importó",
+    "category": "Ehrenreich",
+    "difficulty": "hard",
+    "type": "multiple_choice",
+    "ranked": true,
+    "durationSeconds": 76,
+    "conceptTags": [
+      "ehrenreich_despidos"
+    ],
+    "context": "Lee las cuatro con calma: se parecen a propósito.",
+    "mcQuestions": [
+      {
+        "question": "Un estudio de la American Management Association, de mediados de los noventa, midió qué hacían los despidos masivos. Según Ehrenreich, ¿qué pasaba?",
+        "options": [
+          {
+            "id": "A",
+            "text": "No subían la productividad, pero sí el precio de la acción"
+          },
+          {
+            "id": "B",
+            "text": "Subían la productividad, pero no el precio de la acción"
+          },
+          {
+            "id": "C",
+            "text": "Subían la productividad y también el precio de la acción"
+          },
+          {
+            "id": "D",
+            "text": "No subían la productividad ni tampoco el precio de la acción"
+          }
+        ],
+        "correctOptionIndex": 0,
+        "timeLimitSeconds": 40,
+        "explanation": "El estudio «no encontró ningún impacto positivo sobre la productividad. Pero daba casi lo mismo, porque los despidos claramente elevaban el precio de la acción». No mejoraban la empresa: le pagaban al accionista. Por eso siguieron."
+      }
+    ]
+  },
+  {
+    "id": "mgt_c02_r5_negatividad",
+    "order": 5,
+    "title": "La misma palabra, al revés",
+    "category": "Los dos textos",
+    "difficulty": "hard",
+    "ranked": true,
+    "durationSeconds": 240,
+    "conceptTags": [
+      "puentes",
+      "han_potencia_negativa",
+      "ehrenreich_motivacion"
+    ],
+    "judgeFocus": "El criterio: ¿dice qué deja de ser posible, o qué se vuelve innecesario, cuando objetar pasa a ser un rasgo de carácter en vez de un derecho? Rutas válidas, lista NO cerrada: la objeción queda descalificada antes de que se discuta su contenido, o sea que no se responde, se diagnostica; la empresa se ahorra la negociación entera y el conflicto colectivo; el costo de vigilar se traslada al propio trabajador, que ahora se vigila solo; reclamar se vuelve causal de despido, así que callarse pasa a ser lo racional. Cualquier otra que cierre el mismo paso vale exactamente igual. NO cuenta: «para manipular», «para lavarles el cerebro» o «para que trabajen más» sin decir cómo; ni parafrasear las dos definiciones sin sacar nada de ellas —la comparación ya está hecha en el enunciado, lo que se pide es la consecuencia. Se pidieron 3 o 4 líneas como sugerencia: NO bajes el puntaje por pasarse.",
+    "context": "Para Han, la **potencia negativa** —la capacidad de no hacer, de decir No— es la condición misma de la libertad: sin ella «se caería en una hiperactividad mortal».\n\nEn Amway, a los vendedores se les enseña que «Dios es Positivo y el Diablo es Negativo», y que «negarse a comprar una cinta cuando la recomienda tu línea superior es Negativo».\n\nHan y Ehrenreich nunca se leyeron.",
+    "question": "La misma palabra significa lo contrario en cada texto: para uno es la libertad, para el otro es un defecto de carácter. Explica **qué gana una empresa** cuando logra dar vuelta ese significado. Con 3 o 4 líneas basta.",
+    "evaluationGuide": {
+      "must_hit": [
+        "Nombra una consecuencia concreta de dar vuelta el significado, no solo que las dos definiciones son opuestas.",
+        "Dice a favor de quién opera esa consecuencia y por qué."
+      ],
+      "fatal_errors": [
+        "Invierte a Han: le atribuye que la potencia negativa es pasividad, desmotivación o un defecto. Para él es la condición de la libertad.",
+        "Inventa otro caso, otra empresa u otra cita para sostener el punto."
+      ],
+      "partial_credit": {
+        "solo_parafrasea": "Repite las dos definiciones con otras palabras sin sacar la consecuencia: 'Mecanismo' hasta 60.",
+        "manipulacion_generica": "Se queda en «para manipular» o «es control social» sin el paso intermedio: 'Mecanismo' hasta 50.",
+        "consecuencia_sin_beneficiario": "Nombra la consecuencia pero no dice qué se ahorra o qué gana la empresa con ella: 'Mecanismo' hasta 60."
+      },
+      "nice_to_have": [
+        "Nombra que así se produce lo que Han llama explotación sin dominio: la coacción funciona sin que nadie ordene nada.",
+        "Nota que los seminarios de Amway los paga de su bolsillo el propio vendedor.",
+        "Objeta el puente: que la coincidencia de palabra puede ser casual, porque los dos autores no se leyeron."
+      ]
+    },
+    "idealAnswer": "Gana no tener que discutir. Si decir que no es un derecho, la empresa tiene que responder el contenido del reclamo: por qué esa meta, por qué esa cinta, por qué ese despido. Si decir que no pasa a ser un defecto tuyo, el reclamo ya no se responde, se diagnostica: el problema es tu actitud, no lo que dijiste. Con eso se ahorra la negociación completa, y de paso el empleado empieza a vigilarse solo para no parecer negativo, que es justo la explotación sin dominio de Han."
+  },
+  {
+    "id": "mgt_c02_r6_42_horas",
+    "order": 6,
+    "title": "42 horas",
+    "category": "Chile",
+    "difficulty": "hard",
+    "ranked": true,
+    "durationSeconds": 180,
+    "conceptTags": [
+      "chile_2026",
+      "han_rendimiento"
+    ],
+    "judgeFocus": "El criterio: ¿usa la tesis de Han, y no una intuición, para decir qué alcanza y qué no alcanza una ley de jornada? La distinción que importa es que la jornada legal regula un dominio EXTERNO —cuántas horas puede exigirte un empleador— y la tesis de Han es que la exigencia ya no viene de ahí. Rutas válidas, lista NO cerrada: el que se exige a sí mismo llena con más rendimiento propio las horas que la ley le libera; el tope legal no toca lo que pasa dentro de la persona; la coacción funciona «sin dominio», así que un límite externo no la alcanza; la licencia por salud mental es el momento en que el sujeto «ya no puede poder más», y eso no depende del reloj legal. LA RESPUESTA CONTRARIA VALE EXACTAMENTE IGUAL: quien argumente que la jornada SÍ va a mover la cifra —porque Han exagera la desaparición del dominio externo, porque menos horas legales son menos horas totales, porque hay trabajos donde el jefe sí manda— puntúa igual de alto si lo sostiene con el mecanismo del texto y no con una opinión suelta. NO cuenta: repetir las cifras del enunciado; decir «porque el sistema es así»; ni afirmar que Han dice algo sobre Chile o sobre jornadas legales, de lo que su texto no habla. Se pidieron 3 o 4 líneas como sugerencia: NO bajes el puntaje por pasarse.",
+    "context": "En Chile, en 2025, los trastornos mentales y del comportamiento fueron la **primera causa de licencia médica**: 30,9% del total, por sobre los musculoesqueléticos (17,5%) y las enfermedades respiratorias (14,3%).\n\nEn paralelo, la jornada legal semanal bajó de 45 a 44 horas en abril de 2024 y a **42 horas en abril de 2026**, camino a 40 en 2028.",
+    "question": "Con Han en la mano: **¿por qué bajar la jornada legal podría no mover esa primera cifra?** Si crees que sí la va a mover, dilo y defiéndelo con el texto. Con 3 o 4 líneas basta.",
+    "evaluationGuide": {
+      "must_hit": [
+        "Distingue la exigencia externa que la ley regula de la exigencia que Han describe.",
+        "Dice qué pasa con las horas liberadas, o por qué el mecanismo del texto sobrevive —o no— al tope legal."
+      ],
+      "fatal_errors": [
+        "Le atribuye a Han una posición sobre Chile, sobre la Ley 21.561 o sobre las jornadas legales: su texto no las menciona y esto es una aplicación, no una cita.",
+        "Usa cifras chilenas distintas de las tres del enunciado, o las cambia."
+      ],
+      "partial_credit": {
+        "repite_cifras": "Recita los porcentajes del enunciado sin usarlos para nada: 'Concreción' hasta 40.",
+        "autoexigencia_sin_paso": "Dice «igual uno se sigue autoexigiendo» sin explicar por qué la ley no alcanza eso: 'Mecanismo' hasta 60.",
+        "opinion_sin_texto": "Argumenta que sí o que no va a servir, pero desde el sentido común y sin ningún mecanismo del texto: 'Mecanismo' hasta 40."
+      },
+      "nice_to_have": [
+        "Nombra con qué se llenan las horas liberadas y lo hace concreto.",
+        "Conecta la primera causa de licencia con el momento en que el sujeto de rendimiento «ya no puede poder más».",
+        "Marca el límite de la aplicación: que Han no habla de Chile y que esto es una extrapolación del lector."
+      ]
+    },
+    "idealAnswer": "Porque la ley le pone tope a algo que, según Han, ya casi no es el problema. Una jornada legal regula cuántas horas te puede exigir un empleador, y su tesis es que la exigencia dejó de venir del empleador: viene de uno mismo, y por eso es más eficaz. Si el sujeto se exige solo, las dos horas que la ley le libera no quedan vacías: se llenan con el magíster, el emprendimiento o el currículum, porque nada es imposible. El tope quedó puesto afuera y la coacción está adentro."
+  }
+]

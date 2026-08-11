@@ -1,0 +1,46 @@
+{
+  "sessionId": "clase_02_autoexplotacion",
+  "courseId": "mgt300_2026",
+  "title": "Clase 2: La autoexplotación en el capitalismo tardío",
+  "description": "6 rondas (~17 min) sobre la guía de lectura que el curso lee en papel y en silencio antes de jugar: Byung-Chul Han por dentro y Barbara Ehrenreich por fuera. Cuatro rondas abiertas y dos de opción múltiple. Las seis compiten. No es nota.",
+  "date": "2026-08-11",
+  "roundCount": 6,
+  "roundDurationSeconds": 180,
+  "bufferSeconds": 45,
+  "conceptTags": [
+    "han_rendimiento",
+    "han_potencia_negativa",
+    "ehrenreich_motivacion",
+    "ehrenreich_despidos",
+    "puentes",
+    "chile_2026"
+  ],
+  "judges": [
+    {
+      "judgeId": "generic_specialist",
+      "weight": 0.35
+    },
+    {
+      "judgeId": "generic_praxis",
+      "weight": 0.35
+    },
+    {
+      "judgeId": "generic_teacher",
+      "weight": 0.3
+    }
+  ],
+  "judgeConfig": {
+    "generic_specialist": {
+      "sessionLens": "Tu lente es el TEXTO: si lo que el estudiante afirma está efectivamente en la guía de lectura y si lo reconstruye sin deformarlo. Tienes los dos extractos resumidos con sus citas en el material de referencia; úsalo para verificar, no para exigir que citen. El error que más te importa es leer a Han como un texto sobre el burnout: su tesis no es que trabajemos demasiado, es que la coacción se volvió MÁS eficaz al dejar de tener emisor. Ojo con las cifras: Han no da ninguna, y las de Ehrenreich y las chilenas están todas en el material — si aparece una que no está ahí, la inventaron. Es la segunda clase del semestre: no exijas vocabulario del curso ni las palabras de los autores.",
+      "weightFormula": "score = 0.55 * fidelidad_al_texto + 0.30 * mecanismo + 0.15 * concrecion"
+    },
+    "generic_praxis": {
+      "sessionLens": "Tu única pregunta es POR QUÉ. Casi cualquiera puede repetir la conclusión de estos dos textos; lo que separa a quien leyó de quien hojeó es poder decir por qué se sigue. En la ronda de AT&T no aceptes 'fue cínico': eso es un juicio moral, no un mecanismo — la respuesta es qué problema concreto le resolvía el evento a la empresa. En la ronda de la palabra 'negativo' no aceptes 'para manipular a los empleados': pide el paso intermedio, qué deja de poder discutirse cuando objetar pasa a ser un rasgo de carácter. Premia a quien cierra la cadena completa y nombra quién gana en cada eslabón.",
+      "weightFormula": "score = 0.25 * fidelidad_al_texto + 0.45 * mecanismo + 0.30 * concrecion"
+    },
+    "generic_teacher": {
+      "sessionLens": "Es la segunda clase del semestre y estas rondas SÍ entran al ranking, así que puntúa con honestidad y sin inflar: un puntaje regalado le quita el puesto a otra persona. El juego no es nota. Evalúa si la persona leyó los dos textos de verdad o si está contestando desde el sentido común sobre el estrés laboral y el 'capitalismo malo'. En tu feedback escribe en primera persona e incluye un 'yo habría...' concreto a ESTA respuesta. Si alguien discute a Han o a Ehrenreich —que Han no nombre a nadie, que Ehrenreich generalice desde casos de los noventa, que bajar la jornada sí sirve—, eso no es un problema: es exactamente lo que este curso enseña, siempre que muestre primero que entendió qué sostiene el texto.",
+      "weightFormula": "score = 0.40 * fidelidad_al_texto + 0.35 * mecanismo + 0.25 * concrecion"
+    }
+  }
+}

@@ -1,5 +1,6 @@
 import { CheckCircle, Zap } from 'lucide-react';
 import MediaBlock from './MediaBlock';
+import { RichText } from './RichText';
 import { resolveMediaSrc } from '../lib/media';
 import { MC_SCORING_LEGEND } from '../lib/mcScoring';
 import type { MediaAsset, MCQuestion, MCOption } from '../types/game';
@@ -129,7 +130,9 @@ export default function QuestionPreview({ scenario }: { scenario: PreviewScenari
       <div>
         <h4 className="text-[10px] font-bold text-muted uppercase tracking-widest mb-1">Contexto</h4>
         <p className="text-ink-soft text-sm leading-relaxed whitespace-pre-wrap font-medium">
-          {scenario.context || scenario.prompt || <em className="text-muted">(sin escenario)</em>}
+          {scenario.context || scenario.prompt
+            ? <RichText text={scenario.context || scenario.prompt} />
+            : <em className="text-muted">(sin escenario)</em>}
         </p>
       </div>
 
@@ -138,7 +141,7 @@ export default function QuestionPreview({ scenario }: { scenario: PreviewScenari
       {scenario.question && (
         <div className="p-3 bg-blue-50 border-2 border-blue-200 rounded-xl">
           <h4 className="text-[10px] font-bold text-blue-700 uppercase tracking-widest mb-1">Pregunta</h4>
-          <p className="text-ink text-sm leading-relaxed font-semibold">{scenario.question}</p>
+          <p className="text-ink text-sm leading-relaxed font-semibold"><RichText text={scenario.question} /></p>
         </div>
       )}
 
