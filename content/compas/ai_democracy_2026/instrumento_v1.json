@@ -1,0 +1,597 @@
+{
+  "instrumentId": "ai_democracy_2026_compas_v1",
+  "courseId": "ai_democracy_2026",
+  "version": 1,
+  "title": "Compás IA y Democracia",
+  "subtitle": "¿Dónde estás tú, y dónde está el curso?",
+  "_proposito": "Instrumento de opinion, no de conocimiento. No tiene respuestas correctas, no otorga puntaje y no alimenta el ranking del curso. Si un alumno sospecha que alguna alternativa suma, deja de responder lo que piensa y la medicion de fin de semestre queda arruinada sin que nadie lo note.",
+  "axes": {
+    "x": {
+      "id": "magnitud",
+      "label": "Magnitud",
+      "min": -10,
+      "max": 10,
+      "minLabel": "nada nuevo",
+      "maxLabel": "cambio de régimen",
+      "pregunta": "¿Cuánto altera la IA la estructura del poder político?"
+    },
+    "y": {
+      "id": "direccion",
+      "label": "Dirección",
+      "min": -10,
+      "max": 10,
+      "minLabel": "concentra poder · erosiona la democracia",
+      "maxLabel": "distribuye poder · fortalece la democracia",
+      "pregunta": "¿Hacia dónde la empuja?"
+    }
+  },
+  "scoring": {
+    "method": "promedio_de_respondidas",
+    "skippable": true,
+    "ranked": false,
+    "scored": false,
+    "nota": "La posicion es el promedio de los vectores elegidos. Saltarse un item no penaliza: solo cuenta lo respondido."
+  },
+  "aplicaciones": [
+    {
+      "n": 1,
+      "semana": 3,
+      "fecha": "2026-08-20",
+      "hito": "tras el backlash",
+      "proposito": "linea base"
+    },
+    {
+      "n": 2,
+      "semana": 7,
+      "fecha": "2026-09-24",
+      "hito": "tras la unidad de gobernanza",
+      "proposito": "medio semestre",
+      "nota": "Corrido al jueves de la Semana 7 y no a la Semana 8, que es la Prueba I. Medir opiniones el dia de una prueba calificada contamina las dos cosas."
+    },
+    {
+      "n": 3,
+      "semana": 15,
+      "fecha": "2026-11-19",
+      "hito": "Taller integrador",
+      "proposito": "medicion final y comparacion con la linea base"
+    }
+  ],
+  "items": [
+    {
+      "id": "c01_backlash",
+      "order": 1,
+      "question": "Mucha gente está enojada con la IA. ¿De qué es señal ese enojo?",
+      "discrimina": "Separa a quien cree que el backlash es viejo de quien lo lee como aviso temprano.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Nada nuevo. Cada tecnología tuvo su pánico y este también se va a pasar.",
+          "vector": {
+            "magnitud": -7,
+            "direccion": 1
+          },
+          "anchor": "Norris, «The Growth of Critical Citizens?» · «Cultural Backlash» (S2)"
+        },
+        {
+          "id": "B",
+          "text": "La gente entendió antes que las élites que esto le va a costar el trabajo.",
+          "vector": {
+            "magnitud": 6,
+            "direccion": -6
+          },
+          "anchor": "«Mass Hysteria. Thousands of Jobs Lost» (S3)"
+        },
+        {
+          "id": "C",
+          "text": "Un malestar más viejo que la IA. La IA es el pretexto, no la causa.",
+          "vector": {
+            "magnitud": -3,
+            "direccion": -2
+          },
+          "anchor": "«Cultural Backlash and the Rise of Populism» (S2)"
+        },
+        {
+          "id": "D",
+          "text": "Un problema real de gobernanza: a nadie le preguntaron, y reclaman con razón.",
+          "vector": {
+            "magnitud": 3,
+            "direccion": -3
+          },
+          "anchor": "«The AI backlash is only getting started» (S3)"
+        },
+        {
+          "id": "E",
+          "text": "Miedo mal dirigido: donde se ha medido aparecen más oportunidades que despidos.",
+          "vector": {
+            "magnitud": -2,
+            "direccion": 6
+          },
+          "anchor": "«IA Generativa: oportunidades para el futuro del trabajo en Chile» (S3)"
+        }
+      ]
+    },
+    {
+      "id": "c02_trabajo",
+      "order": 2,
+      "question": "¿Qué le va a pasar al trabajo?",
+      "discrimina": "El ítem que más separa magnitud: en empleo el desacuerdo es de escala, no de valor.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Poco. Se automatizan tareas, aparecen otras. La rotación de siempre.",
+          "vector": {
+            "magnitud": -6,
+            "direccion": 1
+          },
+          "anchor": "«Seis claves para saber si su empleo está amenazado por la IA» (S3)"
+        },
+        {
+          "id": "B",
+          "text": "Los que entran ahora al mercado laboral pagan el costo, y eso deja cicatriz.",
+          "vector": {
+            "magnitud": 5,
+            "direccion": -7
+          },
+          "anchor": "«A Job Market Leaving Young Graduates Behind Could Scar Them For Years» (S3)"
+        },
+        {
+          "id": "C",
+          "text": "Desplazamiento masivo y la riqueza concentrada en los dueños de los modelos.",
+          "vector": {
+            "magnitud": 8,
+            "direccion": -8
+          },
+          "anchor": "«Mass Hysteria» (S3) · «Five men control AI» (S5)"
+        },
+        {
+          "id": "D",
+          "text": "En Chile, más complemento que reemplazo: es lo que muestran los estudios locales.",
+          "vector": {
+            "magnitud": 3,
+            "direccion": 6
+          },
+          "anchor": "«IA Generativa: oportunidades para el futuro del trabajo en Chile» (S3)"
+        },
+        {
+          "id": "E",
+          "text": "Se acaba la necesidad de la mayor parte del trabajo humano. Lo que viene después es la pregunta.",
+          "vector": {
+            "magnitud": 10,
+            "direccion": 0
+          },
+          "anchor": "«How AI Will Affect the Economy» (S3) · pregunta motivadora S5"
+        }
+      ]
+    },
+    {
+      "id": "c03_quien_decide",
+      "order": 3,
+      "question": "Hoy, ¿quién decide de verdad lo que la IA puede hacer?",
+      "discrimina": "Eje de dirección casi puro: mismo diagnóstico de magnitud, lecturas opuestas de quién gana.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Un puñado de empresas, y no hay nada en el horizonte que lo cambie.",
+          "vector": {
+            "magnitud": 7,
+            "direccion": -8
+          },
+          "anchor": "«Five men control AI. Who should control them?» (S5)"
+        },
+        {
+          "id": "B",
+          "text": "Los Estados, cuando se decidan a usar las potestades que ya tienen.",
+          "vector": {
+            "magnitud": 4,
+            "direccion": 1
+          },
+          "anchor": "Boletín 16821-19 · Política Nacional de IA (S7)"
+        },
+        {
+          "id": "C",
+          "text": "Nadie en particular. Es un sistema sin timón, y por eso inquieta.",
+          "vector": {
+            "magnitud": 6,
+            "direccion": -4
+          },
+          "anchor": "«Warning Shots» (S5)"
+        },
+        {
+          "id": "D",
+          "text": "Los ingenieros que las construyen, que no le rinden cuentas a nadie.",
+          "vector": {
+            "magnitud": 5,
+            "direccion": -6
+          },
+          "anchor": "«An interview with Elon Musk» (S5)"
+        },
+        {
+          "id": "E",
+          "text": "Menos concentrado de lo que parece: hay código abierto y competencia entre potencias.",
+          "vector": {
+            "magnitud": 2,
+            "direccion": 4
+          },
+          "anchor": "«China is having another AI moment» · «When China’s open-source AI is a trap» (S12)"
+        }
+      ]
+    },
+    {
+      "id": "c04_esfera_publica",
+      "order": 4,
+      "question": "¿Qué le está haciendo la IA a la conversación pública?",
+      "discrimina": "Discrimina entre «esto ya lo hicieron las redes» y «esto es de otro orden».",
+      "options": [
+        {
+          "id": "A",
+          "text": "Nada que las redes sociales no hubieran hecho ya.",
+          "vector": {
+            "magnitud": -5,
+            "direccion": -1
+          },
+          "anchor": "«Is Fake News Destroying the Public Sphere?» (S6)"
+        },
+        {
+          "id": "B",
+          "text": "La llena de contenido sintético hasta que deja de haber piso común.",
+          "vector": {
+            "magnitud": 7,
+            "direccion": -8
+          },
+          "anchor": "«Is Fake News Destroying the Public Sphere?» (S6)"
+        },
+        {
+          "id": "C",
+          "text": "Nos deja en trance: no es que nos mientan, es que dejamos de querer verificar.",
+          "vector": {
+            "magnitud": 6,
+            "direccion": -6
+          },
+          "anchor": "«Hipnocracia: vivir en el trance de la IA» (S6)"
+        },
+        {
+          "id": "D",
+          "text": "Mejora el acceso: nunca fue tan barato informarse y contrastar versiones.",
+          "vector": {
+            "magnitud": 4,
+            "direccion": 6
+          },
+          "anchor": "ANCLA DEBIL - ningun texto del programa defiende esta posicion con fuerza"
+        },
+        {
+          "id": "E",
+          "text": "Depende de las plataformas, no de la IA. Es un problema de reglas.",
+          "vector": {
+            "magnitud": 2,
+            "direccion": 0
+          },
+          "anchor": "«Truth, Deliberative Democracy, and the Virtues of Accuracy» (S6)"
+        }
+      ]
+    },
+    {
+      "id": "c05_estado",
+      "order": 5,
+      "question": "El Estado usando IA: ¿qué es lo primero que se te viene a la cabeza?",
+      "discrimina": "El ítem del Vigilante: donde el curso tiene más material y donde más se polariza.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Vigilancia. La capacidad de observar a la población sin contrapesos.",
+          "vector": {
+            "magnitud": 7,
+            "direccion": -8
+          },
+          "anchor": "«Homeland Security Wants Social Media Sites to Expose Anti-ICE Accounts» (S10)"
+        },
+        {
+          "id": "B",
+          "text": "Trámites más rápidos. La mayor parte del uso estatal es aburrido y útil.",
+          "vector": {
+            "magnitud": 1,
+            "direccion": 5
+          },
+          "anchor": "«Puentes entre humanos y máquinas: ética, diversidad y empatía» (S10)"
+        },
+        {
+          "id": "C",
+          "text": "Decisiones automáticas sin nadie a quien reclamarle.",
+          "vector": {
+            "magnitud": 6,
+            "direccion": -7
+          },
+          "anchor": "«The End of Accountability? Matt Mahmoudi on AI and War» (S10)"
+        },
+        {
+          "id": "D",
+          "text": "Un Estado por fin capaz de fiscalizar a los que hoy no fiscaliza.",
+          "vector": {
+            "magnitud": 4,
+            "direccion": 6
+          },
+          "anchor": "«White House Approves $9 Billion for Spy Agencies to Catch Up on A.I.» (S10), leído al revés"
+        },
+        {
+          "id": "E",
+          "text": "En Chile todavía no hay capacidad estatal para nada de eso.",
+          "vector": {
+            "magnitud": -6,
+            "direccion": 0
+          },
+          "anchor": "ANCLA DEBIL - ningun texto del programa defiende esta posicion con fuerza"
+        }
+      ]
+    },
+    {
+      "id": "c06_regulacion",
+      "order": 6,
+      "question": "¿Qué debería hacer el Estado chileno con la IA?",
+      "discrimina": "Saca a la superficie el tercer eje —quién tiene el timón— sin ponerlo como eje.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Nada por ahora. Regular lo que todavía no entendemos sale peor que no regular.",
+          "vector": {
+            "magnitud": -4,
+            "direccion": 2
+          },
+          "anchor": "«A Framework for Frontier AI and the Dawning of a New Age» (S7)"
+        },
+        {
+          "id": "B",
+          "text": "Regular fuerte y ya. Hay proyectos en el Congreso justamente para eso.",
+          "vector": {
+            "magnitud": 5,
+            "direccion": 2
+          },
+          "anchor": "Boletín 16821-19 «Regula los sistemas de inteligencia artificial» (S7)"
+        },
+        {
+          "id": "C",
+          "text": "Prohibir o restringir los usos de mayor riesgo hasta entender qué tenemos.",
+          "vector": {
+            "magnitud": 7,
+            "direccion": -2
+          },
+          "anchor": "«An AI disaster is getting ever closer» (S10)"
+        },
+        {
+          "id": "D",
+          "text": "Da lo mismo lo que haga Chile. Esto se decide en Washington y en Pekín.",
+          "vector": {
+            "magnitud": 6,
+            "direccion": -5
+          },
+          "anchor": "«AI has granted America vast new power» (S12)"
+        },
+        {
+          "id": "E",
+          "text": "Lo que importa no es la ley sino quién la escribe. El riesgo es la captura.",
+          "vector": {
+            "magnitud": 4,
+            "direccion": -4
+          },
+          "anchor": "«Consulta experta: Proyecto de ley sobre sistemas de Inteligencia Artificial» (S7)"
+        }
+      ]
+    },
+    {
+      "id": "c07_elecciones_2031",
+      "order": 7,
+      "question": "Es 2031 y hubo elecciones en Chile. ¿Qué pasó?",
+      "discrimina": "Proyecta a futuro, que es donde la gente se sincera más que en el diagnóstico presente.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Lo mismo de siempre, con más spam.",
+          "vector": {
+            "magnitud": -6,
+            "direccion": -1
+          },
+          "anchor": "«AI, Americans and pessimism» (S3)"
+        },
+        {
+          "id": "B",
+          "text": "Campañas sintéticas y microdirigidas: el votante dejó de ser interlocutor.",
+          "vector": {
+            "magnitud": 7,
+            "direccion": -8
+          },
+          "anchor": "pregunta motivadora S3 · «Hipnocracia» (S6)"
+        },
+        {
+          "id": "C",
+          "text": "Aparecieron herramientas que ayudan a deliberar y la conversación mejoró.",
+          "vector": {
+            "magnitud": 6,
+            "direccion": 7
+          },
+          "anchor": "«LLMs as agents for augmented democracy» (S14)"
+        },
+        {
+          "id": "D",
+          "text": "Los candidatos usaron IA como usan las encuestas: una herramienta más.",
+          "vector": {
+            "magnitud": 1,
+            "direccion": 0
+          },
+          "anchor": "«¿IA para reemplazar a políticos?» (S14)"
+        },
+        {
+          "id": "E",
+          "text": "Pasó algo que hoy todavía no sabemos nombrar.",
+          "vector": {
+            "magnitud": 8,
+            "direccion": 0
+          },
+          "anchor": "«¿Sobrevivirá la democracia a la inteligencia artificial?» (S14)"
+        }
+      ]
+    },
+    {
+      "id": "c08_prediccion",
+      "order": 8,
+      "question": "Si una IA pudiera predecir con precisión lo que opinas, ¿habría que seguir preguntándote?",
+      "discrimina": "Es la pregunta motivadora de la Semana 3, tal cual. Separa a quien valora el resultado de quien valora el procedimiento.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Sí, y la pregunta ofende: el punto de votar no es acertar, es que me pregunten.",
+          "vector": {
+            "magnitud": 5,
+            "direccion": -5
+          },
+          "anchor": "pregunta motivadora S3 · «¿IA para reemplazar a políticos?» (S14)"
+        },
+        {
+          "id": "B",
+          "text": "Sí, porque la predicción va a fallar justo con los que menos se parecen al promedio.",
+          "vector": {
+            "magnitud": 4,
+            "direccion": -6
+          },
+          "anchor": "«Puentes entre humanos y máquinas: ética, diversidad y empatía» (S10)"
+        },
+        {
+          "id": "C",
+          "text": "No necesariamente. Si representa bien, es participación para quien hoy no participa.",
+          "vector": {
+            "magnitud": 7,
+            "direccion": 7
+          },
+          "anchor": "«LLMs as agents for augmented democracy» (S14)"
+        },
+        {
+          "id": "D",
+          "text": "Es una fantasía técnica. Eso no se puede predecir.",
+          "vector": {
+            "magnitud": -7,
+            "direccion": 1
+          },
+          "anchor": "«A social network for AI agents is full of introspection—and threats» (S14)"
+        },
+        {
+          "id": "E",
+          "text": "Ya pasa: las encuestas y el marketing político hacen eso hace décadas.",
+          "vector": {
+            "magnitud": -4,
+            "direccion": -3
+          },
+          "anchor": "Norris, «The Growth of Critical Citizens?» (S2)"
+        }
+      ]
+    },
+    {
+      "id": "c09_timon",
+      "order": 9,
+      "question": "¿Qué decisiones sobre IA deberían quedar en manos de empresas, Estados, organismos internacionales o ciudadanía?",
+      "discrimina": "Una de las cinco preguntas del Taller integrador (S15). Mide el tercer eje —quién tiene el timón— y es la que desempata entre El Vigilante y La Oligarquía.",
+      "esItemDeTimon": true,
+      "options": [
+        {
+          "id": "A",
+          "text": "De las empresas. Son las que entienden la tecnología; el Estado siempre llega tarde.",
+          "vector": {
+            "magnitud": 1,
+            "direccion": 3
+          },
+          "anchor": "«A Framework for Frontier AI and the Dawning of a New Age» (S7)",
+          "timon": "empresas"
+        },
+        {
+          "id": "B",
+          "text": "Del Estado, con potestades vinculantes. Para eso existe.",
+          "vector": {
+            "magnitud": 5,
+            "direccion": 2
+          },
+          "anchor": "Boletín 16821-19 (S7) · Política Nacional de IA",
+          "timon": "estado"
+        },
+        {
+          "id": "C",
+          "text": "De organismos internacionales. Un país solo no puede con esto.",
+          "vector": {
+            "magnitud": 6,
+            "direccion": -1
+          },
+          "anchor": "«Artificial intelligence revives a Cold War-style dilemma» (S12)",
+          "timon": "internacional"
+        },
+        {
+          "id": "D",
+          "text": "De la ciudadanía, con mecanismos deliberativos reales.",
+          "vector": {
+            "magnitud": 6,
+            "direccion": 7
+          },
+          "anchor": "«LLMs as agents for augmented democracy» (S14)",
+          "timon": "ciudadania"
+        },
+        {
+          "id": "E",
+          "text": "La pregunta es ingenua: ya lo decidieron cinco empresas y nadie las eligió.",
+          "vector": {
+            "magnitud": 7,
+            "direccion": -8
+          },
+          "anchor": "«Five men control AI. Who should control them?» (S5)",
+          "timon": "empresas"
+        }
+      ]
+    },
+    {
+      "id": "c10_saldo",
+      "order": 10,
+      "question": "En una frase: la IA y la democracia.",
+      "discrimina": "Ítem de cierre. Aporta poca información nueva, pero fija la posición de quien saltó varios ítems.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Una tecnología más. El ruido va a pasar.",
+          "vector": {
+            "magnitud": -8,
+            "direccion": 0
+          },
+          "anchor": "«AI, Americans and pessimism» (S3)"
+        },
+        {
+          "id": "B",
+          "text": "Una amenaza que todavía estamos a tiempo de administrar.",
+          "vector": {
+            "magnitud": 5,
+            "direccion": -4
+          },
+          "anchor": "«Demis Hassabis has a plan to harness AI safely» (S7)"
+        },
+        {
+          "id": "C",
+          "text": "El mayor riesgo que la democracia ha enfrentado en un siglo.",
+          "vector": {
+            "magnitud": 9,
+            "direccion": -9
+          },
+          "anchor": "«Warning Shots» (S5) · «AI danger gets real» (S10)"
+        },
+        {
+          "id": "D",
+          "text": "Una oportunidad de arreglar cosas que la democracia hace mal hace rato.",
+          "vector": {
+            "magnitud": 6,
+            "direccion": 8
+          },
+          "anchor": "«LLMs as agents for augmented democracy» (S14)"
+        },
+        {
+          "id": "E",
+          "text": "Demasiado pronto para saberlo, y desconfío de quien diga que ya sabe.",
+          "vector": {
+            "magnitud": 2,
+            "direccion": 0
+          },
+          "anchor": "«¿Sobrevivirá la democracia a la inteligencia artificial?» (S14)"
+        }
+      ]
+    }
+  ]
+}

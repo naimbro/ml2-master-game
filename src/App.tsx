@@ -25,6 +25,13 @@ import SessionEditor from './pages/professor/SessionEditor';
 
 // Dev/preview
 import RevealPreview from './pages/RevealPreview';
+import CompasPreview from './pages/CompasPreview';
+
+// Compas — instrumento de posicionamiento, hermano del juego
+import CompasSala from './pages/compas/CompasSala';
+import CompasJugar from './pages/compas/CompasJugar';
+import CompasComparacion from './pages/compas/CompasComparacion';
+import CrearCompas from './pages/professor/CrearCompas';
 
 // Auth context
 import { AuthProvider, useAuth } from './hooks/useAuth';
@@ -71,6 +78,25 @@ function AppRoutes() {
       {/* Public routes */}
       <Route path="/" element={<Home />} />
       <Route path="/preview-reveal" element={<RevealPreview />} />
+      <Route path="/preview-compas" element={<CompasPreview />} />
+
+      {/* Compas: el alumno entra por /compas/:code, el anfitrion proyecta /compas/:code/sala */}
+      <Route
+        path="/compas/:code"
+        element={user ? <CompasJugar /> : <Navigate to="/" replace />}
+      />
+      <Route
+        path="/compas/:code/sala"
+        element={user ? <CompasSala /> : <Navigate to="/" replace />}
+      />
+      <Route
+        path="/professor/compas/nuevo"
+        element={user ? <CrearCompas /> : <Navigate to="/" replace />}
+      />
+      <Route
+        path="/professor/compas/:courseId/comparacion"
+        element={user ? <CompasComparacion /> : <Navigate to="/" replace />}
+      />
 
       {/* Student routes (require auth) */}
       <Route

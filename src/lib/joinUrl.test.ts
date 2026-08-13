@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { buildJoinUrl } from './joinUrl';
+import { buildJoinUrl, buildCompasUrl } from './joinUrl';
 
 describe('buildJoinUrl', () => {
   it('respeta el prefijo de GitHub Pages', () => {
@@ -25,5 +25,27 @@ describe('buildJoinUrl', () => {
   it('normaliza el codigo a mayusculas y descarta lo que no sea alfanumerico', () => {
     expect(buildJoinUrl('abc-123', 'https://x.io', '/'))
       .toBe('https://x.io/join?code=ABC123');
+  });
+});
+
+describe('buildCompasUrl', () => {
+  it('lleva directo al compas, sin pasar por /join', () => {
+    expect(buildCompasUrl('ABC123', 'https://naimbro.github.io', '/ml2-master-game/')).toBe(
+      'https://naimbro.github.io/ml2-master-game/compas/ABC123',
+    );
+  });
+
+  it('respeta la base de dev', () => {
+    expect(buildCompasUrl('abc123', 'http://localhost:5173', '/')).toBe(
+      'http://localhost:5173/compas/ABC123',
+    );
+  });
+
+  it('normaliza el codigo igual que la del juego', () => {
+    expect(buildCompasUrl(' ab-c1 23 ', 'https://x.io', '/g/')).toBe('https://x.io/g/compas/ABC123');
+  });
+
+  it('no duplica barras', () => {
+    expect(buildCompasUrl('AB', 'https://x.io/', '/g')).toBe('https://x.io/g/compas/AB');
   });
 });

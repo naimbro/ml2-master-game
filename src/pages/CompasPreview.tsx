@@ -1,0 +1,204 @@
+import { useMemo, useState } from 'react';
+import CompasPlano, { type PuntoCompas } from '../components/compas/CompasPlano';
+import TarjetaArquetipo from '../components/compas/TarjetaArquetipo';
+import { compasDe } from '../lib/compasContent';
+import { arquetipoDe, posicionDe, timonDe } from '../lib/compas';
+import type { CompasAnswers } from '../types/compas';
+
+// El hermano de MCRepartoPreview, para el momento del compas que es imposible
+// de mirar sin treinta personas en la sala: la nube del curso moviendose ronda
+// a ronda, y la tarjeta que le llega al alumno al final.
+//
+// El contenido NO es inventado: son los diez items reales de
+// content/compas/ai_democracy_2026. Lo simulado es el curso — 28 alumnos con
+// una posicion latente y ruido — porque es lo unico que no se puede tener sin
+// una clase en vivo.
+
+const COURSE = 'ai_democracy_2026';
+const N = 28;
+const YO = 6;
+
+function mulberry32(seed: number) {
+  let a = seed;
+  return () => {
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+export default function CompasPreview() {
+  const pack = compasDe(COURSE);
+  const [ronda, setRonda] = useState(0);
+
+  // Un curso falso pero estable: la misma semilla en cada render, para que
+  // comparar dos rondas sea comparar el movimiento y no dos sorteos distintos.
+  const cohorte = useMemo(() => {
+    if (!pack) return [];
+    const rnd = mulberry32(20260813);
+    const centros = [
+      [-4, -1],
+      [5, -5],
+      [4, 5],
+      [1, 1],
+      [-2, 4],
+    ];
+    return Array.from({ length: N }, (_, i) => {
+      const c = centros[i % centros.length];
+      const lx = c[0] + (rnd() - 0.5) * 7;
+      const ly = c[1] + (rnd() - 0.5) * 7;
+      const picks: string[] = pack.instrumento.items.map((item) => {
+        let mejor = item.options[0];
+        let dm = Infinity;
+        for (const o of item.options) {
+          const d =
+            Math.hypot(o.vector.magnitud - lx, o.vector.direccion - ly) + (rnd() - 0.5) * 6;
+          if (d < dm) {
+            dm = d;
+            mejor = o;
+          }
+        }
+        return mejor.id;
+      });
+      // Desorden visual fijo: con pocas rondas muchos comparten el mismo
+      // promedio exacto y los puntos se apilan hasta desaparecer.
+      return { picks, jx: (rnd() - 0.5) * 0.9, jy: (rnd() - 0.5) * 0.9 };
+    });
+  }, [pack]);
+
+  if (!pack) return <div className="p-8">No hay compás para {COURSE}.</div>;
+  const { instrumento, arquetipos } = pack;
+  const total = instrumento.items.length;
+
+  const respuestasHasta = (i: number, hasta: number): CompasAnswers => {
+    const a: CompasAnswers = {};
+    for (let k = 0; k < hasta; k++) a[instrumento.items[k].id] = cohorte[i].picks[k];
+    return a;
+  };
+
+  const posEn = (i: number, hasta: number) => {
+    const p = posicionDe(respuestasHasta(i, hasta), instrumento.items);
+    if (!p) return null;
+    return { ...p, magnitud: p.magnitud + cohorte[i].jx, direccion: p.direccion + cohorte[i].jy };
+  };
+
+  const puntos: PuntoCompas[] = ronda === 0
+    ? []
+    : cohorte.map((_, i) => {
+        const ahora = posEn(i, ronda)!;
+        const antes = ronda > 1 ? posEn(i, ronda - 1) : null;
+        return {
+          id: String(i),
+          esMio: i === YO,
+          pos: { magnitud: ahora.magnitud, direccion: ahora.direccion },
+          previa: antes ? { magnitud: antes.magnitud, direccion: antes.direccion } : null,
+        };
+      });
+
+  const misRespuestas = ronda > 0 ? respuestasHasta(YO, ronda) : {};
+  const miPos = ronda > 0 ? posEn(YO, ronda) : null;
+  const miArquetipo = miPos
+    ? arquetipoDe(miPos, timonDe(misRespuestas, instrumento.items), arquetipos)
+    : null;
+
+  const item = ronda > 0 ? instrumento.items[ronda - 1] : null;
+
+  return (
+    <div className="mx-auto max-w-5xl px-5 py-8">
+      <h1 className="mb-2 text-3xl uppercase leading-none" style={{ fontFamily: "'Archivo Black', sans-serif" }}>
+        Compás — vista previa
+      </h1>
+      <p className="mb-1 max-w-[64ch] text-ink-soft">
+        Los diez ítems reales de <code>content/compas/{COURSE}</code>, con un curso de 28 alumnos
+        simulado. Sin puntaje y sin ranking: el compás mide dónde está parado alguien, no qué tan
+        bien lo hizo.
+      </p>
+      <p className="mb-5 max-w-[68ch] text-[13.5px] text-faint">
+        El punto naranjo es «tu punto», el mismo alumno de la tarjeta de abajo.
+      </p>
+
+      <div className="mb-6 flex flex-wrap items-center gap-4 border-2 border-ink bg-surface p-4 shadow-[4px_4px_0_#101114]">
+        <button
+          type="button"
+          onClick={() => setRonda((r) => Math.min(total, r + 1))}
+          disabled={ronda >= total}
+          className="border-2 border-ink bg-kahoot-orange px-4 py-3 text-sm uppercase text-ink shadow-[3px_3px_0_#101114] disabled:opacity-40 active:translate-x-[3px] active:translate-y-[3px] active:shadow-none"
+          style={{ fontFamily: "'Archivo Black', sans-serif" }}
+        >
+          {ronda >= total ? 'Se acabaron los ítems' : 'Siguiente ítem'}
+        </button>
+        <button
+          type="button"
+          onClick={() => setRonda(0)}
+          className="border-2 border-ink bg-surface px-4 py-3 text-sm uppercase text-ink shadow-[3px_3px_0_#101114] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none"
+          style={{ fontFamily: "'Archivo Black', sans-serif" }}
+        >
+          Reiniciar
+        </button>
+        <span className="tabular-nums text-ink-soft">
+          {ronda === 0 ? 'Nadie ha respondido todavía' : `Ítem ${ronda} de ${total}`}
+        </span>
+      </div>
+
+      {item && (
+        <p className="mb-4 border border-dashed border-line bg-paper p-3 text-[15px] text-ink-soft">
+          <span className="mb-1 block text-[11px] uppercase text-faint" style={{ fontFamily: "'Archivo Black', sans-serif" }}>
+            Ítem {ronda}
+          </span>
+          {item.question}
+        </p>
+      )}
+
+      <div className="mb-8 border-2 border-ink bg-surface p-4 shadow-[4px_4px_0_#101114]">
+        <CompasPlano puntos={puntos} ejeX={instrumento.axes.x} ejeY={instrumento.axes.y} />
+      </div>
+
+      {ronda >= 4 && (
+        <>
+          <h2 className="mb-2 text-xl uppercase" style={{ fontFamily: "'Archivo Black', sans-serif" }}>
+            Comparación entre dos aplicaciones
+          </h2>
+          <p className="mb-3 max-w-[68ch] text-[13.5px] text-faint">
+            Simulada tomando el ítem 3 como «antes» y el actual como «después»; en el curso real son
+            la Semana 3 y la Semana 15. Cada flecha sale de donde estaba el alumno y apunta a donde
+            está. La punta importa: sin ella no se sabe cuál extremo es el ahora.
+          </p>
+          <div className="mb-8 border-2 border-ink bg-surface p-4 shadow-[4px_4px_0_#101114]">
+            <CompasPlano
+              flechas
+              ejeX={instrumento.axes.x}
+              ejeY={instrumento.axes.y}
+              puntos={cohorte.map((_, i) => {
+                const antes = posEn(i, 3)!;
+                const ahora = posEn(i, ronda)!;
+                return {
+                  id: `c${i}`,
+                  esMio: i === YO,
+                  pos: { magnitud: ahora.magnitud, direccion: ahora.direccion },
+                  previa: { magnitud: antes.magnitud, direccion: antes.direccion },
+                };
+              })}
+            />
+          </div>
+        </>
+      )}
+
+      <h2 className="mb-3 text-xl uppercase" style={{ fontFamily: "'Archivo Black', sans-serif" }}>
+        En el teléfono del alumno
+      </h2>
+      <div className="max-w-[390px]">
+        {miPos && miArquetipo ? (
+          <TarjetaArquetipo
+            arquetipo={miArquetipo}
+            posicion={miPos}
+            ejeX={instrumento.axes.x}
+            ejeY={instrumento.axes.y}
+          />
+        ) : (
+          <p className="text-faint">La tarjeta aparece cuando termine el primer ítem.</p>
+        )}
+      </div>
+    </div>
+  );
+}

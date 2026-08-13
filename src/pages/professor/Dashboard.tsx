@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
+  Compass,
   Gamepad2,
   BookOpen,
   FileText,
@@ -19,6 +20,7 @@ import { useProfessor } from '../../hooks/useProfessor';
 import { usePendingProfessorCount } from '../../hooks/usePendingProfessors';
 import { useCardReorder } from '../../hooks/useCardReorder';
 import { COURSES, getSessionsForCourse, type Course } from '../../lib/courses';
+import { COMPASES } from '../../lib/compasContent';
 import { fetchMyCourses, deleteCourse } from '../../lib/dynamicCourses';
 import { applyCourseOrder } from '../../lib/courseOrder';
 import { fetchProfessorPrefs, saveCourseOrder } from '../../lib/professorPrefs';
@@ -69,6 +71,7 @@ export default function Dashboard() {
 
   // Hardcoded catalog courses are only shown to the admin (they belong to Naim)
   const builtinCourses = access === 'admin' ? COURSES : [];
+  const compasDisponibles = Object.keys(COMPASES);
 
   // Las dos procedencias se ordenan JUNTAS. Ordenarlas por separado no serviria
   // de nada: los del catalogo quedarian siempre antes que los propios, que es
@@ -151,6 +154,40 @@ export default function Dashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
+          {/* El compas no es una sesion y no aparece en la lista de sesiones de
+              ningun curso: se abre por su cuenta. Sin este enlace la pantalla
+              existe pero no hay como llegar a ella. */}
+          {compasDisponibles.length > 0 && (
+            <Link
+              to="/professor/compas/nuevo"
+              className="mb-6 flex items-center justify-between gap-3 rounded-xl border-2 border-line bg-surface-2 px-4 py-3 hover:bg-surface-3"
+            >
+              <span>
+                <span className="block font-bold">Abrir un compas</span>
+                <span className="text-muted text-sm">
+                  Instrumento de posicionamiento, sin puntaje ni ranking
+                </span>
+              </span>
+              <Compass className="w-5 h-5 shrink-0 text-cyan-400" />
+            </Link>
+          )}
+
+          {compasDisponibles.map((cid) => (
+            <Link
+              key={cid}
+              to={`/professor/compas/${cid}/comparacion`}
+              className="mb-6 flex items-center justify-between gap-3 rounded-xl border-2 border-line bg-surface-2 px-4 py-3 hover:bg-surface-3"
+            >
+              <span>
+                <span className="block font-bold">Como se movio el curso</span>
+                <span className="text-muted text-sm">
+                  Comparar dos aplicaciones del compas — {cid}
+                </span>
+              </span>
+              <Trophy className="w-5 h-5 shrink-0 text-cyan-400" />
+            </Link>
+          ))}
+
           <h2 className="text-xl font-bold flex items-center gap-2 mb-1">
             <GraduationCap className="w-5 h-5 text-cyan-400" />
             Mis Cursos

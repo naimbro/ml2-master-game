@@ -193,6 +193,50 @@ service cloud.firestore {
       }
     }
 
+    // ---------------------------------------------------------------------
+    // Compas: el instrumento de posicionamiento. No es un juego y no vive en
+    // /games — ver content/compas/README.md.
+    // ---------------------------------------------------------------------
+    match /compasRuns/{code} {
+      allow read: if isAuthenticated();
+      allow create: if isApprovedProfessor();
+      // Los alumnos se inscriben y actualizan su contador en el doc del run.
+      allow update: if isAuthenticated();
+      allow delete: if isAdmin()
+        || (isAuthenticated() && resource.data.hostId == request.auth.uid);
+
+      // Lo que respondio cada alumno. LO LEE SOLO EL ANFITRION, y por la misma
+      // razon que /games/{code}/choices: un alumno que puede ver en vivo lo que
+      // marcan sus companeros es un alumno que responde lo que responde la sala.
+      // Ahi eso arruinaba una pregunta; aca arruina la medicion del semestre
+      // entero, y sin dejar rastro — el instrumento sigue entregando numeros.
+      //
+      // El alumno lee y escribe el suyo, que es lo que le permite recargar el
+      // telefono a mitad de camino sin perder lo que ya dijo.
+      match /respuestas/{playerId} {
+        allow read: if isOwner(playerId)
+          || (isAuthenticated()
+              && get(/databases/$(database)/documents/compasRuns/$(code)).data.hostId == request.auth.uid);
+        allow create, update: if isOwner(playerId)
+          && request.resource.data.playerId == request.auth.uid;
+        allow delete: if false;
+      }
+    }
+
+    // La posicion final, guardada por curso y por aplicacion — NO por run. Es lo
+    // que hace comparable la Semana 3 con la Semana 15, que son dos runs con
+    // codigos distintos separados por tres meses.
+    //
+    // Lectura abierta a autenticados a proposito: el mapa del curso se proyecta
+    // y no hay nada privado adentro salvo el playerId. Nadie puede reescribir la
+    // posicion de otro, que es lo unico que importa proteger aca.
+    match /compas/{courseId}/{aplicacion}/{playerId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isOwner(playerId)
+        && request.resource.data.playerId == request.auth.uid;
+      allow delete: if isAdmin();
+    }
+
     // Tabla acumulada del curso. Contiene SOLO los diez primeros: el fondo de la
     // tabla no se guarda en ningun documento legible por otro alumno.
     match /standings/{courseId} {
