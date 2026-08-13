@@ -67,14 +67,39 @@ sólo adentro.
   es la objeción más fuerte contra la propia posición, y es lo que hace que el
   debate posterior funcione: cada grupo llega sabiendo por dónde lo van a atacar.
 
-## Lo que todavía no existe
+## Las pantallas
 
-Estos archivos son contenido. Falta el código que los lee:
+| Ruta | Quién | Qué |
+|---|---|---|
+| `/professor/compas/nuevo` | profesor | abre una sala y elige cuál de las tres aplicaciones es |
+| `/compas/:code` | alumno | responde ítem por ítem; al cerrar recibe su arquetipo |
+| `/compas/:code/sala` | anfitrión | lo proyectado: la nube con estelas, y el ritmo |
+| `/compas/:code/campos` | anfitrión | grupos de debate a partir de las posiciones |
+| `/professor/compas/:courseId/comparacion` | profesor | Semana 3 contra Semana 15 |
+| `/preview-compas` | cualquiera | todo lo anterior con un curso simulado, sin login |
 
-- un tipo de ronda `compas` que no pase por `correctOptionIndex` ni por los jueces;
-- pantallas **hermanas** de `Results.tsx` y `End.tsx`, no banderas dentro de
-  ellas — las dos superan las 700 líneas y están construidas alrededor de un
-  leaderboard que acá no aplica;
-- persistencia de la posición por alumno y por aplicación, que es lo que permite
-  comparar Semana 3 contra Semana 15;
-- registro en `src/lib/courses.ts`, como cualquier contenido nuevo.
+## Dónde vive cada dato
+
+- `compasRuns/{code}/respuestas/{uid}` — las respuestas ítem por ítem, **con
+  nombre**. La lee sólo el anfitrión.
+- `compas/{courseId}/{instrumentId}_a{n}/{uid}` — la posición final, **sin
+  nombre**, indexada por aplicación y no por sala. La escribe el anfitrión al
+  cerrar (y el alumno la suya, como respaldo).
+
+Que la posición durable no lleve nombre es deliberado: esa colección la puede
+leer cualquier alumno autenticado, y una tabla pública de quién piensa qué es
+justamente lo que este instrumento no debe producir. Por eso los **campos** se
+arman en la pantalla del anfitrión, que es el único lugar donde nombre y
+posición se encuentran.
+
+## Los campos
+
+Grupos de debate a partir de las posiciones, con **tamaños parejos**: difieren
+en una persona como máximo. No se agrupa por arquetipo —son diez y el curso
+tiene menos de treinta— porque saldría un grupo de siete y tres de uno, y en un
+debate el grupo chico simplemente deja de hablar.
+
+Dos modos: **homogéneos**, donde cada campo prepara el caso más fuerte de su
+posición, y **mezclados**, donde cada grupo junta posiciones distintas para
+deliberar. Si se vuelve a aplicar el compás después de una sesión mezclada, la
+comparación mide si deliberar movió a alguien.

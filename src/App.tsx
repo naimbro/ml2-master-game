@@ -30,8 +30,9 @@ import CompasPreview from './pages/CompasPreview';
 // Compas — instrumento de posicionamiento, hermano del juego
 import CompasSala from './pages/compas/CompasSala';
 import CompasJugar from './pages/compas/CompasJugar';
-import CompasComparacion from './pages/compas/CompasComparacion';
 import CrearCompas from './pages/professor/CrearCompas';
+import CompasComparacion from './pages/compas/CompasComparacion';
+import CompasCampos from './pages/compas/CompasCampos';
 
 // Auth context
 import { AuthProvider, useAuth } from './hooks/useAuth';
@@ -88,6 +89,10 @@ function AppRoutes() {
       <Route
         path="/compas/:code/sala"
         element={user ? <CompasSala /> : <Navigate to="/" replace />}
+      />
+      <Route
+        path="/compas/:code/campos"
+        element={user ? <CompasCampos /> : <Navigate to="/" replace />}
       />
       <Route
         path="/professor/compas/nuevo"

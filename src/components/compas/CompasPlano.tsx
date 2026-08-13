@@ -7,6 +7,8 @@ export interface PuntoCompas {
   previa?: CompasVector | null;
   /** The viewer's own point. Orange, on top, and the only one that stands out. */
   esMio?: boolean;
+  /** Fill for the dot. Used to paint debate fields; falls back to ink. */
+  color?: string;
 }
 
 interface Props {
@@ -134,7 +136,7 @@ export default function CompasPlano({ puntos, ejeX, ejeY, modo = 'proyector', fl
           cx={sx(p.pos.magnitud)}
           cy={sy(p.pos.direccion)}
           r={p.esMio ? r + 1 : r}
-          fill={p.esMio ? '#FF5A1F' : '#101114'}
+          fill={p.esMio ? '#FF5A1F' : (p.color ?? '#101114')}
           stroke={p.esMio ? '#101114' : '#FAFAF8'}
           strokeWidth={p.esMio ? 2 : 1.5}
           className="[transition:cx_900ms_cubic-bezier(.22,.8,.28,1),cy_900ms_cubic-bezier(.22,.8,.28,1)] motion-reduce:transition-none"

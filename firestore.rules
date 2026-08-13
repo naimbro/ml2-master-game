@@ -232,8 +232,22 @@ service cloud.firestore {
     // posicion de otro, que es lo unico que importa proteger aca.
     match /compas/{courseId}/{aplicacion}/{playerId} {
       allow read: if isAuthenticated();
-      allow create, update: if isOwner(playerId)
-        && request.resource.data.playerId == request.auth.uid;
+
+      // Dos vias de escritura:
+      //  - el alumno escribe la suya;
+      //  - el ANFITRION del run escribe la de cualquiera de su sala, al cerrar.
+      //
+      // La segunda existe porque la primera sola perdia gente: quien cerraba la
+      // pestana antes de que el profesor cerrara la sala no guardaba nunca su
+      // posicion, y la comparacion de fin de semestre salia con huecos en
+      // silencio. El anfitrion solo puede escribir bajo el id que dice el
+      // payload y solo si es host del run que el mismo payload declara.
+      allow create, update: if
+        (isOwner(playerId) && request.resource.data.playerId == request.auth.uid)
+        || (isAuthenticated()
+            && request.resource.data.playerId == playerId
+            && get(/databases/$(database)/documents/compasRuns/$(request.resource.data.runCode)).data.hostId == request.auth.uid);
+
       allow delete: if isAdmin();
     }
 

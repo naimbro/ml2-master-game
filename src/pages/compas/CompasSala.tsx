@@ -91,6 +91,13 @@ export default function CompasSala() {
         >
           Volver
         </button>
+        <a
+          href={`${import.meta.env.BASE_URL || '/'}compas/${run.code}/campos`}
+          className="border-2 border-ink bg-surface px-5 py-3 text-sm uppercase text-ink shadow-[3px_3px_0_#101114]"
+          style={{ fontFamily: "'Archivo Black', sans-serif" }}
+        >
+          Armar campos
+        </a>
         <button
           type="button"
           onClick={cerrar}

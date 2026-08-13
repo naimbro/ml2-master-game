@@ -3,6 +3,7 @@ import CompasPlano, { type PuntoCompas } from '../components/compas/CompasPlano'
 import TarjetaArquetipo from '../components/compas/TarjetaArquetipo';
 import { compasDe } from '../lib/compasContent';
 import { arquetipoDe, posicionDe, timonDe } from '../lib/compas';
+import { armarCampos } from '../lib/compasCampos';
 import type { CompasAnswers } from '../types/compas';
 
 // El hermano de MCRepartoPreview, para el momento del compas que es imposible
@@ -179,6 +180,39 @@ export default function CompasPreview() {
                   previa: { magnitud: antes.magnitud, direccion: antes.direccion },
                 };
               })}
+            />
+          </div>
+        </>
+      )}
+
+      {ronda >= 4 && (
+        <>
+          <h2 className="mb-2 text-xl uppercase" style={{ fontFamily: "'Archivo Black', sans-serif" }}>
+            Campos para el debate
+          </h2>
+          <p className="mb-3 max-w-[68ch] text-[13.5px] text-faint">
+            Cuatro campos de tamaño parejo sobre las posiciones de este momento. En la sala real los
+            nombres van sólo a tu pantalla; acá no hay nombres que mostrar.
+          </p>
+          <div className="mb-8 border-2 border-ink bg-surface p-4 shadow-[4px_4px_0_#101114]">
+            <CompasPlano
+              ejeX={instrumento.axes.x}
+              ejeY={instrumento.axes.y}
+              puntos={(() => {
+                const paleta = ['#101114', '#FF5A1F', '#2563EB', '#B3272B'];
+                const ms = cohorte.map((_, i) => {
+                  const p = posEn(i, ronda)!;
+                  return { id: `c${i}`, nombre: `A${i}`, magnitud: p.magnitud, direccion: p.direccion };
+                });
+                const campos = armarCampos(ms, 4);
+                const deQuien = new Map<string, number>();
+                campos.forEach((c) => c.miembros.forEach((m) => deQuien.set(m.id, c.n)));
+                return ms.map((m) => ({
+                  id: m.id,
+                  pos: { magnitud: m.magnitud, direccion: m.direccion },
+                  color: paleta[((deQuien.get(m.id) ?? 1) - 1) % paleta.length],
+                }));
+              })()}
             />
           </div>
         </>

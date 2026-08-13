@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   collection,
   doc,
@@ -80,8 +80,13 @@ export function useCompasRun(code: string | undefined) {
   const isHost = !!user && !!run && user.uid === run.hostId;
   const pack = compasDe(run?.courseId);
   // Nunca se expone la sala entera a quien no es anfitrion, ni siquiera si un
-  // snapshot viejo quedo en memoria al cambiar de rol.
-  const respuestas = isHost ? todasLasRespuestas : [];
+  // snapshot viejo quedo en memoria al cambiar de rol. Memoizado porque el `[]`
+  // literal seria un array nuevo en cada render, y eso invalidaba el useCallback
+  // de `cerrar` —que escribe las posiciones de todos— en cada pasada.
+  const respuestas = useMemo(
+    () => (isHost ? todasLasRespuestas : []),
+    [isHost, todasLasRespuestas],
+  );
 
   useEffect(() => {
     if (!code) return;
@@ -170,13 +175,54 @@ export function useCompasRun(code: string | undefined) {
     });
   }, [code, isHost, run]);
 
+  /**
+   * Cierra la sala Y guarda la posicion de TODOS, desde el anfitrion.
+   *
+   * Antes cada telefono guardaba la suya al ver `finished`, y eso perdia a
+   * quien cerro la pestana antes de que el profesor cerrara: sus respuestas
+   * quedaban en la sala pero su posicion durable no se escribia nunca, y la
+   * comparacion de noviembre aparecia con huecos sin decir por que. El
+   * anfitrion tiene todas las respuestas a la vista, asi que puede escribirlas
+   * todas.
+   *
+   * El telefono sigue guardando la suya como respaldo: si esta escritura falla
+   * a medias, la del alumno presente igual queda.
+   */
   const cerrar = useCallback(async () => {
-    if (!code || !isHost) return;
+    if (!code || !isHost || !run || !pack) return;
+
+    const items = pack.instrumento.items;
+    const destino = posicionPath(run.courseId, run.instrumentId, run.aplicacion);
+
+    const escrituras = respuestas.map(async (r) => {
+      const pos = posicionDe(r.answers ?? {}, items);
+      if (!pos) return; // no contesto nada: no hay posicion que inventar
+      const arq = arquetipoDe(pos, timonDe(r.answers ?? {}, items), pack.arquetipos);
+      await setDoc(
+        doc(db, destino, r.playerId),
+        {
+          playerId: r.playerId,
+          courseId: run.courseId,
+          instrumentId: run.instrumentId,
+          aplicacion: run.aplicacion,
+          runCode: run.code,
+          magnitud: pos.magnitud,
+          direccion: pos.direccion,
+          respondidas: pos.respondidas,
+          total: pos.total,
+          arquetipoId: arq?.id ?? null,
+          guardadaEn: Timestamp.now(),
+        },
+        { merge: true },
+      );
+    });
+    await Promise.all(escrituras);
+
     await updateDoc(doc(db, 'compasRuns', code), {
       status: 'finished' as CompasStatus,
       updatedAt: serverTimestamp(),
     });
-  }, [code, isHost]);
+  }, [code, isHost, run, pack, respuestas]);
 
   /**
    * Persist the student's final position where the pre/post comparison can find
