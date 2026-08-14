@@ -1,15 +1,25 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { LogIn, LogOut, User, Zap, Brain, Trophy, GraduationCap } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { initAudio, playClick } from '../../lib/sounds';
+import { destinoSeguro } from '../../lib/joinUrl';
 import SupportLink from '../../components/SupportLink';
 
 export default function Home() {
   const { user, login, logout } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+
+  // El alumno llego aca rebotado desde donde queria ir (ver `ConSesion` en
+  // App.tsx). Apenas hay sesion, se lo devuelve — asi el QR del compas termina
+  // en el compas y no en esta portada.
+  const destino = destinoSeguro(searchParams.get('destino'));
+  useEffect(() => {
+    if (user && destino) navigate(destino, { replace: true });
+  }, [user, destino, navigate]);
 
   const handleLogin = async () => {
     initAudio(); // Initialize audio on first user interaction

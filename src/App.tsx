@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import type { ReactNode } from 'react';
 
 // Student Pages
@@ -39,6 +39,22 @@ import { AuthProvider, useAuth } from './hooks/useAuth';
 import { useProfessor } from './hooks/useProfessor';
 import { canUsePlatform } from './lib/professorAccess';
 import SoundToggle from './components/SoundToggle';
+
+/**
+ * Manda a iniciar sesion SIN perder a donde iba.
+ *
+ * `<Navigate to="/">` a secas descartaba el destino, y en el telefono de un
+ * alumno esa es la ruta normal y no la excepcion: nadie llega con la sesion
+ * abierta. El que escaneaba el QR del compas caia en la portada sin el codigo,
+ * sin explicacion, y sin forma de volver — el codigo solo estaba en el QR que
+ * ya habia dejado de mirar.
+ */
+function ConSesion({ children }: { children: ReactNode }) {
+  const { user } = useAuth();
+  const { pathname, search } = useLocation();
+  if (user) return <>{children}</>;
+  return <Navigate to={`/?destino=${encodeURIComponent(pathname + search)}`} replace />;
+}
 
 // Wraps professor routes: approved professors and the admin pass through;
 // everyone else sees the access-request flow.
@@ -82,18 +98,9 @@ function AppRoutes() {
       <Route path="/preview-compas" element={<CompasPreview />} />
 
       {/* Compas: el alumno entra por /compas/:code, el anfitrion proyecta /compas/:code/sala */}
-      <Route
-        path="/compas/:code"
-        element={user ? <CompasJugar /> : <Navigate to="/" replace />}
-      />
-      <Route
-        path="/compas/:code/sala"
-        element={user ? <CompasSala /> : <Navigate to="/" replace />}
-      />
-      <Route
-        path="/compas/:code/campos"
-        element={user ? <CompasCampos /> : <Navigate to="/" replace />}
-      />
+      <Route path="/compas/:code" element={<ConSesion><CompasJugar /></ConSesion>} />
+      <Route path="/compas/:code/sala" element={<ConSesion><CompasSala /></ConSesion>} />
+      <Route path="/compas/:code/campos" element={<ConSesion><CompasCampos /></ConSesion>} />
       <Route
         path="/professor/compas/nuevo"
         element={user ? <CrearCompas /> : <Navigate to="/" replace />}
@@ -104,10 +111,7 @@ function AppRoutes() {
       />
 
       {/* Student routes (require auth) */}
-      <Route
-        path="/join"
-        element={user ? <JoinGame /> : <Navigate to="/" replace />}
-      />
+      <Route path="/join" element={<ConSesion><JoinGame /></ConSesion>} />
       <Route
         path="/game/:gameCode/lobby"
         element={user ? <Lobby /> : <Navigate to="/" replace />}

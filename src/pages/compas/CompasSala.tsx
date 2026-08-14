@@ -1,12 +1,24 @@
 import { useParams } from 'react-router-dom';
+import { QRCodeSVG } from 'qrcode.react';
 import CompasPlano, { type PuntoCompas } from '../../components/compas/CompasPlano';
 import { useCompasRun } from '../../hooks/useCompasRun';
+import { currentCompasUrl } from '../../lib/joinUrl';
+
+const ARCHIVO = { fontFamily: "'Archivo Black', sans-serif" } as const;
 
 /**
  * The host screen. This is what the projector shows, so two rules hold:
  * no names anywhere on the cloud, and nothing that reveals what any one person
  * answered. Each student recognises their own point; nobody recognises anyone
  * else's.
+ *
+ * Antes de empezar, la pantalla ENTERA es la puerta de entrada. No es una
+ * decision estetica: en el item 0 el plano esta vacio —nadie ha respondido
+ * nada— y ese es justo el minuto en que treinta personas estan buscando como
+ * entrar. Lo que habia antes era el texto "Entren en /compas/ABC123", que no es
+ * una direccion que nadie pueda escribir: le falta el dominio y le falta el
+ * prefijo /ml2-master-game/. Al arrancar se repliega a la franja de arriba, que
+ * se queda toda la sesion para el que llega tarde.
  */
 export default function CompasSala() {
   const { code } = useParams<{ code: string }>();
@@ -43,29 +55,84 @@ export default function CompasSala() {
     (p) => p.respondidas >= run.itemIndex,
   ).length;
 
+  // La URL completa, no la ruta. Un alumno leyendo "/compas/37NBPZ" en el
+  // proyector tendria que adivinar el dominio Y el prefijo de GitHub Pages.
+  const url = currentCompasUrl(run.code);
+  const urlVisible = url.replace(/^https?:\/\//, '');
+
+  const enPortada = run.itemIndex === 0;
+
+  if (enPortada) {
+    return (
+      <div className="mx-auto flex min-h-screen max-w-6xl flex-col px-6 py-6">
+        <div className="mb-6 flex flex-wrap items-baseline gap-4">
+          <h1 className="text-3xl uppercase leading-none" style={ARCHIVO}>
+            {instrumento.title}
+          </h1>
+          <span className="tabular-nums text-ink-soft">{inscritos} conectados</span>
+        </div>
+
+        <div className="grid flex-1 items-center gap-8 sm:grid-cols-[minmax(0,34%)_1fr]">
+          <div className="border-2 border-ink bg-surface p-3 [&>svg]:h-auto [&>svg]:w-full">
+            <QRCodeSVG value={url} size={512} level="M" marginSize={0} />
+          </div>
+
+          <div className="flex flex-col gap-4">
+            <p className="text-lg uppercase tracking-wider text-ink" style={ARCHIVO}>
+              Escanea, o entra en
+            </p>
+            <p className="break-all text-2xl text-ink">{urlVisible}</p>
+            <p
+              className="border-2 border-ink bg-kahoot-yellow px-6 py-4 text-center text-6xl tabular-nums tracking-[0.14em] text-ink shadow-[6px_6px_0_#101114] sm:text-7xl"
+              style={ARCHIVO}
+            >
+              {run.code}
+            </p>
+            <p className="text-ink-soft">No hay respuestas correctas y esto no lleva nota.</p>
+          </div>
+        </div>
+
+        <div className="mt-6 flex flex-wrap gap-3">
+          <button
+            type="button"
+            onClick={avanzar}
+            className="border-2 border-ink bg-kahoot-orange px-5 py-3 text-sm uppercase text-ink shadow-[3px_3px_0_#101114] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none"
+            style={ARCHIVO}
+          >
+            Empezar
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="mx-auto max-w-6xl px-6 py-6">
-      <div className="mb-4 flex flex-wrap items-baseline gap-4">
-        <h1 className="text-3xl uppercase leading-none" style={{ fontFamily: "'Archivo Black', sans-serif" }}>
+      <div className="mb-4 flex flex-wrap items-center gap-4">
+        <h1 className="text-3xl uppercase leading-none" style={ARCHIVO}>
           {instrumento.title}
         </h1>
-        <span className="border-2 border-ink bg-kahoot-yellow px-3 py-1 text-2xl tracking-widest text-ink" style={{ fontFamily: "'Archivo Black', sans-serif" }}>
+        <span
+          className="border-2 border-ink bg-kahoot-yellow px-3 py-1 text-2xl tabular-nums tracking-widest text-ink"
+          style={ARCHIVO}
+        >
           {run.code}
         </span>
         <span className="tabular-nums text-ink-soft">
-          {run.itemIndex === 0
-            ? `${inscritos} conectados`
-            : `${respondieron} de ${inscritos} han respondido · ítem ${run.itemIndex} de ${run.totalItems}`}
+          {respondieron} de {inscritos} han respondido · ítem {run.itemIndex} de {run.totalItems}
+        </span>
+
+        {/* Se queda toda la sesion: el que llega en el item 6 tambien entra. */}
+        <span className="ml-auto flex items-center gap-3">
+          <span className="hidden break-all text-sm text-ink-soft sm:inline">{urlVisible}</span>
+          <span className="w-[74px] border-2 border-ink bg-surface p-1 [&>svg]:h-auto [&>svg]:w-full">
+            <QRCodeSVG value={url} size={512} level="M" marginSize={0} />
+          </span>
         </span>
       </div>
 
       {item && (
         <p className="mb-4 border-l-4 border-ink bg-surface px-4 py-3 text-xl text-ink">{item.question}</p>
-      )}
-      {run.itemIndex === 0 && (
-        <p className="mb-4 text-ink-soft">
-          Entren en <b>/compas/{run.code}</b>. No hay respuestas correctas y esto no lleva nota.
-        </p>
       )}
 
       <div className="mb-5 border-2 border-ink bg-surface p-4 shadow-[4px_4px_0_#101114]">
@@ -78,23 +145,23 @@ export default function CompasSala() {
           onClick={avanzar}
           disabled={run.itemIndex >= run.totalItems}
           className="border-2 border-ink bg-kahoot-orange px-5 py-3 text-sm uppercase text-ink shadow-[3px_3px_0_#101114] disabled:opacity-40 active:translate-x-[3px] active:translate-y-[3px] active:shadow-none"
-          style={{ fontFamily: "'Archivo Black', sans-serif" }}
+          style={ARCHIVO}
         >
-          {run.itemIndex === 0 ? 'Empezar' : 'Siguiente ítem'}
+          Siguiente ítem
         </button>
         <button
           type="button"
           onClick={retroceder}
           disabled={run.itemIndex <= 1}
           className="border-2 border-ink bg-surface px-5 py-3 text-sm uppercase text-ink shadow-[3px_3px_0_#101114] disabled:opacity-40"
-          style={{ fontFamily: "'Archivo Black', sans-serif" }}
+          style={ARCHIVO}
         >
           Volver
         </button>
         <a
           href={`${import.meta.env.BASE_URL || '/'}compas/${run.code}/campos`}
           className="border-2 border-ink bg-surface px-5 py-3 text-sm uppercase text-ink shadow-[3px_3px_0_#101114]"
-          style={{ fontFamily: "'Archivo Black', sans-serif" }}
+          style={ARCHIVO}
         >
           Armar campos
         </a>
@@ -103,7 +170,7 @@ export default function CompasSala() {
           onClick={cerrar}
           disabled={run.status === 'finished'}
           className="border-2 border-ink bg-surface px-5 py-3 text-sm uppercase text-ink shadow-[3px_3px_0_#101114] disabled:opacity-40"
-          style={{ fontFamily: "'Archivo Black', sans-serif" }}
+          style={ARCHIVO}
         >
           {run.status === 'finished' ? 'Cerrado' : 'Cerrar y repartir arquetipos'}
         </button>

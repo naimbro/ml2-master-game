@@ -33,3 +33,26 @@ export function buildCompasUrl(code: string, origin: string, baseUrl: string): s
 export function currentCompasUrl(code: string): string {
   return buildCompasUrl(code, window.location.origin, import.meta.env.BASE_URL || '/');
 }
+
+/**
+ * A donde iba el alumno antes de que lo mandaran a iniciar sesion.
+ *
+ * Existe porque todas las rutas rebotan a `/` cuando no hay sesion, y el
+ * destino se perdia en el camino: quien escaneaba el QR del compas sin haber
+ * entrado nunca a la app caia en la portada, sin el codigo y sin nada que le
+ * dijera que habia pasado. En el telefono de un alumno —donde la sesion no esta
+ * abierta casi nunca— ese era el caso normal, no el raro.
+ *
+ * Devuelve null para cualquier cosa que no sea una ruta interna. La lista de lo
+ * que se rechaza no es paranoia de manual: `//evil.com` es un protocol-relative
+ * URL que el navegador resuelve a otro dominio, y `/\evil.com` hace lo mismo en
+ * varios navegadores. Un destino que llega por la barra de direcciones es texto
+ * de cualquiera, y mandar a alguien a otro sitio despues de un login es
+ * exactamente como se roba una sesion.
+ */
+export function destinoSeguro(raw: string | null | undefined): string | null {
+  if (!raw) return null;
+  if (!raw.startsWith('/')) return null;
+  if (raw.startsWith('//') || raw.startsWith('/\\')) return null;
+  return raw;
+}

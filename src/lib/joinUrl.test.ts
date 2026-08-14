@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { buildJoinUrl, buildCompasUrl } from './joinUrl';
+import { buildJoinUrl, buildCompasUrl, destinoSeguro } from './joinUrl';
 
 describe('buildJoinUrl', () => {
   it('respeta el prefijo de GitHub Pages', () => {
@@ -47,5 +47,32 @@ describe('buildCompasUrl', () => {
 
   it('no duplica barras', () => {
     expect(buildCompasUrl('AB', 'https://x.io/', '/g')).toBe('https://x.io/g/compas/AB');
+  });
+});
+describe('destinoSeguro', () => {
+  it('deja pasar la ruta del compas, que es para lo que existe', () => {
+    expect(destinoSeguro('/compas/37NBPZ')).toBe('/compas/37NBPZ');
+  });
+
+  it('conserva la query, que es donde viaja el codigo del QR del juego', () => {
+    expect(destinoSeguro('/join?code=ABC123')).toBe('/join?code=ABC123');
+  });
+
+  it('sin destino no hay destino', () => {
+    expect(destinoSeguro(null)).toBeNull();
+    expect(destinoSeguro(undefined)).toBeNull();
+    expect(destinoSeguro('')).toBeNull();
+  });
+
+  it('rechaza otro sitio, aunque venga disfrazado de ruta', () => {
+    // Las dos formas resuelven a un dominio ajeno en el navegador. Mandar a
+    // alguien afuera justo despues del login es como se roba una sesion.
+    expect(destinoSeguro('//evil.com/x')).toBeNull();
+    expect(destinoSeguro('/\\evil.com/x')).toBeNull();
+  });
+
+  it('rechaza una URL absoluta', () => {
+    expect(destinoSeguro('https://evil.com')).toBeNull();
+    expect(destinoSeguro('javascript:alert(1)')).toBeNull();
   });
 });

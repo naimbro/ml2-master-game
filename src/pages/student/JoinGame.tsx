@@ -45,7 +45,23 @@ export default function JoinGame() {
       const gameDoc = await getDoc(gameRef);
 
       if (!gameDoc.exists()) {
-        setError('Juego no encontrado. Verifica el codigo.');
+        // Puede ser un compas. Comparten el espacio de codigos de 6 caracteres y
+        // el alumno no tiene como saber cual de los dos le tocó — desde su lado
+        // los dos son "el codigo que salio en la pantalla". Antes esta casilla
+        // miraba solo en `games/` y le decia que el codigo estaba malo, que era
+        // falso: el codigo estaba bien y la unica entrada era el QR.
+        //
+        // Se despacha y ya. La pantalla del compas sigue siendo hermana y no un
+        // modo de esta: aca no se dibuja nada del compas, ni se inscribe a
+        // nadie. El nombre lo pide `CompasJugar`, que ademas no tiene sala de
+        // espera que mostrar.
+        const compasDoc = await getDoc(doc(db, 'compasRuns', code));
+        if (compasDoc.exists()) {
+          navigate(`/compas/${code}`);
+          return;
+        }
+
+        setError('No encontramos ese codigo. Revisa que este bien copiado.');
         setIsJoining(false);
         return;
       }
