@@ -69,6 +69,72 @@ Lo que sí queda escrito offline —y lo cubre
 llegue, que los pesos difieran, que los techos sean ejecutables. Lo que ningún
 chequeo offline puede decir es **qué puntaje va a poner el panel**.
 
+## El compás — instrumento de posicionamiento (agosto 2026)
+
+Vive en `content/compas/` y en `src/lib/compas*.ts`, `src/pages/compas/`. **No es
+una sesión de juego** y por eso no está bajo `content/sessions/`: se intentó
+primero así y no cabe, porque `validate-content.cjs` exige `correctOptionIndex`
+en toda pregunta de alternativas y un ítem del compás no tiene respuesta
+correcta. Inventarle una no es cosmético — `mcScoring.ts` la puntúa y
+`Results.tsx` la muestra en el leaderboard.
+
+**Leer `content/compas/README.md` antes de tocar nada de esto.** Ahí está el
+detalle: el esquema, las rutas, dónde vive cada dato y por qué.
+
+### Las cuatro reglas que no se negocian
+
+1. **No puntúa, no rankea, no entra en la nota.** En cuanto un alumno sospecha
+   que alguna alternativa suma, deja de responder lo que piensa y la medición de
+   fin de semestre queda arruinada sin que nadie lo note. No hay un solo número
+   de puntaje en `src/lib/compas.ts`, y así tiene que seguir.
+2. **Los nombres nunca son públicos.** La posición durable lleva uid y no
+   nombre, porque esa colección la lee cualquier alumno autenticado. Nombre y
+   posición se encuentran sólo en la pantalla del anfitrión (`/compas/:code/campos`).
+   Nada proyectado lleva nombres.
+3. **El instrumento es fijo entre aplicaciones.** Si se cambia un ítem, sube la
+   versión del archivo y las mediciones anteriores dejan de ser comparables.
+4. **La comparación es pareada.** Sólo entran quienes respondieron las dos
+   aplicaciones, y los que faltan se cuentan a la vista. Promediar todos los de
+   agosto contra todos los de noviembre compara dos grupos distintos de personas.
+
+### Estado real
+
+Probado: 534 tests en verde, `tsc -b` y eslint limpios, y las pantallas
+verificadas corriendo en `/preview-compas` (vista previa con curso simulado, sin
+login — es el hermano de `MCRepartoPreview`).
+
+**Nunca lo ha jugado gente real.** Falta la corrida en seco: abrir sala, entrar
+con dos cuentas, avanzar ítems, cerrar. Dos cosas a mirar ahí, que son las que
+no se pueden verificar solo:
+- el contador «X de Y han respondido» compara `respondidas >= itemIndex`, así que
+  quien se saltó un ítem antes queda contado como atrasado para siempre;
+- si la regla de lectura de `respuestas` falla, el plano del anfitrión queda **en
+  blanco sin decir por qué**.
+
+### Pendiente conocido
+
+- **Recalibrar los cortes de la grilla** con terciles empíricos después de la
+  primera aplicación real. Los que están son números redondos escritos a ojo, y
+  como la posición es el promedio de diez ítems casi nadie llega a los extremos.
+  Mismo problema que `timeLimitSeconds`: sólo lo resuelve una clase de verdad.
+  `tercilesDe()` en `src/lib/compas.ts` está para eso.
+- Dos opciones marcadas `ANCLA DEBIL` en `instrumento_v1.json`: la posición
+  existe en el debate chileno pero ningún texto del programa la defiende.
+
+### Trampas del entorno que costaron tiempo
+
+- **`npx vite` no arranca con el node por defecto de WSL** (v18): Vite 7 necesita
+  `crypto.hash`, que llegó en 20.12. El error es `crypto.hash is not a function`
+  y no menciona la versión. Levantar con
+  `export PATH=$HOME/.nvm/versions/node/v20.19.5/bin:$PATH`.
+- No hay `node` del lado Windows: todo tooling va por `wsl.exe -e bash -lc`.
+- El repo suele tener trabajo sin commitear de otras sesiones, y algo de eso
+  **no compila** (`MCRepartoPreview.tsx` tenía un error de tipos que rompía
+  `npm run build`). Antes de commitear, revisar el índice y **construir el commit
+  en un worktree aparte** (`git worktree add /tmp/x HEAD` + symlink a
+  `node_modules`), que es lo que hace CI. Empujar sin eso puede romper el deploy
+  con código ajeno.
+
 ## Project Overview
 
 - **Stack**: React + TypeScript + Vite (frontend), Firebase Cloud Functions (backend), Firestore (database)
@@ -87,6 +153,7 @@ chequeo offline puede decir es **qué puntaje va a poner el panel**.
 - `src/` - React frontend
 - `functions/src/` - Cloud Functions (single file: `index.ts`)
 - `content/sessions/` - Session content (scenarios, rubrics, knowledge bases)
+- `content/compas/` - El compas: instrumento de opinion, NO es una sesion (ver arriba)
 - `functions/lib/` - Compiled JS output (committed to repo, needed for deploy)
 - `.claude/skills/` - Skills de autoría de este proyecto (ver abajo)
 
