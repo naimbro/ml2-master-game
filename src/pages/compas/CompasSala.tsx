@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import { QRCodeSVG } from 'qrcode.react';
 import CompasPlano, { type PuntoCompas } from '../../components/compas/CompasPlano';
 import { useCompasRun } from '../../hooks/useCompasRun';
+import { cuantosRespondieron } from '../../lib/compas';
 import { currentCompasUrl } from '../../lib/joinUrl';
 
 const ARCHIVO = { fontFamily: "'Archivo Black', sans-serif" } as const;
@@ -28,6 +29,7 @@ export default function CompasSala() {
     loading,
     error,
     isHost,
+    respuestas,
     avanzar,
     retroceder,
     cerrar,
@@ -51,9 +53,10 @@ export default function CompasSala() {
   }));
 
   const inscritos = Object.keys(run.participantes ?? {}).length;
-  const respondieron = Object.values(run.participantes ?? {}).filter(
-    (p) => p.respondidas >= run.itemIndex,
-  ).length;
+  // Sobre el item que esta en pantalla, no sobre cuantas respuestas lleva cada
+  // uno: saltarse un item es legitimo aca, y contando cuentas el que se salto
+  // uno quedaba atrasado para siempre. Ver `cuantosRespondieron`.
+  const respondieron = cuantosRespondieron(respuestas, item?.id);
 
   // La URL completa, no la ruta. Un alumno leyendo "/compas/37NBPZ" en el
   // proyector tendria que adivinar el dominio Y el prefijo de GitHub Pages.

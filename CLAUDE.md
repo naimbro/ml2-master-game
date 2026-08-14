@@ -99,17 +99,31 @@ detalle: el esquema, las rutas, dónde vive cada dato y por qué.
 
 ### Estado real
 
-Probado: 534 tests en verde, `tsc -b` y eslint limpios, y las pantallas
+Probado: 543 tests en verde, `tsc -b` y eslint limpios, las pantallas
 verificadas corriendo en `/preview-compas` (vista previa con curso simulado, sin
-login — es el hermano de `MCRepartoPreview`).
+login — es el hermano de `MCRepartoPreview`), y **17 pruebas de las reglas contra
+el emulador** (`npm run test:rules`).
 
-**Nunca lo ha jugado gente real.** Falta la corrida en seco: abrir sala, entrar
-con dos cuentas, avanzar ítems, cerrar. Dos cosas a mirar ahí, que son las que
-no se pueden verificar solo:
-- el contador «X de Y han respondido» compara `respondidas >= itemIndex`, así que
-  quien se saltó un ítem antes queda contado como atrasado para siempre;
-- si la regla de lectura de `respuestas` falla, el plano del anfitrión queda **en
-  blanco sin decir por qué**.
+**La corrida en seco se hizo el 14-ago-2026** (sala `NQ8QGD`, dos cuentas de
+verdad) y las dos ramas que no se podían verificar solo quedaron probadas: el
+anfitrión leyó las respuestas de otro, y **escribió la posición de otro al
+cerrar, con la pestaña del alumno ya muerta** — que es la única forma de saber
+que fue el anfitrión y no el propio teléfono. Sigue sin jugarlo un curso
+completo.
+
+Lo que esa corrida destapó, y que ningún chequeo previo iba a encontrar: **las
+tres puertas de entrada estaban cerradas**. La pantalla proyectada mostraba
+`/compas/ABC123` sin dominio ni prefijo, el código tecleado en `/join` devolvía
+«Juego no encontrado» porque sólo se buscaba en `games/`, y sin sesión **todas**
+las rutas rebotaban a `/` tirando el destino a la basura — que en el teléfono de
+un alumno es el caso normal, no el raro. Arreglado en `3c99abf`. Si se agrega
+otra pantalla que se entre por QR, `ConSesion` en `App.tsx` es lo que hay que
+usar.
+
+**Ojo con probar jugando solo:** si el anfitrión entra con su propia cuenta,
+`isOwner(playerId)` calza primero en las reglas y tapa justamente las dos ramas
+que importan. Dos corridas se perdieron así. Para eso está `npm run test:rules`,
+que las prueba en segundos y sin dos personas.
 
 ### Pendiente conocido
 
@@ -120,6 +134,12 @@ no se pueden verificar solo:
   `tercilesDe()` en `src/lib/compas.ts` está para eso.
 - Dos opciones marcadas `ANCLA DEBIL` en `instrumento_v1.json`: la posición
   existe en el debate chileno pero ningún texto del programa la defiende.
+- **`compas/ai_democracy_2026/ai_democracy_2026_compas_v1_a1/` quedó vacía a
+  propósito** el 14-ago-2026: las tres pruebas habían escrito ahí, que es el
+  cajón de la Semana 3 de verdad. Dos posiciones falsas en un curso de ~25 mueven
+  un tercil, y los terciles son justamente lo que se va a recalcular con esa
+  cohorte. Si se vuelve a probar, o se usa otro número de aplicación o se borra
+  después — las salas (`compasRuns`) da igual dejarlas.
 
 ### Trampas del entorno que costaron tiempo
 

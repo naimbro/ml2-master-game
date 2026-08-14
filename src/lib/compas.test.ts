@@ -8,6 +8,7 @@ import {
   tercilesDe,
   posicionesDeCohorte,
   posicionesPreviasDeCohorte,
+  cuantosRespondieron,
 } from './compas';
 import type { CompasArquetipos, CompasCortesEje, CompasItem, Timon } from '../types/compas';
 
@@ -231,5 +232,35 @@ describe('posicionesPreviasDeCohorte', () => {
 
   it('no hay estela en el primer item: seria una linea desde ninguna parte', () => {
     expect(posicionesPreviasDeCohorte(cohorte, items, 1)).toEqual({});
+  });
+});
+
+describe('cuantosRespondieron', () => {
+  const cohorte = [
+    { playerId: 'ana', answers: { c01: 'A', c02: 'B', c03: 'C' } },
+    // Beto se salto el c02. Con el contador viejo quedaba atrasado para siempre.
+    { playerId: 'beto', answers: { c01: 'A', c03: 'E' } },
+    { playerId: 'coca', answers: { c01: 'D' } },
+  ];
+
+  it('cuenta a quien respondio ESE item, no a quien lleva muchas respuestas', () => {
+    expect(cuantosRespondieron(cohorte, 'c01')).toBe(3);
+    expect(cuantosRespondieron(cohorte, 'c02')).toBe(1);
+  });
+
+  it('el que se salto un item anterior igual cuenta en el de ahora', () => {
+    // Beto lleva 2 respuestas cuando la sala va en el item 3: el contador viejo
+    // (respondidas >= itemIndex) lo daba por atrasado. Respondio el c03.
+    expect(cuantosRespondieron(cohorte, 'c03')).toBe(2);
+  });
+
+  it('nadie respondio un item que nadie toco', () => {
+    expect(cuantosRespondieron(cohorte, 'c09')).toBe(0);
+  });
+
+  it('sin item en pantalla no hay nada que contar', () => {
+    expect(cuantosRespondieron(cohorte, null)).toBe(0);
+    expect(cuantosRespondieron(cohorte, undefined)).toBe(0);
+    expect(cuantosRespondieron([], 'c01')).toBe(0);
   });
 });

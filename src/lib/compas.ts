@@ -210,3 +210,26 @@ export function posicionesPreviasDeCohorte(
   }
   return out;
 }
+
+/**
+ * Cuantos respondieron EL ITEM QUE ESTA EN PANTALLA.
+ *
+ * Antes la sala contaba `participante.respondidas >= itemIndex`, o sea una
+ * CUENTA contra un INDICE. Eso solo da la respuesta correcta si nadie se salta
+ * nada: quien dejo pasar el item 2 y contesto el 3 llega al item 3 con
+ * respondidas = 2 y queda marcado como atrasado por el resto de la sesion, sin
+ * forma de recuperarse. En este instrumento saltarse un item es una respuesta
+ * legitima —"no tengo opinion sobre esto"— asi que el contador castigaba
+ * justamente lo que el diseno permite a proposito.
+ *
+ * Se cuenta sobre `respuestas`, que es lo que el anfitrion ya tiene a la vista.
+ * El numero manda al profesor a cortar el item, asi que tiene que decir "cuantos
+ * ya opinaron de ESTO", no "cuantos llevan al menos N respuestas".
+ */
+export function cuantosRespondieron(
+  respuestas: RespuestasDe[],
+  itemId: string | null | undefined,
+): number {
+  if (!itemId || !Array.isArray(respuestas)) return 0;
+  return respuestas.filter((r) => !!r?.answers?.[itemId]).length;
+}
