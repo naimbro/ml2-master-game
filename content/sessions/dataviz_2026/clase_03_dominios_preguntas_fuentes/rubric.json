@@ -1,0 +1,88 @@
+{
+  "_doc": "Rúbrica PROPIA de clase_03_dominios_preguntas_fuentes, NO la copia de _shared/base_rubric.json. Se apartó dos veces, y por razones distintas.\n\nPrimero, del base del curso: su dimensión 'criterio_visual' describe la construcción de un gráfico —escalas, geometría, orden de categorías—, y en esta clase no se construyó ni se proyectó un solo gráfico. En el bloque B se leyó una fuente, no se dibujó nada. Pesarla 35% le habría dado un tercio del puntaje a una dimensión inaplicable, que es exactamente lo que se corrigió en la clase 2.\n\nSegundo, de la solución de la clase 2: ahí el reemplazo fue 'criterio_de_datos', que pregunta qué OPERACIÓN admite la variable que tengo al frente —promediar comuna, leer una distribución—. Ninguna de las dos rondas juzgadas de esta clase es sobre una operación. La R5 pregunta qué decidió medir la CEP y qué hacer con lo que dejó fuera; la R7, qué puede sostener una serie de opiniones declaradas. Las dos son sobre la FUENTE, no sobre el dato que ya está en la mano, así que la dimensión es 'criterio_de_fuentes': qué mide realmente, a quién deja fuera, y qué se le puede pedir. Cuando la clase llegue a rondas de construir gráficos (clase 8 en adelante), esa sesión vuelve al base_rubric del curso.",
+  "sessionId": "clase_03_dominios_preguntas_fuentes",
+  "globalInstructions": "Evalúa SOLO lo que está escrito. No completes la respuesta con lo que el estudiante 'seguramente quiso decir'.\n\nEsta es la TERCERA clase del semestre y llevan UNA CLASE PROGRAMANDO EN SUS VIDAS. Son de primer año, de sociología y negocios. El estándar es el de alguien que está aprendiendo a mirar de dónde vienen los datos, no el de un estadístico ni el de un metodólogo.\n\nESTA CLASE FUE CONCEPTUAL, NO SINTÁCTICA. Ninguna respuesta necesita código, ni el nombre de una función, ni el nombre exacto de una fuente. 'Hay que ver quién hizo la encuesta y para qué' vale exactamente lo mismo que 'hay que evaluar los sesgos de la fuente'. 'Buscar una encuesta hecha para ese tema' vale lo mismo que nombrarla.\n\nEste curso NO enseña inferencia estadística en ningún momento: nada de tests, valores-p, intervalos de confianza, márgenes de error, regresión ni representatividad muestral formal. Si una respuesta invoca cualquiera de esas cosas, no está siendo sofisticada: está fuera de lo que se enseñó, y no suma.\n\nSE PIDIERON TRES LÍNEAS, escritas en dos minutos y medio desde un teléfono. Tres líneas bien puestas valen 100: no esperes párrafos, ni estructura, ni introducción, ni ortografía perfecta, ni tildes. ESCRIBIR MÁS NO SUBE EL PUNTAJE. Premia densidad, no extensión. No penalices la brevedad; penaliza la vaguedad.\n\nLA IDEA QUE ESTA SESIÓN PERSIGUE es una sola: toda base de datos es el resultado de que alguien decidió qué valía la pena contar, y lo que no se mide no deja de existir. Que el tema de un estudiante no esté en una fuente no es una falla suya: es un dato sobre esa fuente, y decirlo en voz alta es parte del trabajo, no una excusa.\n\nSi un estudiante objeta el enunciado —dice que la premisa le suena falsa, que faltan años, o que falta información para responder— eso NO se penaliza nunca. Si tiene razón, el problema es del enunciado.\n\nEl judgeFocus del escenario es tu prioridad absoluta y manda sobre estas instrucciones generales si hay tensión.",
+  "scoring": {
+    "scaleLevels": [100, 80, 60, 40, 20, 0],
+    "instructions": "Elige uno de los seis niveles escritos por dimensión. No inventes valores intermedios. Si la respuesta satisface un nivel solo parcialmente, baja al nivel inferior."
+  },
+  "dimensions": [
+    {
+      "id": "rigor_descriptivo",
+      "name": "Rigor descriptivo",
+      "weight": 0.4,
+      "description": "¿Dice sólo lo que el dato sostiene? Distinguir lo que se observa de lo que se supone, no convertir un cambio en las respuestas de una encuesta en un cambio en el mundo, no ampliar el sujeto de la frase más allá de a quién cubre la fuente, y no explicar por qué pasó como si el dato lo mostrara.",
+      "level_100": "Todo lo que afirma se sostiene con lo que tiene al frente, y además nombra explícitamente un límite concreto y pertinente: qué mide realmente el dato y qué no, a quién describe y a quién no, o por qué esta serie no puede sostener la conclusión que le están colgando. El límite que nombra es el que de verdad afecta la pregunta.",
+      "level_80": "Lo que afirma se sostiene y no sobre-afirma, pero el límite queda implícito o el que nombra es secundario.",
+      "level_60": "En lo grueso es correcto, pero mezcla algo que observó con algo que supuso sin marcar la diferencia.",
+      "level_40": "Lee bien y salta a explicar por qué pasó, o generaliza a un grupo más amplio del que la fuente cubre, sin señalar que eso es una suposición.",
+      "level_20": "Afirma como hecho algo que el dato no muestra: una causa, un cambio en lo que la gente siente cuando lo que cambió es lo que menciona, o una población que la fuente no entrevista.",
+      "level_0": "Contradice lo que tiene al frente, o responde sobre otra cosa."
+    },
+    {
+      "id": "criterio_de_fuentes",
+      "name": "Criterio sobre la fuente",
+      "weight": 0.35,
+      "description": "¿Le hace a la fuente las preguntas que hay que hacerle antes de usarla —qué mide realmente, a quiénes incluye y a quiénes deja fuera, qué decidió no medir— y saca de ahí una consecuencia para el trabajo? ¿O la acepta y la descarta por lo que parece: porque es oficial, porque es grande, porque no trae su tema?",
+      "level_100": "Identifica qué mide realmente esta fuente y qué quedó fuera de ella, y saca de ahí una consecuencia concreta para el trabajo: qué se puede preguntar, qué no, o qué hacer ahora. Trata el límite o la ausencia como información sobre la fuente, no como un defecto del tema ni como un obstáculo que invalida el proyecto.",
+      "level_80": "Identifica bien qué mide la fuente y qué deja fuera, pero no aterriza la consecuencia: no dice qué se puede hacer con eso.",
+      "level_60": "Acierta a medias: nombra el límite sin decir qué implica, o dice qué hacer sin haber mirado qué mide la fuente.",
+      "level_40": "Habla de la fuente en general —que es buena, grande, oficial o incompleta— sin nombrar qué mide ni a quién deja fuera.",
+      "level_20": "Acepta o descarta la fuente por lo que parece: porque es oficial, porque tiene muchos casos, o porque no trae su tema.",
+      "level_0": "Afirma algo falso sobre lo que esta fuente contiene o sobre a quién cubre, o resuelve el problema dando por hecho un dato que nadie levantó."
+    },
+    {
+      "id": "claridad",
+      "name": "Claridad para un lector no especializado",
+      "weight": 0.25,
+      "description": "¿Lo entendería alguien de fuera a la primera lectura? Una afirmación principal identificable, el resto sosteniéndola, y sin jerga que no se explique.",
+      "level_100": "Un lector sin formación estadística la entiende a la primera. Hay una afirmación principal identificable y todo lo demás la sostiene. La jerga que usa, la explica.",
+      "level_80": "Se entiende bien, con una frase ambigua o un término técnico sin explicar.",
+      "level_60": "Se entiende con esfuerzo: la idea está, pero el lector tiene que reordenarla.",
+      "level_40": "Enumera observaciones sueltas sin una afirmación principal.",
+      "level_20": "Usa vocabulario técnico como sustituto del argumento, o es tan general que no se sabe de qué está hablando.",
+      "level_0": "Ininteligible, o no responde la pregunta que se hizo."
+    }
+  ],
+  "penalties": [
+    {
+      "id": "media_pregunta",
+      "description": "Las dos preguntas de esta sesión piden DOS COSAS cada una: la ronda de la CEP pide qué le respondes al compañero Y qué hace tu grupo ahora; la del titular pide qué SÍ describe el dato Y qué NO se puede concluir. Responder sólo una de las dos mitades no puede superar 60 en 'Rigor descriptivo' ni 60 en 'Criterio sobre la fuente', por correcta que sea la mitad que contestó.",
+      "effect": { "type": "cap", "value": 60, "dimensions": ["rigor_descriptivo", "criterio_de_fuentes"] }
+    },
+    {
+      "id": "el_dato_debe_existir",
+      "description": "Resolver la falta de datos suponiendo que el dato tiene que estar en alguna parte —'seguro alguien lo mide', 'hay que seguir buscando hasta encontrarlo'— sin nombrar ninguna fuente concreta ni ninguna forma de levantarlo, no puede superar 40 en 'Criterio sobre la fuente'. Ojo: proponer buscar otra fuente hecha para el tema SÍ es una salida válida y no cae acá, aunque no diga cuál. Lo que se castiga es dar por hecho que el dato existe, no proponer ir a buscarlo.",
+      "effect": { "type": "cap", "value": 40, "dimensions": ["criterio_de_fuentes"] }
+    },
+    {
+      "id": "respuesta_intercambiable",
+      "description": "Una respuesta que serviría igual para cualquier otra ronda de este juego sin cambiarle una palabra —'hay que revisar bien la fuente antes de sacar conclusiones', 'faltan más datos para analizarlo'— no puede superar 50 en 'Claridad'.",
+      "effect": { "type": "cap", "value": 50, "dimensions": ["claridad"] }
+    }
+  ],
+  "globalPenalties": [
+    "Convertir un cambio en las respuestas de una encuesta en un cambio en el mundo: 'dejó de importarles' cuando lo que cambió es qué problema mencionan primero.",
+    "Causalidad desde datos descriptivos: 'bajó porque mejoró la economía', dicho como hecho, cuando la serie sólo muestra que bajó.",
+    "Tratar 'oficial' o 'grande' como sinónimo de 'sirve para mi pregunta'.",
+    "Leer la ausencia de un tema en una fuente como prueba de que el tema no importa, en vez de como una decisión de quien hizo la fuente.",
+    "Vaguedad intercambiable: una respuesta que se podría pegar debajo de cualquier pregunta del curso.",
+    "Extensión como sustituto de contenido: una respuesta larga que repite la misma idea vale lo que la idea dicha una vez.",
+    "Jerga como sustituto de razonamiento: nombrar 'sesgo', 'cobertura' o 'muestra' sin decir cuál, dónde ni por qué importa acá.",
+    "Invocar márgenes de error, tests o representatividad formal: está fuera del curso y no suma."
+  ],
+  "bonusIndicators": [
+    "Distingue lo que la gente declara de lo que ocurre en el mundo, en una frase",
+    "Nombra a quién deja fuera la fuente, o qué decidió no medir y desde cuándo",
+    "Aterriza qué hacer ahora en algo ejecutable esta semana, sin inventar el dato",
+    "Trata la ausencia como algo que vale la pena contar en la plataforma, no como un problema que esconder",
+    "Objeta el enunciado con razón: nota que faltan años, o que no sabe cómo estaba redactada la pregunta"
+  ],
+  "penaltyIndicators": [
+    "Da por hecho que el dato tiene que existir en alguna parte",
+    "Abandona el dominio en vez de cambiar de fuente",
+    "Convierte una caída en las menciones en una explicación de por qué ocurrió",
+    "Amplía el sujeto a 'los chilenos' o 'la gente' cuando la fuente entrevista sólo a mayores de 18",
+    "Cita el nombre de una fuente o de una función sin decir qué haría con ella"
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "sessionId": "clase_03_dominios_preguntas_fuentes",
+  "courseId": "dataviz_2026",
+  "title": "Clase 3: Dominios, preguntas y fuentes de datos",
+  "description": "7 rondas (~14 min): 5 de alternativas sobre criterio de fuentes, y 2 abiertas de 150 s — la CEP que no tiene tu tema, y el titular «a los chilenos dejó de importarles el trabajo». Ninguna pide escribir código ni recordar el nombre de una función: lo evaluable es el criterio sobre fuentes y preguntas. El reloj de las alternativas va entre 40 y 50 s, más largo que en la clase 2, porque los enunciados son de leer y no de reconocer. Las 7 compiten.",
+  "date": "2026-08-17",
+  "roundCount": 7,
+  "roundDurationSeconds": 150,
+  "bufferSeconds": 45,
+  "conceptTags": [
+    "de_tema_a_pregunta",
+    "evaluar_una_fuente",
+    "cobertura",
+    "lo_que_no_se_mide",
+    "la_encuesta_cep",
+    "el_catalogo_de_fuentes",
+    "cuando_la_base_se_acaba",
+    "tamano_de_muestra"
+  ],
+  "judges": [
+    {
+      "judgeId": "generic_specialist",
+      "weight": 0.35
+    },
+    {
+      "judgeId": "generic_praxis",
+      "weight": 0.35
+    },
+    {
+      "judgeId": "generic_teacher",
+      "weight": 0.3
+    }
+  ],
+  "judgeConfig": {
+    "generic_specialist": {
+      "sessionLens": "Tu lente es LA FUENTE: si el estudiante le hace las preguntas que se le hacen a una base de datos antes de usarla —a quién incluye y a quién deja fuera, con qué unidad de observación, cada cuánto, y qué decidió no medir— o si la acepta porque existe y es oficial. Tienes el material de la clase en la referencia; úsalo para verificar, no para exigir que citen. Los dos errores que más te importan son tratar «oficial» como sinónimo de «bueno», y afirmar sobre un dato algo que ese dato no muestra: una causa, una población que la fuente no cubre, o un hecho del mundo cuando lo que hay son opiniones declaradas. Es la TERCERA clase del semestre y llevan una clase programando: no exijas nombres de funciones ni vocabulario técnico.",
+      "weightFormula": "score = 0.30 * rigor_descriptivo + 0.50 * criterio_de_fuentes + 0.20 * claridad"
+    },
+    "generic_praxis": {
+      "sessionLens": "Tú eres el lector no especializado que el curso pone como estándar: alguien que entra a la plataforma del grupo sin saber nada de datos. Tu única pregunta es si, leyendo estas tres líneas, quedarías con una idea correcta y útil en la cabeza. Premia que traduzcan el criterio a algo que se entienda; penaliza el rodeo y la frase de relleno. Tres líneas claras valen más que diez confusas, y una respuesta que serviría igual para cualquier otra ronda de este juego no sirve para ninguna.",
+      "weightFormula": "score = 0.20 * rigor_descriptivo + 0.30 * criterio_de_fuentes + 0.50 * claridad"
+    },
+    "generic_teacher": {
+      "sessionLens": "Estas rondas SÍ entran al ranking, así que puntúa con honestidad y sin inflar: un puntaje regalado le quita el puesto a otro. Evalúa si la persona entendió la idea o si repitió una palabra que escuchó pasar en la clase. La idea que esta sesión persigue es una sola: que lo que una fuente no mide no deja de existir, y que decirlo en voz alta es parte del trabajo, no una excusa. Recuerda que llevan una clase programando: un razonamiento correcto dicho sin una sola palabra técnica vale 100. En tu feedback escribe en primera persona e incluye un 'yo habría...' concreto a ESTA respuesta, con la frase exacta que le habría agregado.",
+      "weightFormula": "score = 0.50 * rigor_descriptivo + 0.30 * criterio_de_fuentes + 0.20 * claridad"
+    }
+  }
+}
