@@ -13,6 +13,7 @@ import { MC_SCORING_LEGEND } from '../../lib/mcScoring';
 import { modelLabel } from '../../lib/modelLabel';
 import { useCountUp } from '../../hooks/useCountUp';
 import { applyRound, rachaStorageKey, readRacha, writeRacha, EMPTY_RACHA } from '../../lib/racha';
+import { colorDeJugador } from '../../lib/colorJugador';
 
 interface JudgeEvaluation {
   judgeName: string;
@@ -243,6 +244,9 @@ export default function Results() {
   const currentRound = game?.currentRound;
   const roundPhase = (roundResults as { phase?: string } | null)?.phase;
 
+  /** TU color en la tabla. Ver src/lib/colorJugador.ts. */
+  const colorMio = useMemo(() => colorDeJugador(user?.uid), [user?.uid]);
+
   /**
    * La ultima ronda NO muestra tabla: el podio la reemplaza.
    *
@@ -442,20 +446,23 @@ export default function Results() {
   return (
     <div className="min-h-screen bg-gradient-main">
       {/* Header */}
-      {/* Barra de marcador: tinta a sangre, codigo en naranjo. Da estructura de
-          competencia sin comprometer la identidad a un deporte concreto.
-          Naranjo sobre tinta es texto claro sobre fondo oscuro — el caso inverso
-          al que reprueba AA, asi que aqui si funciona como texto. */}
-      <header className="bg-ink text-onaccent p-4">
+      {/* Barra de marcador EN PAPEL, con un filo de tinta abajo.
+          Era tinta a sangre. Con la fila propia rellena y maciza, la pantalla
+          quedaba con dos bloques pesados y mucho papel vacio entre medio; con la
+          banda en papel el unico peso fuerte pasa a ser tu fila, que es lo que
+          uno quiere mirar. Misma informacion y misma altura.
+          El codigo baja a orange-ink: el naranjo de relleno sobre papel no llega
+          al minimo como texto, y este si (4,5:1). */}
+      <header className="bg-paper border-b-[2.5px] border-ink p-4">
         <div className="max-w-4xl mx-auto flex justify-between items-center">
           <div>
-            <span className="text-white/60 text-xs font-bold uppercase tracking-widest">Resultados Ronda</span>
+            <span className="text-muted text-xs font-bold uppercase tracking-widest">Resultados Ronda</span>
             <p className="text-xl font-black tabular-nums">
-              {game.currentRound} <span className="text-white/45 font-bold">/ {game.totalRounds}</span>
+              {game.currentRound} <span className="text-faint font-bold">/ {game.totalRounds}</span>
             </p>
           </div>
 
-          <div className="text-2xl font-black tracking-[0.2em] text-kahoot-orange tabular-nums">
+          <div className="text-2xl font-black tracking-[0.2em] text-orange-ink tabular-nums">
             {gameCode}
           </div>
         </div>
@@ -475,7 +482,8 @@ export default function Results() {
             transition={{ duration: 0.5 }}
           >
             <h2 className="text-3xl sm:text-4xl font-black mb-2 text-center flex items-center justify-center gap-3">
-              <TrendingUp className="w-8 h-8 sm:w-9 sm:h-9 text-kahoot-green" />
+              {/* En tinta y no en verde: el verde significa "correcta" y nada mas. */}
+              <TrendingUp className="w-8 h-8 sm:w-9 sm:h-9 text-ink" />
               {numPlayers > TOP_N ? `Top ${TOP_N}` : 'Ranking'}
             </h2>
             <p className="text-faint text-sm font-bold text-center mb-8 uppercase tracking-widest">
@@ -504,6 +512,7 @@ export default function Results() {
 
                 const revealed = isDetailRevealed(player.rank) || allRevealed;
                 const isSpotlight = player.rank === lastRevealedRank && revealedCount > 0 && !allRevealed;
+                const esMia = player.playerId === user?.uid;
                 const prevRank = hasPrevData
                   ? initialRankings.findIndex(p => p.playerId === player.playerId) + 1
                   : 0;
@@ -525,14 +534,22 @@ export default function Results() {
                     // Horizontal padding and gaps shrink on phones, but vertical
                     // padding must NOT: ROW_H below is the fixed row height the
                     // swap animation offsets are computed from.
-                    className={`flex items-center gap-2 sm:gap-4 px-3 sm:px-4 py-4 rounded-xl transition-colors duration-500 ${
-                      isSpotlight
-                        ? 'bg-kahoot-green/25 border-2 border-kahoot-green/50 shadow-lg shadow-kahoot-green/20'
-                        : player.playerId === user?.uid
-                        /* Naranjo = donde estas. Verde queda reservado para "correcto". */
-                        ? 'bg-kahoot-orange/15 border-2 border-kahoot-orange/40'
-                        : 'bg-surface-2 border-2 border-transparent'
+                    //
+                    // Las filas son FICHAS —blanco, borde de tinta, sombra
+                    // dura—, el mismo objeto que las alternativas de una
+                    // pregunta. Eran pildoras planas de `surface-2`, y eso era
+                    // buena parte de por que la tabla no se veia del mismo juego
+                    // que el resto.
+                    className={`flex items-center gap-2 sm:gap-4 px-3 sm:px-4 py-4 rounded-xl border-2 border-ink shadow-[0_3px_0_#101114] transition-colors duration-500 ${
+                      isSpotlight ? 'bg-surface-3' : esMia ? '' : 'bg-surface'
                     }`}
+                    /* Tu fila va rellena y maciza, en TU color. Ver
+                       src/lib/colorJugador.ts: por que puede ser cualquiera, por
+                       que se deriva en vez de sortearse, y por que el ambar y el
+                       naranjo quedaron fuera. Va inline y no por clase porque el
+                       color sale de un hash en tiempo de ejecucion, y Tailwind
+                       solo genera las clases que puede leer en el fuente. */
+                    style={esMia ? { background: colorMio.fondo } : undefined}
                   >
                     <div className="flex items-center gap-2">
                       <div
@@ -572,7 +589,10 @@ export default function Results() {
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0, opacity: 0 }}
                             transition={{ delay: 0.2, type: 'spring', stiffness: 400 }}
-                            className={`text-xs font-black ${delta > 0 ? 'text-kahoot-green' : 'text-kahoot-red'}`}
+                            className={`text-xs font-black ${
+                              esMia ? 'text-onaccent'
+                                : delta > 0 ? 'text-kahoot-green' : 'text-kahoot-red'
+                            }`}
                           >
                             {delta > 0 ? `↑${delta}` : `↓${Math.abs(delta)}`}
                           </motion.span>
@@ -583,15 +603,18 @@ export default function Results() {
                     {/* Names ALWAYS fully visible — watching them move is the drama.
                         min-w-0 is required: a flex-1 child defaults to min-width:auto,
                         so `truncate` cannot shrink it and long names overflow the row. */}
-                    <span className="flex-1 min-w-0 font-bold text-lg sm:text-xl truncate">
+                    {/* La cinta ambar "Tu" salio el 2026-08-15: con la fila
+                        entera rellena eran DOS marcadores para lo mismo, y de
+                        colores distintos. */}
+                    <span className={`flex-1 min-w-0 font-bold text-lg sm:text-xl truncate ${
+                      esMia ? 'text-onaccent' : ''
+                    }`}>
                       {player.playerName}
-                      {player.playerId === user?.uid && (
-                        <span className="tape text-sm ml-2">Tu</span>
-                      )}
                     </span>
 
                     <span className={`w-12 sm:w-16 text-right font-mono tabular-nums font-bold transition-all duration-300 ${
-                      revealed
+                      esMia ? 'text-onaccent'
+                        : revealed
                         ? player.roundScore >= 80 ? 'text-kahoot-green' :
                           player.roundScore >= 60 ? 'text-amber-ink' : 'text-kahoot-red'
                         : 'text-faint'
@@ -609,8 +632,8 @@ export default function Results() {
 
                     <span
                       className={`w-12 sm:w-16 text-right font-mono tabular-nums font-black text-xl sm:text-2xl transition-all duration-500 ${
-                        revealed ? 'opacity-100' : showingPrev ? 'opacity-50' : 'opacity-20'
-                      }`}
+                        esMia ? 'text-onaccent ' : ''
+                      }${revealed ? 'opacity-100' : showingPrev ? 'opacity-50' : 'opacity-20'}`}
                     >
                       {revealed ? (
                         <motion.span
