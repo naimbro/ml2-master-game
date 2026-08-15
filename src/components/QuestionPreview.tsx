@@ -9,8 +9,12 @@ import type { MediaAsset, MCQuestion, MCOption } from '../types/game';
 // no submission. The live student path (Round.tsx) is never refactored to feed
 // this, so a bug here can never break a running game.
 
-// Mirrors the key-badge colours used in Round.tsx.
-const MC_KEY_COLORS = ['bg-kahoot-red text-onaccent', 'bg-kahoot-blue text-onaccent', 'bg-kahoot-yellow text-ink', 'bg-kahoot-green text-onaccent'];
+// Los colores SI se comparten con Round.tsx (`src/lib/mcOptionColors.ts`). La
+// replica de arriba es de la VISTA, no de sus constantes: cuando la cuarta ficha
+// dejo de ser verde, la copia local quedo desincronizada y el editor le mostraba
+// al profesor un color que el juego ya no usaba. Un arreglo de strings no puede
+// romper una partida en curso, que es lo que la separacion protege.
+import { MC_KEY_COLORS } from '../lib/mcOptionColors';
 
 interface PreviewScenario {
   title?: string;

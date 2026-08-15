@@ -126,10 +126,17 @@ línea explícita de qué **no** cuenta. Es la corrección del hallazgo 3 de la 
 2, donde una lista cerrada de cuatro límites castigó un quinto límite verdadero y
 los tres jueces se abrieron en 46 / 80 / 94.
 
-**4. El tope de las dos rondas abiertas va a empatar.** Una respuesta de tres
-líneas puede llegar a 100 en las dos, que es exactamente lo que la rúbrica
-promete. Eso lo resuelve la recalibración pareada —los duelos—, que sí corre
-sobre rondas abiertas; no lo resuelve la rúbrica.
+**4. El tope de las dos rondas abiertas va a empatar, y ahora nada lo deshace.**
+Una respuesta de tres líneas puede llegar a 100 en las dos, que es exactamente lo
+que la rúbrica promete. Hasta el 15-ago eso lo resolvía la recalibración pareada
+—los duelos—, que corría sobre las rondas abiertas y reordenaba los empates
+comparando unas respuestas con otras. **Los duelos se sacaron**, así que el
+puntaje que manda es el del panel y punto: si tres alumnos escriben tres
+respuestas excelentes, los tres sacan 100 y quedan empatados arriba.
+
+Es una consecuencia buscada, no un descuido — pero si el podio de un curso de 33
+queda con cinco personas en el primer lugar, la palanca ya no son los duelos: son
+las anclas de `level_100`, que habría que hacer más exigentes.
 
 **Nada de esto está verificado contra jueces reales.** Los doce puntajes de
 arriba son predicciones hechas a mano. La única forma de confirmarlos es jugar

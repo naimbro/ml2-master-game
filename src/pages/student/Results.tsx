@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Trophy, TrendingUp, ArrowRight, MessageSquare, Info, Code, CheckCircle, XCircle, Zap, Swords } from 'lucide-react';
+import { Trophy, TrendingUp, ArrowRight, MessageSquare, Info, Code, CheckCircle, XCircle, Zap } from 'lucide-react';
 import { useGame } from '../../hooks/useGame';
 import VueltaAlJuego from '../../components/VueltaAlJuego';
 import { useAuth } from '../../hooks/useAuth';
@@ -9,8 +9,6 @@ import { httpsCallable } from 'firebase/functions';
 import { functions } from '../../lib/firebase';
 import { playScoreReveal, playGoodScore, playBadScore, playDrumRoll, playTensionSweep, playRankReveal } from '../../lib/sounds';
 import { confettiBurst, confettiCannons } from '../../lib/confetti';
-import RecalibrationReveal from './RecalibrationReveal';
-import { useRoundDuels } from '../../hooks/useRoundDuels';
 import { MC_SCORING_LEGEND } from '../../lib/mcScoring';
 import { modelLabel } from '../../lib/modelLabel';
 import { useCountUp } from '../../hooks/useCountUp';
@@ -38,17 +36,6 @@ function AvgCounter({ from, to }: { from: number; to: number }) {
   return <>{value}</>;
 }
 
-/**
- * Cuanto se espera, despues de que la tabla provisional existe, antes de llamar
- * a los duelos.
- *
- * Eran 3.500 ms elegidos para dejar ver la tabla provisional. Desde el
- * 2026-08-11 esa tabla ya no se anima en las rondas con duelos, asi que la
- * espera solo tiene que alcanzar para leer el cartel de transicion. Lo que
- * queda despues de esto es puro arranque de la funcion (~1 s en frio).
- */
-const RECAL_DELAY_MS = 1200;
-
 /** Puntaje de la ronda, contando desde cero. */
 function RoundCounter({ to }: { to: number }) {
   const value = useCountUp(0, to);
@@ -59,7 +46,7 @@ export default function Results() {
   const { gameCode } = useParams<{ gameCode: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { game, loading, error, roundResults, isHost, nextRound, endGame, submissions, recalibrateRound } = useGame(gameCode);
+  const { game, loading, error, roundResults, isHost, nextRound, endGame, submissions } = useGame(gameCode);
   const [isProcessing, setIsProcessing] = useState(false);
   const [, setEvaluationComplete] = useState(false);
   const scoreSoundPlayed = useRef(false);
@@ -70,7 +57,6 @@ export default function Results() {
   /** Que corrida de la animacion ya se lanzo: `${ronda}:${fase}`. */
   const leaderboardRunRef = useRef<string | null>(null);
   const leaderboardTimersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
-  const recalTriggered = useRef(false);
 
   // Navigate based on game status
   useEffect(() => {
@@ -161,16 +147,14 @@ export default function Results() {
       await processRoundEnd({ gameCode, round: game.currentRound });
       setEvaluationComplete(true);
 
-      // Ultima ronda. Antes se saltaba derecho al podio, y por eso la ronda que
-      // decide al ganador era la UNICA que se quedaba con el puntaje crudo de los
-      // jueces, sin duelos. Desde el 2026-08-03 tambien se recalibra: si esta
-      // ronda va a tener duelos, se queda en la tabla y el anfitrion cierra con
-      // "Ver Resultados Finales". Una ronda de alternativas o diagnostica no
-      // recalibra nada, asi que ahi si se va directo al podio como siempre.
-      const lastScenario = game.scenarios?.[game.currentRound - 1];
-      const willRecalibrate =
-        lastScenario?.ranked !== false && lastScenario?.type !== 'multiple_choice';
-      if (game.currentRound >= game.totalRounds && !willRecalibrate) {
+      // Ultima ronda: derecho al podio.
+      //
+      // Entre el 2026-08-03 y el 2026-08-15 esto tenia una excepcion: si la
+      // ultima ronda iba a pasar por duelos se quedaba en la tabla, porque si
+      // no la ronda que decide al ganador era la unica que se quedaba con el
+      // puntaje crudo de los jueces. Sin duelos ya no hay dos puntajes, asi que
+      // la excepcion perdio su motivo y vuelve el comportamiento simple.
+      if (game.currentRound >= game.totalRounds) {
         await endGame();
         // Keep isProcessing=true to show spinner until navigation fires
         return;
@@ -278,24 +262,8 @@ export default function Results() {
   // le paso a la pantalla proyectada el 2026-08-03 y a nadie mas.
   const TOP_N = 10;
 
-  /**
-   * Una ronda abierta y rankeada va a pasar por duelos, asi que su tabla
-   * provisional tiene 30 segundos de vida.
-   *
-   * Hasta el 2026-08-11 se animaba igual: 11,1 s de montaje que el overlay de
-   * duelos tapaba a los 4,8 s, siempre a media animacion. Nadie la vio nunca
-   * terminar — ni el curso ni Naim. Se cuenta media historia y se corta.
-   *
-   * Ahora esa ronda no anima la tabla provisional: un cartel corto y derecho a
-   * los duelos. La unica tabla que se anima es la definitiva, que es la que
-   * significa algo. Las rondas de alternativas y las no rankeadas no tienen
-   * duelos, asi que animan su tabla como siempre.
-   */
-  const esperaDuelos = isRankedRound && !isMCRound && roundPhase !== 'final';
-
   useEffect(() => {
     if (cumulativeRankings.length === 0) return;
-    if (esperaDuelos) return;
     const runKey = `${currentRound}:${roundPhase === 'final' ? 'final' : 'prov'}`;
     if (leaderboardRunRef.current === runKey) return;
     leaderboardRunRef.current = runKey;
@@ -340,29 +308,14 @@ export default function Results() {
 
     // Phase 4 "done"
     at(() => setLbPhase('done'), t + 300);
-  }, [cumulativeRankings, currentRound, roundPhase, esperaDuelos]);
+  }, [cumulativeRankings, currentRound, roundPhase]);
 
-  // Trigger recalibration (pairwise tournament) after provisional board shows (host only)
-  // reset the one-shot guard whenever the round changes
-  useEffect(() => { recalTriggered.current = false; }, [currentRound]);
-  useEffect(() => {
-    if (
-      // MC rounds have no text to compare, so the pairwise tournament would
-      // find <2 candidates and bail — but not before flipping the round to
-      // 'recalibrating', which renders an empty duel overlay and then replays
-      // the whole leaderboard reveal. Skip it outright.
-      //
-      // La ULTIMA ronda tambien se recalibra, desde el 2026-08-03. Antes se
-      // excluia (`currentRound < totalRounds`) porque el juego saltaba derecho al
-      // podio, y el resultado era que la ronda que decide al ganador era la unica
-      // que quedaba con el puntaje crudo de los jueces.
-      isHost && roundPhase === 'provisional' && isRankedRound && !isMCRound &&
-      currentRound !== undefined && !recalTriggered.current
-    ) {
-      recalTriggered.current = true;
-      setTimeout(() => { recalibrateRound(currentRound).catch(console.error); }, RECAL_DELAY_MS);
-    }
-  }, [isHost, roundPhase, isRankedRound, isMCRound, currentRound, recalibrateRound]);
+  // Aca vivia el disparo de la recalibracion pareada — los duelos. Se saco el
+  // 2026-08-15 por decision de Naim: el anfitrion ya no llama a
+  // `recalibrateRound`, y `processRoundEnd` cierra la ronda en 'final' de una.
+  //
+  // La funcion sigue desplegada y sin llamar, a proposito: volver a encenderlos
+  // es restituir este efecto, y no un redespliegue del backend.
 
   const numPlayers = cumulativeRankings.length;
   const hasPrevData = rankedRoundsPlayed > 1;
@@ -379,16 +332,6 @@ export default function Results() {
   const allRevealed = lbPhase === 'done';
   const userInTop = topRankings.some(p => p.playerId === user?.uid);
   const userRankingEntry = cumulativeRankings.find(p => p.playerId === user?.uid);
-
-  const roundDuels = useRoundDuels(gameCode, game?.currentRound);
-  const duelTotal = (roundResults as { duelTotal?: number } | null)?.duelTotal || 0;
-  const [revealDone, setRevealDone] = useState(false);
-  // reset the reveal when the round changes
-  useEffect(() => { setRevealDone(false); }, [currentRound]);
-  const showReveal = isRankedRound && !revealDone
-    && (roundPhase === 'recalibrating'
-      || (roundPhase === 'provisional' && roundDuels.length > 0)
-      || (roundPhase === 'final' && roundDuels.length > 0));
 
   // Racha del propio jugador. Es DECORACION: no entra en ningun calculo de puntaje.
   // Se persiste en localStorage porque el doc del juego no guarda historial por ronda
@@ -473,40 +416,13 @@ export default function Results() {
         </div>
       </header>
 
-      {showReveal && (
-        <RecalibrationReveal
-          duels={roundDuels}
-          duelTotal={duelTotal}
-          finalReady={roundPhase === 'final'}
-          finalRankings={(roundResults?.rankings || []) as unknown as { playerId: string; playerName: string; score: number; rank: number; provScore?: number; provRank?: number; }[]}
-          onDone={() => setRevealDone(true)}
-        />
-      )}
-
-      {/* El puente hasta los duelos. Reemplaza a la tabla provisional en las
-          rondas que van a recalibrarse: dice que los jueces ya terminaron y que
-          falta una vuelta mas, en vez de mostrar un ranking que en 30 s va a
-          ser otro. Dura lo que tarda `recalibrateRound` en marcar la ronda como
-          'recalibrating' (~1,2 s + arranque), y ahi lo tapa el montaje. */}
-      {roundResults && isRankedRound && esperaDuelos && (
-        <div className="min-h-[60vh] flex flex-col items-center justify-center px-4 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35 }}
-            className="card-play p-8 max-w-md"
-          >
-            <Swords className="w-12 h-12 text-kahoot-orange mx-auto mb-4" />
-            <h2 className="text-2xl font-black mb-2">Los jueces ya puntuaron</h2>
-            <p className="text-ink-soft font-semibold">
-              Ahora las respuestas se comparan entre sí.
-            </p>
-          </motion.div>
-        </div>
-      )}
+      {/* Aca iban el montaje de duelos y el cartel puente que lo anunciaba.
+          Los dos salieron el 2026-08-15 junto con los duelos: ahora la ronda
+          llega en 'final' de una y su tabla se anima derecho, como ya hacian
+          las de alternativas y las no rankeadas. */}
 
       {/* Full-Screen Dramatic Leaderboard (ranked rounds only) — shown first for impact */}
-      {roundResults && game.players && isRankedRound && !esperaDuelos && (
+      {roundResults && game.players && isRankedRound && (
         <div className="min-h-[80vh] flex flex-col justify-center py-8 px-4">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}

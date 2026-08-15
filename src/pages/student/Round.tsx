@@ -14,6 +14,8 @@ import MusicSelector from '../../components/MusicSelector';
 import MediaBlock from '../../components/MediaBlock';
 import WaitingForRound from '../../components/WaitingForRound';
 import NoCopy from '../../components/NoCopy';
+import MCReparto from '../../components/MCReparto';
+import { MC_KEY_COLORS } from '../../lib/mcOptionColors';
 import { resolveMediaSrc } from '../../lib/media';
 import { scoreMCQuestion, scoreMCBlock, MC_SCORING_LEGEND } from '../../lib/mcScoring';
 import { mcTimeline, mcGateSeconds, mcAnswerRevealed } from '../../lib/mcTiming';
@@ -28,12 +30,6 @@ import type { MCResponse } from '../../types/game';
 // the text stays ink-on-white and readable.
 // Text colour travels with the fill: white is unreadable on the amber badge
 // (2.0:1), so that one carries ink instead.
-const MC_KEY_COLORS = [
-  'bg-kahoot-red text-onaccent',
-  'bg-kahoot-blue text-onaccent',
-  'bg-kahoot-yellow text-ink',
-  'bg-kahoot-green text-onaccent',
-];
 const MC_TILE_BASE =
   'bg-surface border-2 border-ink shadow-[0_3px_0_#101114] hover:bg-surface-2 active:translate-y-[3px] active:shadow-none';
 
@@ -758,28 +754,44 @@ export default function Round() {
                     />
                   </div>
 
-                  {/* Option buttons */}
+                  {/* PRIMER COMPAS: el reparto de votos, en columnas, EN LUGAR
+                      de las casillas.
+
+                      Reemplaza y no se suma porque en 390 px no cabe todo: el
+                      intento anterior fue una barrita al pie de cada casilla y
+                      no daba el efecto de sala, porque competia con el texto de
+                      su propia casilla en vez de leerse de una.
+
+                      Las casillas vuelven solas en el segundo compas —con la
+                      correcta encendida y el recuento en su ficha—, que es
+                      donde hay que leer el contenido; el grafico ya hizo lo
+                      suyo. Si el anfitrion nunca publico el recuento, esta rama
+                      no corre y el primer compas se ve como antes: casillas en
+                      neutro. Nunca queda un hueco. */}
+                  {mcRevealed && !mcAnswerShown && mcStats && mcStats.total > 0 ? (
+                    <MCReparto
+                      options={currentScenario.mcQuestions[mcCurrentQ]?.options ?? []}
+                      byOption={mcStats.byOption}
+                      total={mcStats.total}
+                      selectedOptionId={mcSelectedOption}
+                    />
+                  ) : (
+                  /* Option buttons */
                   <NoCopy className={`grid ${mcOptionGridClass} gap-3`}>
                     {currentScenario.mcQuestions[mcCurrentQ]?.options.map((opt, i) => {
                       const correctIdx = currentScenario.mcQuestions![mcCurrentQ]?.correctOptionIndex;
                       const isCorrectOption = i === correctIdx;
                       const isSelected = mcSelectedOption === opt.id;
                       // El color sale en el SEGUNDO compas. En el primero las
-                      // casillas siguen en neutro y solo crece el reparto de
-                      // votos: si el verde ya esta puesto, nadie mira el grafico.
+                      // casillas siguen en neutro (y normalmente ni se ven: esta
+                      // el grafico de columnas en su lugar).
                       const showResult = mcAnswerShown;
 
-                      // Cuantos eligieron ESTA alternativa. La barra va sobre la
-                      // misma casilla —no en un grafico aparte— porque la casilla
-                      // ya trae la letra y el texto: repetirlos al lado seria
-                      // leer dos veces lo mismo en la pantalla de un telefono.
-                      // El recuento va en el PRIMER compas —`mcRevealed`, no
-                      // `showResult`—: es lo unico que se muestra mientras la
-                      // correcta sigue apagada.
+                      // Cuantos eligieron ESTA alternativa. En el segundo compas
+                      // la ficha conserva el recuento que el grafico acaba de
+                      // mostrar, para que el dato no se evapore mientras se lee
+                      // la explicacion.
                       const nEsta = mcRevealed ? mcStats?.byOption?.[opt.id] : undefined;
-                      const pctEsta = nEsta !== undefined && mcStats && mcStats.total > 0
-                        ? Math.round((nEsta / mcStats.total) * 100)
-                        : undefined;
 
                       // Green means correct and nothing else in this palette.
                       let btnClass = MC_TILE_BASE;
@@ -868,28 +880,11 @@ export default function Round() {
                               <XCircle className="w-6 h-6 text-onaccent shrink-0" />
                             )}
                           </span>
-
-                          {/* La barra va pegada al borde de abajo de la casilla,
-                              como en Kahoot: se lee de reojo desde el proyector y
-                              no le roba alto a la casilla en el telefono.
-
-                              Crece durante el primer compas, sobre la casilla
-                              todavia en neutro. Ahi es donde tiene que leerse: una
-                              vez que la correcta se pone verde, esta barra pasa a
-                              ser un dato secundario sobre un fondo saturado. */}
-                          {pctEsta !== undefined && (
-                            <motion.span
-                              aria-hidden="true"
-                              initial={{ width: 0 }}
-                              animate={{ width: `${pctEsta}%` }}
-                              transition={{ duration: 0.9, ease: 'easeOut' }}
-                              className="absolute left-0 bottom-0 h-3 bg-ink/30"
-                            />
-                          )}
                         </motion.button>
                       );
                     })}
                   </NoCopy>
+                  )}
 
                   {/* Cuantos acertaron. El numero que el profesor mira para
                       decidir si sigue o vuelve atras, y por eso se dice en

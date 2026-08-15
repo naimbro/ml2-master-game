@@ -25,6 +25,7 @@ import SessionEditor from './pages/professor/SessionEditor';
 
 // Dev/preview
 import RevealPreview from './pages/RevealPreview';
+import MCRepartoPreview from './pages/MCRepartoPreview';
 import CompasPreview from './pages/CompasPreview';
 
 // Compas — instrumento de posicionamiento, hermano del juego
@@ -95,6 +96,7 @@ function AppRoutes() {
       {/* Public routes */}
       <Route path="/" element={<Home />} />
       <Route path="/preview-reveal" element={<RevealPreview />} />
+      <Route path="/preview-mc" element={<MCRepartoPreview />} />
       <Route path="/preview-compas" element={<CompasPreview />} />
 
       {/* Compas: el alumno entra por /compas/:code, el anfitrion proyecta /compas/:code/sala */}

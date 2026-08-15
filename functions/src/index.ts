@@ -875,9 +875,19 @@ export const processRoundEnd = functions
           tx.set(roundDocRef, {
             round,
             ranked: isRanked,
-            // Non-ranked rounds are never recalibrated — mark them final so the
-            // client does not wait for a Phase 2 that will not come.
-            phase: isRanked ? 'provisional' : 'final',
+            // SIEMPRE 'final', desde el 2026-08-15: ya no hay duelos.
+            //
+            // Esto era `isRanked ? 'provisional' : 'final'`, porque una ronda
+            // juzgada quedaba provisional a la espera de que `recalibrateRound`
+            // corriera los duelos y la cerrara. Los duelos se sacaron por
+            // decision de Naim, asi que esa Fase 2 ya no llega para NADIE, y
+            // dejar una ronda en 'provisional' colgaria al cliente esperandola.
+            //
+            // El puntaje no cambia de lugar: `mergeLateScores` ya escribe
+            // `score` y `totalScore` por fila en este mismo documento, y
+            // `finalScores.ts` manda que el doc de la ronda es la autoridad. Lo
+            // unico que se pierde es la reordenacion pareada.
+            phase: 'final',
             rankings,
             processedAt: nowTs,
           });

@@ -40,42 +40,43 @@
     ]
   },
   {
-    "id": "dv_c03_r2_chi_csv",
+    "id": "dv_c03_r2_opinion_no_es_hecho",
     "order": 2,
-    "title": "El archivo que decía Chile",
+    "title": "Lo que cree y lo que pasa",
     "category": "Evaluar una fuente",
     "type": "multiple_choice",
     "ranked": true,
-    "durationSeconds": 74,
+    "durationSeconds": 81,
     "context": "",
     "question": "",
     "conceptTags": [
-      "evaluar_una_fuente"
+      "evaluar_una_fuente",
+      "la_encuesta_cep"
     ],
     "mcQuestions": [
       {
-        "question": "Tu grupo eligió deporte. Encuentran un archivo llamado CHI.csv en un sitio de fútbol, lo descargan y lo usan como los partidos de Chile. ¿Cuál fue el error?",
+        "question": "En 2026, 31,4% de los encuestados por la CEP menciona la delincuencia como el principal problema del país. Tu grupo quiere titular: «la delincuencia aumentó en Chile». ¿Se puede, con este dato?",
         "options": [
           {
             "id": "A",
-            "text": "Bajaron un archivo suelto en vez de pedirle los datos a la federación"
+            "text": "Sí: el dato viene de la encuesta más citada del país"
           },
           {
             "id": "B",
-            "text": "No abrieron el archivo para mirar qué traía: CHI.csv es China"
+            "text": "Sí, pero aclarando que la cifra es sólo de 2026"
           },
           {
             "id": "C",
-            "text": "Confiaron en un sitio que no es oficial ni de gobierno"
+            "text": "No: la CEP mide lo que la gente opina, no cuántos delitos hubo"
           },
           {
             "id": "D",
-            "text": "El archivo venía en inglés y había que traducir las columnas primero"
+            "text": "No, porque 31,4% no alcanza a ser la mayoría"
           }
         ],
-        "correctOptionIndex": 1,
-        "timeLimitSeconds": 40,
-        "explanation": "En football-data.co.uk existe un CHI.csv y su primera columna dice China. Chile no está en ese sitio. El nombre de un archivo es una promesa, no un dato: se abre y se mira qué trae antes de usarlo."
+        "correctOptionIndex": 2,
+        "timeLimitSeconds": 45,
+        "explanation": "Sesgos y límites, la cuarta pregunta que se le hace a una fuente. La CEP dice cuánta gente CREE que la delincuencia es el principal problema, no cuántos delitos hubo. Son dos preguntas distintas, y se responden con fuentes distintas."
       }
     ]
   },
@@ -127,7 +128,7 @@
     "category": "Cuando la base se acaba",
     "type": "multiple_choice",
     "ranked": true,
-    "durationSeconds": 80,
+    "durationSeconds": 86,
     "context": "",
     "question": "",
     "conceptTags": [
@@ -136,7 +137,7 @@
     ],
     "mcQuestions": [
       {
-        "question": "En el cuaderno, la categoría «Otro» de sistema operativo dio 100% en «micro o bus». Un compañero titula: «el 100% de los que usan otro sistema operativo llega en micro». ¿Cuál es el problema?",
+        "question": "De 33 respuestas del curso, 27 usan iOS, 5 Android y 1 marcó «Otro». Al cruzar con el transporte, la categoría «Otro» da 100% en «micro o bus». ¿Qué problema tiene publicar ese 100%?",
         "options": [
           {
             "id": "A",
@@ -144,7 +145,7 @@
           },
           {
             "id": "B",
-            "text": "En esa categoría hay una sola persona: el resultado sólo podía ser 0% o 100%"
+            "text": "Esa categoría tiene una sola persona: el resultado sólo podía ser 0% o 100%"
           },
           {
             "id": "C",
@@ -156,8 +157,8 @@
           }
         ],
         "correctOptionIndex": 1,
-        "timeLimitSeconds": 45,
-        "explanation": "En esa columna hay 27 iOS, 5 Android y una sola persona en «Otro». Con un caso el resultado sólo podía ser 0% o 100%. Por eso un porcentaje no se publica sin decir sobre cuántos casos está calculado."
+        "timeLimitSeconds": 50,
+        "explanation": "Con un solo caso en la categoría, el resultado sólo podía ser 0% o 100%: el número parece contundente justamente porque está calculado sobre casi nada. Un porcentaje no se publica sin decir sobre cuántos casos está calculado."
       }
     ]
   },
@@ -174,7 +175,7 @@
       "el_catalogo_de_fuentes"
     ],
     "judgeFocus": "Esta ronda mide la idea central de la clase: que lo que una fuente no mide no deja de existir. La respuesta tiene DOS MITADES y se puntúan por separado: (1) por qué el compañero está equivocado, y (2) qué hace el grupo ahora. Quien contesta sólo una no debería pasar de 60, por buena que sea la mitad que contestó.\n\nPRIMERA MITAD — EL CRITERIO: la respuesta tiene que darse cuenta de que la ausencia dice algo sobre la CEP, no sobre la cultura. Que 27 alternativas fijas desde 1994 no incluyan cultura significa que alguien decidió hace treinta años qué contaba como problema del país; no significa que el tema no dé para un proyecto. CUALQUIER FORMA DE DECIR ESO CUENTA, esté o no en los ejemplos que siguen. Las versiones más frecuentes van a ser tres —que la ausencia es un dato sobre la fuente, que la CEP simplemente no es una encuesta hecha para ese tema, o que esa decisión de 1994 sigue mandando en 2026—, pero hay otras igual de válidas: que la CEP mide opiniones sobre problemas del país y no participación cultural, o que el tema no puede aparecer porque nunca se le ofreció a nadie como alternativa. La pregunta que te tienes que hacer no es si la versión está en esta lista, sino si es cierta sobre la CEP. Si lo es, vale 100 en esa mitad aunque no se te haya ocurrido a ti.\n\nLo que NO cuenta como primera mitad: decir sólo que 'la CEP está incompleta' o que 'le falta información', sin decir qué decidió medir y qué no. Y tampoco cuenta afirmar que la ausencia prueba que al país la cultura no le importa: ése es el mismo error de la ronda con el signo cambiado.\n\nSEGUNDA MITAD — EL CRITERIO: qué hace el grupo. Vale cualquier salida que no abandone el dominio y no dé el dato por existente. Las dos más frecuentes van a ser buscar otra fuente hecha para el tema, y decir la ausencia en voz alta en la plataforma como parte del proyecto. Una sola de las dos, bien dicha, basta para 100. NOMBRAR LA FUENTE EXACTA NO ES OBLIGATORIO: 'buscar una encuesta hecha para cultura' vale exactamente lo mismo que nombrarla.\n\nLo que NO cuenta como segunda mitad: 'el dato tiene que estar en alguna parte, sigamos buscando', que es suponer en vez de decidir; y aceptar el cambio a salud, que es rendirse.\n\nNO EXIJAS VOCABULARIO TÉCNICO NI NOMBRES DE FUENTES DE MEMORIA. 'Hay que ver quién hizo la encuesta y para qué' vale lo mismo que 'hay que evaluar los sesgos de la fuente'. Llevan tres clases de curso y una programando.\n\nSon TRES LÍNEAS escritas en dos minutos y medio desde un teléfono. Tres líneas bien puestas valen 100. Escribir más NO sube el puntaje.",
-    "context": "En el taller vieron que la pregunta de la CEP por los problemas del país lleva **32 años** con las mismas 27 alternativas, y que entre ellas **no está el deporte, no está la cultura y no está la inteligencia artificial**.\n\nUn compañero del grupo de **cultura** dice: «la CEP no tiene nuestro tema, así que este dominio no da para el proyecto; cambiémonos a salud».",
+    "context": "**Tu grupo eligió cultura.**\n\nLa CEP lleva **32 años** haciendo la misma pregunta —*«¿cuáles son los tres problemas a los que el país debería dedicar mayor esfuerzo?»*— con una lista fija de 27 alternativas. **La cultura nunca estuvo en esa lista.** Tampoco el deporte, tampoco la inteligencia artificial.\n\nUn compañero tuyo dice: «si la encuesta más importante de Chile no tiene nuestro tema, este dominio no da para el proyecto. Cambiémonos a salud».",
     "question": "¿Qué le respondes, y qué hace tu grupo ahora? **En 3 líneas basta.**",
     "evaluationGuide": {
       "must_hit": [
