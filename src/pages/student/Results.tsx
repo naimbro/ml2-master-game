@@ -243,6 +243,38 @@ export default function Results() {
   const currentRound = game?.currentRound;
   const roundPhase = (roundResults as { phase?: string } | null)?.phase;
 
+  /**
+   * La ultima ronda NO muestra tabla: el podio la reemplaza.
+   *
+   * El anfitrion ya llamaba a `endGame()` apenas terminaba de procesar la ronda
+   * final, pero eso no alcanzaba, y el motivo es que `isProcessing` solo existe
+   * en SU pantalla. En la de los alumnos no hay nada que espere: el doc de la
+   * ronda llega por snapshot, la tabla se renderiza y se anima entera, y recien
+   * despues aterriza el cambio de estado que los manda al podio. O sea que el
+   * curso veia la tabla igual, y de yapa a mitad de animacion.
+   *
+   * Con esto la ultima ronda no arma tabla en ninguna pantalla. El alumno cae
+   * derecho en el formulario de feedback —que en `End.tsx` va ANTES del podio— y
+   * el profesor en la ceremonia.
+   */
+  const esUltimaRonda =
+    currentRound !== undefined &&
+    game?.totalRounds !== undefined &&
+    currentRound >= game.totalRounds;
+
+  /**
+   * Red de seguridad. Si `endGame()` falla —el anfitrion cerro el navegador, se
+   * cayo la red— sin esto la ultima pantalla de la clase seria un spinner
+   * eterno, sin tabla y sin podio. A los 20 s se muestra la tabla de siempre,
+   * que es peor que el podio y muchisimo mejor que nada.
+   */
+  const [cierreDemorado, setCierreDemorado] = useState(false);
+  useEffect(() => {
+    if (!esUltimaRonda) return;
+    const id = setTimeout(() => setCierreDemorado(true), 20000);
+    return () => clearTimeout(id);
+  }, [esUltimaRonda]);
+
   // Leaderboard: animated top 10 + user position, full list after.
   //
   // Corre UNA vez por (ronda, fase). La fase es lo que hace que la tabla se
@@ -375,6 +407,19 @@ export default function Results() {
       <div className="min-h-screen bg-gradient-main flex items-center justify-center p-4">
         <div className="text-center">
           <p className="text-red-400 font-semibold">{error || 'Error al cargar resultados'}</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Ultima ronda: sin tabla. Ver `esUltimaRonda` arriba.
+  if (esUltimaRonda && !cierreDemorado) {
+    return (
+      <div className="min-h-screen bg-gradient-main flex items-center justify-center p-4">
+        <div className="text-center">
+          <div className="w-20 h-20 border-4 border-kahoot-orange border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-ink-soft text-lg font-bold">Ultima ronda lista</p>
+          <p className="text-muted text-sm mt-2 font-medium">Armando el podio...</p>
         </div>
       </div>
     );

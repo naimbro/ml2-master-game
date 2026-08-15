@@ -47,6 +47,18 @@ export default {
           red: '#B3272B',
           orange: '#FF5A1F',        // FILL ONLY — carries ink text, not white
           yellow: '#F5A524',        // FILL ONLY — carries ink text, not white
+          // La cuarta ficha de una pregunta de alternativas. Era `green`, y a
+          // tamano de ficha nadie lo noto; al dibujar el reparto de votos en
+          // columnas quedo en evidencia que una alternativa verde afirma
+          // "correcta" antes de que se revele nada. El verde queda reservado.
+          //
+          // No se puede reemplazar por cualquier cosa: rojo/azul/ambar/verde es
+          // la unica de las combinaciones probadas que separa bien bajo
+          // daltonismo, y este violeta choca con el azul (deltaE 12,4 normal,
+          // 0,4 en deuteranopia). Vale IGUAL porque en una ficha la identidad la
+          // carga la LETRA, no el color: el color es adorno. Por eso mismo el
+          // grafico de columnas no pinta las columnas de estos colores.
+          violet: '#7C3AED',        // 5,70:1 con blanco encima; 5,45:1 como texto sobre papel
         },
       },
       animation: {
