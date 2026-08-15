@@ -48,6 +48,8 @@
  * ## Que salio, y por que
  *
  * - **Tinta #101114**: la fila negra no gusto. Salio por decision, no por medida.
+ * - **Marino #1E3A8A**: tampoco gusto. Cumplia todo (10,36:1 y a 25,1 del verde),
+ *   asi que tambien salio por decision y no por medida.
  * - **Magenta #BE185D**: deltaE 7,5 del rojo que significa "incorrecta". Se habia
  *   colado en la primera version.
  * - **Petroleo #0E7490**: deltaE 12,3 del verde reservado.
@@ -55,12 +57,16 @@
  * - **Ambar y naranjo**: son los dorsales del primer y del tercer lugar. El mismo
  *   color estaria diciendo dos cosas distintas en la misma pantalla.
  *
- * ## Los cinco que quedaron
+ * ## Los cuatro que quedaron
  *
  * Todos oscuros y con texto blanco, lo que ademas simplifica: no hay que decidir
  * el color del texto caso a caso. Contrastes medidos contra blanco, todos AA:
- * marino 10,36:1 · indigo 7,90:1 · fucsia 6,32:1 · violeta 5,70:1 · azul 5,17:1.
- * El peor acercamiento a un color reservado es fucsia contra el rojo, a 20,9.
+ * indigo 7,90:1 · fucsia 6,32:1 · violeta 5,70:1 · azul 5,17:1. El peor
+ * acercamiento a un color reservado es fucsia contra el rojo, a 20,9.
+ *
+ * Sacar uno reordena el modulo, asi que a todos los alumnos les cambia el color.
+ * Da igual hoy —la paleta se estreno el mismo dia y ningun curso la ha visto—,
+ * pero si esto se toca a mitad de semestre hay que saberlo.
  *
  * El costo asumido es que en tu propia fila se pierde el codigo de color del
  * puntaje (verde/ambar/rojo); sigue estando grande en la tarjeta "Tu Resultado".
@@ -78,7 +84,6 @@ export interface ColorJugador {
  * todos los alumnos que ya tenian uno.
  */
 export const COLORES_JUGADOR: readonly ColorJugador[] = [
-  { fondo: '#1E3A8A', nombre: 'marino' },
   { fondo: '#2563EB', nombre: 'azul' },
   { fondo: '#4338CA', nombre: 'indigo' },
   { fondo: '#7C3AED', nombre: 'violeta' },
