@@ -25,6 +25,7 @@ el año que viene sea una edición de una línea y no un redibujo.
 | Archivo | Fuente | Licencia |
 |---|---|---|
 | `data/owid-life-expectancy-chile.csv` | [Our World in Data — Life expectancy at birth](https://ourworldindata.org/grapher/life-expectancy), serie de Chile 1900-2023 | CC BY 4.0 |
+| `data/cep-problemas-por-anio.csv` | [Encuesta CEP](https://www.cepchile.cl/opinion-publica/encuesta-cep/), base consolidada 1994-2026, agregada por año y problema. Es el mismo archivo que los alumnos reciben en el catálogo de fuentes de la clase 3 | Datos públicos del CEP |
 
 ## Toolchain
 
@@ -61,3 +62,32 @@ código y difieren solo en `coord_cartesian(ylim=)`:
 Se usa `coord_cartesian(ylim=)` y no `scale_y_continuous(limits=)` a propósito: el
 segundo **descarta** las observaciones fuera del rango, el primero solo hace zoom.
 Es la distinción que se enseña en clase.
+
+## El gráfico de la clase 3
+
+| Archivo | Para qué |
+|---|---|
+| `c03_cep_empleo.png` | ronda 7, la serie de Empleo en la CEP contra el titular «a los chilenos dejó de importarles el trabajo» |
+
+**El hueco de 2020 va visible y sin puente.** La CEP no se levantó ese año, y unir
+la línea por encima afirmaría un dato que no existe — que es exactamente lo que la
+clase enseña a no hacer. Se fuerza metiendo una fila con `NA`, que es como ggplot
+corta una línea. El `stopifnot` avisa si el CSV algún día trae 2020 de verdad.
+
+**Va Empleo solo, y es una decisión de contenido, no estética.** Se dibujó también
+la versión con los otros cuatro problemas de la tabla del briefing en gris de
+contexto, y se descartó: ahí la subida de Delincuencia queda a la vista, así que
+«el empleo pudo bajar porque otro tema subió» —que es el mejor argumento que la
+ronda persigue— se **lee** del gráfico en vez de razonarse. Y a 310 px de teléfono,
+cinco líneas grises son puré. Para recuperarla: `geom_line` gris sobre
+`filter(d, serie != "Empleo")`, Empleo encima, etiquetas directas en el extremo
+derecho y `ylim` hasta 35.
+
+Una sola serie, así que **no hay leyenda**: el título nombra la serie. Se etiquetan
+sólo los dos hitos que el enunciado ya menciona (2001 y 2024), y el de 2024 va
+corrido a la izquierda porque puesto arriba se sienta sobre la cola que vuelve a
+subir en 2025-2026.
+
+El eje y parte en 0. La clase 1 usa un eje truncado como defecto deliberado y su
+ronda 3 pregunta por él; repetirlo acá, donde nadie pregunta, sería un segundo
+defecto en un gráfico que ya tiene su pregunta.

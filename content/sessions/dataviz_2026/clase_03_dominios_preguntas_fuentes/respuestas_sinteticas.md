@@ -53,6 +53,12 @@ de la clase 2.
 
 ## R7 · El titular del empleo
 
+Desde el 15-ago la ronda **lleva el gráfico de la serie completa** al frente
+(`c03_cep_empleo.png`), el mismo que se proyectó en clase. Eso agregó rutas
+correctas que antes no existían —el rebote de 2025-2026, el pico de 2001, el
+corte de 2020— y mató una que sí estaba en el `judgeFocus` viejo: «con dos años
+sueltos no se sabe cómo fue el camino». Ahora se sabe, así que dejó de contar.
+
 **Buena.** «El dato muestra que cada vez menos gente menciona el empleo como
 principal problema del país. No muestra que les importe menos el trabajo: es una
 encuesta de opinión sobre el país, no sobre la vida de cada uno.»
@@ -78,6 +84,18 @@ Llega por una ruta distinta a la de la respuesta ideal: **no usa el mecanismo de
 «cada persona nombra sólo tres problemas»**, que es el argumento más bonito de
 esta ronda, y aun así es enteramente correcta. Tiene que puntuar igual o más que
 la buena.
+
+**La de al lado, segunda (la que nace del gráfico).** «Bajó de 26,5% a 2,2%,
+pero en el gráfico se ve que en 2025 y 2026 vuelve a subir, así que ni siquiera
+es una caída que siga. Y lo que muestra es qué nombran como problema del país,
+no cuánto les importa su trabajo.»
+→ rigor 100 · fuentes 80 · claridad 100 = **90 / 94 / 94**
+
+Ésta **no se podía escribir antes de que la ronda tuviera el gráfico**, y es la
+que confirma que la imagen sirve para algo más que decorar: usa un hecho que
+sólo está en el dibujo. Si algún juez la castiga por «no estar en el material»,
+el problema es que el `judgeFocus` no dijo con suficiente claridad que el
+estudiante tiene la serie completa a la vista.
 
 ---
 
