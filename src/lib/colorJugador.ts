@@ -21,27 +21,49 @@
  * `Math.random()` en el render haria que la fila cambiara de color en cada
  * re-render, y la tabla se re-renderiza muchas veces mientras corre la animacion
  * de revelacion: el color parpadearia justo en el momento que importa. Derivarlo
- * del uid da un color estable durante todo el juego —y entre juegos— sin
- * guardar absolutamente nada.
+ * del uid da un color estable durante todo el juego —y entre juegos— sin guardar
+ * absolutamente nada.
  *
- * ## Por que estos cinco y no los siete
+ * El reparto esta medido: sobre 10.000 uid con forma de Firebase, FNV-1a deja
+ * cada color entre 19,4% y 20,7%. Que dos cuentas de prueba caigan en el mismo
+ * color es el 4% y no un sintoma — paso, y no habia nada roto.
  *
- * Quedaron fuera los dos rellenos que YA son dorsales del podio: el ambar es el
- * primer lugar y el naranjo el tercero. Si a un alumno le tocara uno de esos, el
- * mismo color estaria diciendo dos cosas distintas en su pantalla.
+ * ## Por que una familia fria, y por que NO importa que sean vecinos
  *
- * Y nunca el verde, que en esta identidad significa "correcta" y nada mas. Se
- * midio tambien un petroleo #0E7490 y se descarto: queda a deltaE 12,3 del verde
- * reservado, menos que los 15,6 que separan al naranjo del ambar dentro del
- * propio sistema, asi que se leeria como "correcto".
+ * Porque casi todo el circulo esta tomado: el verde significa "correcta", el
+ * ambar y el naranjo son dorsales del podio, el rojo es "incorrecta", y encima
+ * cada relleno tiene que dar 4,5:1 con texto blanco. Lo que queda disponible es
+ * la franja azul-violeta-fucsia.
  *
- * Los cinco son oscuros y llevan texto blanco, lo que ademas simplifica: no hay
- * que decidir el color del texto caso a caso. El costo es que en tu propia fila
- * se pierde el codigo de color del puntaje (verde/ambar/rojo); sigue estando
- * grande en la tarjeta "Tu Resultado".
+ * Que midan 10 u 11 de distancia entre si NO es un problema, y costo entenderlo:
+ * los cinco nunca coexisten en pantalla. Cada alumno ve uno solo, asi que la
+ * separacion entre ellos es preferencia estetica, no legibilidad. El requisito
+ * duro es la distancia a los colores que SI comparten pantalla con la fila —los
+ * dorsales del podio y los puntajes—, y de eso todos estan a 15 o mas.
  *
- * Contrastes medidos contra blanco, todos AA: tinta 18,88:1 · indigo 7,90:1 ·
- * magenta 6,04:1 · violeta 5,70:1 · azul 5,17:1.
+ * Un primer intento optimizo la separacion mutua a ciegas y devolvio un olivo
+ * #534805 y un azul apagado: separados de verdad, y feos. La restriccion estaba
+ * mal puesta.
+ *
+ * ## Que salio, y por que
+ *
+ * - **Tinta #101114**: la fila negra no gusto. Salio por decision, no por medida.
+ * - **Magenta #BE185D**: deltaE 7,5 del rojo que significa "incorrecta". Se habia
+ *   colado en la primera version.
+ * - **Petroleo #0E7490**: deltaE 12,3 del verde reservado.
+ * - **Tabaco #7C2D12**: deltaE 11,7 del rojo.
+ * - **Ambar y naranjo**: son los dorsales del primer y del tercer lugar. El mismo
+ *   color estaria diciendo dos cosas distintas en la misma pantalla.
+ *
+ * ## Los cinco que quedaron
+ *
+ * Todos oscuros y con texto blanco, lo que ademas simplifica: no hay que decidir
+ * el color del texto caso a caso. Contrastes medidos contra blanco, todos AA:
+ * marino 10,36:1 · indigo 7,90:1 · fucsia 6,32:1 · violeta 5,70:1 · azul 5,17:1.
+ * El peor acercamiento a un color reservado es fucsia contra el rojo, a 20,9.
+ *
+ * El costo asumido es que en tu propia fila se pierde el codigo de color del
+ * puntaje (verde/ambar/rojo); sigue estando grande en la tarjeta "Tu Resultado".
  */
 
 export interface ColorJugador {
@@ -56,11 +78,11 @@ export interface ColorJugador {
  * todos los alumnos que ya tenian uno.
  */
 export const COLORES_JUGADOR: readonly ColorJugador[] = [
-  { fondo: '#101114', nombre: 'tinta' },
+  { fondo: '#1E3A8A', nombre: 'marino' },
   { fondo: '#2563EB', nombre: 'azul' },
-  { fondo: '#7C3AED', nombre: 'violeta' },
   { fondo: '#4338CA', nombre: 'indigo' },
-  { fondo: '#BE185D', nombre: 'magenta' },
+  { fondo: '#7C3AED', nombre: 'violeta' },
+  { fondo: '#A21CAF', nombre: 'fucsia' },
 ];
 
 /**

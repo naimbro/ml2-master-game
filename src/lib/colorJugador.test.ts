@@ -13,6 +13,25 @@ function contraste(a: string, b: string): number {
   return (alto + 0.05) / (bajo + 0.05);
 }
 
+/** Distancia perceptual en OKLab, x100. Es la que separa dos colores al ojo. */
+function deltaE(a: string, b: string): number {
+  const oklab = (hex: string) => {
+    const [r, g, bl] = [1, 3, 5]
+      .map((i) => parseInt(hex.slice(i, i + 2), 16) / 255)
+      .map((v) => (v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4)));
+    const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * bl);
+    const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * bl);
+    const s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * bl);
+    return [
+      0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s,
+      1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s,
+      0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s,
+    ];
+  };
+  const [A, B] = [oklab(a), oklab(b)];
+  return Math.hypot(A[0] - B[0], A[1] - B[1], A[2] - B[2]) * 100;
+}
+
 describe('colorDeJugador', () => {
   it('el mismo alumno saca siempre el mismo color', () => {
     // Es la razon de ser del modulo: con Math.random() la fila parpadearia en
@@ -68,6 +87,34 @@ describe('colorDeJugador', () => {
   it('los cinco pasan AA con texto blanco encima', () => {
     for (const c of COLORES_JUGADOR) {
       expect(contraste(c.fondo, '#FFFFFF')).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+
+  /**
+   * El chequeo que faltaba, y que habria cazado el magenta #BE185D antes de que
+   * llegara a produccion: quedaba a deltaE 7,5 del rojo que significa
+   * "incorrecta". El ojo no lo separa de una fila de error.
+   *
+   * El umbral es 15 porque es la distancia que el propio sistema acepta entre su
+   * naranjo y su ambar. Y se mide contra los colores que COMPARTEN PANTALLA con
+   * la fila —los dorsales del podio y los puntajes—, no entre los cinco: esos
+   * nunca coexisten, porque cada alumno ve el suyo y nada mas.
+   */
+  it('ninguno se acerca a un color que ya significa algo en la misma pantalla', () => {
+    const RESERVADOS = {
+      verde: '#0B7A46',   // "correcta"
+      ambar: '#F5A524',   // dorsal del primer lugar
+      naranjo: '#FF5A1F', // dorsal del tercer lugar
+      rojo: '#B3272B',    // "incorrecta"
+    };
+    for (const c of COLORES_JUGADOR) {
+      for (const [nombre, hex] of Object.entries(RESERVADOS)) {
+        const d = deltaE(c.fondo, hex);
+        expect(
+          d,
+          `${c.nombre} (${c.fondo}) queda a ΔE ${d.toFixed(1)} del ${nombre}`,
+        ).toBeGreaterThanOrEqual(15);
+      }
     }
   });
 });
