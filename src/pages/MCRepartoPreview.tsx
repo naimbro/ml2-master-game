@@ -23,7 +23,10 @@ interface CasoReparto {
   options: MCOption[];
   byOption: Record<string, number>;
   total: number;
+  /** La que eligio el jugador de ejemplo. */
   mia: string;
+  /** La correcta, para poder mirar el segundo compas. */
+  correcta: string;
 }
 
 const CASOS: CasoReparto[] = [
@@ -40,6 +43,7 @@ const CASOS: CasoReparto[] = [
     byOption: { A: 1, B: 6, C: 33, D: 0 },
     total: 40,
     mia: 'B',
+    correcta: 'C',
   },
   {
     id: 'r4',
@@ -54,6 +58,7 @@ const CASOS: CasoReparto[] = [
     byOption: { A: 32, B: 2, C: 2, D: 0 },
     total: 36,
     mia: 'A',
+    correcta: 'A',
   },
   {
     id: 'parejo',
@@ -68,6 +73,7 @@ const CASOS: CasoReparto[] = [
     byOption: { A: 11, B: 9, C: 13, D: 8 },
     total: 41,
     mia: 'C',
+    correcta: 'B',
   },
   {
     id: 'dos',
@@ -80,12 +86,14 @@ const CASOS: CasoReparto[] = [
     byOption: { A: 29, B: 12 },
     total: 41,
     mia: 'A',
+    correcta: 'B',
   },
 ];
 
 export default function MCRepartoPreview() {
   const [caso, setCaso] = useState(CASOS[0]);
   const [k, setK] = useState(0); // fuerza el re-montaje para volver a animar
+  const [revelado, setRevelado] = useState(false);
 
   return (
     <div className="min-h-screen bg-paper p-6 flex flex-col items-center gap-6">
@@ -104,12 +112,22 @@ export default function MCRepartoPreview() {
           </button>
         ))}
         <button
-          onClick={() => setK((n) => n + 1)}
+          onClick={() => { setRevelado(false); setK((n) => n + 1); }}
           className="px-3 py-2 rounded-lg text-sm font-bold border-2 border-line bg-surface hover:bg-surface-2"
         >
           ↻ Repetir la animación
         </button>
       </div>
+
+      {/* Los dos compases se conmutan a mano: en el juego los separa el reloj
+          compartido (ver mcAnswerRevealed), y esperar tres segundos cada vez
+          que uno quiere mirar el segundo no sirve para trabajar. */}
+      <button
+        onClick={() => setRevelado((v) => !v)}
+        className="primary-button"
+      >
+        {revelado ? '◀ Volver al primer compás' : '▶ Revelar la correcta'}
+      </button>
 
       {/* 390 px clavados: es el ancho en el que hay que decidir esto. */}
       <div className="w-[390px] border border-line rounded-2xl bg-paper p-4 flex flex-col gap-3 shadow-lg">
@@ -121,12 +139,15 @@ export default function MCRepartoPreview() {
           byOption={caso.byOption}
           total={caso.total}
           selectedOptionId={caso.mia}
+          revealed={revelado}
+          correctOptionId={caso.correcta}
         />
       </div>
 
       <p className="text-muted text-sm max-w-md text-center">
-        Primer compás de la revelación. En el segundo vuelven las casillas con la
-        correcta encendida — eso no se previsualiza acá.
+        {revelado
+          ? 'Segundo compás. La correcta se enciende SOBRE el gráfico, como en Kahoot, y las demás bajan a un tercio. La ficha de «la tuya» no se atenúa nunca: es la única excepción, y existe para que el alumno ubique lo que marcó justo cuando más quiere saberlo.'
+          : 'Primer compás: el reparto de votos sin revelar nada. Aprieta «Revelar la correcta» para ver el segundo.'}
       </p>
     </div>
   );

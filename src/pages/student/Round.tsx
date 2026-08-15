@@ -754,26 +754,37 @@ export default function Round() {
                     />
                   </div>
 
-                  {/* PRIMER COMPAS: el reparto de votos, en columnas, EN LUGAR
-                      de las casillas.
+                  {/* LA REVELACION ENTERA, en columnas, EN LUGAR de las
+                      casillas.
 
                       Reemplaza y no se suma porque en 390 px no cabe todo: el
                       intento anterior fue una barrita al pie de cada casilla y
                       no daba el efecto de sala, porque competia con el texto de
                       su propia casilla en vez de leerse de una.
 
-                      Las casillas vuelven solas en el segundo compas —con la
-                      correcta encendida y el recuento en su ficha—, que es
-                      donde hay que leer el contenido; el grafico ya hizo lo
-                      suyo. Si el anfitrion nunca publico el recuento, esta rama
-                      no corre y el primer compas se ve como antes: casillas en
-                      neutro. Nunca queda un hueco. */}
-                  {mcRevealed && !mcAnswerShown && mcStats && mcStats.total > 0 ? (
+                      Hasta el 2026-08-15 esto corria SOLO en el primer compas y
+                      el segundo remontaba las casillas, o sea que el grafico se
+                      iba justo cuando la pregunta se resolvia. Ahora se queda en
+                      los dos y la correcta se enciende encima, como en Kahoot:
+                      `revealed` es lo que lo dispara, y MCReparto se encarga de
+                      que la alternativa que eligio el jugador siga visible
+                      aunque su columna se atenue.
+
+                      Si el anfitrion nunca publico el recuento, esta rama no
+                      corre y la revelacion cae a las casillas de siempre, con la
+                      correcta en verde. Nunca queda un hueco. */}
+                  {mcRevealed && mcStats && mcStats.total > 0 ? (
                     <MCReparto
                       options={currentScenario.mcQuestions[mcCurrentQ]?.options ?? []}
                       byOption={mcStats.byOption}
                       total={mcStats.total}
                       selectedOptionId={mcSelectedOption}
+                      revealed={mcAnswerShown}
+                      correctOptionId={
+                        currentScenario.mcQuestions[mcCurrentQ]?.options[
+                          currentScenario.mcQuestions[mcCurrentQ].correctOptionIndex
+                        ]?.id
+                      }
                     />
                   ) : (
                   /* Option buttons */
