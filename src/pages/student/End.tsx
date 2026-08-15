@@ -33,11 +33,25 @@ interface PlayerFinalScore {
   rank: number;
 }
 
-// Podium colors matching Kahoot's energetic palette
+/**
+ * Los tres puestos del podio, en el sistema Cancha.
+ *
+ * Hasta el 2026-08-15 esto eran degradados de `yellow-400/600`, `gray-300/500` y
+ * `amber-500/700` con sombras de color: la identidad morada anterior al
+ * 2026-07-26. El restyle migro las pantallas de juego y **se salto el podio**,
+ * asi que la ultima pantalla de la partida —la que queda proyectada mientras el
+ * curso se va— era la unica que no se veia como el resto.
+ *
+ * Los rellenos son los MISMOS que el dorsal de la tabla de cada ronda en
+ * `Results.tsx`, a proposito: el primero es el mismo objeto visual en las dos
+ * pantallas. Amarillo y naranjo son fill-only, asi que el numero va en tinta.
+ * Nada de degradados ni de sombras de color: en Cancha la sombra es dura y de
+ * tinta.
+ */
 const PODIUM_STYLES = {
-  1: { bg: 'from-yellow-400 to-yellow-600', text: 'text-black', border: 'border-yellow-300', shadow: 'shadow-yellow-500/40', h: 'h-48' },
-  2: { bg: 'from-gray-300 to-gray-500', text: 'text-black', border: 'border-gray-200', shadow: 'shadow-gray-400/30', h: 'h-36' },
-  3: { bg: 'from-amber-500 to-amber-700', text: 'text-black', border: 'border-amber-400', shadow: 'shadow-amber-500/30', h: 'h-28' },
+  1: { bg: 'bg-kahoot-yellow', text: 'text-ink', border: 'border-ink', h: 'h-48' },
+  2: { bg: 'bg-surface-3', text: 'text-ink', border: 'border-ink', h: 'h-36' },
+  3: { bg: 'bg-kahoot-orange', text: 'text-ink', border: 'border-ink', h: 'h-28' },
 };
 
 export default function End() {
@@ -78,10 +92,14 @@ export default function End() {
 
     const calculateFinalRankings = async () => {
       try {
-        // El puntaje que manda es el del doc de la ronda, no el de la submission:
-        // los duelos recalibran ahi y NO reescriben el finalScore del juez. Ver
-        // src/lib/finalScores.ts. Las submissions siguen leyendose como respaldo
-        // para juegos viejos, que no tienen subcoleccion `rounds`.
+        // El puntaje que manda es el del doc de la ronda, no el de la submission.
+        // Ver src/lib/finalScores.ts. Las submissions siguen leyendose como
+        // respaldo para juegos viejos, que no tienen subcoleccion `rounds`.
+        //
+        // La regla nacio porque los duelos escribian ahi sin reescribir el
+        // finalScore del juez, y sumar la submission coronaba a otro ganador.
+        // Los duelos salieron el 2026-08-15 y la regla se queda igual: el doc de
+        // la ronda tambien es el unico que trae a los rezagados.
         const [roundsSnapshot, submissionsSnapshot] = await Promise.all([
           getDocs(collection(db, 'games', gameCode, 'rounds')),
           getDocs(collection(db, 'games', gameCode, 'submissions')),
@@ -402,7 +420,7 @@ export default function End() {
                 transition={{ type: 'spring', stiffness: 150 }}
                 className="flex flex-col items-center"
               >
-                <div className={`w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br ${PODIUM_STYLES[2].bg} flex items-center justify-center mb-2 border-4 ${PODIUM_STYLES[2].border} shadow-lg ${PODIUM_STYLES[2].shadow}`}>
+                <div className={`w-16 h-16 md:w-20 md:h-20 rounded-full ${PODIUM_STYLES[2].bg} flex items-center justify-center mb-2 border-4 ${PODIUM_STYLES[2].border} shadow-[0_3px_0_#101114]`}>
                   <span className={`text-2xl font-black ${PODIUM_STYLES[2].text}`}>2</span>
                 </div>
                 <p className="font-bold text-center text-sm mb-2 max-w-24 truncate">
@@ -427,9 +445,9 @@ export default function End() {
                   animate={{ rotate: [0, -5, 5, -5, 0] }}
                   transition={{ delay: 0.3, duration: 0.5 }}
                 >
-                  <Trophy className="w-10 h-10 text-yellow-400 mb-2" />
+                  <Trophy className="w-10 h-10 text-amber-ink mb-2" />
                 </motion.div>
-                <div className={`w-20 h-20 md:w-24 md:h-24 rounded-full bg-gradient-to-br ${PODIUM_STYLES[1].bg} flex items-center justify-center mb-2 border-4 ${PODIUM_STYLES[1].border} shadow-xl ${PODIUM_STYLES[1].shadow}`}>
+                <div className={`w-20 h-20 md:w-24 md:h-24 rounded-full ${PODIUM_STYLES[1].bg} flex items-center justify-center mb-2 border-4 ${PODIUM_STYLES[1].border} shadow-[0_4px_0_#101114]`}>
                   <span className={`text-3xl font-black ${PODIUM_STYLES[1].text}`}>1</span>
                 </div>
                 <p className="font-black text-center mb-2 max-w-28 truncate text-lg">
@@ -450,7 +468,7 @@ export default function End() {
                 transition={{ type: 'spring', stiffness: 150 }}
                 className="flex flex-col items-center"
               >
-                <div className={`w-14 h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-br ${PODIUM_STYLES[3].bg} flex items-center justify-center mb-2 border-4 ${PODIUM_STYLES[3].border} shadow-lg ${PODIUM_STYLES[3].shadow}`}>
+                <div className={`w-14 h-14 md:w-16 md:h-16 rounded-full ${PODIUM_STYLES[3].bg} flex items-center justify-center mb-2 border-4 ${PODIUM_STYLES[3].border} shadow-[0_3px_0_#101114]`}>
                   <span className={`text-xl font-black ${PODIUM_STYLES[3].text}`}>3</span>
                 </div>
                 <p className="font-bold text-center text-sm mb-2 max-w-20 truncate">
@@ -586,7 +604,7 @@ export default function End() {
             className="card-play p-6"
           >
             <h2 className="text-xl font-black mb-4 flex items-center gap-2">
-              <Medal className="w-5 h-5 text-purple-400" />
+              <Medal className="w-5 h-5 text-amber-ink" />
               Ranking Completo
             </h2>
 
@@ -607,12 +625,12 @@ export default function End() {
                   <div
                     className={`w-8 h-8 rounded-lg flex items-center justify-center font-black text-sm ${
                       player.rank === 1
-                        ? 'bg-yellow-500 text-black'
+                        ? 'bg-kahoot-yellow text-ink'
                         : player.rank === 2
-                        ? 'bg-gray-400 text-black'
+                        ? 'bg-surface-3 text-ink'
                         : player.rank === 3
-                        ? 'bg-amber-600 text-black'
-                        : 'bg-surface-3'
+                        ? 'bg-kahoot-orange text-ink'
+                        : 'bg-surface-2 text-ink'
                     }`}
                   >
                     {player.rank}
@@ -672,7 +690,7 @@ export default function End() {
             className="card-play p-6"
           >
             <h2 className="text-xl font-black mb-4 flex items-center gap-2">
-              <FileText className="w-5 h-5 text-purple-400" />
+              <FileText className="w-5 h-5 text-amber-ink" />
               Panel del Profesor
             </h2>
             <p className="text-muted text-sm mb-4 font-medium">
@@ -681,7 +699,7 @@ export default function End() {
             <div className="space-y-3">
               <Link
                 to={`/professor/report/${gameCode}`}
-                className="w-full p-4 bg-purple-600 hover:bg-purple-700 rounded-xl transition-colors flex items-center justify-center gap-2 font-bold shadow-lg shadow-purple-600/20"
+                className="primary-button w-full flex items-center justify-center gap-2"
               >
                 <FileText className="w-5 h-5" />
                 Ver Reporte de Clase

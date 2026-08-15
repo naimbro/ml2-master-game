@@ -642,9 +642,9 @@ export default function Results() {
                 >
                   <Trophy
                     className={`w-6 h-6 ${
-                      userRank.rank === 1 ? 'text-yellow-400'
+                      userRank.rank === 1 ? 'text-amber-ink'
                         : userRank.rank === 2 ? 'text-muted'
-                        : userRank.rank === 3 ? 'text-amber-600'
+                        : userRank.rank === 3 ? 'text-orange-ink'
                         : 'text-muted'
                     }`}
                   />
@@ -724,11 +724,11 @@ export default function Results() {
                   <Trophy
                     className={`w-6 h-6 ${
                       userRank.rank === 1
-                        ? 'text-yellow-400'
+                        ? 'text-amber-ink'
                         : userRank.rank === 2
                         ? 'text-muted'
                         : userRank.rank === 3
-                        ? 'text-amber-600'
+                        ? 'text-orange-ink'
                         : 'text-muted'
                     }`}
                   />

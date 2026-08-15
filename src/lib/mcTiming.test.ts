@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { mcAnswerRevealed, mcFeedbackSeconds } from './mcTiming';
+import { mcAnswerRevealed, mcBeatSeconds, mcFeedbackSeconds } from './mcTiming';
 
 /**
  * La revelacion en dos tiempos. Lo que se prueba aca no es el diseno sino la
@@ -58,5 +58,35 @@ describe('mcAnswerRevealed', () => {
 
   it('un secondsLeft mayor que la ventana (reloj desfasado) no adelanta el verde', () => {
     expect(mcAnswerRevealed(expl, total + 5)).toBe(false);
+  });
+});
+
+describe('mcBeatSeconds', () => {
+  it('es el instante exacto en que mcAnswerRevealed cambia de false a true', () => {
+    // La razon de ser del export: el redoble se agenda contra este numero, asi
+    // que si se desincronizara del verde el suspenso resolveria en el aire.
+    for (const e of [null, '', 'corta', 'x'.repeat(120), 'x'.repeat(400)]) {
+      const total = mcFeedbackSeconds(e);
+      const beat = mcBeatSeconds(e);
+      // Un pelo antes del compas todavia no hay verde; justo en el compas si.
+      expect(mcAnswerRevealed(e, total - beat + 0.01)).toBe(false);
+      expect(mcAnswerRevealed(e, total - beat)).toBe(true);
+    }
+  });
+
+  it('con explicacion normal son los 3 s de diseno', () => {
+    expect(mcBeatSeconds('x'.repeat(200))).toBe(3);
+  });
+
+  it('sin explicacion se recorta para no comerse media revelacion', () => {
+    // Ventana de 6 s: el compas baja a 3, no se queda en 3 de 6 mas el resto.
+    expect(mcFeedbackSeconds(null)).toBe(6);
+    expect(mcBeatSeconds(null)).toBe(3);
+  });
+
+  it('nunca es mayor que la mitad de la ventana', () => {
+    for (const e of [null, '', 'corta', 'x'.repeat(120), 'x'.repeat(400)]) {
+      expect(mcBeatSeconds(e)).toBeLessThanOrEqual(mcFeedbackSeconds(e) / 2);
+    }
   });
 });

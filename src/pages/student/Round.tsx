@@ -8,7 +8,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { useTypingTelemetry } from '../../hooks/useTypingTelemetry';
 import { doc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
-import { playCountdownTick, playCriticalTick, playSubmitSuccess, playScoreReveal, playGoodScore, playBadScore, startBackgroundMusic, stopBackgroundMusic, getMuted, getCurrentMusicStyle } from '../../lib/sounds';
+import { playCountdownTick, playCriticalTick, playSubmitSuccess, playScoreReveal, playGoodScore, playBadScore, playDrumRoll, startBackgroundMusic, stopBackgroundMusic, getMuted, getCurrentMusicStyle } from '../../lib/sounds';
 import { confettiBurst, confettiCannons, confettiPop } from '../../lib/confetti';
 import MusicSelector from '../../components/MusicSelector';
 import MediaBlock from '../../components/MediaBlock';
@@ -18,11 +18,18 @@ import MCReparto from '../../components/MCReparto';
 import { MC_KEY_COLORS } from '../../lib/mcOptionColors';
 import { resolveMediaSrc } from '../../lib/media';
 import { scoreMCQuestion, scoreMCBlock, MC_SCORING_LEGEND } from '../../lib/mcScoring';
-import { mcTimeline, mcGateSeconds, mcAnswerRevealed } from '../../lib/mcTiming';
+import { mcTimeline, mcGateSeconds, mcAnswerRevealed, mcBeatSeconds } from '../../lib/mcTiming';
 import { mcStatsKey } from '../../lib/mcStats';
 import { modelLabel } from '../../lib/modelLabel';
 import { RichText } from '../../components/RichText';
 import type { MCResponse } from '../../types/game';
+
+/**
+ * Cuanto dura `playDrumRoll`. Vive aca y no en sounds.ts porque lo unico que se
+ * necesita es AGENDARLO, y exportar la duracion desde el modulo de sonido
+ * invitaria a que alguien la cambie creyendo que altera el sonido.
+ */
+const DRUM_ROLL_MS = 1500;
 
 // On a light ground the four Kahoot fills would be four shouting rectangles, so
 // the tile itself is a white card with an ink border and a hard bottom shadow,
@@ -377,6 +384,39 @@ export default function Round() {
       return changed ? next : prev;
     });
   }, [isMC, mcQuestions, timeline, hasSubmitted, mcBlockDone]);
+
+  /**
+   * El suspenso del PRIMER compas: un redoble que resuelve justo con el verde.
+   *
+   * Hasta el 2026-08-15 el grafico crecia en silencio y el unico sonido llegaba
+   * con la respuesta ya revelada, asi que la pausa de tres segundos que existe
+   * para generar expectativa no sonaba a nada. Naim lo pidio despues de jugar
+   * S6ELE2: "la revelacion tendria que venir precedida de algun audio".
+   *
+   * Se agenda al FINAL del compas y no al principio: el redoble dura 1,5 s y el
+   * compas 3, asi que arrancandolo de inmediato quedaba un segundo y medio de
+   * silencio muerto justo antes del golpe. Empezando en `compas - 1,5 s` el
+   * crescendo cae encima del verde, que es como suena en un concurso.
+   *
+   * `mcBeatSeconds` viene de mcTiming y no de una constante local a proposito:
+   * el compas se recorta cuando la explicacion es corta, y una copia de la regla
+   * aca se habria desincronizado en silencio.
+   *
+   * Suena en TODAS las pantallas, incluida la del anfitrion que solo dirige: el
+   * suspenso es de la sala, no del jugador. Lo que no suena antes de tiempo es
+   * el acierto o el error, que va en el segundo compas.
+   */
+  const mcSuspensoRef = useRef<number | null>(null);
+  useEffect(() => {
+    if (!isMC || !mcRevealed || mcAnswerShown || mcBlockDone) return;
+    if (mcSuspensoRef.current === mcCurrentQ) return;
+    mcSuspensoRef.current = mcCurrentQ;
+
+    const beatMs = mcBeatSeconds(mcQuestions?.[mcCurrentQ]?.explanation) * 1000;
+    const espera = Math.max(0, beatMs - DRUM_ROLL_MS);
+    const id = setTimeout(playDrumRoll, espera);
+    return () => clearTimeout(id);
+  }, [isMC, mcRevealed, mcAnswerShown, mcBlockDone, mcCurrentQ, mcQuestions]);
 
   // MC: right/wrong reveal, once per question. Suena en el SEGUNDO compas, con
   // el verde: el aplauso durante el grafico delataria la respuesta a la sala.
@@ -735,7 +775,12 @@ export default function Round() {
                       question read as a single unit on a projected screen */}
                   <NoCopy className="card-play p-5 sm:p-6">
                     <p className="text-xl sm:text-2xl font-black text-ink leading-snug">
-                      {currentScenario.mcQuestions[mcCurrentQ]?.question}
+                      {/* Por RichText como el enunciado de las rondas abiertas.
+                          Hoy ningun contenido usa markdown aca, pero los
+                          profesores escriben sesiones desde la UI y el modo de
+                          falla es silencioso y proyectado: asteriscos literales
+                          delante del curso. */}
+                      <RichText text={currentScenario.mcQuestions[mcCurrentQ]?.question} />
                     </p>
                     <MediaBlock
                       media={currentScenario.mcQuestions[mcCurrentQ]?.media}
@@ -961,7 +1006,7 @@ export default function Round() {
                       )}
                       {currentScenario.mcQuestions[mcCurrentQ]?.explanation && (
                         <p className="text-ink-soft text-sm font-medium mt-2 max-w-xl mx-auto leading-relaxed">
-                          {currentScenario.mcQuestions[mcCurrentQ]?.explanation}
+                          <RichText text={currentScenario.mcQuestions[mcCurrentQ]?.explanation} />
                         </p>
                       )}
                     </motion.div>

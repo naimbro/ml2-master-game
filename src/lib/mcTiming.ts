@@ -90,13 +90,24 @@ export function mcAnswerRevealed(
   explanation: string | null | undefined,
   secondsLeft: number,
 ): boolean {
-  const total = mcFeedbackSeconds(explanation);
-  // Sin explicación la ventana cae al piso de 6 s: ahí el compás se recorta para
-  // no comerse la mitad de la revelación. Nunca deja al verde con menos de la
-  // mitad de la ventana.
-  const beat = Math.min(MC_FEEDBACK_BEAT_SECONDS, Math.floor(total / 2));
-  const elapsed = total - secondsLeft;
-  return elapsed >= beat;
+  const elapsed = mcFeedbackSeconds(explanation) - secondsLeft;
+  return elapsed >= mcBeatSeconds(explanation);
+}
+
+/**
+ * Cuanto dura el PRIMER compas: el reparto de votos sin revelar nada.
+ *
+ * Sale de aca y no de la constante porque hay un caso de borde: sin explicacion
+ * la ventana entera cae al piso de 6 s, y ahi el compas se recorta para no
+ * comerse la mitad de la revelacion. Nunca deja al verde con menos de la mitad
+ * de la ventana.
+ *
+ * Lo exporta para el suspenso sonoro: `Round.tsx` necesita saber cuando termina
+ * este compas para que el redoble resuelva JUSTO cuando se enciende el verde, y
+ * duplicar la regla alla era garantizar que se desincronizara.
+ */
+export function mcBeatSeconds(explanation?: string | null): number {
+  return Math.min(MC_FEEDBACK_BEAT_SECONDS, Math.floor(mcFeedbackSeconds(explanation) / 2));
 }
 
 /**
