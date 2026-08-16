@@ -101,7 +101,10 @@ export default function TarjetaArquetipo({
           <>
             <br />
             Agencia {f(posicion.agencia)} — sobre {posicion.agenciaRespondidas}{' '}
-            {posicion.agenciaRespondidas === 1 ? 'respuesta' : 'respuestas'} que hablan de quién conduce
+            {posicion.agenciaRespondidas === 1
+              ? 'respuesta que habla'
+              : 'respuestas que hablan'}{' '}
+            de quién conduce
           </>
         )}
       </p>
