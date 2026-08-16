@@ -85,6 +85,8 @@ export default function CompasPreview() {
     return { ...p, magnitud: p.magnitud + cohorte[i].jx, direccion: p.direccion + cohorte[i].jy };
   };
 
+  const bandasAgencia = arquetipos.bandasAgencia?.bandas;
+
   const puntos: PuntoCompas[] = ronda === 0
     ? []
     : cohorte.map((_, i) => {
@@ -99,7 +101,6 @@ export default function CompasPreview() {
         };
       });
 
-  const bandasAgencia = arquetipos.bandasAgencia?.bandas;
   const puntosAgencia: PuntoAgencia[] =
     ronda === 0
       ? []
