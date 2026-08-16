@@ -147,7 +147,20 @@ export default function CompasSala() {
       </div>
 
       {item && (
-        <p className="mb-4 border-l-4 border-ink bg-surface px-4 py-3 text-xl text-ink">{item.question}</p>
+        <div className="mb-4 border-l-4 border-ink bg-surface px-4 py-3">
+          <p className="text-xl text-ink">{item.question}</p>
+          {/*
+            Seis de los doce items alimentan el tercer eje y seis no. Sin decirlo,
+            la tira vacia en el item 1 se lee desde la sala como que algo fallo.
+          */}
+          {instrumento.ejeAgencia && (
+            <p className="mt-2 text-[12px] uppercase tracking-wide text-faint" style={ARCHIVO}>
+              {item.options.some((o) => typeof o.agencia === 'number')
+                ? '↓ este ítem también mueve la tira de abajo'
+                : '↓ este ítem no pregunta por quién conduce: la tira no se mueve'}
+            </p>
+          )}
+        </div>
       )}
 
       <div className="mb-4 border-2 border-ink bg-surface p-4 shadow-[4px_4px_0_#101114]">

@@ -35,8 +35,10 @@ interface Props {
  */
 export default function TiraAgencia({ puntos, eje, bandas, conLeyenda = true }: Props) {
   const W = 720;
-  const H = conLeyenda ? 108 : 62;
-  const M = { t: 10, r: 22, b: conLeyenda ? 40 : 12, l: 22 };
+  const H = conLeyenda ? 124 : 62;
+  // La pregunta del eje va ARRIBA. Abajo chocaba con el contador de "sin
+  // opinion", y en el proyector se leian los dos textos encimados.
+  const M = { t: conLeyenda ? 34 : 10, r: 22, b: conLeyenda ? 34 : 12, l: 22 };
   const PW = W - M.l - M.r;
   const PH = H - M.t - M.b;
 
@@ -93,26 +95,47 @@ export default function TiraAgencia({ puntos, eje, bandas, conLeyenda = true }: 
         );
       })}
 
+      {/*
+        Estado vacio explicito. Sin esto la tira aparece en blanco en el item 1
+        —que no pregunta por este eje— y desde la sala se lee como que esta
+        rota. Es la primera cosa que se ve en la primera aplicacion, asi que
+        tiene que explicarse sola.
+      */}
+      {conValor.length === 0 && (
+        <text
+          x={M.l + PW / 2}
+          y={M.t + PH / 2 + 4}
+          textAnchor="middle"
+          className="fill-muted text-[13px]"
+        >
+          Ningún ítem respondido pregunta todavía por este eje
+        </text>
+      )}
+
       {conLeyenda && (
         <g>
-          <text x={M.l} y={H - 22} className="fill-muted text-[12px]">
-            {eje.minLabel}
-          </text>
-          <text x={M.l + PW} y={H - 22} textAnchor="end" className="fill-muted text-[12px]">
-            {eje.maxLabel}
-          </text>
           <text
-            x={M.l + PW / 2}
-            y={H - 6}
-            textAnchor="middle"
+            x={M.l}
+            y={20}
             className="fill-ink text-[11px] uppercase"
             style={{ fontFamily: "'Archivo Black', sans-serif" }}
           >
             {eje.pregunta}
           </text>
-          {sinValor > 0 && (
-            <text x={M.l} y={H - 6} className="fill-faint text-[11px]">
-              {sinValor} sin opinión en este eje todavía
+          <text x={M.l} y={H - 12} className="fill-muted text-[12px]">
+            {eje.minLabel}
+          </text>
+          <text x={M.l + PW} y={H - 12} textAnchor="end" className="fill-muted text-[12px]">
+            {eje.maxLabel}
+          </text>
+          {sinValor > 0 && conValor.length > 0 && (
+            <text
+              x={M.l + PW / 2}
+              y={H - 12}
+              textAnchor="middle"
+              className="fill-faint text-[11px]"
+            >
+              {sinValor} sin opinión en este eje
             </text>
           )}
         </g>
