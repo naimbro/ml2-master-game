@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { QRCodeSVG } from 'qrcode.react';
 import CompasPlano, { type PuntoCompas } from '../../components/compas/CompasPlano';
 import TiraAgencia, { type PuntoAgencia } from '../../components/compas/TiraAgencia';
@@ -24,6 +24,7 @@ const ARCHIVO = { fontFamily: "'Archivo Black', sans-serif" } as const;
  */
 export default function CompasSala() {
   const { code } = useParams<{ code: string }>();
+  const navigate = useNavigate();
   const {
     run,
     pack,
@@ -196,21 +197,22 @@ export default function CompasSala() {
         >
           Volver
         </button>
-        <a
-          href={`${import.meta.env.BASE_URL || '/'}compas/${run.code}/campos`}
+        {/*
+          Un solo boton. Eran dos --"armar campos" y "cerrar"-- y en la sala
+          eso es una decision que nadie quiere tomar con el curso mirando: los
+          campos se arman con las posiciones finales, asi que cerrar SIEMPRE va
+          antes. Separarlos solo ofrecia la forma de hacerlo mal.
+        */}
+        <button
+          type="button"
+          onClick={async () => {
+            if (run.status !== 'finished') await cerrar();
+            navigate(`/compas/${run.code}/campos`);
+          }}
           className="border-2 border-ink bg-surface px-5 py-3 text-sm uppercase text-ink shadow-[3px_3px_0_#101114]"
           style={ARCHIVO}
         >
-          Armar campos
-        </a>
-        <button
-          type="button"
-          onClick={cerrar}
-          disabled={run.status === 'finished'}
-          className="border-2 border-ink bg-surface px-5 py-3 text-sm uppercase text-ink shadow-[3px_3px_0_#101114] disabled:opacity-40"
-          style={ARCHIVO}
-        >
-          {run.status === 'finished' ? 'Cerrado' : 'Cerrar y repartir arquetipos'}
+          {run.status === 'finished' ? 'Ver campos' : 'Cerrar y armar campos'}
         </button>
       </div>
     </div>
