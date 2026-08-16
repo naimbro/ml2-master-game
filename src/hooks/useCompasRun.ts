@@ -208,6 +208,8 @@ export function useCompasRun(code: string | undefined) {
           runCode: run.code,
           magnitud: pos.magnitud,
           direccion: pos.direccion,
+          agencia: pos.agencia,
+          agenciaRespondidas: pos.agenciaRespondidas,
           respondidas: pos.respondidas,
           total: pos.total,
           arquetipoId: arq?.id ?? null,
@@ -249,6 +251,11 @@ export function useCompasRun(code: string | undefined) {
         runCode: run.code,
         magnitud: pos.magnitud,
         direccion: pos.direccion,
+        // Tercer eje. Se guarda aunque sea null: null significa "no dijo nada
+        // sobre quien conduce", que es un dato, y un 0 en su lugar lo pondria
+        // en "en disputa" sin que lo haya dicho nunca.
+        agencia: pos.agencia,
+        agenciaRespondidas: pos.agenciaRespondidas,
         respondidas: pos.respondidas,
         total: pos.total,
         arquetipoId: arq?.id ?? null,

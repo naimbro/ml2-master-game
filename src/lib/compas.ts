@@ -11,6 +11,7 @@
 import type {
   Arquetipo,
   Banda,
+  BandaAgencia,
   CompasAnswers,
   CompasArquetipos,
   CompasCortesEje,
@@ -39,6 +40,8 @@ export function posicionDe(answers: CompasAnswers, items: CompasItem[]): CompasP
   let sumM = 0;
   let sumD = 0;
   let respondidas = 0;
+  let sumA = 0;
+  let agenciaRespondidas = 0;
 
   for (const item of items) {
     const optionId = answers?.[item.id];
@@ -53,6 +56,16 @@ export function posicionDe(answers: CompasAnswers, items: CompasItem[]): CompasP
     sumM += m;
     sumD += d;
     respondidas += 1;
+
+    // Averaged over its OWN denominator, not over `respondidas`. Only six of the
+    // twelve items say anything about who acts; dividing by all of them would
+    // drag every student toward "in dispute" in proportion to how many
+    // unrelated items they happened to answer.
+    const a = Number(option.agencia);
+    if (Number.isFinite(a)) {
+      sumA += a;
+      agenciaRespondidas += 1;
+    }
   }
 
   if (respondidas === 0) return null;
@@ -62,7 +75,54 @@ export function posicionDe(answers: CompasAnswers, items: CompasItem[]): CompasP
     direccion: sumD / respondidas,
     respondidas,
     total: items.length,
+    agencia: agenciaRespondidas > 0 ? sumA / agenciaRespondidas : null,
+    agenciaRespondidas,
   };
+}
+
+/**
+ * Where a value falls among the agency bands.
+ *
+ * Bands tile the axis `[min, max]` with touching edges, like `bandaDe`. The
+ * comparison is on the upper edge so a value sitting exactly on a boundary
+ * lands in the lower band and never in both. Returns null for a student who
+ * answered nothing on this axis — there is no band to give them, and the
+ * middle one would invent a position they never took.
+ */
+export function bandaAgenciaDe(
+  valor: number | null | undefined,
+  bandas: BandaAgencia[] | undefined,
+): BandaAgencia | null {
+  if (!Number.isFinite(valor as number) || !bandas?.length) return null;
+  const v = valor as number;
+  for (const b of bandas) {
+    const [lo, hi] = b.rango ?? [];
+    if (!Number.isFinite(lo) || !Number.isFinite(hi)) continue;
+    if (v >= lo && v <= hi) return b;
+  }
+  return v < bandas[0].rango[0] ? bandas[0] : bandas[bandas.length - 1];
+}
+
+/**
+ * Dot colour for the third axis, light (humans) to dark (machines).
+ *
+ * One hue on purpose. The axis is a magnitude along a single direction, and a
+ * categorical palette here would read as five unrelated groups instead of one
+ * ordered scale. Points with no agency answer come back null and the caller
+ * paints them in the default ink — the room should be able to see who has not
+ * expressed anything on this axis yet.
+ */
+export const RAMPA_AGENCIA = ['#B5D4F4', '#85B7EB', '#378ADD', '#185FA5', '#0C447C'] as const;
+
+export function colorAgencia(
+  valor: number | null | undefined,
+  bandas: BandaAgencia[] | undefined,
+): string | null {
+  const b = bandaAgenciaDe(valor, bandas);
+  if (!b || !bandas?.length) return null;
+  const i = bandas.findIndex((x) => x.id === b.id);
+  if (i < 0) return null;
+  return RAMPA_AGENCIA[Math.min(RAMPA_AGENCIA.length - 1, i)];
 }
 
 /**

@@ -6,8 +6,8 @@
 // create-a-game list, where picking it would build a game the engine cannot
 // score.
 
-import instrumentoAyD from '../../content/compas/ai_democracy_2026/instrumento_v2.json';
-import arquetiposAyD from '../../content/compas/ai_democracy_2026/arquetipos_v2.json';
+import instrumentoAyD from '../../content/compas/ai_democracy_2026/instrumento_v3.json';
+import arquetiposAyD from '../../content/compas/ai_democracy_2026/arquetipos_v3.json';
 
 import type { CompasArquetipos, CompasInstrument } from '../types/compas';
 

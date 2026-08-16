@@ -7,8 +7,12 @@ export interface PuntoCompas {
   previa?: CompasVector | null;
   /** The viewer's own point. Orange, on top, and the only one that stands out. */
   esMio?: boolean;
-  /** Fill for the dot. Used to paint debate fields; falls back to ink. */
-  color?: string;
+  /**
+   * Fill for the dot. Used to paint debate fields and, in a run, the third
+   * axis; falls back to ink. Null on purpose when a student has not answered
+   * anything on the agency axis — the room should be able to see that.
+   */
+  color?: string | null;
 }
 
 interface Props {

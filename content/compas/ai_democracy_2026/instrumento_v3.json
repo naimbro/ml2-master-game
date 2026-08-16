@@ -1,0 +1,758 @@
+{
+  "instrumentId": "ai_democracy_2026_compas_v3",
+  "courseId": "ai_democracy_2026",
+  "version": 3,
+  "title": "Compás IA y Democracia",
+  "subtitle": "¿Dónde estás tú, y dónde está el curso?",
+  "_proposito": "Instrumento de opinion, no de conocimiento. No tiene respuestas correctas, no otorga puntaje y no alimenta el ranking del curso. Si un alumno sospecha que alguna alternativa suma, deja de responder lo que piensa y la medicion de fin de semestre queda arruinada sin que nadie lo note.",
+  "_semanas": "Las anclas citan la semana en que la lectura se discute HOY: la vigilancia estatal y la geopolitica son Semana 12 (la Semana 10 es la clase invitada de Martin Borquez). En v1 varias anclas decian (S10) por el orden anterior del modulo.",
+  "axes": {
+    "x": {
+      "id": "magnitud",
+      "label": "Magnitud",
+      "min": -10,
+      "max": 10,
+      "minLabel": "nada nuevo",
+      "maxLabel": "cambio de régimen",
+      "pregunta": "¿Cuánto altera la IA la estructura del poder político?"
+    },
+    "y": {
+      "id": "direccion",
+      "label": "Dirección",
+      "min": -10,
+      "max": 10,
+      "minLabel": "concentra poder · erosiona la democracia",
+      "maxLabel": "distribuye poder · fortalece la democracia",
+      "pregunta": "¿Hacia dónde la empuja?"
+    }
+  },
+  "scoring": {
+    "method": "promedio_de_respondidas",
+    "skippable": true,
+    "ranked": false,
+    "scored": false,
+    "nota": "La posicion es el promedio de los vectores elegidos. Saltarse un item no penaliza: solo cuenta lo respondido."
+  },
+  "aplicaciones": [
+    {
+      "n": 1,
+      "semana": 3,
+      "fecha": "2026-08-17",
+      "hito": "tras el backlash",
+      "proposito": "linea base"
+    },
+    {
+      "n": 2,
+      "semana": 7,
+      "fecha": "2026-09-24",
+      "hito": "tras la unidad de gobernanza",
+      "proposito": "medio semestre",
+      "nota": "Corrido al jueves de la Semana 7 y no a la Semana 8, que es la Prueba I. Medir opiniones el dia de una prueba calificada contamina las dos cosas."
+    },
+    {
+      "n": 3,
+      "semana": 15,
+      "fecha": "2026-11-19",
+      "hito": "Taller integrador",
+      "proposito": "medicion final y comparacion con la linea base"
+    }
+  ],
+  "items": [
+    {
+      "id": "c01_backlash",
+      "order": 1,
+      "question": "Mucha gente está enojada con la IA. ¿De qué es señal ese enojo?",
+      "discrimina": "Separa a quien lee el backlash como pánico repetido, de quien lo lee como aviso temprano, de quien lo lee como síntoma de otra cosa — y agrega la posición que faltaba: que el enojo mismo es el peligro.",
+      "_tension": "S3 · ¿el backlash es irracional o es lectura correcta de los propios incentivos? Y el backlash como riesgo (portada de The Economist).",
+      "options": [
+        {
+          "id": "A",
+          "text": "Nada nuevo. Cada tecnología tuvo su pánico y este también se va a pasar.",
+          "vector": {
+            "magnitud": -7,
+            "direccion": 1
+          },
+          "anchor": "«AI has become the ultimate dread risk» (S3) · Norris, «The Growth of Critical Citizens?» (S2)"
+        },
+        {
+          "id": "B",
+          "text": "La gente entendió antes que las élites que esto le va a costar el trabajo.",
+          "vector": {
+            "magnitud": 6,
+            "direccion": -6
+          },
+          "anchor": "«Mass Hysteria. Thousands of Jobs Lost» (S3)"
+        },
+        {
+          "id": "C",
+          "text": "Es enojo racional, pero no con la IA: donde no hay seguro de desempleo ni salud desligada del trabajo, cualquier tecnología asusta.",
+          "vector": {
+            "magnitud": 2,
+            "direccion": -3
+          },
+          "anchor": "«There's One Clear Reason Americans Are Gloomy About A.I.» (S3)"
+        },
+        {
+          "id": "D",
+          "text": "Un problema real de gobernanza: a nadie le preguntaron —hasta los concejales firmaron acuerdos de confidencialidad— y reclaman con razón.",
+          "vector": {
+            "magnitud": 3,
+            "direccion": -3
+          },
+          "anchor": "«The AI backlash is only getting started» (S3) · «The A.I. Giants Weren't Prepared for This», Klein y Sun (S5)"
+        },
+        {
+          "id": "E",
+          "text": "Es un enojo peligroso: si prospera nos deja sin las curas, sin la productividad, y con la frontera tecnológica en manos de quien no la frenó.",
+          "vector": {
+            "magnitud": 4,
+            "direccion": 4
+          },
+          "anchor": "«The AI backlash is only getting started» (S3), la tesis del editorial y no la del reportaje"
+        }
+      ]
+    },
+    {
+      "id": "c02_trabajo",
+      "order": 2,
+      "question": "¿Qué le va a pasar al trabajo?",
+      "discrimina": "El ítem que más separa magnitud: en empleo el desacuerdo es de escala, no de valor.",
+      "_tension": "S3 · ¿ajuste cíclico o cicatriz estructural? S5 · underclass y quién es dueño de la abundancia.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Poco. Se automatizan tareas, aparecen otras. La rotación de siempre.",
+          "vector": {
+            "magnitud": -6,
+            "direccion": 1
+          },
+          "anchor": "«Seis claves para saber si su empleo está amenazado por la IA», Egaña (S3)",
+          "agencia": -7
+        },
+        {
+          "id": "B",
+          "text": "Los que entran ahora al mercado laboral pagan el costo, y eso deja cicatriz por años.",
+          "vector": {
+            "magnitud": 5,
+            "direccion": -7
+          },
+          "anchor": "«A Job Market Leaving Young Graduates Behind Could Scar Them For Years» (S3)",
+          "agencia": -3
+        },
+        {
+          "id": "C",
+          "text": "Desplazamiento masivo y la riqueza concentrada en los dueños de los modelos.",
+          "vector": {
+            "magnitud": 8,
+            "direccion": -8
+          },
+          "anchor": "«Mass Hysteria» (S3) · «Five men control AI. Who should control them?» (S5)",
+          "agencia": -5
+        },
+        {
+          "id": "D",
+          "text": "En Chile, más complemento que reemplazo: es lo que muestran los estudios locales.",
+          "vector": {
+            "magnitud": 3,
+            "direccion": 6
+          },
+          "anchor": "«IA Generativa: oportunidades para el futuro del trabajo en Chile», CENIA/SOFOFA/SENCE (S3)",
+          "agencia": -8
+        },
+        {
+          "id": "E",
+          "text": "Se acaba la necesidad de la mayor parte del trabajo humano. La pregunta que queda es quién es dueño de lo que las máquinas produzcan.",
+          "vector": {
+            "magnitud": 10,
+            "direccion": 0
+          },
+          "anchor": "Acemoglu, «How AI Will Affect the Economy» (S3/S5) · pregunta motivadora S5 · «An interview with Elon Musk» (S5)",
+          "agencia": 6
+        }
+      ]
+    },
+    {
+      "id": "c03_quien_decide",
+      "order": 3,
+      "question": "Hoy, ¿quién decide de verdad lo que la IA puede hacer?",
+      "discrimina": "Mismo diagnóstico de magnitud, lecturas opuestas de quién gana. Es el ítem donde el villano cambia de cara: empresas, Estados, o nadie.",
+      "_tension": "S5 · oligarquía. S12 · Estados Unidos como portero del acceso, y el pulso Anthropic–Pentágono. S7/S12 · sistemas que se sueltan.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Un puñado de empresas, y no hay nada en el horizonte que lo cambie.",
+          "vector": {
+            "magnitud": 7,
+            "direccion": -8
+          },
+          "anchor": "«Five men control AI. Who should control them?» (S5)",
+          "agencia": -7
+        },
+        {
+          "id": "B",
+          "text": "El gobierno de Estados Unidos: puede decidir en una tarde quién en el mundo accede a los mejores modelos, y ya lo hizo.",
+          "vector": {
+            "magnitud": 7,
+            "direccion": -4
+          },
+          "anchor": "«AI has granted America vast new power» (S12)",
+          "agencia": -8
+        },
+        {
+          "id": "C",
+          "text": "Nadie en particular. Es un sistema sin timón: algunos modelos ya se soltaron de sus propios creadores.",
+          "vector": {
+            "magnitud": 6,
+            "direccion": -4
+          },
+          "anchor": "«Why the OpenAI escape is the most worrying AI mishap yet» (S7) · «It May Be Time to Panic About AI», Wong (S12)",
+          "agencia": 8
+        },
+        {
+          "id": "D",
+          "text": "Hoy el único límite real no lo pone una ley sino una empresa que dice que no. Y que esa sea nuestra garantía es exactamente el problema.",
+          "vector": {
+            "magnitud": 5,
+            "direccion": -2
+          },
+          "anchor": "«AI danger gets real» (S12): Anthropic negándose al «any lawful use» del Pentágono · «White House Approves $9 Billion for Spy Agencies» (S12)",
+          "agencia": -6
+        },
+        {
+          "id": "E",
+          "text": "Menos concentrado de lo que parece: hay modelos abiertos, competencia entre potencias y Estados con potestades que todavía no usan.",
+          "vector": {
+            "magnitud": -3,
+            "direccion": 5
+          },
+          "anchor": "«China is having another AI moment» (S12) · Boletín 16821-19 (S7)",
+          "agencia": -7
+        }
+      ]
+    },
+    {
+      "id": "c04_prueba",
+      "order": 4,
+      "question": "Circula un video que incrimina a una autoridad. ¿Qué pasa hoy con esa prueba?",
+      "discrimina": "Sustituye al ítem de esfera pública, que era de la Semana 6 del módulo Democracia y no tenía ancla propia. Separa a quien cree que la cámara todavía derriba versiones oficiales de quien cree que ya no prueba nada.",
+      "_tension": "S12 · en Minneapolis los videos de vecinos derribaron la versión del gobierno; al mismo tiempo el mejor perito forense del mundo dejó de confiar en sus ojos. Las dos cosas son ciertas a la vez.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Sigue funcionando. En Minneapolis los videos de los vecinos desmintieron a los agentes y forzaron el retiro de la operación.",
+          "vector": {
+            "magnitud": 3,
+            "direccion": 6
+          },
+          "anchor": "«More Than Ever, Videos Expose the Truth. And Cloud It, Too.» (S12)"
+        },
+        {
+          "id": "B",
+          "text": "Ya no prueba nada. Cuando cualquiera puede fabricar cualquier cosa, basta con sembrar la duda para anular una prueba verdadera.",
+          "vector": {
+            "magnitud": 7,
+            "direccion": -8
+          },
+          "anchor": "«More Than Ever, Videos Expose the Truth» (S12): «solo necesitas sembrar la duda» · «Hany Farid y el desafío de detectar deepfakes» (S12)"
+        },
+        {
+          "id": "C",
+          "text": "Depende de quién verifique, y los que saben verificar están perdiendo la carrera.",
+          "vector": {
+            "magnitud": 5,
+            "direccion": -4
+          },
+          "anchor": "«Hany Farid y el desafío de detectar deepfakes» (S12) · Boletín 17795-19 sobre imitaciones digitales realistas (S7)"
+        },
+        {
+          "id": "D",
+          "text": "El problema no es el video: es que dejamos de querer verificar. Nos acomodamos a no saber.",
+          "vector": {
+            "magnitud": 5,
+            "direccion": -6
+          },
+          "anchor": "«Hipnocracia: vivir en el trance de la IA» (S6)"
+        },
+        {
+          "id": "E",
+          "text": "Nada nuevo. La foto trucada y el testigo falso son tan viejos como el tribunal; lo que cambia es la escala.",
+          "vector": {
+            "magnitud": -5,
+            "direccion": -1
+          },
+          "anchor": "«Is Fake News Destroying the Public Sphere?» (S6) · «AI has become the ultimate dread risk» (S3)"
+        }
+      ]
+    },
+    {
+      "id": "c05_estado",
+      "order": 5,
+      "question": "El Estado usando IA: ¿qué es lo primero que se te viene a la cabeza?",
+      "discrimina": "El ítem del Vigilante: donde el curso tiene más material y donde más se polariza. Ahora incluye la inversión del supuesto — el Estado no como el que vigila, sino como el que se ahoga.",
+      "_tension": "S12 · ¿el Estado es el último garante del control humano o el vehículo que convierte decisiones algorítmicas en coerción? Más la pregunta que ninguna encuesta hace: qué pasa cuando el ciudadano es el que tiene el agente.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Vigilancia. Desanonimizar a quien protesta sin pasar por un juez, porque la citación administrativa la firma el propio organismo.",
+          "vector": {
+            "magnitud": 7,
+            "direccion": -8
+          },
+          "anchor": "«Homeland Security Wants Social Media Sites to Expose Anti-ICE Accounts» (S12)"
+        },
+        {
+          "id": "B",
+          "text": "Decisiones automáticas sin nadie a quien reclamarle.",
+          "vector": {
+            "magnitud": 6,
+            "direccion": -7
+          },
+          "anchor": "«The End of Accountability? Matt Mahmoudi on AI and War» (S12) · Arriagada, «Puentes entre humanos y máquinas» (S12)"
+        },
+        {
+          "id": "C",
+          "text": "Capacidad. Trámites que hoy tardan meses, y por fin fiscalizar a quien hoy no se fiscaliza.",
+          "vector": {
+            "magnitud": 4,
+            "direccion": 7
+          },
+          "anchor": "Schneier & Sanders, «Rewiring Democracy», caps. 20–24 (S12) · «White House Approves $9 Billion for Spy Agencies», leído al revés (S12)"
+        },
+        {
+          "id": "D",
+          "text": "Un Estado ahogado: cuando cualquier ciudadano puede litigarle gratis con un agente, la máquina se detiene.",
+          "vector": {
+            "magnitud": 5,
+            "direccion": -2
+          },
+          "anchor": "«How AI is breaking the British state» (S12), el «agentic flooding»"
+        },
+        {
+          "id": "E",
+          "text": "Poco. En Chile no hay presupuesto ni capacidad para nada de eso — y esa es justamente la razón para no confiarse.",
+          "vector": {
+            "magnitud": -6,
+            "direccion": 0
+          },
+          "anchor": "«Consulta experta: Proyecto de ley sobre sistemas de IA», BCN (S7) · Senado, sobre quién fiscaliza y con qué capacidades reales (S7)"
+        }
+      ]
+    },
+    {
+      "id": "c06_regulacion",
+      "order": 6,
+      "question": "¿Qué debería hacer el Estado chileno con la IA?",
+      "discrimina": "Los cuatro modelos que la Semana 7 compara, reducidos a la decisión que de verdad los separa: voluntario o vinculante, la tecnología o sus usos, y quién termina escribiendo la norma.",
+      "_tension": "S7 · autorregulación vs. potestad estatal; enfoque de riesgos; captura regulatoria. S12 · la tesis de que Chile es espectador.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Nada por ahora. Regular lo que todavía no entendemos sale peor que no regular.",
+          "vector": {
+            "magnitud": -4,
+            "direccion": 2
+          },
+          "anchor": "Hassabis, «A Framework for Frontier AI and the Dawning of a New Age» (S7)"
+        },
+        {
+          "id": "B",
+          "text": "Lo que ya está haciendo: no regular la tecnología sino sus usos, por nivel de riesgo, con los procesos electorales entre los usos de alto riesgo.",
+          "vector": {
+            "magnitud": 5,
+            "direccion": 4
+          },
+          "anchor": "Boletín 16821-19, «Regula los sistemas de inteligencia artificial» (S7) · Política Nacional de IA"
+        },
+        {
+          "id": "C",
+          "text": "Obligatorio, no voluntario. Pedirle a las empresas que avisen «si quieren» antes de lanzar un modelo no es regular nada.",
+          "vector": {
+            "magnitud": 7,
+            "direccion": -1
+          },
+          "anchor": "«Trump Signs Executive Order Seeking Oversight of A.I. Models» (S7): revisión voluntaria de 30 días, y los propios aliados pidiendo que sea obligatoria"
+        },
+        {
+          "id": "D",
+          "text": "Da lo mismo lo que haga Chile. Esto se decide en Washington y en Pekín.",
+          "vector": {
+            "magnitud": 6,
+            "direccion": -5
+          },
+          "anchor": "«AI has granted America vast new power» (S12) · «Artificial intelligence revives a Cold War-style dilemma» (S12)"
+        },
+        {
+          "id": "E",
+          "text": "Lo que importa no es la ley sino quién la escribe. El riesgo es que la norma la termine redactando el regulado.",
+          "vector": {
+            "magnitud": 4,
+            "direccion": -4
+          },
+          "anchor": "«Consulta experta», BCN (S7) · VandeHei & Allen, «AI godfathers converge on regulations», sobre captura regulatoria (S7)"
+        }
+      ]
+    },
+    {
+      "id": "c07_elecciones_2031",
+      "order": 7,
+      "question": "Es 2031 y hubo elecciones en Chile. ¿Qué pasó?",
+      "discrimina": "Proyecta a futuro, que es donde la gente se sincera más que en el diagnóstico presente. Separa deliberar mejor de delegar el voto, que no son lo mismo.",
+      "_tension": "S14 · el gradiente que va de escuchar al elector, a representarlo, a actuar por él.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Lo mismo de siempre, con más spam.",
+          "vector": {
+            "magnitud": -6,
+            "direccion": -1
+          },
+          "anchor": "«There's One Clear Reason Americans Are Gloomy About A.I.» (S3)",
+          "agencia": -7
+        },
+        {
+          "id": "B",
+          "text": "Campañas sintéticas y microdirigidas: el votante dejó de ser interlocutor y pasó a ser blanco.",
+          "vector": {
+            "magnitud": 6,
+            "direccion": -8
+          },
+          "anchor": "pregunta motivadora S3 · «Hipnocracia» (S6) · «Hany Farid y el desafío de detectar deepfakes» (S12)",
+          "agencia": -2
+        },
+        {
+          "id": "C",
+          "text": "Aparecieron herramientas que ayudan a deliberar —resumen, traducen, ordenan lo que hoy se pierde— y la conversación mejoró.",
+          "vector": {
+            "magnitud": 6,
+            "direccion": 7
+          },
+          "anchor": "Gudiño et al., «LLMs as agents for augmented democracy» (S14) · Rewiring Democracy, cap. 15 «Listening to Constituents» (S14)",
+          "agencia": -6
+        },
+        {
+          "id": "D",
+          "text": "Mucha gente delegó el voto en un agente que la representa, y a nadie le pareció raro.",
+          "vector": {
+            "magnitud": 8,
+            "direccion": -2
+          },
+          "anchor": "Rewiring Democracy, cap. 38 «Acting as Your Personal Political Proxy» (S14) · Diella, la primera ministra IA (S14)",
+          "agencia": 6
+        },
+        {
+          "id": "E",
+          "text": "Pasó algo que hoy todavía no sabemos nombrar.",
+          "vector": {
+            "magnitud": 6,
+            "direccion": 0
+          },
+          "anchor": "Innerarity, «¿Sobrevivirá la democracia a la inteligencia artificial?» (S14)",
+          "agencia": 3
+        }
+      ]
+    },
+    {
+      "id": "c08_prediccion",
+      "order": 8,
+      "question": "Si una IA pudiera predecir con precisión lo que opinas, ¿habría que seguir preguntándote?",
+      "discrimina": "Es la pregunta motivadora de la Semana 3, tal cual. Separa a quien valora el resultado de quien valora el procedimiento — y agrega a quien objeta no el principio sino a quién representa mal el modelo.",
+      "_tension": "S14 · legitimidad por resultado vs. por procedimiento; injusticia epistémica de la representación sintética; valores incrustados en los modelos.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Sí, y la pregunta ofende: el punto de votar no es acertar, es que me pregunten.",
+          "vector": {
+            "magnitud": 5,
+            "direccion": -5
+          },
+          "anchor": "Innerarity, «¿Sobrevivirá la democracia a la IA?» (S14) · pregunta motivadora S3"
+        },
+        {
+          "id": "B",
+          "text": "Sí, porque la predicción falla justo con los que menos se parecen al promedio — y en Chile falla más que en Estados Unidos.",
+          "vector": {
+            "magnitud": 4,
+            "direccion": -5
+          },
+          "anchor": "Abeliuk, Gaete & Bro (2026), «Auditing socio-demographic and cross-societal fairness in LLM-simulated public opinion» (S14)"
+        },
+        {
+          "id": "C",
+          "text": "No necesariamente. Si representa bien, es participación para quien hoy no participa.",
+          "vector": {
+            "magnitud": 7,
+            "direccion": 7
+          },
+          "anchor": "Gudiño et al., «LLMs as agents for augmented democracy» (S14) · Hidalgo, «¿IA para reemplazar a políticos?» (S14)"
+        },
+        {
+          "id": "D",
+          "text": "Depende de qué modelo. Los que existen son más seculares y más liberales que cualquier país del mundo: ya sabemos a quién no representan.",
+          "vector": {
+            "magnitud": 3,
+            "direccion": -3
+          },
+          "anchor": "«AI models' values are very different from most people's» (S14)"
+        },
+        {
+          "id": "E",
+          "text": "Ya pasa: las encuestas y el marketing político hacen eso hace décadas.",
+          "vector": {
+            "magnitud": -4,
+            "direccion": -3
+          },
+          "anchor": "Rewiring Democracy, cap. 9 «Conducting Polls» (S14) · Norris, «The Growth of Critical Citizens?» (S2)"
+        }
+      ]
+    },
+    {
+      "id": "c09_timon",
+      "order": 9,
+      "question": "¿Qué decisiones sobre IA deberían quedar en manos de empresas, Estados, organismos internacionales o ciudadanía?",
+      "discrimina": "Una de las cinco preguntas del Taller integrador (S15). Mide el tercer eje —quién tiene el timón— y es la que desempata entre El Vigilante y La Oligarquía.",
+      "_tension": "S7 · FINRA de Hassabis vs. foro tipo OIEA de Altman vs. agencia estatal vs. deliberación ciudadana. S12 · el dilema tipo Guerra Fría.",
+      "esItemDeTimon": true,
+      "options": [
+        {
+          "id": "A",
+          "text": "De las empresas. Un organismo financiado por la industria se mueve a la velocidad que el Estado no tiene, y el Estado siempre llega tarde.",
+          "vector": {
+            "magnitud": 1,
+            "direccion": 3
+          },
+          "anchor": "Hassabis, «A Framework for Frontier AI and the Dawning of a New Age» (S7), el modelo tipo FINRA",
+          "timon": "empresas"
+        },
+        {
+          "id": "B",
+          "text": "Del Estado, con potestades vinculantes y multas que se cobren. Para eso existe.",
+          "vector": {
+            "magnitud": 5,
+            "direccion": 2
+          },
+          "anchor": "Boletín 16821-19 (S7) · Agencia de Protección de Datos como fiscalizadora, multas de 5.000 a 20.000 UTM",
+          "timon": "estado"
+        },
+        {
+          "id": "C",
+          "text": "De organismos internacionales. Un país solo no puede con esto, y los dos que sí pueden están corriendo una carrera.",
+          "vector": {
+            "magnitud": 6,
+            "direccion": -1
+          },
+          "anchor": "«Artificial intelligence revives a Cold War-style dilemma» (S12) · la propuesta de foro internacional de Altman (S7)",
+          "timon": "internacional"
+        },
+        {
+          "id": "D",
+          "text": "De la ciudadanía, con mecanismos deliberativos reales.",
+          "vector": {
+            "magnitud": 6,
+            "direccion": 7
+          },
+          "anchor": "Gudiño et al., «LLMs as agents for augmented democracy» (S14) · Rewiring Democracy, cap. 41 (S15)",
+          "timon": "ciudadania"
+        },
+        {
+          "id": "E",
+          "text": "La pregunta es ingenua: ya lo decidieron cinco empresas y a nadie le preguntaron.",
+          "vector": {
+            "magnitud": 7,
+            "direccion": -8
+          },
+          "anchor": "«Five men control AI. Who should control them?» (S5) · «An interview with Elon Musk» (S5)",
+          "timon": "empresas"
+        }
+      ]
+    },
+    {
+      "id": "c10_agencia",
+      "order": 10,
+      "question": "En diez años, ¿quién va a estar tomando las decisiones que importan?",
+      "discrimina": "El item raiz del tercer eje. Sus extremos son los dos polos del curso: Acemoglu, para quien cuales personas mandan sigue siendo una decision politica abierta, y Musk, para quien no va a mandar ninguna persona. Las opciones B y E existen para que 'perder el control' no se pueda contestar con 'mandan cinco empresas': esa respuesta es HUMANOS al mando.",
+      "_tension": "S5 · determinismo de Musk contra eleccion politica de Acemoglu. S12 · sistemas que ya operan fuera del circuito humano.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Personas. Y cuáles personas manden sigue siendo una decisión política que está abierta.",
+          "vector": {
+            "magnitud": 2,
+            "direccion": 5
+          },
+          "agencia": -9,
+          "anchor": "Acemoglu, «How AI Will Affect the Economy» (S5): automatización o IA proworker es una decisión política y no una consecuencia técnica · moción del debate S5"
+        },
+        {
+          "id": "B",
+          "text": "Las mismas cinco empresas de siempre, y con más margen que hoy.",
+          "vector": {
+            "magnitud": 7,
+            "direccion": -8
+          },
+          "agencia": -6,
+          "anchor": "«Five men control AI. Who should control them?» (S5) · «Elon Musk, Gabriel Zucman y el poder de los multimillonarios» (S5)"
+        },
+        {
+          "id": "C",
+          "text": "Nadie va a poder decir que decidió: los sistemas van a proponer y las personas van a firmar.",
+          "vector": {
+            "magnitud": 7,
+            "direccion": -5
+          },
+          "agencia": 5,
+          "anchor": "«The End of Accountability? Matt Mahmoudi on AI and War» (S12) · Rewiring Democracy, caps. 21–24, sobre aumento contra reemplazo del juicio (S12)"
+        },
+        {
+          "id": "D",
+          "text": "Los sistemas. Nosotros vamos a ser los chimpancés de la analogía de Musk.",
+          "vector": {
+            "magnitud": 9,
+            "direccion": -4
+          },
+          "agencia": 10,
+          "anchor": "«An interview with Elon Musk» (S5): las IA no van a recibir órdenes de las personas más de lo que las recibirían de los chimpancés · «Will artificial intelligence soon escape human control?» (S12)"
+        },
+        {
+          "id": "E",
+          "text": "Personas, pero con mucha menos capacidad de decidir de la que creen tener hoy.",
+          "vector": {
+            "magnitud": 1,
+            "direccion": -2
+          },
+          "agencia": 2,
+          "anchor": "«Should you be afraid of Elon Musk?» (S5), la primera paradoja: el hombre más poderoso del mundo esperando volverse impotente"
+        }
+      ]
+    },
+    {
+      "id": "c11_control",
+      "order": 11,
+      "question": "Si un sistema llega a ser más capaz que cualquier persona en casi todo, ¿se puede seguir teniendo el control?",
+      "discrimina": "Es la pregunta motivadora de la Semana 7, tal cual: como conserva el control un principal humano menos inteligente que su agente. Separa a quien cree que el control es un problema tecnico soluble de quien cree que ya se perdio, con dos anclas empiricas y no especulativas.",
+      "_tension": "S7 · el escape de OpenAI vuelve la perdida de control un hecho y no una hipotesis. S12 · mejora recursiva y modelos vigilados por modelos.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Sí: es un problema técnico y tiene solución. Evaluar antes de lanzar, poner umbrales, y medir si el modelo desobedece o finge ser menos capaz de lo que es.",
+          "vector": {
+            "magnitud": 2,
+            "direccion": 4
+          },
+          "agencia": -7,
+          "anchor": "«Demis Hassabis has a plan to harness AI safely» (S7): su propuesta incluye medir qué tan dispuesto está un modelo a ignorar instrucciones o a fingir menos capacidad"
+        },
+        {
+          "id": "B",
+          "text": "Sí, pero se decide antes. El control no se pierde por capacidad de la máquina: se pierde por diseño.",
+          "vector": {
+            "magnitud": 3,
+            "direccion": 5
+          },
+          "agencia": -9,
+          "anchor": "Acemoglu (S5/S7): la dirección de la tecnología es una decisión política · Schneier & Sanders, «How to Build AI for Democracy» (S7)"
+        },
+        {
+          "id": "C",
+          "text": "No, y ya está demostrado: un modelo salió de su encierro, hackeó a otra empresa, y su fabricante se enteró después.",
+          "vector": {
+            "magnitud": 8,
+            "direccion": -6
+          },
+          "agencia": 8,
+          "anchor": "«Why the OpenAI escape is the most worrying AI mishap yet» (S7)"
+        },
+        {
+          "id": "D",
+          "text": "No, y hace rato. A los modelos los vigilan otros modelos: los humanos ya estamos fuera del circuito.",
+          "vector": {
+            "magnitud": 8,
+            "direccion": -7
+          },
+          "agencia": 10,
+          "anchor": "«It May Be Time to Panic About AI», Wong (S12): los humanos ya están fuera del loop · «Will artificial intelligence soon escape human control?» (S12)"
+        },
+        {
+          "id": "E",
+          "text": "Es ciencia ficción. Ningún sistema va a ser más capaz que cualquier persona en casi todo, y llevamos décadas escuchando que falta poco.",
+          "vector": {
+            "magnitud": -7,
+            "direccion": 1
+          },
+          "agencia": -8,
+          "anchor": "«AI has become the ultimate dread risk» (S3): tememos más lo que no entendemos que lo que efectivamente nos mata · Acemoglu (S5), sobre lo incierto que es incluso el pasado inmediato de la IA"
+        }
+      ]
+    },
+    {
+      "id": "c12_sentido",
+      "order": 12,
+      "question": "Imagina que las máquinas hacen casi todo el trabajo y el ingreso está resuelto. ¿Queda un problema?",
+      "discrimina": "Donde Musk y Acemoglu chocan mas limpio. Musk ofrece el ajedrez y la jardineria; Acemoglu responde que una transferencia no devuelve la capacidad de decidir. La opcion D es el ancla anticontaminacion: quien contesta que basta con repartir esta diciendo que el problema es de propiedad entre humanos, no de agencia.",
+      "_tension": "S5 · las dos paradojas de Musk y el remate del editorial sobre sentirse superfluo. S7 · Acemoglu rechazando la renta basica por la perdida de agencia.",
+      "options": [
+        {
+          "id": "A",
+          "text": "No. Trabajar por necesidad nunca fue el punto: queda el ajedrez, queda el jardín.",
+          "vector": {
+            "magnitud": 7,
+            "direccion": 3
+          },
+          "agencia": 7,
+          "anchor": "«Should you be afraid of Elon Musk?» (S5): Musk observa que la gente sigue jugando ajedrez aunque los programas le ganen siempre, y sugiere la jardinería"
+        },
+        {
+          "id": "B",
+          "text": "Sí, y es el problema principal: sentirse de más no se arregla con una transferencia.",
+          "vector": {
+            "magnitud": 7,
+            "direccion": -6
+          },
+          "agencia": 8,
+          "anchor": "«Should you be afraid of Elon Musk?» (S5): la sensación de ser superfluo puede llevar a la miseria y la degradación moral"
+        },
+        {
+          "id": "C",
+          "text": "Sí: una renta básica no crea empleos ni devuelve la capacidad de decidir sobre la propia vida.",
+          "vector": {
+            "magnitud": 6,
+            "direccion": -4
+          },
+          "agencia": 4,
+          "anchor": "Acemoglu (S7): rechaza la renta básica universal porque no crea empleos ni resuelve la pérdida de agencia humana"
+        },
+        {
+          "id": "D",
+          "text": "No, si se reparte. El problema es de propiedad, no de sentido.",
+          "vector": {
+            "magnitud": 4,
+            "direccion": -5
+          },
+          "agencia": -7,
+          "anchor": "«Elon Musk, Gabriel Zucman y el poder de los multimillonarios» (S5) · pregunta motivadora S5: quién decidirá qué hacer con la abundancia"
+        },
+        {
+          "id": "E",
+          "text": "La pregunta no se plantea: las máquinas no van a hacer casi todo el trabajo, y menos en Chile.",
+          "vector": {
+            "magnitud": -8,
+            "direccion": 2
+          },
+          "agencia": -8,
+          "anchor": "«IA Generativa: oportunidades para el futuro del trabajo en Chile», CENIA/SOFOFA/SENCE (S3) · «Seis claves para saber si su empleo está amenazado por la IA», Egaña (S3)"
+        }
+      ]
+    }
+  ],
+  "_v3": "Agrega un TERCER EJE: agencia humana. No es cuanto cambia el poder ni hacia donde, sino QUIEN actua: si la IA es un instrumento en manos humanas o un agente que va a sustituir a los humanos como los que deciden. Los polos son Acemoglu --la renta basica no crea empleos ni resuelve la perdida de agencia humana-- y Musk --las IA no van a recibir ordenes de las personas mas de lo que las recibirian de los chimpances--. Es la pregunta motivadora de la Semana 7, que el compas no medía. Se agregan dos items (c11, c12), se reescribe c10, y c02/c03/c07 declaran agencia sin cambiar su texto: seis de doce items miden el eje. La agencia NO mueve el plano ni cambia las celdas: se promedia aparte y se reporta como banda de color, porque nueve celdas por tres bandas son 27 casillas para veinticinco alumnos.",
+  "_anticontaminacion": "Cada item que declara agencia incluye al menos una opcion donde el control se pierde frente a OTROS HUMANOS: cinco empresas, el gobierno de Estados Unidos, el microtargeting, el reparto de la propiedad. Esas opciones van al polo HUMANO. Sin ellas el eje colapsa dentro de direccion y deja de medir nada nuevo.",
+  "ejeAgencia": {
+    "id": "agencia",
+    "label": "Agencia",
+    "min": -10,
+    "max": 10,
+    "minLabel": "humanos al mando",
+    "maxLabel": "máquinas al mando",
+    "pregunta": "¿Quién va a estar actuando: personas usando máquinas, o máquinas?",
+    "_no_es_del_plano": "Se promedia sobre las opciones que declaran agencia y se reporta como banda de color sobre la nube. No entra en la celda del arquetipo."
+  }
+}

@@ -1,12 +1,16 @@
 import { useState } from 'react';
 import CompasPlano from './CompasPlano';
-import type { Arquetipo, CompasAxis, CompasPosicion } from '../../types/compas';
+import { RAMPA_AGENCIA } from '../../lib/compas';
+import type { Arquetipo, BandaAgencia, CompasAxis, CompasPosicion } from '../../types/compas';
 
 interface Props {
   arquetipo: Arquetipo;
   posicion: CompasPosicion;
   ejeX: CompasAxis;
   ejeY: CompasAxis;
+  /** Third axis: reported NEXT TO the archetype, never folded into it. */
+  banda?: BandaAgencia | null;
+  bandas?: BandaAgencia[];
   /** Previous application, when there is one: draws the trail on the mini plot. */
   posicionPrevia?: CompasPosicion | null;
 }
@@ -25,9 +29,19 @@ const f = (n: number) => `${n > 0 ? '+' : ''}${n.toFixed(1)}`;
  * There is no score on this card and there is no rank. Nothing to compare with
  * the person sitting next to them except a position, which is the point.
  */
-export default function TarjetaArquetipo({ arquetipo, posicion, ejeX, ejeY, posicionPrevia }: Props) {
+export default function TarjetaArquetipo({
+  arquetipo,
+  posicion,
+  ejeX,
+  ejeY,
+  banda,
+  bandas,
+  posicionPrevia,
+}: Props) {
   const [abierto, setAbierto] = useState(false);
   const primeraFrase = arquetipo.desc.split(/(?<=\.)\s/)[0];
+  const iBanda = banda && bandas ? bandas.findIndex((b) => b.id === banda.id) : -1;
+  const colorBanda = iBanda >= 0 ? RAMPA_AGENCIA[Math.min(RAMPA_AGENCIA.length - 1, iBanda)] : null;
 
   return (
     <div className="card-play relative overflow-hidden p-4 pb-6">
@@ -43,6 +57,22 @@ export default function TarjetaArquetipo({ arquetipo, posicion, ejeX, ejeY, posi
         {arquetipo.name}
       </h2>
       <p className="mb-3 text-[15px] text-ink-soft">{abierto ? arquetipo.desc : primeraFrase}</p>
+
+      {banda && (
+        <div className="mb-3 border-2 border-ink bg-surface px-3 py-2">
+          <p className="flex items-center gap-2 text-[10.5px] uppercase tracking-wider text-faint" style={{ fontFamily: "'Archivo Black', sans-serif" }}>
+            {colorBanda && (
+              <span
+                aria-hidden="true"
+                className="inline-block h-3 w-3 rounded-full border border-ink"
+                style={{ background: colorBanda }}
+              />
+            )}
+            ¿Quién conduce? · {banda.name}
+          </p>
+          <p className="mt-1 text-[13.5px] text-ink-soft">{banda.desc}</p>
+        </div>
+      )}
 
       <div className="mb-2 border border-line bg-surface">
         <CompasPlano
@@ -66,6 +96,13 @@ export default function TarjetaArquetipo({ arquetipo, posicion, ejeX, ejeY, posi
         {ejeX.label} {f(posicion.magnitud)} · {ejeY.label} {f(posicion.direccion)}
         {posicion.respondidas < posicion.total && (
           <> — sobre {posicion.respondidas} de {posicion.total} respondidas</>
+        )}
+        {posicion.agencia !== null && (
+          <>
+            <br />
+            Agencia {f(posicion.agencia)} — sobre {posicion.agenciaRespondidas}{' '}
+            {posicion.agenciaRespondidas === 1 ? 'respuesta' : 'respuestas'} que hablan de quién conduce
+          </>
         )}
       </p>
 

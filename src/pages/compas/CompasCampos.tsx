@@ -65,7 +65,16 @@ export default function CompasCampos() {
     const c = campos.find((x) => x.n === n);
     if (!c) return null;
     return arquetipoDe(
-      { magnitud: c.centroide.magnitud, direccion: c.centroide.direccion, respondidas: 1, total: 1 },
+      {
+        magnitud: c.centroide.magnitud,
+        direccion: c.centroide.direccion,
+        respondidas: 1,
+        total: 1,
+        // El arquetipo de un campo sale de la celda del plano. El tercer eje no
+        // entra en la celda, asi que un centroide no necesita promediarlo.
+        agencia: null,
+        agenciaRespondidas: 0,
+      },
       c.miembros.map((m) => m.timon).find(Boolean) ?? null,
       pack.arquetipos,
     );

@@ -20,6 +20,16 @@ export interface CompasOption {
   id: string;
   text: string;
   vector: CompasVector;
+  /**
+   * The third axis: −10 humans at the wheel, +10 machines at the wheel.
+   *
+   * OPTIONAL on purpose, and averaged only over the options that declare it.
+   * Most options say nothing about who acts — an option about data centres or
+   * about the Chilean bill has no honest value here, and inventing one would
+   * measure the instrument instead of the student. Six of the twelve items
+   * declare it on all five options; the rest declare nothing.
+   */
+  agencia?: number;
   /** The text in the syllabus that defends this position. Audited, not decorative. */
   anchor: string;
   /** Only on the tiebreak item. */
@@ -62,6 +72,12 @@ export interface CompasInstrument {
   title: string;
   subtitle: string;
   axes: { x: CompasAxis; y: CompasAxis };
+  /**
+   * The third axis. NOT part of the plane and NOT part of the archetype cell:
+   * nine cells times three bands is 27 boxes for twenty-five students, and the
+   * grid comes out empty. It is averaged separately and reported as a band.
+   */
+  ejeAgencia?: CompasAxis;
   scoring: {
     method: string;
     skippable: boolean;
@@ -97,6 +113,17 @@ export interface CompasCortesEje {
   alto: number[];
 }
 
+/** One band of the third axis. Reported next to the archetype, never inside it. */
+export interface BandaAgencia {
+  id: string;
+  name: string;
+  /** `[min, max]`. The bands tile the axis with no gaps and no overlap. */
+  rango: number[];
+  desc: string;
+  lectura: string;
+  puntoCiego: string;
+}
+
 export interface CompasArquetipos {
   archetypesId: string;
   instrumentId: string;
@@ -112,6 +139,10 @@ export interface CompasArquetipos {
     porDefecto: string;
   };
   arquetipos: Arquetipo[];
+  bandasAgencia?: {
+    eje: string;
+    bandas: BandaAgencia[];
+  };
 }
 
 /**
@@ -126,6 +157,16 @@ export interface CompasPosicion {
   /** How many items actually fed this position. */
   respondidas: number;
   total: number;
+  /**
+   * Mean of the `agencia` values among the answered options that declare one.
+   * `null` when they answered nothing that speaks to it — which is a real
+   * outcome, not a zero. Zero on this axis means "in dispute", and handing that
+   * to someone who never expressed it is the same lie as plotting a silent
+   * student at the origin.
+   */
+  agencia: number | null;
+  /** How many answers fed `agencia`. Fewer than `respondidas` by design. */
+  agenciaRespondidas: number;
 }
 
 /** Change between two applications of the same instrument. */

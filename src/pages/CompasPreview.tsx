@@ -1,8 +1,9 @@
 import { useMemo, useState } from 'react';
 import CompasPlano, { type PuntoCompas } from '../components/compas/CompasPlano';
+import TiraAgencia, { type PuntoAgencia } from '../components/compas/TiraAgencia';
 import TarjetaArquetipo from '../components/compas/TarjetaArquetipo';
 import { compasDe } from '../lib/compasContent';
-import { arquetipoDe, posicionDe, timonDe } from '../lib/compas';
+import { arquetipoDe, bandaAgenciaDe, colorAgencia, posicionDe, timonDe } from '../lib/compas';
 import { armarCampos } from '../lib/compasCampos';
 import type { CompasAnswers } from '../types/compas';
 
@@ -94,8 +95,15 @@ export default function CompasPreview() {
           esMio: i === YO,
           pos: { magnitud: ahora.magnitud, direccion: ahora.direccion },
           previa: antes ? { magnitud: antes.magnitud, direccion: antes.direccion } : null,
+          color: colorAgencia(ahora.agencia, bandasAgencia),
         };
       });
+
+  const bandasAgencia = arquetipos.bandasAgencia?.bandas;
+  const puntosAgencia: PuntoAgencia[] =
+    ronda === 0
+      ? []
+      : cohorte.map((_, i) => ({ id: String(i), agencia: posEn(i, ronda)!.agencia, esMio: i === YO }));
 
   const misRespuestas = ronda > 0 ? respuestasHasta(YO, ronda) : {};
   const miPos = ronda > 0 ? posEn(YO, ronda) : null;
@@ -111,7 +119,7 @@ export default function CompasPreview() {
         Compás — vista previa
       </h1>
       <p className="mb-1 max-w-[64ch] text-ink-soft">
-        Los diez ítems reales de <code>content/compas/{COURSE}</code>, con un curso de 28 alumnos
+        Los {instrumento.items.length} ítems reales de <code>content/compas/{COURSE}</code>, con un curso de 28 alumnos
         simulado. Sin puntaje y sin ranking: el compás mide dónde está parado alguien, no qué tan
         bien lo hizo.
       </p>
@@ -151,9 +159,26 @@ export default function CompasPreview() {
         </p>
       )}
 
-      <div className="mb-8 border-2 border-ink bg-surface p-4 shadow-[4px_4px_0_#101114]">
+      <div className="mb-4 border-2 border-ink bg-surface p-4 shadow-[4px_4px_0_#101114]">
         <CompasPlano puntos={puntos} ejeX={instrumento.axes.x} ejeY={instrumento.axes.y} />
       </div>
+
+      {instrumento.ejeAgencia && bandasAgencia && (
+        <>
+          <p className="mb-2 max-w-[68ch] text-[13.5px] text-faint">
+            El color de cada punto es el tercer eje. La nube puede quedarse quieta y cambiar de
+            color: eso sería el curso manteniendo su diagnóstico político y cambiando de idea sobre
+            quién conduce.
+          </p>
+          <div className="mb-8 border-2 border-ink bg-surface p-4 shadow-[4px_4px_0_#101114]">
+            <TiraAgencia
+              puntos={puntosAgencia}
+              eje={instrumento.ejeAgencia}
+              bandas={bandasAgencia}
+            />
+          </div>
+        </>
+      )}
 
       {ronda >= 4 && (
         <>
@@ -228,6 +253,8 @@ export default function CompasPreview() {
             posicion={miPos}
             ejeX={instrumento.axes.x}
             ejeY={instrumento.axes.y}
+            banda={bandaAgenciaDe(miPos.agencia, bandasAgencia)}
+            bandas={bandasAgencia}
           />
         ) : (
           <p className="text-faint">La tarjeta aparece cuando termine el primer ítem.</p>

@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import TarjetaArquetipo from '../../components/compas/TarjetaArquetipo';
 import { useCompasRun } from '../../hooks/useCompasRun';
 import { useAuth } from '../../hooks/useAuth';
-import { arquetipoDe, posicionDe, timonDe } from '../../lib/compas';
+import { arquetipoDe, bandaAgenciaDe, posicionDe, timonDe } from '../../lib/compas';
 
 /**
  * The student's phone, start to finish: join, wait, answer the item on the
@@ -69,6 +69,8 @@ export default function CompasJugar() {
   if (run.status === 'finished') {
     const pos = posicionDe(misRespuestas, instrumento.items);
     const arq = pos ? arquetipoDe(pos, timonDe(misRespuestas, instrumento.items), arquetipos) : null;
+    const bandas = arquetipos.bandasAgencia?.bandas;
+    const banda = pos ? bandaAgenciaDe(pos.agencia, bandas) : null;
     return (
       <div className="mx-auto max-w-[420px] px-5 py-8">
         {pos && arq ? (
@@ -77,6 +79,8 @@ export default function CompasJugar() {
             posicion={pos}
             ejeX={instrumento.axes.x}
             ejeY={instrumento.axes.y}
+            banda={banda}
+            bandas={bandas}
           />
         ) : (
           <p className="text-ink-soft">

@@ -20,6 +20,9 @@ export interface PosicionGuardada {
   respondidas: number;
   total: number;
   arquetipoId: string | null;
+  /** Tercer eje. Ausente en documentos escritos por instrumentos anteriores al v3. */
+  agencia?: number | null;
+  agenciaRespondidas?: number;
 }
 
 export interface Par {
@@ -67,6 +70,14 @@ function comoPosicion(p: PosicionGuardada): CompasPosicion {
     direccion: p.direccion,
     respondidas: p.respondidas,
     total: p.total,
+    // Las posiciones de la Semana 3 en adelante traen el tercer eje; las de
+    // instrumentos anteriores no, y ahi `null` es la respuesta correcta y no un
+    // cero. `movimiento()` solo mira el plano, asi que esto no altera ninguna
+    // comparacion existente.
+    agencia: Number.isFinite(p.agencia as number) ? (p.agencia as number) : null,
+    agenciaRespondidas: Number.isFinite(p.agenciaRespondidas as number)
+      ? (p.agenciaRespondidas as number)
+      : 0,
   };
 }
 

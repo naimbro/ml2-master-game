@@ -65,6 +65,64 @@ describe.each(Object.entries(COMPASES))('compas %s', (courseId, pack) => {
     }
   });
 
+  it('el tercer eje viene completo: eje, bandas que lo cubren, y sin huecos', () => {
+    if (!instrumento.ejeAgencia) return; // instrumentos anteriores al v3
+    const bandas = arquetipos.bandasAgencia?.bandas;
+    expect(bandas, 'hay ejeAgencia pero no hay bandas').toBeTruthy();
+    const { min, max } = instrumento.ejeAgencia;
+    expect(bandas![0].rango[0]).toBe(min);
+    expect(bandas![bandas!.length - 1].rango[1]).toBe(max);
+    for (let i = 1; i < bandas!.length; i += 1) {
+      expect(bandas![i].rango[0], `hueco o solape antes de ${bandas![i].id}`).toBe(
+        bandas![i - 1].rango[1],
+      );
+    }
+  });
+
+  it('un item que declara agencia la declara en las CINCO opciones', () => {
+    // A medias es peor que nada: el promedio del eje saldria de las opciones que
+    // por casualidad la traen, y quien eligio la que no la trae desaparece de la
+    // medicion sin que nadie lo note.
+    for (const item of instrumento.items) {
+      const con = item.options.filter((o) => typeof o.agencia === 'number').length;
+      expect([0, 5], `${item.id} declara agencia en ${con} de 5 opciones`).toContain(con);
+    }
+  });
+
+  it('los valores de agencia caen dentro del eje declarado', () => {
+    if (!instrumento.ejeAgencia) return;
+    const { min, max } = instrumento.ejeAgencia;
+    for (const item of instrumento.items) {
+      for (const o of item.options) {
+        if (typeof o.agencia !== 'number') continue;
+        expect(o.agencia, `${item.id}/${o.id}`).toBeGreaterThanOrEqual(min);
+        expect(o.agencia, `${item.id}/${o.id}`).toBeLessThanOrEqual(max);
+      }
+    }
+  });
+
+  it('cada item del tercer eje ofrece una salida por el polo humano', () => {
+    // La invariante anticontaminacion. Si un item deja contestar "perdemos el
+    // control" solo con respuestas del polo maquina, el eje se confunde con
+    // direccion: perder el control frente a cinco empresas es HUMANOS al mando,
+    // y tiene que poder decirse. Sin esta salida el eje deja de medir algo
+    // distinto de lo que ya mide el plano, y nadie se entera.
+    for (const item of instrumento.items) {
+      const ag = item.options.map((o) => o.agencia).filter((a): a is number => typeof a === 'number');
+      if (ag.length === 0) continue;
+      expect(Math.min(...ag), `${item.id} sin salida por el polo humano`).toBeLessThanOrEqual(-5);
+      expect(Math.max(...ag), `${item.id} sin salida por el polo maquina`).toBeGreaterThanOrEqual(2);
+    }
+  });
+
+  it('el tercer eje lo miden varios items, no uno solo', () => {
+    if (!instrumento.ejeAgencia) return;
+    const cuantos = instrumento.items.filter((i) =>
+      i.options.some((o) => typeof o.agencia === 'number'),
+    ).length;
+    expect(cuantos, 'un eje colgando de un item es ruido, no medicion').toBeGreaterThanOrEqual(4);
+  });
+
   it('hay exactamente un item de timon y todas sus opciones lo declaran', () => {
     const deTimon = instrumento.items.filter((i) => i.esItemDeTimon);
     expect(deTimon).toHaveLength(1);

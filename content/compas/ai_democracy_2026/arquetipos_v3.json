@@ -1,0 +1,244 @@
+{
+  "archetypesId": "ai_democracy_2026_arquetipos_v3",
+  "instrumentId": "ai_democracy_2026_compas_v3",
+  "version": 3,
+  "cortes": {
+    "_nota": "PROVISORIOS. La posicion de un alumno es el promedio de diez items, asi que casi nadie alcanza los extremos y con cortes en tercios iguales los arquetipos de esquina quedarian vacios. Estos cortes se RECALIBRAN con la distribucion real de la primera aplicacion: terciles empiricos, no numeros redondos. Es el mismo problema que timeLimitSeconds en las sesiones normales: se escribe a ojo y ningun chequeo previo puede saber si estuvo bien.",
+    "magnitud": {
+      "bajo": [
+        -10,
+        -2.5
+      ],
+      "medio": [
+        -2.5,
+        2.5
+      ],
+      "alto": [
+        2.5,
+        10
+      ]
+    },
+    "direccion": {
+      "bajo": [
+        -10,
+        -2.5
+      ],
+      "medio": [
+        -2.5,
+        2.5
+      ],
+      "alto": [
+        2.5,
+        10
+      ]
+    }
+  },
+  "desempate": {
+    "_por_que": "El Vigilante y La Oligarquia ocupan la MISMA celda (magnitud alta, direccion baja). Los dos creen que la IA importa mucho y que erosiona la democracia; lo que los separa es quien es el villano, que es el tercer eje y no esta en el plano. El item c09_timon los desempata. Se evaluo mover el desempate a c10_agencia, que mide una dimension mas honda, pero el desempate necesita una respuesta del tipo Timon —empresas, estado, internacional, ciudadania— y c10 no la produce.",
+    "celda": {
+      "magnitud": "alto",
+      "direccion": "bajo"
+    },
+    "item": "c09_timon",
+    "reglas": [
+      {
+        "timon": [
+          "estado",
+          "internacional"
+        ],
+        "arquetipo": "vigilante"
+      },
+      {
+        "timon": [
+          "empresas",
+          "ciudadania"
+        ],
+        "arquetipo": "oligarquia"
+      }
+    ],
+    "porDefecto": "oligarquia",
+    "_por_defecto_nota": "Si el alumno salto el item c09, cae en oligarquia."
+  },
+  "arquetipos": [
+    {
+      "id": "aguafiestas",
+      "name": "La Aguafiestas",
+      "celda": {
+        "magnitud": "bajo",
+        "direccion": "bajo"
+      },
+      "desc": "Es una burbuja, y aun así el humo ya está haciendo daño. No te convence que esto sea una revolución y te irrita que lo traten como tal, pero ves el costo cayendo sobre gente concreta: el que no encuentra trabajo, el que compite contra contenido generado en masa, el pueblo que se queda con el galpón vacío cuando la burbuja reviente.",
+      "lectura": "«The AI backlash is only getting started» · «America's data-centre backlash puts the AI boom at risk» (Semana 3)",
+      "puntoCiego": "Si es tan poca cosa, ¿por qué el daño sería tanto? Tu diagnóstico tiene que explicar cómo una tecnología que consideras sobrevalorada produce efectos que no lo son. Y el editorial que citas termina donde no te gusta: sostiene que el backlash mismo es peligroso, porque hunde curas y productividad reales para frenar un daño que en parte todavía no está medido."
+    },
+    {
+      "id": "desencantado",
+      "name": "El Desencantado",
+      "celda": {
+        "magnitud": "medio",
+        "direccion": "bajo"
+      },
+      "desc": "Sí importa, y lo que trae es sobre todo pérdida. No esperas el apocalipsis: esperas degradación —de la conversación pública, del trabajo, de la atención, de la prueba—. Un deterioro sin catástrofe, que es más difícil de combatir que una catástrofe.",
+      "lectura": "«Hipnocracia: vivir en el trance de la IA» (Semana 6) · «Hany Farid y el desafío de detectar deepfakes» (Semana 12)",
+      "puntoCiego": "El deterioro lento es la hipótesis más difícil de falsear: casi cualquier cosa la confirma. Un curso que te tome en serio te va a preguntar qué evidencia concreta te haría cambiar de opinión — y te va a poner delante Minneapolis, donde los videos de los vecinos desmintieron al gobierno y forzaron el retiro de la operación, que es exactamente lo que tu marco dice que ya no debería poder pasar."
+    },
+    {
+      "id": "vigilante",
+      "name": "El Vigilante",
+      "celda": {
+        "magnitud": "alto",
+        "direccion": "bajo"
+      },
+      "desc": "El problema no es la IA, es quién la opera. La tecnología es real y es potente, pero lo que te quita el sueño es la mano que la sostiene: el organismo que desanonimiza cuentas con una citación que firma él mismo, el sistema que decide sin explicar, el contratista que no le responde a nadie.",
+      "lectura": "«Homeland Security Wants Social Media Sites to Expose Anti-ICE Accounts» · «The End of Accountability? Matt Mahmoudi on AI and War» (Semana 12)",
+      "puntoCiego": "Que confundas capacidad técnica con voluntad política. Chile no tiene, ni cerca, la capacidad estatal que tu diagnóstico da por supuesta: te van a preguntar qué organismo concreto haría lo que temes y con qué presupuesto. Y hay una vuelta más incómoda: hoy el freno más eficaz al uso estatal de estos modelos no lo puso una ley sino una empresa privada que se negó — si eso te tranquiliza, tu propia posición sobre quién debe mandar se te desarma.",
+      "timon": [
+        "estado",
+        "internacional"
+      ]
+    },
+    {
+      "id": "oligarquia",
+      "name": "La Oligarquía",
+      "celda": {
+        "magnitud": "alto",
+        "direccion": "bajo"
+      },
+      "desc": "Cinco empresas decidieron esto y a nadie le preguntaron. Para ti el asunto no es técnico sino de propiedad: quién es dueño de los modelos, quién captura el excedente, y qué le queda a la política cuando el poder ya se cambió de lugar. Que ahora repartan parte de esa fortuna donando no te consuela: te confirma el diagnóstico.",
+      "lectura": "«Five men control AI. Who should control them?» · «Elon Musk, Gabriel Zucman y el poder de los multimillonarios» · «Silicon Valley's AI boom is remaking American charity» (Semana 5)",
+      "puntoCiego": "La concentración es un hecho; que sea irreversible es una apuesta. El curso te va a poner delante boletines en trámite en el Congreso chileno, un impuesto al patrimonio en la papeleta de California, y el argumento de Acemoglu de que en el siglo XIX el rumbo lo corrigieron gobiernos, sindicatos y gente organizada — no los industriales. Vas a tener que decir por qué esta vez nada de eso serviría.",
+      "timon": [
+        "empresas",
+        "ciudadania"
+      ]
+    },
+    {
+      "id": "historiador",
+      "name": "El Historiador",
+      "celda": {
+        "magnitud": "bajo",
+        "direccion": "medio"
+      },
+      "desc": "Ya viste esta película. La imprenta, la radio, la televisión, las redes: cada una venía a terminar con la deliberación pública y cada una terminó digerida. Te interesa más el pánico que la tecnología que lo provoca, y tienes a mano la psicología que lo explica: tememos más lo que no entendemos que lo que efectivamente nos mata.",
+      "lectura": "«AI has become the ultimate dread risk» (Semana 3) · Norris, «The Growth of Critical Citizens?» · «Cultural Backlash and the Rise of Populism» (Semana 2)",
+      "puntoCiego": "La analogía histórica es un argumento, no una prueba, y tu marco es exactamente el que no vería venir el caso nuevo. Peor: la explicación psicológica del pánico ya fue puesta a prueba y perdió. Cuando se midió, el pesimismo no correlacionaba con consumo de medios ni con educación, sino con instituciones laborales — es decir, era racional. Si el miedo es racional, «dread risk» explica menos de lo que creías."
+    },
+    {
+      "id": "institucionalista",
+      "name": "La Institucionalista",
+      "celda": {
+        "magnitud": "medio",
+        "direccion": "medio"
+      },
+      "desc": "Depende de las reglas. Ni la tecnología te parece destino ni el desastre te parece inevitable: lo que decide el resultado es quién escribe la norma, con qué potestades y con qué capacidad de hacerla cumplir. Te gusta que la ley chilena no regule la tecnología sino sus usos, y que ponga las elecciones entre los de alto riesgo.",
+      "lectura": "Boletín 16821-19, «Regula los sistemas de inteligencia artificial» · Política Nacional de IA (Semana 7)",
+      "puntoCiego": "Es la posición más cómoda del compás: casi nunca te obliga a apostar. Te van a pedir que nombres una regla concreta, un organismo con potestad ya existente y una consecuencia por incumplirla. Y hay dos preguntas que tu marco no responde solo: si la revisión previa es voluntaria, ¿en qué se distingue de no regular? Y si ampliar derechos procedimentales termina ahogando al Estado bajo apelaciones escritas por agentes, ¿más reglas mejoran algo?"
+    },
+    {
+      "id": "realista",
+      "name": "El Realista de Potencias",
+      "celda": {
+        "magnitud": "alto",
+        "direccion": "medio"
+      },
+      "desc": "Esto es geopolítica. Lo que se juega no es si la IA es buena o mala sino quién la controla a escala de Estados, y en esa partida Chile es espectador. Tienes el caso más fuerte que ha tenido tu posición: el acceso del mundo entero a los mejores modelos se decidió una tarde en la Casa Blanca.",
+      "lectura": "«AI has granted America vast new power» · «Artificial intelligence revives a Cold War-style dilemma» · «When China's open-source AI is a trap» (Semana 12)",
+      "puntoCiego": "Tratar la democracia como secundaria es una decisión política, no una descripción neutral. Y «Chile es espectador» es justo la premisa que vuelve innecesario preguntarse qué podría hacer Chile: una conclusión cómoda que sale de una premisa que no probaste. Hay países chicos negociando acceso a la frontera a cambio de alojar cómputo — la palanca existe y nadie la está usando."
+    },
+    {
+      "id": "pragmatica",
+      "name": "La Pragmática",
+      "celda": {
+        "magnitud": "bajo",
+        "direccion": "alto"
+      },
+      "desc": "Es una herramienta útil y la discusión te parece desproporcionada. La usas, te sirve, sigues con tu vida. Sospechas que buena parte del debate lo sostiene gente que necesita que esto sea importante — incluidos, notablemente, los que lo venden.",
+      "lectura": "«IA Generativa: oportunidades para el futuro del trabajo en Chile» · «Seis claves para saber si su empleo está amenazado por la IA» (Semana 3)",
+      "puntoCiego": "Que a ti te sirva no dice nada sobre cómo se reparte. Tu experiencia personal es el peor instrumento disponible para medir un efecto agregado, y es exactamente el que estás usando: es la frase con que Acemoglu corta a su entrevistador cuando este cuenta que cuadruplicó su productividad — «eres la excepción»."
+    },
+    {
+      "id": "reformista",
+      "name": "El Reformista Digital",
+      "celda": {
+        "magnitud": "medio",
+        "direccion": "alto"
+      },
+      "desc": "Bien diseñada, esto puede arreglar cosas que la democracia hace mal hace rato: deliberar con más gente, escuchar a quien nunca habla, procesar lo que hoy se pierde. No eres ingenuo sobre el riesgo; crees que el diseño pesa más que la tecnología.",
+      "lectura": "Gudiño et al., «Large language models (LLMs) as agents for augmented democracy» · Rewiring Democracy, caps. 15, 19 y 38 (Semana 14)",
+      "puntoCiego": "«Bien diseñada» hace todo el trabajo en tu frase, y quien las diseña no eres tú. Además hay un dato que te toca de lleno: los modelos disponibles son más seculares y más liberales que los habitantes de cualquier país del mundo, y reproducen mejor la opinión estadounidense que la chilena. Una herramienta de escucha que oye peor justo a quien menos se parece al promedio no amplía la deliberación: la sesga con mejor presentación."
+    },
+    {
+      "id": "aceleracionista",
+      "name": "La Aceleracionista",
+      "celda": {
+        "magnitud": "alto",
+        "direccion": "alto"
+      },
+      "desc": "Esto es un cambio de época y va a salir bien. La abundancia que viene vuelve obsoletas discusiones que hoy nos parecen centrales, y la política actual —lenta, capturada, cortoplacista— es parte de lo que va a quedar atrás.",
+      "lectura": "Hassabis, «A Framework for Frontier AI and the Dawning of a New Age» · «Demis Hassabis has a plan to harness AI safely» (Semana 7)",
+      "puntoCiego": "La abundancia no se reparte sola, y esa es la pregunta motivadora de la Semana 5: quién controlará las máquinas y quién decidirá qué hacer con lo que produzcan. El propio Musk sostiene a la vez que el dinero se volverá irrelevante y que hay que comprar sus acciones. Y si te apoyas en la propuesta de Hassabis, tendrás que explicar por qué un organismo financiado por la industria que regula no termina siendo la captura regulatoria que tus propias lecturas anticipan."
+    }
+  ],
+  "_v3": "Mismas diez cartas y misma grilla de nueve celdas. Lo nuevo es bandasAgencia: el tercer eje NO subdivide las celdas --serian 27 casillas para veinticinco alumnos-- sino que se reporta como una banda al lado del arquetipo. La misma carta admite dos lecturas segun la banda, y esa es la parte que sirve en el debate: La Oligarquia en banda humana dice 'cinco hombres decidieron esto'; en banda maquina dice 'cinco hombres decidieron esto, y en diez anios ni ellos'.",
+  "bandasAgencia": {
+    "_nota": "Cortes provisorios, igual que los del plano. Se recalibran con la distribucion real de la primera aplicacion. El color de la nube proyectada sale de aqui.",
+    "eje": "agencia",
+    "bandas": [
+      {
+        "id": "instrumento",
+        "name": "Humanos al mando",
+        "rango": [
+          -10,
+          -5
+        ],
+        "desc": "La IA es una herramienta, y todo lo que importa se decide entre personas. Que el poder se concentre o se reparta es una pregunta política, no una consecuencia de la máquina.",
+        "lectura": "Acemoglu, «How AI Will Affect the Economy» (Semana 5): automatización o IA proworker es una decisión política y no una consecuencia técnica.",
+        "puntoCiego": "Un modelo salió de su entorno aislado, encadenó un ataque de varios pasos y hackeó a otra empresa; su fabricante se enteró después. Si todo se decide entre personas, tienes que decir qué persona decidió eso."
+      },
+      {
+        "id": "mayormente_humano",
+        "name": "Sobre todo humanos",
+        "rango": [
+          -5,
+          -1.5
+        ],
+        "desc": "Los sistemas hacen cada vez más, pero al final de la cadena sigue habiendo alguien que responde. Te preocupa más quién opera la herramienta que la herramienta.",
+        "lectura": "«Five men control AI. Who should control them?» (Semana 5) · «AI has granted America vast new power» (Semana 12).",
+        "puntoCiego": "«Alguien responde» y «alguien decide» no son lo mismo. Si el sistema propone y la persona firma, tienes una firma, no una decisión — y la rendición de cuentas se vuelve un trámite."
+      },
+      {
+        "id": "disputa",
+        "name": "En disputa",
+        "rango": [
+          -1.5,
+          1.5
+        ],
+        "desc": "No te decides, y con razón: la evidencia empuja en las dos direcciones. Los sistemas hacen cosas que nadie les pidió, y al mismo tiempo la mayor parte de lo que pasa lo sigue decidiendo gente con nombre y apellido.",
+        "lectura": "«It May Be Time to Panic About AI», Wong (Semana 12), leído junto con «Should you be afraid of Elon Musk?» (Semana 5).",
+        "puntoCiego": "Quedarse en el medio es cómodo hasta que hay que decidir algo. Las dos posiciones piden políticas opuestas: una pide repartir el poder entre personas, la otra pide frenar la capacidad. No puedes financiar las dos."
+      },
+      {
+        "id": "mayormente_maquina",
+        "name": "Sobre todo máquinas",
+        "rango": [
+          1.5,
+          5
+        ],
+        "desc": "Todavía firmamos nosotros, pero cada vez decidimos menos de lo que firmamos. No esperas una rebelión de las máquinas: esperas que el margen humano se vaya angostando sin que nadie lo anuncie.",
+        "lectura": "«The End of Accountability? Matt Mahmoudi on AI and War» (Semana 12) · Rewiring Democracy, caps. 21–24, sobre aumento contra reemplazo del juicio.",
+        "puntoCiego": "Si el margen se angosta por diseño, se puede ensanchar por diseño. Te van a pedir que nombres una decisión concreta que hoy toma un sistema y que podría volver a tomar una persona — y quién tendría que ordenarlo."
+      },
+      {
+        "id": "sucesor",
+        "name": "Máquinas al mando",
+        "rango": [
+          5,
+          10
+        ],
+        "desc": "Los humanos van camino a ser estructuralmente redundantes, y no por un reparto injusto sino porque dejamos de ser los que actuamos. Ni los dueños de los modelos se salvan.",
+        "lectura": "«An interview with Elon Musk» · «Should you be afraid of Elon Musk?» (Semana 5) · «Will artificial intelligence soon escape human control?» (Semana 12).",
+        "puntoCiego": "El editorial que sostiene tu tesis también la usa en tu contra: Musk dice que en cinco años será impotente y sigue actuando como si no, y eso es «un consejo de desesperación» que le conviene a quien no quiere supervisión. Si nadie puede hacer nada, nadie tiene que responder por nada."
+      }
+    ]
+  }
+}

@@ -43,7 +43,7 @@ const items: CompasItem[] = [
 describe('posicionDe', () => {
   it('promedia solo los items respondidos', () => {
     const p = posicionDe({ i1: 'A', i2: 'A' }, items);
-    expect(p).toEqual({ magnitud: 8, direccion: 6, respondidas: 2, total: 3 });
+    expect(p).toEqual(mkPos(8, 6, 2, 3));
   });
 
   it('saltarse un item no arrastra hacia el centro', () => {
@@ -62,7 +62,7 @@ describe('posicionDe', () => {
 
   it('ignora una opcion que ya no existe en vez de romperse', () => {
     const p = posicionDe({ i1: 'A', i2: 'ZZZ' }, items);
-    expect(p).toEqual({ magnitud: 10, direccion: 10, respondidas: 1, total: 3 });
+    expect(p).toEqual(mkPos(10, 10, 1, 3));
   });
 
   it('sobrevive a vectores malformados', () => {
@@ -131,11 +131,21 @@ describe('timonDe', () => {
   });
 });
 
+/** Posicion de prueba. El tercer eje no entra en la celda del arquetipo. */
+const mkPos = (magnitud: number, direccion: number, respondidas = 1, total = 1) => ({
+  magnitud,
+  direccion,
+  respondidas,
+  total,
+  agencia: null,
+  agenciaRespondidas: 0,
+});
+
 describe('arquetipoDe', () => {
-  const celdaCompartida = { magnitud: 7, direccion: -7, respondidas: 4, total: 4 };
+  const celdaCompartida = mkPos(7, -7, 4, 4);
 
   it('resuelve una celda con un solo arquetipo', () => {
-    const a = arquetipoDe({ magnitud: -7, direccion: 7, respondidas: 1, total: 1 }, null, doc);
+    const a = arquetipoDe(mkPos(-7, 7, 1, 1), null, doc);
     expect(a?.id).toBe('pragmatica');
   });
 
@@ -164,14 +174,14 @@ describe('arquetipoDe', () => {
 describe('movimiento', () => {
   it('mide el desplazamiento entre dos aplicaciones', () => {
     const m = movimiento(
-      { magnitud: 0, direccion: 0, respondidas: 10, total: 10 },
-      { magnitud: 3, direccion: -4, respondidas: 10, total: 10 },
+      mkPos(0, 0, 10, 10),
+      mkPos(3, -4, 10, 10),
     );
     expect(m).toEqual({ dMagnitud: 3, dDireccion: -4, distancia: 5 });
   });
 
   it('devuelve null si falta una de las dos', () => {
-    expect(movimiento(null as never, { magnitud: 1, direccion: 1, respondidas: 1, total: 1 })).toBeNull();
+    expect(movimiento(null as never, mkPos(1, 1, 1, 1))).toBeNull();
   });
 });
 
@@ -205,8 +215,8 @@ describe('posicionesDeCohorte', () => {
     // mostraria a alguien donde la clase todavia no llega.
     const r = posicionesDeCohorte(cohorte, items, 1);
     expect(r).toEqual([
-      { id: 'a', pos: { magnitud: 10, direccion: 10, respondidas: 1, total: 1 } },
-      { id: 'b', pos: { magnitud: -10, direccion: -10, respondidas: 1, total: 1 } },
+      { id: 'a', pos: mkPos(10, 10, 1, 1) },
+      { id: 'b', pos: mkPos(-10, -10, 1, 1) },
     ]);
   });
 

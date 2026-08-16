@@ -1,8 +1,9 @@
 import { useParams } from 'react-router-dom';
 import { QRCodeSVG } from 'qrcode.react';
 import CompasPlano, { type PuntoCompas } from '../../components/compas/CompasPlano';
+import TiraAgencia, { type PuntoAgencia } from '../../components/compas/TiraAgencia';
 import { useCompasRun } from '../../hooks/useCompasRun';
-import { cuantosRespondieron } from '../../lib/compas';
+import { colorAgencia, cuantosRespondieron } from '../../lib/compas';
 import { currentCompasUrl } from '../../lib/joinUrl';
 
 const ARCHIVO = { fontFamily: "'Archivo Black', sans-serif" } as const;
@@ -41,15 +42,26 @@ export default function CompasSala() {
   if (error || !run || !pack) return <div className="p-8 text-ink-soft">{error ?? 'No existe ese compás'}</div>;
   if (!isHost) return <div className="p-8 text-ink-soft">Esta pantalla es del anfitrión.</div>;
 
-  const { instrumento } = pack;
+  const { instrumento, arquetipos } = pack;
+  const bandasAgencia = arquetipos.bandasAgencia?.bandas;
   const item = run.itemIndex > 0 ? instrumento.items[run.itemIndex - 1] : null;
   const previas = posicionesPrevias();
-  const puntos: PuntoCompas[] = posicionesDelCurso().map((p) => ({
+  const delCurso = posicionesDelCurso();
+  const puntos: PuntoCompas[] = delCurso.map((p) => ({
     id: p.id,
     pos: { magnitud: p.pos.magnitud, direccion: p.pos.direccion },
     previa: previas[p.id]
       ? { magnitud: previas[p.id].magnitud, direccion: previas[p.id].direccion }
       : null,
+    // El tercer eje va en el color del punto y no en una tercera coordenada:
+    // nueve celdas por cinco bandas serian cuarenta y cinco casillas para
+    // veinticinco personas. Quien todavia no ha respondido nada del eje viene
+    // en null y se pinta con la tinta de siempre.
+    color: colorAgencia(p.pos.agencia, bandasAgencia),
+  }));
+  const puntosAgencia: PuntoAgencia[] = delCurso.map((p) => ({
+    id: p.id,
+    agencia: p.pos.agencia,
   }));
 
   const inscritos = Object.keys(run.participantes ?? {}).length;
@@ -138,9 +150,19 @@ export default function CompasSala() {
         <p className="mb-4 border-l-4 border-ink bg-surface px-4 py-3 text-xl text-ink">{item.question}</p>
       )}
 
-      <div className="mb-5 border-2 border-ink bg-surface p-4 shadow-[4px_4px_0_#101114]">
+      <div className="mb-4 border-2 border-ink bg-surface p-4 shadow-[4px_4px_0_#101114]">
         <CompasPlano puntos={puntos} ejeX={instrumento.axes.x} ejeY={instrumento.axes.y} />
       </div>
+
+      {instrumento.ejeAgencia && bandasAgencia && (
+        <div className="mb-5 border-2 border-ink bg-surface p-4 shadow-[4px_4px_0_#101114]">
+          <TiraAgencia
+            puntos={puntosAgencia}
+            eje={instrumento.ejeAgencia}
+            bandas={bandasAgencia}
+          />
+        </div>
+      )}
 
       <div className="flex flex-wrap gap-3">
         <button
