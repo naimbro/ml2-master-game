@@ -339,69 +339,10 @@
       ]
     },
     {
-      "id": "c07_elecciones_2031",
-      "order": 6,
-      "question": "Es 2031 y hubo elecciones en Chile. ¿Qué pasó?",
-      "discrimina": "La escalera es la magnitud: -6, +3, +5, +8, +10. La direccion se mueve aparte --la tercera es la unica buena para la democracia-- y la agencia sube en los dos ultimos escalones, que son los que sacan a las personas del acto de votar.",
-      "_tension": "S14 · el gradiente que va de escuchar al elector, a representarlo, a actuar por él.",
-      "options": [
-        {
-          "id": "A",
-          "text": "Nada raro. Lo mismo, con más spam.",
-          "vector": {
-            "magnitud": -6,
-            "direccion": -1
-          },
-          "agencia": -7,
-          "anchor": "«There's One Clear Reason Americans Are Gloomy About A.I.» (S3)"
-        },
-        {
-          "id": "B",
-          "text": "Cada uno recibió su propia campaña.",
-          "vector": {
-            "magnitud": 3,
-            "direccion": -6
-          },
-          "agencia": -2,
-          "anchor": "pregunta motivadora S3 · «Hipnocracia: vivir en el trance de la IA» (S6): microdirigir hasta que no queda discurso publico compartido"
-        },
-        {
-          "id": "C",
-          "text": "Aparecieron herramientas que ayudan a deliberar.",
-          "vector": {
-            "magnitud": 5,
-            "direccion": 7
-          },
-          "agencia": -6,
-          "anchor": "Gudiño et al., «LLMs as agents for augmented democracy» (S14) · Rewiring Democracy, cap. 15 «Listening to Constituents» (S14)"
-        },
-        {
-          "id": "D",
-          "text": "Mucha gente dejó que un agente votara por ella.",
-          "vector": {
-            "magnitud": 8,
-            "direccion": -2
-          },
-          "agencia": 6,
-          "anchor": "Rewiring Democracy, cap. 38 «Acting as Your Personal Political Proxy» (S14) · Diella, la primera ministra IA (S14)"
-        },
-        {
-          "id": "E",
-          "text": "Los humanos ya casi no participan.",
-          "vector": {
-            "magnitud": 10,
-            "direccion": -4
-          },
-          "agencia": 8,
-          "anchor": "Innerarity, «¿Sobrevivirá la democracia a la inteligencia artificial?» (S14) · «A social network for AI agents is full of introspection—and threats» (S14)"
-        }
-      ]
-    },
-    {
       "id": "c08_representacion",
-      "order": 7,
-      "question": "¿Podría una IA representarte en el Congreso?",
-      "discrimina": "La escalera es cuanto aceptas que te represente: si cinico, si por resultado, si a medias, no por sesgo, no por principio. Separa a Hidalgo de Innerarity, y el escalon del medio distingue escuchar de votar --que son los capitulos 15 y 38 de Schneier-- que es donde se parte el curso.",
+      "order": 6,
+      "question": "¿Podría una IA votar por ti?",
+      "discrimina": "Escalera de cuanto aceptas delegar el voto: si cinico, si por resultado, si a medias, no por sesgo, no por principio. Separa a Hidalgo de Innerarity. El escalon del medio distingue aconsejar de votar --los capitulos 15 y 38 de Schneier-- que es donde se parte el curso. Absorbe lo electoral que aportaba el item de las elecciones de 2031, retirado por duplicar tres de sus cinco escalones.",
       "_tension": "S14 · legitimidad por resultado o por procedimiento; injusticia epistemica; delegar la accion politica.",
       "options": [
         {
@@ -426,7 +367,7 @@
         },
         {
           "id": "C",
-          "text": "Sí para escuchar, no para votar.",
+          "text": "Sí para aconsejarme, no para votar.",
           "vector": {
             "magnitud": 4,
             "direccion": 4
@@ -446,7 +387,7 @@
         },
         {
           "id": "E",
-          "text": "No. El punto de que me representen es que me pregunten.",
+          "text": "No. El punto de votar es que me pregunten a mí.",
           "vector": {
             "magnitud": 5,
             "direccion": -5
@@ -458,7 +399,7 @@
     },
     {
       "id": "c09_timon",
-      "order": 8,
+      "order": 7,
       "question": "¿Quién debería decidir sobre la IA?",
       "discrimina": "Una de las cinco preguntas del Taller integrador (S15). Mide el tercer eje —quién tiene el timón— y es la que desempata entre El Vigilante y La Oligarquía.",
       "_tension": "S7 · FINRA de Hassabis vs. foro tipo OIEA de Altman vs. agencia estatal vs. deliberación ciudadana. S12 · el dilema tipo Guerra Fría.",
@@ -519,7 +460,7 @@
     },
     {
       "id": "c10_agencia",
-      "order": 9,
+      "order": 8,
       "question": "En diez años, ¿quién va a estar decidiendo?",
       "discrimina": "El item raiz del tercer eje. Sus extremos son los dos polos del curso: Acemoglu, para quien cuales personas mandan sigue siendo una decision politica abierta, y Musk, para quien no va a mandar ninguna persona. Las opciones B y E existen para que 'perder el control' no se pueda contestar con 'mandan cinco empresas': esa respuesta es HUMANOS al mando.",
       "_tension": "S5 · determinismo de Musk contra eleccion politica de Acemoglu. S12 · sistemas que ya operan fuera del circuito humano.",
@@ -578,7 +519,7 @@
     },
     {
       "id": "c11_control",
-      "order": 10,
+      "order": 9,
       "question": "¿Podemos seguir mandando a una IA más inteligente que nosotros?",
       "discrimina": "Escalera de control, de mas a menos: no se plantea, si por diseno, si con pruebas, muy dificil, ya lo perdimos. Los dos ultimos escalones eran ambos 'no' con evidencias distintas y sin gradacion entre ellos; ahora uno habla de dificultad y el otro de un hecho consumado.",
       "_tension": "S7 · el escape de OpenAI vuelve la perdida de control un hecho y no una hipotesis. S12 · mejora recursiva y modelos vigilados por modelos.",
@@ -637,7 +578,7 @@
     },
     {
       "id": "c12_valencia",
-      "order": 11,
+      "order": 10,
       "question": "Supongamos que la IA hace todo el trabajo y ya no hacemos falta. ¿Qué tan bueno es eso?",
       "discrimina": "Item CONDICIONAL: estipula el escenario de Musk y pregunta cuanto vale. Al dar la premisa por cierta nadie puede esquivarlo con 'eso no va a pasar', que era la salida comoda de la version anterior. Escalera de pura valencia, de perder el sentido a la mejor epoca de la historia, con la propiedad de las maquinas como bisagra en el medio.",
       "_tension": "S5 · la abundancia de Musk y el remate del editorial sobre sentirse superfluo. S14 · que queda de la vida civica sin trabajo.",
