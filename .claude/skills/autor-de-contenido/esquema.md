@@ -82,6 +82,19 @@ las dos formas, pero `courses.ts` hace `scenarios.length` y la envuelta deja
 - `durationSeconds` es **derivado**, nunca escrito a mano: `src/lib/mcTiming.ts`.
   El validador falla el build si no alcanza para el bloque.
 - `correctOptionIndex` es base 0. Contarlo dos veces.
+- **El `context` del escenario NO se muestra en una ronda de alternativas.**
+  `Round.tsx` lo renderiza en un solo lugar (la rama de rondas abiertas, junto al
+  `question`); la rama MC dibuja la portada, el enunciado y las opciones, y nunca
+  el contexto. Escribirlo no da error, no rompe ningún validador y se pierde
+  entero — así que **todo lo que la pregunta necesita va DENTRO del `question`**,
+  aunque quede largo. La carga de lectura no es el problema (ver más abajo);
+  el enunciado que depende de un texto invisible sí.
+- **La imagen de una MC va en dos lugares distintos y no dan lo mismo.** En el
+  escenario (`scenario.media`) se muestra **solo en la portada**, antes de que
+  aparezca la pregunta, y sube la portada de 5 s a 12 s. En la pregunta
+  (`mcQuestions[i].media`) se muestra **junto al enunciado, mientras corre el
+  reloj**, y deja la portada en 5 s. Si la imagen es el clima de la pregunta,
+  va en la pregunta.
 - **El reloj va por tipo de pregunta, no uniforme.** `timeLimitSeconds` es por
   pregunta justamente para esto. Tres tramos, y el tercero salió caro:
 

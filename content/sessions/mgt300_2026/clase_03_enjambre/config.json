@@ -1,0 +1,47 @@
+{
+  "sessionId": "clase_03_enjambre",
+  "courseId": "mgt300_2026",
+  "title": "Clase 3: Identidad y vida social en plataformas",
+  "description": "5 rondas (~20 min) sobre En el enjambre de Byung-Chul Han, los cuatro capítulos que el curso lee en papel y en silencio antes de jugar: «Sin respeto», «En el enjambre», «El Listo Hans» y «Huida a la imagen». Tres rondas de alternativas y dos abiertas; la primera repite textual una pregunta de la clase 2, para ver qué quedó. Las cinco compiten. No es nota.",
+  "date": "2026-08-18",
+  "roundCount": 5,
+  "roundDurationSeconds": 210,
+  "bufferSeconds": 45,
+  "conceptTags": [
+    "clase_02_repaso",
+    "han_respeto_distancia",
+    "han_enjambre",
+    "han_listo_hans",
+    "han_huida_imagen",
+    "metodo_han",
+    "chile_2026_redes"
+  ],
+  "judges": [
+    {
+      "judgeId": "generic_specialist",
+      "weight": 0.35
+    },
+    {
+      "judgeId": "generic_praxis",
+      "weight": 0.35
+    },
+    {
+      "judgeId": "generic_teacher",
+      "weight": 0.3
+    }
+  ],
+  "judgeConfig": {
+    "generic_specialist": {
+      "sessionLens": "Tu lente es el TEXTO: si lo que el estudiante le atribuye a Han está efectivamente en la guía de lectura y si lo reconstruye sin deformarlo. Tienes los cuatro capítulos resumidos con sus citas en el material de referencia; úsalo para verificar, no para exigir que citen. El error que más te importa es leer «En el enjambre» como un texto moral sobre las redes: la tesis de Han no es que la gente se volvió agresiva, es que se cayeron condiciones del medio —la distancia, el nombre, la demora, la negatividad— y que sin ellas ciertas prácticas dejan de ser posibles. Ojo con las cifras: los cuatro capítulos no traen ninguna, y las tres chilenas del cierre de la guía no son de Han. Si aparece una que no está en el material, la inventaron. En la ronda del método, cuidado con una trampa tuya: ahí no se juzga si resumió bien a Han sino si evaluó de qué está hecha su evidencia, y un resumen impecable que no evalúa nada no responde la pregunta. Es la tercera clase del semestre: no exijas vocabulario del curso ni las palabras del autor.",
+      "weightFormula": "score = 0.45 * fidelidad_al_texto + 0.40 * mecanismo + 0.15 * concrecion"
+    },
+    "generic_praxis": {
+      "sessionLens": "Tu única pregunta es POR QUÉ. Casi cualquiera puede repetir que Han cree que las redes nos aíslan; lo que separa a quien leyó de quien hojeó es poder decir por qué se sigue. En la ronda del titular no aceptes «se perdió el respeto»: eso es lo que el propio enunciado puso del otro lado, y lo que se pide es la condición que lo hacía posible y qué práctica concreta cae con ella. Tampoco aceptes «la gente se volvió más agresiva»: eso es una impresión, no un mecanismo. En la ronda del método no aceptes «le faltan datos»: pide a qué afirmación concreta de Han le faltan, porque no es lo mismo sostener que el canal no verbal existe que sostener cuánto pesa. Premia a quien cierra la cadena completa y dice qué se vuelve imposible, innecesario o gratuito en cada eslabón. Y premia igual de alto a quien defiende a Han con argumento —que su afirmación es conceptual y no estadística— que a quien lo critica: las dos cierran una cadena.",
+      "weightFormula": "score = 0.25 * fidelidad_al_texto + 0.45 * mecanismo + 0.30 * concrecion"
+    },
+    "generic_teacher": {
+      "sessionLens": "Es la tercera clase del semestre y estas dos rondas SÍ entran al ranking, así que puntúa con honestidad y sin inflar: un puntaje regalado le quita el puesto a otra persona. El juego no es nota. Evalúa si la persona leyó los cuatro capítulos de verdad o si está contestando desde el sentido común sobre el celular y las redes sociales, que es lo que suena parecido y no lo es. En tu feedback escribe en primera persona e incluye un «yo habría...» concreto a ESTA respuesta. Si alguien discute a Han —que construir una teoría entera sobre la etimología de una palabra es endeble, que sus ejemplos están elegidos a favor, que un libro de 2013 no vio venir los algoritmos de recomendación ni a los influencers—, eso no es un problema: es exactamente lo que este curso enseña, siempre que muestre primero que entendió qué sostiene el texto. Y acuérdate de que las dos rondas admiten más de una respuesta correcta: si alguien llega con un ejemplo o una condición que no esperabas y la sostiene, vale lo mismo que la prevista.",
+      "weightFormula": "score = 0.35 * fidelidad_al_texto + 0.40 * mecanismo + 0.25 * concrecion"
+    }
+  }
+}

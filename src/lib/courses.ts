@@ -72,6 +72,10 @@ import mgtC02Config from '../../content/sessions/mgt300_2026/clase_02_autoexplot
 import mgtC02Scenarios from '../../content/sessions/mgt300_2026/clase_02_autoexplotacion/scenarios.json';
 import mgtC02Rubric from '../../content/sessions/mgt300_2026/clase_02_autoexplotacion/rubric.json';
 import mgtC02KnowledgeBase from '../../content/sessions/mgt300_2026/clase_02_autoexplotacion/knowledge_base.md?raw';
+import mgtC03Config from '../../content/sessions/mgt300_2026/clase_03_enjambre/config.json';
+import mgtC03Scenarios from '../../content/sessions/mgt300_2026/clase_03_enjambre/scenarios.json';
+import mgtC03Rubric from '../../content/sessions/mgt300_2026/clase_03_enjambre/rubric.json';
+import mgtC03KnowledgeBase from '../../content/sessions/mgt300_2026/clase_03_enjambre/knowledge_base.md?raw';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyJson = any;
@@ -329,6 +333,18 @@ export const SESSIONS: SessionOption[] = [
     scenarios: mgtC02Scenarios,
     rubric: mgtC02Rubric,
     knowledgeBase: mgtC02KnowledgeBase,
+  },
+  {
+    id: 'clase_03_enjambre',
+    courseId: 'mgt300_2026',
+    title: mgtC03Config.title,
+    description: mgtC03Config.description,
+    rounds: mgtC03Scenarios.length,
+    duration: Math.round(mgtC03Config.roundDurationSeconds / 60),
+    config: mgtC03Config,
+    scenarios: mgtC03Scenarios,
+    rubric: mgtC03Rubric,
+    knowledgeBase: mgtC03KnowledgeBase,
   },
 ];
 

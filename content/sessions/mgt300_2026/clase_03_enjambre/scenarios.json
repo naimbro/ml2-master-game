@@ -1,0 +1,214 @@
+[
+  {
+    "id": "mgt_c03_r1_repaso_mas_eficaz",
+    "order": 1,
+    "type": "multiple_choice",
+    "title": "Lo de la semana pasada",
+    "category": "Repaso",
+    "difficulty": "easy",
+    "ranked": true,
+    "durationSeconds": 66,
+    "conceptTags": [
+      "clase_02_repaso"
+    ],
+    "mcQuestions": [
+      {
+        "question": "Han escribe que la autoexplotación es «mucho más eficaz que la explotación por otros». ¿Por qué es MÁS eficaz?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Porque le ahorra a la empresa el costo de supervisar"
+          },
+          {
+            "id": "B",
+            "text": "Porque uno conoce sus propios límites mejor que un jefe"
+          },
+          {
+            "id": "C",
+            "text": "Porque va acompañada de un sentimiento de libertad"
+          },
+          {
+            "id": "D",
+            "text": "Porque las jornadas de trabajo se hicieron más largas"
+          }
+        ],
+        "correctOptionIndex": 2,
+        "timeLimitSeconds": 30,
+        "explanation": "No hay a quién desobedecer: por eso rinde más. Guárdenla, porque hoy Han la lleva más lejos. Ya no nos creemos un sujeto sometido, sino «un proyecto que se optima». Y ahí escribe: «Más libertad significa más coacción»."
+      }
+    ]
+  },
+  {
+    "id": "mgt_c03_r2_alguien_anonimo",
+    "order": 2,
+    "type": "multiple_choice",
+    "title": "Un alguien anónimo",
+    "category": "En el enjambre",
+    "difficulty": "hard",
+    "ranked": true,
+    "durationSeconds": 76,
+    "conceptTags": [
+      "han_enjambre"
+    ],
+    "mcQuestions": [
+      {
+        "question": "McLuhan sostenía que el ciudadano electrónico era «un nadie», como el espectador en un estadio deportivo. Han lo corrige. ¿Qué es, para Han, el *homo digitalis*?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Un nadie, porque en la red su identidad privada queda extinguida"
+          },
+          {
+            "id": "B",
+            "text": "Un alguien anónimo, que se expone y optimiza su perfil"
+          },
+          {
+            "id": "C",
+            "text": "Un anónimo que renuncia al perfil para no dejar rastro"
+          },
+          {
+            "id": "D",
+            "text": "Un alguien con nombre propio, cuya identidad se la fijan las plataformas"
+          }
+        ],
+        "correctOptionIndex": 1,
+        "timeLimitSeconds": 40,
+        "explanation": "McLuhan veía un nadie: el estadio borra al espectador. Han dice lo contrario. El homo digitalis se manifiesta sin nombre, pero «trabaja incesantemente» en su perfil. Es un alguien anónimo, y por eso el enjambre no marcha."
+      }
+    ]
+  },
+  {
+    "id": "mgt_c03_r3_sindrome_paris",
+    "order": 3,
+    "type": "multiple_choice",
+    "title": "El síndrome de París",
+    "category": "Huida a la imagen",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 71,
+    "conceptTags": [
+      "han_huida_imagen"
+    ],
+    "mcQuestions": [
+      {
+        "question": "El «síndrome de París» —alucinaciones y angustia en turistas japoneses recién llegados— lo dispara la distancia entre la imagen ideal de la ciudad y la ciudad real. Esos mismos turistas fotografían, dice Han, de manera «coactiva, casi histérica». ¿Por qué?",
+        "media": [
+          {
+            "kind": "image",
+            "src": "media/mgt300/louvre-fotografiando-2014.jpg",
+            "alt": "Decenas de visitantes apiñados en una sala del Louvre frente a la Mona Lisa, casi todos con el teléfono o la cámara en alto y la vista puesta en su propia pantalla en vez de en el cuadro.",
+            "credit": "Victor Grigas, 2014 · Wikimedia Commons · CC BY-SA 4.0"
+          }
+        ],
+        "options": [
+          {
+            "id": "A",
+            "text": "Porque quieren mostrar en su país que el viaje valió la pena"
+          },
+          {
+            "id": "B",
+            "text": "Porque fotografiar les permite recordar lo que la angustia les borra"
+          },
+          {
+            "id": "C",
+            "text": "Porque necesitan comprobar después que la ciudad era como pensaban"
+          },
+          {
+            "id": "D",
+            "text": "Porque las fotos bonitas los blindan frente a la realidad sucia"
+          }
+        ],
+        "correctOptionIndex": 3,
+        "timeLimitSeconds": 35,
+        "explanation": "La foto no registra el viaje: defiende al turista de la ciudad real y le devuelve la imagen ideal que la realidad contradijo. Han la llama «una reacción inconsciente de protección». Fotografiar como blindaje, no memoria."
+      }
+    ]
+  },
+  {
+    "id": "mgt_c03_r4_titular_equivocado",
+    "order": 4,
+    "type": "open",
+    "title": "El titular equivocado",
+    "category": "Sin respeto",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 210,
+    "conceptTags": [
+      "han_respeto_distancia"
+    ],
+    "context": "Un compañero sale de la lectura y resume el capítulo así: **«Han dice que en las redes la gente se volvió más agresiva y menos respetuosa».**\n\nEstá a medias. Han no dice que empeoramos: dice que se perdió **algo muy concreto**, y que sin eso no hay respeto ni espacio público.",
+    "question": "**Nómbralo, y explica qué deja de ser posible cuando falta.** Con 3 o 4 líneas basta.",
+    "judgeFocus": "EL CRITERIO, y va primero: la respuesta tiene que (1) nombrar una CONDICIÓN ESTRUCTURAL del medio que el texto dice que se perdió —algo que estaba en cómo funcionaba la comunicación, no en cómo eran las personas— y (2) decir qué práctica concreta deja de ser posible sin ella. Las dos partes valen: quien nombra bien la condición y no dice qué se pierde se queda a medio camino, y al revés también.\n\nEJEMPLOS ILUSTRATIVOS, NO UNA LISTA CERRADA. La guía ofrece por lo menos tres condiciones distintas, y las tres son respuestas completas: la DISTANCIA (respectare es 'mirar de nuevo'; sin distancia el mirar se vuelve spectare, el del mirón, y con eso caen el espacio público y la esfera privada de Barthes, esa zona donde uno no es imagen); el NOMBRE ('anonimato y respeto se excluyen entre sí'; el medio digital separa el mensaje del mensajero y con el nombre se van la responsabilidad, la confianza y la promesa); y la DEMORA entre sentir y publicar (mientras se redactaba la carta al director 'la excitación inmediata se ha evaporado ya'; el medio digital transporta el afecto caliente). Si alguien nombra una cuarta condición estructural que esté en la guía y la sostiene, vale exactamente lo mismo. NO la castigues por no ser una de estas tres.\n\nQUÉ NO CUENTA COMO RESPUESTA, y es por donde se cae la mayoría: nombrar un rasgo de carácter o un valor —la empatía, la educación, el respeto mismo, la paciencia, los modales, 'los valores'— en vez de una condición del medio. Eso es exactamente la lectura moral que el enunciado ya descartó. Tampoco cuenta decir 'la privacidad' a secas sin la definición de Barthes que la guía trae, porque ahí se está usando el sentido común de privacidad (lo que se oculta) y no el del texto (la zona donde uno no es imagen).\n\nOJO CON DOS COSAS. Primero: el enunciado ya dice que sin eso 'no hay respeto', así que contestar 'se perdió el respeto' es circular y se queda en 40-60, no en 0: entendió la mitad. Segundo: si alguien objeta que la distinción es endeble o que Han construye demasiado sobre una etimología, eso NO baja el puntaje —es lo que este curso enseña—, siempre que antes muestre que entendió qué sostiene el texto.\n\nSe pidieron 3 o 4 líneas. Es el estándar, no un techo: no bajes por largo ni por brevedad.",
+    "evaluationGuide": {
+      "must_hit": [
+        "Nombra una condición estructural del medio que se perdió, no un rasgo de carácter de las personas",
+        "Dice qué práctica concreta deja de ser posible cuando esa condición falta"
+      ],
+      "fatal_errors": [
+        "Contesta que la gente se volvió más agresiva, más grosera o menos educada, o sea repite el titular que el enunciado ya descartó",
+        "Le atribuye a Han una cifra, un estudio o un caso que el material no trae"
+      ],
+      "partial_credit": {
+        "solo_la_condicion": "Nombra bien la condición pero no dice qué se vuelve imposible sin ella: alto en fidelidad, medio en mecanismo",
+        "solo_la_consecuencia": "Describe bien lo que se perdió —el espacio público, la confianza, el decoro— sin nombrar la condición que lo hacía posible: medio en las dos",
+        "circular": "Contesta 'se perdió el respeto', que es lo que el enunciado puso del otro lado de la ecuación: entendió el capítulo pero no la pregunta",
+        "privacidad_sentido_comun": "Dice 'la privacidad' usando el sentido corriente (lo que se oculta) en vez del de Barthes (la zona donde no soy imagen)"
+      },
+      "nice_to_have": [
+        "Trae la etimología: respectare es mirar de nuevo, spectare es el mirón del espectáculo",
+        "Usa la definición de Barthes: la esfera privada es la zona donde no soy una imagen, un objeto",
+        "Nota que el diagnóstico es sobre el medio y no sobre las personas, y lo dice con todas sus letras",
+        "Objeta a Han con argumento, después de haber mostrado que entendió su tesis"
+      ]
+    },
+    "idealAnswer": "Lo que se perdió es la distancia. Han dice que respetar es literalmente «mirar de nuevo», y que eso presupone mirar desde lejos; cuando la distancia desaparece la mirada se vuelve la del mirón, la del espectáculo. Y sin distancia no se puede sostener lo público, porque lo público existía justamente por apartar la vista de lo privado. Por eso hoy la intimidad se expone y ya no hay ninguna zona donde uno no sea una imagen. No es que la gente sea peor: es que se cayó la condición que hacía posible el respeto."
+  },
+  {
+    "id": "mgt_c03_r5_de_que_esta_hecha",
+    "order": 5,
+    "type": "open",
+    "title": "De qué está hecha la evidencia",
+    "category": "Método",
+    "difficulty": "hard",
+    "ranked": true,
+    "durationSeconds": 210,
+    "conceptTags": [
+      "metodo_han",
+      "han_listo_hans"
+    ],
+    "media": [
+      {
+        "kind": "image",
+        "src": "media/mgt300/clever-hans-1909.jpg",
+        "alt": "Fotografía en sepia de comienzos del siglo XX: el caballo Kluger Hans de pie a la derecha, y a su izquierda un grupo de seis personas con sombrero y abrigo largo, de pie alrededor de una mesita, mirándolo con atención.",
+        "credit": "Karl Krall, «Denkende Tiere» (1909), p. 68 · Wikimedia Commons · dominio público"
+      }
+    ],
+    "context": "Mira de qué está hecho el capítulo del Listo Hans: **un caballo de circo de hace cien años, la posición física de la cámara en un notebook y una frase de Leonardo da Vinci.** Ni una encuesta, ni un experimento, ni una cifra.\n\nLa semana pasada Ehrenreich hacía exactamente lo contrario: empresas con nombre, fechas y el estudio de la American Management Association.",
+    "question": "**¿Cuál de esos ejemplos carga todo el peso del argumento de Han, y dónde queda débil por no traer datos?** Con 3 o 4 líneas basta.",
+    "judgeFocus": "ESTA RONDA NO ES SOBRE EL CONTENIDO DE HAN, ES SOBRE SU MÉTODO. No premies el mejor resumen de sus tesis: premia a quien evalúa de qué está hecha la evidencia. Alguien puede explicar bellamente qué dice Han y no responder nada de lo que se preguntó.\n\nEL CRITERIO, y va primero: la respuesta tiene que (1) ELEGIR un ejemplo y decir qué afirmación general está sosteniendo ese ejemplo, y (2) nombrar una afirmación concreta de Han que un caso escogido no alcanza a respaldar. Las dos partes valen por separado.\n\nNO HAY UNA RESPUESTA CORRECTA A LA PRIMERA PARTE. El caballo, la cámara de Skype descentrada, la frase de Leonardo, el estadio del espejo de Lacan, el síndrome de París: cualquiera de estos es una elección defendible, y también lo es una que no esté en esta lista si está en la guía. Lo que se juzga es si dice QUÉ CARGA soporta el ejemplo que eligió, no cuál eligió. NO CASTIGUES una elección distinta de la que tú habrías hecho.\n\nEN LA SEGUNDA PARTE HAY POR LO MENOS DOS CAMINOS Y LOS DOS PUEDEN SACAR 100. El primero es señalar el límite: un caso elegido a favor no dice cuán frecuente ni cuán general es el fenómeno, y con otros cuatro ejemplos escogidos se podría defender lo contrario. El segundo es DEFENDER a Han: sostener que su afirmación es conceptual y no estadística —qué condiciones hacen posible el respeto, el deseo o un nosotros—, y que para eso un caso bien elegido basta. El enunciado da por hecho que queda débil; quien objeta ese supuesto y lo argumenta NO pierde puntaje, gana. Esa es la regla del curso.\n\nQUÉ NO CUENTA, y es la caída típica: decir 'le faltan datos', 'es muy subjetivo' o 'debería haber hecho un estudio' sin nombrar a qué afirmación concreta de Han le falta el respaldo. Eso es el nombre del problema, no el problema. Tampoco cuenta comparar con Ehrenreich sin decir qué hace distinto cada método; mencionarla es un plus, no un requisito, y nadie tiene por qué acordarse del estudio de la American Management Association.\n\nSe pidieron 3 o 4 líneas. Es el estándar, no un techo: no bajes por largo ni por brevedad.",
+    "evaluationGuide": {
+      "must_hit": [
+        "Elige un ejemplo concreto de Han y dice qué afirmación general está sosteniendo ese ejemplo",
+        "Nombra una afirmación específica de Han y dice por qué un caso escogido alcanza o no alcanza a respaldarla"
+      ],
+      "fatal_errors": [
+        "Resume las tesis de Han sin evaluar en ningún momento de qué está hecha su evidencia",
+        "Le atribuye a Han un estudio, una encuesta o una cifra: los cuatro capítulos no traen ninguna"
+      ],
+      "partial_credit": {
+        "solo_eligio": "Elige un ejemplo y explica bien qué sostiene, pero no llega a evaluar el límite ni a defenderlo",
+        "solo_la_critica": "Dice bien por qué un caso escogido no generaliza, pero no se compromete con ningún ejemplo del texto",
+        "le_faltan_datos": "Critica la falta de evidencia empírica sin nombrar a qué afirmación concreta le falta: es el nombre del problema, no el problema",
+        "compara_sin_distinguir": "Contrasta con Ehrenreich diciendo que ella sí traía datos, sin decir qué tipo de afirmación sostiene cada método"
+      },
+      "nice_to_have": [
+        "Distingue entre una afirmación de frecuencia o magnitud (que necesita datos) y una conceptual sobre condiciones de posibilidad (que puede no necesitarlos)",
+        "Nota que con los mismos cuatro ejemplos escogidos podría defenderse la tesis contraria",
+        "Contrasta con el método de Ehrenreich diciendo qué puede probar cada uno",
+        "Señala que el libro es de 2013 y que eso condiciona qué casos tenía disponibles"
+      ]
+    },
+    "idealAnswer": "El que carga todo el peso es el caballo. Si el Listo Hans acertaba leyendo caras, entonces la información que viaja por el cuerpo es enorme, y de ahí Han salta a que la comunicación digital, que no tiene cuerpo ni rostro, pierde el núcleo de la comunicación. El salto es del caballo a todo internet. Y ahí queda débil: un caso muestra que el canal no verbal existe, no cuánto pesa ni si una videollamada lo pierde entero. Para eso haría falta medirlo, y Han nunca lo mide. Con todo, si lo que quiere probar es que la condición existe y no cuán frecuente es, el ejemplo le alcanza."
+  }
+]
