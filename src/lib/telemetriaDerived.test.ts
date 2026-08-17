@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { formatoReloj, proporcionPegada, proporcionDeGolpe, posicionNube, puntosHuella, hechosDetalle, clasificarPunto, UMBRAL_DE_GOLPE } from './telemetriaDerived';
+import { formatoReloj, proporcionPegada, proporcionDeGolpe, posicionNube, puntosHuella, hechosDetalle, clasificarPunto, radioAnillo, UMBRAL_DE_GOLPE } from './telemetriaDerived';
 
 describe('formatoReloj', () => {
   it('bajo el minuto muestra solo segundos', () => {
@@ -132,7 +132,7 @@ describe('hechosDetalle', () => {
     const hechos = hechosDetalle(captura, 240_000);
     expect(hechos).toEqual([
       { etiqueta: 'Primera tecla', valor: 'a los 2 min 18 s de los 4 min de ronda' },
-      { etiqueta: 'Fuera de la app', valor: '41 s antes de escribir (1 salida)' },
+      { etiqueta: 'Fuera de la app', valor: '41 s, toda antes de escribir (1 salida)' },
       { etiqueta: 'Pegados', valor: '1 · de 782 caracteres · a los 2 min 18 s' },
       { etiqueta: 'Editó después de pegar', valor: '0 caracteres' },
       { etiqueta: 'Largo final', valor: '782 caracteres' },
@@ -152,6 +152,36 @@ describe('hechosDetalle', () => {
     );
     expect(hechos.map((h) => h.etiqueta)).not.toContain('Pegados');
     expect(hechos.map((h) => h.etiqueta)).not.toContain('Editó después de pegar');
+  });
+
+  it('cuando salio antes Y despues de escribir, muestra los dos numeros', () => {
+    // El caso real mas largo de N9YHC5: 1 min 34 s fuera en total, de los cuales
+    // solo 31 s antes de la primera tecla. La version anterior mostraba "31 s" y
+    // se comia los otros 63, que son un hecho distinto.
+    const hechos = hechosDetalle(
+      { ...captura, msFueraDeApp: 94_200, msFueraAntesDeEscribir: 31_400, salidas: 2 },
+      240_000
+    );
+    const fuera = hechos.find((h) => h.etiqueta === 'Fuera de la app')!;
+    expect(fuera.valor).toBe('1 min 34 s en total · 31 s antes de escribir (2 salidas)');
+  });
+
+  it('cuando solo salio con la respuesta ya empezada, lo dice', () => {
+    const hechos = hechosDetalle(
+      { ...captura, msFueraDeApp: 3_200, msFueraAntesDeEscribir: 0, salidas: 3 },
+      240_000
+    );
+    const fuera = hechos.find((h) => h.etiqueta === 'Fuera de la app')!;
+    expect(fuera.valor).toBe('3 s, ya escribiendo (3 salidas)');
+  });
+
+  it('un dato viejo inconsistente no produce un negativo en pantalla', () => {
+    const hechos = hechosDetalle(
+      { ...captura, msFueraDeApp: 10_000, msFueraAntesDeEscribir: 40_000, salidas: 1 },
+      240_000
+    );
+    const fuera = hechos.find((h) => h.etiqueta === 'Fuera de la app')!;
+    expect(fuera.valor).not.toContain('-');
   });
 
   it('omite la linea de salidas cuando nunca salio de la app', () => {
@@ -274,5 +304,37 @@ describe('clasificarPunto', () => {
 
   it('una respuesta vacia no se declara sospechosa', () => {
     expect(clasificarPunto({ ...base, largoFinal: 0, maxInsercionDeGolpe: 0 })).toBe('no-sospechoso');
+  });
+});
+
+describe('radioAnillo', () => {
+  const R = 4.2;
+
+  it('no dibuja nada si nunca salio de la app', () => {
+    expect(radioAnillo(0, R)).toBeNull();
+    expect(radioAnillo(-1, R)).toBeNull();
+  });
+
+  it('el anillo nunca toca al punto: siempre queda holgura', () => {
+    // Una salida de un solo milisegundo tiene que verse como anillo, no como
+    // un punto con el borde engordado.
+    expect(radioAnillo(1, R)!).toBeGreaterThan(R + 2.5);
+  });
+
+  it('separa los tres casos reales de N9YHC5', () => {
+    // 9 s (tecleo a mano), 23 s (el caso que hoy es invisible) y 89 s (el mas
+    // largo del juego). Si dos de estos se dibujan casi iguales, el anillo no
+    // sirve para lo unico que se agrego.
+    const corto = radioAnillo(9_300, R)!;
+    const medio = radioAnillo(22_900, R)!;
+    const largo = radioAnillo(88_700, R)!;
+    expect(medio - corto).toBeGreaterThan(1.8);
+    expect(largo - medio).toBeGreaterThan(1.8);
+  });
+
+  it('una salida enorme no tapa media nube', () => {
+    // 20 minutos fuera es un dato posible (alguien dejo el telefono) y no puede
+    // producir un anillo que se coma el grafico.
+    expect(radioAnillo(20 * 60_000, R)!).toBeLessThanOrEqual(22);
   });
 });

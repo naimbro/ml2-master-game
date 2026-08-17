@@ -1,4 +1,4 @@
-import { formatoReloj, posicionNube, clasificarPunto } from '../../lib/telemetriaDerived';
+import { formatoReloj, posicionNube, clasificarPunto, radioAnillo } from '../../lib/telemetriaDerived';
 import type { TelemetriaDoc } from '../../lib/telemetriaDerived';
 
 const ANCHO = 380;
@@ -7,6 +7,7 @@ const MARGEN_IZQ = 42;
 const MARGEN_ABAJO = 37;
 const MARGEN_ARRIBA = 14;
 const MARGEN_DER = 12;
+const RADIO_PUNTO = 4.2;
 
 const COLOR: Record<ReturnType<typeof clasificarPunto>, string> = {
   sospechoso: 'var(--wrong)',
@@ -30,6 +31,16 @@ const COLOR: Record<ReturnType<typeof clasificarPunto>, string> = {
  * y no azul: son las respuestas que el navegador no entrego medidas, y decir
  * "no sospechoso" de algo que nadie midio es la unica forma en que este panel
  * puede mentir de verdad.
+ *
+ * **El anillo punteado dice cuanto rato estuvo fuera de la app antes de
+ * escribir.** Es el segundo hecho que se dibuja, y va en tinta —no en el color
+ * de la clasificacion— porque es de otra especie: el color clasifica, el anillo
+ * describe. El porque de esta forma y no otra esta en `radioAnillo`.
+ *
+ * Sirve para una sola cosa, y hay que decirla: los puntos rojos YA salieron
+ * todos de la app (7 de 7 en N9YHC5), asi que arriba el anillo es redundante. Lo
+ * que hace visible es al que quedo abajo —tecleo a mano, salio azul— y aun asi
+ * estuvo un rato afuera. Ese caso hoy no se ve.
  *
  * La decision que sigue en pie: NO se muestran nombres. El nombre aparece solo
  * al hacer clic, que es un gesto deliberado de ir a buscarlo.
@@ -73,16 +84,41 @@ export default function NubeEscritura({
       <text x={MARGEN_IZQ - 6} y={MARGEN_ARRIBA + 4} textAnchor="end" fontSize={8.5}
             fill="currentColor" opacity={0.45}>100</text>
 
+      {/* Los anillos van ANTES que los puntos, en su propia pasada: dibujados
+          intercalados, el anillo de un punto tapaba al vecino. */}
+      {puntos.map(({ telemetria }) => {
+        const r = radioAnillo(telemetria.msFueraAntesDeEscribir ?? 0, RADIO_PUNTO);
+        if (r === null) return null;
+        const { x, y } = posicionNube(telemetria, duracionMaxMs, anchoTrazo, altoTrazo);
+        return (
+          <circle
+            key={`anillo_${telemetria.playerId}_${telemetria.round}`}
+            cx={MARGEN_IZQ + x}
+            cy={MARGEN_ARRIBA + y}
+            r={r}
+            fill="none"
+            stroke="currentColor"
+            strokeOpacity={0.55}
+            strokeWidth={1.6}
+            // Punteado, y en tinta: asi no se confunde con un punto mas gordo ni
+            // se lee como una intensificacion del color de la clasificacion.
+            strokeDasharray="3 3"
+            pointerEvents="none"
+          />
+        );
+      })}
+
       {puntos.map(({ telemetria, nombre }) => {
         const { x, y } = posicionNube(telemetria, duracionMaxMs, anchoTrazo, altoTrazo);
         const estado = clasificarPunto(telemetria);
         const color = COLOR[estado];
+        const fuera = telemetria.msFueraAntesDeEscribir ?? 0;
         return (
           <circle
             key={`${telemetria.playerId}_${telemetria.round}`}
             cx={MARGEN_IZQ + x}
             cy={MARGEN_ARRIBA + y}
-            r={4.2}
+            r={RADIO_PUNTO}
             fill={color}
             fillOpacity={0.6}
             // El borde, y no solo el relleno, porque dos puntos superpuestos de
@@ -95,11 +131,48 @@ export default function NubeEscritura({
             {/* Una sola cadena: React no acepta varios hijos en un <title>, y el
                 navegador convierte todos los nodos a un texto plano igual. */}
             <title>
-              {`Ronda ${telemetria.round}${estado === 'sin-medicion' ? ' · sin medición' : ''}`}
+              {`Ronda ${telemetria.round}`
+                + (estado === 'sin-medicion' ? ' · sin medición' : '')
+                + (fuera > 0 ? ` · ${formatoReloj(fuera)} fuera de la app antes de escribir` : '')}
             </title>
           </circle>
         );
       })}
+
+      {/* La leyenda del anillo. Sin ella es un adorno: nadie deduce que el
+          diametro son segundos. Se dibuja el anillo de referencia al tamano que
+          le corresponde a 30 s, que es el orden de magnitud del caso que
+          interesa. */}
+      {puntos.some((p) => (p.telemetria.msFueraAntesDeEscribir ?? 0) > 0) && (
+        <g pointerEvents="none">
+          <circle
+            cx={ANCHO - MARGEN_DER - 74}
+            cy={MARGEN_ARRIBA + 9}
+            r={radioAnillo(30_000, RADIO_PUNTO) ?? 0}
+            fill="none"
+            stroke="currentColor"
+            strokeOpacity={0.55}
+            strokeWidth={1.6}
+            strokeDasharray="3 3"
+          />
+          <circle
+            cx={ANCHO - MARGEN_DER - 74}
+            cy={MARGEN_ARRIBA + 9}
+            r={RADIO_PUNTO}
+            fill="currentColor"
+            fillOpacity={0.25}
+          />
+          <text
+            x={ANCHO - MARGEN_DER - 58}
+            y={MARGEN_ARRIBA + 12}
+            fontSize={8.5}
+            fill="currentColor"
+            opacity={0.6}
+          >
+            30 s fuera de la app
+          </text>
+        </g>
+      )}
     </svg>
   );
 }

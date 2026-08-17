@@ -11,13 +11,16 @@ Comercial, Universidad Adolfo Ibáñez. Clase 3 de 15, lunes 17 de agosto de 202
 Llevan **exactamente una clase programando en su vida** (la clase 2, hace una
 semana). Vienen de ciencias sociales y negocios, no de ingeniería.
 
-**Esta clase es conceptualmente pesada y sintácticamente liviana.** Casi no
-introduce funciones nuevas. Lo evaluable es **el criterio sobre fuentes y
-preguntas**: si una pregunta se puede responder con los datos que existen, qué
-mide realmente una fuente, quién decidió qué se mide, y qué queda fuera.
+**El peso conceptual de esta clase está en las fuentes, no en el código.** La
+parte de programación fue entrenamiento de dedos con **una sola función nueva**,
+`count()`, repetida en siete ejercicios idénticos. Lo evaluable es **el criterio
+sobre fuentes y preguntas**: si una pregunta se puede responder con los datos que
+existen, qué mide realmente una fuente, quién decidió qué se mide, y qué queda
+fuera.
 
 **Ninguna respuesta debe requerir escribir código ni recordar nombres de
-funciones.** Un razonamiento correcto dicho sin una sola palabra técnica vale
+funciones.** A lo más se les puede mostrar una salida de `count()` y pedirles que
+digan qué muestra y qué no permite concluir. Un razonamiento correcto dicho sin una sola palabra técnica vale
 100. Decir "hay que fijarse a cuánta gente le preguntaron" vale exactamente lo
 mismo que decir "hay que reportar el n".
 
@@ -31,7 +34,11 @@ del enunciado.
 
 ## Lo que está fuera de alcance
 
-No han visto `dplyr` ni el pipe (`%>%`) —eso es clase 5— ni `ggplot2` —clase 8—.
+**De `dplyr` vieron sólo `count()` y `select()`**, más `library()` y `glimpse()`.
+No vieron el pipe (`%>%`), ni `filter()`, ni `mutate()`, ni `group_by()`, ni
+`summarise()` —eso es clase 5— ni `ggplot2` —clase 8—. Tampoco calcularon
+porcentajes, ni promedios por grupo, ni limpiaron datos con código.
+
 Y **no van a ver inferencia estadística en ningún momento del curso**: nada de
 tests de hipótesis, valores-p, intervalos de confianza, regresión, márgenes de
 error ni representatividad muestral formal. El curso es descriptivo.
@@ -285,30 +292,28 @@ su propio dato, **y a explicar esa decisión**.
 
 ## Cuando la base se acaba: el muro del cuaderno
 
-En el cuaderno de la clase, los estudiantes cruzaron dos variables de su propia
-encuesta (**33 respuestas**) y se toparon con el límite.
+En el cuaderno de la clase, los estudiantes contaron variables de su propia
+encuesta (**33 respuestas**) con `count()`, y al hacerlo vieron el límite.
 
-Los datos exactos que vieron en pantalla:
+Los conteos exactos que salieron en pantalla:
 
 - **Medio de transporte:** micro o bus 15, auto 12, metro 6.
 - **Sistema operativo del celular:** iOS 27, Android 5, **Otro 1**.
-- Cruzando ambos, con porcentajes por fila: de quienes llegan en **metro, el
-  100% usa iPhone** — y ese 100% son **6 personas**.
-- Con porcentajes por columna, la categoría `Otro` da **100% "micro o bus"** — y
-  ese 100% es **una sola persona**.
+- **Experiencia previa programando:** "sé usar Excel o Sheets" 16, "ninguna,
+  primera vez" 9, "he programado un poco" 7, "bastante experiencia" 1.
+- **Dominio del proyecto:** deporte 7, IA 6, salud 6, cultura 4, educación 4,
+  vivienda 2, y **cuatro categorías con una sola persona cada una**
+  (`Medioambiente`, `politica`, `Transporte`, `tecnologia y salud`).
 
-El titular que se les mostró como ejemplo de algo perfecto y vacío:
-
-> *"El 100% de quienes usan otro sistema operativo llega a la universidad en
-> micro."*
-
-**Con una sola persona en la categoría, el resultado sólo podía ser 0% o 100%.**
-El número parece contundente justamente porque está calculado sobre casi nada.
+**Varias categorías tienen `n = 1`: una persona.** Si alguien dijera *"el 100% de
+quienes eligieron transporte piensa X"*, ese 100% **es una sola persona**, y no
+describe a nadie más que a ella. Con un solo caso el resultado sólo puede ser 0%
+o 100%, así que el número parece contundente justamente porque está calculado
+sobre casi nada.
 
 De ahí las dos reglas de la sesión:
 
-- **Un porcentaje nunca se publica sin decir sobre cuántos casos está
-  calculado.**
+- **Un número nunca se reporta sin decir sobre cuánta gente está calculado.**
 - **Los conteos absolutos se comparan mal entre grupos de distinto tamaño.** Por
   eso la CEP se lee en porcentajes: comparar cuántas personas mencionaron Salud
   en 2012 (4.560 encuestados) con 2018 (1.402) usando conteos absolutos engaña.
@@ -322,35 +327,22 @@ Y la conclusión que abre la segunda mitad de la clase:
 
 <!-- section: limpiar_es_decidir -->
 
-## Limpiar es decidir, y son capas
+## Los datos sucios se ven antes de saber arreglarlos
 
-Esto viene de la clase 2 y reaparece acá sobre los datos del propio curso.
+**Importante para escribir escenarios: en esta clase los datos sucios se
+OBSERVAN, no se arreglan.** El cuaderno dice explícitamente que arreglarlos es
+tema de las próximas clases. **No preguntar cómo se limpian**: no se enseñó.
 
-### Una persona puede arruinar una columna entera
+Lo que sí vieron, al contar con `count()`:
 
-En la encuesta del curso, **una sola persona escribió `"3 horas"`** en vez de
-`3` en las horas de sueño. Eso convierte **toda la columna en texto**, y el
-promedio por grupo devuelve `NA` en los tres grupos — **con advertencia pero sin
-error**. Una persona de 33 arruina el cálculo para las 33. Lo mismo pasa en los
-minutos de viaje (alguien puso `"10 min"`) y en las horas de redes (`"5 horas"`).
+- Al contar las horas de sueño aparecen **`3` y `3 horas` como dos categorías
+  distintas**, porque una persona escribió la palabra además del número.
+- Al contar la comuna aparecen **`Las condes` y `las condes` como dos comunas
+  distintas**, y lo mismo `Ñuñoa` y `ñuñoa`. Para R, una mayúscula distinta es
+  una categoría distinta.
 
-**Que el código corra no significa que el resultado sirva.**
-
-### Limpiar no es un paso: son capas
-
-La columna de comuna del curso está sucia en tres capas, y cada arreglo destapa
-la siguiente:
-
-1. **Mayúsculas:** `Las condes` y `las condes` son la misma comuna, y se cuentan
-   aparte. Igual `ñuñoa`/`Ñuñoa` y `providencia`/`Providencia`.
-2. **Espacios invisibles al final:** cuatro respuestas terminan en espacio, así
-   que **siguen contándose aparte incluso después de pasar todo a minúscula**.
-3. **Tildes y eñes:** quedan `ñuñoa` vs `nunoa`, y `peñalolen` vs `peñalolén`.
-   **Peñalolén aparece escrita de cuatro formas distintas.**
-
-> **En algún momento hay que decidir dónde parar y dejarlo escrito**, para que
-> otra persona pueda repetir exactamente lo que se hizo y llegar al mismo
-> número.
+La idea que se llevan es que **los datos de verdad vienen así, y notarlo ya es
+parte del trabajo** — no que existan funciones para arreglarlo.
 
 ### La misma enfermedad en la variable que decide sus grupos
 
@@ -361,6 +353,8 @@ minúscula y sin tilde (que R cuenta aparte de `Política`), alguien escribió
 `tecnologia y salud`.
 
 **Ninguna de las tres las resuelve R sola. Son decisiones, y se documentan.**
+Es el único lugar donde la suciedad de los datos importa para el criterio y no
+sólo para la vista: de esa columna salen los grupos del semestre.
 
 <!-- section: audiencia_y_sprint1 -->
 

@@ -48,11 +48,39 @@ describe.each(Object.entries(COMPASES))('compas %s', (courseId, pack) => {
     const { x, y } = instrumento.axes;
     for (const item of instrumento.items) {
       for (const o of item.options) {
-        expect(o.vector.magnitud).toBeGreaterThanOrEqual(x.min);
-        expect(o.vector.magnitud).toBeLessThanOrEqual(x.max);
-        expect(o.vector.direccion).toBeGreaterThanOrEqual(y.min);
-        expect(o.vector.direccion).toBeLessThanOrEqual(y.max);
+        if (o.vector.magnitud !== undefined) {
+          expect(o.vector.magnitud).toBeGreaterThanOrEqual(x.min);
+          expect(o.vector.magnitud).toBeLessThanOrEqual(x.max);
+        }
+        if (o.vector.direccion !== undefined) {
+          expect(o.vector.direccion).toBeGreaterThanOrEqual(y.min);
+          expect(o.vector.direccion).toBeLessThanOrEqual(y.max);
+        }
       }
+    }
+  });
+
+  it('un item declara un eje en las CINCO opciones o en ninguna', () => {
+    // A medias, el promedio de ese eje saldria de las opciones que por casualidad
+    // lo traen, y quien eligio la que no lo trae desaparece de esa coordenada.
+    for (const item of instrumento.items) {
+      for (const eje of ['magnitud', 'direccion'] as const) {
+        const con = item.options.filter((o) => o.vector[eje] !== undefined).length;
+        expect([0, 5], `${item.id} declara ${eje} en ${con} de 5`).toContain(con);
+      }
+    }
+  });
+
+  it('todo item declara al menos un eje, y el plano nunca se queda sin ninguno', () => {
+    const conMagnitud = instrumento.items.filter((i) => i.options.some((o) => o.vector.magnitud !== undefined));
+    const conDireccion = instrumento.items.filter((i) => i.options.some((o) => o.vector.direccion !== undefined));
+    expect(conMagnitud.length, 'ningun item alimenta la magnitud').toBeGreaterThan(0);
+    expect(conDireccion.length, 'ningun item alimenta la direccion').toBeGreaterThan(0);
+    for (const item of instrumento.items) {
+      const alguno = item.options.some(
+        (o) => o.vector.magnitud !== undefined || o.vector.direccion !== undefined || o.agencia !== undefined,
+      );
+      expect(alguno, `${item.id} no alimenta ningun eje`).toBe(true);
     }
   });
 
@@ -60,8 +88,9 @@ describe.each(Object.entries(COMPASES))('compas %s', (courseId, pack) => {
     // Sin esto el instrumento arrastra al curso hacia abajo por construccion y
     // el desplazamiento de fin de semestre seria un artefacto del diseno.
     for (const item of instrumento.items) {
-      const max = Math.max(...item.options.map((o) => o.vector.direccion));
-      expect(max, `item ${item.id} sin salida optimista`).toBeGreaterThanOrEqual(2);
+      const ds = item.options.map((o) => o.vector.direccion).filter((v): v is number => v !== undefined);
+      if (ds.length === 0) continue; // item que no declara direccion
+      expect(Math.max(...ds), `item ${item.id} sin salida optimista`).toBeGreaterThanOrEqual(2);
     }
   });
 
@@ -172,18 +201,54 @@ describe.each(Object.entries(COMPASES))('compas %s', (courseId, pack) => {
     }
   });
 
-  it('toda combinacion de respuestas produce un arquetipo — ninguna deja al alumno sin carta', () => {
-    // Recorre las 5^n combinaciones seria caro; se prueba el extremo de cada
+  it('una respuesta suelta da carta si el item alimenta el plano, y ninguna si es condicional', () => {
+    // Recorrer las 5^n combinaciones seria caro; se prueba el extremo de cada
     // opcion sola, que es lo que produce las posiciones mas excentricas.
+    //
+    // Un item CONDICIONAL --que declara solo un eje-- no alcanza para ubicar a
+    // nadie en el plano, y eso es lo correcto: tiene una valoracion, no una
+    // posicion. Inventarle la coordenada que falta seria ponerlo en el centro
+    // sin que lo haya dicho.
     for (const item of instrumento.items) {
+      const alimentaElPlano =
+        item.options.some((o) => o.vector.magnitud !== undefined) &&
+        item.options.some((o) => o.vector.direccion !== undefined);
+
       for (const o of item.options) {
         const answers: CompasAnswers = { [item.id]: o.id };
         const pos = posicionDe(answers, instrumento.items);
+
+        if (!alimentaElPlano) {
+          expect(pos, `${item.id}/${o.id} es condicional y no deberia ubicar a nadie`).toBeNull();
+          continue;
+        }
+
         expect(pos).not.toBeNull();
         const a = arquetipoDe(pos, timonDe(answers, instrumento.items), arquetipos);
         expect(a, `sin arquetipo para ${item.id}/${o.id} (m ${pos!.magnitud}, d ${pos!.direccion})`).not.toBeNull();
       }
     }
+  });
+
+  it('un item condicional mueve su eje y deja los otros intactos', () => {
+    // La propiedad que hace posible preguntar "asumamos X: que tan bueno es".
+    const condicional = instrumento.items.find(
+      (i) => !i.options.some((o) => o.vector.magnitud !== undefined),
+    );
+    if (!condicional) return;
+    const base = instrumento.items.find((i) => i.id !== condicional.id)!;
+
+    const solaBase: CompasAnswers = { [base.id]: base.options[0].id };
+    const conAmbos: CompasAnswers = { ...solaBase, [condicional.id]: condicional.options[0].id };
+
+    const a = posicionDe(solaBase, instrumento.items)!;
+    const b = posicionDe(conAmbos, instrumento.items)!;
+
+    expect(b.magnitud, 'el item condicional movio la magnitud').toBe(a.magnitud);
+    expect(b.agencia, 'el item condicional movio la agencia').toBe(a.agencia);
+    expect(b.direccionRespondidas, 'el item condicional no alimento la direccion').toBe(
+      a.direccionRespondidas + 1,
+    );
   });
 
   it('contestar todo con la misma letra tampoco deja a nadie sin carta', () => {

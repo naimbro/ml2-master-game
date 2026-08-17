@@ -1,10 +1,19 @@
-import type { CompasAxis, CompasVector } from '../../types/compas';
+import type { CompasAxis } from '../../types/compas';
+
+/**
+ * Where a dot goes. NOT `CompasVector`: an option's vector may declare only one
+ * axis --conditional items do-- but a point that gets drawn always has both.
+ */
+export interface PuntoXY {
+  magnitud: number;
+  direccion: number;
+}
 
 export interface PuntoCompas {
   id: string;
-  pos: CompasVector;
+  pos: PuntoXY;
   /** Where this point sat in the previous round. Draws the trail. */
-  previa?: CompasVector | null;
+  previa?: PuntoXY | null;
   /** The viewer's own point. Orange, on top, and the only one that stands out. */
   esMio?: boolean;
   /**

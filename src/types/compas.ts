@@ -11,9 +11,23 @@ export type Banda = 'bajo' | 'medio' | 'alto';
 /** Who the respondent thinks should hold the wheel. The third dimension. */
 export type Timon = 'empresas' | 'estado' | 'internacional' | 'ciudadania';
 
+/**
+ * What an option contributes to the plane.
+ *
+ * Both components are OPTIONAL, and that is what makes conditional items
+ * possible. An item whose premise stipulates the scenario --"suppose AI does
+ * every job: how good is that?"-- cannot honestly declare a magnitude: every
+ * one of its options lives inside a transformed world, so scoring them would
+ * shove anyone who answers toward "this changes everything" whether they
+ * believe it or not. Such an item declares `direccion` only.
+ *
+ * `CompasPosicion` keeps a separate denominator per axis, so a missing
+ * component is skipped rather than counted as zero. Zero is a position on
+ * these axes, not the absence of one.
+ */
 export interface CompasVector {
-  magnitud: number;
-  direccion: number;
+  magnitud?: number;
+  direccion?: number;
 }
 
 export interface CompasOption {
@@ -157,6 +171,9 @@ export interface CompasPosicion {
   /** How many items actually fed this position. */
   respondidas: number;
   total: number;
+  /** How many answers fed each plane axis. They differ when an item is conditional. */
+  magnitudRespondidas: number;
+  direccionRespondidas: number;
   /**
    * Mean of the `agencia` values among the answered options that declare one.
    * `null` when they answered nothing that speaks to it — which is a real

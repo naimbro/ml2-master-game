@@ -84,7 +84,7 @@ export default function CompasJugar() {
           />
         ) : (
           <p className="text-ink-soft">
-            No alcanzaste a responder ningún ítem, así que no hay posición que mostrarte.
+            No respondiste ninguna pregunta que ubique tu punto, así que no hay posición que mostrarte.
           </p>
         )}
       </div>

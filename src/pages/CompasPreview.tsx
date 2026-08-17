@@ -54,8 +54,12 @@ export default function CompasPreview() {
         let mejor = item.options[0];
         let dm = Infinity;
         for (const o of item.options) {
-          const d =
-            Math.hypot(o.vector.magnitud - lx, o.vector.direccion - ly) + (rnd() - 0.5) * 6;
+          // Un item condicional declara un solo eje. Se mide la distancia sobre
+          // los ejes que la opcion efectivamente declara, o el simulado nunca
+          // elegiria esas opciones.
+          const ex = o.vector.magnitud === undefined ? 0 : o.vector.magnitud - lx;
+          const ey = o.vector.direccion === undefined ? 0 : o.vector.direccion - ly;
+          const d = Math.hypot(ex, ey) + (rnd() - 0.5) * 6;
           if (d < dm) {
             dm = d;
             mejor = o;

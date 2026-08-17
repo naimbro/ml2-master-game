@@ -70,6 +70,8 @@ export default function CompasCampos() {
         direccion: c.centroide.direccion,
         respondidas: 1,
         total: 1,
+        magnitudRespondidas: 1,
+        direccionRespondidas: 1,
         // El arquetipo de un campo sale de la celda del plano. El tercer eje no
         // entra en la celda, asi que un centroide no necesita promediarlo.
         agencia: null,

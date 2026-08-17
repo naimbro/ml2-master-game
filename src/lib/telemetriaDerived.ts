@@ -226,6 +226,51 @@ export function posicionNube(
   };
 }
 
+/** Separacion entre el punto y su anillo, para que el punto siga leyendose. */
+const ANILLO_HOLGURA = 3;
+/** Tope del anillo. Sin el, una salida de varios minutos tapa media nube. */
+const ANILLO_MAX = 22;
+
+/**
+ * El radio del anillo que rodea a un punto: cuanto rato estuvo fuera de la app
+ * ANTES de escribir la primera letra. `null` si no salio nunca — ese es el caso
+ * normal y no se dibuja nada.
+ *
+ * ## Por que un anillo y no el tamano del punto ni una cola sobre el eje
+ *
+ * Medido sobre N9YHC5 (114 respuestas): las SIETE respuestas que el color marca
+ * en rojo salieron ademas de la app antes de escribir. Las siete. O sea que
+ * sobre los rojos este dato no agrega absolutamente nada — ya estaban marcados.
+ *
+ * Todo su valor esta en la masa de abajo: los que tecleraron a mano, quedaron
+ * azules, y aun asi pasaron un rato afuera. En ese juego fue una sola respuesta
+ * —23 segundos fuera, 3% de golpe— y hoy es invisible.
+ *
+ * Eso descarta las otras dos formas que se probaron. Una cola horizontal sobre
+ * el eje se pierde justamente ahi: en una banda densa de puntos a la misma
+ * altura, un segmento del mismo color se lee como una fila de puntos pegados. Y
+ * el tamano del punto es peor todavia, porque un punto rojo y grande se lee como
+ * "mas sospechoso" en vez de "estuvo mas rato afuera", que es lo unico que se
+ * midio.
+ *
+ * El anillo funciona porque es de otra ESPECIE que el punto: va en tinta y
+ * punteado, no en el color de la clasificacion. Un punto azul con anillo sigue
+ * diciendo "esto lo escribio a mano" y agrega "y ademas estuvo afuera", sin que
+ * lo segundo contamine lo primero. Es la unica de las tres que respeta el
+ * encabezado de este archivo mientras se ve.
+ *
+ * La raiz cuadrada, y no el valor directo, porque el rango real va de 9 a 89
+ * segundos: lineal dejaria a los cortos indistinguibles del punto pelado.
+ */
+export function radioAnillo(
+  msFueraAntesDeEscribir: number,
+  radioPunto: number
+): number | null {
+  if (!(msFueraAntesDeEscribir > 0)) return null;
+  const segundos = msFueraAntesDeEscribir / 1000;
+  return Math.min(ANILLO_MAX, radioPunto + ANILLO_HOLGURA + Math.sqrt(segundos) * 1.9);
+}
+
 export interface HechoDetalle {
   etiqueta: string;
   valor: string;
@@ -261,14 +306,31 @@ export function hechosDetalle(t: TelemetriaCaptura, duracionMs: number): HechoDe
         : `a los ${formatoReloj(t.msPrimeraTecla)} de los ${formatoReloj(duracionMs)} de ronda`,
   });
 
+  // El total y el tramo previo son DOS hechos, no uno.
+  //
+  // Hasta el 2026-08-11 esta linea elegia uno de los dos y descartaba el otro:
+  // si habia salida antes de escribir mostraba solo esa y el total desaparecia.
+  // Medido en N9YHC5: la salida mas larga de todo el juego fueron 1 min 34 s en
+  // total, de los cuales solo 31 s cayeron antes de la primera tecla. El panel
+  // mostraba "31 s" y se comia los otros 63, que ocurrieron con la respuesta ya
+  // empezada — que es un hecho distinto y no menos interesante.
   if (t.salidas > 0) {
     const cuantas = `${t.salidas} ${t.salidas === 1 ? 'salida' : 'salidas'}`;
-    hechos.push({
-      etiqueta: 'Fuera de la app',
-      valor: t.msFueraAntesDeEscribir > 0
-        ? `${formatoReloj(t.msFueraAntesDeEscribir)} antes de escribir (${cuantas})`
-        : `${formatoReloj(t.msFueraDeApp)} en total (${cuantas})`,
-    });
+    const antes = t.msFueraAntesDeEscribir;
+    const total = t.msFueraDeApp;
+    // El tramo "despues" se calcula y no se mide aparte, asi que un dato viejo
+    // inconsistente (antes > total) no puede producir un negativo en pantalla.
+    const despues = Math.max(0, total - antes);
+
+    let valor: string;
+    if (antes <= 0) {
+      valor = `${formatoReloj(total)}, ya escribiendo (${cuantas})`;
+    } else if (despues <= 0) {
+      valor = `${formatoReloj(total)}, toda antes de escribir (${cuantas})`;
+    } else {
+      valor = `${formatoReloj(total)} en total · ${formatoReloj(antes)} antes de escribir (${cuantas})`;
+    }
+    hechos.push({ etiqueta: 'Fuera de la app', valor });
   }
 
   if (t.pegados.length > 0) {

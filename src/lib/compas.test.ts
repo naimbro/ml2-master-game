@@ -137,6 +137,8 @@ const mkPos = (magnitud: number, direccion: number, respondidas = 1, total = 1) 
   direccion,
   respondidas,
   total,
+  magnitudRespondidas: respondidas,
+  direccionRespondidas: respondidas,
   agencia: null,
   agenciaRespondidas: 0,
 });

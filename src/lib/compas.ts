@@ -37,11 +37,18 @@ import type {
 export function posicionDe(answers: CompasAnswers, items: CompasItem[]): CompasPosicion | null {
   if (!Array.isArray(items) || items.length === 0) return null;
 
+  // Un acumulador por eje, cada uno con su propio denominador. No es una
+  // floritura: un item CONDICIONAL --uno que estipula el escenario y pregunta
+  // cuanto vale-- no puede declarar magnitud sin empujar a "esto lo cambia
+  // todo" a cualquiera que lo responda, crea o no la premisa. Declara solo el
+  // eje que su premisa no estipula, y los otros dos lo saltan.
   let sumM = 0;
+  let nM = 0;
   let sumD = 0;
-  let respondidas = 0;
+  let nD = 0;
   let sumA = 0;
   let agenciaRespondidas = 0;
+  let respondidas = 0;
 
   for (const item of items) {
     const optionId = answers?.[item.id];
@@ -49,32 +56,43 @@ export function posicionDe(answers: CompasAnswers, items: CompasItem[]): CompasP
     const option = item.options?.find((o) => o.id === optionId);
     if (!option) continue; // unknown id (stale answer after an item was edited)
 
+    let cuenta = false;
+
     const m = Number(option.vector?.magnitud);
+    if (Number.isFinite(m)) {
+      sumM += m;
+      nM += 1;
+      cuenta = true;
+    }
+
     const d = Number(option.vector?.direccion);
-    if (!Number.isFinite(m) || !Number.isFinite(d)) continue;
+    if (Number.isFinite(d)) {
+      sumD += d;
+      nD += 1;
+      cuenta = true;
+    }
 
-    sumM += m;
-    sumD += d;
-    respondidas += 1;
-
-    // Averaged over its OWN denominator, not over `respondidas`. Only six of the
-    // twelve items say anything about who acts; dividing by all of them would
-    // drag every student toward "in dispute" in proportion to how many
-    // unrelated items they happened to answer.
     const a = Number(option.agencia);
     if (Number.isFinite(a)) {
       sumA += a;
       agenciaRespondidas += 1;
+      cuenta = true;
     }
+
+    if (cuenta) respondidas += 1;
   }
 
-  if (respondidas === 0) return null;
+  // Sin las DOS coordenadas no hay punto que dibujar. Puede pasarle a quien
+  // solo respondio items condicionales: tiene una valoracion, no una posicion.
+  if (nM === 0 || nD === 0) return null;
 
   return {
-    magnitud: sumM / respondidas,
-    direccion: sumD / respondidas,
+    magnitud: sumM / nM,
+    direccion: sumD / nD,
     respondidas,
     total: items.length,
+    magnitudRespondidas: nM,
+    direccionRespondidas: nD,
     agencia: agenciaRespondidas > 0 ? sumA / agenciaRespondidas : null,
     agenciaRespondidas,
   };

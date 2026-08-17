@@ -70,6 +70,10 @@ function comoPosicion(p: PosicionGuardada): CompasPosicion {
     direccion: p.direccion,
     respondidas: p.respondidas,
     total: p.total,
+    // Los documentos guardados no separan denominadores por eje: hasta ahora
+    // todos los items declaraban los dos. Se reporta el mismo valor.
+    magnitudRespondidas: p.respondidas,
+    direccionRespondidas: p.respondidas,
     // Las posiciones de la Semana 3 en adelante traen el tercer eje; las de
     // instrumentos anteriores no, y ahi `null` es la respuesta correcta y no un
     // cero. `movimiento()` solo mira el plano, asi que esto no altera ninguna
