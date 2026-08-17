@@ -2,7 +2,7 @@
   "sessionId": "clase_03_dominios_preguntas_fuentes",
   "courseId": "dataviz_2026",
   "title": "Clase 3: Dominios, preguntas y fuentes de datos",
-  "description": "7 rondas (~14 min): 5 de alternativas sobre criterio de fuentes, y 2 abiertas de 150 s — la CEP que no tiene tu tema, y el titular «a los chilenos dejó de importarles el trabajo», esta última con el gráfico de la serie de Empleo 1994-2026 que se proyectó en clase. Ninguna pide escribir código ni recordar el nombre de una función: lo evaluable es el criterio sobre fuentes y preguntas. El reloj de las alternativas va entre 40 y 50 s, más largo que en la clase 2, porque los enunciados son de leer y no de reconocer. Las 7 compiten.",
+  "description": "7 rondas (~18 min): 4 de alternativas sobre criterio de fuentes, 2 abiertas DE CÓDIGO R de 150 s —las tres líneas para abrir dplyr, leer el csv y contar el transporte; y el conteo cruzado de dos columnas más el ordenado de mayor a menor—, y 1 abierta de lectura de 150 s con el gráfico de la serie de Empleo 1994-2026 que se proyectó en clase. Las dos de código llevan `answerFormat: \"code\"`, que apaga autocorrección y autocapitalización en el teclado del teléfono: sin eso `count(curso, transporte)` llega a los jueces como `Count(Curso, transporte)`. El reloj de las alternativas va entre 40 y 50 s. Las 7 compiten.",
   "date": "2026-08-17",
   "roundCount": 7,
   "roundDurationSeconds": 150,
@@ -11,11 +11,10 @@
     "de_tema_a_pregunta",
     "evaluar_una_fuente",
     "cobertura",
-    "lo_que_no_se_mide",
+    "contar_con_dplyr",
     "la_encuesta_cep",
     "el_catalogo_de_fuentes",
-    "cuando_la_base_se_acaba",
-    "tamano_de_muestra"
+    "lo_que_no_se_mide"
   ],
   "judges": [
     {
@@ -33,16 +32,16 @@
   ],
   "judgeConfig": {
     "generic_specialist": {
-      "sessionLens": "Tu lente es LA FUENTE: si el estudiante le hace las preguntas que se le hacen a una base de datos antes de usarla —a quién incluye y a quién deja fuera, con qué unidad de observación, cada cuánto, y qué decidió no medir— o si la acepta porque existe y es oficial. Tienes el material de la clase en la referencia; úsalo para verificar, no para exigir que citen. Los dos errores que más te importan son tratar «oficial» como sinónimo de «bueno», y afirmar sobre un dato algo que ese dato no muestra: una causa, una población que la fuente no cubre, o un hecho del mundo cuando lo que hay son opiniones declaradas. Es la TERCERA clase del semestre y llevan una clase programando: no exijas nombres de funciones ni vocabulario técnico.",
-      "weightFormula": "score = 0.30 * rigor_descriptivo + 0.50 * criterio_de_fuentes + 0.20 * claridad"
+      "sessionLens": "Tu lente es LA EXACTITUD DE LO ENTREGADO. En las dos rondas de código (R4 y R5) tu única pregunta es si ese código, pegado en un Colab, corre y responde: la función correcta, la base nombrada, y el nombre de la columna escrito tal cual está en los datos. Sé estricto con el nombre de la columna —R distingue mayúsculas y es justo lo que la clase enseñó a mirar— y deliberadamente indulgente con todo lo demás: espacios, comillas, indentación y un paréntesis que falta no son errores en un teclado de teléfono. Y no confundas 'no está en el cuaderno' con 'está mal': el pipe, `require()` y `arrange(desc(n))` funcionan y valen igual que la versión que se enseñó. En la ronda de lectura (R7) tu lente es la fuente: si el estudiante afirma sobre el dato algo que ese dato no muestra —una causa, una población que la fuente no cubre, un hecho del mundo cuando lo que hay son opiniones declaradas—. Es la TERCERA clase del semestre y llevan dos clases programando.",
+      "weightFormula": "score = 0.75 * exactitud + 0.15 * completitud + 0.10 * claridad"
     },
     "generic_praxis": {
-      "sessionLens": "Tú eres el lector no especializado que el curso pone como estándar: alguien que entra a la plataforma del grupo sin saber nada de datos. Tu única pregunta es si, leyendo estas tres líneas, quedarías con una idea correcta y útil en la cabeza. Premia que traduzcan el criterio a algo que se entienda; penaliza el rodeo y la frase de relleno. Tres líneas claras valen más que diez confusas, y una respuesta que serviría igual para cualquier otra ronda de este juego no sirve para ninguna.",
-      "weightFormula": "score = 0.20 * rigor_descriptivo + 0.30 * criterio_de_fuentes + 0.50 * claridad"
+      "sessionLens": "Tú eres quien va a tomar lo que el estudiante escribió y usarlo sin poder preguntarle nada. En las rondas de código eso significa literalmente copiar y pegar: ¿está todo lo que hace falta, en un orden en que correría, sin que tengas que adivinar qué va primero? Una respuesta que es puro código, sin una palabra de prosa, es exactamente lo que se pidió y no te molesta: lo que te molesta es el código enterrado en un párrafo, o los fragmentos sueltos que no llegan a ser una línea. En la ronda de lectura eres el lector no especializado que entra a la plataforma del grupo sin saber nada de datos, y tu pregunta es si quedarías con una idea correcta en la cabeza. Premia lo que se entiende a la primera; penaliza el rodeo y la frase de relleno.",
+      "weightFormula": "score = 0.60 * exactitud + 0.10 * completitud + 0.30 * claridad"
     },
     "generic_teacher": {
-      "sessionLens": "Estas rondas SÍ entran al ranking, así que puntúa con honestidad y sin inflar: un puntaje regalado le quita el puesto a otro. Evalúa si la persona entendió la idea o si repitió una palabra que escuchó pasar en la clase. La idea que esta sesión persigue es una sola: que lo que una fuente no mide no deja de existir, y que decirlo en voz alta es parte del trabajo, no una excusa. Recuerda que llevan una clase programando: un razonamiento correcto dicho sin una sola palabra técnica vale 100. En tu feedback escribe en primera persona e incluye un 'yo habría...' concreto a ESTA respuesta, con la frase exacta que le habría agregado.",
-      "weightFormula": "score = 0.50 * rigor_descriptivo + 0.30 * criterio_de_fuentes + 0.20 * claridad"
+      "sessionLens": "Estas rondas SÍ entran al ranking, así que puntúa con honestidad y sin inflar: un puntaje regalado le quita el puesto a otro. Lo que más te importa es que ENTREGUEN TODO LO QUE SE PIDIÓ: R4 pide tres líneas, R5 pide dos, y R7 pide qué sí describe el dato Y qué no se puede concluir. Entregar la mitad, perfecta, sigue siendo la mitad, y es la respuesta parcial más común de esta sesión. En las de código caza el error que la clase enseñó a mirar —el nombre de columna con otra mayúscula— y el que revela que no entendió el cruce: contar dos columnas por separado cuando se pidió contarlas juntas. Recuerda que llevan dos clases programando: no exijas elegancia, exige que corra. En tu feedback escribe en primera persona e incluye un 'yo habría...' concreto a ESTA respuesta, con la línea exacta que le habría escrito.",
+      "weightFormula": "score = 0.60 * exactitud + 0.30 * completitud + 0.10 * claridad"
     }
   }
 }

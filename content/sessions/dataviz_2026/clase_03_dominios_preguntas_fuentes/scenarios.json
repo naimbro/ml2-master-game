@@ -122,103 +122,117 @@
     ]
   },
   {
-    "id": "dv_c03_r4_cien_por_ciento",
+    "id": "dv_c03_r4_tres_lineas",
     "order": 4,
-    "title": "Un 100% que es una persona",
-    "category": "Cuando la base se acaba",
-    "type": "multiple_choice",
-    "ranked": true,
-    "durationSeconds": 86,
-    "context": "",
-    "question": "",
-    "conceptTags": [
-      "cuando_la_base_se_acaba",
-      "tamano_de_muestra"
-    ],
-    "mcQuestions": [
-      {
-        "question": "De 33 respuestas del curso, 27 usan iOS, 5 Android y 1 marcó «Otro». Al cruzar con el transporte, la categoría «Otro» da 100% en «micro o bus». ¿Qué problema tiene publicar ese 100%?",
-        "options": [
-          {
-            "id": "A",
-            "text": "Falta comparar ese 100% con lo que dieron iOS y Android"
-          },
-          {
-            "id": "B",
-            "text": "Esa categoría tiene una sola persona: el resultado sólo podía ser 0% o 100%"
-          },
-          {
-            "id": "C",
-            "text": "Los porcentajes se calcularon por columna y debieron calcularse por fila"
-          },
-          {
-            "id": "D",
-            "text": "Con 33 respuestas ningún porcentaje se puede calcular"
-          }
-        ],
-        "correctOptionIndex": 1,
-        "timeLimitSeconds": 50,
-        "explanation": "Con un solo caso en la categoría, el resultado sólo podía ser 0% o 100%: el número parece contundente justamente porque está calculado sobre casi nada. Un porcentaje no se publica sin decir sobre cuántos casos está calculado."
-      }
-    ]
-  },
-  {
-    "id": "dv_c03_r5_la_ausencia",
-    "order": 5,
-    "title": "La CEP no tiene tu tema",
-    "category": "Lo que no se mide",
-    "difficulty": "medium",
+    "title": "Las tres líneas del principio",
+    "category": "Contar con dplyr",
+    "difficulty": "easy",
     "ranked": true,
     "durationSeconds": 150,
+    "answerFormat": "code",
     "conceptTags": [
-      "lo_que_no_se_mide",
-      "el_catalogo_de_fuentes"
+      "contar_con_dplyr"
     ],
-    "judgeFocus": "Esta ronda mide la idea central de la clase: que lo que una fuente no mide no deja de existir. La respuesta tiene DOS MITADES y se puntúan por separado: (1) por qué el compañero está equivocado, y (2) qué hace el grupo ahora. Quien contesta sólo una no debería pasar de 60, por buena que sea la mitad que contestó.\n\nPRIMERA MITAD — EL CRITERIO: la respuesta tiene que darse cuenta de que la ausencia dice algo sobre la CEP, no sobre la cultura. Que 27 alternativas fijas desde 1994 no incluyan cultura significa que alguien decidió hace treinta años qué contaba como problema del país; no significa que el tema no dé para un proyecto. CUALQUIER FORMA DE DECIR ESO CUENTA, esté o no en los ejemplos que siguen. Las versiones más frecuentes van a ser tres —que la ausencia es un dato sobre la fuente, que la CEP simplemente no es una encuesta hecha para ese tema, o que esa decisión de 1994 sigue mandando en 2026—, pero hay otras igual de válidas: que la CEP mide opiniones sobre problemas del país y no participación cultural, o que el tema no puede aparecer porque nunca se le ofreció a nadie como alternativa. La pregunta que te tienes que hacer no es si la versión está en esta lista, sino si es cierta sobre la CEP. Si lo es, vale 100 en esa mitad aunque no se te haya ocurrido a ti.\n\nLo que NO cuenta como primera mitad: decir sólo que 'la CEP está incompleta' o que 'le falta información', sin decir qué decidió medir y qué no. Y tampoco cuenta afirmar que la ausencia prueba que al país la cultura no le importa: ése es el mismo error de la ronda con el signo cambiado.\n\nSEGUNDA MITAD — EL CRITERIO: qué hace el grupo. Vale cualquier salida que no abandone el dominio y no dé el dato por existente. Las dos más frecuentes van a ser buscar otra fuente hecha para el tema, y decir la ausencia en voz alta en la plataforma como parte del proyecto. Una sola de las dos, bien dicha, basta para 100. NOMBRAR LA FUENTE EXACTA NO ES OBLIGATORIO: 'buscar una encuesta hecha para cultura' vale exactamente lo mismo que nombrarla.\n\nLo que NO cuenta como segunda mitad: 'el dato tiene que estar en alguna parte, sigamos buscando', que es suponer en vez de decidir; y aceptar el cambio a salud, que es rendirse.\n\nNO EXIJAS VOCABULARIO TÉCNICO NI NOMBRES DE FUENTES DE MEMORIA. 'Hay que ver quién hizo la encuesta y para qué' vale lo mismo que 'hay que evaluar los sesgos de la fuente'. Llevan tres clases de curso y una programando.\n\nSon TRES LÍNEAS escritas en dos minutos y medio desde un teléfono. Tres líneas bien puestas valen 100. Escribir más NO sube el puntaje.",
-    "context": "**Tu grupo eligió cultura.**\n\nLa CEP lleva **32 años** haciendo la misma pregunta —*«¿cuáles son los tres problemas a los que el país debería dedicar mayor esfuerzo?»*— con una lista fija de 27 alternativas. **La cultura nunca estuvo en esa lista.** Tampoco el deporte, tampoco la inteligencia artificial.\n\nUn compañero tuyo dice: «si la encuesta más importante de Chile no tiene nuestro tema, este dominio no da para el proyecto. Cambiémonos a salud».",
-    "question": "¿Qué le respondes, y qué hace tu grupo ahora? **En 3 líneas basta.**",
+    "judgeFocus": "Esta ronda pide TRES LÍNEAS DE CÓDIGO R y nada más. NO es una pregunta de redacción: si el alumno escribe sólo código, sin una sola palabra de prosa, eso es exactamente lo que se pidió y no le baja nada. Escribir explicación de más no sube el puntaje.\n\nEL CRITERIO, que manda sobre cualquier ejemplo: puntúa alto todo código que, corrido en un Colab nuevo sobre esta base, haga las tres cosas —abrir dplyr, cargar el csv en un objeto, y contar la columna del transporte—. NO EXISTE UNA SOLA FORMA CORRECTA. La versión canónica es:\n\nlibrary(dplyr)\ncurso <- read.csv(\"...\")\ncount(curso, transporte)\n\npero CUALQUIER OTRA QUE HAGA LO MISMO VALE EXACTAMENTE IGUAL, esté o no en la lista que sigue. Las variantes que vas a ver son, entre otras: `require(dplyr)` o `library(\"dplyr\")` en vez de `library(dplyr)`; `=` o `->` en vez de `<-`; el pipe (`curso |> count(transporte)` o `curso %>% count(transporte)`) aunque hoy no se enseñó; un `sort = TRUE` de más que nadie pidió pero que tampoco molesta; y poner `library(dplyr)` en segundo lugar en vez de primero, que corre igual porque `read.csv` no necesita el paquete. La pregunta que te tienes que hacer no es si la variante está en esta lista, sino si ese código corre y responde. Si corre y responde, vale 100 aunque no se te haya ocurrido a ti.\n\nLO QUE SÍ ES ERROR, y es donde se decide el puntaje:\n- EL NOMBRE DE LA COLUMNA CON OTRAS MAYÚSCULAS O MAL ESCRITO: `Transporte`, `TRANSPORTE`, `transportes`. R distingue mayúsculas —es justo lo que la clase vio con `Las condes` y `las condes`— y con ese nombre la línea no corre. Es error de fondo, no un detalle de tipeo.\n- Contar sin decir sobre qué base: `count(transporte)`.\n- Inventar una función que no existe: `contar()`, `count_by()`, `leer.csv()`.\n- Llamar a `count()` sin haber abierto el paquete en ninguna línea.\n- Guardar el csv en un objeto con un nombre y después contar sobre otro que nunca se creó.\n\nLO QUE NO SE EXIGE, NUNCA: la dirección completa del csv —el enunciado les dijo expresamente que escribieran `read.csv(\"...\")`, así que los tres puntos entre comillas valen 100—, ni el tipo exacto de comillas, ni la indentación, ni los espacios, ni comentarios, ni explicación en prosa. Tampoco se exige que el objeto se llame `curso`: lo que importa es que sea el MISMO nombre en la línea que lo crea y en la que lo cuenta.\n\nEs la SEGUNDA CLASE PROGRAMANDO EN SUS VIDAS, escribiendo desde un teclado de teléfono. Si falta un paréntesis de cierre y la intención es inequívoca y todo lo demás está bien, no lo penalices. El nombre de columna equivocado sí se penaliza, porque es exactamente lo que la clase enseñó a mirar.",
+    "context": "Abriste un Colab **nuevo, en blanco**, y quieres saber **cómo llega el curso a la universidad**.\n\nLa base de la encuesta está en:\n\n`https://raw.githubusercontent.com/naimbro/naimbro.github.io/main/materiales/2026_descripcion_visualizacion_datos/datos/encuesta_curso.csv`\n\n**No copies esa dirección.** Escribe `read.csv(\"...\")` con los tres puntos adentro de las comillas y listo: lo que se evalúa es la línea, no tu paciencia con el teclado.",
+    "question": "Escribe las **tres líneas**, en orden: **(1)** abrir la caja de herramientas de hoy, **(2)** leer el csv y guardarlo en un objeto llamado `curso`, y **(3)** contar cuántos llegan en cada medio de transporte. **Sólo el código, sin explicar.**",
     "evaluationGuide": {
       "must_hit": [
-        "Dice, de alguna forma, que la ausencia es información sobre la CEP y no un defecto del tema: alguien decidió qué entraba en esa lista y la cultura nunca entró. Cualquier versión que sea cierta sobre la CEP cuenta igual, esté o no entre los ejemplos del judgeFocus",
-        "Dice qué hace el grupo ahora sin abandonar el dominio: buscar una fuente hecha para el tema, o poner la ausencia misma en la plataforma como hallazgo. Una sola de las dos basta, y no hace falta nombrar la fuente"
+        "Abre el paquete antes de usar `count()`, con `library(dplyr)` o cualquier equivalente que funcione",
+        "Lee el csv y lo guarda en un objeto; la dirección puede ir como `\"...\"`, así lo dijo el enunciado",
+        "Cuenta la columna del transporte sobre ese mismo objeto, con el nombre de la columna escrito tal cual está en la base: `transporte`, en minúscula"
       ],
       "nice_to_have": [
-        "Nota que la decisión es vieja: la lista viene de 1994 y sigue mandando en 2026",
-        "Distingue que la CEP mide opiniones sobre problemas del país, que no es lo mismo que medir cultura",
-        "Nombra una fuente concreta del catálogo para cultura",
-        "Dice que la ausencia es justamente lo que vale la pena contarle a la audiencia",
-        "Nota que le pasa lo mismo a deporte y a IA, o sea a buena parte del curso"
+        "Las tres líneas en el orden pedido y sin nada más alrededor",
+        "El objeto se llama `curso`, como pedía el enunciado"
       ],
       "fatal_errors": [
-        "Le da la razón al compañero: hay que cambiarse de dominio porque la fuente no trae el tema",
-        "Resuelve la ausencia dando por hecho que el dato existe en alguna parte, sin decir dónde ni cómo llegaría a él",
-        "Concluye que la cultura no está en la CEP porque a los chilenos no les importa la cultura"
+        "Escribe el nombre de la columna con otras mayúsculas o mal escrito: `Transporte`, `TRANSPORTE`, `transportes`",
+        "Cuenta sin nombrar la base: `count(transporte)`",
+        "Usa una función que no existe: `contar()`, `count_by()`, `leer.csv()`",
+        "Cuenta sobre un objeto que nunca creó"
       ],
       "partial_credit": {
-        "solo_diagnostica": "Explica bien por qué el compañero se equivoca pero no dice qué hace el grupo ahora: techo 60.",
-        "solo_actua": "Dice qué hacer ahora pero no explica por qué la ausencia no descalifica el tema: techo 60.",
-        "fuente_incompleta": "Se queda en 'la CEP está incompleta' o 'le falta información' sin decir qué decidió medir: techo 40 en criterio sobre la fuente."
+        "falta_library": "Las dos líneas de datos están bien pero nunca abre el paquete: techo 60.",
+        "solo_dos_lineas": "Entrega dos de las tres líneas pedidas: techo 60.",
+        "prosa_en_vez_de_codigo": "Describe en palabras lo que habría que hacer sin escribir ninguna línea de R: techo 40."
       }
     },
     "idealAnswer": {
       "keyPoints": [
-        "Que la cultura no esté en la CEP dice algo de la CEP, no del tema: alguien armó esa lista en 1994 y nunca la cambió",
-        "No nos cambiamos: buscamos una fuente hecha para cultura, que para eso está el catálogo",
-        "Y esa ausencia la contamos en la plataforma, porque es parte de lo que encontramos"
+        "library(dplyr)",
+        "curso <- read.csv(\"...\")",
+        "count(curso, transporte)"
       ],
       "expectedConcepts": [
-        "lo_que_no_se_mide",
-        "el_catalogo_de_fuentes"
+        "contar_con_dplyr"
       ],
       "commonMistakes": [
-        "Aceptar el cambio de dominio",
-        "Quedarse en el diagnóstico sin decir qué hace el grupo",
-        "Suponer que el dato tiene que existir en alguna parte"
+        "Escribir `Transporte` con mayúscula: R lo trata como otra columna y no corre",
+        "Olvidar `library(dplyr)` y llamar a `count()` igual",
+        "Contar sin nombrar la base"
       ],
       "excellentResponseIndicators": [
-        "Da vuelta la frase: el problema no es el tema, es la fuente",
-        "Propone algo ejecutable esta semana sin inventar ningún dato",
-        "Tres líneas sin relleno y sin una sola palabra técnica innecesaria"
+        "Tres líneas limpias y nada más",
+        "El mismo nombre de objeto en la línea que lo crea y en la que lo cuenta",
+        "El nombre de la columna escrito exactamente como está en la base"
+      ]
+    }
+  },
+  {
+    "id": "dv_c03_r5_cruzar_y_ordenar",
+    "order": 5,
+    "title": "Dos columnas, y de mayor a menor",
+    "category": "Contar con dplyr",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 150,
+    "answerFormat": "code",
+    "conceptTags": [
+      "contar_con_dplyr"
+    ],
+    "judgeFocus": "Esta ronda pide DOS LÍNEAS DE CÓDIGO R y nada más. Sólo código, sin una palabra de prosa, es exactamente lo que se pidió: no le baja nada. Escribir explicación de más no sube el puntaje.\n\nLAS DOS LÍNEAS SE PUNTÚAN POR SEPARADO Y VALEN LO MISMO. Quien entrega sólo una de las dos, por perfecta que esté, no pasa de 60. Es la respuesta parcial más común y hay que puntuarla como lo que es.\n\nEL CRITERIO, que manda sobre cualquier ejemplo: puntúa alto todo código que haga las dos cosas —(1) contar el transporte CRUZADO con el sistema operativo, en un solo conteo, y (2) contar la comuna con las categorías más frecuentes arriba—. La versión canónica es:\n\ncount(curso, transporte, sistema_operativo)\ncount(curso, comuna, sort = TRUE)\n\nPERO NO ES LA ÚNICA, y cualquier otra que haga lo mismo vale exactamente igual, esté o no en la lista que sigue: el pipe (`curso |> count(comuna, sort = TRUE)` o con `%>%`) aunque hoy no se enseñó; `sort = T` en vez de `sort = TRUE`; ordenar con `arrange(desc(n))` después del conteo, que no se enseñó hoy y hace lo mismo; las dos columnas del cruce en el otro orden (`count(curso, sistema_operativo, transporte)`), que devuelve la misma información; y un `sort = TRUE` de más en la primera línea, que nadie pidió y no molesta. La pregunta que te tienes que hacer no es si la variante está en esta lista, sino si ese código corre y responde. Si corre y responde, vale 100 aunque no se te haya ocurrido a ti.\n\nLO QUE SÍ ES ERROR, y es donde se decide el puntaje:\n- DOS CONTEOS SEPARADOS DONDE SE PIDIÓ UN CRUCE. `count(curso, transporte)` en una línea y `count(curso, sistema_operativo)` en otra NO es contar el cruce: son dos preguntas distintas, y contestan otra cosa. Es el error más importante de esta ronda y hay que cazarlo, aunque las dos líneas por separado estén impecables.\n- Nombres de columna con otras mayúsculas o mal escritos: `Comuna`, `Sistema_operativo`, o `sistema operativo` con espacio en vez de guión bajo. R distingue mayúsculas —es lo que la clase vio con `Las condes` y `las condes`— y con ese nombre la línea no corre.\n- `sort` sin `= TRUE`, `sort(TRUE)`, o una función `sort()` aparte envolviendo el conteo.\n- Poner el orden en la línea equivocada: `sort = TRUE` en el cruce y la comuna sin ordenar.\n\nLO QUE NO SE EXIGE, NUNCA: espacios alrededor del `=`, comentarios, explicación en prosa, ni repetir `library(dplyr)` ni `read.csv()` —el enunciado dice que ya están cargados, así que repetirlos no suma ni resta—. Tampoco se exige recordar de memoria que la columna se llama `sistema_operativo` con guión bajo si el resto de la línea muestra que entendió el cruce: eso baja el nivel, no lo hunde.\n\nEs la SEGUNDA CLASE PROGRAMANDO EN SUS VIDAS, escribiendo desde un teclado de teléfono. Un paréntesis de cierre que falta con la intención inequívoca no es error. El cruce contestado como dos conteos sueltos sí lo es.",
+    "context": "Sigues en el mismo Colab: **`dplyr` ya está abierto y `curso` ya está cargado**, así que esas dos líneas no hay que repetirlas.\n\nAhora el grupo quiere dos cosas distintas: saber **cómo se cruza el medio de transporte con el sistema operativo del celular**, y ver el conteo de **comuna** con las más frecuentes arriba.\n\nLas columnas se llaman `transporte`, `sistema_operativo` y `comuna`.",
+    "question": "Escribe las **dos líneas**: **(1)** el conteo de `transporte` junto con `sistema_operativo`, en un solo conteo, y **(2)** el conteo de `comuna` ordenado de mayor a menor. **Sólo el código, sin explicar.**",
+    "evaluationGuide": {
+      "must_hit": [
+        "Una sola llamada que cuenta las dos columnas juntas, no dos conteos separados",
+        "Una segunda llamada que cuenta la comuna y la ordena de mayor a menor, con `sort = TRUE` o con cualquier otra forma que funcione",
+        "Los nombres de columna escritos tal cual están en la base: `transporte`, `sistema_operativo`, `comuna`"
+      ],
+      "nice_to_have": [
+        "Las dos líneas limpias, sin repetir `library()` ni `read.csv()`",
+        "Nada de prosa alrededor"
+      ],
+      "fatal_errors": [
+        "Responde el cruce con dos conteos separados, uno por columna",
+        "Escribe los nombres de columna con otras mayúsculas o mal escritos",
+        "Escribe `sort` sin `= TRUE`, o `sort(TRUE)`, o envuelve el conteo en una función `sort()` aparte",
+        "Pone el orden en la línea del cruce y deja la comuna sin ordenar"
+      ],
+      "partial_credit": {
+        "solo_una_linea": "Entrega sólo una de las dos líneas pedidas, por correcta que esté: techo 60.",
+        "cruce_como_dos_conteos": "Las dos columnas del cruce contadas por separado: techo 40, porque contesta otra pregunta.",
+        "prosa_en_vez_de_codigo": "Describe en palabras lo que habría que hacer sin escribir ninguna línea de R: techo 40."
+      }
+    },
+    "idealAnswer": {
+      "keyPoints": [
+        "count(curso, transporte, sistema_operativo)",
+        "count(curso, comuna, sort = TRUE)"
+      ],
+      "expectedConcepts": [
+        "contar_con_dplyr"
+      ],
+      "commonMistakes": [
+        "Contar cada columna por separado creyendo que eso es el cruce",
+        "Escribir `sistema operativo` con espacio, o `Comuna` con mayúscula",
+        "Olvidar `= TRUE` después de `sort`"
+      ],
+      "excellentResponseIndicators": [
+        "Dos líneas y nada más",
+        "El cruce en una sola llamada, con las dos columnas separadas por coma",
+        "El orden puesto en la línea que lo pedía"
       ]
     }
   },

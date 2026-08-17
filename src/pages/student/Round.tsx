@@ -508,6 +508,7 @@ export default function Round() {
 
   const currentScenario = game.scenarios?.[game.currentRound - 1];
   const isNonRanked = currentScenario?.ranked === false;
+  const isCodeAnswer = currentScenario?.answerFormat === 'code';
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft % 60;
   const isLowTime = timeLeft <= 60;
@@ -1260,7 +1261,7 @@ export default function Round() {
               ) : (
                 <div className="card-play p-6">
                   <label className="block text-xs font-bold text-muted uppercase tracking-widest mb-3">
-                    Tu Respuesta
+                    {isCodeAnswer ? 'Tu Codigo' : 'Tu Respuesta'}
                   </label>
                   <textarea
                     value={response}
@@ -1270,9 +1271,15 @@ export default function Round() {
                     }}
                     onPaste={telemetria.onPaste}
                     ref={telemetria.refTextarea}
-                    placeholder="Escribe tu respuesta aqui..."
+                    placeholder={isCodeAnswer ? 'Escribe tu codigo aqui...' : 'Escribe tu respuesta aqui...'}
                     rows={8}
-                    className="input-field resize-none mb-4"
+                    // En rondas de codigo el teclado del telefono es el enemigo: sin esto
+                    // `count(curso, dominio)` se envia como `Count(Curso, dominio)`.
+                    autoCapitalize={isCodeAnswer ? 'off' : undefined}
+                    autoCorrect={isCodeAnswer ? 'off' : undefined}
+                    autoComplete={isCodeAnswer ? 'off' : undefined}
+                    spellCheck={isCodeAnswer ? false : undefined}
+                    className={`input-field resize-none mb-4 ${isCodeAnswer ? 'font-mono text-[15px] leading-relaxed' : ''}`}
                     disabled={isSubmitting}
                   />
 

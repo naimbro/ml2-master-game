@@ -11,22 +11,25 @@ Comercial, Universidad Adolfo Ibáñez. Clase 3 de 15, lunes 17 de agosto de 202
 Llevan **exactamente una clase programando en su vida** (la clase 2, hace una
 semana). Vienen de ciencias sociales y negocios, no de ingeniería.
 
-**El peso conceptual de esta clase está en las fuentes, no en el código.** La
-parte de programación fue entrenamiento de dedos con **una sola función nueva**,
-`count()`, repetida en siete ejercicios idénticos. Lo evaluable es **el criterio
-sobre fuentes y preguntas**: si una pregunta se puede responder con los datos que
-existen, qué mide realmente una fuente, quién decidió qué se mide, y qué queda
-fuera.
+La clase tuvo dos mitades y el juego evalúa las dos, con estándares distintos.
 
-**Ninguna respuesta debe requerir escribir código ni recordar nombres de
-funciones.** A lo más se les puede mostrar una salida de `count()` y pedirles que
-digan qué muestra y qué no permite concluir. Un razonamiento correcto dicho sin una sola palabra técnica vale
-100. Decir "hay que fijarse a cuánta gente le preguntaron" vale exactamente lo
-mismo que decir "hay que reportar el n".
+**Las rondas de código** (R4 y R5) piden escribir literalmente las líneas de R
+del cuaderno del bloque A. Ahí lo evaluable es **que el código corra y responda
+la pregunta**: la función correcta, la base nombrada, y el nombre de la columna
+escrito tal cual está en los datos. En esas rondas se pidió *sólo código*, así
+que una respuesta sin una palabra de prosa es exactamente lo que se pidió.
+Existe más de una forma correcta de escribir cada línea, y todas valen igual.
+
+**La ronda de lectura** (R7) no requiere escribir código ni recordar el nombre de
+ninguna función. Ahí lo evaluable es **el criterio sobre fuentes y preguntas**: si
+una pregunta se puede responder con los datos que existen, qué mide realmente una
+fuente, quién decidió qué se mide, y qué queda fuera. Un razonamiento correcto
+dicho sin una sola palabra técnica vale 100: decir "hay que fijarse a cuánta
+gente le preguntaron" vale exactamente lo mismo que decir "hay que reportar el n".
 
 Las respuestas se escriben en dos minutos y medio desde un teléfono. Tres líneas
-bien puestas valen 100. **Escribir más no sube el puntaje**: premia densidad, no
-extensión.
+—de código o de prosa, según la ronda— bien puestas valen 100. **Escribir más no
+sube el puntaje**: premia densidad, no extensión.
 
 Si un estudiante objeta el enunciado —dice que la premisa le suena falsa o que
 falta información— eso **no se penaliza nunca**. Si tiene razón, el problema es
@@ -287,6 +290,64 @@ Datos verificados de cada fuente:
 los dominios peor cubiertos por la estadística pública chilena. No los deja
 fuera del curso: los obliga a trabajar con fuentes internacionales o a construir
 su propio dato, **y a explicar esa decisión**.
+
+<!-- section: contar_con_dplyr -->
+
+## El cuaderno del bloque A: exactamente lo que se enseñó a escribir
+
+Cuaderno `clase03_contar_con_dplyr.ipynb`. **Una sola función nueva**, `count()`,
+repetida en siete ejercicios idénticos. Todo lo que el curso sabe escribir en R
+después de esta clase cabe en esta tabla, y **nada fuera de ella se puede exigir**:
+
+| Para qué | Cómo se escribe |
+|---|---|
+| Abrir la caja de herramientas | `library(dplyr)` |
+| Cargar datos desde internet | `read.csv("...")` |
+| Cuántas filas tiene la base | `nrow(curso)` |
+| Ver la base de un vistazo | `glimpse(curso)` |
+| **Contar cuántos hay de cada tipo** | **`count(curso, columna)`** |
+| Ordenar de mayor a menor | `count(curso, columna, sort = TRUE)` |
+| Contar cruzando dos columnas | `count(curso, columna1, columna2)` |
+| Quedarse con algunas columnas | `select(curso, col1, col2)` |
+| Ver las primeras filas | `head(objeto)` |
+
+La base se carga así, y el objeto se llama `curso` en todo el cuaderno:
+
+```r
+curso <- read.csv("https://raw.githubusercontent.com/naimbro/naimbro.github.io/main/materiales/2026_descripcion_visualizacion_datos/datos/encuesta_curso.csv")
+```
+
+**Los nombres de columna que aparecen en el cuaderno**, escritos siempre en
+minúscula y con guión bajo: `edad`, `comuna`, `transporte`, `minutos_viaje`,
+`sistema_operativo`, `dominio`, `experiencia`, `hermanos`, `tazas_cafe`,
+`horas_sueno`, `op_datos_chile`. Son 16 columnas en total.
+
+El resultado de `count()` siempre tiene la misma forma: **una fila por categoría
+distinta, y una columna llamada `n` con cuántas personas hay en cada una.**
+
+### Más de una forma de escribir lo mismo
+
+R acepta varias escrituras equivalentes, y el cuaderno usó una sola de cada par.
+**Una respuesta que usa la otra no está peor: está igual de correcta.**
+`require(dplyr)` hace lo que `library(dplyr)`; `=` y `->` asignan igual que `<-`;
+`sort = T` es `sort = TRUE`; el pipe (`curso |> count(transporte)`) hace lo mismo
+que `count(curso, transporte)` aunque no se enseñó hoy; y `arrange(desc(n))`
+ordena igual que `sort = TRUE`.
+
+### Lo que sí es un error, y por qué la clase lo enseñó
+
+**R distingue mayúsculas.** `Transporte` y `transporte` son dos columnas
+distintas para R, y sólo una existe en la base: con la otra la línea no corre.
+Ésta no es una regla de estilo, es la misma lección que la clase vio al contar
+comunas y encontrar `Las condes` y `las condes` como dos categorías separadas.
+
+**Contar dos columnas por separado no es contar el cruce.** `count(curso, transporte)`
+seguido de `count(curso, sistema_operativo)` responde dos preguntas distintas;
+`count(curso, transporte, sistema_operativo)` responde una tercera, que es cuántas
+personas hay en cada combinación.
+
+**`count()` no funciona sin el paquete abierto**: si `library(dplyr)` no aparece
+en ninguna línea, ninguna de las demás corre.
 
 <!-- section: cuando_la_base_se_acaba, tamano_de_muestra -->
 

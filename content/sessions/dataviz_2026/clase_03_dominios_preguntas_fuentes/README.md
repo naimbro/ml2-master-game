@@ -2,8 +2,25 @@
 
 **Curso:** `dataviz_2026` · **Fecha:** lunes 17-08-2026, 10:00–12:40 · **33 alumnos**
 
-Estado: **`knowledge_base.md` listo.** Faltan `config.json`, `scenarios.json`,
-`rubric.json` y `respuestas_sinteticas.md`.
+Estado: **sesión completa.** `config.json`, `scenarios.json`, `rubric.json`,
+`knowledge_base.md` y `respuestas_sinteticas.md` están escritos: 7 rondas
+(4 de alternativas, **2 abiertas de código R**, y 1 abierta de lectura).
+
+> **Cambio del 17-ago, tres horas antes de jugar.** La sesión pasó de «ninguna
+> ronda pide escribir código» a dos rondas que piden exactamente eso, sacadas
+> del cuaderno del bloque A. Salieron la abierta «La CEP no tiene tu tema» y el
+> kahoot «Un 100% que es una persona». Lo que arrastró el cambio:
+>
+> - `rubric.json` cambió de dimensiones: `rigor_descriptivo / criterio_de_fuentes
+>   / claridad` → `exactitud / completitud / claridad`, las tres duales
+>   (código y lectura). El porqué está en su `_doc`.
+> - `knowledge_base.md` ganó la sección `contar_con_dplyr` con el vocabulario
+>   exacto del cuaderno, y su bloque `_always` dejó de decir «ninguna respuesta
+>   debe requerir escribir código» — que se inyecta en toda evaluación.
+> - `answerFormat: "code"` es un campo nuevo del `Scenario`
+>   (`src/types/game.ts`): apaga autocorrección, autocapitalización y corrector
+>   en el `<textarea>` de `Round.tsx`, y lo pone monoespaciado. Sin eso el
+>   teclado del teléfono manda `Count(Curso, transporte)` a los jueces.
 
 ---
 
@@ -67,10 +84,14 @@ de respuestas en vivo, y las de Epoch AI descargando el CSV.
 
 ## Notas para escribir los escenarios
 
-- **Ningún escenario debe pedir escribir código ni recordar nombres de
-  funciones.** El peso conceptual está en las fuentes; la parte de programación
-  fue entrenamiento de dedos. A lo más se puede mostrar una salida de `count()`
-  y pedir que digan qué muestra y qué no permite concluir.
+- ~~**Ningún escenario debe pedir escribir código.**~~ **Revocado el 17-ago**:
+  R4 y R5 piden escribir las líneas del cuaderno. Lo que sigue en pie es el
+  límite de vocabulario del punto siguiente — se puede pedir escribir código,
+  pero sólo el que está en la tabla de `contar_con_dplyr`.
+- **Más de una escritura es correcta y todas valen igual.** `require()`, el
+  pipe, `=` en vez de `<-` y `arrange(desc(n))` funcionan aunque el cuaderno no
+  los haya mostrado. La rúbrica lo dice tres veces a propósito: el riesgo no es
+  perdonar un error, es castigar una escritura correcta.
 - **La clase introdujo `dplyr`, antes de lo que decía el programa original**, pero
   sólo cinco cosas: `library(dplyr)`, `glimpse()`, `count()`, `sort = TRUE` y
   `select()`. **No** vieron el pipe, `filter()`, `mutate()`, `group_by()`,

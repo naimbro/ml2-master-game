@@ -254,6 +254,13 @@ export interface Scenario {
   ranked?: boolean;
   durationSeconds?: number;
   type?: 'open' | 'multiple_choice';    // default 'open'
+  /**
+   * Solo rondas abiertas. `'code'` cambia el textarea a monoespaciado y apaga
+   * autocorreccion, autocapitalizacion y corrector ortografico: en un teclado de
+   * telefono `count(curso, dominio)` se envia como `Count(Curso, dominio)` y el
+   * juez termina puntuando al corrector de iOS. Default `'prose'`.
+   */
+  answerFormat?: 'prose' | 'code';
   mcQuestions?: MCQuestion[];
   media?: MediaAsset[];                 // open-round scenario card / MC block intro
   context: string;

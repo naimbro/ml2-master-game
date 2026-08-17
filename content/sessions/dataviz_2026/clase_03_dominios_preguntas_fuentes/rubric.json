@@ -1,88 +1,114 @@
 {
-  "_doc": "Rúbrica PROPIA de clase_03_dominios_preguntas_fuentes, NO la copia de _shared/base_rubric.json. Se apartó dos veces, y por razones distintas.\n\nPrimero, del base del curso: su dimensión 'criterio_visual' describe la construcción de un gráfico —escalas, geometría, orden de categorías—, y en esta clase no se construyó ni se proyectó un solo gráfico. En el bloque B se leyó una fuente, no se dibujó nada. Pesarla 35% le habría dado un tercio del puntaje a una dimensión inaplicable, que es exactamente lo que se corrigió en la clase 2.\n\nSegundo, de la solución de la clase 2: ahí el reemplazo fue 'criterio_de_datos', que pregunta qué OPERACIÓN admite la variable que tengo al frente —promediar comuna, leer una distribución—. Ninguna de las dos rondas juzgadas de esta clase es sobre una operación. La R5 pregunta qué decidió medir la CEP y qué hacer con lo que dejó fuera; la R7, qué puede sostener una serie de opiniones declaradas. Las dos son sobre la FUENTE, no sobre el dato que ya está en la mano, así que la dimensión es 'criterio_de_fuentes': qué mide realmente, a quién deja fuera, y qué se le puede pedir. Cuando la clase llegue a rondas de construir gráficos (clase 8 en adelante), esa sesión vuelve al base_rubric del curso.",
+  "_doc": "Rúbrica PROPIA de clase_03_dominios_preguntas_fuentes, NO la copia de _shared/base_rubric.json. Se apartó tres veces, y por razones distintas.\n\nPrimero, del base del curso: su dimensión 'criterio_visual' describe la construcción de un gráfico —escalas, geometría, orden de categorías—, y en esta clase no se construyó ni se proyectó un solo gráfico. Pesarla 35% le habría dado un tercio del puntaje a una dimensión inaplicable.\n\nSegundo, de la solución de la clase 2 ('criterio_de_datos', qué operación admite la variable que tengo al frente): ninguna ronda juzgada de esta clase es sobre una operación.\n\nTercero —y es el cambio del 17-ago, tres horas antes de jugar—: las dos rondas juzgadas dejaron de ser dos y pasaron a ser tres, y DOS DE LAS TRES SON DE CÓDIGO. R4 y R5 piden escribir las líneas de R del cuaderno del bloque A; sólo R7 sigue siendo de criterio sobre la fuente. La versión anterior de esta rúbrica tenía tres dimensiones ('rigor_descriptivo', 'criterio_de_fuentes', 'claridad') y un globalInstructions que decía textual «ESTA CLASE FUE CONCEPTUAL, NO SINTÁCTICA. Ninguna respuesta necesita código». Con dos rondas de código, dos de esas tres dimensiones no tenían nada que medir en dos de las tres rondas.\n\nEl motor tiene UN SOLO juego de dimensiones por sesión (functions/src/index.ts:315, resolveDimensionWeights) — no hay forma de darle dimensiones propias a una ronda. Así que las tres dimensiones de acá son DELIBERADAMENTE DUALES: cada ancla dice qué significa en una ronda de código y qué significa en la de lectura. Lo perdido en el cambio es la resolución fina sobre criterio de fuentes, que ahora vive dentro de 'exactitud' y sobre todo en el judgeFocus de R7 — que manda sobre estas instrucciones. Las cuatro rondas de alternativas siguen cubriendo fuentes y se puntúan del lado del cliente, sin pasar por acá.\n\nCuando la clase llegue a rondas de construir gráficos (clase 8 en adelante), esa sesión vuelve al base_rubric del curso.",
   "sessionId": "clase_03_dominios_preguntas_fuentes",
-  "globalInstructions": "Evalúa SOLO lo que está escrito. No completes la respuesta con lo que el estudiante 'seguramente quiso decir'.\n\nEsta es la TERCERA clase del semestre y llevan UNA CLASE PROGRAMANDO EN SUS VIDAS. Son de primer año, de sociología y negocios. El estándar es el de alguien que está aprendiendo a mirar de dónde vienen los datos, no el de un estadístico ni el de un metodólogo.\n\nESTA CLASE FUE CONCEPTUAL, NO SINTÁCTICA. Ninguna respuesta necesita código, ni el nombre de una función, ni el nombre exacto de una fuente. 'Hay que ver quién hizo la encuesta y para qué' vale exactamente lo mismo que 'hay que evaluar los sesgos de la fuente'. 'Buscar una encuesta hecha para ese tema' vale lo mismo que nombrarla.\n\nEste curso NO enseña inferencia estadística en ningún momento: nada de tests, valores-p, intervalos de confianza, márgenes de error, regresión ni representatividad muestral formal. Si una respuesta invoca cualquiera de esas cosas, no está siendo sofisticada: está fuera de lo que se enseñó, y no suma.\n\nSE PIDIERON TRES LÍNEAS, escritas en dos minutos y medio desde un teléfono. Tres líneas bien puestas valen 100: no esperes párrafos, ni estructura, ni introducción, ni ortografía perfecta, ni tildes. ESCRIBIR MÁS NO SUBE EL PUNTAJE. Premia densidad, no extensión. No penalices la brevedad; penaliza la vaguedad.\n\nLA IDEA QUE ESTA SESIÓN PERSIGUE es una sola: toda base de datos es el resultado de que alguien decidió qué valía la pena contar, y lo que no se mide no deja de existir. Que el tema de un estudiante no esté en una fuente no es una falla suya: es un dato sobre esa fuente, y decirlo en voz alta es parte del trabajo, no una excusa.\n\nSi un estudiante objeta el enunciado —dice que la premisa le suena falsa, que faltan años, o que falta información para responder— eso NO se penaliza nunca. Si tiene razón, el problema es del enunciado.\n\nEl judgeFocus del escenario es tu prioridad absoluta y manda sobre estas instrucciones generales si hay tensión.",
+  "globalInstructions": "Evalúa SOLO lo que está escrito. No completes la respuesta con lo que el estudiante 'seguramente quiso decir'.\n\nEsta es la TERCERA clase del semestre y llevan DOS CLASES PROGRAMANDO EN SUS VIDAS. Son de primer año, de sociología y negocios. El estándar es el de alguien que aprendió una función la semana pasada y la segunda esta mañana, no el de un programador.\n\nESTA SESIÓN TIENE DOS TIPOS DE RONDA JUZGADA Y NO SE EVALÚAN IGUAL.\n\n(a) RONDAS DE CÓDIGO (R4 y R5). Piden escribir líneas de R y dicen expresamente «sólo el código, sin explicar». Una respuesta que es puro código, sin una palabra de prosa, es EXACTAMENTE lo que se pidió: no le bajes nada por eso, y no premies la explicación que nadie pidió. Lo que se evalúa es si el código corre y responde. TODO EL VOCABULARIO DE R QUE ESTE CURSO TIENE está en la sección `contar_con_dplyr` del material de referencia: `library()`, `read.csv()`, `nrow()`, `glimpse()`, `count()` con una y con dos columnas, `sort = TRUE`, `select()` y `head()`. Nada fuera de eso se puede exigir. Pero MÁS DE UNA ESCRITURA ES CORRECTA para cada línea, y una respuesta que usa una variante que el cuaderno no mostró —el pipe, `require()`, `arrange(desc(n))`, `=` en vez de `<-`— no está peor: está igual de correcta, y vale igual.\n\nEn código sí importa una cosa que en prosa no: EL NOMBRE DE LA COLUMNA. R distingue mayúsculas, y `Transporte` no existe en esta base. No es un detalle de tipeo, es la misma lección que la clase vio al encontrar `Las condes` y `las condes` como dos comunas distintas. Lo que NO importa: espacios, indentación, tipo de comillas, comentarios, ni un paréntesis de cierre que falta cuando la intención es inequívoca y todo lo demás está bien. Escriben desde un teclado de teléfono.\n\n(b) RONDA DE LECTURA (R7). No necesita código, ni el nombre de una función, ni el nombre exacto de una fuente. 'Hay que ver quién hizo la encuesta y para qué' vale exactamente lo mismo que 'hay que evaluar los sesgos de la fuente'.\n\nEste curso NO enseña inferencia estadística en ningún momento: nada de tests, valores-p, intervalos de confianza, márgenes de error, regresión ni representatividad muestral formal. Si una respuesta invoca cualquiera de esas cosas, no está siendo sofisticada: está fuera de lo que se enseñó, y no suma.\n\nSE PIDIERON TRES LÍNEAS —de código o de prosa según la ronda—, escritas en dos minutos y medio desde un teléfono. Tres líneas bien puestas valen 100: no esperes párrafos, ni estructura, ni introducción, ni ortografía perfecta, ni tildes. ESCRIBIR MÁS NO SUBE EL PUNTAJE. Premia densidad, no extensión. No penalices la brevedad; penaliza la vaguedad.\n\nSi un estudiante objeta el enunciado —dice que la premisa le suena falsa, que faltan años, o que falta información para responder— eso NO se penaliza nunca. Si tiene razón, el problema es del enunciado.\n\nEl judgeFocus del escenario es tu prioridad absoluta y manda sobre estas instrucciones generales si hay tensión.",
   "scoring": {
-    "scaleLevels": [100, 80, 60, 40, 20, 0],
+    "scaleLevels": [
+      100,
+      80,
+      60,
+      40,
+      20,
+      0
+    ],
     "instructions": "Elige uno de los seis niveles escritos por dimensión. No inventes valores intermedios. Si la respuesta satisface un nivel solo parcialmente, baja al nivel inferior."
   },
   "dimensions": [
     {
-      "id": "rigor_descriptivo",
-      "name": "Rigor descriptivo",
-      "weight": 0.4,
-      "description": "¿Dice sólo lo que el dato sostiene? Distinguir lo que se observa de lo que se supone, no convertir un cambio en las respuestas de una encuesta en un cambio en el mundo, no ampliar el sujeto de la frase más allá de a quién cubre la fuente, y no explicar por qué pasó como si el dato lo mostrara.",
-      "level_100": "Todo lo que afirma se sostiene con lo que tiene al frente, y además nombra explícitamente un límite concreto y pertinente: qué mide realmente el dato y qué no, a quién describe y a quién no, o por qué esta serie no puede sostener la conclusión que le están colgando. El límite que nombra es el que de verdad afecta la pregunta.",
-      "level_80": "Lo que afirma se sostiene y no sobre-afirma, pero el límite queda implícito o el que nombra es secundario.",
-      "level_60": "En lo grueso es correcto, pero mezcla algo que observó con algo que supuso sin marcar la diferencia.",
-      "level_40": "Lee bien y salta a explicar por qué pasó, o generaliza a un grupo más amplio del que la fuente cubre, sin señalar que eso es una suposición.",
-      "level_20": "Afirma como hecho algo que el dato no muestra: una causa, un cambio en lo que la gente siente cuando lo que cambió es lo que menciona, o una población que la fuente no entrevista.",
-      "level_0": "Contradice lo que tiene al frente, o responde sobre otra cosa."
+      "id": "exactitud",
+      "name": "Exactitud",
+      "weight": 0.6,
+      "description": "¿Es correcto lo que entregó? En las rondas de código: ¿corre y hace exactamente lo que se pidió, con la función correcta, la base nombrada y los nombres de columna escritos tal cual están en los datos? En la ronda de lectura: ¿dice sólo lo que el dato sostiene, sin convertir un cambio en las respuestas de una encuesta en un cambio en el mundo, sin ampliar el sujeto más allá de a quién cubre la fuente, y sin explicar por qué pasó como si el dato lo mostrara?",
+      "level_100": "CÓDIGO: todo lo que escribió corre y hace exactamente lo pedido — la función correcta, la base nombrada, y cada nombre de columna escrito tal cual está. Cualquier variante que funcione cuenta igual que la del cuaderno. LECTURA: todo lo que afirma se sostiene con lo que tiene al frente, y además nombra explícitamente un límite concreto y pertinente de la fuente: qué mide realmente y qué no, a quién describe y a quién no, o por qué esta serie no puede sostener la conclusión que le están colgando.",
+      "level_80": "CÓDIGO: hace lo pedido y corre, con un detalle de escritura que no lo rompe — un argumento de más que nadie pidió, otro tipo de comillas, otro nombre de objeto usado de forma consistente. LECTURA: lo que afirma se sostiene y no sobre-afirma, pero el límite queda implícito o el que nombra es secundario.",
+      "level_60": "CÓDIGO: corre, pero responde de más o de menos que lo que se pidió — un argumento extra que cambia el resultado, o el orden puesto donde nadie lo pidió. LECTURA: en lo grueso es correcto, pero mezcla algo que observó con algo que supuso sin marcar la diferencia.",
+      "level_40": "CÓDIGO: NO CORRE, aunque la estructura sea la correcta — un nombre de columna con otras mayúsculas o mal escrito, o un conteo sobre un objeto que nunca se creó. R distingue mayúsculas y `Transporte` no existe en esta base. También cae acá el código que corre pero contesta otra pregunta: dos conteos separados donde se pidió un cruce. LECTURA: lee bien y salta a explicar por qué pasó, o generaliza a un grupo más amplio del que la fuente cubre, sin señalar que eso es una suposición.",
+      "level_20": "CÓDIGO: inventa funciones o argumentos que no existen en R, o describe en palabras lo que habría que hacer sin escribir ninguna línea. LECTURA: afirma como hecho algo que el dato no muestra: una causa, un cambio en lo que la gente siente cuando lo que cambió es lo que menciona, o una población que la fuente no entrevista.",
+      "level_0": "CÓDIGO: no hay código, o lo que hay no tiene relación con lo que se pidió. LECTURA: contradice lo que tiene al frente, o responde sobre otra cosa."
     },
     {
-      "id": "criterio_de_fuentes",
-      "name": "Criterio sobre la fuente",
-      "weight": 0.35,
-      "description": "¿Le hace a la fuente las preguntas que hay que hacerle antes de usarla —qué mide realmente, a quiénes incluye y a quiénes deja fuera, qué decidió no medir— y saca de ahí una consecuencia para el trabajo? ¿O la acepta y la descarta por lo que parece: porque es oficial, porque es grande, porque no trae su tema?",
-      "level_100": "Identifica qué mide realmente esta fuente y qué quedó fuera de ella, y saca de ahí una consecuencia concreta para el trabajo: qué se puede preguntar, qué no, o qué hacer ahora. Trata el límite o la ausencia como información sobre la fuente, no como un defecto del tema ni como un obstáculo que invalida el proyecto.",
-      "level_80": "Identifica bien qué mide la fuente y qué deja fuera, pero no aterriza la consecuencia: no dice qué se puede hacer con eso.",
-      "level_60": "Acierta a medias: nombra el límite sin decir qué implica, o dice qué hacer sin haber mirado qué mide la fuente.",
-      "level_40": "Habla de la fuente en general —que es buena, grande, oficial o incompleta— sin nombrar qué mide ni a quién deja fuera.",
-      "level_20": "Acepta o descarta la fuente por lo que parece: porque es oficial, porque tiene muchos casos, o porque no trae su tema.",
-      "level_0": "Afirma algo falso sobre lo que esta fuente contiene o sobre a quién cubre, o resuelve el problema dando por hecho un dato que nadie levantó."
+      "id": "completitud",
+      "name": "Completitud de la entrega",
+      "weight": 0.25,
+      "description": "¿Está todo lo que la pregunta pidió? Las tres rondas juzgadas piden varias cosas explícitamente: R4 pide tres líneas, R5 pide dos líneas, y R7 pide qué SÍ describe el dato Y qué NO se puede concluir. Esta dimensión mide sólo cuánto de lo pedido llegó, no qué tan bien está hecho — eso lo mide Exactitud.",
+      "level_100": "Están todas las partes que se pidieron, cada una cumpliendo la suya, y nada innecesario alrededor.",
+      "level_80": "Están todas las partes, con algo de más que no se pidió y que no molesta: una línea extra, una explicación en prosa donde se pedía sólo código, una tercera idea donde bastaban dos.",
+      "level_60": "Falta exactamente una parte de tres: dos de las tres líneas pedidas, o una de las dos mitades de la pregunta contestada muy por encima.",
+      "level_40": "Falta la mitad de lo pedido: una sola de las dos líneas, o sólo una de las dos mitades de la pregunta.",
+      "level_20": "Llegó una fracción menor de lo pedido, y a medias: una línea incompleta, o una frase que apunta a una de las partes sin llegar a contestarla.",
+      "level_0": "No entrega ninguna de las partes que se pidieron."
     },
     {
       "id": "claridad",
-      "name": "Claridad para un lector no especializado",
-      "weight": 0.25,
-      "description": "¿Lo entendería alguien de fuera a la primera lectura? Una afirmación principal identificable, el resto sosteniéndola, y sin jerga que no se explique.",
-      "level_100": "Un lector sin formación estadística la entiende a la primera. Hay una afirmación principal identificable y todo lo demás la sostiene. La jerga que usa, la explica.",
-      "level_80": "Se entiende bien, con una frase ambigua o un término técnico sin explicar.",
-      "level_60": "Se entiende con esfuerzo: la idea está, pero el lector tiene que reordenarla.",
-      "level_40": "Enumera observaciones sueltas sin una afirmación principal.",
-      "level_20": "Usa vocabulario técnico como sustituto del argumento, o es tan general que no se sabe de qué está hablando.",
+      "name": "Claridad",
+      "weight": 0.15,
+      "description": "¿Se entiende de inmediato lo que entregó? En código: se lee limpio, una instrucción por línea, en el orden en que habría que correrlas. En prosa: lo entendería alguien de fuera a la primera lectura, con una afirmación principal identificable y sin jerga sin explicar.",
+      "level_100": "CÓDIGO: una instrucción por línea, en un orden en que efectivamente correrían, sin adorno ni relleno. LECTURA: un lector sin formación estadística la entiende a la primera; hay una afirmación principal identificable y todo lo demás la sostiene.",
+      "level_80": "CÓDIGO: se lee bien, con algo suelto — todo en una línea, o un comentario que sobra. LECTURA: se entiende bien, con una frase ambigua o un término técnico sin explicar.",
+      "level_60": "CÓDIGO: hay que reordenarlo mentalmente para saber qué corre primero, o el código está enterrado en un párrafo. LECTURA: se entiende con esfuerzo: la idea está, pero el lector tiene que reordenarla.",
+      "level_40": "CÓDIGO: fragmentos sueltos sin forma de línea ejecutable. LECTURA: enumera observaciones sueltas sin una afirmación principal.",
+      "level_20": "CÓDIGO: mezcla de pseudocódigo y prosa donde no se distingue qué es una instrucción. LECTURA: usa vocabulario técnico como sustituto del argumento, o es tan general que no se sabe de qué está hablando.",
       "level_0": "Ininteligible, o no responde la pregunta que se hizo."
     }
   ],
   "penalties": [
     {
-      "id": "media_pregunta",
-      "description": "Las dos preguntas de esta sesión piden DOS COSAS cada una: la ronda de la CEP pide qué le respondes al compañero Y qué hace tu grupo ahora; la del titular pide qué SÍ describe el dato Y qué NO se puede concluir. Responder sólo una de las dos mitades no puede superar 60 en 'Rigor descriptivo' ni 60 en 'Criterio sobre la fuente', por correcta que sea la mitad que contestó.",
-      "effect": { "type": "cap", "value": 60, "dimensions": ["rigor_descriptivo", "criterio_de_fuentes"] }
+      "id": "entrega_incompleta",
+      "description": "Las tres rondas juzgadas piden varias cosas explícitamente: R4 pide TRES líneas, R5 pide DOS líneas, y R7 pide qué SÍ describe el dato Y qué NO se puede concluir. Entregar sólo una parte de lo pedido no puede superar 60 en 'Exactitud', por perfecta que esté la parte entregada. Se gatilla por lo que FALTA, no por errores en lo que sí está.",
+      "effect": {
+        "type": "cap",
+        "value": 60,
+        "dimensions": [
+          "exactitud"
+        ]
+      }
     },
     {
-      "id": "el_dato_debe_existir",
-      "description": "Resolver la falta de datos suponiendo que el dato tiene que estar en alguna parte —'seguro alguien lo mide', 'hay que seguir buscando hasta encontrarlo'— sin nombrar ninguna fuente concreta ni ninguna forma de levantarlo, no puede superar 40 en 'Criterio sobre la fuente'. Ojo: proponer buscar otra fuente hecha para el tema SÍ es una salida válida y no cae acá, aunque no diga cuál. Lo que se castiga es dar por hecho que el dato existe, no proponer ir a buscarlo.",
-      "effect": { "type": "cap", "value": 40, "dimensions": ["criterio_de_fuentes"] }
+      "id": "codigo_que_no_corre",
+      "description": "Sólo en las rondas de código. Código que NO CORRE tal cual está escrito no puede superar 40 en 'Exactitud' ni 60 en 'Claridad'. Son tres casos: (1) un nombre de columna que no existe en la base porque está escrito con otras mayúsculas o mal —`Transporte`, `Comuna`, `sistema operativo` con espacio—, que es exactamente la lección que la clase enseñó con `Las condes` y `las condes`; (2) una función o un argumento que no existe en R —`contar()`, `count_by()`, `leer.csv()`, `sort(TRUE)`—; (3) prosa que describe lo que habría que hacer sin ninguna línea de R. El tope de claridad va junto con el otro a propósito: para quien va a copiar y pegar ese código, uno que no corre no es claro por muy ordenado que se lea.\n\nNO CAE ACÁ una escritura que existe y funciona aunque el cuaderno no la haya mostrado: el pipe (`|>`, `%>%`), `require()`, `arrange(desc(n))`, `sort = T` y `=` en vez de `<-` son todas correctas y no gatillan nada. Tampoco un paréntesis de cierre que falta cuando la intención es inequívoca y todo lo demás está bien: escriben desde un teclado de teléfono. Lo que se castiga es inventar y equivocar el nombre, no salirse del cuaderno.",
+      "effect": {
+        "type": "cap",
+        "value": 40,
+        "dimensions": [
+          "exactitud"
+        ]
+      }
     },
     {
       "id": "respuesta_intercambiable",
-      "description": "Una respuesta que serviría igual para cualquier otra ronda de este juego sin cambiarle una palabra —'hay que revisar bien la fuente antes de sacar conclusiones', 'faltan más datos para analizarlo'— no puede superar 50 en 'Claridad'.",
-      "effect": { "type": "cap", "value": 50, "dimensions": ["claridad"] }
+      "description": "En la ronda de lectura, una respuesta que serviría igual para cualquier otra pregunta del curso sin cambiarle una palabra —'hay que revisar bien la fuente antes de sacar conclusiones', 'faltan más datos para analizarlo'— no puede superar 50 en 'Claridad'.",
+      "effect": {
+        "type": "cap",
+        "value": 50,
+        "dimensions": [
+          "claridad"
+        ]
+      }
     }
   ],
   "globalPenalties": [
+    "Escribir el nombre de una columna con otras mayúsculas o mal escrito: para R es otra columna y la línea no corre. Es la lección que la clase vio con `Las condes` y `las condes`.",
+    "Responder un cruce de dos columnas con dos conteos separados: son dos preguntas distintas y ninguna es la que se hizo.",
+    "Llamar a `count()` sin que `library(dplyr)` aparezca en ninguna línea.",
     "Convertir un cambio en las respuestas de una encuesta en un cambio en el mundo: 'dejó de importarles' cuando lo que cambió es qué problema mencionan primero.",
     "Causalidad desde datos descriptivos: 'bajó porque mejoró la economía', dicho como hecho, cuando la serie sólo muestra que bajó.",
     "Tratar 'oficial' o 'grande' como sinónimo de 'sirve para mi pregunta'.",
-    "Leer la ausencia de un tema en una fuente como prueba de que el tema no importa, en vez de como una decisión de quien hizo la fuente.",
     "Vaguedad intercambiable: una respuesta que se podría pegar debajo de cualquier pregunta del curso.",
-    "Extensión como sustituto de contenido: una respuesta larga que repite la misma idea vale lo que la idea dicha una vez.",
-    "Jerga como sustituto de razonamiento: nombrar 'sesgo', 'cobertura' o 'muestra' sin decir cuál, dónde ni por qué importa acá.",
+    "Extensión como sustituto de contenido: una respuesta larga que repite la misma idea vale lo que la idea dicha una vez. En las rondas de código, la explicación en prosa que nadie pidió no suma.",
     "Invocar márgenes de error, tests o representatividad formal: está fuera del curso y no suma."
   ],
   "bonusIndicators": [
-    "Distingue lo que la gente declara de lo que ocurre en el mundo, en una frase",
-    "Nombra a quién deja fuera la fuente, o qué decidió no medir y desde cuándo",
-    "Aterriza qué hacer ahora en algo ejecutable esta semana, sin inventar el dato",
-    "Trata la ausencia como algo que vale la pena contar en la plataforma, no como un problema que esconder",
+    "En código: entrega exactamente las líneas pedidas y nada más, listas para pegar en Colab",
+    "En código: usa una escritura correcta que el cuaderno no mostró, y la usa bien",
+    "En lectura: distingue lo que la gente declara de lo que ocurre en el mundo, en una frase",
+    "En lectura: nombra a quién deja fuera la fuente, o qué decidió no medir y desde cuándo",
     "Objeta el enunciado con razón: nota que faltan años, o que no sabe cómo estaba redactada la pregunta"
   ],
   "penaltyIndicators": [
-    "Da por hecho que el dato tiene que existir en alguna parte",
-    "Abandona el dominio en vez de cambiar de fuente",
+    "Nombre de columna con mayúscula o mal escrito",
+    "El cruce de dos columnas contestado como dos conteos sueltos",
+    "Falta una de las líneas o una de las mitades que la pregunta pedía",
     "Convierte una caída en las menciones en una explicación de por qué ocurrió",
-    "Amplía el sujeto a 'los chilenos' o 'la gente' cuando la fuente entrevista sólo a mayores de 18",
-    "Cita el nombre de una fuente o de una función sin decir qué haría con ella"
+    "Amplía el sujeto a 'los chilenos' o 'la gente' cuando la fuente entrevista sólo a mayores de 18"
   ]
 }
