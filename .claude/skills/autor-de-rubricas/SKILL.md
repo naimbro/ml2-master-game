@@ -67,6 +67,34 @@ Señales de que la rúbrica está mal calibrada:
 Una rúbrica no se prueba con una respuesta brillante ni con una pésima. Se
 prueba en la zona gris, y en el borde: la respuesta correcta que no esperabas.
 
+### Y después ordenarlas: el bug no está en el nivel, está en el orden
+
+Predecir el puntaje de cada respuesta no basta. **Hay que ponerlas en fila y
+preguntarse si ese orden es el que quieres defender delante del curso.** Un
+puntaje individual puede parecer razonable y el orden estar dado vuelta.
+
+Pasó en dataviz clase 3, con los jueces reales: una respuesta con **una sola de
+las tres líneas pedidas, correcta**, sacó 61; otra con **las tres líneas y un
+solo error** sacó 52. Los dos números pasan solos, y juntos son indefendibles.
+
+El par que hay que agregar es siempre el mismo: **la completa-con-un-error contra
+la incompleta-pero-impecable.** Es el que más se invierte, porque la respuesta
+incompleta saca notas altas en las dimensiones de forma justamente por no haberse
+arriesgado a nada.
+
+### Las penalizaciones casi nunca se disparan: no cuentes con ellas
+
+Medido sobre tres juegos con curso completo: **0 de 174 evaluaciones, 8 de 201 y
+13 de 342.** Entre 0% y 4%. Una penalización declarada, ejecutable y perfecta
+puede no gatillarse nunca, porque el juez tiene que *reportar el id* para que el
+motor la aplique.
+
+Consecuencia práctica: **las anclas de nivel tienen que sostener el puntaje
+solas.** Calibra las cuatro respuestas sintéticas **con las penalizaciones
+apagadas**; si con eso el orden ya es el correcto, las penalizaciones son el
+cinturón. Si el orden sólo se arregla asumiendo que un techo se aplica, la
+rúbrica no está calibrada — está apostando.
+
 ## Reglas duras
 
 - **Nunca penalizar que objeten el enunciado.** Si un alumno escribe "esa
@@ -92,7 +120,21 @@ prueba en la zona gris, y en el borde: la respuesta correcta que no esperabas.
 - **Máximo 3 penalizaciones duras**, cada una verificable leyendo el texto. Una
   penalización que exige saber algo que no está escrito no es verificable.
 - **Dimensiones ortogonales**: si una respuesta no puede sacar alto en A y bajo
-  en B, sobra una.
+  en B, sobra una. **Y ortogonales sobre el papel no basta: hay que escribir en
+  cada dimensión qué NO mide, y qué dimensión sí lo mide.** El juez no tiene
+  ninguna razón para no castigar el mismo error dos veces, y por defecto lo hace.
+  En dataviz clase 3, `claridad` decía «¿se lee limpio?» y los jueces igual le
+  bajaron a 60 a la respuesta que tenía un error — que ya había pagado en
+  `exactitud`. Ese doble cobro solo alcanzó para dar vuelta el orden. El arreglo
+  es una frase dentro de la dimensión: «claridad mide si se lee limpio y **no**
+  si es correcta; la corrección la mide exactitud y sólo exactitud».
+- **Cuidado con la dimensión que la respuesta corta gana gratis.** Toda dimensión
+  de forma —claridad, orden, concisión— la saca perfecta quien escribió poco y
+  bien. Si pesa mucho, el piso de una respuesta equivocada queda alto: con la
+  dimensión de fondo en 40 y las de forma en 100, el puntaje es
+  `100 − 60 × peso_de_fondo`. O sea que **para que una respuesta equivocada no
+  pase de 65, la dimensión de fondo tiene que pesar 0,59 o más en cada juez.** Es
+  aritmética, no criterio, y conviene hacerla antes de repartir los pesos.
 - **`weightFormula` explícita por juez**, obligatoria para los `generic_*`: sin
   ella caen a los pesos de la rúbrica y los tres jueces quedan idénticos.
 - **`sessionLens` coherente**: distinto por juez, con vocabulario de esta sesión,

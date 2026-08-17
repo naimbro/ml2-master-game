@@ -61,6 +61,42 @@ es su decisión de contenido, no tuya.
 Preguntar, no asumir: cuántas rondas, abiertas o de alternativas, si compite o
 no, qué error de los alumnos le interesa cazar, y el largo de respuesta.
 
+### 4b. Hacer el presupuesto ANTES de proponer rondas
+
+**Un juego dura entre 15 y 20 minutos de reloj de pared**, de que aparece el
+código en pantalla a que se proyecta el podio. No es una preferencia: es el
+bloque que tiene la actividad de cierre. **Un juego que no cabe no se acorta
+solo — se corta a la mitad, y lo que se pierde es el final**, que es donde suele
+estar la ronda que más importa.
+
+El presupuesto **no es la suma de los `durationSeconds`.** Medido sobre siete
+juegos con curso completo, el reloj de pared es **1,7 a 2,4 veces** esa suma: la
+revelación, la espera de los jueces y el leaderboard entre rondas cuestan
+**~2 minutos por ronda** que nadie presupuesta.
+
+La cuenta que sirve:
+
+```
+suma_de_relojes + 2 min × nº de rondas ≤ 20 min
+```
+
+De ahí sale la tabla, y es más apretada de lo que parece:
+
+| rondas | presupuesto de relojes | lo que cabe |
+|---|---|---|
+| 5 | 10 min | 3 MC (45 s) + 3 abiertas (150 s) |
+| 6 | 8 min | 4 MC + 2 abiertas |
+| 7 | 6 min | 5 MC + **una sola** abierta |
+
+**Una abierta de 150 s cuesta casi el doble que una MC de 45 s**, así que la
+decisión real no es cuántas rondas sino **cuántas abiertas caben**. Decidirlo con
+Naim acá, antes de escribir nada: es más barato descartar una ronda en una tabla
+que descubrir en la clase que nunca se jugó.
+
+Dataviz clase 3 se escribió estimando «~18 min» sumando los relojes y el
+`bufferSeconds`. Eran ~27 min de pared, se cortó en R5 de 7, y con R7 se perdió
+la única ronda de criterio sobre fuentes de toda la sesión.
+
 ### 5. Proponer TRES versiones de cada ronda
 
 Cada una con enunciado, contexto y **el ancla de la que sale**. Distintas de
@@ -121,7 +157,26 @@ cada ocho.
   podio muestra ceros.
 - **El alumno ve la imagen en su teléfono**, no solo proyectada. Un gráfico de
   dos paneles es ilegible ahí.
-- El juego es actividad de cierre de clase, 10-15 minutos. No es el abre.
+- El juego es actividad de cierre de clase. **15-20 minutos de pared**, con el
+  presupuesto de la sección 4b. No es el abre.
+- **No pedir de memoria lo que la clase tuvo escrito al frente.** Vale para el
+  código y para cualquier dato que estuviera proyectado: nombres de columnas,
+  cifras, rutas, nombres de funciones de arranque. El alumno hizo el ejercicio
+  copiando de la pantalla; sin la pantalla está recordando, no razonando. **La
+  regla: dale el dato en el enunciado y pídele sólo la parte que carga el
+  concepto.**
+
+  Está medido en el mismo juego, con los mismos 29 alumnos y el mismo reloj: la
+  ronda que pidió recordar `library(dplyr)` y la línea de carga sacó **mediana
+  24 y nadie la respondió bien**; la siguiente, que traía los nombres de columna
+  escritos en el enunciado y sólo pedía el cruce, sacó **mediana 43 y dos
+  respuestas perfectas**. La diferencia no fue la dificultad: fue qué había que
+  recordar.
+- **La unidad de la respuesta hay que nombrarla, y en el idioma de la respuesta.**
+  «En 3 líneas» sobre una pregunta de código lo leyeron seis alumnos como «en 3
+  pasos» y contestaron en castellano numerado («1. cambiar el formato a R»). Si
+  la respuesta es código, decir «tres líneas **de R**» y, mejor todavía, mostrar
+  la forma vacía.
 
 ## Errores que ya se cometieron
 
@@ -135,3 +190,5 @@ cada ocho.
 | Sesión nueva sin `weightFormula` para los `generic_*` | Los tres jueces quedan indistinguibles, en silencio |
 | Par mínimo (dos alternativas con las mismas palabras) con reloj de 25 s | 89% del reloj consumido, 8 sin responder y 43% de acierto: una moneda al aire. Hoy el validador lo rechaza |
 | Acortar el reloj porque "la clase pasada sobraba" | Sobraba en MGT300, faltó en dataviz. El reloj se mide por sesión, no se hereda |
+| Estimar la duración sumando los `durationSeconds` | La pared es 1,7-2,4× eso. Se cortó en R5 de 7 y se perdió la ronda que más importaba |
+| Pedir que escriban un marcador de posición (`read.csv("...")`) | Nadie escribe los puntos: rellenan las comillas adivinando (`read.csv("curso")`, `read.csv("webc")`). Si el dato no importa, **dáselo escrito**; no le pidas que escriba un hueco |
