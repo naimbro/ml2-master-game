@@ -1,0 +1,487 @@
+{
+  "instrumentId": "mgt300_2026_compas_v1",
+  "courseId": "mgt300_2026",
+  "version": 1,
+  "title": "Compás IA y Democracia",
+  "subtitle": "¿Dónde estás tú, y dónde está el curso?",
+  "_proposito": "Instrumento de opinion, no de conocimiento. No tiene respuestas correctas, no otorga puntaje y no alimenta el ranking del curso. Si un alumno sospecha que alguna alternativa suma, deja de responder lo que piensa y la medicion de fin de semestre queda arruinada sin que nadie lo note.",
+  "_de_donde_sale": "Es el mismo compas que se aplico en ai_democracy_2026 (v3), reescrito con lo que dejo su primera aplicacion real: 21 respuestas, sala NXR2DY, 17-ago-2026. Ahi el instrumento salio con alfa de Cronbach 0.01 en magnitud y 0.12 en direccion, y la correlacion mitad-mitad --posicion calculada con la mitad de los items contra la otra mitad, en las 126 y 252 particiones posibles-- dio 0.03 y 0.08. No media una posicion estable. De 50 opciones, 19 recibieron un voto o ninguno, y el promedio de opciones efectivas por item era 2.60 de 5.",
+  "_cinco_reglas": "Las cinco reglas de escritura que salieron de esos datos, y que este instrumento aplica: (1) un solo tipo logico por item --todas lecturas, o todas predicciones, o todas valoraciones-- porque un hecho descriptivo entre cuatro interpretaciones se lleva el 86% y no separa a nadie; (2) toda escalera necesita una bifurcacion, porque cinco peldanos de lo mismo colapsan en el que suena razonable; (3) separar el hecho de la valoracion, estipulando la premisa cuando se pregunta cuanto vale algo; (4) la opcion que niega solo cobra votos contra un fenomeno especulativo, nunca contra algo que el alumno ve; (5) nada de opciones anidadas, porque la general se come a la especifica.",
+  "_anclas": "Las anclas son de la bibliografia de MGT300, NO de la de IA y Democracia. Este curso no lee la prensa de aquel: lee a Han, Sen, Aghion, Galor, Acemoglu y Robinson, Pariser, Chambers, Schneier y Sanders, y los boletines chilenos. La marca (C1)-(C15) es el numero de clase del programa 2026.",
+  "_agrupacion": "Los diez items no son diez preguntas sueltas: son tres grupos y un item de valencia. Reparto material (m01, m02, m04), agencia y control (m06, m08, m09) y gobernanza (m03, m05, m07), mas m10. Que dos items de un grupo se pisen es deliberado: el instrumento anterior fracaso por tener diez preguntas demasiado distintas entre si, no demasiado parecidas.",
+  "axes": {
+    "x": {
+      "id": "magnitud",
+      "label": "Magnitud",
+      "min": -10,
+      "max": 10,
+      "minLabel": "nada nuevo",
+      "maxLabel": "cambio de régimen",
+      "pregunta": "¿Cuánto altera la IA la estructura del poder político y económico?"
+    },
+    "y": {
+      "id": "direccion",
+      "label": "Dirección",
+      "min": -10,
+      "max": 10,
+      "minLabel": "concentra poder · erosiona la democracia",
+      "maxLabel": "distribuye poder · fortalece la democracia",
+      "pregunta": "¿Hacia dónde la empuja?"
+    }
+  },
+  "ejeAgencia": {
+    "id": "agencia",
+    "label": "Agencia",
+    "min": -10,
+    "max": 10,
+    "minLabel": "deciden personas",
+    "maxLabel": "deciden los sistemas",
+    "pregunta": "¿Quién termina decidiendo: personas con nombre, o los sistemas?"
+  },
+  "scoring": {
+    "method": "promedio_de_respondidas",
+    "skippable": true,
+    "ranked": false,
+    "scored": false,
+    "nota": "La posicion es el promedio de los vectores elegidos, con un denominador por eje. Saltarse un item no penaliza: solo cuenta lo respondido."
+  },
+  "aplicaciones": [
+    {
+      "n": 1,
+      "semana": 5,
+      "fecha": "2026-09-01",
+      "hito": "antes de la Unidad 2",
+      "proposito": "línea base",
+      "nota": "La fecha es el plan, no una restriccion: la aplicacion se elige al abrir la sala. Lo unico que importa es que la 1 quede ANTES de la Clase 7, que es donde parte la unidad de IA y Democracia. Correrla antes --Clase 3 o 4-- no rompe nada."
+    },
+    {
+      "n": 2,
+      "semana": 9,
+      "fecha": "2026-10-06",
+      "hito": "al cierre de la Unidad 2",
+      "proposito": "efecto de la unidad",
+      "nota": "Clase 9, ultima de la unidad. No la Clase 10, que es la Prueba de analisis 2: medir opiniones el dia de una prueba calificada contamina las dos cosas."
+    },
+    {
+      "n": 3,
+      "semana": 15,
+      "fecha": "2026-11-17",
+      "hito": "Taller integrador",
+      "proposito": "medición final y comparación con la línea base"
+    }
+  ],
+  "items": [
+    {
+      "id": "m01_trabajo_propio",
+      "order": 1,
+      "question": "Piensa en el trabajo que quieres tener al salir. ¿Qué le hace la IA?",
+      "discrimina": "Las cinco son predicciones sobre una misma cosa concreta y personal: mismo tipo logico (regla 1). Reemplaza al item de apertura del instrumento anterior, donde una opcion descriptiva --la gente tiene miedo de perder el trabajo-- se llevo 18 de 21 porque era el unico hecho observable entre cuatro interpretaciones. La opcion B trae la Unidad 1 al eje: la IA como intensificacion del rendimiento y no como reemplazo, que es la unica lectura de Han que el instrumento anterior no tenia forma de recoger.",
+      "_pisa_con": "m02_trabajo, a proposito. Dos items que preguntan lo mismo desde distinto angulo --el trabajo en general, tu trabajo-- son lo que le da consistencia interna a una escala.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Lo hace más liviano: las mismas tareas, menos esfuerzo.",
+          "vector": { "magnitud": -3, "direccion": 5 },
+          "anchor": "Ines Lee, «Piensa primero, IA después» (C1): la IA como apoyo que no reemplaza el juicio propio"
+        },
+        {
+          "id": "B",
+          "text": "Sube la vara. Voy a competir con gente que rinde el doble, y voy a tener que rendir el doble.",
+          "vector": { "magnitud": 5, "direccion": -4 },
+          "anchor": "Han, «La sociedad del cansancio» (C2): el sujeto de rendimiento se explota a sí mismo, sin amo · Ehrenreich, «Smile or Die», cap. 4 (C2)"
+        },
+        {
+          "id": "C",
+          "text": "Cambia qué hago, no cuánto valgo.",
+          "vector": { "magnitud": 3, "direccion": 2 },
+          "anchor": "CENIA / SOFOFA / SENCE / Stanford, «IA Generativa: oportunidades para el futuro del trabajo en Chile» (C14): complementariedad y reconversión"
+        },
+        {
+          "id": "D",
+          "text": "Van a quedar menos puestos como ese, y peor pagados.",
+          "vector": { "magnitud": 6, "direccion": -6 },
+          "anchor": "Aghion, Antonin y Bunel, «The Power of Creative Destruction», cap. 3 (C14): desplazamiento y distribución de los costos de la innovación"
+        },
+        {
+          "id": "E",
+          "text": "Va a seguir existiendo, pero no se va a entrar por abajo.",
+          "vector": { "magnitud": 6, "direccion": -5 },
+          "anchor": "CENIA / SOFOFA / SENCE (C14), sobre los puestos de entrada y la reconversión de quienes recién ingresan"
+        }
+      ]
+    },
+    {
+      "id": "m02_trabajo",
+      "order": 2,
+      "question": "¿Qué le va a pasar al trabajo, en general?",
+      "discrimina": "El item que mas separo la magnitud en la aplicacion anterior: en empleo el desacuerdo es de escala, no de valor. Se conserva con una sola opcion cambiada. La antigua C --«los que recien entran se quedan afuera»-- saco cero votos porque la comia la E, que dice mas y la contiene (regla 5); ademas ahora la cubre m01/E. En su lugar entra una opcion que no es una intensidad de las otras sino otra cosa: el trabajo se conserva pero cambia de naturaleza, y carga el polo maquina del tercer eje.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Nada raro. Unas tareas se van, otras llegan.",
+          "vector": { "magnitud": -6, "direccion": 1 },
+          "agencia": -7,
+          "anchor": "Galor, «El viaje de la humanidad», cap. 4 (C14): las revoluciones tecnológicas transformaron el trabajo sin acabarlo · Aghion, cap. 3 (C14)"
+        },
+        {
+          "id": "B",
+          "text": "Acá, más ayuda que reemplazo.",
+          "vector": { "magnitud": 3, "direccion": 6 },
+          "agencia": -8,
+          "anchor": "CENIA / SOFOFA / SENCE / Stanford (C14): el diagnóstico chileno es de complementariedad antes que de sustitución"
+        },
+        {
+          "id": "C",
+          "text": "El mismo trabajo, pero supervisando máquinas.",
+          "vector": { "magnitud": 4, "direccion": -2 },
+          "agencia": 3,
+          "anchor": "Schneier y Sanders, «Rewiring Democracy», caps. 20–24 (C7), sobre aumento frente a reemplazo en decisiones asistidas"
+        },
+        {
+          "id": "D",
+          "text": "Desplazamiento masivo, y la ganancia queda arriba.",
+          "vector": { "magnitud": 8, "direccion": -8 },
+          "agencia": -5,
+          "anchor": "Aghion, cap. 5 (C13): innovación, desigualdad y captura de rentas"
+        },
+        {
+          "id": "E",
+          "text": "Se acaba el trabajo como lo conocemos.",
+          "vector": { "magnitud": 10, "direccion": 0 },
+          "agencia": 6,
+          "anchor": "Galor, cap. 4 (C14) leído en su límite · Aghion, cap. 3 (C14), sobre revoluciones que reorganizan el trabajo por completo"
+        }
+      ]
+    },
+    {
+      "id": "m03_quien_decide",
+      "order": 3,
+      "question": "Hoy, ¿quién decide lo que la IA puede hacer?",
+      "discrimina": "Mismo diagnostico de magnitud, lecturas opuestas de quien gana: es el item donde el villano cambia de cara. Dos opciones cambiaron. La antigua E --«la IA decide por si misma»-- saco cero votos: era el extremo puro del tercer eje y pedia afirmar autonomia de la maquina como hecho presente. La reemplaza una que dice casi lo mismo a un costo mucho menor --nadie alcanza a decidir-- y que por eso si puede poblar ese polo. La antigua D citaba un episodio que MGT300 no lee, y pasa a ser la lectura geopolitica.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Muchos. Está más repartido de lo que parece.",
+          "vector": { "magnitud": -3, "direccion": 5 },
+          "agencia": -7,
+          "anchor": "Boletín 16821-19 y Política Nacional de Inteligencia Artificial (C8): hay reglas en discusión y actores que las disputan"
+        },
+        {
+          "id": "B",
+          "text": "Un gobierno, que puede cortarte el acceso mañana.",
+          "vector": { "magnitud": 7, "direccion": -4 },
+          "agencia": -8,
+          "anchor": "Schneier y Sanders, caps. 20–24 (C7): capacidad estatal, vigilancia y control del acceso"
+        },
+        {
+          "id": "C",
+          "text": "Cinco empresas, y nadie más.",
+          "vector": { "magnitud": 7, "direccion": -8 },
+          "agencia": -7,
+          "anchor": "Schneier y Sanders, «AI and Power» (C13) · Aghion, cap. 5 (C13): concentración de chips, nube, datos y modelos"
+        },
+        {
+          "id": "D",
+          "text": "Estados Unidos y China. El resto se acomoda.",
+          "vector": { "magnitud": 7, "direccion": -6 },
+          "agencia": -7,
+          "anchor": "Rice y Zegart, «Managing 21st-Century Political Risk» (C15) · Aghion, cap. 5 (C13), sobre concentración y dependencia de proveedores"
+        },
+        {
+          "id": "E",
+          "text": "Nadie en particular: va más rápido de lo que alcanza a decidirse.",
+          "vector": { "magnitud": 7, "direccion": -5 },
+          "agencia": 6,
+          "anchor": "Schneier y Sanders, caps. 40–42 (C8), sobre el desfase entre la regulación y la capacidad · Han, «Infocracia», cap. 2 (C5)"
+        }
+      ]
+    },
+    {
+      "id": "m04_quien_paga",
+      "order": 4,
+      "question": "Si cualquiera puede fabricar un video creíble, ¿quién termina pagando el costo?",
+      "discrimina": "Las cinco nombran a un perdedor distinto --nadie, el que acusa, el acusado, el que no puede pagar peritos, todos--, asi que son del mismo tipo logico y ademas se bifurcan (reglas 1 y 2). Reemplaza al peor item del instrumento anterior: «cambia quien tiene que probar» se llevo 19 de 21 por ser la descripcion analiticamente correcta entre dos negaciones y dos catastrofes, y tres de sus cinco opciones sacaron cero. La opcion D mete a Sen en el instrumento: verificar es una capacidad, y cuesta plata.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Nadie nuevo. Los tribunales y los medios ya sabían verificar.",
+          "vector": { "magnitud": -4, "direccion": 3 },
+          "anchor": "Chambers (2020), «Truth, Deliberative Democracy, and the Virtues of Accuracy» (C5): las instituciones de verificación son anteriores al problema. Minimiza sin negar (regla 4)"
+        },
+        {
+          "id": "B",
+          "text": "El que acusa: ahora hay que probar que la prueba es real.",
+          "vector": { "magnitud": 4, "direccion": -3 },
+          "anchor": "Boletín 17795-19, sobre deepfakes (C8): el problema probatorio que la ley intenta cubrir"
+        },
+        {
+          "id": "C",
+          "text": "El acusado: basta sembrar la duda para hundir a alguien.",
+          "vector": { "magnitud": 6, "direccion": -7 },
+          "anchor": "Boletín 17795-19 (C8), sobre el daño reputacional que no requiere que el falso sea creído"
+        },
+        {
+          "id": "D",
+          "text": "El que no tiene abogados ni peritos. Verificar cuesta plata.",
+          "vector": { "magnitud": 5, "direccion": -6 },
+          "anchor": "Sen, «Desarrollo y libertad», cap. 2 (C11): la libertad efectiva depende de capacidades, y verificar es una de ellas"
+        },
+        {
+          "id": "E",
+          "text": "Todos, porque dejamos de discutir sobre hechos.",
+          "vector": { "magnitud": 8, "direccion": -8 },
+          "anchor": "Han, «Infocracia», cap. 2 (C5) · Pariser, «El filtro burbuja», introducción (C5)"
+        }
+      ]
+    },
+    {
+      "id": "m05_estado",
+      "order": 5,
+      "question": "El Estado usando IA. ¿Qué se te viene a la cabeza?",
+      "discrimina": "Magnitud creciente con la direccion dada vuelta a la mitad: mientras el Estado gana capacidad, las dos primeras lecturas son buenas y las dos ultimas amenazantes. Esa bifurcacion es la que lo salvo en la aplicacion anterior --3.13 opciones efectivas, uno de los cuatro items que funcionaron-- y se conserva entera. Solo cambia la A: «aca no hay capacidad ni para eso» negaba algo que el alumno tiene a la vista y saco cero votos (regla 4). La reemplaza una que minimiza sin negar.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Lo mismo de siempre, un poco más rápido.",
+          "vector": { "magnitud": -3, "direccion": 1 },
+          "anchor": "Schneier y Sanders, caps. 20–24 (C7): buena parte de la automatización pública acelera trámites sin cambiar quién decide"
+        },
+        {
+          "id": "B",
+          "text": "Trámites que por fin funcionan.",
+          "vector": { "magnitud": 4, "direccion": 7 },
+          "anchor": "Schneier y Sanders, caps. 20–24 (C7), sobre administración asistida y servicios que mejoran"
+        },
+        {
+          "id": "C",
+          "text": "Un Estado que por fin le llega a los que hoy se le escapan.",
+          "vector": { "magnitud": 5, "direccion": 6 },
+          "anchor": "Sen, «Desarrollo y libertad», introducción (C11): capacidad estatal como condición de la expansión de libertades"
+        },
+        {
+          "id": "D",
+          "text": "Decisiones sin nadie a quien reclamarle.",
+          "vector": { "magnitud": 6, "direccion": -7 },
+          "anchor": "Schneier y Sanders, cap. 35 (C7), sobre explicabilidad e impugnación · Gabriela Arriagada, charla CENIA/UC (C7)"
+        },
+        {
+          "id": "E",
+          "text": "Vigilancia.",
+          "vector": { "magnitud": 7, "direccion": -8 },
+          "anchor": "Schneier y Sanders, caps. 20–24 (C7), sobre vigilancia estatal asistida por sistemas automatizados"
+        }
+      ]
+    },
+    {
+      "id": "m06_delegar",
+      "order": 6,
+      "question": "Supón que existe un sistema que responde igual que tú el 90% de las veces. ¿Qué le dejarías hacer?",
+      "discrimina": "La regla 3 en su forma mas pura, y el item que repara el agujero estructural del instrumento anterior. Alli «¿podria una IA votar por ti?» quedo binario y torcido: las DOS opciones del si sacaron cero, porque pedirle a alguien que entregue el voto obliga a suscribir a la vez una apuesta tecnica y una cesion de principio. Estipulado el 90%, decir que si deja de costar. D y E son los dos no, uno empirico y otro de principio, que es la bifurcacion. Es tambien el unico item donde alguien puede quedar en el polo alto de agencia sin pagar nada por ello.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Votar, si acierta más que yo cuando estoy apurado.",
+          "vector": { "magnitud": 7, "direccion": 6 },
+          "agencia": 4,
+          "anchor": "César Hidalgo, charla sobre IA y representación política (C9) · Gudiño et al. (2024), «LLMs as agents for augmented democracy» (C9)"
+        },
+        {
+          "id": "B",
+          "text": "Opinar en consultas y encuestas, no votar.",
+          "vector": { "magnitud": 5, "direccion": 3 },
+          "agencia": 0,
+          "anchor": "Gudiño et al. (2024) (C9): agentes que amplían la participación sin sustituir el voto"
+        },
+        {
+          "id": "C",
+          "text": "Prepararme el resumen y decidir yo.",
+          "vector": { "magnitud": 3, "direccion": 2 },
+          "agencia": -4,
+          "anchor": "Clase 9 (C9), sobre avatares personales y agentes delegados en decisiones comerciales y políticas"
+        },
+        {
+          "id": "D",
+          "text": "Nada. Ese 10% es exactamente lo que me hace a mí.",
+          "vector": { "magnitud": 4, "direccion": -4 },
+          "agencia": -7,
+          "anchor": "Abeliuk, Gaete y Bro (2026), «Auditing socio-demographic and cross-societal fairness in LLM-simulated public opinion» (C9): el error no se reparte parejo entre grupos"
+        },
+        {
+          "id": "E",
+          "text": "Nada, aunque acertara el 100%. Delegar la voz es el problema, no equivocarse.",
+          "vector": { "magnitud": 5, "direccion": -5 },
+          "agencia": -9,
+          "anchor": "Chambers (2020) (C5), sobre por qué la deliberación no es reemplazable por la agregación · Han, «En el enjambre» (C3)"
+        }
+      ]
+    },
+    {
+      "id": "m07_timon",
+      "order": 7,
+      "question": "¿Quién debería decidir sobre la IA?",
+      "discrimina": "El mejor item del instrumento anterior junto con m09: 4.05 opciones efectivas, las cinco vivas, la modal en 38%. Se conserva entero y solo cambian las anclas. Es el item que desempata entre El Vigilante y La Oligarquia, que comparten celda porque los separa quien es el villano y eso no esta en el plano.",
+      "esItemDeTimon": true,
+      "options": [
+        {
+          "id": "A",
+          "text": "Las empresas. Se mueven a la velocidad que hace falta.",
+          "vector": { "magnitud": 1, "direccion": 3 },
+          "timon": "empresas",
+          "anchor": "Schneier y Sanders, cap. 33 (C8), sobre autorregulación y estándares de la industria"
+        },
+        {
+          "id": "B",
+          "text": "Los Estados, con poder de multar.",
+          "vector": { "magnitud": 5, "direccion": 2 },
+          "timon": "estado",
+          "anchor": "Boletín 16821-19 (C8): la Agencia de Protección de Datos como fiscalizadora, con multas de 5.000 a 20.000 UTM"
+        },
+        {
+          "id": "C",
+          "text": "Un organismo internacional.",
+          "vector": { "magnitud": 6, "direccion": -1 },
+          "timon": "internacional",
+          "anchor": "Schneier y Sanders, caps. 40–42 (C8), sobre estándares internacionales · Política Nacional de Inteligencia Artificial (C8)"
+        },
+        {
+          "id": "D",
+          "text": "La gente, deliberando en serio.",
+          "vector": { "magnitud": 6, "direccion": 7 },
+          "timon": "ciudadania",
+          "anchor": "Gudiño et al. (2024) (C9) · Chambers (2020) (C5), sobre democracia deliberativa"
+        },
+        {
+          "id": "E",
+          "text": "Da lo mismo quién debería. Ya está decidido.",
+          "vector": { "magnitud": 7, "direccion": -8 },
+          "timon": "empresas",
+          "anchor": "Schneier y Sanders, «AI and Power» (C13) · Aghion, cap. 5 (C13). Redactada como respuesta normativa y no como prediccion: es la posicion de quien cree que la pregunta ya no tiene destinatario"
+        }
+      ]
+    },
+    {
+      "id": "m08_agencia",
+      "order": 8,
+      "question": "En diez años, ¿quién va a estar decidiendo?",
+      "discrimina": "El item raiz del tercer eje. Cambia solo la E: «las maquinas, nosotros vamos a mirar» saco cero votos, porque estaba en el extremo puro del eje y no habia masa cerca. La reemplaza el peldano inmediatamente siguiente al que SI tuvo votos --los sistemas proponen y las personas firman, 8 de 20--: la diferencia entre las dos es si la firma humana significa algo. Asi se puebla un polo: poniendo el escalon al lado de donde ya hay gente, no en la punta.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Personas. Cuáles, todavía está en disputa.",
+          "vector": { "magnitud": 2, "direccion": 5 },
+          "agencia": -9,
+          "anchor": "Acemoglu y Robinson, «Por qué fracasan los países», cap. 3 (C15): quién manda es resultado de instituciones, y eso sigue abierto"
+        },
+        {
+          "id": "B",
+          "text": "Quien tenga los centros de datos.",
+          "vector": { "magnitud": 6, "direccion": -6 },
+          "agencia": -7,
+          "anchor": "Aghion, cap. 5 (C13) · Schneier y Sanders, «AI and Power» (C13): concentración de cómputo, nube y capital"
+        },
+        {
+          "id": "C",
+          "text": "Personas, con mucho menos margen del que creen.",
+          "vector": { "magnitud": 1, "direccion": -2 },
+          "agencia": 2,
+          "anchor": "Schneier y Sanders, caps. 20–24 (C7), sobre decisiones asistidas donde el margen humano se angosta sin anunciarse"
+        },
+        {
+          "id": "D",
+          "text": "Los sistemas van a proponer y las personas van a firmar.",
+          "vector": { "magnitud": 7, "direccion": -5 },
+          "agencia": 5,
+          "anchor": "Schneier y Sanders, cap. 35 (C7) · Arriagada (C7): la rendición de cuentas cuando la decisión ya venía hecha"
+        },
+        {
+          "id": "E",
+          "text": "Los sistemas, aunque la ley siga diciendo que las personas.",
+          "vector": { "magnitud": 8, "direccion": -6 },
+          "agencia": 8,
+          "anchor": "Schneier y Sanders, cap. 35 (C7): la firma humana como trámite, no como decisión"
+        }
+      ]
+    },
+    {
+      "id": "m09_control",
+      "order": 9,
+      "question": "¿Podemos seguir mandando a una IA más inteligente que nosotros?",
+      "discrimina": "El mejor item del instrumento anterior: 4.17 opciones efectivas, las cinco vivas, la modal en 30%. Funciona porque sus peldanos son posiciones reconocibles del debate y no grados de una sola cosa (regla 2), y porque el escalon desestimatorio niega algo especulativo --por eso se llevo un cuarto del curso, mientras los otros escalones desestimatorios del instrumento sacaban cero (regla 4). Se conserva; D y E se reescriben porque citaban episodios que MGT300 no lee.",
+      "options": [
+        {
+          "id": "A",
+          "text": "La pregunta es de ciencia ficción.",
+          "vector": { "magnitud": -7, "direccion": 1 },
+          "agencia": -8,
+          "anchor": "Ines Lee, «Piensa primero, IA después» (C1) · Galor, cap. 4 (C14): las revoluciones tardan generaciones, y el susto suele adelantarse"
+        },
+        {
+          "id": "B",
+          "text": "Sí, si lo decidimos antes.",
+          "vector": { "magnitud": 3, "direccion": 5 },
+          "agencia": -9,
+          "anchor": "Acemoglu y Robinson, cap. 3 (C15): la dirección de la tecnología depende de las instituciones · Schneier y Sanders, caps. 40–42 (C8)"
+        },
+        {
+          "id": "C",
+          "text": "Sí, probándola antes de soltarla.",
+          "vector": { "magnitud": 2, "direccion": 4 },
+          "agencia": -7,
+          "anchor": "Boletín 16821-19 (C8), sobre evaluación de sistemas por nivel de riesgo · Política Nacional de Inteligencia Artificial (C8)"
+        },
+        {
+          "id": "D",
+          "text": "Muy difícil. Para cuando entendamos cómo funciona, ya va a estar decidiendo.",
+          "vector": { "magnitud": 7, "direccion": -6 },
+          "agencia": 8,
+          "anchor": "Schneier y Sanders, cap. 35 (C7): el problema de explicabilidad, y qué queda de la supervisión cuando no se puede explicar"
+        },
+        {
+          "id": "E",
+          "text": "Ya lo perdimos. La supervisión humana es un trámite.",
+          "vector": { "magnitud": 9, "direccion": -7 },
+          "agencia": 10,
+          "anchor": "Schneier y Sanders, cap. 35 (C7) · «AI and Power» (C13)"
+        }
+      ]
+    },
+    {
+      "id": "m10_que_se_pierde",
+      "order": 10,
+      "question": "Supón que la IA hace todo el trabajo y ya no hacemos falta. ¿Qué es lo que se pierde?",
+      "discrimina": "Item CONDICIONAL: declara SOLO direccion. No puede declarar magnitud sin empujar hacia «esto lo cambia todo» a cualquiera que lo responda, crea o no la premisa, y no puede declarar agencia porque la premisa ya la estipula. Conserva del item anterior lo unico que funciono --estipular el escenario, que es lo que libera el extremo (regla 3)-- y cambia lo que fallo: alli las otras cuatro opciones eran versiones mas suaves de la misma valencia y quedaron en 1/1/1/1. Aca las cinco discrepan sobre QUE se pierde, no sobre cuanto duele.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Nada que valga la pena. El trabajo nunca fue el sentido.",
+          "vector": { "direccion": 8 },
+          "anchor": "Han, «La sociedad del cansancio» (C2), leído al revés: si el trabajo es autoexplotación, perderlo libera"
+        },
+        {
+          "id": "B",
+          "text": "El ingreso, y eso se arregla repartiendo.",
+          "vector": { "direccion": 3 },
+          "anchor": "Sen, «Desarrollo y libertad», cap. 2 (C11): el ingreso como medio para las capacidades, no como fin"
+        },
+        {
+          "id": "C",
+          "text": "El sentido, y eso no se arregla repartiendo.",
+          "vector": { "direccion": -7 },
+          "anchor": "Han, «La sociedad del cansancio» (C2) · Ehrenreich, «Smile or Die», cap. 4 (C2)"
+        },
+        {
+          "id": "D",
+          "text": "La posición para negociar. Sin trabajo no tienes con qué presionar a nadie.",
+          "vector": { "direccion": -8 },
+          "anchor": "Acemoglu y Robinson, «Por qué fracasan los países», cap. 3 (C15): instituciones inclusivas y extractivas, y de dónde sale el poder de negociación"
+        },
+        {
+          "id": "E",
+          "text": "La costumbre de decidir. Nos vamos a acomodar rápido.",
+          "vector": { "direccion": -5 },
+          "anchor": "Han, «En el enjambre» (C3), sobre la pasividad del enjambre digital"
+        }
+      ]
+    }
+  ]
+}

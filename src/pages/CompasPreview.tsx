@@ -16,7 +16,11 @@ import type { CompasAnswers } from '../types/compas';
 // una posicion latente y ruido — porque es lo unico que no se puede tener sin
 // una clase en vivo.
 
-const COURSE = 'ai_democracy_2026';
+// Qué compás se mira. Por defecto el de IA y Democracia, que es el que existía
+// cuando se escribió esta pantalla; `?curso=mgt300_2026` mira cualquier otro.
+// Sin esto, un instrumento nuevo no se puede ver hasta tener la sala montada y
+// un curso adentro, que es exactamente cuando ya es tarde para arreglarlo.
+const CURSO_POR_DEFECTO = 'ai_democracy_2026';
 const N = 28;
 const YO = 6;
 
@@ -31,7 +35,9 @@ function mulberry32(seed: number) {
 }
 
 export default function CompasPreview() {
-  const pack = compasDe(COURSE);
+  const curso =
+    new URLSearchParams(window.location.search).get('curso') ?? CURSO_POR_DEFECTO;
+  const pack = compasDe(curso);
   const [ronda, setRonda] = useState(0);
 
   // Un curso falso pero estable: la misma semilla en cada render, para que
@@ -73,7 +79,7 @@ export default function CompasPreview() {
     });
   }, [pack]);
 
-  if (!pack) return <div className="p-8">No hay compás para {COURSE}.</div>;
+  if (!pack) return <div className="p-8">No hay compás para {curso}.</div>;
   const { instrumento, arquetipos } = pack;
   const total = instrumento.items.length;
 
@@ -124,7 +130,7 @@ export default function CompasPreview() {
         Compás — vista previa
       </h1>
       <p className="mb-1 max-w-[64ch] text-ink-soft">
-        Los {instrumento.items.length} ítems reales de <code>content/compas/{COURSE}</code>, con un curso de 28 alumnos
+        Los {instrumento.items.length} ítems reales de <code>content/compas/{curso}</code>, con un curso de 28 alumnos
         simulado. Sin puntaje y sin ranking: el compás mide dónde está parado alguien, no qué tan
         bien lo hizo.
       </p>
