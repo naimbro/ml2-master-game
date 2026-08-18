@@ -114,7 +114,7 @@ export default function CrearCompas() {
       >
         {cursos.map(([id, p]) => (
           <option key={id} value={id}>
-            {p.instrumento.title} — {id}
+            {p.curso} — {id}
           </option>
         ))}
       </select>

@@ -14,6 +14,21 @@ import arquetiposMgt from '../../content/compas/mgt300_2026/arquetipos_v1.json';
 import type { CompasArquetipos, CompasInstrument } from '../types/compas';
 
 export interface CompasPack {
+  /**
+   * Como se llama el ramo, para el desplegable del profesor.
+   *
+   * Escrito a mano aca y no leido de `courses.ts` a proposito, por la misma
+   * razon por la que este registro vive aparte. Se duplica un string y se evita
+   * que abrir un compas dependa del modulo de sesiones.
+   *
+   * Existe porque los dos instrumentos comparten `title` --los dos se llaman
+   * «Compas IA y Democracia», y esta bien que asi sea: es el mismo instrumento
+   * aplicado a dos cursos--, de modo que el desplegable los mostraba como dos
+   * lineas casi identicas separadas solo por el sufijo del courseId. Elegir el
+   * equivocado escribe las posiciones en la coleccion del otro curso, y eso no
+   * se nota hasta que la comparacion de fin de semestre no cuadra.
+   */
+  curso: string;
   instrumento: CompasInstrument;
   arquetipos: CompasArquetipos;
 }
@@ -21,6 +36,7 @@ export interface CompasPack {
 /** Every compass in the repo, by courseId. */
 export const COMPASES: Record<string, CompasPack> = {
   ai_democracy_2026: {
+    curso: 'AyD · IA y Democracia',
     instrumento: instrumentoAyD as CompasInstrument,
     arquetipos: arquetiposAyD as CompasArquetipos,
   },
@@ -29,6 +45,7 @@ export const COMPASES: Record<string, CompasPack> = {
   // anclas, y las dos mediciones no se comparan entre si. Ver el campo
   // `_de_donde_sale` del instrumento.
   mgt300_2026: {
+    curso: 'MGT300 · Sociedad, Cultura y Política',
     instrumento: instrumentoMgt as CompasInstrument,
     arquetipos: arquetiposMgt as CompasArquetipos,
   },
