@@ -77,6 +77,7 @@
       "question": "Piensa en el trabajo que quieres tener al salir. ¿Qué le hace la IA?",
       "discrimina": "Las cinco son predicciones sobre una misma cosa concreta y personal: mismo tipo logico (regla 1). Reemplaza al item de apertura del instrumento anterior, donde una opcion descriptiva --la gente tiene miedo de perder el trabajo-- se llevo 18 de 21 porque era el unico hecho observable entre cuatro interpretaciones. La opcion B trae la Unidad 1 al eje: la IA como intensificacion del rendimiento y no como reemplazo, que es la unica lectura de Han que el instrumento anterior no tenia forma de recoger.",
       "_pisa_con": "m02_trabajo, a proposito. Dos items que preguntan lo mismo desde distinto angulo --el trabajo en general, tu trabajo-- son lo que le da consistencia interna a una escala.",
+      "_largo_de_B": "La B decia «Sube la vara. Voy a competir con gente que rinde el doble, y voy a tener que rendir el doble.» y era la UNICA opcion de tres lineas de las cincuenta del instrumento: 96px contra 73px de todas las demas, medido a 375 y a 360 px con las clases reales de CompasJugar. Dentro de su item el desnivel quedaba en 51/73/96/73/73. En un instrumento de medicion el peso visual sesga la eleccion, y esta es justo la opcion que trae a Han al eje: si sale sobre o sub elegida no habria forma de saber si eso fue opinion o pantalla. Si se reescribe, mantenerla en dos lineas.",
       "options": [
         {
           "id": "A",
@@ -86,7 +87,7 @@
         },
         {
           "id": "B",
-          "text": "Sube la vara. Voy a competir con gente que rinde el doble, y voy a tener que rendir el doble.",
+          "text": "Sube la vara. Todos vamos a tener que rendir el doble.",
           "vector": { "magnitud": 5, "direccion": -4 },
           "anchor": "Han, «La sociedad del cansancio» (C2): el sujeto de rendimiento se explota a sí mismo, sin amo · Ehrenreich, «Smile or Die», cap. 4 (C2)"
         },
