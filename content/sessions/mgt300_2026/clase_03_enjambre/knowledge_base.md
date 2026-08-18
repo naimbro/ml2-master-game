@@ -222,6 +222,43 @@ digital. **«La nueva masa es el enjambre digital.»**
 
 ### Por qué un enjambre no es una masa
 
+**La lámina que el curso proyectó**, y que la ronda 5 les vuelve a poner delante
+(las dos columnas van textuales en el enunciado, así que nadie tiene que
+recordarlas):
+
+| La masa (modernidad industrial) | El enjambre (era digital) |
+|---|---|
+| Unida física y emocionalmente | Dispersa: individuos aislados |
+| Tiene un alma: la une una ideología | No desarrolla ningún nosotros |
+| Se manifiesta en una voz | No tiene voz: se percibe como ruido |
+| **El individuo pierde ahí su identidad** | **El individuo conserva y optimiza su perfil** |
+
+**La última fila es la que carga la ronda 5, y es contraintuitiva.** Leída sola
+parece una mejora: en el enjambre no te disuelves, sigues siendo tú. Han dice lo
+contrario, y el paso intermedio es el que hay que exigir: **la disolución del
+individuo no era el costo de la masa, era lo que compraba su capacidad de
+acción.** Sin alguien que deje de ser sólo él no se constituye un nosotros, y sin
+un nosotros no hay sujeto que pueda marchar, sostener una consigna o durar más
+que el impulso. Conservar el perfil sale barato y deja a cada uno solo.
+
+De ahí salen los cuatro caminos que cierran la ronda, y ninguno es la respuesta
+oficial: **el nosotros** (no se constituye un sujeto colectivo), **la voz** (el
+ruido no tiene con quién negociar ni a quién exigirle), **la duración** (se
+disuelve tan rápido como surge) y **el blanco** (la ola cae sobre personas
+particulares y nunca sobre las relaciones de poder).
+
+**Lo que NO es la respuesta**: que la gente se volvió egoísta, narcisista o poco
+comprometida. Eso nombra a las personas; Han está describiendo una propiedad de
+la forma social. El enjambre no falla porque sus miembros sean peores.
+
+**La objeción que el curso tiene a mano, y que vale puntaje alto:** el deck
+lista como casos de estudio el **#MeToo**, el **#BlackLivesMatter** y el
+**estallido social de 2019**. Los tres se parecen a un enjambre y los tres
+movieron algo. Quien sostenga que Han se equivoca —o que esos casos sí
+produjeron un nosotros, y por eso no eran enjambres puros— está haciendo
+exactamente lo que este curso enseña.
+
+
 > **«El enjambre digital no es ninguna masa porque no es inherente a ninguna
 > alma, a ningún espíritu.»** «El alma es congregadora y unificante. **El
 > enjambre digital consta de individuos aislados.** […] Los individuos que se

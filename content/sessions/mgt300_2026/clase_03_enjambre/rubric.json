@@ -1,9 +1,16 @@
 {
-  "_doc": "Rúbrica propia de clase_03_enjambre. MGT300 no tiene _shared/base_rubric.json. Las dos rondas juzgadas son de teoría social: R4 pide identificar la condición estructural que Han dice que se perdió y qué deja de ser posible sin ella; R5 no es sobre el contenido sino sobre el MÉTODO —de qué está hecha la evidencia de Han y dónde eso lo deja débil—. Las tres rondas de opción múltiple (R1, R2, R3) se corrigen en el cliente (src/lib/mcScoring.ts) y no pasan por los jueces ni por la recalibración pareada. Los ids de las dimensiones están comprometidos con las weightFormula de config.json: no renombrarlos sin tocar las dos cosas. LAS DOS RONDAS ADMITEN MÁS DE UNA RESPUESTA CORRECTA y por eso los criterios están escritos como criterio primero y ejemplos después, marcados como no exhaustivos.",
+  "_doc": "Rúbrica propia de clase_03_enjambre. MGT300 no tiene _shared/base_rubric.json. Las dos rondas juzgadas son de teoría social: R4 pide identificar la condición estructural que Han dice que se perdió y qué deja de ser posible sin ella; R5 parte de la lámina de masa contra enjambre que el curso proyectó y pide el paso contraintuitivo: por qué conservar la identidad, que parece una ganancia, es lo que deja al enjambre sin capacidad de actuar. Las tres rondas de opción múltiple (R1, R2, R3) se corrigen en el cliente (src/lib/mcScoring.ts) y no pasan por los jueces ni por la recalibración pareada. Los ids de las dimensiones están comprometidos con las weightFormula de config.json: no renombrarlos sin tocar las dos cosas. LAS DOS RONDAS ADMITEN MÁS DE UNA RESPUESTA CORRECTA y por eso los criterios están escritos como criterio primero y ejemplos después, marcados como no exhaustivos.",
   "sessionId": "clase_03_enjambre",
   "globalInstructions": "Evalúa SOLO lo que está escrito. No completes la respuesta con lo que el estudiante 'seguramente quiso decir'.\n\nEs la TERCERA CLASE del semestre de un curso de teoría social y argumentación. De este curso han leído tres cosas: el artículo de Ines Lee (clase 1), una guía en papel con extractos de Byung-Chul Han y Barbara Ehrenreich (clase 2) y, HOY MISMO, otra guía en papel con cuatro capítulos de Han, 'En el enjambre': «Sin respeto», «En el enjambre», «El Listo Hans» y «Huida a la imagen». La leyeron en silencio veinte minutos, sin celular y sin IA, justo antes de jugar, y la tienen al lado. No manejan nada más del curso.\n\nEL LARGO ES UNA SUGERENCIA, NO UNA REGLA. El enunciado dice 'con 3 o 4 líneas basta' para indicar el estándar, no para poner un techo. NO BAJES EL PUNTAJE POR PASARSE DEL LARGO NI POR QUEDARSE CORTO. Escribir más no sube ni baja: cuenta lo que agrega. Dos líneas bien puestas pueden valer 100, y ocho también, si las ocho agregan.\n\nEstán escribiendo desde el teléfono, en tres minutos, al final de una clase de dos horas y media en la que además hubo presentaciones grupales. NO EXIJAS: ortografía perfecta, tildes, introducción, estructura, conectores ni vocabulario académico. Nadie tiene que decir 'pathos de la distancia', 'negatividad', 'homo digitalis' ni 'enjambre digital' para sacar 100: si explican la idea con sus palabras, vale exactamente igual.\n\nNUNCA PENALICES QUE OBJETEN EL ENUNCIADO O AL AUTOR. Si alguien escribe que Han exagera, que construir una teoría entera sobre una etimología es endeble, que sus ejemplos están elegidos a favor, o que el libro de 2013 no anticipó nada de lo que vino después, eso NO es evadir la pregunta: es exactamente lo que este curso enseña. Una objeción bien argumentada puede sacar el puntaje más alto de la ronda. Lo único que se exige es que muestre haber entendido primero qué sostiene el texto.\n\nEL ERROR DE LECTURA QUE MÁS IMPORTA CAZAR es leer a Han como un texto moral sobre las redes: 'la gente se volvió más agresiva', 'las redes sacan lo peor de nosotros', 'perdimos los valores', 'ya nadie respeta a nadie'. Han NO sostiene que las personas empeoraron. Sostiene que se perdieron CONDICIONES ESTRUCTURALES —la distancia, el nombre, la demora entre sentir y publicar, la negatividad— y que sin ellas ciertas prácticas dejan de ser posibles. El diagnóstico es sobre el medio, no sobre el carácter de las personas. Quien contesta con un juicio moral está describiendo su impresión de las redes, no el argumento del texto.\n\nOJO CON LAS CIFRAS. Los cuatro capítulos de Han no contienen una sola cifra, ni un solo nombre de empresa, ni una sola encuesta. Las únicas cifras que este curso vio hoy son las chilenas del cierre de la guía (OCDE 2026 y Ley 21.801), y están en el material de referencia. Si aparece una cifra que no está ahí, la inventaron.\n\nCUIDADO CON EL DOBLE COBRO. Cada error se castiga en UNA sola dimensión: la que lo mide. Cada dimensión dice abajo qué NO mide y qué dimensión sí lo mide. No bajes el puntaje de una dimensión por un problema que ya pagó en otra.\n\nLAS DOS RONDAS ADMITEN MÁS DE UNA RESPUESTA CORRECTA. Los ejemplos que aparecen en el judgeFocus y en esta rúbrica son ILUSTRATIVOS, NUNCA UNA LISTA CERRADA. Una respuesta que cumple el criterio con un caso que no está enumerado vale exactamente lo mismo que una que usa el ejemplo previsto. Si dudas entre castigar una respuesta correcta que no esperabas y premiarla, premiala.\n\nEl juego compite y hay podio, pero no es una nota del curso. Puntúa igual con honestidad y sin inflar: un puntaje regalado le quita el puesto a otra persona.\n\nEl judgeFocus del escenario es tu prioridad absoluta y manda sobre estas instrucciones generales si hay tensión.",
   "scoring": {
-    "scaleLevels": [100, 80, 60, 40, 20, 0],
+    "scaleLevels": [
+      100,
+      80,
+      60,
+      40,
+      20,
+      0
+    ],
     "instructions": "Elige uno de los seis niveles escritos por dimensión. No inventes valores intermedios. Si la respuesta satisface un nivel solo parcialmente, baja al nivel inferior."
   },
   "dimensions": [
@@ -11,7 +18,7 @@
       "id": "fidelidad_al_texto",
       "name": "Fidelidad al texto",
       "weight": 0.35,
-      "description": "¿Lo que le atribuye a Han está efectivamente en la guía de lectura? Lo que más importa es que no le ponga la tesis moral —que la gente empeoró, que se perdieron los valores, que las redes sacan lo peor— y que no le atribuya una cifra, un caso o una afirmación que el material no trae. NO MIDE si la explicación es profunda ni si cierra el porqué: eso lo mide 'Mecanismo' y solo 'Mecanismo'. NO MIDE si trae detalle específico: eso lo mide 'Concreción'. Una respuesta fiel pero superficial saca alto acá y bajo allá, y eso es correcto. En la ronda de método (R5) esta dimensión pesa distinto: ahí solo se verifica que los ejemplos que atribuye a Han estén de verdad en los capítulos, y que no le atribuya una pretensión estadística que el texto nunca hizo.",
+      "description": "¿Lo que le atribuye a Han está efectivamente en la guía de lectura? Lo que más importa es que no le ponga la tesis moral —que la gente empeoró, que se perdieron los valores, que las redes sacan lo peor— y que no le atribuya una cifra, un caso o una afirmación que el material no trae. NO MIDE si la explicación es profunda ni si cierra el porqué: eso lo mide 'Mecanismo' y solo 'Mecanismo'. NO MIDE si trae detalle específico: eso lo mide 'Concreción'. Una respuesta fiel pero superficial saca alto acá y bajo allá, y eso es correcto. En la ronda de la masa y el enjambre (R5) lo que se verifica es que no le cambie de lado una propiedad de las dos columnas —darle voz al enjambre, o un nosotros, o quitarle a la masa su ideología— y que no le atribuya a Han un juicio sobre casos chilenos que su texto no menciona.",
       "level_100": "Todo lo que le atribuye al texto está en el texto, incluido el matiz que separa el diagnóstico de la moralina: lo que se perdió es una condición del medio, no una virtud de las personas.",
       "level_80": "Lo central es correcto, pero se le escapa un matiz que la guía sí marca.",
       "level_60": "La idea general es correcta, pero mezcla lo que dice Han con una interpretación propia sin distinguir cuál es cuál.",
@@ -23,19 +30,19 @@
       "id": "mecanismo",
       "name": "Mecanismo",
       "weight": 0.4,
-      "description": "¿Explica POR QUÉ una cosa lleva a la otra, o repite la conclusión con otras palabras? Es la dimensión que separa a quien leyó de quien hojeó. Nombrar el fenómeno —'falta de respeto', 'narcisismo', 'hiperconexión', 'le faltan datos'— no es explicarlo: el mecanismo es el paso intermedio, qué práctica concreta deja de ser posible cuando falta la condición que nombró. NO MIDE si lo que dice está en el texto: eso lo mide 'Fidelidad al texto'. Una explicación bien cerrada sobre una lectura equivocada saca alto acá y bajo allá, y eso también es correcto: el juicio de fondo lo componen las dos juntas, no una sola cobrando dos veces.",
+      "description": "¿Explica POR QUÉ una cosa lleva a la otra, o repite la conclusión con otras palabras? Es la dimensión que separa a quien leyó de quien hojeó. Nombrar el fenómeno —'falta de respeto', 'narcisismo', 'hiperconexión', 'está disperso'— no es explicarlo: el mecanismo es el paso intermedio, qué práctica concreta deja de ser posible cuando falta la condición que nombró. NO MIDE si lo que dice está en el texto: eso lo mide 'Fidelidad al texto'. Una explicación bien cerrada sobre una lectura equivocada saca alto acá y bajo allá, y eso también es correcto: el juicio de fondo lo componen las dos juntas, no una sola cobrando dos veces.",
       "level_100": "Cierra el paso intermedio completo —por qué la ausencia de esa condición produce ese efecto— y nombra qué práctica concreta se vuelve imposible, innecesaria o gratuita como consecuencia.",
       "level_80": "Nombra el mecanismo correcto pero lo deja a medio cerrar, o trae el detalle sin terminar de decir por qué se sigue.",
       "level_60": "Repite la conclusión con otras palabras, o pone el nombre del fenómeno en lugar de su explicación.",
       "level_40": "Da una explicación plausible pero equivocada: atribuye el efecto a una causa que el texto descarta o no menciona.",
       "level_20": "Menciona los elementos correctos sin establecer ninguna relación entre ellos.",
-      "level_0": "No hay razonamiento: solo una afirmación suelta, un juicio moral sobre las redes, o algo que no responde lo que se preguntó. ESTO INCLUYE, en la ronda del método, la respuesta que resume bien las tesis de Han y no evalúa en ningún momento de qué está hecha su evidencia: por bien escrita que esté, contestó otra pregunta, y acá va 0."
+      "level_0": "No hay razonamiento: solo una afirmación suelta, un juicio moral sobre las redes, o algo que no responde lo que se preguntó. ESTO INCLUYE, en la ronda de la masa y el enjambre, la respuesta que se limita a reordenar las dos columnas que el enunciado ya traía escritas: por bien redactada que esté, no agregó ningún paso, y acá va 0."
     },
     {
       "id": "concrecion",
       "name": "Concreción",
       "weight": 0.25,
-      "description": "¿Se compromete con algo específico de ESTOS capítulos, o dice algo que serviría igual para cualquier texto sobre redes sociales? Se mide si trae el detalle que solo puede traer quien leyó —la etimología de respetar, la carta al director que se enfría, el caballo que leía caras, la cámara arriba de la pantalla, el turista japonés— o si escribe una crítica genérica a la vida digital. NO MIDE si es correcto ni si está bien argumentado: eso ya lo miden las otras dos. Una respuesta llena de detalle y equivocada saca alto acá; el error ya se cobró donde corresponde. Lo único que sí descuenta acá es el detalle que no está al servicio de lo que se preguntó: citas acumuladas de adorno, o el resumen del capítulo puesto donde iba una evaluación.",
+      "description": "¿Se compromete con algo específico de ESTOS capítulos, o dice algo que serviría igual para cualquier texto sobre redes sociales? Se mide si trae el detalle que solo puede traer quien leyó —la etimología de respetar, la carta al director que se enfría, el caballo que leía caras, la cámara arriba de la pantalla, el turista japonés, la masa que marcha bajo una sola voz— o si escribe una crítica genérica a la vida digital. NO MIDE si es correcto ni si está bien argumentado: eso ya lo miden las otras dos. Una respuesta llena de detalle y equivocada saca alto acá; el error ya se cobró donde corresponde. Lo único que sí descuenta acá es el detalle que no está al servicio de lo que se preguntó: citas acumuladas de adorno, o las dos columnas copiadas de vuelta donde iba el paso que se pedía.",
       "level_100": "Todo lo que dice está anclado en algo específico de la guía: un detalle que nadie que no la haya leído podría traer.",
       "level_80": "Mayormente concreto, con una parte que se queda en lo general.",
       "level_60": "Nombra algo específico pero lo desarrolla en términos genéricos, o al revés.",
@@ -51,16 +58,20 @@
       "effect": {
         "type": "cap",
         "value": 40,
-        "dimensions": ["fidelidad_al_texto"]
+        "dimensions": [
+          "fidelidad_al_texto"
+        ]
       }
     },
     {
       "id": "nombre_en_vez_de_mecanismo",
-      "description": "Poner el nombre del fenómeno en lugar de su explicación —'porque se perdió el respeto', 'porque hay narcisismo', 'porque todo es inmediato', 'porque le faltan datos'— sin decir qué práctica concreta se vuelve imposible o gratuita como consecuencia, no puede superar 50 en 'Mecanismo'. En R5 esto incluye decir que la evidencia de Han es débil sin nombrar a qué afirmación suya concreta le falta el respaldo.",
+      "description": "Poner el nombre del fenómeno en lugar de su explicación —'porque se perdió el respeto', 'porque hay narcisismo', 'porque todo es inmediato', 'porque está disperso'— sin decir qué práctica concreta se vuelve imposible o gratuita como consecuencia, no puede superar 50 en 'Mecanismo'. En R5 esto incluye repetir que al enjambre le falta un nosotros sin decir para qué servía ese nosotros.",
       "effect": {
         "type": "cap",
         "value": 50,
-        "dimensions": ["mecanismo"]
+        "dimensions": [
+          "mecanismo"
+        ]
       }
     },
     {
@@ -69,14 +80,16 @@
       "effect": {
         "type": "cap",
         "value": 20,
-        "dimensions": ["fidelidad_al_texto"]
+        "dimensions": [
+          "fidelidad_al_texto"
+        ]
       }
     }
   ],
   "globalPenalties": [
     "Atribuirle a Han que las personas empeoraron —más agresivas, más groseras, sin valores— cuando su tesis es que se cayeron condiciones del medio.",
     "Poner el nombre del fenómeno donde iba la explicación de por qué se sigue.",
-    "Decir que a Han le faltan datos sin nombrar a qué afirmación suya concreta le faltan.",
+    "Repetir las dos columnas de masa y enjambre, que el enunciado ya trae escritas, en vez de dar el paso que se pedía.",
     "Responder con una crítica genérica a las redes sociales que serviría igual sin haber leído la guía.",
     "Inventar una cifra, un estudio o un caso para no dejar el campo vacío: los cuatro capítulos no traen ninguno."
   ]

@@ -164,51 +164,50 @@
     "idealAnswer": "Lo que se perdió es la distancia. Han dice que respetar es literalmente «mirar de nuevo», y que eso presupone mirar desde lejos; cuando la distancia desaparece la mirada se vuelve la del mirón, la del espectáculo. Y sin distancia no se puede sostener lo público, porque lo público existía justamente por apartar la vista de lo privado. Por eso hoy la intimidad se expone y ya no hay ninguna zona donde uno no sea una imagen. No es que la gente sea peor: es que se cayó la condición que hacía posible el respeto."
   },
   {
-    "id": "mgt_c03_r5_de_que_esta_hecha",
+    "id": "mgt_c03_r5_masa_y_enjambre",
     "order": 5,
     "type": "open",
-    "title": "De qué está hecha la evidencia",
-    "category": "Método",
+    "title": "Lo que el enjambre no puede hacer",
+    "category": "En el enjambre",
     "difficulty": "hard",
     "ranked": true,
     "durationSeconds": 210,
     "conceptTags": [
-      "metodo_han",
-      "han_listo_hans"
+      "han_enjambre"
     ],
     "media": [
       {
         "kind": "image",
-        "src": "media/mgt300/clever-hans-1909.jpg",
-        "alt": "Fotografía en sepia de comienzos del siglo XX: el caballo Kluger Hans de pie a la derecha, y a su izquierda un grupo de seis personas con sombrero y abrigo largo, de pie alrededor de una mesita, mirándolo con atención.",
-        "credit": "Karl Krall, «Denkende Tiere» (1909), p. 68 · Wikimedia Commons · dominio público"
+        "src": "media/mgt300/masa-1917.jpg",
+        "alt": "Fotografía en sepia de 1917: una columna de hombres, mujeres y niños con abrigos y gorros de invierno marcha apretada por una calle nevada, hombro con hombro, bajo un único lienzo con consignas que cubre todo el ancho de la calle.",
+        "credit": "Manifestación del Bund, Moscú, febrero-marzo de 1917 · Wikimedia Commons · dominio público"
       }
     ],
-    "context": "Mira de qué está hecho el capítulo del Listo Hans: **un caballo de circo de hace cien años, la posición física de la cámara en un notebook y una frase de Leonardo da Vinci.** Ni una encuesta, ni un experimento, ni una cifra.\n\nLa semana pasada Ehrenreich hacía exactamente lo contrario: empresas con nombre, fechas y el estudio de la American Management Association.",
-    "question": "**¿Cuál de esos ejemplos carga todo el peso del argumento de Han, y dónde queda débil por no traer datos?** Con 3 o 4 líneas basta.",
-    "judgeFocus": "ESTA RONDA NO ES SOBRE EL CONTENIDO DE HAN, ES SOBRE SU MÉTODO. No premies el mejor resumen de sus tesis: premia a quien evalúa de qué está hecha la evidencia. Alguien puede explicar bellamente qué dice Han y no responder nada de lo que se preguntó.\n\nEL CRITERIO, y va primero: la respuesta tiene que (1) ELEGIR un ejemplo y decir qué afirmación general está sosteniendo ese ejemplo, y (2) nombrar una afirmación concreta de Han que un caso escogido no alcanza a respaldar. Las dos partes valen por separado.\n\nNO HAY UNA RESPUESTA CORRECTA A LA PRIMERA PARTE. El caballo, la cámara de Skype descentrada, la frase de Leonardo, el estadio del espejo de Lacan, el síndrome de París: cualquiera de estos es una elección defendible, y también lo es una que no esté en esta lista si está en la guía. Lo que se juzga es si dice QUÉ CARGA soporta el ejemplo que eligió, no cuál eligió. NO CASTIGUES una elección distinta de la que tú habrías hecho.\n\nEN LA SEGUNDA PARTE HAY POR LO MENOS DOS CAMINOS Y LOS DOS PUEDEN SACAR 100. El primero es señalar el límite: un caso elegido a favor no dice cuán frecuente ni cuán general es el fenómeno, y con otros cuatro ejemplos escogidos se podría defender lo contrario. El segundo es DEFENDER a Han: sostener que su afirmación es conceptual y no estadística —qué condiciones hacen posible el respeto, el deseo o un nosotros—, y que para eso un caso bien elegido basta. El enunciado da por hecho que queda débil; quien objeta ese supuesto y lo argumenta NO pierde puntaje, gana. Esa es la regla del curso.\n\nQUÉ NO CUENTA, y es la caída típica: decir 'le faltan datos', 'es muy subjetivo' o 'debería haber hecho un estudio' sin nombrar a qué afirmación concreta de Han le falta el respaldo. Eso es el nombre del problema, no el problema. Tampoco cuenta comparar con Ehrenreich sin decir qué hace distinto cada método; mencionarla es un plus, no un requisito, y nadie tiene por qué acordarse del estudio de la American Management Association.\n\nSe pidieron 3 o 4 líneas. Es el estándar, no un techo: no bajes por largo ni por brevedad.",
+    "context": "Las dos columnas que acabamos de ver:\n\n**LA MASA** — unida física y emocionalmente · tiene un alma: la une una ideología · se manifiesta en una voz · **el individuo pierde ahí su identidad**\n\n**EL ENJAMBRE** — dispersa, individuos aislados · no desarrolla ningún nosotros · no tiene voz: se percibe como ruido · **el individuo conserva y optimiza su perfil**\n\nLeída sola, la última línea parece decir que el enjambre salió ganando: ahí no te disuelves, sigues siendo tú. Y sin embargo Han escribe que «masa es poder» y que los enjambres **no marchan**.",
+    "question": "**¿Por qué eso que parece una ganancia —conservar tu identidad en vez de perderla— es justamente lo que deja al enjambre sin capacidad de actuar?** Con 3 o 4 líneas basta.",
+    "judgeFocus": "EL CRITERIO, y va primero: la respuesta tiene que enganchar la última línea de las dos columnas —que en la masa el individuo se disuelve y en el enjambre conserva su perfil— con la incapacidad de actuar, pasando por algo que se pierde EN EL MEDIO. No basta con repetir que el enjambre está disperso: eso ya venía escrito en el enunciado. Lo que se juzga es el paso intermedio.\n\nEJEMPLOS ILUSTRATIVOS, NO UNA LISTA CERRADA. Hay por lo menos cuatro caminos y los cuatro cierran: (a) EL NOSOTROS — para actuar en conjunto alguien tiene que dejar de ser sólo él; la masa cobraba ese precio y a cambio producía un sujeto colectivo, y el enjambre no cobra nada y por eso no produce ninguno; (b) LA VOZ — sin una voz común hay ruido, y el ruido no tiene con quién negociar, a quién exigirle ni qué sostener; (c) LA DURACIÓN — el enjambre se disuelve tan rápido como surge, y cualquier acción política necesita durar más que la ola; (d) EL BLANCO — la shitstorm cae sobre personas particulares y nunca sobre las relaciones de poder, así que compromete a alguien pero no cambia nada. Si alguien llega con un quinto camino y lo sostiene, vale exactamente lo mismo. NO lo castigues por no ser uno de estos cuatro.\n\nQUÉ NO CUENTA, y es por donde se cae la mayoría: contestar con un rasgo de carácter —«porque la gente es egoísta», «porque sólo les importa su imagen», «porque hay mucho narcisismo», «porque nadie se compromete»—. Eso nombra a las personas, y Han está hablando de una condición de la forma social: el enjambre no falla porque sus miembros sean peores, falla porque nunca se constituye un sujeto que pueda actuar. Tampoco cuenta repetir las palabras del enunciado («está disperso, no tiene voz») sin decir qué se sigue de eso.\n\nOJO, Y ESTO IMPORTA: el estallido de 2019, el #MeToo y el #BlackLivesMatter son casos que el curso vio, y son la mejor objeción posible a Han. Si alguien escribe que un enjambre SÍ actuó y sostiene por qué, eso NO baja el puntaje: puede sacar el puntaje más alto de la ronda. Es exactamente lo que este curso enseña. Lo único que se exige es que muestre primero que entendió qué sostiene Han.\n\nSe pidieron 3 o 4 líneas. Es el estándar, no un techo: no bajes por largo ni por brevedad.",
     "evaluationGuide": {
       "must_hit": [
-        "Elige un ejemplo concreto de Han y dice qué afirmación general está sosteniendo ese ejemplo",
-        "Nombra una afirmación específica de Han y dice por qué un caso escogido alcanza o no alcanza a respaldarla"
+        "Nombra qué se pierde al conservar el perfil: el nosotros, la voz común, la duración o el blanco colectivo",
+        "Cierra el paso hasta la incapacidad de actuar, en vez de quedarse en que el enjambre está disperso"
       ],
       "fatal_errors": [
-        "Resume las tesis de Han sin evaluar en ningún momento de qué está hecha su evidencia",
-        "Le atribuye a Han un estudio, una encuesta o una cifra: los cuatro capítulos no traen ninguna"
+        "Explica la incapacidad de actuar por un defecto de carácter de las personas: egoísmo, narcisismo, falta de compromiso",
+        "Le atribuye a Han una cifra, un estudio o un caso que el material no trae"
       ],
       "partial_credit": {
-        "solo_eligio": "Elige un ejemplo y explica bien qué sostiene, pero no llega a evaluar el límite ni a defenderlo",
-        "solo_la_critica": "Dice bien por qué un caso escogido no generaliza, pero no se compromete con ningún ejemplo del texto",
-        "le_faltan_datos": "Critica la falta de evidencia empírica sin nombrar a qué afirmación concreta le falta: es el nombre del problema, no el problema",
-        "compara_sin_distinguir": "Contrasta con Ehrenreich diciendo que ella sí traía datos, sin decir qué tipo de afirmación sostiene cada método"
+        "repite_el_enunciado": "Reformula las dos columnas —disperso, sin voz, aislados— sin agregar el paso que lleva a no poder actuar",
+        "solo_el_nombre": "Dice «le falta un nosotros» y se detiene ahí, sin decir para qué servía ese nosotros",
+        "invierte_el_signo": "Sostiene que conservar la identidad es bueno sin engancharlo con la pregunta, que es por qué eso impide actuar",
+        "caso_sin_argumento": "Trae el estallido o el #MeToo como contraejemplo pero no dice en qué se parece o se diferencia del enjambre de Han"
       },
       "nice_to_have": [
-        "Distingue entre una afirmación de frecuencia o magnitud (que necesita datos) y una conceptual sobre condiciones de posibilidad (que puede no necesitarlos)",
-        "Nota que con los mismos cuatro ejemplos escogidos podría defenderse la tesis contraria",
-        "Contrasta con el método de Ehrenreich diciendo qué puede probar cada uno",
-        "Señala que el libro es de 2013 y que eso condiciona qué casos tenía disponibles"
+        "Nota que es el mismo alguien anónimo de la ronda 2: se manifiesta sin nombre pero no suelta su perfil",
+        "Distingue que la masa cobraba un precio —la identidad— y que ese precio era lo que compraba la capacidad de acción",
+        "Objeta con un caso real y sostiene por qué ese caso sí produjo un nosotros, o por qué no lo produjo y aun así movió algo",
+        "Conecta con la clase 2: el que se explota a sí mismo creyéndose libre es el mismo que no suelta su perfil"
       ]
     },
-    "idealAnswer": "El que carga todo el peso es el caballo. Si el Listo Hans acertaba leyendo caras, entonces la información que viaja por el cuerpo es enorme, y de ahí Han salta a que la comunicación digital, que no tiene cuerpo ni rostro, pierde el núcleo de la comunicación. El salto es del caballo a todo internet. Y ahí queda débil: un caso muestra que el canal no verbal existe, no cuánto pesa ni si una videollamada lo pierde entero. Para eso haría falta medirlo, y Han nunca lo mide. Con todo, si lo que quiere probar es que la condición existe y no cuán frecuente es, el ejemplo le alcanza."
+    "idealAnswer": "Porque para actuar en conjunto alguien tiene que dejar de ser solamente él. La masa cobraba justo ese precio —el individuo se disolvía— y a cambio aparecía un nosotros capaz de marchar, de sostener una consigna y de durar más que el impulso. El enjambre no cobra nada: cada uno se queda en su perfil y lo sigue optimizando. Por eso no hay una voz sino ruido, y por eso una ola cae sobre una persona en particular y nunca sobre las relaciones de poder. Conservar la identidad sale barato, y lo que cuesta es que deja a cada uno solo."
   }
 ]
