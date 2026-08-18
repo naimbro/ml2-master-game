@@ -23,7 +23,7 @@
  * responde consistente, no que alguien vaya a responder asi.
  */
 import { readFileSync } from 'node:fs';
-import { posicionDe, arquetipoDe, timonDe, bandaAgenciaDe } from '../src/lib/compas';
+import { posicionDe, arquetipoDe, timonDe, bandaAgenciaDe, bandaDe } from '../src/lib/compas';
 import type { CompasAnswers, CompasInstrument, CompasArquetipos } from '../src/types/compas';
 
 const courseId = process.argv[2] ?? 'mgt300_2026';
@@ -41,40 +41,47 @@ const items = instrumento.items;
  */
 const PERSONAS: Array<{ id: string; desc: string; esperado: string; answers: CompasAnswers }> = [
   {
-    id: 'tecnooptimista',
-    desc: 'El mercado lo resuelve; la herramienta sirve; regular ahora frena algo que va a salir bien.',
-    esperado: 'pragmatica',
-    answers: { m01_trabajo_propio: 'A', m02_trabajo: 'B', m03_quien_decide: 'A', m04_quien_paga: 'A', m05_estado: 'B', m06_delegar: 'B', m07_timon: 'A', m08_agencia: 'A', m09_control: 'C', m10_que_se_pierde: 'A' },
+    id: 'aceleracionista',
+    desc: 'Cambia todo y sale bien: mas productividad, mas gente adentro, y la politica de hoy es lo que sobra.',
+    esperado: 'aceleracionista',
+    answers: { m01_trabajo_propio: 'D', m02_trabajo: 'D', m03_quien_decide: 'D', m04_quien_paga: 'D', m05_estado: 'D', m06_delegar: 'A', m07_timon: 'D', m08_agencia: 'D', m09_control: 'D', m10_que_se_pierde: 'A' },
   },
   {
     id: 'critico_redistributivo',
     desc: 'Cambio grande que concentra poder y excedente. La respuesta es politica y redistributiva.',
     esperado: 'oligarquia',
-    answers: { m01_trabajo_propio: 'D', m02_trabajo: 'D', m03_quien_decide: 'C', m04_quien_paga: 'D', m05_estado: 'C', m06_delegar: 'D', m07_timon: 'D', m08_agencia: 'B', m09_control: 'B', m10_que_se_pierde: 'D' },
+    answers: { m01_trabajo_propio: 'E', m02_trabajo: 'E', m03_quien_decide: 'E', m04_quien_paga: 'E', m05_estado: 'E', m06_delegar: 'E', m07_timon: 'D', m08_agencia: 'E', m09_control: 'B', m10_que_se_pierde: 'D' },
   },
   {
-    id: 'esceptico_historico',
-    desc: 'Ya vimos esta pelicula. El plazo importa mas que el titular y el susto se adelanta siempre.',
-    esperado: 'historiador',
-    answers: { m01_trabajo_propio: 'A', m02_trabajo: 'A', m03_quien_decide: 'A', m04_quien_paga: 'A', m05_estado: 'A', m06_delegar: 'C', m07_timon: 'B', m08_agencia: 'A', m09_control: 'A', m10_que_se_pierde: 'B' },
+    id: 'nada_nuevo_optimista',
+    desc: 'Nada nuevo bajo el sol, y esta bien: cada ola trajo su panico y el mundo siguio funcionando.',
+    esperado: 'pragmatica',
+    answers: { m01_trabajo_propio: 'B', m02_trabajo: 'A', m03_quien_decide: 'A', m04_quien_paga: 'A', m05_estado: 'C', m06_delegar: 'D', m07_timon: 'A', m08_agencia: 'A', m09_control: 'A', m10_que_se_pierde: 'B' },
+  },
+  {
+    id: 'nada_nuevo_cinico',
+    desc: 'Nada nuevo bajo el sol, y esa es la mala noticia: lo de siempre ya era malo y sigue igual. '
+      + 'Es la posicion que el instrumento anterior no permitia expresar, y por eso su ausencia no probaba nada.',
+    esperado: 'aguafiestas',
+    answers: { m01_trabajo_propio: 'A', m02_trabajo: 'B', m03_quien_decide: 'B', m04_quien_paga: 'B', m05_estado: 'B', m06_delegar: 'C', m07_timon: 'A', m08_agencia: 'B', m09_control: 'B', m10_que_se_pierde: 'D' },
   },
   {
     id: 'institucionalista',
     desc: 'Ni catastrofe ni salvacion: depende de las reglas que alcancemos a poner y de quien fiscalice.',
     esperado: 'institucionalista',
-    answers: { m01_trabajo_propio: 'C', m02_trabajo: 'B', m03_quien_decide: 'A', m04_quien_paga: 'B', m05_estado: 'B', m06_delegar: 'C', m07_timon: 'B', m08_agencia: 'A', m09_control: 'B', m10_que_se_pierde: 'B' },
+    answers: { m01_trabajo_propio: 'C', m02_trabajo: 'C', m03_quien_decide: 'A', m04_quien_paga: 'C', m05_estado: 'C', m06_delegar: 'B', m07_timon: 'C', m08_agencia: 'C', m09_control: 'C', m10_que_se_pierde: 'B' },
   },
   {
     id: 'fatalista_maquinas',
     desc: 'Para el plazo que importa las decisiones ya no las tomamos nosotros. Prueba el polo alto de agencia.',
     esperado: 'oligarquia',
-    answers: { m01_trabajo_propio: 'D', m02_trabajo: 'E', m03_quien_decide: 'E', m04_quien_paga: 'E', m05_estado: 'D', m06_delegar: 'A', m07_timon: 'E', m08_agencia: 'E', m09_control: 'E', m10_que_se_pierde: 'E' },
+    answers: { m01_trabajo_propio: 'E', m02_trabajo: 'E', m03_quien_decide: 'C', m04_quien_paga: 'E', m05_estado: 'E', m06_delegar: 'E', m07_timon: 'E', m08_agencia: 'E', m09_control: 'E', m10_que_se_pierde: 'E' },
   },
   {
     id: 'vigilante_estatista',
     desc: 'La tecnologia es potente y el peligro es el Estado que decide sin explicar. Prueba el desempate.',
     esperado: 'vigilante',
-    answers: { m01_trabajo_propio: 'C', m02_trabajo: 'D', m03_quien_decide: 'B', m04_quien_paga: 'C', m05_estado: 'E', m06_delegar: 'E', m07_timon: 'C', m08_agencia: 'B', m09_control: 'D', m10_que_se_pierde: 'C' },
+    answers: { m01_trabajo_propio: 'E', m02_trabajo: 'E', m03_quien_decide: 'E', m04_quien_paga: 'E', m05_estado: 'E', m06_delegar: 'E', m07_timon: 'C', m08_agencia: 'E', m09_control: 'E', m10_que_se_pierde: 'C' },
   },
 ];
 
@@ -148,7 +155,8 @@ for (const f of filas) {
   if (bien) calzan += 1;
   console.log(`${bien ? '  ok  ' : '  ~~  '} ${f.p.id.padEnd(24)} esperada ${f.p.esperado.padEnd(20)} asignada ${f.arq?.id ?? '—'}`);
 }
-console.log(`calzan ${calzan} de ${filas.length}. Con los cortes provisorios de +-2.5 esto se espera bajo; es el numero a subir al recalibrar.`);
+console.log(`calzan ${calzan} de ${filas.length}. Con los ejes centrados los cortes de +-2.5 caen donde corresponde;
+  si al recalibrar con datos reales este numero BAJA, los cortes nuevos estan contando otra historia que las cartas.`);
 
 console.log('\nconsistencia interna con respondentes coherentes');
 console.log('-'.repeat(92));
@@ -164,5 +172,89 @@ for (const eje of ['magnitud', 'direccion'] as const) {
   console.log(`${ok(alpha >= 0.7)} ${eje.padEnd(10)} K=${K}  alfa = ${alpha.toFixed(2)}   (la aplicacion real del instrumento anterior dio 0.01 y 0.12)`);
 }
 
-console.log('\nRecordatorio: esto mide si los items PUEDEN cohesionar, no como va a responder el curso.');
-console.log('El unico chequeo que dice eso es aplicarlo.\n');
+// ---------------------------------------------------------------------------
+// COBERTURA DEL PLANO
+//
+// El chequeo que faltaba y que costo una sala de prueba descubrir. Un
+// instrumento puede separar a personas-tipo extremas y aun asi ser incapaz de
+// mandar a nadie fuera de un cuadrante, si los vectores de las opciones no
+// estan centrados. La version anterior de este instrumento tenia 6 de 45
+// opciones con magnitud negativa y una correlacion magnitud-direccion de
+// -0.52: 10.000 de 10.000 respuestas al azar caian abajo-derecha, y el punto
+// proyectado no se movia de ahi hiciera lo que hiciera el alumno.
+//
+// Aca se muestrea el espacio de respuestas de verdad --secuencias completas,
+// al azar-- y se exige que ocupen las cuatro esquinas del plano y la mayoria
+// de las nueve celdas. Si no las ocupan, el problema esta en las opciones o en
+// la regla de agregacion, no en el curso.
+console.log('\ncobertura del plano: 200.000 secuencias de respuesta al azar');
+console.log('-'.repeat(92));
+
+const RONDAS = 200_000;
+const cuadrantes: Record<string, number> = { 'izq-arriba': 0, 'der-arriba': 0, 'izq-abajo': 0, 'der-abajo': 0 };
+const celdas: Record<string, number> = {};
+const ejemplo: Record<string, CompasAnswers> = {};
+let semilla = 20260818;
+const rnd = () => {
+  semilla = (semilla * 1103515245 + 12345) & 0x7fffffff;
+  return semilla / 0x7fffffff;
+};
+
+for (let k = 0; k < RONDAS; k++) {
+  const answers: CompasAnswers = {};
+  for (const it of items) answers[it.id] = it.options[Math.floor(rnd() * 5)].id;
+  const pos = posicionDe(answers, items);
+  if (!pos) continue;
+  const q = (pos.magnitud >= 0 ? 'der' : 'izq') + '-' + (pos.direccion >= 0 ? 'arriba' : 'abajo');
+  cuadrantes[q] += 1;
+  const arq = arquetipoDe(pos, timonDe(answers, items), arquetipos);
+  const celda = `${bandaDe(pos.magnitud, arquetipos.cortes.magnitud)}/${bandaDe(pos.direccion, arquetipos.cortes.direccion)}`;
+  celdas[celda] = (celdas[celda] ?? 0) + 1;
+  if (!ejemplo[celda]) ejemplo[celda] = { ...answers, __arq: arq?.id ?? 'null' } as CompasAnswers;
+}
+
+const pct = (n: number) => ((100 * n) / RONDAS).toFixed(1).padStart(5) + '%';
+console.log('cuadrantes:');
+for (const [q, n] of Object.entries(cuadrantes)) {
+  console.log(`  ${ok(n > 0)} ${q.padEnd(12)} ${pct(n)}  ${String(n).padStart(7)}`);
+}
+
+const BANDAS3 = ['bajo', 'medio', 'alto'];
+console.log('\nlas nueve celdas de la grilla (magnitud / direccion):');
+let celdasVivas = 0;
+for (const bm of BANDAS3) {
+  const fila = BANDAS3.map((bd) => {
+    const n = celdas[`${bm}/${bd}`] ?? 0;
+    if (n > 0) celdasVivas += 1;
+    return `${bd.padEnd(5)} ${n > 0 ? pct(n) : '  ----'}`;
+  });
+  console.log(`  magnitud ${bm.padEnd(6)} | ${fila.join(' | ')}`);
+}
+
+console.log('\nuna secuencia de ejemplo por celda alcanzada:');
+for (const bm of BANDAS3) {
+  for (const bd of BANDAS3) {
+    const e = ejemplo[`${bm}/${bd}`];
+    if (!e) continue;
+    const letras = items.map((it) => (e as Record<string, string>)[it.id]).join("");
+    console.log(`  ${bm.padEnd(5)}/${bd.padEnd(5)} -> ${letras}  (${(e as Record<string, string>).__arq})`);
+  }
+}
+
+const cuadrantesVivos = Object.values(cuadrantes).filter((n) => n > 0).length;
+console.log('\nveredicto de cobertura');
+console.log('-'.repeat(92));
+console.log(`${ok(cuadrantesVivos === 4)} los cuatro cuadrantes son alcanzables: ${cuadrantesVivos} de 4`);
+console.log(`${ok(celdasVivas >= 6)} celdas de la grilla alcanzables: ${celdasVivas} de 9 (se piden >= 6)`);
+const menor = Math.min(...Object.values(cuadrantes));
+console.log(`${ok(menor / RONDAS >= 0.02)} el cuadrante mas raro se lleva ${pct(menor)} (se pide >= 2.0%, para que no sea una rareza aritmetica)`);
+
+const falla = cuadrantesVivos < 4 || celdasVivas < 6 || menor / RONDAS < 0.02;
+
+console.log('\nRecordatorio: esto mide si los items PUEDEN cohesionar y si el plano PUEDE ocuparse,');
+console.log('no como va a responder el curso. El unico chequeo que dice eso es aplicarlo.\n');
+
+if (falla) {
+  console.error('COBERTURA INSUFICIENTE: hay que cambiar las opciones o la regla de agregacion.\n');
+  process.exit(1);
+}

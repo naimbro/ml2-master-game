@@ -3,27 +3,60 @@
   "instrumentId": "mgt300_2026_compas_v1",
   "version": 1,
   "cortes": {
-    "_nota": "PROVISORIOS, y a sabiendas. La posicion de un alumno es el promedio de hasta diez items, asi que casi nadie alcanza los extremos: en la primera aplicacion real del instrumento hermano (ai_democracy_2026, 21 alumnos, 17-ago-2026) estos mismos cortes de +-2.5 dejaron ocupadas solo 4 de las 10 cartas, con la mitad del curso en una sola.",
-    "_la_trampa": "La correccion obvia --recalibrar con terciles empiricos-- ocupa 8 celdas pero ROMPE el relato de las cartas. En esa cohorte el tercil superior de direccion cayo en -2.3, de modo que «direccion alta» habria significado -2.3 y a un alumno claramente pesimista le habria tocado el texto de La Aceleracionista, que dice que esto va a salir bien. Si se recalibra hay que reescribir desc y lectura en clave relativa al curso, no solo mover los numeros.",
+    "_nota": "Provisorios, pero ya no arbitrarios. Con los ejes CENTRADOS --cada item con media cercana a cero en los dos ejes-- estos cortes de +-2.5 caen donde corresponde: las siete personas-tipo de scripts/compas-preflight.ts reciben las siete la carta que las describe, y las nueve celdas son alcanzables. Con la version anterior de los vectores, sin centrar, solo calzaban 3 de 6.",
+    "_la_trampa": "Sigue en pie para la recalibracion con datos reales. Recalibrar con terciles empiricos ocupa mas celdas pero puede ROMPER el relato de las cartas: en la cohorte de ai_democracy_2026 el tercil superior de direccion cayo en -2.3, de modo que direccion alta habria significado -2.3 y a un alumno claramente pesimista le habria tocado el texto de La Aceleracionista. El chequeo que lo detecta es el bloque de carta-esperada-contra-carta-asignada del preflight: si al recalibrar ese numero BAJA de 7 de 7, los cortes nuevos estan contando otra historia que las cartas.",
     "_cuando": "Se recalibra UNA VEZ, con la distribucion de la aplicacion 1, y despues se congela. Si los cortes se vuelven a mover en la aplicacion 2 o 3, la comparacion de noviembre no puede distinguir movimiento real de recalibracion. Las posiciones se guardan crudas, asi que la comparabilidad de los numeros no corre riesgo: lo que se juega es la de las etiquetas.",
     "magnitud": {
-      "bajo": [-10, -2.5],
-      "medio": [-2.5, 2.5],
-      "alto": [2.5, 10]
+      "bajo": [
+        -10,
+        -2.5
+      ],
+      "medio": [
+        -2.5,
+        2.5
+      ],
+      "alto": [
+        2.5,
+        10
+      ]
     },
     "direccion": {
-      "bajo": [-10, -2.5],
-      "medio": [-2.5, 2.5],
-      "alto": [2.5, 10]
+      "bajo": [
+        -10,
+        -2.5
+      ],
+      "medio": [
+        -2.5,
+        2.5
+      ],
+      "alto": [
+        2.5,
+        10
+      ]
     }
   },
   "desempate": {
     "_por_que": "El Vigilante y La Oligarquia ocupan la MISMA celda (magnitud alta, direccion baja). Los dos creen que la IA importa mucho y que erosiona la democracia; lo que los separa es quien es el villano --el Estado o las empresas--, que es un tercer asunto y no esta en el plano. El item m07_timon lo desempata, porque es el unico que produce una respuesta del tipo empresas / estado / internacional / ciudadania.",
-    "celda": { "magnitud": "alto", "direccion": "bajo" },
+    "celda": {
+      "magnitud": "alto",
+      "direccion": "bajo"
+    },
     "item": "m07_timon",
     "reglas": [
-      { "timon": ["estado", "internacional"], "arquetipo": "vigilante" },
-      { "timon": ["empresas", "ciudadania"], "arquetipo": "oligarquia" }
+      {
+        "timon": [
+          "estado",
+          "internacional"
+        ],
+        "arquetipo": "vigilante"
+      },
+      {
+        "timon": [
+          "empresas",
+          "ciudadania"
+        ],
+        "arquetipo": "oligarquia"
+      }
     ],
     "porDefecto": "oligarquia",
     "_por_defecto_nota": "Si el alumno salto el item m07, cae en oligarquia."
@@ -33,7 +66,10 @@
     {
       "id": "aguafiestas",
       "name": "La Aguafiestas",
-      "celda": { "magnitud": "bajo", "direccion": "bajo" },
+      "celda": {
+        "magnitud": "bajo",
+        "direccion": "bajo"
+      },
       "desc": "Crees que se está exagerando y que igual va a salir mal. No porque la tecnología sea poderosa, sino porque el entusiasmo se va a cobrar en gente: proyectos que se anuncian, plata que se gasta, puestos que se recortan por una promesa que no se cumple. Lo que te molesta no es la máquina, es la conversación alrededor de la máquina.",
       "lectura": "Ines Lee, «Piensa primero, IA después» (C1) · Ehrenreich, «Smile or Die», cap. 4 (C2), sobre el costo de obligarse al optimismo · Galor, cap. 4 (C14)",
       "puntoCiego": "Si la tecnología cambia poco, cuesta explicar por qué el daño sería tanto. Tu diagnóstico y tu pronóstico tiran para lados distintos: o el asunto es menor y el perjuicio también, o el perjuicio es grande y entonces algo importante sí está cambiando."
@@ -41,7 +77,10 @@
     {
       "id": "desencantado",
       "name": "El Desencantado",
-      "celda": { "magnitud": "medio", "direccion": "bajo" },
+      "celda": {
+        "magnitud": "medio",
+        "direccion": "bajo"
+      },
       "desc": "Ves un cambio real, de tamaño mediano, y no ves ninguna razón para creer que vaya a repartirse bien. No es catastrofismo: es que ya viste cómo terminaron repartiéndose las olas anteriores, y no encuentras qué habría cambiado esta vez para que el resultado sea otro.",
       "lectura": "Aghion, cap. 5 (C13), sobre innovación y desigualdad · Galor, cap. 4 (C14) · Han, «La sociedad del cansancio» (C2)",
       "puntoCiego": "Que las olas anteriores se repartieran mal no es una ley de la naturaleza: se repartieron mal donde las instituciones lo permitieron y menos mal donde no. Si el resultado depende de instituciones, entonces no está decidido de antemano, y tu posición se vuelve una predicción y no un diagnóstico."
@@ -49,8 +88,14 @@
     {
       "id": "vigilante",
       "name": "El Vigilante",
-      "celda": { "magnitud": "alto", "direccion": "bajo" },
-      "timon": ["estado", "internacional"],
+      "celda": {
+        "magnitud": "alto",
+        "direccion": "bajo"
+      },
+      "timon": [
+        "estado",
+        "internacional"
+      ],
       "desc": "El problema no es la IA, es quién la opera, y para ti esa mano es pública. La tecnología es real y es potente, pero lo que te quita el sueño es el Estado que decide sin explicar, el sistema que clasifica sin decir con qué criterio y el trámite de apelación que no existe. Quieres reglas, y las quieres con dientes.",
       "lectura": "Schneier y Sanders, «Rewiring Democracy», caps. 20–24 y 35 (C7) · Gabriela Arriagada, CENIA/UC (C7) · Boletín 16821-19 (C8)",
       "puntoCiego": "El mismo Estado que te preocupa es el único actor con capacidad de multar a quien construye estos sistemas. Si lo debilitas para protegerte de él, el que queda decidiendo no es un ciudadano con derechos: es la empresa que vendía el sistema, y a esa no la eliges."
@@ -58,8 +103,14 @@
     {
       "id": "oligarquia",
       "name": "La Oligarquía",
-      "celda": { "magnitud": "alto", "direccion": "bajo" },
-      "timon": ["empresas", "ciudadania"],
+      "celda": {
+        "magnitud": "alto",
+        "direccion": "bajo"
+      },
+      "timon": [
+        "empresas",
+        "ciudadania"
+      ],
       "desc": "Un puñado de empresas decidió esto y a nadie le preguntaron. Para ti el asunto no es técnico sino de propiedad: quién es dueño de los modelos y del cómputo, quién captura el excedente, y qué le queda a la política cuando el poder ya se trasladó a un directorio al que no se llega votando.",
       "lectura": "Aghion, cap. 5 (C13), sobre captura de rentas · Schneier y Sanders, «AI and Power» (C13) · Rice y Zegart (C15)",
       "puntoCiego": "Si el poder ya se trasladó del todo, no se entiende por qué esas empresas gastan tanto en presionar gobiernos. Que hagan lobby es evidencia de que la decisión pública todavía les importa — y por lo tanto de que todavía existe."
@@ -67,7 +118,10 @@
     {
       "id": "historiador",
       "name": "El Historiador",
-      "celda": { "magnitud": "bajo", "direccion": "medio" },
+      "celda": {
+        "magnitud": "bajo",
+        "direccion": "medio"
+      },
       "desc": "Ya viste esta película: el telar, la electricidad, el computador personal. Cada vez alguien anunció el fin del trabajo y cada vez el trabajo se reorganizó. Tu apuesta es que el plazo importa más que el titular, y que lo que hoy parece una ruptura, a treinta años, va a leerse como un capítulo más.",
       "lectura": "Galor, «El viaje de la humanidad», cap. 4 (C14) · Aghion, cap. 3 (C14), sobre revoluciones tecnológicas y productividad",
       "puntoCiego": "El argumento histórico predice el final pero no el intervalo, y la gente vive en el intervalo. Que a treinta años se haya reorganizado no le sirve de nada a quien tiene que entrar al mercado laboral en dos, que es exactamente donde estás tú."
@@ -75,7 +129,10 @@
     {
       "id": "institucionalista",
       "name": "La Institucionalista",
-      "celda": { "magnitud": "medio", "direccion": "medio" },
+      "celda": {
+        "magnitud": "medio",
+        "direccion": "medio"
+      },
       "desc": "Ni catástrofe ni salvación: lo que pase depende de las reglas que alcancemos a poner y de quién las haga cumplir. Te interesa menos qué puede hacer la tecnología que quién queda a cargo de fiscalizarla, con qué presupuesto y con qué facultades reales para multar a alguien.",
       "lectura": "Acemoglu y Robinson, «Por qué fracasan los países», cap. 3 (C15) · Boletín 16821-19 y Política Nacional de IA (C8) · Schneier y Sanders, caps. 40–42 (C8)",
       "puntoCiego": "Las instituciones se construyen a la velocidad de la política y esto se mueve a otra. Si la regla llega cinco años tarde, llega a regular un mercado que ya se repartió — y regular un reparto consumado es otra cosa que dirigirlo."
@@ -83,7 +140,10 @@
     {
       "id": "realista",
       "name": "El Realista de Potencias",
-      "celda": { "magnitud": "alto", "direccion": "medio" },
+      "celda": {
+        "magnitud": "alto",
+        "direccion": "medio"
+      },
       "desc": "Esto es geopolítica. Lo que se juega no es si la IA es buena o mala sino quién la controla a escala de Estados, y en esa partida Chile es espectador. Tu pregunta práctica no es cómo regular sino de quién vamos a depender, en qué términos, y qué margen de negociación queda cuando el proveedor es también una potencia.",
       "lectura": "Rice y Zegart, «Managing 21st-Century Political Risk» (C15) · Aghion, cap. 5 (C13) · Acemoglu y Robinson, cap. 3 (C15)",
       "puntoCiego": "«Somos espectadores» es una descripción cómoda porque no obliga a nada. Países del tamaño de Chile sí negocian condiciones de acceso, compras públicas y estándares — y lo hacen peor cuando sus propias élites ya decidieron que no hay nada que negociar."
@@ -91,7 +151,10 @@
     {
       "id": "pragmatica",
       "name": "La Pragmática",
-      "celda": { "magnitud": "bajo", "direccion": "alto" },
+      "celda": {
+        "magnitud": "bajo",
+        "direccion": "alto"
+      },
       "desc": "Es una herramienta útil y la discusión te parece desproporcionada. La usas, te sirve, te ahorra trabajo y sigues con tu vida. Sospechas que buena parte del debate lo sostiene gente que necesita que esto sea importante, y que el pánico es su propio producto.",
       "lectura": "Ines Lee, «Piensa primero, IA después» (C1) · CENIA / SOFOFA / SENCE (C14), sobre complementariedad · Galor, cap. 4 (C14)",
       "puntoCiego": "Tu experiencia es la de alguien a quien la herramienta le sirve, y esa es exactamente la posición desde la cual no se ve a quién le cuesta. La pregunta no es si a ti te resulta: es si el que perdió el puesto de entrada tiene tu misma opinión."
@@ -99,7 +162,10 @@
     {
       "id": "reformista",
       "name": "El Reformista",
-      "celda": { "magnitud": "medio", "direccion": "alto" },
+      "celda": {
+        "magnitud": "medio",
+        "direccion": "alto"
+      },
       "desc": "Crees que esto puede terminar bien, y que va a terminar bien exactamente en la medida en que se decida que termine bien. La dirección de la tecnología es una elección política y no una consecuencia técnica, así que el trabajo está en las reglas, los incentivos y en quién se sienta a la mesa.",
       "lectura": "Acemoglu y Robinson, cap. 3 (C15) · Aghion, cap. 9 (C12), sobre dirigir la innovación · Chambers (2020) (C5) · Gudiño et al. (2024) (C9)",
       "puntoCiego": "«Se decide» supone un sujeto que decide, y todavía no has dicho quién es. Si son los mismos que hoy concentran el cómputo, tu reforma depende de que el poderoso acepte limitarse; si son otros, falta explicar de dónde sacan la fuerza para imponerlo."
@@ -107,7 +173,10 @@
     {
       "id": "aceleracionista",
       "name": "La Aceleracionista",
-      "celda": { "magnitud": "alto", "direccion": "alto" },
+      "celda": {
+        "magnitud": "alto",
+        "direccion": "alto"
+      },
       "desc": "Esto es un cambio de época y va a salir bien. La abundancia que viene vuelve obsoletas discusiones que hoy parecen centrales, y buena parte de la política actual —lenta, capturada, cortoplacista— es de lo que vamos a poder prescindir. Frenar ahora te parece el error caro, no la precaución barata.",
       "lectura": "Aghion, cap. 3 (C14), sobre destrucción creativa y crecimiento · Aghion, cap. 9 (C12) · Sen (C11), leído en clave de expansión de capacidades",
       "puntoCiego": "Toda abundancia registrada hasta hoy tuvo dueño antes de tener reparto, y el reparto nunca fue automático: fue peleado. Si la política es lo que sobra, no queda quién haga esa pelea — y la abundancia sin reparto tiene un nombre viejo y conocido."
@@ -120,7 +189,10 @@
       {
         "id": "instrumento",
         "name": "Humanos al mando",
-        "rango": [-10, -5],
+        "rango": [
+          -10,
+          -5
+        ],
         "desc": "La IA es una herramienta, y todo lo que importa se decide entre personas. Que el poder se concentre o se reparta es una pregunta política, no una consecuencia de la máquina.",
         "lectura": "Acemoglu y Robinson, cap. 3 (C15): lo que determina el resultado son las instituciones · Sen (C11)",
         "puntoCiego": "Si todo se decide entre personas, tienes que poder nombrar a la persona que decidió cada cosa. Cuando el sistema propone y alguien firma, esa pregunta se vuelve difícil de responder sin hacer trampa."
@@ -128,7 +200,10 @@
       {
         "id": "mayormente_humano",
         "name": "Sobre todo humanos",
-        "rango": [-5, -1.5],
+        "rango": [
+          -5,
+          -1.5
+        ],
         "desc": "Los sistemas hacen cada vez más, pero al final de la cadena sigue habiendo alguien que responde. Te preocupa más quién opera la herramienta que la herramienta.",
         "lectura": "Schneier y Sanders, caps. 20–24 (C7) · Aghion, cap. 5 (C13), sobre quién es dueño de qué",
         "puntoCiego": "«Alguien responde» y «alguien decide» no son lo mismo. Si el sistema propone y la persona firma, tienes una firma y no una decisión, y la rendición de cuentas se vuelve un trámite."
@@ -136,7 +211,10 @@
       {
         "id": "disputa",
         "name": "En disputa",
-        "rango": [-1.5, 1.5],
+        "rango": [
+          -1.5,
+          1.5
+        ],
         "desc": "No te decides, y con razón: la evidencia empuja en las dos direcciones. Los sistemas hacen cosas que nadie pidió explícitamente, y al mismo tiempo la mayor parte de lo que pasa lo sigue decidiendo gente con nombre y apellido.",
         "lectura": "Schneier y Sanders, cap. 35 (C7), leído junto con Acemoglu y Robinson, cap. 3 (C15)",
         "puntoCiego": "Quedarse en el medio es cómodo hasta que hay que decidir algo. Las dos posiciones piden políticas opuestas: una pide repartir el poder entre personas, la otra pide frenar la capacidad. No se pueden financiar las dos."
@@ -144,7 +222,10 @@
       {
         "id": "mayormente_maquina",
         "name": "Sobre todo máquinas",
-        "rango": [1.5, 5],
+        "rango": [
+          1.5,
+          5
+        ],
         "desc": "Todavía firmamos nosotros, pero cada vez decidimos menos de lo que firmamos. No esperas una rebelión de las máquinas: esperas que el margen humano se vaya angostando sin que nadie lo anuncie.",
         "lectura": "Schneier y Sanders, cap. 35 (C7), sobre explicabilidad e impugnación · Arriagada (C7)",
         "puntoCiego": "Si el margen se angosta sin que nadie lo anuncie, alguien igual está eligiendo comprar, instalar y confiar en esos sistemas. El angostamiento no es un fenómeno meteorológico: tiene proveedores y tiene compradores."
@@ -152,7 +233,10 @@
       {
         "id": "maquina",
         "name": "Máquinas al mando",
-        "rango": [5, 10],
+        "rango": [
+          5,
+          10
+        ],
         "desc": "Para el plazo que importa, las decisiones ya no las vamos a estar tomando nosotros. La discusión sobre quién debería gobernar la IA te parece una conversación sobre un puesto que va a quedar vacante.",
         "lectura": "Schneier y Sanders, cap. 35 (C7) y «AI and Power» (C13), leídos en su límite",
         "puntoCiego": "Es la posición más difícil de sostener sin un texto que la defienda de frente, y en este programa no hay ninguno que lo haga: se llega a ella extendiendo a Schneier más allá de lo que Schneier dice. Vale como hipótesis, no como lectura."
