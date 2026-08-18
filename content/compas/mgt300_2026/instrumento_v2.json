@@ -95,136 +95,8 @@
       ]
     },
     {
-      "id": "p02_trabajo",
+      "id": "p02_acceso",
       "order": 2,
-      "question": "Dentro de diez años el trabajo va a estar organizado de una manera que hoy no reconoceríamos.",
-      "discrimina": "Proposicion de un solo eje (magnitud, |k| = 8). Estar de acuerdo empuja el eje hacia arriba.",
-      "options": [
-        {
-          "id": "A",
-          "text": "De acuerdo",
-          "vector": {
-            "magnitud": 8
-          },
-          "anchor": "Aghion, cap. 3 (C14) · CENIA / SOFOFA / SENCE / Stanford (C14)"
-        },
-        {
-          "id": "B",
-          "text": "Ni de acuerdo ni en desacuerdo",
-          "vector": {
-            "magnitud": 0
-          },
-          "anchor": "Aghion, cap. 3 (C14) · CENIA / SOFOFA / SENCE / Stanford (C14)"
-        },
-        {
-          "id": "C",
-          "text": "En desacuerdo",
-          "vector": {
-            "magnitud": -8
-          },
-          "anchor": "Aghion, cap. 3 (C14) · CENIA / SOFOFA / SENCE / Stanford (C14)"
-        }
-      ]
-    },
-    {
-      "id": "p03_un_capitulo",
-      "order": 3,
-      "question": "Lo que hoy llamamos revolución de la IA se va a leer como un capítulo más de la automatización.",
-      "discrimina": "Proposicion de un solo eje (magnitud, |k| = 7). CLAVE INVERTIDA: estar de acuerdo empuja el eje hacia ABAJO.",
-      "options": [
-        {
-          "id": "A",
-          "text": "De acuerdo",
-          "vector": {
-            "magnitud": -7
-          },
-          "anchor": "Galor, «El viaje de la humanidad», cap. 4 (C14): las revoluciones tardan generaciones y se parecen entre sí"
-        },
-        {
-          "id": "B",
-          "text": "Ni de acuerdo ni en desacuerdo",
-          "vector": {
-            "magnitud": 0
-          },
-          "anchor": "Galor, «El viaje de la humanidad», cap. 4 (C14): las revoluciones tardan generaciones y se parecen entre sí"
-        },
-        {
-          "id": "C",
-          "text": "En desacuerdo",
-          "vector": {
-            "magnitud": 7
-          },
-          "anchor": "Galor, «El viaje de la humanidad», cap. 4 (C14): las revoluciones tardan generaciones y se parecen entre sí"
-        }
-      ]
-    },
-    {
-      "id": "p04_las_de_siempre",
-      "order": 4,
-      "question": "Las decisiones que más me afectan las siguen tomando las mismas instituciones de siempre, con o sin IA.",
-      "discrimina": "Proposicion de un solo eje (magnitud, |k| = 6). CLAVE INVERTIDA: estar de acuerdo empuja el eje hacia ABAJO.",
-      "options": [
-        {
-          "id": "A",
-          "text": "De acuerdo",
-          "vector": {
-            "magnitud": -6
-          },
-          "anchor": "Acemoglu y Robinson, «Por qué fracasan los países», cap. 3 (C15)"
-        },
-        {
-          "id": "B",
-          "text": "Ni de acuerdo ni en desacuerdo",
-          "vector": {
-            "magnitud": 0
-          },
-          "anchor": "Acemoglu y Robinson, «Por qué fracasan los países», cap. 3 (C15)"
-        },
-        {
-          "id": "C",
-          "text": "En desacuerdo",
-          "vector": {
-            "magnitud": 6
-          },
-          "anchor": "Acemoglu y Robinson, «Por qué fracasan los países», cap. 3 (C15)"
-        }
-      ]
-    },
-    {
-      "id": "p05_mas_ruido",
-      "order": 5,
-      "question": "Se está hablando bastante más de IA de lo que la IA está cambiando de verdad.",
-      "discrimina": "Proposicion de un solo eje (magnitud, |k| = 6). CLAVE INVERTIDA: estar de acuerdo empuja el eje hacia ABAJO.",
-      "options": [
-        {
-          "id": "A",
-          "text": "De acuerdo",
-          "vector": {
-            "magnitud": -6
-          },
-          "anchor": "Ines Lee, «Piensa primero, IA después» (C1) · Ehrenreich, «Smile or Die», cap. 4 (C2), sobre el entusiasmo obligatorio"
-        },
-        {
-          "id": "B",
-          "text": "Ni de acuerdo ni en desacuerdo",
-          "vector": {
-            "magnitud": 0
-          },
-          "anchor": "Ines Lee, «Piensa primero, IA después» (C1) · Ehrenreich, «Smile or Die», cap. 4 (C2), sobre el entusiasmo obligatorio"
-        },
-        {
-          "id": "C",
-          "text": "En desacuerdo",
-          "vector": {
-            "magnitud": 6
-          },
-          "anchor": "Ines Lee, «Piensa primero, IA después» (C1) · Ehrenreich, «Smile or Die», cap. 4 (C2), sobre el entusiasmo obligatorio"
-        }
-      ]
-    },
-    {
-      "id": "p06_acceso",
-      "order": 6,
       "question": "La IA le va a dar a mucha gente acceso a cosas que hasta ahora eran de unos pocos.",
       "discrimina": "Proposicion de un solo eje (direccion, |k| = 7). Estar de acuerdo empuja el eje hacia arriba.",
       "options": [
@@ -255,8 +127,40 @@
       ]
     },
     {
-      "id": "p07_estado_llega",
-      "order": 7,
+      "id": "p03_trabajo",
+      "order": 3,
+      "question": "Dentro de diez años el trabajo va a estar organizado de una manera que hoy no reconoceríamos.",
+      "discrimina": "Proposicion de un solo eje (magnitud, |k| = 8). Estar de acuerdo empuja el eje hacia arriba.",
+      "options": [
+        {
+          "id": "A",
+          "text": "De acuerdo",
+          "vector": {
+            "magnitud": 8
+          },
+          "anchor": "Aghion, cap. 3 (C14) · CENIA / SOFOFA / SENCE / Stanford (C14)"
+        },
+        {
+          "id": "B",
+          "text": "Ni de acuerdo ni en desacuerdo",
+          "vector": {
+            "magnitud": 0
+          },
+          "anchor": "Aghion, cap. 3 (C14) · CENIA / SOFOFA / SENCE / Stanford (C14)"
+        },
+        {
+          "id": "C",
+          "text": "En desacuerdo",
+          "vector": {
+            "magnitud": -8
+          },
+          "anchor": "Aghion, cap. 3 (C14) · CENIA / SOFOFA / SENCE / Stanford (C14)"
+        }
+      ]
+    },
+    {
+      "id": "p04_estado_llega",
+      "order": 4,
       "question": "Un Estado con mejores sistemas va a llegarle a gente que hoy queda afuera.",
       "discrimina": "Proposicion de un solo eje (direccion, |k| = 6). Estar de acuerdo empuja el eje hacia arriba.",
       "options": [
@@ -287,8 +191,40 @@
       ]
     },
     {
-      "id": "p08_fiscalizar",
-      "order": 8,
+      "id": "p05_un_capitulo",
+      "order": 5,
+      "question": "Lo que hoy llamamos revolución de la IA se va a leer como un capítulo más de la automatización.",
+      "discrimina": "Proposicion de un solo eje (magnitud, |k| = 7). CLAVE INVERTIDA: estar de acuerdo empuja el eje hacia ABAJO.",
+      "options": [
+        {
+          "id": "A",
+          "text": "De acuerdo",
+          "vector": {
+            "magnitud": -7
+          },
+          "anchor": "Galor, «El viaje de la humanidad», cap. 4 (C14): las revoluciones tardan generaciones y se parecen entre sí"
+        },
+        {
+          "id": "B",
+          "text": "Ni de acuerdo ni en desacuerdo",
+          "vector": {
+            "magnitud": 0
+          },
+          "anchor": "Galor, «El viaje de la humanidad», cap. 4 (C14): las revoluciones tardan generaciones y se parecen entre sí"
+        },
+        {
+          "id": "C",
+          "text": "En desacuerdo",
+          "vector": {
+            "magnitud": 7
+          },
+          "anchor": "Galor, «El viaje de la humanidad», cap. 4 (C14): las revoluciones tardan generaciones y se parecen entre sí"
+        }
+      ]
+    },
+    {
+      "id": "p06_fiscalizar",
+      "order": 6,
       "question": "Con estas herramientas la gente común puede fiscalizar al poder mejor que antes.",
       "discrimina": "Proposicion de un solo eje (direccion, |k| = 6). Estar de acuerdo empuja el eje hacia arriba.",
       "options": [
@@ -319,8 +255,40 @@
       ]
     },
     {
-      "id": "p09_capital",
-      "order": 9,
+      "id": "p07_las_de_siempre",
+      "order": 7,
+      "question": "Las decisiones que más me afectan las siguen tomando las mismas instituciones de siempre, con o sin IA.",
+      "discrimina": "Proposicion de un solo eje (magnitud, |k| = 6). CLAVE INVERTIDA: estar de acuerdo empuja el eje hacia ABAJO.",
+      "options": [
+        {
+          "id": "A",
+          "text": "De acuerdo",
+          "vector": {
+            "magnitud": -6
+          },
+          "anchor": "Acemoglu y Robinson, «Por qué fracasan los países», cap. 3 (C15)"
+        },
+        {
+          "id": "B",
+          "text": "Ni de acuerdo ni en desacuerdo",
+          "vector": {
+            "magnitud": 0
+          },
+          "anchor": "Acemoglu y Robinson, «Por qué fracasan los países», cap. 3 (C15)"
+        },
+        {
+          "id": "C",
+          "text": "En desacuerdo",
+          "vector": {
+            "magnitud": 6
+          },
+          "anchor": "Acemoglu y Robinson, «Por qué fracasan los países», cap. 3 (C15)"
+        }
+      ]
+    },
+    {
+      "id": "p08_capital",
+      "order": 8,
       "question": "Lo que la IA produzca va a terminar sobre todo en manos de quienes ya tenían capital.",
       "discrimina": "Proposicion de un solo eje (direccion, |k| = 8). CLAVE INVERTIDA: estar de acuerdo empuja el eje hacia ABAJO.",
       "options": [
@@ -347,6 +315,38 @@
             "direccion": 8
           },
           "anchor": "Aghion, cap. 5 (C13): innovación, desigualdad y captura de rentas"
+        }
+      ]
+    },
+    {
+      "id": "p09_mas_ruido",
+      "order": 9,
+      "question": "Se está hablando bastante más de IA de lo que la IA está cambiando de verdad.",
+      "discrimina": "Proposicion de un solo eje (magnitud, |k| = 6). CLAVE INVERTIDA: estar de acuerdo empuja el eje hacia ABAJO.",
+      "options": [
+        {
+          "id": "A",
+          "text": "De acuerdo",
+          "vector": {
+            "magnitud": -6
+          },
+          "anchor": "Ines Lee, «Piensa primero, IA después» (C1) · Ehrenreich, «Smile or Die», cap. 4 (C2), sobre el entusiasmo obligatorio"
+        },
+        {
+          "id": "B",
+          "text": "Ni de acuerdo ni en desacuerdo",
+          "vector": {
+            "magnitud": 0
+          },
+          "anchor": "Ines Lee, «Piensa primero, IA después» (C1) · Ehrenreich, «Smile or Die», cap. 4 (C2), sobre el entusiasmo obligatorio"
+        },
+        {
+          "id": "C",
+          "text": "En desacuerdo",
+          "vector": {
+            "magnitud": 6
+          },
+          "anchor": "Ines Lee, «Piensa primero, IA después» (C1) · Ehrenreich, «Smile or Die», cap. 4 (C2), sobre el entusiasmo obligatorio"
         }
       ]
     },
@@ -382,5 +382,6 @@
         }
       ]
     }
-  ]
+  ],
+  "_orden": "Los ejes van ALTERNADOS: impares magnitud, pares direccion. No es cosmetico. `posicionDe` devuelve null mientras falte una de las dos coordenadas, asi que con las cinco de magnitud primero y las cinco de direccion despues NADIE tiene posicion hasta el item 6 y la nube proyectada --que es lo que la clase mira-- sale vacia la primera mitad de la sesion. Alternando, todos aparecen en el item 2. Se descubrio mirando la vista previa del sitio desplegado, no en los tests: la sala no falla, solo se ve vacia."
 }

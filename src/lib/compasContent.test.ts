@@ -292,6 +292,25 @@ describe.each(Object.entries(COMPASES))('compas %s', (courseId, pack) => {
     }
   });
 
+  it('el plano se puebla en las primeras rondas, no a mitad de la sesion', () => {
+    // `posicionDe` devuelve null mientras falte UNA de las dos coordenadas, asi
+    // que un instrumento cuyos items declaran un solo eje tiene que
+    // ALTERNARLOS. Agrupados --las cinco de magnitud y despues las cinco de
+    // direccion-- nadie tiene posicion hasta el item 6 y la nube proyectada,
+    // que es lo que mira el curso, sale vacia media sesion. No falla nada: solo
+    // se ve vacia, y por eso ningun test lo veia.
+    const primeraConPosicion = instrumento.items.findIndex((_, n) => {
+      const answers: CompasAnswers = {};
+      for (const it of instrumento.items.slice(0, n + 1)) answers[it.id] = it.options[0].id;
+      return posicionDe(answers, instrumento.items) !== null;
+    });
+    expect(primeraConPosicion, 'ningun prefijo de items ubica a nadie en el plano').toBeGreaterThanOrEqual(0);
+    expect(
+      primeraConPosicion,
+      `hay que responder ${primeraConPosicion + 1} items antes de aparecer en el plano`,
+    ).toBeLessThanOrEqual(1);
+  });
+
   it('las aplicaciones estan ordenadas y ninguna cae el dia de una prueba', () => {
     const ns = instrumento.aplicaciones.map((a) => a.n);
     expect(ns).toEqual([...ns].sort((a, b) => a - b));

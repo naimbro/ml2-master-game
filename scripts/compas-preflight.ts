@@ -48,37 +48,37 @@ const PERSONAS: Array<{ id: string; desc: string; esperado: string; answers: Com
     id: 'aceleracionista',
     desc: 'Cambia todo y sale bien: se reorganiza el poder, y se reparte hacia abajo.',
     esperado: 'aceleracionista',
-    answers: { p01_reorganizacion: 'A', p02_trabajo: 'A', p03_un_capitulo: 'C', p04_las_de_siempre: 'C', p05_mas_ruido: 'C', p06_acceso: 'A', p07_estado_llega: 'A', p08_fiscalizar: 'A', p09_capital: 'C', p10_sin_explicar: 'C' },
+    answers: { p01_reorganizacion: 'A', p03_trabajo: 'A', p05_un_capitulo: 'C', p07_las_de_siempre: 'C', p09_mas_ruido: 'C', p02_acceso: 'A', p04_estado_llega: 'A', p06_fiscalizar: 'A', p08_capital: 'C', p10_sin_explicar: 'C' },
   },
   {
     id: 'concentracion',
     desc: 'Cambia todo y el poder se junta en pocas manos.',
     esperado: 'concentracion',
-    answers: { p01_reorganizacion: 'A', p02_trabajo: 'A', p03_un_capitulo: 'C', p04_las_de_siempre: 'C', p05_mas_ruido: 'C', p06_acceso: 'C', p07_estado_llega: 'C', p08_fiscalizar: 'C', p09_capital: 'A', p10_sin_explicar: 'A' },
+    answers: { p01_reorganizacion: 'A', p03_trabajo: 'A', p05_un_capitulo: 'C', p07_las_de_siempre: 'C', p09_mas_ruido: 'C', p02_acceso: 'C', p04_estado_llega: 'C', p06_fiscalizar: 'C', p08_capital: 'A', p10_sin_explicar: 'A' },
   },
   {
     id: 'nada_nuevo_optimista',
     desc: 'Nada nuevo bajo el sol, y esta bien. Es la posicion que la v1 no dejaba expresar.',
     esperado: 'pragmatica',
-    answers: { p01_reorganizacion: 'C', p02_trabajo: 'C', p03_un_capitulo: 'A', p04_las_de_siempre: 'A', p05_mas_ruido: 'A', p06_acceso: 'A', p07_estado_llega: 'A', p08_fiscalizar: 'A', p09_capital: 'C', p10_sin_explicar: 'C' },
+    answers: { p01_reorganizacion: 'C', p03_trabajo: 'C', p05_un_capitulo: 'A', p07_las_de_siempre: 'A', p09_mas_ruido: 'A', p02_acceso: 'A', p04_estado_llega: 'A', p06_fiscalizar: 'A', p08_capital: 'C', p10_sin_explicar: 'C' },
   },
   {
     id: 'nada_nuevo_cinico',
     desc: 'Nada nuevo bajo el sol, y lo de siempre ya era malo.',
     esperado: 'aguafiestas',
-    answers: { p01_reorganizacion: 'C', p02_trabajo: 'C', p03_un_capitulo: 'A', p04_las_de_siempre: 'A', p05_mas_ruido: 'A', p06_acceso: 'C', p07_estado_llega: 'C', p08_fiscalizar: 'C', p09_capital: 'A', p10_sin_explicar: 'A' },
+    answers: { p01_reorganizacion: 'C', p03_trabajo: 'C', p05_un_capitulo: 'A', p07_las_de_siempre: 'A', p09_mas_ruido: 'A', p02_acceso: 'C', p04_estado_llega: 'C', p06_fiscalizar: 'C', p08_capital: 'A', p10_sin_explicar: 'A' },
   },
   {
     id: 'institucionalista',
     desc: 'Ni catastrofe ni salvacion: depende de las reglas. Contesta al medio a proposito.',
     esperado: 'institucionalista',
-    answers: { p01_reorganizacion: 'B', p02_trabajo: 'B', p03_un_capitulo: 'B', p04_las_de_siempre: 'B', p05_mas_ruido: 'B', p06_acceso: 'B', p07_estado_llega: 'B', p08_fiscalizar: 'B', p09_capital: 'B', p10_sin_explicar: 'B' },
+    answers: { p01_reorganizacion: 'B', p03_trabajo: 'B', p05_un_capitulo: 'B', p07_las_de_siempre: 'B', p09_mas_ruido: 'B', p02_acceso: 'B', p04_estado_llega: 'B', p06_fiscalizar: 'B', p08_capital: 'B', p10_sin_explicar: 'B' },
   },
   {
     id: 'aquiescente',
     desc: 'Dice que si a las diez. Con clave invertida tiene que caer cerca del origen, no en una esquina.',
     esperado: 'institucionalista',
-    answers: { p01_reorganizacion: 'A', p02_trabajo: 'A', p03_un_capitulo: 'A', p04_las_de_siempre: 'A', p05_mas_ruido: 'A', p06_acceso: 'A', p07_estado_llega: 'A', p08_fiscalizar: 'A', p09_capital: 'A', p10_sin_explicar: 'A' },
+    answers: { p01_reorganizacion: 'A', p03_trabajo: 'A', p05_un_capitulo: 'A', p07_las_de_siempre: 'A', p09_mas_ruido: 'A', p02_acceso: 'A', p04_estado_llega: 'A', p06_fiscalizar: 'A', p08_capital: 'A', p10_sin_explicar: 'A' },
   },
 ];
 

@@ -97,24 +97,32 @@ export default function CompasPreview() {
 
   const bandasAgencia = arquetipos.bandasAgencia?.bandas;
 
+  // `posEn` viene en null mientras al alumno le falte una de las dos
+  // coordenadas, que con proposiciones de un solo eje pasa en la ronda 1. Antes
+  // habia un `!` aqui y la pantalla se caia entera con «Cannot read properties
+  // of null».
   const puntos: PuntoCompas[] = ronda === 0
     ? []
-    : cohorte.map((_, i) => {
-        const ahora = posEn(i, ronda)!;
+    : cohorte.flatMap((_, i) => {
+        const ahora = posEn(i, ronda);
+        if (!ahora) return [];
         const antes = ronda > 1 ? posEn(i, ronda - 1) : null;
-        return {
+        return [{
           id: String(i),
           esMio: i === YO,
           pos: { magnitud: ahora.magnitud, direccion: ahora.direccion },
           previa: antes ? { magnitud: antes.magnitud, direccion: antes.direccion } : null,
           color: colorAgencia(ahora.agencia, bandasAgencia),
-        };
+        }];
       });
 
   const puntosAgencia: PuntoAgencia[] =
     ronda === 0
       ? []
-      : cohorte.map((_, i) => ({ id: String(i), agencia: posEn(i, ronda)!.agencia, esMio: i === YO }));
+      : cohorte.flatMap((_, i) => {
+          const pos = posEn(i, ronda);
+          return pos ? [{ id: String(i), agencia: pos.agencia, esMio: i === YO }] : [];
+        });
 
   const misRespuestas = ronda > 0 ? respuestasHasta(YO, ronda) : {};
   const miPos = ronda > 0 ? posEn(YO, ronda) : null;
