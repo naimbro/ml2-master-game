@@ -196,8 +196,10 @@ export function arquetipoDe(
   if (enCelda.length === 0) return null;
   if (enCelda.length === 1) return enCelda[0];
 
-  // Shared cell: the tiebreak item decides.
-  const porId = (id: string) => enCelda.find((a) => a.id === id) ?? null;
+  // Shared cell: the tiebreak item decides. `porId` takes an optional id
+  // because an instrument of propositions has no `desempate` at all — and then
+  // it also has no shared cell, so this branch is unreachable for it.
+  const porId = (id: string | undefined) => (id ? enCelda.find((a) => a.id === id) ?? null : null);
 
   if (timon) {
     const regla = doc.desempate?.reglas?.find((r) => r.timon?.includes(timon));

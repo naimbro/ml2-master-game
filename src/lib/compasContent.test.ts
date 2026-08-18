@@ -32,11 +32,18 @@ describe.each(Object.entries(COMPASES))('compas %s', (courseId, pack) => {
     );
   });
 
-  it('cada item tiene cinco opciones con ids unicos, texto y ancla', () => {
+  const ARIDAD = instrumento.items[0].options.length;
+
+  it('todos los items ofrecen la misma cantidad de opciones, con ids unicos, texto y ancla', () => {
+    // La aridad la fija el instrumento y no el test: un compas de alternativas
+    // sustantivas usa cinco, y uno de proposiciones con grado de acuerdo usa
+    // tres. Lo que no puede pasar es que varie ENTRE items del mismo
+    // instrumento, porque entonces unos pesarian mas que otros al elegir.
+    expect(ARIDAD).toBeGreaterThanOrEqual(3);
     for (const item of instrumento.items) {
-      expect(item.options).toHaveLength(5);
+      expect(item.options, `${item.id} rompe la aridad del instrumento`).toHaveLength(ARIDAD);
       const ids = item.options.map((o) => o.id);
-      expect(new Set(ids).size).toBe(5);
+      expect(new Set(ids).size).toBe(ARIDAD);
       for (const o of item.options) {
         expect(o.text.trim().length).toBeGreaterThan(0);
         expect(o.anchor.trim().length).toBeGreaterThan(0);
@@ -66,7 +73,7 @@ describe.each(Object.entries(COMPASES))('compas %s', (courseId, pack) => {
     for (const item of instrumento.items) {
       for (const eje of ['magnitud', 'direccion'] as const) {
         const con = item.options.filter((o) => o.vector[eje] !== undefined).length;
-        expect([0, 5], `${item.id} declara ${eje} en ${con} de 5`).toContain(con);
+        expect([0, ARIDAD], `${item.id} declara ${eje} en ${con} de ${ARIDAD}`).toContain(con);
       }
     }
   });
@@ -114,7 +121,7 @@ describe.each(Object.entries(COMPASES))('compas %s', (courseId, pack) => {
     // medicion sin que nadie lo note.
     for (const item of instrumento.items) {
       const con = item.options.filter((o) => typeof o.agencia === 'number').length;
-      expect([0, 5], `${item.id} declara agencia en ${con} de 5 opciones`).toContain(con);
+      expect([0, ARIDAD], `${item.id} declara agencia en ${con} de ${ARIDAD} opciones`).toContain(con);
     }
   });
 
@@ -152,10 +159,13 @@ describe.each(Object.entries(COMPASES))('compas %s', (courseId, pack) => {
     expect(cuantos, 'un eje colgando de un item es ruido, no medicion').toBeGreaterThanOrEqual(4);
   });
 
-  it('hay exactamente un item de timon y todas sus opciones lo declaran', () => {
+  it('el item de timon es cero o uno, y si existe todas sus opciones lo declaran', () => {
+    // Cero es legitimo: un instrumento de proposiciones no puede producir un
+    // timon, y entonces tampoco puede tener dos arquetipos compartiendo celda.
     const deTimon = instrumento.items.filter((i) => i.esItemDeTimon);
-    expect(deTimon).toHaveLength(1);
-    for (const o of deTimon[0].options) expect(o.timon).toBeTruthy();
+    expect(deTimon.length).toBeLessThanOrEqual(1);
+    for (const o of deTimon[0]?.options ?? []) expect(o.timon).toBeTruthy();
+    expect(Boolean(arquetipos.desempate), 'hay desempate sin item de timon, o al reves').toBe(deTimon.length === 1);
   });
 
   it('las nueve celdas de la grilla tienen arquetipo', () => {
@@ -169,6 +179,7 @@ describe.each(Object.entries(COMPASES))('compas %s', (courseId, pack) => {
 
   it('el desempate apunta a un item real, a arquetipos reales y cubre todos los timones', () => {
     const { desempate } = arquetipos;
+    if (!desempate) return; // instrumento de proposiciones: no hay celda compartida que romper
     expect(instrumento.items.some((i) => i.id === desempate.item)).toBe(true);
 
     const ids = new Set(arquetipos.arquetipos.map((a) => a.id));
@@ -189,6 +200,12 @@ describe.each(Object.entries(COMPASES))('compas %s', (courseId, pack) => {
       (porCelda[k] ??= []).push(a.id);
     }
     const compartidas = Object.entries(porCelda).filter(([, v]) => v.length > 1);
+    if (!arquetipos.desempate) {
+      // Sin item que desempate, dos arquetipos en la misma celda serian
+      // indistinguibles y la carta se repartiria por orden de aparicion.
+      expect(compartidas, 'celdas compartidas sin desempate que las separe').toHaveLength(0);
+      return;
+    }
     expect(compartidas).toHaveLength(1);
     expect(compartidas[0][0]).toBe(`${arquetipos.desempate.celda.magnitud}/${arquetipos.desempate.celda.direccion}`);
   });
@@ -236,9 +253,19 @@ describe.each(Object.entries(COMPASES))('compas %s', (courseId, pack) => {
       (i) => !i.options.some((o) => o.vector.magnitud !== undefined),
     );
     if (!condicional) return;
-    const base = instrumento.items.find((i) => i.id !== condicional.id)!;
 
-    const solaBase: CompasAnswers = { [base.id]: base.options[0].id };
+    // La base tiene que ubicar en el plano por si sola. En un instrumento de
+    // alternativas basta un item; en uno de proposiciones de un solo eje hacen
+    // falta dos, uno por coordenada.
+    const conM = instrumento.items.find(
+      (i) => i.id !== condicional.id && i.options.some((o) => o.vector.magnitud !== undefined),
+    );
+    const conD = instrumento.items.find(
+      (i) => i.id !== condicional.id && i.id !== conM?.id && i.options.some((o) => o.vector.direccion !== undefined),
+    );
+    if (!conM || !conD) return;
+
+    const solaBase: CompasAnswers = { [conM.id]: conM.options[0].id, [conD.id]: conD.options[0].id };
     const conAmbos: CompasAnswers = { ...solaBase, [condicional.id]: condicional.options[0].id };
 
     const a = posicionDe(solaBase, instrumento.items)!;
@@ -252,7 +279,11 @@ describe.each(Object.entries(COMPASES))('compas %s', (courseId, pack) => {
   });
 
   it('contestar todo con la misma letra tampoco deja a nadie sin carta', () => {
-    for (const letra of ['A', 'B', 'C', 'D', 'E']) {
+    // Las letras salen del instrumento y no de una lista fija: un compas de
+    // proposiciones ofrece A/B/C y no A..E, y un id que no existe hace que
+    // posicionDe descarte la respuesta --que es lo correcto para una
+    // respuesta vieja de un item editado, pero aqui seria un falso negativo.
+    for (const letra of instrumento.items[0].options.map((o) => o.id)) {
       const answers: CompasAnswers = {};
       for (const i of instrumento.items) answers[i.id] = letra;
       const pos = posicionDe(answers, instrumento.items)!;

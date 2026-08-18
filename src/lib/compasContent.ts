@@ -8,8 +8,8 @@
 
 import instrumentoAyD from '../../content/compas/ai_democracy_2026/instrumento_v3.json';
 import arquetiposAyD from '../../content/compas/ai_democracy_2026/arquetipos_v3.json';
-import instrumentoMgt from '../../content/compas/mgt300_2026/instrumento_v1.json';
-import arquetiposMgt from '../../content/compas/mgt300_2026/arquetipos_v1.json';
+import instrumentoMgt from '../../content/compas/mgt300_2026/instrumento_v2.json';
+import arquetiposMgt from '../../content/compas/mgt300_2026/arquetipos_v2.json';
 
 import type { CompasArquetipos, CompasInstrument } from '../types/compas';
 
@@ -40,10 +40,11 @@ export const COMPASES: Record<string, CompasPack> = {
     instrumento: instrumentoAyD as CompasInstrument,
     arquetipos: arquetiposAyD as CompasArquetipos,
   },
-  // El mismo compas, reescrito con lo que dejo la primera aplicacion real del
-  // de arriba. NO es una version del anterior: es otro instrumentId, con otras
-  // anclas, y las dos mediciones no se comparan entre si. Ver el campo
-  // `_de_donde_sale` del instrumento.
+  // v2: diez PROPOSICIONES con tres grados de acuerdo, dos ejes, sin tercer
+  // eje. La v1 --diez items con cinco alternativas sustantivas-- queda en el
+  // repo pero fuera del registro: sus mediciones no son comparables con las de
+  // la v2, que es justamente por lo que el numero de version esta en el nombre
+  // del archivo. Ver `_por_que_v2` en el instrumento.
   mgt300_2026: {
     curso: 'MGT300 · Sociedad, Cultura y Política',
     instrumento: instrumentoMgt as CompasInstrument,

@@ -1,0 +1,386 @@
+{
+  "instrumentId": "mgt300_2026_compas_v2",
+  "courseId": "mgt300_2026",
+  "version": 2,
+  "title": "Compás IA y Democracia",
+  "subtitle": "¿Dónde estás tú, y dónde está el curso?",
+  "_proposito": "Instrumento de opinion, no de conocimiento. No tiene respuestas correctas, no otorga puntaje y no alimenta el ranking del curso.",
+  "_por_que_v2": "La v1 tenia diez items con CINCO alternativas sustantivas cada uno, que no es como se construye un compas sino como se construye una prueba de alternativas. Ninguno de los instrumentos conocidos lo hace asi: el Political Compass son 62 proposiciones con cuatro grados de acuerdo y sin neutro, 8values son 70 con cinco grados, el World's Smallest Political Quiz son 10 con tres (de acuerdo / quizas / en desacuerdo) y el Wahl-O-Mat son 38 tesis con tres. Todos usan UNA afirmacion mas un grado de acuerdo. El formato de cinco alternativas obliga a ubicar cada opcion en los dos ejes a la vez, y de ahi salia la correlacion magnitud-direccion de -0.52 (hasta -0.98 dentro de un item) que convertia el plano en una diagonal y no dejaba al punto salir de un cuadrante. Con una proposicion por eje esa colinealidad desaparece por construccion. Ademas Rodriguez (2005), meta-analisis de 80 anios, concluye que tres opciones son optimas para items de alternativas, y la v1 ya funcionaba de hecho como un instrumento de 2.60 opciones efectivas de 5.",
+  "_sin_tercer_eje": "La v2 NO mide agencia humana contra agencia de las maquinas. Se saca entero, no se reduce: con diez proposiciones y un eje por proposicion, el tercer eje quedaba con dos items, que es demasiado poco para llamarlo eje. Las dos proposiciones liberadas se reparten entre magnitud y direccion, que quedan con cinco cada una. Lo que el tercer eje aportaba --quien termina decidiendo-- no se pierde del todo: vive en p10_sin_explicar y en el punto ciego de La Concentracion.",
+  "_clave_invertida": "Cinco de las diez proposiciones estan invertidas (p03, p04, p05, p09, p10), de modo que decir que si a todo no lleva a ninguna esquina: un respondente que acepta las diez cae en (-0.60, +0.80), o sea practicamente en el origen. Es la defensa estandar contra el sesgo de aquiescencia y la v1 no la tenia.",
+  "_neutro": "La opcion del medio vale cero en su eje. El Nolan y el Wahl-O-Mat la incluyen; el Political Compass la elimina a proposito porque la gente se apila ahi. Cuanto se apila en este caso lo mide el bloque de cobertura de scripts/compas-preflight.ts.",
+  "axes": {
+    "x": {
+      "id": "magnitud",
+      "label": "Magnitud",
+      "min": -10,
+      "max": 10,
+      "minLabel": "nada nuevo",
+      "maxLabel": "cambio de régimen",
+      "pregunta": "¿Cuánto altera la IA la estructura del poder político y económico?"
+    },
+    "y": {
+      "id": "direccion",
+      "label": "Dirección",
+      "min": -10,
+      "max": 10,
+      "minLabel": "concentra poder · erosiona la democracia",
+      "maxLabel": "distribuye poder · fortalece la democracia",
+      "pregunta": "¿Hacia dónde la empuja?"
+    }
+  },
+  "scoring": {
+    "method": "promedio_de_respondidas",
+    "skippable": true,
+    "ranked": false,
+    "scored": false,
+    "nota": "La posicion es el promedio de los valores elegidos, con un denominador por eje. Saltarse una proposicion no penaliza: solo cuenta lo respondido."
+  },
+  "aplicaciones": [
+    {
+      "n": 1,
+      "semana": 5,
+      "fecha": "2026-09-01",
+      "hito": "antes de la Unidad 2",
+      "proposito": "línea base",
+      "nota": "La fecha es el plan, no una restriccion: la aplicacion se elige al abrir la sala. Lo unico que importa es que la 1 quede ANTES de la Clase 7, que es donde parte la unidad de IA y Democracia. Correrla antes --Clase 3 o 4-- no rompe nada."
+    },
+    {
+      "n": 2,
+      "semana": 9,
+      "fecha": "2026-10-06",
+      "hito": "al cierre de la Unidad 2",
+      "proposito": "efecto de la unidad",
+      "nota": "Clase 9, ultima de la unidad. No la Clase 10, que es la Prueba de analisis 2: medir opiniones el dia de una prueba calificada contamina las dos cosas."
+    },
+    {
+      "n": 3,
+      "semana": 15,
+      "fecha": "2026-11-17",
+      "hito": "Taller integrador",
+      "proposito": "medición final y comparación con la línea base"
+    }
+  ],
+  "items": [
+    {
+      "id": "p01_reorganizacion",
+      "order": 1,
+      "question": "El poder político y económico se está reorganizando por la IA, no sólo acomodándose a ella.",
+      "discrimina": "Proposicion de un solo eje (magnitud, |k| = 8). Estar de acuerdo empuja el eje hacia arriba.",
+      "options": [
+        {
+          "id": "A",
+          "text": "De acuerdo",
+          "vector": {
+            "magnitud": 8
+          },
+          "anchor": "Schneier y Sanders, «AI and Power» (C13) · Aghion, cap. 5 (C13)"
+        },
+        {
+          "id": "B",
+          "text": "Ni de acuerdo ni en desacuerdo",
+          "vector": {
+            "magnitud": 0
+          },
+          "anchor": "Schneier y Sanders, «AI and Power» (C13) · Aghion, cap. 5 (C13)"
+        },
+        {
+          "id": "C",
+          "text": "En desacuerdo",
+          "vector": {
+            "magnitud": -8
+          },
+          "anchor": "Schneier y Sanders, «AI and Power» (C13) · Aghion, cap. 5 (C13)"
+        }
+      ]
+    },
+    {
+      "id": "p02_trabajo",
+      "order": 2,
+      "question": "Dentro de diez años el trabajo va a estar organizado de una manera que hoy no reconoceríamos.",
+      "discrimina": "Proposicion de un solo eje (magnitud, |k| = 8). Estar de acuerdo empuja el eje hacia arriba.",
+      "options": [
+        {
+          "id": "A",
+          "text": "De acuerdo",
+          "vector": {
+            "magnitud": 8
+          },
+          "anchor": "Aghion, cap. 3 (C14) · CENIA / SOFOFA / SENCE / Stanford (C14)"
+        },
+        {
+          "id": "B",
+          "text": "Ni de acuerdo ni en desacuerdo",
+          "vector": {
+            "magnitud": 0
+          },
+          "anchor": "Aghion, cap. 3 (C14) · CENIA / SOFOFA / SENCE / Stanford (C14)"
+        },
+        {
+          "id": "C",
+          "text": "En desacuerdo",
+          "vector": {
+            "magnitud": -8
+          },
+          "anchor": "Aghion, cap. 3 (C14) · CENIA / SOFOFA / SENCE / Stanford (C14)"
+        }
+      ]
+    },
+    {
+      "id": "p03_un_capitulo",
+      "order": 3,
+      "question": "Lo que hoy llamamos revolución de la IA se va a leer como un capítulo más de la automatización.",
+      "discrimina": "Proposicion de un solo eje (magnitud, |k| = 7). CLAVE INVERTIDA: estar de acuerdo empuja el eje hacia ABAJO.",
+      "options": [
+        {
+          "id": "A",
+          "text": "De acuerdo",
+          "vector": {
+            "magnitud": -7
+          },
+          "anchor": "Galor, «El viaje de la humanidad», cap. 4 (C14): las revoluciones tardan generaciones y se parecen entre sí"
+        },
+        {
+          "id": "B",
+          "text": "Ni de acuerdo ni en desacuerdo",
+          "vector": {
+            "magnitud": 0
+          },
+          "anchor": "Galor, «El viaje de la humanidad», cap. 4 (C14): las revoluciones tardan generaciones y se parecen entre sí"
+        },
+        {
+          "id": "C",
+          "text": "En desacuerdo",
+          "vector": {
+            "magnitud": 7
+          },
+          "anchor": "Galor, «El viaje de la humanidad», cap. 4 (C14): las revoluciones tardan generaciones y se parecen entre sí"
+        }
+      ]
+    },
+    {
+      "id": "p04_las_de_siempre",
+      "order": 4,
+      "question": "Las decisiones que más me afectan las siguen tomando las mismas instituciones de siempre, con o sin IA.",
+      "discrimina": "Proposicion de un solo eje (magnitud, |k| = 6). CLAVE INVERTIDA: estar de acuerdo empuja el eje hacia ABAJO.",
+      "options": [
+        {
+          "id": "A",
+          "text": "De acuerdo",
+          "vector": {
+            "magnitud": -6
+          },
+          "anchor": "Acemoglu y Robinson, «Por qué fracasan los países», cap. 3 (C15)"
+        },
+        {
+          "id": "B",
+          "text": "Ni de acuerdo ni en desacuerdo",
+          "vector": {
+            "magnitud": 0
+          },
+          "anchor": "Acemoglu y Robinson, «Por qué fracasan los países», cap. 3 (C15)"
+        },
+        {
+          "id": "C",
+          "text": "En desacuerdo",
+          "vector": {
+            "magnitud": 6
+          },
+          "anchor": "Acemoglu y Robinson, «Por qué fracasan los países», cap. 3 (C15)"
+        }
+      ]
+    },
+    {
+      "id": "p05_mas_ruido",
+      "order": 5,
+      "question": "Se está hablando bastante más de IA de lo que la IA está cambiando de verdad.",
+      "discrimina": "Proposicion de un solo eje (magnitud, |k| = 6). CLAVE INVERTIDA: estar de acuerdo empuja el eje hacia ABAJO.",
+      "options": [
+        {
+          "id": "A",
+          "text": "De acuerdo",
+          "vector": {
+            "magnitud": -6
+          },
+          "anchor": "Ines Lee, «Piensa primero, IA después» (C1) · Ehrenreich, «Smile or Die», cap. 4 (C2), sobre el entusiasmo obligatorio"
+        },
+        {
+          "id": "B",
+          "text": "Ni de acuerdo ni en desacuerdo",
+          "vector": {
+            "magnitud": 0
+          },
+          "anchor": "Ines Lee, «Piensa primero, IA después» (C1) · Ehrenreich, «Smile or Die», cap. 4 (C2), sobre el entusiasmo obligatorio"
+        },
+        {
+          "id": "C",
+          "text": "En desacuerdo",
+          "vector": {
+            "magnitud": 6
+          },
+          "anchor": "Ines Lee, «Piensa primero, IA después» (C1) · Ehrenreich, «Smile or Die», cap. 4 (C2), sobre el entusiasmo obligatorio"
+        }
+      ]
+    },
+    {
+      "id": "p06_acceso",
+      "order": 6,
+      "question": "La IA le va a dar a mucha gente acceso a cosas que hasta ahora eran de unos pocos.",
+      "discrimina": "Proposicion de un solo eje (direccion, |k| = 7). Estar de acuerdo empuja el eje hacia arriba.",
+      "options": [
+        {
+          "id": "A",
+          "text": "De acuerdo",
+          "vector": {
+            "direccion": 7
+          },
+          "anchor": "Aghion, cap. 3 (C14), sobre difusión tecnológica · Gudiño et al. (2024) (C9)"
+        },
+        {
+          "id": "B",
+          "text": "Ni de acuerdo ni en desacuerdo",
+          "vector": {
+            "direccion": 0
+          },
+          "anchor": "Aghion, cap. 3 (C14), sobre difusión tecnológica · Gudiño et al. (2024) (C9)"
+        },
+        {
+          "id": "C",
+          "text": "En desacuerdo",
+          "vector": {
+            "direccion": -7
+          },
+          "anchor": "Aghion, cap. 3 (C14), sobre difusión tecnológica · Gudiño et al. (2024) (C9)"
+        }
+      ]
+    },
+    {
+      "id": "p07_estado_llega",
+      "order": 7,
+      "question": "Un Estado con mejores sistemas va a llegarle a gente que hoy queda afuera.",
+      "discrimina": "Proposicion de un solo eje (direccion, |k| = 6). Estar de acuerdo empuja el eje hacia arriba.",
+      "options": [
+        {
+          "id": "A",
+          "text": "De acuerdo",
+          "vector": {
+            "direccion": 6
+          },
+          "anchor": "Sen, «Desarrollo y libertad», introducción (C11) · Schneier y Sanders, caps. 20–24 (C7)"
+        },
+        {
+          "id": "B",
+          "text": "Ni de acuerdo ni en desacuerdo",
+          "vector": {
+            "direccion": 0
+          },
+          "anchor": "Sen, «Desarrollo y libertad», introducción (C11) · Schneier y Sanders, caps. 20–24 (C7)"
+        },
+        {
+          "id": "C",
+          "text": "En desacuerdo",
+          "vector": {
+            "direccion": -6
+          },
+          "anchor": "Sen, «Desarrollo y libertad», introducción (C11) · Schneier y Sanders, caps. 20–24 (C7)"
+        }
+      ]
+    },
+    {
+      "id": "p08_fiscalizar",
+      "order": 8,
+      "question": "Con estas herramientas la gente común puede fiscalizar al poder mejor que antes.",
+      "discrimina": "Proposicion de un solo eje (direccion, |k| = 6). Estar de acuerdo empuja el eje hacia arriba.",
+      "options": [
+        {
+          "id": "A",
+          "text": "De acuerdo",
+          "vector": {
+            "direccion": 6
+          },
+          "anchor": "Schneier y Sanders, caps. 40–42 (C8) · Chambers (2020) (C5) · Gudiño et al. (2024) (C9)"
+        },
+        {
+          "id": "B",
+          "text": "Ni de acuerdo ni en desacuerdo",
+          "vector": {
+            "direccion": 0
+          },
+          "anchor": "Schneier y Sanders, caps. 40–42 (C8) · Chambers (2020) (C5) · Gudiño et al. (2024) (C9)"
+        },
+        {
+          "id": "C",
+          "text": "En desacuerdo",
+          "vector": {
+            "direccion": -6
+          },
+          "anchor": "Schneier y Sanders, caps. 40–42 (C8) · Chambers (2020) (C5) · Gudiño et al. (2024) (C9)"
+        }
+      ]
+    },
+    {
+      "id": "p09_capital",
+      "order": 9,
+      "question": "Lo que la IA produzca va a terminar sobre todo en manos de quienes ya tenían capital.",
+      "discrimina": "Proposicion de un solo eje (direccion, |k| = 8). CLAVE INVERTIDA: estar de acuerdo empuja el eje hacia ABAJO.",
+      "options": [
+        {
+          "id": "A",
+          "text": "De acuerdo",
+          "vector": {
+            "direccion": -8
+          },
+          "anchor": "Aghion, cap. 5 (C13): innovación, desigualdad y captura de rentas"
+        },
+        {
+          "id": "B",
+          "text": "Ni de acuerdo ni en desacuerdo",
+          "vector": {
+            "direccion": 0
+          },
+          "anchor": "Aghion, cap. 5 (C13): innovación, desigualdad y captura de rentas"
+        },
+        {
+          "id": "C",
+          "text": "En desacuerdo",
+          "vector": {
+            "direccion": 8
+          },
+          "anchor": "Aghion, cap. 5 (C13): innovación, desigualdad y captura de rentas"
+        }
+      ]
+    },
+    {
+      "id": "p10_sin_explicar",
+      "order": 10,
+      "question": "Cada vez va a ser más fácil decidir sobre las personas sin tener que darles explicaciones.",
+      "discrimina": "Proposicion de un solo eje (direccion, |k| = 7). CLAVE INVERTIDA: estar de acuerdo empuja el eje hacia ABAJO.",
+      "options": [
+        {
+          "id": "A",
+          "text": "De acuerdo",
+          "vector": {
+            "direccion": -7
+          },
+          "anchor": "Schneier y Sanders, cap. 35 (C7) · Gabriela Arriagada, CENIA/UC (C7)"
+        },
+        {
+          "id": "B",
+          "text": "Ni de acuerdo ni en desacuerdo",
+          "vector": {
+            "direccion": 0
+          },
+          "anchor": "Schneier y Sanders, cap. 35 (C7) · Gabriela Arriagada, CENIA/UC (C7)"
+        },
+        {
+          "id": "C",
+          "text": "En desacuerdo",
+          "vector": {
+            "direccion": 7
+          },
+          "anchor": "Schneier y Sanders, cap. 35 (C7) · Gabriela Arriagada, CENIA/UC (C7)"
+        }
+      ]
+    }
+  ]
+}

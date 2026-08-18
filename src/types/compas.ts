@@ -146,7 +146,13 @@ export interface CompasArquetipos {
     magnitud: CompasCortesEje;
     direccion: CompasCortesEje;
   };
-  desempate: {
+  /**
+   * Solo cuando dos arquetipos comparten celda. Un instrumento de
+   * proposiciones no puede tenerlo: el desempate necesita una respuesta del
+   * tipo empresas / estado / internacional / ciudadania, y un grado de acuerdo
+   * no la produce. Sin desempate, ninguna celda puede estar compartida.
+   */
+  desempate?: {
     celda: { magnitud: Banda; direccion: Banda };
     item: string;
     reglas: Array<{ timon: Timon[]; arquetipo: string }>;

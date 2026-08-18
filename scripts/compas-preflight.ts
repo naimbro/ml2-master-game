@@ -27,10 +27,11 @@ import { posicionDe, arquetipoDe, timonDe, bandaAgenciaDe, bandaDe } from '../sr
 import type { CompasAnswers, CompasInstrument, CompasArquetipos } from '../src/types/compas';
 
 const courseId = process.argv[2] ?? 'mgt300_2026';
+const version = process.argv[3] ?? (courseId === 'mgt300_2026' ? 'v2' : 'v3');
 
 const J = <T>(p: string): T => JSON.parse(readFileSync(p, 'utf-8')) as T;
-const instrumento = J<CompasInstrument>(`content/compas/${courseId}/instrumento_v1.json`);
-const arquetipos = J<CompasArquetipos>(`content/compas/${courseId}/arquetipos_v1.json`);
+const instrumento = J<CompasInstrument>(`content/compas/${courseId}/instrumento_${version}.json`);
+const arquetipos = J<CompasArquetipos>(`content/compas/${courseId}/arquetipos_${version}.json`);
 const items = instrumento.items;
 
 /**
@@ -40,54 +41,66 @@ const items = instrumento.items;
  * cambio de significado.
  */
 const PERSONAS: Array<{ id: string; desc: string; esperado: string; answers: CompasAnswers }> = [
+  // A = de acuerdo, B = ni una cosa ni la otra, C = en desacuerdo.
+  // p01 p02 magnitud +, p03 p04 p05 magnitud - (clave invertida)
+  // p06 p07 p08 direccion +, p09 p10 direccion - (clave invertida)
   {
     id: 'aceleracionista',
-    desc: 'Cambia todo y sale bien: mas productividad, mas gente adentro, y la politica de hoy es lo que sobra.',
+    desc: 'Cambia todo y sale bien: se reorganiza el poder, y se reparte hacia abajo.',
     esperado: 'aceleracionista',
-    answers: { m01_trabajo_propio: 'D', m02_trabajo: 'D', m03_quien_decide: 'D', m04_quien_paga: 'D', m05_estado: 'D', m06_delegar: 'A', m07_timon: 'D', m08_agencia: 'D', m09_control: 'D', m10_que_se_pierde: 'A' },
+    answers: { p01_reorganizacion: 'A', p02_trabajo: 'A', p03_un_capitulo: 'C', p04_las_de_siempre: 'C', p05_mas_ruido: 'C', p06_acceso: 'A', p07_estado_llega: 'A', p08_fiscalizar: 'A', p09_capital: 'C', p10_sin_explicar: 'C' },
   },
   {
-    id: 'critico_redistributivo',
-    desc: 'Cambio grande que concentra poder y excedente. La respuesta es politica y redistributiva.',
-    esperado: 'oligarquia',
-    answers: { m01_trabajo_propio: 'E', m02_trabajo: 'E', m03_quien_decide: 'E', m04_quien_paga: 'E', m05_estado: 'E', m06_delegar: 'E', m07_timon: 'D', m08_agencia: 'E', m09_control: 'B', m10_que_se_pierde: 'D' },
+    id: 'concentracion',
+    desc: 'Cambia todo y el poder se junta en pocas manos.',
+    esperado: 'concentracion',
+    answers: { p01_reorganizacion: 'A', p02_trabajo: 'A', p03_un_capitulo: 'C', p04_las_de_siempre: 'C', p05_mas_ruido: 'C', p06_acceso: 'C', p07_estado_llega: 'C', p08_fiscalizar: 'C', p09_capital: 'A', p10_sin_explicar: 'A' },
   },
   {
     id: 'nada_nuevo_optimista',
-    desc: 'Nada nuevo bajo el sol, y esta bien: cada ola trajo su panico y el mundo siguio funcionando.',
+    desc: 'Nada nuevo bajo el sol, y esta bien. Es la posicion que la v1 no dejaba expresar.',
     esperado: 'pragmatica',
-    answers: { m01_trabajo_propio: 'B', m02_trabajo: 'A', m03_quien_decide: 'A', m04_quien_paga: 'A', m05_estado: 'C', m06_delegar: 'D', m07_timon: 'A', m08_agencia: 'A', m09_control: 'A', m10_que_se_pierde: 'B' },
+    answers: { p01_reorganizacion: 'C', p02_trabajo: 'C', p03_un_capitulo: 'A', p04_las_de_siempre: 'A', p05_mas_ruido: 'A', p06_acceso: 'A', p07_estado_llega: 'A', p08_fiscalizar: 'A', p09_capital: 'C', p10_sin_explicar: 'C' },
   },
   {
     id: 'nada_nuevo_cinico',
-    desc: 'Nada nuevo bajo el sol, y esa es la mala noticia: lo de siempre ya era malo y sigue igual. '
-      + 'Es la posicion que el instrumento anterior no permitia expresar, y por eso su ausencia no probaba nada.',
+    desc: 'Nada nuevo bajo el sol, y lo de siempre ya era malo.',
     esperado: 'aguafiestas',
-    answers: { m01_trabajo_propio: 'A', m02_trabajo: 'B', m03_quien_decide: 'B', m04_quien_paga: 'B', m05_estado: 'B', m06_delegar: 'C', m07_timon: 'A', m08_agencia: 'B', m09_control: 'B', m10_que_se_pierde: 'D' },
+    answers: { p01_reorganizacion: 'C', p02_trabajo: 'C', p03_un_capitulo: 'A', p04_las_de_siempre: 'A', p05_mas_ruido: 'A', p06_acceso: 'C', p07_estado_llega: 'C', p08_fiscalizar: 'C', p09_capital: 'A', p10_sin_explicar: 'A' },
   },
   {
     id: 'institucionalista',
-    desc: 'Ni catastrofe ni salvacion: depende de las reglas que alcancemos a poner y de quien fiscalice.',
+    desc: 'Ni catastrofe ni salvacion: depende de las reglas. Contesta al medio a proposito.',
     esperado: 'institucionalista',
-    answers: { m01_trabajo_propio: 'C', m02_trabajo: 'C', m03_quien_decide: 'A', m04_quien_paga: 'C', m05_estado: 'C', m06_delegar: 'B', m07_timon: 'C', m08_agencia: 'C', m09_control: 'C', m10_que_se_pierde: 'B' },
+    answers: { p01_reorganizacion: 'B', p02_trabajo: 'B', p03_un_capitulo: 'B', p04_las_de_siempre: 'B', p05_mas_ruido: 'B', p06_acceso: 'B', p07_estado_llega: 'B', p08_fiscalizar: 'B', p09_capital: 'B', p10_sin_explicar: 'B' },
   },
   {
-    id: 'fatalista_maquinas',
-    desc: 'Para el plazo que importa las decisiones ya no las tomamos nosotros. Prueba el polo alto de agencia.',
-    esperado: 'oligarquia',
-    answers: { m01_trabajo_propio: 'E', m02_trabajo: 'E', m03_quien_decide: 'C', m04_quien_paga: 'E', m05_estado: 'E', m06_delegar: 'E', m07_timon: 'E', m08_agencia: 'E', m09_control: 'E', m10_que_se_pierde: 'E' },
-  },
-  {
-    id: 'vigilante_estatista',
-    desc: 'La tecnologia es potente y el peligro es el Estado que decide sin explicar. Prueba el desempate.',
-    esperado: 'vigilante',
-    answers: { m01_trabajo_propio: 'E', m02_trabajo: 'E', m03_quien_decide: 'E', m04_quien_paga: 'E', m05_estado: 'E', m06_delegar: 'E', m07_timon: 'C', m08_agencia: 'E', m09_control: 'E', m10_que_se_pierde: 'C' },
+    id: 'aquiescente',
+    desc: 'Dice que si a las diez. Con clave invertida tiene que caer cerca del origen, no en una esquina.',
+    esperado: 'institucionalista',
+    answers: { p01_reorganizacion: 'A', p02_trabajo: 'A', p03_un_capitulo: 'A', p04_las_de_siempre: 'A', p05_mas_ruido: 'A', p06_acceso: 'A', p07_estado_llega: 'A', p08_fiscalizar: 'A', p09_capital: 'A', p10_sin_explicar: 'A' },
   },
 ];
+
+// Las personas estan escritas contra UN instrumento: sus respuestas nombran
+// items por id. Contra otro instrumento no fallan ruidosamente sino que dan
+// posiciones vacias, que es peor. Se detecta, se salta esa seccion y se deja
+// corriendo la de cobertura, que si es independiente del contenido.
+const IDS = new Set(items.map((i) => i.id));
+const PERSONAS_APLICAN = PERSONAS.every((p) => Object.keys(p.answers).every((k) => IDS.has(k)));
+if (!PERSONAS_APLICAN) {
+  console.log(`
+[!] Las personas-tipo de este script son las de mgt300_2026_compas_v2, no las de`);
+  console.log(`    ${instrumento.instrumentId}. Se salta esa seccion y se corre solo la cobertura del plano.`);
+}
 
 const media = (xs: number[]) => xs.reduce((a, b) => a + b, 0) / xs.length;
 const vari = (xs: number[]) => { const m = media(xs); return media(xs.map((x) => (x - m) ** 2)); };
 
+const ok = (b: boolean) => (b ? '  OK  ' : ' FALLA');
+const rango = (xs: number[]) => Math.max(...xs) - Math.min(...xs);
+
+if (PERSONAS_APLICAN) {
 console.log(`\ncompas: ${instrumento.instrumentId}   ${items.length} items   ${PERSONAS.length} personas\n`);
 console.log('persona                  magnitud  direccion  agencia  carta                banda');
 console.log('-'.repeat(92));
@@ -115,8 +128,6 @@ const mags = filas.map((f) => f.pos.magnitud);
 const dirs = filas.map((f) => f.pos.direccion);
 const ags = filas.map((f) => f.pos.agencia).filter((a): a is number => a !== null);
 
-const ok = (b: boolean) => (b ? '  OK  ' : ' FALLA');
-const rango = (xs: number[]) => Math.max(...xs) - Math.min(...xs);
 
 console.log(`${ok(rango(dirs) >= 6)} las personas se separan en direccion: rango ${rango(dirs).toFixed(2)} (se pide >= 6)`);
 console.log(`${ok(rango(mags) >= 4)} las personas se separan en magnitud:  rango ${rango(mags).toFixed(2)} (se pide >= 4)`);
@@ -124,14 +135,32 @@ console.log(`${ok(rango(mags) >= 4)} las personas se separan en magnitud:  rango
 const cartas = new Set(filas.map((f) => f.arq?.id));
 console.log(`${ok(cartas.size >= 4)} cartas distintas: ${cartas.size} de ${PERSONAS.length} personas -> ${[...cartas].join(', ')}`);
 
-const fatalista = filas.find((f) => f.p.id === 'fatalista_maquinas')!;
-const enPoloMaquina = (fatalista.pos.agencia ?? -99) > 1.5;
-console.log(`${ok(enPoloMaquina)} el polo maquina es alcanzable: el fatalista queda en agencia ${fatalista.pos.agencia?.toFixed(2)} (${fatalista.banda?.name})`);
-console.log(`${ok(rango(ags) >= 8)} el eje agencia se usa entero: rango ${rango(ags).toFixed(2)} (se pide >= 8)`);
+// El tercer eje solo se chequea si el instrumento lo declara. La v2 de MGT300
+// lo saco entero: con diez proposiciones y un eje por proposicion quedaba con
+// dos items, que es demasiado poco para llamarlo eje.
+if (instrumento.ejeAgencia) {
+  const conAgencia = filas.filter((f) => f.pos.agencia !== null);
+  console.log(`${ok(rango(ags) >= 8)} el eje agencia se usa entero: rango ${rango(ags).toFixed(2)} (se pide >= 8)`);
+  console.log(`${ok(conAgencia.some((f) => (f.pos.agencia ?? -99) > 1.5))} el polo maquina es alcanzable`);
+} else {
+  console.log('  --   sin tercer eje: el instrumento no declara ejeAgencia');
+}
 
-const vig = filas.find((f) => f.p.id === 'vigilante_estatista')!;
-const cri = filas.find((f) => f.p.id === 'critico_redistributivo')!;
-console.log(`${ok(vig.arq?.id !== cri.arq?.id)} el desempate distingue villanos: vigilante -> ${vig.arq?.name}, critico -> ${cri.arq?.name}`);
+// El aquiescente --el que dice que si a las diez proposiciones-- tiene que caer
+// cerca del origen. Si cae en una esquina, la clave invertida no esta cumpliendo
+// su trabajo y el instrumento esta midiendo docilidad en vez de opinion.
+const aq = filas.find((f) => f.p.id === 'aquiescente');
+if (aq) {
+  const lejos = Math.hypot(aq.pos.magnitud, aq.pos.direccion);
+  console.log(`${ok(lejos <= 2.5)} decir que si a todo no lleva a ninguna esquina: (${aq.pos.magnitud.toFixed(2)}, ${aq.pos.direccion.toFixed(2)}), a ${lejos.toFixed(2)} del origen (se pide <= 2.5)`);
+}
+
+// El del medio tambien: contestar B a las diez tiene que dar exactamente (0,0).
+const med = filas.find((f) => f.p.id === 'institucionalista');
+if (med) {
+  const centrado = Math.abs(med.pos.magnitud) < 0.01 && Math.abs(med.pos.direccion) < 0.01;
+  console.log(`${ok(centrado)} contestar el neutro en todo cae en el origen exacto: (${med.pos.magnitud.toFixed(2)}, ${med.pos.direccion.toFixed(2)})`);
+}
 
 // ---- consistencia interna sobre las personas
 // ---- la carta que le toca contra la carta que la describe
@@ -171,6 +200,7 @@ for (const eje of ['magnitud', 'direccion'] as const) {
   const alpha = (K / (K - 1)) * (1 - sumaVar / varTot);
   console.log(`${ok(alpha >= 0.7)} ${eje.padEnd(10)} K=${K}  alfa = ${alpha.toFixed(2)}   (la aplicacion real del instrumento anterior dio 0.01 y 0.12)`);
 }
+}
 
 // ---------------------------------------------------------------------------
 // COBERTURA DEL PLANO
@@ -202,7 +232,7 @@ const rnd = () => {
 
 for (let k = 0; k < RONDAS; k++) {
   const answers: CompasAnswers = {};
-  for (const it of items) answers[it.id] = it.options[Math.floor(rnd() * 5)].id;
+  for (const it of items) answers[it.id] = it.options[Math.floor(rnd() * it.options.length)].id;
   const pos = posicionDe(answers, items);
   if (!pos) continue;
   const q = (pos.magnitud >= 0 ? 'der' : 'izq') + '-' + (pos.direccion >= 0 ? 'arriba' : 'abajo');

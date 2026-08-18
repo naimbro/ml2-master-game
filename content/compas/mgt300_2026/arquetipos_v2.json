@@ -1,0 +1,141 @@
+{
+  "archetypesId": "mgt300_2026_arquetipos_v2",
+  "instrumentId": "mgt300_2026_compas_v2",
+  "version": 2,
+  "_sin_desempate": "La v1 tenia diez cartas en nueve celdas: El Vigilante y La Oligarquia compartian la casilla alto/bajo y las separaba el item de timon, que producia una respuesta del tipo empresas / estado / internacional / ciudadania. En formato de grado de acuerdo ese item no existe, asi que las dos cartas se fusionan en La Concentracion y la pregunta por el villano se mueve al punto ciego. Se gana algo con eso: repartida de antemano, esa pregunta llegaba contestada al debate; en el punto ciego llega abierta.",
+  "_sin_bandas_de_agencia": "La v2 no mide el tercer eje, asi que no hay bandas. `bandaAgenciaDe` devuelve null sin bandas y la UI ya lo tiene guardado con `instrumento.ejeAgencia && bandasAgencia`.",
+  "cortes": {
+    "_nota": "Heredados de la v1 y por verificar contra el formato nuevo: con proposiciones de grado de acuerdo la escala de la posicion cambia, porque el promedio se toma sobre cinco valores de {-k, 0, +k} y no sobre diez vectores. Lo mide el bloque de cobertura del preflight.",
+    "_la_trampa": "Sigue en pie para la recalibracion con datos reales. Recalibrar con terciles empiricos ocupa mas celdas pero puede ROMPER el relato de las cartas: en la cohorte de ai_democracy_2026 el tercil superior de direccion cayo en -2.3, de modo que direccion alta habria significado -2.3 y a un alumno claramente pesimista le habria tocado el texto de La Aceleracionista. El chequeo que lo detecta es el bloque de carta-esperada-contra-carta-asignada del preflight: si al recalibrar ese numero BAJA de 7 de 7, los cortes nuevos estan contando otra historia que las cartas.",
+    "_cuando": "Se recalibra UNA VEZ, con la distribucion de la aplicacion 1, y despues se congela. Si los cortes se vuelven a mover en la aplicacion 2 o 3, la comparacion de noviembre no puede distinguir movimiento real de recalibracion. Las posiciones se guardan crudas, asi que la comparabilidad de los numeros no corre riesgo: lo que se juega es la de las etiquetas.",
+    "magnitud": {
+      "bajo": [
+        -10,
+        -2.5
+      ],
+      "medio": [
+        -2.5,
+        2.5
+      ],
+      "alto": [
+        2.5,
+        10
+      ]
+    },
+    "direccion": {
+      "bajo": [
+        -10,
+        -2.5
+      ],
+      "medio": [
+        -2.5,
+        2.5
+      ],
+      "alto": [
+        2.5,
+        10
+      ]
+    }
+  },
+  "arquetipos": [
+    {
+      "id": "aguafiestas",
+      "name": "La Aguafiestas",
+      "celda": {
+        "magnitud": "bajo",
+        "direccion": "bajo"
+      },
+      "desc": "Crees que se está exagerando y que igual va a salir mal. No porque la tecnología sea poderosa, sino porque el entusiasmo se va a cobrar en gente: proyectos que se anuncian, plata que se gasta, puestos que se recortan por una promesa que no se cumple. Lo que te molesta no es la máquina, es la conversación alrededor de la máquina.",
+      "lectura": "Ines Lee, «Piensa primero, IA después» (C1) · Ehrenreich, «Smile or Die», cap. 4 (C2), sobre el costo de obligarse al optimismo · Galor, cap. 4 (C14)",
+      "puntoCiego": "Si la tecnología cambia poco, cuesta explicar por qué el daño sería tanto. Tu diagnóstico y tu pronóstico tiran para lados distintos: o el asunto es menor y el perjuicio también, o el perjuicio es grande y entonces algo importante sí está cambiando."
+    },
+    {
+      "id": "desencantado",
+      "name": "El Desencantado",
+      "celda": {
+        "magnitud": "medio",
+        "direccion": "bajo"
+      },
+      "desc": "Ves un cambio real, de tamaño mediano, y no ves ninguna razón para creer que vaya a repartirse bien. No es catastrofismo: es que ya viste cómo terminaron repartiéndose las olas anteriores, y no encuentras qué habría cambiado esta vez para que el resultado sea otro.",
+      "lectura": "Aghion, cap. 5 (C13), sobre innovación y desigualdad · Galor, cap. 4 (C14) · Han, «La sociedad del cansancio» (C2)",
+      "puntoCiego": "Que las olas anteriores se repartieran mal no es una ley de la naturaleza: se repartieron mal donde las instituciones lo permitieron y menos mal donde no. Si el resultado depende de instituciones, entonces no está decidido de antemano, y tu posición se vuelve una predicción y no un diagnóstico."
+    },
+    {
+      "id": "concentracion",
+      "name": "La Concentración",
+      "celda": {
+        "magnitud": "alto",
+        "direccion": "bajo"
+      },
+      "desc": "Esto importa mucho y el poder se está juntando en pocas manos. Para ti el asunto no es técnico sino de propiedad y de mando: quién es dueño de los modelos y del cómputo, quién captura el excedente, y qué le queda a la política cuando la decisión ya se tomó en un lugar al que no se llega votando.",
+      "lectura": "Aghion, cap. 5 (C13), sobre captura de rentas · Schneier y Sanders, «AI and Power» (C13) y cap. 35 (C7) · Rice y Zegart (C15)",
+      "puntoCiego": "Todavía no has dicho en manos de QUIÉN. Los que comparten tu casilla se dividen en dos bandos que piden políticas opuestas: si el que concentra es el Estado, quieres límites y contrapesos; si son las empresas, quieres un Estado con dientes para ponérselos. No se pueden querer las dos cosas a la vez, y ese es exactamente el debate que te toca dar."
+    },
+    {
+      "id": "historiador",
+      "name": "El Historiador",
+      "celda": {
+        "magnitud": "bajo",
+        "direccion": "medio"
+      },
+      "desc": "Ya viste esta película: el telar, la electricidad, el computador personal. Cada vez alguien anunció el fin del trabajo y cada vez el trabajo se reorganizó. Tu apuesta es que el plazo importa más que el titular, y que lo que hoy parece una ruptura, a treinta años, va a leerse como un capítulo más.",
+      "lectura": "Galor, «El viaje de la humanidad», cap. 4 (C14) · Aghion, cap. 3 (C14), sobre revoluciones tecnológicas y productividad",
+      "puntoCiego": "El argumento histórico predice el final pero no el intervalo, y la gente vive en el intervalo. Que a treinta años se haya reorganizado no le sirve de nada a quien tiene que entrar al mercado laboral en dos, que es exactamente donde estás tú."
+    },
+    {
+      "id": "institucionalista",
+      "name": "La Institucionalista",
+      "celda": {
+        "magnitud": "medio",
+        "direccion": "medio"
+      },
+      "desc": "Ni catástrofe ni salvación: lo que pase depende de las reglas que alcancemos a poner y de quién las haga cumplir. Te interesa menos qué puede hacer la tecnología que quién queda a cargo de fiscalizarla, con qué presupuesto y con qué facultades reales para multar a alguien.",
+      "lectura": "Acemoglu y Robinson, «Por qué fracasan los países», cap. 3 (C15) · Boletín 16821-19 y Política Nacional de IA (C8) · Schneier y Sanders, caps. 40–42 (C8)",
+      "puntoCiego": "Las instituciones se construyen a la velocidad de la política y esto se mueve a otra. Si la regla llega cinco años tarde, llega a regular un mercado que ya se repartió — y regular un reparto consumado es otra cosa que dirigirlo."
+    },
+    {
+      "id": "realista",
+      "name": "El Realista de Potencias",
+      "celda": {
+        "magnitud": "alto",
+        "direccion": "medio"
+      },
+      "desc": "Esto es geopolítica. Lo que se juega no es si la IA es buena o mala sino quién la controla a escala de Estados, y en esa partida Chile es espectador. Tu pregunta práctica no es cómo regular sino de quién vamos a depender, en qué términos, y qué margen de negociación queda cuando el proveedor es también una potencia.",
+      "lectura": "Rice y Zegart, «Managing 21st-Century Political Risk» (C15) · Aghion, cap. 5 (C13) · Acemoglu y Robinson, cap. 3 (C15)",
+      "puntoCiego": "«Somos espectadores» es una descripción cómoda porque no obliga a nada. Países del tamaño de Chile sí negocian condiciones de acceso, compras públicas y estándares — y lo hacen peor cuando sus propias élites ya decidieron que no hay nada que negociar."
+    },
+    {
+      "id": "pragmatica",
+      "name": "La Pragmática",
+      "celda": {
+        "magnitud": "bajo",
+        "direccion": "alto"
+      },
+      "desc": "Es una herramienta útil y la discusión te parece desproporcionada. La usas, te sirve, te ahorra trabajo y sigues con tu vida. Sospechas que buena parte del debate lo sostiene gente que necesita que esto sea importante, y que el pánico es su propio producto.",
+      "lectura": "Ines Lee, «Piensa primero, IA después» (C1) · CENIA / SOFOFA / SENCE (C14), sobre complementariedad · Galor, cap. 4 (C14)",
+      "puntoCiego": "Tu experiencia es la de alguien a quien la herramienta le sirve, y esa es exactamente la posición desde la cual no se ve a quién le cuesta. La pregunta no es si a ti te resulta: es si el que perdió el puesto de entrada tiene tu misma opinión."
+    },
+    {
+      "id": "reformista",
+      "name": "El Reformista",
+      "celda": {
+        "magnitud": "medio",
+        "direccion": "alto"
+      },
+      "desc": "Crees que esto puede terminar bien, y que va a terminar bien exactamente en la medida en que se decida que termine bien. La dirección de la tecnología es una elección política y no una consecuencia técnica, así que el trabajo está en las reglas, los incentivos y en quién se sienta a la mesa.",
+      "lectura": "Acemoglu y Robinson, cap. 3 (C15) · Aghion, cap. 9 (C12), sobre dirigir la innovación · Chambers (2020) (C5) · Gudiño et al. (2024) (C9)",
+      "puntoCiego": "«Se decide» supone un sujeto que decide, y todavía no has dicho quién es. Si son los mismos que hoy concentran el cómputo, tu reforma depende de que el poderoso acepte limitarse; si son otros, falta explicar de dónde sacan la fuerza para imponerlo."
+    },
+    {
+      "id": "aceleracionista",
+      "name": "La Aceleracionista",
+      "celda": {
+        "magnitud": "alto",
+        "direccion": "alto"
+      },
+      "desc": "Esto es un cambio de época y va a salir bien. La abundancia que viene vuelve obsoletas discusiones que hoy parecen centrales, y buena parte de la política actual —lenta, capturada, cortoplacista— es de lo que vamos a poder prescindir. Frenar ahora te parece el error caro, no la precaución barata.",
+      "lectura": "Aghion, cap. 3 (C14), sobre destrucción creativa y crecimiento · Aghion, cap. 9 (C12) · Sen (C11), leído en clave de expansión de capacidades",
+      "puntoCiego": "Toda abundancia registrada hasta hoy tuvo dueño antes de tener reparto, y el reparto nunca fue automático: fue peleado. Si la política es lo que sobra, no queda quién haga esa pelea — y la abundancia sin reparto tiene un nombre viejo y conocido."
+    }
+  ]
+}
