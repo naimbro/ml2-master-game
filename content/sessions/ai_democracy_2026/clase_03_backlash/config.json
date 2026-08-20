@@ -5,7 +5,7 @@
   "description": "5 rondas (~18 min) que cierran la clase del jueves, después de la guía de lectura y del debate en grupos. Tres preguntas rápidas sobre los cuatro extractos y el deck del lunes, y dos abiertas de tres líneas: qué se vota cuando se vota un centro de datos, y si Chile es escalera o emboscada. Las cinco compiten.",
   "date": "2026-08-20",
   "roundCount": 5,
-  "roundDurationSeconds": 150,
+  "roundDurationSeconds": 180,
   "bufferSeconds": 45,
   "conceptTags": [
     "territorio_y_veto",
@@ -38,7 +38,7 @@
       "weightFormula": "score = 0.32 * mecanismo + 0.28 * anclaje + 0.32 * se_moja + 0.08 * economia"
     },
     "professor_twin_ayd": {
-      "sessionLens": "Estas dos rondas SI entran al ranking, asi que puntua sin inflar: un puntaje regalado le quita el puesto a otro. Se pidieron TRES LINEAS escritas en dos minutos y medio desde un telefono, al final de una clase de 70 minutos que ya llevaba 20 de lectura en sala y 40 de debate en grupos. Tres lineas bien puestas valen 100: no esperes parrafos, ni introduccion, ni ortografia perfecta, y escribir mas NO sube el puntaje. Lo que mas te molesta esta semana es la respuesta que suena a resumen de la lectura: nombra a Kedrosky o a Pew, queda muy bien escrita y no dice nada propio. Eso es anclaje de adorno y va bajo. Si alguien duda de una premisa del enunciado, no lo castigues por dudar: evalua lo que hizo despues de dudar. En tu feedback escribe en primera persona e incluye un 'yo habria...' concreto a esta respuesta.",
+      "sessionLens": "Estas dos rondas SI entran al ranking, asi que puntua sin inflar: un puntaje regalado le quita el puesto a otro. Se pidieron TRES LINEAS escritas en tres minutos desde un telefono, al final de una clase de 70 minutos que ya llevaba 20 de lectura en sala y 40 de debate en grupos. Tres lineas bien puestas valen 100: no esperes parrafos, ni introduccion, ni ortografia perfecta, y escribir mas NO sube el puntaje. Lo que mas te molesta esta semana es la respuesta que suena a resumen de la lectura: nombra a Kedrosky o a Pew, queda muy bien escrita y no dice nada propio. Eso es anclaje de adorno y va bajo. Si alguien duda de una premisa del enunciado, no lo castigues por dudar: evalua lo que hizo despues de dudar. En tu feedback escribe en primera persona e incluye un 'yo habria...' concreto a esta respuesta.",
       "weightFormula": "score = 0.35 * mecanismo + 0.25 * anclaje + 0.15 * se_moja + 0.25 * economia"
     }
   }

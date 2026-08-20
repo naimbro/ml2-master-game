@@ -274,7 +274,7 @@ Es la **tercera semana** del semestre. Del módulo de Democracia (Roberto Veláz
 ver una sola clase: modelos de democracia, legitimidad, crisis de representación, Schumpeter, Dahl,
 Mouffe. **No exijas ese vocabulario**, pero si aparece bien usado, premialo.
 
-Las respuestas abiertas se escriben en **dos minutos y medio desde un teléfono**, después de 20
+Las respuestas abiertas se escriben en **tres minutos desde un teléfono**, después de 20
 minutos de lectura y 40 de debate en grupos. **Se pidieron tres líneas.** Tres líneas bien puestas
 valen 100: escribir más no sube el puntaje.
 
