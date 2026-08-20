@@ -10,7 +10,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { useAuth } from './useAuth';
-import { compasDe, posicionPath } from '../lib/compasContent';
+import { compasDe, compasDeInstrumento, posicionPath } from '../lib/compasContent';
 import {
   arquetipoDe,
   posicionDe,
@@ -40,6 +40,12 @@ export interface CompasParticipante {
 
 export interface CompasRun {
   code: string;
+  /**
+   * Cual compas del registro se abrio. OPCIONAL: las salas creadas antes de que
+   * un curso pudiera tener varios no lo traen, y el pack se resuelve igual por
+   * `instrumentId`, que si esta en todas.
+   */
+  compasId?: string;
   courseId: string;
   instrumentId: string;
   /** Which of the three applications this is. Positions are stored per application. */
@@ -78,7 +84,11 @@ export function useCompasRun(code: string | undefined) {
   const loading = !!code && !vigente;
 
   const isHost = !!user && !!run && user.uid === run.hostId;
-  const pack = compasDe(run?.courseId);
+  // Por INSTRUMENTO y no por curso: un curso puede tener varios compases --el
+  // de semestre y el de una clase-- y el que produjo estas respuestas es el que
+  // tiene que interpretarlas. Ademas sirve para las salas abiertas antes de que
+  // el registro pasara a estar indexado por compas, que solo guardaron esto.
+  const pack = compasDeInstrumento(run?.instrumentId);
   // Nunca se expone la sala entera a quien no es anfitrion, ni siquiera si un
   // snapshot viejo quedo en memoria al cambiar de rol. Memoizado porque el `[]`
   // literal seria un array nuevo en cada render, y eso invalidaba el useCallback
@@ -295,16 +305,21 @@ export function useCompasRun(code: string | undefined) {
 /** Creates a run. Host only; the code is what goes on the projector. */
 export async function crearCompasRun(params: {
   code: string;
-  courseId: string;
+  /** Cual de los compases del registro, no cual curso: un curso tiene varios. */
+  compasId: string;
   aplicacion: number;
   hostId: string;
   hostName: string;
 }): Promise<void> {
-  const pack = compasDe(params.courseId);
-  if (!pack) throw new Error(`No hay compás para ${params.courseId}`);
+  const pack = compasDe(params.compasId);
+  if (!pack) throw new Error(`No hay compás ${params.compasId}`);
   await setDoc(doc(db, 'compasRuns', params.code), {
     code: params.code,
-    courseId: params.courseId,
+    compasId: pack.compasId,
+    // El curso sale del pack y no del formulario: es lo que arma la ruta de las
+    // posiciones, y escribirlo por separado permitiria abrir una sala cuyo
+    // instrumento guarda bajo un curso que no es el suyo.
+    courseId: pack.courseId,
     instrumentId: pack.instrumento.instrumentId,
     aplicacion: params.aplicacion,
     hostId: params.hostId,

@@ -6,13 +6,13 @@
 // them throw at runtime — they just hand a student the wrong card.
 
 import { describe, it, expect } from 'vitest';
-import { COMPASES, compasDe, posicionPath } from './compasContent';
+import { COMPASES, compasDe, compasDeInstrumento, compasesDeCurso, posicionPath } from './compasContent';
 import { posicionDe, arquetipoDe, timonDe, bandaDe } from './compas';
 import type { Banda, CompasAnswers } from '../types/compas';
 
 const BANDAS: Banda[] = ['bajo', 'medio', 'alto'];
 
-describe.each(Object.entries(COMPASES))('compas %s', (courseId, pack) => {
+describe.each(Object.entries(COMPASES))('compas %s', (compasId, pack) => {
   const { instrumento, arquetipos } = pack;
 
   it('el instrumento y los arquetipos se refieren al mismo instrumentId', () => {
@@ -318,10 +318,59 @@ describe.each(Object.entries(COMPASES))('compas %s', (courseId, pack) => {
     expect(instrumento.aplicaciones.some((a) => a.semana === 8)).toBe(false);
   });
 
-  it('se encuentra por courseId', () => {
-    expect(compasDe(courseId)).toBe(pack);
+  it('la llave del registro, el pack y el instrumento dicen lo mismo', () => {
+    // Se repite el id adentro del pack para poder pasarlo suelto. Si las dos
+    // copias se separan, un enlace de comparacion apunta a un compas y el
+    // desplegable abre otro, y los dos parecen correctos.
+    expect(pack.compasId).toBe(compasId);
+    expect(pack.instrumento.courseId).toBe(pack.courseId);
+    expect(pack.arquetipos.instrumentId).toBe(pack.instrumento.instrumentId);
+  });
+
+  it('tiene un nombre que lo distingue de los otros compases de su curso', () => {
+    // El nombre es lo unico que el profesor lee al elegir en el desplegable, y
+    // elegir el equivocado escribe las posiciones bajo otro instrumento.
+    const hermanos = compasesDeCurso(pack.courseId);
+    expect(hermanos).toContain(pack);
+    const nombres = hermanos.map((p) => p.nombre);
+    expect(new Set(nombres).size, `nombres repetidos en ${pack.courseId}`).toBe(nombres.length);
+    expect(pack.nombre.trim().length).toBeGreaterThan(10);
+  });
+
+  it('se encuentra por su llave y por su instrumento', () => {
+    expect(compasDe(compasId)).toBe(pack);
     expect(compasDe('no_existe')).toBeNull();
     expect(compasDe(undefined)).toBeNull();
+    // Como lo resuelve un run: los documentos guardan `instrumentId`, tambien
+    // los de las salas abiertas antes de que el registro se indexara por compas.
+    expect(compasDeInstrumento(pack.instrumento.instrumentId)).toBe(pack);
+    expect(compasDeInstrumento('no_existe')).toBeNull();
+    expect(compasDeInstrumento(undefined)).toBeNull();
+  });
+});
+
+describe('varios compases por curso', () => {
+  it('ningun instrumentId se repite en todo el registro', () => {
+    // La invariante que hace posible que un curso tenga mas de un compas. La
+    // ruta es `compas/{courseId}/{instrumentId}_a{n}`: dos instrumentos del
+    // mismo curso con el mismo id se pisan las posiciones alumno por alumno, y
+    // no se ve nada raro hasta que los numeros no cuadran.
+    const ids = Object.values(COMPASES).map((p) => p.instrumento.instrumentId);
+    expect(new Set(ids).size, `instrumentId repetido: ${ids.join(', ')}`).toBe(ids.length);
+  });
+
+  it('dos compases del mismo curso escriben en colecciones distintas', () => {
+    for (const courseId of new Set(Object.values(COMPASES).map((p) => p.courseId))) {
+      const rutas = compasesDeCurso(courseId).map((p) =>
+        posicionPath(p.courseId, p.instrumento.instrumentId, 1),
+      );
+      expect(new Set(rutas).size, `colision de rutas en ${courseId}`).toBe(rutas.length);
+    }
+  });
+
+  it('compasesDeCurso no inventa cursos', () => {
+    expect(compasesDeCurso('no_existe')).toEqual([]);
+    expect(compasesDeCurso(undefined)).toEqual([]);
   });
 });
 
@@ -334,7 +383,7 @@ describe('posicionPath', () => {
 
 describe('bandas contra los cortes reales', () => {
   it('los cortes provisorios reparten el rango completo', () => {
-    const { cortes } = COMPASES.ai_democracy_2026.arquetipos;
+    const { cortes } = COMPASES.ayd_semestral_v3.arquetipos;
     expect(bandaDe(-10, cortes.magnitud)).toBe('bajo');
     expect(bandaDe(0, cortes.magnitud)).toBe('medio');
     expect(bandaDe(10, cortes.magnitud)).toBe('alto');

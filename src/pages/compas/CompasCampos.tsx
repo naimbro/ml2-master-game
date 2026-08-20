@@ -176,8 +176,13 @@ export default function CompasCampos() {
                     Campo {c.n} · {c.miembros.length} personas
                   </h2>
                 </div>
+                {/* Con el nombre del eje y no como `1,2 / -3,4`. Los dos numeros
+                    sueltos obligan a recordar cual es cual justo cuando hay que
+                    ordenar los campos por uno de ellos delante del curso, y en
+                    un compas de clase los ejes no son los del de semestre. */}
                 <p className="mb-2 text-[12.5px] tabular-nums text-faint">
-                  centro en {c.centroide.magnitud.toFixed(1)} / {c.centroide.direccion.toFixed(1)}
+                  {pack.instrumento.axes.x.label} {c.centroide.magnitud.toFixed(1)} ·{' '}
+                  {pack.instrumento.axes.y.label} {c.centroide.direccion.toFixed(1)}
                   {arq && <> · más cerca de {arq.name}</>}
                 </p>
                 {arq && (

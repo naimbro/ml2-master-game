@@ -108,7 +108,7 @@ function AppRoutes() {
         element={user ? <CrearCompas /> : <Navigate to="/" replace />}
       />
       <Route
-        path="/professor/compas/:courseId/comparacion"
+        path="/professor/compas/:compasId/comparacion"
         element={user ? <CompasComparacion /> : <Navigate to="/" replace />}
       />
 

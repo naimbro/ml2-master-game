@@ -71,7 +71,12 @@ export default function Dashboard() {
 
   // Hardcoded catalog courses are only shown to the admin (they belong to Naim)
   const builtinCourses = access === 'admin' ? COURSES : [];
-  const compasDisponibles = Object.keys(COMPASES);
+  // Solo los que se repiten. Un compas de una clase se aplica una vez y no
+  // tiene dos momentos que comparar, asi que su enlace llevaria a una pantalla
+  // que solo puede decir que no hay nada.
+  const compasComparables = Object.values(COMPASES).filter(
+    (p) => p.instrumento.aplicaciones.length > 1,
+  );
 
   // Las dos procedencias se ordenan JUNTAS. Ordenarlas por separado no serviria
   // de nada: los del catalogo quedarian siempre antes que los propios, que es
@@ -157,7 +162,7 @@ export default function Dashboard() {
           {/* El compas no es una sesion y no aparece en la lista de sesiones de
               ningun curso: se abre por su cuenta. Sin este enlace la pantalla
               existe pero no hay como llegar a ella. */}
-          {compasDisponibles.length > 0 && (
+          {Object.keys(COMPASES).length > 0 && (
             <Link
               to="/professor/compas/nuevo"
               className="mb-6 flex items-center justify-between gap-3 rounded-xl border-2 border-line bg-surface-2 px-4 py-3 hover:bg-surface-3"
@@ -172,16 +177,16 @@ export default function Dashboard() {
             </Link>
           )}
 
-          {compasDisponibles.map((cid) => (
+          {compasComparables.map((p) => (
             <Link
-              key={cid}
-              to={`/professor/compas/${cid}/comparacion`}
+              key={p.compasId}
+              to={`/professor/compas/${p.compasId}/comparacion`}
               className="mb-6 flex items-center justify-between gap-3 rounded-xl border-2 border-line bg-surface-2 px-4 py-3 hover:bg-surface-3"
             >
               <span>
                 <span className="block font-bold">Como se movio el curso</span>
                 <span className="text-muted text-sm">
-                  Comparar dos aplicaciones del compas — {cid}
+                  {p.curso} — {p.nombre}
                 </span>
               </span>
               <Trophy className="w-5 h-5 shrink-0 text-cyan-400" />

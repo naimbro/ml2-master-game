@@ -23,12 +23,12 @@ const f = (n: number) => `${n > 0 ? '+' : ''}${n.toFixed(1)}`;
  * "the people who kept coming to class were always the ones over there".
  */
 export default function CompasComparacion() {
-  const { courseId } = useParams<{ courseId: string }>();
+  const { compasId } = useParams<{ compasId: string }>();
   const { access, loading: cargandoAcceso } = useProfessor();
   // Memoizado aunque COMPASES sea estatico: sin esto el linter no puede
   // garantizar que la referencia no cambie entre renders y marca las deps del
   // efecto y del memo de abajo.
-  const pack = useMemo(() => compasDe(courseId), [courseId]);
+  const pack = useMemo(() => compasDe(compasId), [compasId]);
 
   const aplicaciones = pack?.instrumento.aplicaciones ?? [];
   const [a, setA] = useState(1);
@@ -45,18 +45,18 @@ export default function CompasComparacion() {
     error: string | null;
   } | null>(null);
 
-  const clave = `${courseId}:${a}:${b}`;
+  const clave = `${compasId}:${a}:${b}`;
   const cargando = !!pack && lectura?.clave !== clave;
   const antes = lectura?.clave === clave ? lectura.antes : null;
   const despues = lectura?.clave === clave ? lectura.despues : null;
   const error = lectura?.clave === clave ? lectura.error : null;
 
   useEffect(() => {
-    if (!courseId || !pack) return;
+    if (!compasId || !pack) return;
     let vivo = true;
     const leer = async (n: number) => {
       const snap = await getDocs(
-        collection(db, posicionPath(courseId, pack.instrumento.instrumentId, n)),
+        collection(db, posicionPath(pack.courseId, pack.instrumento.instrumentId, n)),
       );
       return snap.docs.map((d) => d.data() as PosicionGuardada);
     };
@@ -76,7 +76,7 @@ export default function CompasComparacion() {
     return () => {
       vivo = false;
     };
-  }, [courseId, pack, a, b, clave]);
+  }, [compasId, pack, a, b, clave]);
 
   const analisis = useMemo(() => {
     if (!antes || !despues || !pack) return null;
@@ -91,7 +91,25 @@ export default function CompasComparacion() {
 
   if (cargandoAcceso) return <div className="p-8 text-ink-soft">Cargando…</div>;
   if (access !== 'admin' && access !== 'approved') return <Navigate to="/professor" replace />;
-  if (!pack) return <div className="p-8 text-ink-soft">No hay compás para {courseId}.</div>;
+  if (!pack) return <div className="p-8 text-ink-soft">No existe el compás {compasId}.</div>;
+  // Un compas de una clase se aplica una vez y su producto es lo que se hizo
+  // con el esa tarde. Sin esta salida la pantalla pedia la aplicacion 3 de un
+  // instrumento que solo tiene la 1, leia una coleccion vacia y mostraba un
+  // curso de cero alumnos, que se lee como «nadie contesto» y no como «esto no
+  // se compara».
+  if (aplicaciones.length < 2) {
+    return (
+      <div className="mx-auto max-w-2xl px-6 py-10 text-ink-soft">
+        <h1 className="mb-3 text-2xl uppercase text-ink" style={{ fontFamily: "'Archivo Black', sans-serif" }}>
+          Nada que comparar
+        </h1>
+        <p>
+          <b>{pack.nombre}</b> tiene una sola aplicación: no es una medición que se repita, así que
+          no hay dos momentos que poner uno contra otro.
+        </p>
+      </div>
+    );
+  }
 
   const puntos: PuntoCompas[] =
     analisis?.emp.pares.map((p) => ({

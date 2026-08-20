@@ -1,0 +1,316 @@
+{
+  "instrumentId": "ayd_s3_backlash_v1",
+  "courseId": "ai_democracy_2026",
+  "version": 1,
+  "title": "Compás de clase — Semana 3",
+  "subtitle": "¿De qué está hecho el backlash, y cuánto debería mandar?",
+  "_proposito": "Compás de UNA CLASE, no de semestre. Se aplica una sola vez, el jueves 20 de agosto de 2026, en los primeros diez minutos, y su producto no es una serie temporal sino los cuatro campos del debate de esa misma sesión. No es comparable con ai_democracy_2026_compas_v3 y no pretende serlo: mide otras dos cosas.",
+  "_calibracion": "Los vectores están balanceados de modo que la media de las cuatro opciones de cada ítem quede cerca de cero: sin eso el instrumento arrastra al curso hacia un lado por construcción y la nube resultante mide el diseño y no a la sala. Recorriendo las 65.536 combinaciones posibles con los cortes en ±1,5, las filas del diagnóstico salen 28/39/33 y las columnas de legitimidad 31/38/31, con la celda más poblada en 14% y la menos poblada en 9%. Es un supuesto de respuesta uniforme, no una predicción de la sala.",
+  "_por_que_existe": "El compás de semestre pregunta por MAGNITUD (cuánto altera la IA la estructura del poder) y DIRECCIÓN (hacia dónde la empuja). Los dos ejes son prospectivos: preguntan por 2035. En la Semana 3 un alumno que todavía no tiene posición contesta el medio, y contestar el medio es honesto. La nube sale apretada en el centro y no sirve para armar campos. Este instrumento pregunta SOLO por cosas que ya ocurrieron —el caso Block, los US$42.000 millones cancelados, el vecino de Ohio, la brecha de Pew— y por el propio trabajo del que contesta.",
+  "_mapeo_de_ejes": "ATENCIÓN al leer los vectores. El motor guarda las dos coordenadas del plano bajo las llaves `magnitud` y `direccion` (ver src/types/compas.ts), que son los nombres del compás de semestre. Acá significan otra cosa: `magnitud` = eje X = DIAGNÓSTICO (¿el malestar está mal calibrado o es la lectura correcta de una pérdida real?) y `direccion` = eje Y = LEGITIMIDAD (¿ese malestar se administra o manda?). Los nombres visibles salen de `axes`, no de las llaves.",
+  "_orden_de_items": "Los ítems ALTERNAN eje al principio. Agrupados —los cinco del diagnóstico y después los tres de legitimidad— nadie tendría posición hasta el ítem 6, porque `posicionDe` devuelve null mientras falte una coordenada, y la nube proyectada saldría vacía la mitad de la sesión.",
+  "_anti_centro": "Cuatro alternativas y ninguna neutra: no hay dónde marcar «no sé» sin saltarse el ítem. En los tres ítems del eje Y los vectores son todos impares (±3, ±7), así que la suma de los tres es impar y con los tres respondidos el promedio nunca cae exactamente en 0. Con uno saltado sí puede caer ahí —12 de 48 pares dan 0— y por eso las nueve celdas de la grilla tienen carta: nadie se queda sin arquetipo por haberse saltado un ítem.",
+  "axes": {
+    "x": {
+      "id": "magnitud",
+      "label": "Diagnóstico",
+      "min": -10,
+      "max": 10,
+      "minLabel": "reacción mal calibrada",
+      "maxLabel": "lectura correcta de una pérdida real",
+      "pregunta": "¿De qué está hecho el malestar con la IA?"
+    },
+    "y": {
+      "id": "direccion",
+      "label": "Legitimidad",
+      "min": -10,
+      "max": 10,
+      "minLabel": "se administra",
+      "maxLabel": "manda",
+      "pregunta": "¿Cuánto debería pesar ese malestar en lo que se decide?"
+    }
+  },
+  "scoring": {
+    "method": "promedio_de_respondidas",
+    "skippable": true,
+    "ranked": false,
+    "scored": false,
+    "nota": "La posición es el promedio de los vectores elegidos. Saltarse un ítem no penaliza: solo cuenta lo respondido. No puntúa y no entra en la nota."
+  },
+  "aplicaciones": [
+    {
+      "n": 1,
+      "semana": 3,
+      "fecha": "2026-08-20",
+      "hito": "jueves de la Semana 3, antes de la guía de lectura",
+      "proposito": "armar los cuatro campos del debate",
+      "nota": "Aplicación única. Este compás no se repite y no se compara con nada: su producto son los campos de esa clase. La línea base del semestre es el otro instrumento."
+    }
+  ],
+  "items": [
+    {
+      "id": "s3_01_desajuste",
+      "order": 1,
+      "question": "El miedo a la IA es mayor que su historial: todavía no ha matado a nadie y la ranquean muy por detrás de las armas nucleares. Y aun así, pocos quieren prohibirla. ¿Cómo lees ese desajuste?",
+      "discrimina": "Escalera del eje del diagnóstico. De «es un sesgo conocido» a «no es miedo a la IA, es miedo a quedarse sin piso». Es la pregunta que la guía pone al margen del extracto 3: Kedrosky dice que el miedo es racional, Prideaux que es un sesgo.",
+      "_tension": "S3 · Prideaux/Slovic contra Kedrosky. Contestable con las diapos 9 y 10 del deck del lunes, sin haber leído los extractos.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Es un sesgo: le tememos a lo que no entendemos, no a lo que nos hace daño.",
+          "vector": { "magnitud": -8 },
+          "anchor": "«AI has become the ultimate dread risk» (S3): la regla de Slovic — tememos menos los riesgos que entendemos, aunque sean más peligrosos"
+        },
+        {
+          "id": "B",
+          "text": "Es una marea: va a bajar apenas aparezca otra alarma más urgente.",
+          "vector": { "magnitud": -5 },
+          "anchor": "«AI has become the ultimate dread risk» (S3): los temores existenciales son como las mareas, y solo se sostienen uno o dos a la vez"
+        },
+        {
+          "id": "C",
+          "text": "Es un piso, no un techo. El daño todavía no se ve, y cuando se vea el miedo va a subir.",
+          "vector": { "magnitud": 5 },
+          "anchor": "Deck S3, diapo 10: lo que frena el miedo es que la IA todavía no tiene víctimas visibles · «The AI backlash is only getting started» (S3)"
+        },
+        {
+          "id": "D",
+          "text": "No es miedo a la IA. Es miedo a quedarse sin piso, y eso ya se puede medir.",
+          "vector": { "magnitud": 8 },
+          "anchor": "«There's One Clear Reason Americans Are Gloomy About A.I.» (S3): el pesimismo correlaciona con las instituciones del mercado laboral, no con la tecnología"
+        }
+      ]
+    },
+    {
+      "id": "s3_02_vecino",
+      "order": 2,
+      "question": "Al vecino de Ohio le explican que el centro de datos no va a subir la cuenta de la luz —trae su propia generación— ni puede contaminar el agua —no la descarga—. Él responde: «bueno, simplemente no lo quiero». ¿Qué haces con esa respuesta?",
+      "discrimina": "Escalera del eje de legitimidad, y el ítem más discriminante de los tres: obliga a decir si una preferencia sin razones técnicas es un obstáculo o es un voto. Ninguno de los cuatro extractos lo resuelve.",
+      "_tension": "S3 · el backlash como problema de gestión pública contra el backlash como agencia democrática.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Es un problema de gestión: hay que mostrarle el beneficio y compensarlo.",
+          "vector": { "direccion": -7 },
+          "anchor": "«The AI backlash is only getting started» (S3), primer consejo: repartir los beneficios, y las empresas empezando a financiar a los pueblos vecinos"
+        },
+        {
+          "id": "B",
+          "text": "Es un problema de información: los datos correctos todavía no llegaron bien.",
+          "vector": { "direccion": -3 },
+          "anchor": "«The AI backlash is only getting started» (S3), tercer consejo: medir todo, porque los hechos no curan la desinformación pero su ausencia la empeora"
+        },
+        {
+          "id": "C",
+          "text": "Es una preferencia legítima aunque no tenga razones técnicas, y con eso basta para que el proyecto se caiga.",
+          "vector": { "direccion": 3 },
+          "anchor": "«America's data-centre backlash puts the AI boom at risk» (S3): los concejos que rechazan proyectos y las moratorias de Michigan y San Marcos"
+        },
+        {
+          "id": "D",
+          "text": "Es exactamente lo que un voto es. No tiene que justificarse ante un ingeniero.",
+          "vector": { "direccion": 7 },
+          "anchor": "Deck S3, diapo 13: una preferencia declarada sin costo y una decisión con consecuencias no son lo mismo — y esto último es lo que decide"
+        }
+      ]
+    },
+    {
+      "id": "s3_03_eeuu",
+      "order": 3,
+      "question": "En una encuesta a 24.000 adultos de 30 países, Estados Unidos resultó el más pesimista de todos: más que Tailandia, Indonesia o México. ¿Por qué?",
+      "discrimina": "El mismo eje del diagnóstico por la vía comparada. Separa a quien explica el pesimismo por el relato —prensa, redes, desinformación— de quien lo explica por lo que se pierde al perder el trabajo.",
+      "_tension": "S3 · la tesis de la industria («es un problema de comunicación») contra la de Kedrosky («es un problema de instituciones»).",
+      "options": [
+        {
+          "id": "A",
+          "text": "Porque su prensa y sus redes amplifican el pánico más que en ninguna parte.",
+          "vector": { "magnitud": -8 },
+          "anchor": "«There's One Clear Reason Americans Are Gloomy About A.I.» (S3): es la tesis de la industria —prensa alarmista, desinformación extranjera— que el artículo cita para refutarla"
+        },
+        {
+          "id": "B",
+          "text": "Porque adoptan todo antes que nadie, y ya se les pasó el entusiasmo.",
+          "vector": { "magnitud": -4 },
+          "anchor": "«There's One Clear Reason Americans Are Gloomy About A.I.» (S3): es sorprendente en ciudadanos que suelen adoptar con entusiasmo cualquier cosa con enchufe"
+        },
+        {
+          "id": "C",
+          "text": "Porque su mercado laboral es formal y hay más que perder. Donde se trabaja sin contrato, la IA parece una escalera.",
+          "vector": { "magnitud": 5 },
+          "anchor": "«There's One Clear Reason Americans Are Gloomy About A.I.» (S3): en economías informales la IA parece una escalera; en mercados formales, una emboscada"
+        },
+        {
+          "id": "D",
+          "text": "Porque allá perder el trabajo es perder también la salud de toda la familia.",
+          "vector": { "magnitud": 8 },
+          "anchor": "«There's One Clear Reason Americans Are Gloomy About A.I.» (S3): el seguro de cesantía reemplaza 67% en Noruega y 60% en Alemania; en EE.UU. mucho menos, y la cobertura de salud se pierde junto con el empleo"
+        }
+      ]
+    },
+    {
+      "id": "s3_04_cancelados",
+      "order": 4,
+      "question": "En un solo trimestre, la oposición local canceló más de 20 proyectos de centros de datos: US$42.000 millones y 3,5 gigavatios. ¿Qué es eso?",
+      "discrimina": "Eje de legitimidad sobre un hecho consumado y no sobre una opinión. La misma cifra se lee como daño evitable o como control democrático funcionando.",
+      "_tension": "S3 · el editorial (el backlash es él mismo peligroso) contra el reportaje (así se decide dónde se construye).",
+      "options": [
+        {
+          "id": "A",
+          "text": "El costo de un pánico mal informado, y lo vamos a pagar todos.",
+          "vector": { "direccion": -7 },
+          "anchor": "«The AI backlash is only getting started» (S3): frenar la tecnología cuesta curas, productividad y la frontera — como pasó con la investigación en vacunas de ARN mensajero"
+        },
+        {
+          "id": "B",
+          "text": "Una señal de que hay que negociar mejor con las comunidades antes de llegar con las excavadoras.",
+          "vector": { "direccion": -3 },
+          "anchor": "«The AI backlash is only getting started» (S3): hay que mostrarle al que bloquea que su zona va a ganar algo si se corre"
+        },
+        {
+          "id": "C",
+          "text": "El sistema funcionando: así se decide dónde se construye una infraestructura de este tamaño.",
+          "vector": { "direccion": 3 },
+          "anchor": "«America's data-centre backlash puts the AI boom at risk» (S3): Loudoun County exigiendo audiencias públicas, y los municipios de Michigan aprobando moratorias"
+        },
+        {
+          "id": "D",
+          "text": "La única forma de control democrático sobre esta industria que ha funcionado hasta ahora.",
+          "vector": { "direccion": 7 },
+          "anchor": "«America's data-centre backlash puts the AI boom at risk» (S3): el proyecto de Piketon se instaló en terreno federal justamente para saltarse parte del permiso local"
+        }
+      ]
+    },
+    {
+      "id": "s3_05_block",
+      "order": 5,
+      "question": "Block despidió al 40% de su personal —unas 4.000 personas— atribuyéndolo a la IA. La acción subió más de 20%. Ex empleados dicen que había sobrecontratación y que la IA fue una excusa cómoda. ¿Qué prueba el caso?",
+      "discrimina": "El caso que la guía marca como tierra de nadie: sirve para los dos lados de la moción del debate. Separa a quien lee el incentivo de quien lee el hecho.",
+      "_tension": "S3 · la moción del jueves: «las cifras de destrucción de empleo por IA son, ante todo, un relato corporativo».",
+      "options": [
+        {
+          "id": "A",
+          "text": "Que conviene decir «IA» aunque no sea IA. La cifra es un producto de comunicación.",
+          "vector": { "magnitud": -9 },
+          "anchor": "«Mass Hysteria» (S3): ex empleados sostienen que una mala gestión infló la planilla y que la IA fue una excusa conveniente · deck S3, diapo 1: salvo que asustar sea el producto"
+        },
+        {
+          "id": "B",
+          "text": "Nada, en ninguna de las dos direcciones. Es un caso, y encima disputado.",
+          "vector": { "magnitud": -2 },
+          "anchor": "«Mass Hysteria» (S3): nadie sabe todavía si la causa del enfriamiento es la IA o una corrección después de la sobrecontratación pospandemia"
+        },
+        {
+          "id": "C",
+          "text": "Que el mercado premia automatizar. Eso solo ya destruye empleo, se llame como se llame.",
+          "vector": { "magnitud": 4 },
+          "anchor": "«Mass Hysteria» (S3): la reacción de los inversionistas indica de qué lado se inclina Wall Street entre aumentar el trabajo y eliminarlo"
+        },
+        {
+          "id": "D",
+          "text": "Que ya se despide por IA. Que además convenga decirlo no lo vuelve falso.",
+          "vector": { "magnitud": 7 },
+          "anchor": "«Mass Hysteria» (S3): la contratación se detuvo en finanzas, seguros, contabilidad, consultoría y tecnología, con empresas que rinden bien sin sumar gente"
+        }
+      ]
+    },
+    {
+      "id": "s3_06_prohibir",
+      "order": 6,
+      "question": "Alrededor del 40% de los votantes estadounidenses dice querer que se prohíba la IA en la mayoría de las industrias. ¿Qué se hace con ese 40%?",
+      "discrimina": "Cierra el eje de legitimidad con el caso más incómodo: una mayoría relativa pidiendo algo que buena parte de la sala considera un error. Obliga a separar «creo que se equivocan» de «no les corresponde decidir».",
+      "_tension": "S3 · preferencia declarada sin costo contra mandato. Es el ítem que produce la esquina del Demócrata a Regañadientes.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Poco: es una preferencia declarada sin costo. Si tuviera precio, ese 40% bajaría solo.",
+          "vector": { "direccion": -7 },
+          "anchor": "Deck S3, diapo 13: «el 40% quiere prohibir la IA» es una preferencia declarada sin costo, y no es lo mismo que un concejo rechazando un proyecto"
+        },
+        {
+          "id": "B",
+          "text": "Hay que tomarla en serio para desactivarla, no para obedecerla.",
+          "vector": { "direccion": -3 },
+          "anchor": "«The AI backlash is only getting started» (S3): persuadir a los votantes de que sus intereses están siendo atendidos se volvió tan importante como mejorar los modelos"
+        },
+        {
+          "id": "C",
+          "text": "Hay que tomarla en serio aunque uno crea que se equivocan.",
+          "vector": { "direccion": 3 },
+          "anchor": "«The AI backlash is only getting started» (S3): los opositores creen estar protegiendo el medioambiente, el empleo y la especie, y no están del todo equivocados"
+        },
+        {
+          "id": "D",
+          "text": "Es un mandato. Un gobierno que lo ignora tiene un problema de legitimidad, no de comunicación.",
+          "vector": { "direccion": 7 },
+          "anchor": "«The AI backlash is only getting started» (S3): los votantes hacen bien en interesarse de cerca en cómo la IA puede cambiarles la vida"
+        }
+      ]
+    },
+    {
+      "id": "s3_07_tu_trabajo",
+      "order": 7,
+      "question": "Piensa en el trabajo al que vas a postular cuando salgas de la universidad. ¿Qué le hace la IA?",
+      "discrimina": "El ítem de mayor varianza esperada de todo el instrumento, y el único que no pregunta por un texto. Esta sala ES la cohorte de 22 a 25 del gráfico de Brynjolfsson. Algunos ya se sienten ganadores y otros están mirando un mercado de entrada que desapareció, y los dos están sentados ahí.",
+      "_tension": "S3 · la asimetría generacional: la IA sustituye lo codificable (junior) y complementa lo tácito (senior).",
+      "options": [
+        {
+          "id": "A",
+          "text": "Me da ventaja: voy a poder hacer solo lo que antes pedía un equipo.",
+          "vector": { "magnitud": -8 },
+          "anchor": "Deck S3, diapo 3: la falacia del lump of labour y la recomposición del empleo · Acemoglu al entrevistador que dice haber cuadruplicado su productividad: «eres la excepción»"
+        },
+        {
+          "id": "B",
+          "text": "Ni ventaja ni amenaza. El trabajo va a cambiar y yo también.",
+          "vector": { "magnitud": -3 },
+          "anchor": "«Mass Hysteria» (S3): el escenario óptimo según Katz es la IA como copiloto, con tipos de trabajo nuevos reemplazando a los que se pierden"
+        },
+        {
+          "id": "C",
+          "text": "Me preocupa que el puesto de entrada por el que iba a pasar ya no exista.",
+          "vector": { "magnitud": 6 },
+          "anchor": "Deck S3, diapo 5 (Brynjolfsson, Chandar & Chen): los de 22 a 25 en oficios expuestos caen 16% relativo mientras los mayores crecen 6-9%"
+        },
+        {
+          "id": "D",
+          "text": "Voy a competir por menos puestos y peor pagados que los que agarró mi hermano mayor.",
+          "vector": { "magnitud": 8 },
+          "anchor": "«A Job Market Leaving Young Graduates Behind Could Scar Them for Years» (S3): egresar en un mal mercado deja brecha salarial quince años después"
+        }
+      ]
+    },
+    {
+      "id": "s3_08_quien_habla",
+      "order": 8,
+      "question": "Los que anuncian el desempleo masivo son, en buena parte, los que venden la tecnología: Amodei predice 10-20% de desempleo de cuello blanco, Gates dice que la gente no será necesaria para casi nada. ¿Qué le hace eso a la cifra?",
+      "discrimina": "El ítem del incentivo, y el que más directamente arma la moción. Cierra el eje del diagnóstico preguntando si el interés de quien habla descuenta lo que dice.",
+      "_tension": "S3 · la observación de Steinberger: cuesta ver cómo asustar al público sirve a sus intereses, salvo que asustar sea el producto.",
+      "options": [
+        {
+          "id": "A",
+          "text": "La deja en nada: asustar es parte del producto que están vendiendo.",
+          "vector": { "magnitud": -9 },
+          "anchor": "«Mass Hysteria» (S3): que quienes venden la IA estén entre los que lanzan las advertencias más ominosas es, sin embargo, notable"
+        },
+        {
+          "id": "B",
+          "text": "La deja mal como pronóstico, pero igual dice algo real sobre lo que están construyendo.",
+          "vector": { "magnitud": 0 },
+          "anchor": "«AI has become the ultimate dread risk» (S3): un p(doom) de 20 o 30% es lo bastante grande para evitar la acusación de complacencia y lo bastante chico para que nadie te lo cobre"
+        },
+        {
+          "id": "C",
+          "text": "Nada. Que a alguien le convenga decir algo no dice si es verdad.",
+          "vector": { "magnitud": 3 },
+          "anchor": "«Mass Hysteria» (S3): Martin Wolf no es dado a la hipérbole, y cuando alguien así habla en esos términos es indicio de que el riesgo es real"
+        },
+        {
+          "id": "D",
+          "text": "Al revés: si hasta ellos lo dicen, es porque lo están viendo de cerca.",
+          "vector": { "magnitud": 7 },
+          "anchor": "Deck S3, diapo 1: Amodei predice 10-20% de desempleo de cuello blanco en cinco años y hasta la mitad de los empleos de entrada eliminados"
+        }
+      ]
+    }
+  ]
+}

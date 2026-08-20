@@ -16,11 +16,12 @@ import type { CompasAnswers } from '../types/compas';
 // una posicion latente y ruido — porque es lo unico que no se puede tener sin
 // una clase en vivo.
 
-// Qué compás se mira. Por defecto el de IA y Democracia, que es el que existía
-// cuando se escribió esta pantalla; `?curso=mgt300_2026` mira cualquier otro.
-// Sin esto, un instrumento nuevo no se puede ver hasta tener la sala montada y
-// un curso adentro, que es exactamente cuando ya es tarde para arreglarlo.
-const CURSO_POR_DEFECTO = 'ai_democracy_2026';
+// Qué compás se mira. Por defecto el de semestre de IA y Democracia, que es el
+// que existía cuando se escribió esta pantalla; `?compas=ayd_s3_backlash_v1`
+// mira cualquier otro del registro. Sin esto, un instrumento nuevo no se puede
+// ver hasta tener la sala montada y un curso adentro, que es exactamente cuando
+// ya es tarde para arreglarlo.
+const COMPAS_POR_DEFECTO = 'ayd_semestral_v3';
 const N = 28;
 const YO = 6;
 
@@ -35,9 +36,11 @@ function mulberry32(seed: number) {
 }
 
 export default function CompasPreview() {
-  const curso =
-    new URLSearchParams(window.location.search).get('curso') ?? CURSO_POR_DEFECTO;
-  const pack = compasDe(curso);
+  const params = new URLSearchParams(window.location.search);
+  // `?curso=` sigue funcionando: es lo que decian los enlaces de antes de que
+  // un curso pudiera tener varios compases, y romperlos no le sirve a nadie.
+  const compasId = params.get('compas') ?? params.get('curso') ?? COMPAS_POR_DEFECTO;
+  const pack = compasDe(compasId);
   const [ronda, setRonda] = useState(0);
 
   // Un curso falso pero estable: la misma semilla en cada render, para que
@@ -79,7 +82,7 @@ export default function CompasPreview() {
     });
   }, [pack]);
 
-  if (!pack) return <div className="p-8">No hay compás para {curso}.</div>;
+  if (!pack) return <div className="p-8">No existe el compás {compasId}.</div>;
   const { instrumento, arquetipos } = pack;
   const total = instrumento.items.length;
 
@@ -138,7 +141,7 @@ export default function CompasPreview() {
         Compás — vista previa
       </h1>
       <p className="mb-1 max-w-[64ch] text-ink-soft">
-        Los {instrumento.items.length} ítems reales de <code>content/compas/{curso}</code>, con un curso de 28 alumnos
+        Los {instrumento.items.length} ítems reales de <code>content/compas/{pack.courseId}</code> ({pack.nombre}), con un curso de 28 alumnos
         simulado. Sin puntaje y sin ranking: el compás mide dónde está parado alguien, no qué tan
         bien lo hizo.
       </p>

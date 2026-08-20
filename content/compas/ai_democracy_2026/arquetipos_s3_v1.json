@@ -1,0 +1,94 @@
+{
+  "archetypesId": "ayd_s3_backlash_arq_v1",
+  "instrumentId": "ayd_s3_backlash_v1",
+  "version": 1,
+  "_como_leer_las_celdas": "Las llaves `magnitud` y `direccion` son las del motor, no las de este instrumento. `magnitud` es el eje X (DIAGNÓSTICO): bajo = el malestar está mal calibrado, medio = en disputa, alto = es la lectura correcta de una pérdida real. `direccion` es el eje Y (LEGITIMIDAD): bajo = ese malestar se administra, medio = mixto, alto = ese malestar manda.",
+  "_para_el_debate": "La moción del jueves —«las cifras de destrucción de empleo por IA son, ante todo, un relato corporativo»— cae sobre el eje X. Los campos con centroide X bajo la defienden; los de X alto la atacan. El eje Y empareja las mesas: los dos campos que quieren administrar debaten entre sí, y los dos que creen que el malestar manda debaten entre sí. Cada mesa discute el dato con la política constante, y el plenario pregunta por qué dos mesas que miraron el mismo dato salieron con políticas opuestas.",
+  "cortes": {
+    "_nota": "PROVISORIOS, como los de cualquier instrumento que todavía no se ha aplicado. No están escritos a ojo: son los que reparten mejor las 65.536 combinaciones de respuesta posibles. Con ±2,5 —los cortes del compás de semestre— el 39% de las combinaciones caía en la celda del centro y las cuatro esquinas quedaban bajo 5% cada una, que es exactamente la nube apretada que este instrumento existe para evitar. Con ±1,5 las filas salen 28/39/33 y las columnas 31/38/31. Supone respuesta uniforme, que no es como contesta una sala real; si el jueves la nube igual sale apretada, los cortes se corren y los campos no cambian, porque `armarCampos` no usa estas bandas.",
+    "magnitud": {
+      "bajo": [-10, -1.5],
+      "medio": [-1.5, 1.5],
+      "alto": [1.5, 10]
+    },
+    "direccion": {
+      "bajo": [-10, -1.5],
+      "medio": [-1.5, 1.5],
+      "alto": [1.5, 10]
+    }
+  },
+  "arquetipos": [
+    {
+      "id": "gestor_del_panico",
+      "name": "El Gestor del Pánico",
+      "celda": { "magnitud": "bajo", "direccion": "bajo" },
+      "desc": "El malestar está mal calibrado y además es caro. Le tememos a lo que no entendemos, no a lo que nos hace daño, y mientras tanto se cancelan proyectos, se pierden curas y la frontera tecnológica se va a otra parte. El problema que hay que administrar es el pánico, no la tecnología.",
+      "lectura": "«The AI backlash is only getting started» y «AI has become the ultimate dread risk» (Semana 3)",
+      "puntoCiego": "El editorial que te respalda concede que los opositores no están del todo equivocados y pide repartir beneficios y regular fuerte donde haga falta: tu versión se queda con la mitad del texto. Y termina con un vecino de Ohio diciendo que simplemente no lo quiere, después de que le respondieran todas las objeciones técnicas. ¿Qué regla responde a eso?"
+    },
+    {
+      "id": "persuasor",
+      "name": "El Persuasor",
+      "celda": { "magnitud": "bajo", "direccion": "medio" },
+      "desc": "Crees que se equivocan, pero no que haya que pasarles por encima. El miedo está mal puesto y aun así es un hecho político con el que hay que trabajar: mostrar el beneficio, medir bien, discutir en la plaza. Convencer, no arrollar — y tampoco obedecer.",
+      "lectura": "«The AI backlash is only getting started» (Semana 3), la tesis de que persuadir a los votantes se volvió tan importante como mejorar los modelos",
+      "puntoCiego": "Persuadir supone que el desacuerdo es sobre hechos. Pew encontró que quien solo ha oído hablar de un centro de datos se opone igual que quien vive a cinco millas, y al vecino de Ohio ya le respondieron todo. Si los datos correctos no mueven a nadie, tu método no tiene con qué seguir, y hay que decir qué pasa entonces."
+    },
+    {
+      "id": "democrata_a_reganadientes",
+      "name": "El Demócrata a Regañadientes",
+      "celda": { "magnitud": "bajo", "direccion": "alto" },
+      "desc": "Crees que se equivocan, y aun así crees que les toca decidir. Que una preferencia no tenga fundamento técnico no la vuelve ilegítima: eso es precisamente lo que un voto es. Es la posición más incómoda de la sala y la más difícil de sostener sin trampa.",
+      "lectura": "Con nadie del todo. Ninguno de los cuatro extractos defiende esto: el editorial elige administrar y el reportaje describe el veto sin defenderlo. Es la esquina que el curso tiene que argumentar solo.",
+      "puntoCiego": "Si la mayoría puede vetar por razones que tú mismo consideras falsas, tienes que decir qué NO puede vetar y con qué criterio. Sin ese límite, tu posición es un cheque en blanco; con él, dejaste de ser procedimentalista y te toca decir quién decide dónde está la raya."
+    },
+    {
+      "id": "el_que_mide",
+      "name": "El Que Mide",
+      "celda": { "magnitud": "medio", "direccion": "bajo" },
+      "desc": "Todavía no sabemos si esto es la IA o una corrección después de la sobrecontratación pospandemia, y decidir sin saber es peor que esperar. Primero estadísticas decentes; después política. Te irritan por igual el que promete el apocalipsis y el que promete la abundancia.",
+      "lectura": "«The AI backlash is only getting started» (Semana 3), el tercer consejo: medir todo · «Mass Hysteria» (Semana 3), Katz sobre lo inédito de la situación",
+      "puntoCiego": "Esperar también es una decisión, y se toma a favor de quien ya está construyendo: mientras mides, se levantan seis carpas del tamaño de un terminal de aeropuerto. Nombra qué medición concreta, en qué plazo, cambiaría tu posición — o «midamos» es una manera elegante de no tener ninguna."
+    },
+    {
+      "id": "el_jurado",
+      "name": "El Jurado",
+      "celda": { "magnitud": "medio", "direccion": "medio" },
+      "desc": "No estás en el centro por comodidad: estás escuchando el caso antes de fallar. La evidencia de la semana empuja en las dos direcciones —el pesimismo correlaciona con instituciones y a la vez la IA es el dread risk perfecto— y todavía no encuentras la razón para quedarte con una.",
+      "lectura": "La guía de la Semana 3 completa: los cuatro extractos coinciden en que hay rechazo y cada uno lo explica por una causa distinta",
+      "puntoCiego": "El jurado falla. Los dos lados de esta semana piden políticas incompatibles: uno pide arreglar el seguro de cesantía y el otro pide transparencia y mejor comunicación, y no se pueden financiar los dos como prioridad. Al final de la clase te van a pedir un lado, y «depende» no es uno."
+    },
+    {
+      "id": "procedimental",
+      "name": "El Procedimental",
+      "celda": { "magnitud": "medio", "direccion": "alto" },
+      "desc": "No sabes quién tiene razón sobre el empleo, y justamente por eso crees que debe decidir el que pone el cuerpo. En la duda, la legitimidad la da el procedimiento y no el diagnóstico: el que vive al lado del proyecto vota, y el que tiene la razón técnica argumenta.",
+      "lectura": "«America's data-centre backlash puts the AI boom at risk» (Semana 3): los concejos, las moratorias, las audiencias públicas de Loudoun County",
+      "puntoCiego": "Pew encontró que quienes solo han oído hablar de un centro de datos se oponen tanto como quienes viven a menos de cinco millas de uno. Si el que decide no es el que pone el cuerpo sino cualquiera con una opinión, tu criterio de legitimidad se te queda sin sujeto y hay que reponerlo con otro."
+    },
+    {
+      "id": "reparador",
+      "name": "El Reparador",
+      "celda": { "magnitud": "alto", "direccion": "bajo" },
+      "desc": "Tienen razón, y por eso mismo no hay que frenar la máquina sino arreglar el piso. El pesimismo es racional porque perder el trabajo cuesta demasiado, no porque la tecnología sea mala: desliga la salud del empleo, pon un seguro de cesantía que reemplace ingreso de verdad, y el malestar se desarma solo.",
+      "lectura": "«There's One Clear Reason Americans Are Gloomy About A.I.» (Semana 3) · el primer consejo del editorial, sobre seguro salarial y participación en los beneficios",
+      "puntoCiego": "Blue Rose midió que el público pide 54% crear empleos y solo 17% transferir dinero — la respuesta más discutida en el mundo tech es la que menos le piden. Si el malestar es demanda de reconocimiento y no de ingreso, tu política es la más eficiente y aun así no desactiva nada."
+    },
+    {
+      "id": "negociador",
+      "name": "El Negociador",
+      "celda": { "magnitud": "alto", "direccion": "medio" },
+      "desc": "Tienen razón en lo que reclaman, y el proyecto se hace solo si a ellos les conviene. No es veto ni es trámite: es precio. Que las empresas financien al pueblo vecino, que paguen la capacidad de red que reservan, que la renta se quede donde está el galpón — y entonces se construye.",
+      "lectura": "«America's data-centre backlash puts the AI boom at risk» (Semana 3): la regla de Ohio que obliga a pagar el 85% de la capacidad pedida aunque no se use, que es vinculante y no una promesa",
+      "puntoCiego": "El caso que tu marco no explica está en el mismo reportaje: al vecino le ofrecieron respuestas a todo y contestó que simplemente no lo quiere. Si lo que se rechaza es la tecnología y no el reparto, no hay precio que cierre el trato, y tu negociación se queda sin objeto."
+    },
+    {
+      "id": "el_que_no_lo_quiere",
+      "name": "El Que No Lo Quiere",
+      "celda": { "magnitud": "alto", "direccion": "alto" },
+      "desc": "Tienen razón, y por eso el proyecto no se construye. La pérdida es real y medible, y el único freno que ha funcionado hasta ahora no fue una ley ni un organismo: fueron concejos municipales votando que no. No es «no en mi patio»: es que no.",
+      "lectura": "«America's data-centre backlash puts the AI boom at risk» (Semana 3): US$42.000 millones cancelados en un trimestre, las moratorias de Michigan y San Marcos, y el rechazo transversal en Ohio",
+      "puntoCiego": "El editorial sostiene que si unos países frenan y otros no, los que frenaron no se recuperan — más de dos siglos después de la Revolución Industrial, pocos alcanzaron a los primeros. Y el proyecto de Piketon se instaló en terreno federal para saltarse el permiso local: tu freno se puede rodear, y hay que decir qué sigue cuando lo rodean."
+    }
+  ]
+}
