@@ -31,6 +31,11 @@ import aydC01Scenarios from '../../content/sessions/ai_democracy_2026/clase_01_i
 import aydC01Rubric from '../../content/sessions/ai_democracy_2026/clase_01_introduccion/rubric.json';
 import aydC01KnowledgeBase from '../../content/sessions/ai_democracy_2026/clase_01_introduccion/knowledge_base.md?raw';
 
+import aydC03Config from '../../content/sessions/ai_democracy_2026/clase_03_backlash/config.json';
+import aydC03Scenarios from '../../content/sessions/ai_democracy_2026/clase_03_backlash/scenarios.json';
+import aydC03Rubric from '../../content/sessions/ai_democracy_2026/clase_03_backlash/rubric.json';
+import aydC03KnowledgeBase from '../../content/sessions/ai_democracy_2026/clase_03_backlash/knowledge_base.md?raw';
+
 import teB2Config from '../../content/sessions/temas_emergentes_2026/bloque_2_concentracion_frontera/config.json';
 import teB2Scenarios from '../../content/sessions/temas_emergentes_2026/bloque_2_concentracion_frontera/scenarios.json';
 import teB2Rubric from '../../content/sessions/temas_emergentes_2026/bloque_2_concentracion_frontera/rubric.json';
@@ -225,6 +230,18 @@ export const SESSIONS: SessionOption[] = [
     scenarios: aydC01Scenarios,
     rubric: aydC01Rubric,
     knowledgeBase: aydC01KnowledgeBase,
+  },
+  {
+    id: 'clase_03_backlash',
+    courseId: 'ai_democracy_2026',
+    title: aydC03Config.title,
+    description: aydC03Config.description,
+    rounds: aydC03Scenarios.length,
+    duration: Math.round(aydC03Config.roundDurationSeconds / 60),
+    config: aydC03Config,
+    scenarios: aydC03Scenarios,
+    rubric: aydC03Rubric,
+    knowledgeBase: aydC03KnowledgeBase,
   },
   {
     id: 'bloque_2_concentracion_frontera',

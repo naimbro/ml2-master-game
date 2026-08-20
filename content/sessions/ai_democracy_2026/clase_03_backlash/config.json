@@ -1,0 +1,45 @@
+{
+  "sessionId": "clase_03_backlash",
+  "courseId": "ai_democracy_2026",
+  "title": "Semana 3: De qué está hecho el backlash",
+  "description": "5 rondas (~18 min) que cierran la clase del jueves, después de la guía de lectura y del debate en grupos. Tres preguntas rápidas sobre los cuatro extractos y el deck del lunes, y dos abiertas de tres líneas: qué se vota cuando se vota un centro de datos, y si Chile es escalera o emboscada. Las cinco compiten.",
+  "date": "2026-08-20",
+  "roundCount": 5,
+  "roundDurationSeconds": 150,
+  "bufferSeconds": 45,
+  "conceptTags": [
+    "territorio_y_veto",
+    "no_es_nimby",
+    "instituciones_y_pesimismo",
+    "china_shock",
+    "escalera_o_emboscada"
+  ],
+  "judges": [
+    {
+      "judgeId": "democracy_scholar",
+      "weight": 0.4
+    },
+    {
+      "judgeId": "policy_lawyer",
+      "weight": 0.3
+    },
+    {
+      "judgeId": "professor_twin_ayd",
+      "weight": 0.3
+    }
+  ],
+  "judgeConfig": {
+    "democracy_scholar": {
+      "sessionLens": "Tu lente es LA VIA. Las dos preguntas abiertas de esta ronda parten de un hecho —el vecino que no se mueve con el dato correcto, el pais que ve la IA como escalera o como emboscada— y tu unica pregunta es si el estudiante nombra el camino concreto por el que ese hecho se vuelve politico: que se esta decidiendo, quien decide, quien queda sin voz, que institucion produce el efecto. La prueba que aplicas es siempre la misma: ¿podria copiar esta razon y pegarla en la otra pregunta del juego sin que nadie lo note? Si la respuesta es si, no es una razon. Premia el rasgo concreto y la via nombrada; penaliza el juicio moral sobre la IA sin nada detras. Es la tercera semana del semestre y del modulo democratico alcanzaron a ver una sola clase: no exijas Schumpeter, Dahl ni Mouffe, y si aparecen bien usados, premialos. Exige razonamiento, no erudicion.",
+      "weightFormula": "score = 0.40 * mecanismo + 0.30 * anclaje + 0.20 * se_moja + 0.10 * economia"
+    },
+    "policy_lawyer": {
+      "sessionLens": "Tu lente es LA DECISION CON CONSECUENCIAS. La semana entera giro sobre esa distincion: 'el 40% quiere prohibir la IA' es una preferencia declarada sin costo, y 'este concejo rechazo este proyecto' es una decision que cancela US$42.000 millones. Tu obsesion es si el estudiante llega hasta ahi o se queda en el sondeo: si nombra algo sobre lo que efectivamente se decide, una regla, una institucion, un actor con potestad, un mecanismo que muerde. 'Depende', 'las dos cosas' y 'Chile esta en el medio' valen poco aunque esten bien escritos, salvo que digan de que depende y aun asi se queden con una. Importante: todas las opciones valen exactamente lo mismo. No premies una eleccion por sobre otra ni por parecerte mas sensata; evalua solo que haya una respuesta y que este sostenida. No exijas que propongan una politica: ninguna de las dos preguntas la pide.",
+      "weightFormula": "score = 0.32 * mecanismo + 0.28 * anclaje + 0.32 * se_moja + 0.08 * economia"
+    },
+    "professor_twin_ayd": {
+      "sessionLens": "Estas dos rondas SI entran al ranking, asi que puntua sin inflar: un puntaje regalado le quita el puesto a otro. Se pidieron TRES LINEAS escritas en dos minutos y medio desde un telefono, al final de una clase de 70 minutos que ya llevaba 20 de lectura en sala y 40 de debate en grupos. Tres lineas bien puestas valen 100: no esperes parrafos, ni introduccion, ni ortografia perfecta, y escribir mas NO sube el puntaje. Lo que mas te molesta esta semana es la respuesta que suena a resumen de la lectura: nombra a Kedrosky o a Pew, queda muy bien escrita y no dice nada propio. Eso es anclaje de adorno y va bajo. Si alguien duda de una premisa del enunciado, no lo castigues por dudar: evalua lo que hizo despues de dudar. En tu feedback escribe en primera persona e incluye un 'yo habria...' concreto a esta respuesta.",
+      "weightFormula": "score = 0.35 * mecanismo + 0.25 * anclaje + 0.15 * se_moja + 0.25 * economia"
+    }
+  }
+}

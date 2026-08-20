@@ -1,0 +1,217 @@
+[
+  {
+    "id": "ayd_c03_r1_planta_nuclear",
+    "order": 1,
+    "title": "Antes que un centro de datos",
+    "category": "Lectura",
+    "type": "multiple_choice",
+    "ranked": true,
+    "durationSeconds": 62,
+    "context": "",
+    "question": "",
+    "conceptTags": [
+      "territorio_y_veto",
+      "no_es_nimby"
+    ],
+    "mcQuestions": [
+      {
+        "question": "The Economist, 23 de junio de 2026, sobre el rechazo a los centros de datos en EE.UU. Entre las encuestas que cita hay una comparación incómoda: los estadounidenses preferirían vivir junto a ___ antes que junto a un centro de datos.",
+        "options": [
+          {
+            "id": "A",
+            "text": "un vertedero municipal"
+          },
+          {
+            "id": "B",
+            "text": "una planta nuclear"
+          },
+          {
+            "id": "C",
+            "text": "una cárcel de mediana seguridad"
+          },
+          {
+            "id": "D",
+            "text": "una autopista de seis pistas"
+          }
+        ],
+        "correctOptionIndex": 1,
+        "timeLimitSeconds": 20,
+        "explanation": "Una planta nuclear. Y no es una talla: el argumento del agua —un centro mediano gasta al año lo mismo que dos canchas de golf— viene de un libro con un error de cálculo. El dato correcto no está moviendo a nadie."
+      }
+    ],
+    "media": [
+      {
+        "kind": "image",
+        "src": "media/ai_democracy/backlash-council-bluffs.jpg",
+        "alt": "Vista aerea al atardecer del centro de datos de Google en Council Bluffs, Iowa: una nave larga de hormigon rodeada de campo, con una fila de equipos de refrigeracion a un costado y un lago al fondo.",
+        "credit": "Centro de datos de Google en Council Bluffs, Iowa. Foto: Chad Davis, 2017. CC BY 2.0, via Wikimedia Commons."
+      }
+    ]
+  },
+  {
+    "id": "ayd_c03_r2_kedrosky_correlaciones",
+    "order": 2,
+    "title": "Con qué correlaciona el pesimismo",
+    "category": "Mecanismo",
+    "type": "multiple_choice",
+    "ranked": true,
+    "durationSeconds": 66,
+    "context": "",
+    "question": "",
+    "conceptTags": [
+      "instituciones_y_pesimismo"
+    ],
+    "mcQuestions": [
+      {
+        "question": "Paul Kedrosky (NYT, 25 de junio de 2026) discute con la industria, que dice que el pesimismo sobre la IA es un problema de comunicación. Su argumento es de correlaciones: si el pesimismo fuera cultural o informacional, se concentraría en ciertos grupos. ¿Qué encontró?",
+        "options": [
+          {
+            "id": "A",
+            "text": "No correlaciona con el ingreso ni la edad; sí con el nivel educativo"
+          },
+          {
+            "id": "B",
+            "text": "No correlaciona con la polarización; sí con el consumo de redes y podcasts"
+          },
+          {
+            "id": "C",
+            "text": "No correlaciona con medios ni educación; sí con el seguro de cesantía"
+          },
+          {
+            "id": "D",
+            "text": "No correlaciona con nada medible: es un ánimo cultural sin causa clara"
+          }
+        ],
+        "correctOptionIndex": 2,
+        "timeLimitSeconds": 30,
+        "explanation": "Con el seguro de cesantía. Si fuera cultural o informacional correlacionaría con medios, educación o polarización, pero «los atraviesa a todos». En EE.UU. perder el empleo es perder ingreso y salud a la vez: el pesimismo es racional."
+      }
+    ]
+  },
+  {
+    "id": "ayd_c03_r3_china_shock",
+    "order": 3,
+    "title": "Dos millones de empleos",
+    "category": "Mecanismo",
+    "type": "multiple_choice",
+    "ranked": true,
+    "durationSeconds": 72,
+    "context": "",
+    "question": "",
+    "conceptTags": [
+      "china_shock"
+    ],
+    "mcQuestions": [
+      {
+        "question": "The Economist, 14 de mayo de 2026. Entre 1999 y 2011 el «China shock» destruyó 2 millones de empleos manufactureros en EE.UU. El artículo compara esa cifra con otra para hacer un punto político sobre lo que puede venir con la IA. ¿Con cuál, y qué concluye?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Con un mes típico de despidos: un shock chico puede ser un terremoto político"
+          },
+          {
+            "id": "B",
+            "text": "Con la Gran Depresión: solo un colapso así mueve el voto de un país entero"
+          },
+          {
+            "id": "C",
+            "text": "Con el desempleo europeo: EE.UU. lo absorbió mejor que cualquier otro país rico"
+          },
+          {
+            "id": "D",
+            "text": "Con la automatización de los ochenta, que no dejó ninguna huella electoral"
+          }
+        ],
+        "correctOptionIndex": 0,
+        "timeLimitSeconds": 30,
+        "explanation": "Un mes típico de despidos. En agregado la cifra es chica; políticamente contribuyó a llevar a Trump a la Casa Blanca y a los aranceles más altos desde los treinta. Y ahora el amenazado —el cuello y corbata— pesa más."
+      }
+    ],
+    "media": [
+      {
+        "kind": "image",
+        "src": "media/ai_democracy/backlash-rally-trump.jpg",
+        "alt": "Publico en un acto de campana de Donald Trump: un hombre levanta un cartel azul que dice TRUMP - MAKE AMERICA GREAT AGAIN entre asistentes con gorras rojas.",
+        "credit": "Acto de campana de Donald Trump en Las Vegas, Nevada, 2016. Foto: Gage Skidmore. CC BY-SA 2.0, via Wikimedia Commons."
+      }
+    ]
+  },
+  {
+    "id": "ayd_c03_r4_que_se_vota",
+    "order": 4,
+    "title": "Qué se vota cuando se vota un centro de datos",
+    "category": "Argumentación",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 150,
+    "conceptTags": [
+      "no_es_nimby",
+      "territorio_y_veto"
+    ],
+    "context": "Shane Wilkin es senador estatal de Ohio y los centros de datos son el tema de su distrito. Esto es lo que cuenta que le pasa cuando sale a explicarlos:\n\n«Les explico que los centros de datos no subirán las cuentas de luz, porque traen su propia generación, y que no pueden contaminar el agua, porque no la descargan. Y me responden: bueno, simplemente no lo quiero.»\n\nY no es el vecino enojado de siempre. Una encuesta de Pew (abril 2026) encontró que quienes solo han oído hablar de un centro de datos se oponen tanto como quienes viven a menos de cinco millas de uno. En Ohio se oponen tres cuartos de los demócratas y dos tercios de los republicanos.",
+    "question": "Si el dato correcto no cambia la posición del vecino, ¿qué se está votando realmente cuando se vota un centro de datos? Tres líneas.",
+    "judgeFocus": "Se evalua si el estudiante nombra QUE se esta decidiendo cuando el dato correcto ya no mueve a nadie, y si se queda con una respuesta. NO hay una respuesta correcta unica y no la busques en una lista: el criterio es que la respuesta nombre algo concreto que se este decidiendo y explique por que el dato del senador no lo toca. Cualquier respuesta que cumpla ese criterio vale 100, la haya pensado alguien antes o no.\n\nPara calibrar, y sin que esto sea lista cerrada: sirven leer el voto como un veto sobre la tecnologia entera y no sobre este proyecto; como una disputa por quien decide sobre el territorio; como una demanda de reconocimiento antes que de informacion; como desconfianza en quien trae el dato mas que en el dato mismo. Hay otras lecturas verdaderas que no estan escritas aca y valen exactamente igual.\n\nLo que NO cuenta: repetir el enunciado con otras palabras; opinar sobre si los centros de datos son buenos o malos; decir 'se vota con emocion y no con datos' sin decir que se esta decidiendo con esa emocion.\n\nDOS ADVERTENCIAS.\n\n(1) 'El vecino esta desinformado' es una respuesta LEGITIMA y puede valer 100, pero solo si se hace cargo del hallazgo de Pew que esta en el enunciado: quienes solo han oido hablar de un centro de datos se oponen igual que quienes viven al lado. Si lo ignora, eso es mecanismo bajo, no una falta moral, y no lo trates como desprecio al vecino.\n\n(2) Si el estudiante duda del dato del senador o del hallazgo de Pew, NO lo castigues por dudar: evalua lo que hace despues de dudar.\n\nSe pidieron TRES LINEAS. Tres lineas bien puestas valen 100 y escribir mas no sube el puntaje.",
+    "evaluationGuide": {
+      "must_hit": [
+        "Nombra algo concreto que se este decidiendo cuando se vota el proyecto, y no solo dice que la gente esta enojada",
+        "Explica por que el dato correcto del senador no toca eso que se esta decidiendo"
+      ],
+      "fatal_errors": [
+        "Contesta si los centros de datos son buenos o malos, en vez de que se vota",
+        "Afirma que la oposicion viene sobre todo de los vecinos cercanos, que es lo contrario de lo que dice el enunciado",
+        "Repite el enunciado con otras palabras sin agregar nada"
+      ],
+      "partial_credit": {
+        "nombra_sin_explicar": "Dice que se vota la tecnologia entera (o cualquier equivalente valido) pero no dice por que el dato no lo mueve: 60 en mecanismo",
+        "explica_sin_nombrar": "Explica bien por que el dato no convence pero nunca dice que se esta decidiendo: 60 en mecanismo y 60 en se_moja",
+        "material_de_adorno": "Menciona Pew, Ohio o el senador y despues no los usa para nada: 40 en anclaje, sin tocar mecanismo"
+      },
+      "nice_to_have": [
+        "Distingue preferencia declarada sin costo de decision con consecuencias",
+        "Nombra a quien queda sin voz en esa votacion",
+        "Traslada la pregunta a un caso chileno concreto"
+      ]
+    },
+    "idealAnswer": "Se esta votando si la IA entra o no al territorio, no este proyecto en particular. Por eso el dato no mueve: el vecino no esta evaluando el consumo de agua ni la cuenta de luz, esta usando la unica votacion que tiene a mano para decir algo sobre la tecnologia entera. Y ahi una preferencia que en una encuesta no costaba nada se convierte en un veto que cancela el proyecto."
+  },
+  {
+    "id": "ayd_c03_r5_escalera_o_emboscada",
+    "order": 5,
+    "title": "Escalera o emboscada",
+    "category": "Argumentación",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 150,
+    "conceptTags": [
+      "escalera_o_emboscada",
+      "instituciones_y_pesimismo"
+    ],
+    "context": "Kedrosky compara países y encuentra dos formas distintas de que se vea la misma tecnología. Donde se trabaja sin contrato —economías con alta informalidad— la IA «parece una escalera» hacia resultados que antes exigían capital, educación y empleo formal. En países ricos con mercados laborales formales, en cambio, «la IA se parece más a una emboscada»: amenaza lo que la gente ya tiene.\n\nSu tesis es que el pesimismo no se explica por cultura ni por desinformación, sino por qué tan dura es la caída cuando pierdes el trabajo. El seguro de cesantía conserva ~67% del sueldo en Noruega, ~66% en Francia y 60% en Alemania; en EE.UU. bastante menos, por plazo acotado, y ahí perder el empleo significa perder también la cobertura de salud.",
+    "question": "¿De qué lado está Chile: escalera o emboscada? Elige uno y nombra el rasgo concreto de nuestro mercado laboral o de nuestra protección social que decide la respuesta. Tres líneas.",
+    "judgeFocus": "Se pidio ELEGIR un lado —escalera o emboscada— y nombrar el rasgo concreto que decide la respuesta. Se evaluan las dos cosas, y el rasgo pesa mas que la eleccion.\n\nLos dos lados valen exactamente lo mismo. No premies uno por parecerte mas correcto ni por ser el que el material sugiere para paises ricos: Chile tiene las dos caras y las dos son defendibles. Lo que no vale es no elegir: 'depende', 'las dos a la vez' o 'Chile esta en el medio' topa en 40 en 'Se moja' por bien escrito que este. Si vale elegir uno reconociendo lo que el otro tiene de cierto, y eso es lo mejor que puede pasar.\n\nEl rasgo tiene que ser un RASGO, no un adjetivo. 'Chile es desigual' o 'aca hay mucha precariedad' no nombran nada: hay que poder senalar la regla, la institucion o el hecho que produce el efecto. Para calibrar, y sin que esto sea lista cerrada: la duracion y la tasa de reemplazo del seguro de cesantia; el peso del trabajo informal o a honorarios; que la salud aca no dependa del empleo como en EE.UU.; la indemnizacion por anos de servicio; que el empleo publico o formal se concentre en ciertas ocupaciones. Otros rasgos verdaderos que no estan escritos aca valen exactamente igual.\n\nNO exijas cifras, ni nombres oficiales exactos, ni que sepan como se llama el instrumento: lo que vale es que el rasgo exista y explique. Si trae una cifra aproximada, no la persigas. Traer algo del mercado laboral chileno que NO esta en el material y usarlo bien es lo mejor que puede pasar, no una falta.\n\nLo que NO cuenta: describir la distincion de Kedrosky sin aplicarla a Chile; decir que Chile es emboscada porque la IA es peligrosa; elegir un lado y no dar ningun rasgo.\n\nEstas rondas SI entran al ranking. Se pidieron TRES LINEAS y escribir mas no sube el puntaje.",
+    "evaluationGuide": {
+      "must_hit": [
+        "Elige escalera o emboscada de forma inequivoca",
+        "Nombra un rasgo concreto del mercado laboral o de la proteccion social chilena, no un adjetivo",
+        "Se entiende por que ESE rasgo produce ESE lado"
+      ],
+      "fatal_errors": [
+        "No se queda con ninguno de los dos lados",
+        "Describe la distincion de Kedrosky sin aplicarla a Chile",
+        "Justifica la eleccion diciendo que la IA es peligrosa o prometedora, sin ningun rasgo institucional",
+        "Le atribuye a Chile una institucion que no existe, o inventa una cifra con aire de precision"
+      ],
+      "partial_credit": {
+        "elige_sin_rasgo": "Elige con claridad y solo ofrece un adjetivo ('somos precarios'): 40 en mecanismo, 100 en se_moja",
+        "rasgo_sin_elegir": "Nombra un rasgo excelente y termina en 'depende de a quien mires': 80 o 100 en mecanismo, 40 en se_moja",
+        "rasgo_a_medias": "Nombra el rasgo correcto pero no dice como produce el efecto: 60 en mecanismo"
+      },
+      "nice_to_have": [
+        "Elige un lado reconociendo que Chile tiene tambien el otro",
+        "Distingue a quien le toca cada cara dentro de Chile, en vez de tratar al pais como un bloque",
+        "Conecta el rasgo con la tesis de Kedrosky de que el pesimismo es racional"
+      ]
+    },
+    "idealAnswer": "Emboscada, aunque Chile tenga las dos caras. Lo que decide es que el seguro de cesantia aca paga poco y por pocos meses, asi que para quien tiene contrato la caida es dura y el miedo es racional, igual que en EE.UU. La informalidad hace que para otra parte grande la IA si sea escalera, pero el malestar politico lo va a poner el sector formal, que es el que tiene algo que perder."
+  }
+]

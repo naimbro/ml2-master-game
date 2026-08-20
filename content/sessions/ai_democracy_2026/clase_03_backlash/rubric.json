@@ -1,0 +1,97 @@
+{
+  "_doc": "Rubrica escrita para lo que piden las DOS rondas abiertas de esta sesion. Las rondas 1, 2 y 3 son de opcion multiple y se puntuan del lado del cliente: esta rubrica no las toca. Las dimensiones no son las de _shared/base_rubric.json (process_structuring / institutional_realism / precision_clarity) porque aca no se pide disenar una institucion ni mapear actores con potestad: se pide nombrar una via concreta, apoyarse en el material de la semana y quedarse con una respuesta. Las cuatro formulas de peso viven en config.json y usan estos mismos ids.\n\nARITMETICA DE LOS PESOS, para que no se pierda al editarla: una respuesta generica pero decidida y bien escrita (mecanismo 40, anclaje 40, se_moja 100, economia 100) tiene que quedar bajo 65 en los TRES jueces. Con los pesos actuales queda en 50, 58 y 57. Si alguien sube 'economia' o 'se_moja', eso se rompe y una respuesta vacia empieza a sacar 70.",
+  "sessionId": "clase_03_backlash",
+  "globalInstructions": "Evalua SOLO lo que esta escrito. Es la TERCERA semana del curso 'Inteligencia Artificial y Democracia' (Escuela de Gobierno UAI, 2026). Las respuestas se escriben en dos minutos y medio desde un telefono, al final de una clase de 70 minutos que ya llevaba 20 minutos de lectura en sala y 40 de debate en grupos.\n\nTODO lo que el estudiante necesita esta en el enunciado de la ronda, en el deck del lunes 17 o en la guia de cuatro extractos que leyeron hoy en sala. Ese material esta transcrito completo en el knowledge base. NO exijas nada fuera de ahi: no pidas los fragmentos de Acemoglu ni los capitulos de Schneier & Sanders, que estaban asignados pero no hay evidencia de que se hayan visto; no pidas teoria democratica del modulo de Roberto Velazquez, del que alcanzaron a ver una sola clase; no pidas bibliografia ni citas con pagina, porque los cuatro textos llegaron traducidos y recortados.\n\nSE PIDIERON TRES LINEAS. Tres lineas bien puestas valen 100. No esperes parrafos, ni introduccion, ni conclusion, ni ortografia perfecta, y escribir mas NO sube el puntaje.\n\nNINGUNA de las dos preguntas abiertas tiene una respuesta correcta unica. En las dos, la posicion contraria a la que a ti te parezca obvia puede valer 100 si esta sostenida. Evalua la razon, no el bando. Y si un estudiante duda de una premisa del enunciado o del dato que se le da, NO lo castigues por dudar: evalua lo que hace despues de dudar.\n\nPremia: nombrar la via concreta por la que pasa lo que afirma, usar algo del material de la semana para que haga trabajo de verdad, y quedarse con una respuesta. Penaliza: la generalidad, el juicio moral sin mecanismo, el dato citado como adorno y la respuesta larga que dice una sola cosa.",
+  "scoring": {
+    "scaleLevels": [100, 80, 60, 40, 20, 0],
+    "instructions": "Elige uno de los seis niveles escritos por dimension. No inventes valores intermedios. Si la respuesta satisface un nivel solo parcialmente, baja al nivel inferior. Usa el campo 'judgeFocus' del escenario como ancla principal para esa ronda: ahi estan las advertencias especificas de cada pregunta y mandan sobre estas instrucciones generales si hay tension."
+  },
+  "dimensions": [
+    {
+      "id": "mecanismo",
+      "name": "Mecanismo nombrado",
+      "weight": 0.36,
+      "description": "¿Nombra la VIA concreta por la que pasa lo que afirma? La prueba es de copiar y pegar: si la razon serviria igual en la otra pregunta del juego, o para cualquier tecnologia, o para cualquier pais, no es una razon — es un relleno con forma de razon. Esta dimension NO mide si eligio (eso lo mide 'se_moja'), NO mide si uso el material (eso lo mide 'anclaje') y NO mide el largo (eso lo mide 'economia'). Un error de hecho ya se cobra aca y en 'anclaje': no lo cobres tambien en las otras dos.",
+      "level_100": "Nombra una via, un rasgo o un actor concreto que sostiene lo que afirma, y es propio de esta pregunta. No se podria trasladar a otra respuesta sin que se note.",
+      "level_80": "La via es correcta y propia, pero queda a medio explicar: se entiende cual es y no como opera.",
+      "level_60": "Afirma que hay una consecuencia y no dice por que via se produce.",
+      "level_40": "Emite un juicio —es preocupante, es una oportunidad, es injusto— sin nada que lo sostenga.",
+      "level_20": "La razon serviria igual para cualquier otra respuesta posible a esta pregunta.",
+      "level_0": "No responde a lo que se pregunto, o afirma algo que el enunciado contradice explicitamente."
+    },
+    {
+      "id": "anclaje",
+      "name": "Anclaje en el material",
+      "weight": 0.28,
+      "description": "¿Se apoya en algo de la semana —un hallazgo, una distincion, una cifra, una de las cuatro explicaciones— y ese algo HACE TRABAJO en el argumento? Un dato nombrado que se podria borrar sin que la respuesta cambie es adorno, no anclaje. Traer un rasgo del mundo real que NO esta en el material (por ejemplo, algo del mercado laboral chileno) y usarlo bien vale lo mismo que traerlo del material: no es una falta, es lo mejor que puede pasar. Esta dimension NO mide si eligio ni el largo. Y NO exijas cifras exactas: lo que vale es el rasgo, no el decimal.",
+      "level_100": "Toma un elemento concreto —del material o del mundo— y lo usa como herramienta: si se lo quitas, el argumento se cae.",
+      "level_80": "Usa un elemento concreto y pertinente, pero el argumento se sostendria casi igual sin el.",
+      "level_60": "Alude al material de forma reconocible pero vaga ('lo que vimos de las encuestas', 'la lectura del centro de datos') sin que aporte nada especifico.",
+      "level_40": "Nombra un termino, un autor o una cifra de la semana como decoracion: aparece y no vuelve a aparecer.",
+      "level_20": "Opina en general sobre la IA sin tocar nada de lo que se leyo ni de lo que se proyecto.",
+      "level_0": "Le atribuye al material algo que el material no dice, o inventa un dato con aire de precision."
+    },
+    {
+      "id": "se_moja",
+      "name": "Se moja",
+      "weight": 0.22,
+      "description": "¿Hay una respuesta identificable, o quedo todo abierto? En la ronda 5 se pidio elegir un lado de forma explicita; en la ronda 4 se pidio decir que se esta votando. Se evalua QUE haya una respuesta, NO cual: todas las opciones valen exactamente lo mismo, y no premies una por parecerte mas sensata o por ser la del curso. Esta dimension NO mide si la razon es buena —una eleccion nitida con una razon floja es alto aca y bajo en 'mecanismo'— ni si uso el material.",
+      "level_100": "Se entiende de inmediato con que se queda. Si reconoce que la otra opcion tiene algo a favor, igual se queda con una.",
+      "level_80": "Se queda con una, pero recien al final y casi como nota al pie.",
+      "level_60": "Se inclina por una sin decirlo: hay que deducirla de lo que escribio.",
+      "level_40": "Dice 'depende' o nombra varias posibilidades, explica el criterio, y nunca se queda con ninguna.",
+      "level_20": "Dice que las dos cosas son ciertas, o que el tema es complejo, y nada mas.",
+      "level_0": "No hay respuesta alguna, o contesta una pregunta distinta de la que se hizo."
+    },
+    {
+      "id": "economia",
+      "name": "Economia",
+      "weight": 0.14,
+      "description": "Se pidieron tres lineas. ¿Dice lo suyo sin relleno? Escribir mas no sube el puntaje: una respuesta larga que repite una idea vale lo que esa idea dicha una vez. Esta dimension mide si se lee limpio y ajustado, y NO si es correcta ni si eligio: la correccion la miden 'mecanismo' y 'anclaje', y solo ellas. No bajes aca por un error de contenido.",
+      "level_100": "Tres lineas o menos, cada una aportando algo distinto. Nada sobra.",
+      "level_80": "Se ajusta al largo pedido con una frase de mas que no aporta.",
+      "level_60": "Se pasa del largo pedido, o gasta una linea en repetir el enunciado.",
+      "level_40": "Repite la misma idea con otras palabras para llenar espacio.",
+      "level_20": "Texto largo del que se puede extraer una sola afirmacion.",
+      "level_0": "No se entiende que quiso decir."
+    }
+  ],
+  "penalties": [
+    {
+      "id": "razon_generica",
+      "description": "Una razon que serviria igual para cualquier otra respuesta —para cualquier pais, para cualquier tecnologia, para la otra pregunta del juego— no puede superar 40 en 'Mecanismo nombrado'.",
+      "effect": { "type": "cap", "value": 40, "dimensions": ["mecanismo"] }
+    },
+    {
+      "id": "no_elige",
+      "description": "No quedarse con ninguna respuesta —'depende', 'las dos', 'ambas cosas a la vez'— no puede superar 40 en 'Se moja', por bien escrita que este la respuesta.",
+      "effect": { "type": "cap", "value": 40, "dimensions": ["se_moja"] }
+    },
+    {
+      "id": "material_de_adorno",
+      "description": "Nombrar un dato, un autor o un concepto de la semana sin que haga trabajo en el argumento —se podria borrar y la respuesta no cambiaria— no puede superar 40 en 'Anclaje en el material'.",
+      "effect": { "type": "cap", "value": 40, "dimensions": ["anclaje"] }
+    }
+  ],
+  "globalPenalties": [
+    "Sustituir la respuesta por una opinion sobre si la IA es buena o mala.",
+    "Esquivar la eleccion o la respuesta que el enunciado pidio de forma explicita.",
+    "Dar una razon que valdria igual para cualquier otra respuesta.",
+    "Citar un dato o un autor de la semana como adorno, sin que sostenga nada.",
+    "Extension como sustituto de contenido: una respuesta larga que repite una idea vale lo que esa idea dicha una vez.",
+    "Inventar una cifra con aire de precision, o atribuirle al material algo que no dice."
+  ],
+  "bonusIndicators": [
+    "La razon no se podria copiar y pegar a la otra pregunta del juego",
+    "Nombra a quien le pasa, y no solo que pasa",
+    "Se queda con una respuesta reconociendo lo que la otra tiene de cierto",
+    "Trae un rasgo del mundo real que no estaba en el material y lo usa bien",
+    "Dice en tres lineas lo que otro diria en diez"
+  ],
+  "penaltyIndicators": [
+    "Se queda en 'es preocupante' sin decir por que via",
+    "Nombra varias posibilidades para no quedarse con ninguna",
+    "Menciona una cifra de la semana y despues no la usa para nada",
+    "Rellena con frases que servirian para cualquier pregunta sobre IA"
+  ]
+}
