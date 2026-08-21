@@ -194,8 +194,9 @@ profesor. Transferir un curso, si alguna vez hace falta, se hace con el SDK de
 admin, donde las reglas no corren.
 
 **Ser colaborador no es una puerta de entrada a la plataforma.** Sigue habiendo
-una sola: el ayudante pide acceso en `/professor/solicitar` y el admin lo
-aprueba. Hasta entonces el curso no le aparece, y la pantalla lo dice.
+una sola: el ayudante entra a `/professor`, donde el guard de `App.tsx` le
+muestra la pantalla de solicitud (`RequestAccess`, que no tiene ruta propia), y
+el admin lo aprueba. Hasta entonces el curso no le aparece, y la pantalla lo dice.
 
 ### Qué hay que desplegar
 
