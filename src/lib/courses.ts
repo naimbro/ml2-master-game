@@ -105,6 +105,12 @@ export interface Course {
   tagline: string;
   accentClass: string;
   iconClass: string;
+  /**
+   * El curso es de OTRO profesor y llega porque el mail de quien mira esta en
+   * su lista de colaboradores. Solo lo traen los cursos de Firestore; los del
+   * repo no tienen dueno. Ver `src/lib/colaboradores.ts`.
+   */
+  compartido?: boolean;
 }
 
 export const COURSES: Course[] = [

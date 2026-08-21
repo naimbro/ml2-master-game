@@ -1979,12 +1979,25 @@ export const generateSessionDraft = functions
       }
     }
 
-    // Caller must own the course
+    // El curso tiene que ser suyo, o tiene que estar invitado a el.
+    //
+    // Este chequeo es el gemelo de `puedeEditar()` en firestore.rules: la lista
+    // `colaboradores` guarda MAILS normalizados (ver src/lib/colaboradores.ts),
+    // y sin `email_verified` cualquiera que declare el mail de un profesor
+    // gastaria presupuesto de OpenAI a su nombre. Si los dos se separan, el
+    // sintoma es un colaborador que puede escribir sesiones a mano pero no
+    // generarlas con el asistente.
     const courseDoc = await db.collection('courses').doc(input.courseId).get();
     if (!courseDoc.exists) {
       throw new functions.https.HttpsError('not-found', 'Course not found');
     }
-    if (!isAdmin && courseDoc.data()!.professorId !== context.auth.uid) {
+    const course = courseDoc.data()!;
+    const colaboradores: string[] = Array.isArray(course.colaboradores)
+      ? course.colaboradores.filter((m: unknown): m is string => typeof m === 'string')
+      : [];
+    const esColaborador = context.auth.token.email_verified === true &&
+      colaboradores.includes(callerEmail.trim().toLowerCase());
+    if (!isAdmin && course.professorId !== context.auth.uid && !esColaborador) {
       throw new functions.https.HttpsError('permission-denied', 'Not the course owner');
     }
 

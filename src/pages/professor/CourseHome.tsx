@@ -8,6 +8,7 @@ import { fetchCourse, fetchSessions, deleteSession, type SessionWithStatus } fro
 import { db } from '../../lib/firebase';
 import type { CourseStandings } from '../../types/standings';
 import { filasDeJuegos, fechaCorta } from '../../lib/juegosJugados';
+import ColaboradoresCurso from '../../components/ColaboradoresCurso';
 
 /** Un curso acumula pruebas del profesor: se muestran las ultimas y el resto se pide. */
 const VISIBLES_POR_DEFECTO = 5;
@@ -301,6 +302,10 @@ export default function CourseHome() {
               )}
             </section>
           )}
+          {/* Un curso del repo no tiene documento en Firestore donde guardar
+              la lista, y sus sesiones son archivos versionados: quien puede
+              tocarlas es quien tiene el repo, no quien entra a esta pantalla. */}
+          {!esDelRepo && <ColaboradoresCurso courseId={courseId} />}
         </motion.div>
       </main>
     </div>

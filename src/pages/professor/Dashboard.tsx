@@ -37,8 +37,14 @@ export default function Dashboard() {
   // Firestore no borra en cascada, asi que deleteCourse() barre primero las
   // sesiones. La confirmacion nombra el curso porque no hay papelera ni deshacer.
   const removeCourse = async (course: Course) => {
+    // Un curso prestado se borra igual que uno propio —un colaborador puede
+    // todo lo que puede el dueno— pero la confirmacion lo dice con todas sus
+    // letras: quien aprieta no es quien se queda sin sus sesiones.
+    const aviso = course.compartido
+      ? `\n\nOJO: este curso NO es tuyo. Lo ves porque su profesor te agrego como colaborador, y borrarlo se lo borra a el.`
+      : '';
     if (!window.confirm(
-      `Eliminar el curso "${course.name}"?\n\nSe borran tambien todas sus sesiones y los jueces personalizados. No se puede deshacer.\n\nLos juegos ya jugados siguen funcionando: cada partida guarda su propia copia.`
+      `Eliminar el curso "${course.name}"?${aviso}\n\nSe borran tambien todas sus sesiones y los jueces personalizados. No se puede deshacer.\n\nLos juegos ya jugados siguen funcionando: cada partida guarda su propia copia.`
     )) return;
     setDeleting(course.id);
     try {
@@ -54,7 +60,9 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!user) return;
-    fetchMyCourses(user.uid).then(setMyCourses).catch((err) => {
+    // El mail va junto al uid porque los cursos prestados se encuentran por
+    // mail: la lista `colaboradores` del curso guarda correos, no uid.
+    fetchMyCourses(user.uid, user.email).then(setMyCourses).catch((err) => {
       console.error('Error loading courses:', err);
     });
     fetchProfessorPrefs(user.uid).then((p) => setCourseOrder(p.courseOrder)).catch((err) => {
@@ -257,7 +265,21 @@ export default function Dashboard() {
                       <BookOpen className="w-7 h-7 text-onaccent" />
                     </div>
                     <Link to={`/professor/courses/${id}`} className="group block">
-                      <h3 className="text-xl font-bold mb-1 group-hover:underline">{course.name}</h3>
+                      <div className="flex items-center gap-2 mb-1 flex-wrap">
+                        <h3 className="text-xl font-bold group-hover:underline">{course.name}</h3>
+                        {/* Un curso ajeno se ve y se maneja igual que uno propio,
+                            asi que sin esta marca no hay NINGUNA forma de
+                            distinguirlos — y el boton de borrar esta a dos
+                            centimetros del nombre. */}
+                        {course.compartido && (
+                          <span
+                            className="text-xs px-2 py-0.5 rounded-full shrink-0 border border-line text-muted"
+                            title="Es el curso de otro profesor: te agrego como colaborador"
+                          >
+                            Compartido contigo
+                          </span>
+                        )}
+                      </div>
                       <p className="text-muted text-sm mb-1">{course.tagline}</p>
                     </Link>
                     <p className="text-muted text-sm mb-4">

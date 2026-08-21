@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "test": "vitest run",
     "bt-rescore": "tsx scripts/bt-rescore.ts",
-    "test:rules": "firebase emulators:exec --only firestore \"node scripts/test-compas-rules.mjs\""
+    "test:rules": "firebase emulators:exec --only firestore \"node scripts/test-compas-rules.mjs && node scripts/test-colaboradores-rules.mjs\""
   },
   "dependencies": {
     "canvas-confetti": "^1.9.4",

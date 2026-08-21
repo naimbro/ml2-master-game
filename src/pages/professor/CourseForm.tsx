@@ -27,7 +27,7 @@ export default function CourseForm() {
         shortName: shortName.trim() || name.trim().slice(0, 6),
         tagline: tagline.trim(),
         color,
-      });
+      }, user.email);
       navigate(`/professor/courses/${courseId}`);
     } catch (err) {
       console.error('Error creating course:', err);

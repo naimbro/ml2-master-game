@@ -21,8 +21,15 @@ export function colorById(id: string | undefined): CourseColor {
   return COURSE_COLORS.find((c) => c.id === id) ?? COURSE_COLORS[0];
 }
 
+/**
+ * `uidQueMira` existe solo para poder marcar el curso como prestado: un curso
+ * que aparece en el panel de alguien que no es su dueno llego por la lista de
+ * colaboradores, y la tarjeta tiene que decirlo. Sin ese aviso, un ayudante que
+ * ve seis cursos no tiene como saber cuales puede borrar sin dejar a nadie sin
+ * clase.
+ */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function courseDocToCourse(id: string, data: any): Course {
+export function courseDocToCourse(id: string, data: any, uidQueMira?: string): Course {
   const color = colorById(data.color);
   return {
     id,
@@ -31,6 +38,9 @@ export function courseDocToCourse(id: string, data: any): Course {
     tagline: data.tagline || '',
     accentClass: color.accentClass,
     iconClass: color.iconClass,
+    ...(uidQueMira && data.professorId && data.professorId !== uidQueMira
+      ? { compartido: true }
+      : {}),
   };
 }
 

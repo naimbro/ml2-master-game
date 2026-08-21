@@ -155,6 +155,78 @@ que las prueba en segundos y sin dos personas.
   `node_modules`), que es lo que hace CI. Empujar sin eso puede romper el deploy
   con código ajeno.
 
+## Colaboradores de un curso — más de un profesor en el mismo curso (agosto 2026)
+
+Hasta acá la propiedad de un curso era **un solo campo**: `courses/{id}.professorId`,
+el uid de quien lo creó. Un ayudante que tenía que llevar el registro de un ramo
+no tenía ninguna forma de entrar. Ahora el documento del curso lleva además
+`colaboradores: string[]`, y quien esté ahí puede **exactamente lo mismo que el
+dueño, borrar el curso incluido**.
+
+La lista se administra en la pantalla del curso (`/professor/courses/:id`,
+sección «Quién más entra a este curso»). El permiso es **por curso y no por
+panel**: compartir «todo mi panel» sería una casilla y compartiría de más —cada
+curso que se cree después— sin que nadie se entere.
+
+**La lista guarda MAILS, no uid**, y esa decisión arrastra todo lo demás. Un uid
+sólo existe después del primer login: agregar por uid obligaría al profesor a
+pedirle al ayudante que entre primero y a averiguar un número que ninguna
+pantalla muestra. El costo es que el mail hay que **normalizarlo en las cuatro
+puntas** —al guardarlo, al consultarlo, en las reglas y en la function—, porque
+la comparación de Firestore es literal: un mail guardado con mayúsculas no calza
+nunca con el `request.auth.token.email` de Google, y el ayudante ve un «permiso
+denegado» que ninguna pantalla puede explicar. Todo pasa por `normalizarMail()`
+en `src/lib/colaboradores.ts`, y las reglas comparan contra `.lower()`.
+
+Las dos trampas que costaron pensarlas, las dos cubiertas por pruebas:
+
+1. **`get('colaboradores', [])` y nunca `course.colaboradores`.** En las reglas,
+   leer un campo que no existe hace fallar la regla *entera*. Todos los cursos
+   creados antes de esto no tienen el campo: sin el valor por defecto, estrenar
+   esta función le habría quitado a cada profesor sus propios cursos.
+2. **`email_verified` no es decorativo.** Sin él, cualquiera que consiga una
+   cuenta que declare el mail de un ayudante entra a los cursos de su profesor.
+
+Lo único reservado al dueño es no perder el curso: **`professorId` es inmutable
+para todos** (regla en `firestore.rules`), porque un colaborador que puede
+escribir el resto del documento podría ponerse de dueño y dejar afuera al
+profesor. Transferir un curso, si alguna vez hace falta, se hace con el SDK de
+admin, donde las reglas no corren.
+
+**Ser colaborador no es una puerta de entrada a la plataforma.** Sigue habiendo
+una sola: el ayudante pide acceso en `/professor/solicitar` y el admin lo
+aprueba. Hasta entonces el curso no le aparece, y la pantalla lo dice.
+
+### Qué hay que desplegar
+
+Tres cosas, y las tres por separado:
+
+```bash
+npx firebase deploy --only firestore:rules      # el permiso de verdad
+```
+
+La function `generateSessionDraft` también chequea el curso (es el gemelo de
+`puedeEditar()` en las reglas): va por el camino de `/tmp` que está al principio
+de este archivo. Y el frontend sale solo con el push a `main`.
+
+### Estado real
+
+Probado: 651 tests de vitest en verde, `tsc -b` y eslint limpios, y **20 pruebas
+de las reglas contra el emulador** (`npm run test:rules`, que ahora corre las del
+compás y las de colaboradores). Las de colaboradores cubren las dos direcciones
+—el ayudante entra, y nadie más entra— porque las dos fallan en silencio: si el
+permiso no alcanza, el ayudante ve un panel vacío y concluye que la plataforma
+está rota; si alcanza de más, el síntoma es que todo funciona.
+
+**Sin correr con dos cuentas de verdad todavía.** Vale lo mismo que en el compás:
+si el profesor prueba con su propia cuenta, entra por `professorId` y la rama que
+importa —la del mail— no se toca nunca.
+
+**Ojo con los cursos del repo.** Los seis de `src/lib/courses.ts` (`ml2-2025`,
+`ai_democracy_2026`, …) no tienen documento en Firestore y sólo se le muestran al
+admin: la lista de colaboradores no los alcanza y la sección no aparece en ellos.
+Esto sirve para los cursos creados desde la app.
+
 ## Project Overview
 
 - **Stack**: React + TypeScript + Vite (frontend), Firebase Cloud Functions (backend), Firestore (database)

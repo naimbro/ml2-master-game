@@ -27,9 +27,54 @@ service cloud.firestore {
       );
     }
 
-    function ownsCourse(courseId) {
-      let course = get(/databases/$(database)/documents/courses/$(courseId)).data;
-      return request.auth != null && request.auth.uid == course.professorId;
+    // Quien manda en un curso: su dueno, o cualquiera cuyo MAIL este en la lista
+    // `colaboradores` del documento del curso. Un colaborador puede TODO lo que
+    // puede el dueno, borrar el curso incluido; la unica cosa reservada es no
+    // poder regalarlo, y eso lo garantiza la inmutabilidad de `professorId` mas
+    // abajo. Ver `src/lib/colaboradores.ts` para por que la lista lleva mails y
+    // no uid.
+    //
+    // `email_verified` no es decorativo. Sin el, cualquiera que logre una cuenta
+    // que declare el mail de un ayudante entraria a los cursos de su profesor.
+    // Google —el unico proveedor que tiene la app— siempre lo trae verdadero, y
+    // por eso el chequeo no le cuesta nada a nadie real.
+    //
+    // `.lower()` en la punta que viene de la sesion porque la comparacion es
+    // literal y lo guardado ya paso por `normalizarMail()`. Si un solo lado
+    // queda con mayusculas, el colaborador ve un "permiso denegado" que no tiene
+    // ninguna explicacion visible en pantalla.
+    //
+    // `get('colaboradores', [])` y NO `course.colaboradores`: todos los cursos
+    // creados antes de esto no tienen el campo, y leer un campo inexistente
+    // hace fallar la regla entera — el dueno perderia su propio curso.
+    function esColaborador(course) {
+      return request.auth != null &&
+             request.auth.token.email_verified == true &&
+             request.auth.token.email is string &&
+             course.get('colaboradores', []).hasAny([request.auth.token.email.lower()]);
+    }
+
+    // El `||` de Firestore corta al primer verdadero, asi que el dueno entra sin
+    // que se llegue a mirar `colaboradores`: un campo malformado puede dejar
+    // afuera a un colaborador, nunca al dueno.
+    function puedeEditar(course) {
+      return request.auth != null &&
+             (request.auth.uid == course.professorId || esColaborador(course));
+    }
+
+    // La misma pregunta cuando lo unico que se tiene es el id (sesiones,
+    // analytics, datos de alumnos). Cuesta un get(); dentro de /courses se usa
+    // `puedeEditar(resource.data)`, que ya tiene el documento a mano.
+    function puedeEditarCurso(courseId) {
+      return puedeEditar(get(/databases/$(database)/documents/courses/$(courseId)).data);
+    }
+
+    // Forma del campo, chequeada al escribir para que no pueda quedar en un
+    // estado que rompa `esColaborador`. El tope espeja MAX_COLABORADORES en
+    // src/lib/colaboradores.ts: si se cambia alla, se cambia aca.
+    function colaboradoresBienFormados() {
+      return request.resource.data.get('colaboradores', []) is list &&
+             request.resource.data.get('colaboradores', []).size() <= 5;
     }
 
     // Professor access requests + profiles
@@ -57,16 +102,26 @@ service cloud.firestore {
     match /courses/{courseId} {
       allow read: if isAuthenticated();
       allow create: if isApprovedProfessor() &&
-                    request.resource.data.professorId == request.auth.uid;
-      allow update, delete: if isAdmin() || ownsCourse(courseId);
+                    request.resource.data.professorId == request.auth.uid &&
+                    colaboradoresBienFormados();
+
+      // `professorId` es inmutable, para TODOS. No existe pantalla que lo
+      // cambie, y dejarlo abierto significaria que un colaborador —que puede
+      // escribir el resto del documento— se pueda poner de dueno y dejar al
+      // profesor afuera de su propio curso. Transferir un curso, si algun dia
+      // hace falta, se hace con el SDK de admin, donde las reglas no corren.
+      allow update: if (isAdmin() || puedeEditar(resource.data)) &&
+                    request.resource.data.professorId == resource.data.professorId &&
+                    colaboradoresBienFormados();
+      allow delete: if isAdmin() || puedeEditar(resource.data);
 
       match /sessions/{sessionId} {
         allow read: if isAuthenticated();
-        allow write: if isAdmin() || ownsCourse(courseId);
+        allow write: if isAdmin() || puedeEditarCurso(courseId);
       }
 
       match /analytics/{docId} {
-        allow read: if isAdmin() || ownsCourse(courseId);
+        allow read: if isAdmin() || puedeEditarCurso(courseId);
         allow write: if false; // Only Cloud Functions write
       }
     }
@@ -76,7 +131,7 @@ service cloud.firestore {
       allow read, write: if isOwner(studentId);
 
       match /courseData/{courseId} {
-        allow read: if isOwner(studentId) || ownsCourse(courseId);
+        allow read: if isOwner(studentId) || puedeEditarCurso(courseId);
         allow write: if false; // Only Cloud Functions write
       }
     }
