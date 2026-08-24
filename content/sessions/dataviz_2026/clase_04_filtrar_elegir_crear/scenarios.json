@@ -1,0 +1,241 @@
+[
+  {
+    "id": "dv_c04_r1_cual_de_las_tres",
+    "order": 1,
+    "title": "Cuál de las tres",
+    "category": "Filtrar, elegir y crear",
+    "type": "multiple_choice",
+    "ranked": true,
+    "durationSeconds": 74,
+    "context": "",
+    "question": "",
+    "conceptTags": [
+      "las_tres_funciones"
+    ],
+    "mcQuestions": [
+      {
+        "question": "Tienes la tabla `curso` entera —33 filas y 16 columnas— y sólo quieres quedarte con `comuna` y `edad`. ¿Qué función hace eso?",
+        "options": [
+          {
+            "id": "A",
+            "text": "`filter()`"
+          },
+          {
+            "id": "B",
+            "text": "`select()`"
+          },
+          {
+            "id": "C",
+            "text": "`mutate()`"
+          },
+          {
+            "id": "D",
+            "text": "`count()`"
+          }
+        ],
+        "correctOptionIndex": 1,
+        "timeLimitSeconds": 40,
+        "explanation": "`select()` se queda con algunas columnas; `filter()` se queda con algunas filas. Son las dos direcciones de recortar la misma tabla, igual que en la tabla que abre el cuaderno de hoy."
+      }
+    ]
+  },
+  {
+    "id": "dv_c04_r2_cadena_tres_pasos",
+    "order": 2,
+    "title": "Una sola cadena",
+    "category": "El pipe",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 150,
+    "answerFormat": "code",
+    "conceptTags": [
+      "el_pipe"
+    ],
+    "context": "La tabla `curso` ya está cargada, con las 33 respuestas de ustedes. Tres de sus columnas:\n\n- `dominio` — el tema que la persona eligió para su proyecto. Uno de sus valores es `\"Deporte\"`.\n- `comuna`\n- `edad`\n\nLos nombres van escritos así, tal cual, en la base.",
+    "question": "Escribe **UNA sola cadena con `%>%`** que, partiendo de `curso`, se quede con las personas cuyo `dominio` es `\"Deporte\"` y muestre sólo `comuna` y `edad`.\n\nLa forma es ésta, y tú escribes los dos pasos que faltan:\n\n```\ncurso %>%\n  ... %>%\n  ...\n```\n\n**Sólo el código, sin explicar.** Si te cabe todo en una línea, también vale.",
+    "judgeFocus": "Esta ronda pide UNA CADENA DE CÓDIGO R y nada más. NO es una pregunta de redacción: si el alumno escribe sólo código, sin una sola palabra de prosa, eso es exactamente lo que se pidió y no le baja nada. Escribir explicación de más no sube el puntaje.\n\nEL CRITERIO, QUE MANDA SOBRE CUALQUIER EJEMPLO: puntúa alto todo código que, pegado en un Colab donde `curso` ya está cargado, devuelva una tabla con LAS PERSONAS DE DOMINIO \"Deporte\" y SÓLO LAS COLUMNAS `comuna` y `edad`. Son dos pasos y los dos tienen que estar. NO EXISTE UNA SOLA FORMA CORRECTA. La versión canónica es:\n\ncurso %>%\n  filter(dominio == \"Deporte\") %>%\n  select(comuna, edad)\n\npero CUALQUIER OTRA QUE DEVUELVA ESA MISMA TABLA VALE EXACTAMENTE IGUAL, esté o no en la lista que sigue, que no es exhaustiva. Entre otras vas a ver: `|>` en vez de `%>%`; la versión anidada `select(filter(curso, dominio == \"Deporte\"), comuna, edad)`; la versión con pasos guardados en objetos intermedios; `subset()`; `curso[curso$dominio == \"Deporte\", c(\"comuna\", \"edad\")]`; los dos pasos en el orden inverso —`select()` antes que `filter()`— que en R también corre y devuelve lo mismo; y todo escrito en una sola línea. La pregunta que te tienes que hacer no es si la variante está en la lista, sino si ese código corre y devuelve esa tabla. Si corre y la devuelve, vale 100 aunque no se te haya ocurrido a ti.\n\nLO QUE NO CUENTA COMO CORRECTO, por el otro lado: quedarse en el filtro y no recortar las columnas, o recortar las columnas y no filtrar. Eso es media respuesta, no otra forma de responder.\n\nLO QUE SÍ ES ERROR, y es donde se decide el puntaje:\n- EL NOMBRE DE LA COLUMNA CON OTRAS MAYÚSCULAS O MAL ESCRITO: `Dominio`, `Comuna`, `Edad`, `dominios`. R distingue mayúsculas —es la misma lección que la clase vio con `Las condes` y `las condes`— y con ese nombre la cadena no corre. Es error de fondo, no un detalle de tipeo.\n- El valor sin comillas: `dominio == Deporte` busca un objeto llamado `Deporte` que no existe.\n- UN SOLO `=` en el filtro: `filter(dominio = \"Deporte\")` no corre.\n- Volver a nombrar la base adentro de la función después de habérsela pasado con el pipe: `curso %>% filter(curso, dominio == \"Deporte\")`. Es la señal de que el pipe se copió sin entenderlo.\n- Inventar una función que no existe: `filtrar()`, `elegir()`, `seleccionar()`.\n- Entregar UN SOLO PASO, aunque esté impecable. Media respuesta no puede pasar de 40 en Exactitud.\n\nLO QUE NO SE EXIGE, NUNCA: `library(dplyr)` ni `read.csv()` —el enunciado dice que `curso` ya está cargada—, ni el tipo exacto de comillas, ni la indentación, ni los saltos de línea, ni `head()`, ni comentarios, ni explicación en prosa. Tampoco se exige que use el pipe para que la respuesta sea CORRECTA: una versión anidada o con objetos intermedios devuelve la misma tabla y es correcta en Exactitud; el pipe era la forma pedida, y eso se refleja en Completitud, no en Exactitud.\n\nEs la TERCERA CLASE PROGRAMANDO EN SUS VIDAS, escribiendo desde un teclado de teléfono. Si falta un paréntesis de cierre y la intención es inequívoca y todo lo demás está bien, no lo penalices. El nombre de columna equivocado sí se penaliza, porque es exactamente lo que la clase enseñó a mirar.",
+    "evaluationGuide": {
+      "must_hit": [
+        "Se queda con las personas cuyo `dominio` es \"Deporte\": el nombre de la columna escrito tal cual —`dominio`, en minúscula— y el valor entre comillas",
+        "Deja SÓLO las columnas `comuna` y `edad`, escritas tal cual están en la base",
+        "Los dos pasos están en la misma respuesta y encadenados de una forma que corre"
+      ],
+      "nice_to_have": [
+        "Usa `%>%` tal como pedía el enunciado, con un paso por línea",
+        "Nada más alrededor: ni carga de la base, ni explicación, ni `head()`"
+      ],
+      "fatal_errors": [
+        "Escribe el nombre de una columna con otras mayúsculas o mal: `Dominio`, `Comuna`, `Edad`",
+        "Usa un solo `=` en la condición del filtro",
+        "Escribe el valor sin comillas: `dominio == Deporte`",
+        "Vuelve a nombrar la base adentro de la función después del pipe: `curso %>% filter(curso, ...)`",
+        "Usa una función que no existe: `filtrar()`, `elegir()`, `seleccionar()`"
+      ],
+      "partial_credit": {
+        "solo_un_paso": "Entrega uno solo de los dos pasos —sólo el filtro, o sólo las columnas— aunque esté impecable: techo 40 en Exactitud. Media respuesta no responde la pregunta.",
+        "sin_pipe_pero_correcta": "Resuelve las dos cosas sin el pipe, anidando o con objetos intermedios: es CORRECTA. No baja en Exactitud; a lo más 80 en Completitud, porque la forma pedida era la cadena.",
+        "prosa_en_vez_de_codigo": "Describe en palabras lo que habría que hacer sin escribir ninguna línea de R: techo 40 en Exactitud."
+      }
+    },
+    "idealAnswer": {
+      "keyPoints": [
+        "curso %>%",
+        "filter(dominio == \"Deporte\") %>%",
+        "select(comuna, edad)"
+      ],
+      "expectedConcepts": [
+        "el_pipe"
+      ],
+      "commonMistakes": [
+        "Escribir `Dominio` o `Comuna` con mayúscula: R lo trata como otra columna y la cadena no corre",
+        "Un solo `=` en el filtro",
+        "Repetir `curso` adentro de `filter()` después de habérselo pasado con el pipe",
+        "Entregar sólo el filtro y olvidar el recorte de columnas"
+      ],
+      "excellentResponseIndicators": [
+        "La cadena completa y nada más, lista para pegar en Colab",
+        "Un paso por línea, con el `%>%` al final de cada una",
+        "Los nombres de columna escritos exactamente como están en la base"
+      ]
+    }
+  },
+  {
+    "id": "dv_c04_r3_dos_iguales",
+    "order": 3,
+    "title": "Dos iguales, no uno",
+    "category": "Escribir el filtro",
+    "type": "multiple_choice",
+    "ranked": true,
+    "durationSeconds": 83,
+    "context": "",
+    "question": "",
+    "conceptTags": [
+      "escribir_el_filtro"
+    ],
+    "mcQuestions": [
+      {
+        "question": "Quieres quedarte sólo con las personas del curso que llegan en metro. ¿Cuál de estas cuatro líneas lo hace?",
+        "options": [
+          {
+            "id": "A",
+            "text": "`filter(curso, transporte = \"Metro\")`"
+          },
+          {
+            "id": "B",
+            "text": "`filter(curso, transporte == \"metro\")`"
+          },
+          {
+            "id": "C",
+            "text": "`filter(curso, transporte == \"Metro\")`"
+          },
+          {
+            "id": "D",
+            "text": "`filter(curso, Transporte == \"Metro\")`"
+          }
+        ],
+        "correctOptionIndex": 2,
+        "timeLimitSeconds": 50,
+        "explanation": "Sólo C. Un `=` guarda, `==` pregunta. Y el texto va exacto: `\"metro\"` en minúscula devuelve cero filas, y `Transporte` con mayúscula no es una columna de esta base."
+      }
+    ]
+  },
+  {
+    "id": "dv_c04_r4_filtro_que_miente",
+    "order": 4,
+    "title": "Diez, y eran catorce",
+    "category": "Un filtro puede mentir",
+    "difficulty": "hard",
+    "ranked": true,
+    "durationSeconds": 165,
+    "conceptTags": [
+      "un_filtro_puede_mentir"
+    ],
+    "context": "Querías saber cuántas personas del curso se demoran más de una hora en llegar. Escribiste esto:\n\n```r\ncurso %>%\n  filter(minutos_viaje > 60) %>%\n  count(minutos_viaje)\n```\n\nY R devolvió **diez personas**: cuatro con 70 minutos, una con 80, una con 85 y cuatro con 90.\n\nPero en el curso hay **catorce** personas que se demoran más de una hora. Las cuatro que faltan pusieron **100, 130, 150 y 180** minutos: son justo las que más viajan de todo el curso.\n\n**R no mostró ningún error ni ninguna advertencia.** La tabla salió limpia.",
+    "question": "Dos cosas, en tres o cuatro líneas:\n\n**(1)** Por qué el filtro dejó fuera justo a esas cuatro personas.\n\n**(2)** Por qué un error así es más peligroso que uno que sí aparece en pantalla.",
+    "judgeFocus": "Esta ronda pide DOS COSAS y las dos se califican. Se pidieron TRES O CUATRO LÍNEAS, escritas en dos minutos y medio desde un teléfono: tres líneas bien puestas valen 100 y escribir más no sube el puntaje. No hace falta código, ni el nombre de ninguna función, ni una sola palabra técnica.\n\nPARTE (1) — POR QUÉ EL FILTRO DEJÓ FUERA A ESAS CUATRO. El criterio: la respuesta tiene que llegar a que esa columna NO SE ESTÁ COMPARANDO COMO NÚMERO. Basta con eso dicho en cualquier vocabulario. Valen igual, y la lista no es exhaustiva: «la columna es texto porque alguien escribió `10 min`», «R la está leyendo como palabra y no como cantidad», «las comparó letra por letra, y como 130 empieza con 1 le pareció menor que 60», «las ordenó como si fueran nombres». Una respuesta que dice sólo «la columna está sucia» o «tiene un dato mal escrito» va en la dirección correcta pero no llega: no explica por qué eso hace desaparecer justo a las cuatro más grandes.\n\nNO SE PUEDE EXIGIR QUE SEPA ARREGLARLO. Convertir la columna a número es la clase siguiente, el 31 de agosto, y hoy la trampa sólo se diagnostica. Si además propone el arreglo, es un plus; no proponerlo no resta nada.\n\nPARTE (2) — POR QUÉ ES MÁS PELIGROSO QUE UN ERROR QUE SÍ APARECE. El criterio: la respuesta tiene que apuntar a que ESTE ERROR NO AVISA, y por lo tanto nadie lo va a ir a buscar. Valen igual, y la lista tampoco es exhaustiva: «un error que sale en pantalla lo arreglas, éste no sabes que está»; «el resultado se ve bien y te lo llevas al informe»; «la tabla salió limpia y con cara de correcta»; «te vas a quedar con el número equivocado creyendo que está bien»; «y encima se comió justo a los casos más extremos, que son los que más importaban». Cualquiera de esas ideas, dicha una vez y bien, cumple la parte (2).\n\nLO QUE NO CUENTA COMO PARTE (2): repetir el diagnóstico con otras palabras, o decir genéricamente «hay que revisar bien los datos» sin decir nada de por qué este error en particular pasa desapercibido. Ojo con esto, porque es la forma más común de simular la segunda mitad.\n\nLA RESPUESTA PARCIAL TÍPICA DE ESTA SESIÓN es entregar (1) impecable y no entregar (2). Está previsto y tiene que doler: media respuesta no puede pasar de 40 en Exactitud, por muy bien explicada que esté la mitad que entregó. Esto es lo que esta ronda mide.\n\nDIAGNÓSTICOS EQUIVOCADOS que usan el vocabulario correcto, y que van bajo: que faltan datos o hay valores perdidos (NA) en esas cuatro filas; que el operador debía ser `>=` en vez de `>`; que R sólo leyó las primeras filas de la tabla; que `count()` escondió el resto. Ninguno de ésos es lo que pasó, y el enunciado no da pie para ninguno.\n\nNO EXIJAS ortografía, tildes, estructura, introducción ni vocabulario académico. Y si el estudiante objeta el enunciado —dice que los números no le calzan o que le falta información— eso NO se penaliza nunca: si tiene razón, el problema es del enunciado.",
+    "evaluationGuide": {
+      "must_hit": [
+        "PARTE (1): llega a que esa columna no se está comparando como número, en cualquier vocabulario — que R la lee como texto y la compara letra por letra en vez de medirla",
+        "PARTE (2): apunta a que este error NO AVISA, y por eso nadie lo va a ir a buscar: el resultado sale limpio y se toma por bueno"
+      ],
+      "nice_to_have": [
+        "Nombra el `10 min` como el origen de que la columna sea texto",
+        "Nota que el filtro se comió justo a los casos extremos, que suelen ser los que importan",
+        "Propone además cómo arreglarlo, que es materia de la clase siguiente y nadie le pidió"
+      ],
+      "fatal_errors": [
+        "Atribuye el resultado a valores perdidos o NA en esas cuatro filas",
+        "Dice que el error fue haber usado `>` en vez de `>=`",
+        "Dice que R leyó sólo parte de las filas, o que `count()` escondió el resto",
+        "Afirma que el filtro dio un error o una advertencia, cuando el enunciado dice lo contrario"
+      ],
+      "partial_credit": {
+        "solo_el_diagnostico": "Explica bien por qué pasó y no dice nada de por qué es peligroso: techo 40 en Exactitud. Es la respuesta parcial más común de esta sesión.",
+        "solo_el_peligro": "Dice bien que el error no avisa pero no llega a por qué el filtro falló: techo 40 en Exactitud.",
+        "columna_sucia_sin_mas": "Dice que la columna está sucia o mal escrita sin llegar a que se comparó como texto: 40 en Exactitud, porque no explica por qué desaparecieron justo las cuatro más grandes."
+      }
+    },
+    "idealAnswer": {
+      "keyPoints": [
+        "Alguien escribió `10 min`, así que esa columna no es numérica: es texto",
+        "R comparó los valores como palabras, letra por letra: `130` empieza con 1 y le pareció menor que 60, así que quedó fuera",
+        "Es peligroso porque no dio ningún error: el número salió limpio y se copia al informe creyendo que está bien",
+        "Y se comió justo a los que más viajan, que eran los casos que importaban"
+      ],
+      "expectedConcepts": [
+        "un_filtro_puede_mentir"
+      ],
+      "commonMistakes": [
+        "Explicar el porqué y no decir nada del peligro",
+        "Atribuirlo a datos faltantes o NA",
+        "Decir que faltaba `>=`",
+        "Quedarse en «la columna está sucia» sin llegar a la comparación como texto"
+      ],
+      "excellentResponseIndicators": [
+        "Explica la comparación letra por letra en lenguaje llano, sin necesitar vocabulario técnico",
+        "Dice explícitamente que un error que no avisa es peor que uno que rompe el código",
+        "Conecta con que el resultado se habría publicado sin que nadie lo revisara"
+      ]
+    }
+  },
+  {
+    "id": "dv_c04_r5_audiencia_con_puerta",
+    "order": 5,
+    "title": "Una audiencia con puerta",
+    "category": "Sprint 1",
+    "type": "multiple_choice",
+    "ranked": true,
+    "durationSeconds": 84,
+    "context": "",
+    "question": "",
+    "conceptTags": [
+      "audiencia_y_sprint1"
+    ],
+    "mcQuestions": [
+      {
+        "question": "En el demo del Sprint 1 se dijo que una audiencia «tiene que tener puerta». ¿Cuál de estas cuatro es una audiencia y no un tema?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Las personas interesadas en la IA y la educación."
+          },
+          {
+            "id": "B",
+            "text": "La opinión pública chilena."
+          },
+          {
+            "id": "C",
+            "text": "La Comisión de uso de IA en el pregrado de la UAI, que redacta la norma este semestre."
+          },
+          {
+            "id": "D",
+            "text": "Cualquiera que quiera entender mejor los datos."
+          }
+        ],
+        "correctOptionIndex": 2,
+        "timeLimitSeconds": 50,
+        "explanation": "Una audiencia es alguien a quien uno podría ir a buscar esta misma semana: se sabe quiénes son, dónde están y cuándo les sirve. «Las personas interesadas en el tema» no es una audiencia."
+      }
+    ]
+  }
+]

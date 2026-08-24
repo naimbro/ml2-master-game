@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
 import { MC_KEY_COLORS } from '../lib/mcOptionColors';
 import type { MCOption } from '../types/game';
+import { RichText } from './RichText';
 
 /**
  * El reparto de votos, en columnas — LOS DOS COMPASES de la revelacion.
@@ -190,7 +191,7 @@ export default function MCReparto({
               )}
               {/* Un lector de pantalla no ve columnas: lee esto. */}
               <span className="sr-only">
-                {opt.text}: {byOption[opt.id] ?? 0} de {total}
+                <RichText text={opt.text} />: {byOption[opt.id] ?? 0} de {total}
                 {esCorrecta ? '. Es la respuesta correcta' : ''}
                 {esMia ? '. Es la que elegiste' : ''}
               </span>

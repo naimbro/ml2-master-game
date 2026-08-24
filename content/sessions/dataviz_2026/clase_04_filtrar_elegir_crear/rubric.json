@@ -1,0 +1,114 @@
+{
+  "_doc": "Rúbrica PROPIA de clase_04_filtrar_elegir_crear. Hereda la estructura de la clase 3 —tres dimensiones duales, porque el motor tiene UN SOLO juego de dimensiones por sesión (functions/src/index.ts, resolveDimensionWeights) y esta sesión tiene una ronda de código (R2) y una de lectura (R4)—, y se aparta de ella en dos puntos, los dos por lo que se midió jugando la clase 3.\n\nPRIMERO, EL DOBLE COBRO. En la clase 3 la penalización `codigo_que_no_corre` topaba exactitud EN 40 Y claridad EN 60. El resultado fue que un error de fondo se pagaba dos veces, y eso solo alcanzó para dar vuelta el orden entre dos respuestas. Acá esa penalización toca UNA sola dimensión, y `claridad` dice explícitamente que no mide corrección.\n\nSEGUNDO, Y ES EL CAMBIO QUE IMPORTA: LA MEDIA RESPUESTA. En la clase 3, una respuesta con UNA de las tres líneas pedidas, correcta, sacó 61, y otra con las TRES líneas y un solo error sacó 52. Los dos números pasan solos y juntos son indefendibles delante del curso: premian no arriesgarse. La causa es aritmética y no de criterio — la respuesta corta gana gratis las dimensiones de forma justamente por no haber intentado la otra mitad. El arreglo está en el ancla de `exactitud`: entregar la mitad de lo que se pidió NO PUEDE PASAR DE 40, porque una media respuesta no responde la pregunta que se hizo. Con eso, y con las penalizaciones APAGADAS, el orden queda: completa con un error 61, media respuesta impecable 49.\n\nLos pesos por juez se eligieron con esa aritmética a la vista y están en config.json: exactitud pesa 0,75 / 0,60 / 0,60. Nunca baja de 0,59, que es el piso para que una respuesta equivocada pero bien escrita no pase de 65.\n\nCuando la clase llegue a rondas de construir gráficos (clase 8 en adelante), esa sesión vuelve al base_rubric del curso.",
+  "sessionId": "clase_04_filtrar_elegir_crear",
+  "globalInstructions": "Evalúa SOLO lo que está escrito. No completes la respuesta con lo que el estudiante 'seguramente quiso decir'.\n\nEsta es la CUARTA clase del semestre y llevan TRES CLASES PROGRAMANDO EN SUS VIDAS. Son de primer año, de sociología y negocios. El estándar es el de alguien que aprendió `count()` la semana pasada y `filter()` esta mañana, no el de un programador.\n\nESTA SESIÓN TIENE DOS TIPOS DE RONDA JUZGADA Y NO SE EVALÚAN IGUAL.\n\n(a) RONDA DE CÓDIGO (R2). Pide una cadena de `dplyr` y dice expresamente «sólo el código, sin explicar». Una respuesta que es puro código, sin una palabra de prosa, es EXACTAMENTE lo que se pidió: no le bajes nada por eso, y no premies la explicación que nadie pidió. Lo que se evalúa es si ese código, pegado en un Colab que ya tiene `curso` cargado, corre y responde.\n\nTODO EL VOCABULARIO DE R QUE ESTE CURSO TIENE está en el material de referencia: de `dplyr` sólo `library()`, `read.csv()`, `count()`, `select()`, y desde hoy `filter()`, `mutate()` y el pipe `%>%`. Nada fuera de eso se puede exigir. En particular NO se puede exigir `group_by()`, `summarise()`, `arrange()`, `desc()`, `if_else()` ni `ggplot2`: no se han enseñado.\n\nPero MÁS DE UNA ESCRITURA ES CORRECTA, y el criterio manda sobre cualquier lista: si el código corre y devuelve la tabla que se pidió, vale 100 aunque no se te haya ocurrido a ti. Entre otras que vas a ver: `|>` en vez de `%>%`, la versión anidada `select(filter(curso, ...), ...)`, la versión con objetos intermedios, `subset()`, `curso[curso$dominio == \"Deporte\", ]`, `=` o `->` en vez de `<-`, y todo en una sola línea. Ninguna de ésas está peor que la del cuaderno.\n\nEn código sí importa una cosa que en prosa no: EL NOMBRE DE LA COLUMNA. R distingue mayúsculas, y `Dominio` no existe en esta base. No es un detalle de tipeo, es la misma lección que la clase vio al encontrar `Las condes` y `las condes` como dos comunas distintas. Lo que NO importa: espacios, indentación, saltos de línea, tipo de comillas, comentarios, ni un paréntesis de cierre que falta cuando la intención es inequívoca y todo lo demás está bien. Escriben desde un teclado de teléfono.\n\n(b) RONDA DE LECTURA (R4). No necesita código, ni el nombre de una función, ni vocabulario técnico. 'Esa columna no la está leyendo como número, la está leyendo como palabra' vale exactamente lo mismo que 'la variable es de tipo carácter'. Y NO SE PUEDE EXIGIR QUE SEPA ARREGLARLO: convertir la columna a número es la clase siguiente, el 31 de agosto, y hoy la trampa sólo se diagnostica. Proponer el arreglo suma; no proponerlo no resta.\n\nEste curso NO enseña inferencia estadística en ningún momento: nada de tests, valores-p, intervalos de confianza, márgenes de error, regresión ni representatividad muestral formal. Si una respuesta invoca cualquiera de esas cosas, no está siendo sofisticada: está fuera de lo que se enseñó, y no suma.\n\nEL LARGO PEDIDO. R2 pide sólo el código. R4 pide tres o cuatro líneas. Escritas en dos minutos y medio desde un teléfono. Tres líneas bien puestas valen 100: no esperes párrafos, ni estructura, ni introducción, ni ortografía perfecta, ni tildes. ESCRIBIR MÁS NO SUBE EL PUNTAJE. Premia densidad, no extensión. No penalices la brevedad; penaliza la vaguedad.\n\nMEDIA RESPUESTA NO ES MEDIA NOTA. Las dos rondas piden DOS cosas explícitamente: R2 pide dos pasos después de `curso`, y R4 pide el porqué Y el peligro. Una mitad perfecta sigue sin responder la pregunta que se hizo, y por eso no puede pasar de 40 en Exactitud. Es la respuesta parcial más común de esta sesión y el error de calibración que esta rúbrica existe para no repetir.\n\nSi un estudiante objeta el enunciado —dice que la premisa le suena falsa, que los números no le calzan, o que falta información para responder— eso NO se penaliza nunca. Si tiene razón, el problema es del enunciado.\n\nEl judgeFocus del escenario es tu prioridad absoluta y manda sobre estas instrucciones generales si hay tensión.",
+  "scoring": {
+    "scaleLevels": [
+      100,
+      80,
+      60,
+      40,
+      20,
+      0
+    ],
+    "instructions": "Elige uno de los seis niveles escritos por dimensión. No inventes valores intermedios. Si la respuesta satisface un nivel solo parcialmente, baja al nivel inferior."
+  },
+  "dimensions": [
+    {
+      "id": "exactitud",
+      "name": "Exactitud",
+      "weight": 0.6,
+      "description": "¿Responde correctamente la pregunta que se hizo? En la ronda de código: ¿corre tal cual está escrito y devuelve la tabla que se pidió, con la función correcta en cada paso y los nombres de columna escritos tal cual están en los datos? En la ronda de lectura: ¿el diagnóstico es el correcto, y lo que afirma se sostiene con lo que tiene al frente? Esta dimensión NO mide si se lee ordenado —eso lo mide Claridad y sólo Claridad—. Sí mide, en cambio, si lo entregado responde la pregunta completa: una respuesta que hace bien la mitad de lo pedido no la responde, y ese caso está escrito en el nivel 40.",
+      "level_100": "CÓDIGO: corre tal cual y devuelve exactamente lo que se pidió — la función correcta en cada paso y cada nombre de columna escrito tal cual está. Cualquier escritura que funcione cuenta igual que la del cuaderno. LECTURA: el diagnóstico es correcto y completo, y todo lo que afirma se sostiene con lo que tiene al frente; nada de lo que dice es invento.",
+      "level_80": "CÓDIGO: hace lo pedido y corre, con un detalle de escritura que no lo rompe — un `head()` de más que nadie pidió, otro tipo de comillas, otro nombre de objeto usado de forma consistente. LECTURA: el diagnóstico es correcto pero queda dicho a medio camino, o una de las dos partes está más insinuada que afirmada.",
+      "level_60": "CÓDIGO: corre, pero responde de más o de menos que lo pedido — deja columnas que no se pidieron, filtra por otra cosa además de lo que se pidió, o cambia el orden del resultado sin que nadie lo pidiera. LECTURA: en lo grueso acierta, pero mezcla algo que el enunciado muestra con algo que supuso, sin marcar la diferencia.",
+      "level_40": "TRES CASOS, TODOS ACÁ. (1) CÓDIGO QUE NO CORRE aunque la estructura sea la correcta: un nombre de columna con otras mayúsculas o mal escrito —`Dominio`, `Comuna`, `Edad`—, o volver a nombrar la base adentro de la función después de habérsela pasado con el pipe. R distingue mayúsculas y `Dominio` no existe en esta base. (2) LECTURA QUE SE QUEDA CORTA: lee bien pero salta a explicar por qué pasó, o generaliza más allá de lo que el enunciado sostiene, sin señalar que eso es una suposición. (3) Y EL CASO QUE MÁS SE VA A DAR: MEDIA RESPUESTA, aunque esa mitad esté impecable — un solo paso de los dos que pedía la cadena, o sólo el porqué sin el peligro. Una mitad perfecta no responde la pregunta que se hizo, y no puede pasar de acá por muy limpia que esté.",
+      "level_20": "CÓDIGO: inventa funciones o argumentos que no existen en R, o describe en palabras lo que habría que hacer sin escribir ninguna línea. LECTURA: afirma como hecho algo que el enunciado no muestra —que faltan datos, que hay valores perdidos, que el operador estaba mal elegido— usando el vocabulario correcto para un diagnóstico equivocado.",
+      "level_0": "CÓDIGO: no hay código, o lo que hay no tiene relación con lo que se pidió. LECTURA: contradice lo que tiene al frente, o responde sobre otra cosa."
+    },
+    {
+      "id": "completitud",
+      "name": "Completitud de la entrega",
+      "weight": 0.25,
+      "description": "¿Cuánto de lo que la pregunta pidió llegó? Las dos rondas juzgadas piden DOS cosas explícitamente: R2 pide los dos pasos que van después de `curso` —quedarse con las filas y después con las columnas—, y R4 pide el porqué del error Y por qué ese tipo de error es peligroso. Esta dimensión mide SÓLO cuánto llegó, no qué tan bien hecho está: si una de las dos partes llegó y está equivocada, para esta dimensión llegó igual. Lo bien o mal hecha que esté lo mide Exactitud, y no se cobra dos veces acá.",
+      "level_100": "Están las dos partes que se pidieron, cada una cumpliendo la suya, y nada innecesario alrededor.",
+      "level_80": "Están las dos partes, con algo de más que no se pidió y que no molesta: una línea extra, una explicación en prosa donde se pedía sólo código, o la forma pedida cambiada por otra equivalente —la cadena resuelta sin pipe, con pasos guardados o anidados— que sí responde lo mismo.",
+      "level_60": "Las dos partes están, pero una de ellas apenas: nombrada de pasada, en tres palabras, sin llegar a decir nada propio.",
+      "level_40": "Falta la mitad de lo pedido: uno solo de los dos pasos de la cadena, o sólo una de las dos preguntas contestada.",
+      "level_20": "Llegó una fracción menor: un fragmento de un paso, o una frase que apunta a una de las partes sin llegar a contestarla.",
+      "level_0": "No entrega ninguna de las partes que se pidieron."
+    },
+    {
+      "id": "claridad",
+      "name": "Claridad",
+      "weight": 0.15,
+      "description": "¿Se entiende de inmediato lo que entregó? En código: se lee limpio, un paso por línea, en un orden en que se leería de arriba abajo como una receta. En prosa: lo entendería alguien de fuera a la primera lectura, con una afirmación principal identificable y sin jerga sin explicar. ESTA DIMENSIÓN NO MIDE SI LA RESPUESTA ES CORRECTA. Un código con el nombre de columna equivocado que se lee perfecto es CLARO: ya pagó su error en Exactitud, y volvérselo a cobrar acá es cobrar dos veces el mismo error. Lo único que se pregunta acá es si se entiende.",
+      "level_100": "CÓDIGO: un paso por línea, en un orden en que se lee como una receta, sin adorno ni relleno. LECTURA: un lector sin formación técnica la entiende a la primera; hay una afirmación principal identificable y todo lo demás la sostiene.",
+      "level_80": "CÓDIGO: se lee bien, con algo suelto — todo apretado en una línea, o un comentario que sobra. LECTURA: se entiende bien, con una frase ambigua o un término técnico sin explicar.",
+      "level_60": "CÓDIGO: hay que reordenarlo mentalmente para saber qué pasa primero, o el código está enterrado en un párrafo. LECTURA: se entiende con esfuerzo: la idea está, pero el lector tiene que reordenarla.",
+      "level_40": "CÓDIGO: fragmentos sueltos que no llegan a formar una línea ejecutable. LECTURA: enumera observaciones sueltas sin una afirmación principal.",
+      "level_20": "CÓDIGO: mezcla de pseudocódigo y prosa donde no se distingue qué es una instrucción. LECTURA: usa vocabulario técnico como sustituto del argumento, o es tan general que no se sabe de qué está hablando.",
+      "level_0": "Ininteligible, o no responde la pregunta que se hizo."
+    }
+  ],
+  "penalties": [
+    {
+      "id": "entrega_incompleta",
+      "description": "Las dos rondas juzgadas piden DOS cosas explícitamente: R2 pide los dos pasos de la cadena, y R4 pide el porqué del error Y por qué ese tipo de error es peligroso. Entregar sólo una de las dos no puede superar 40 en 'Exactitud', por perfecta que esté la parte entregada. Se gatilla por lo que FALTA, no por errores en lo que sí está. Es la respuesta parcial más común de esta sesión: en R4, explicar que la columna es texto y detenerse ahí.",
+      "effect": {
+        "type": "cap",
+        "value": 40,
+        "dimensions": [
+          "exactitud"
+        ]
+      }
+    },
+    {
+      "id": "codigo_que_no_corre",
+      "description": "Sólo en la ronda de código. Código que NO CORRE tal cual está escrito no puede superar 40 en 'Exactitud'. Tres casos: (1) un nombre de columna que no existe en la base porque está escrito con otras mayúsculas o mal —`Dominio`, `Comuna`, `Edad`—, que es exactamente la lección que la clase enseñó con `Las condes` y `las condes`; (2) una función o un argumento que no existe en R —`filtrar()`, `elegir()`, `seleccionar()`—; (3) prosa que describe lo que habría que hacer sin ninguna línea de R.\n\nEste techo toca UNA SOLA dimensión a propósito: el error ya se paga acá y no se vuelve a cobrar en 'Claridad'. Un código que no corre puede leerse perfectamente claro.\n\nNO CAE ACÁ una escritura que existe y funciona aunque el cuaderno no la haya mostrado: `|>`, la versión anidada, la versión con objetos intermedios, `subset()`, `require()` y `=` en vez de `<-` son todas correctas y no gatillan nada. Tampoco un paréntesis de cierre que falta cuando la intención es inequívoca y todo lo demás está bien: escriben desde un teclado de teléfono. Lo que se castiga es inventar y equivocar el nombre, no salirse del cuaderno.",
+      "effect": {
+        "type": "cap",
+        "value": 40,
+        "dimensions": [
+          "exactitud"
+        ]
+      }
+    },
+    {
+      "id": "respuesta_intercambiable",
+      "description": "En la ronda de lectura, una respuesta que serviría igual para cualquier otra pregunta del curso sin cambiarle una palabra —'hay que revisar bien los datos antes de sacar conclusiones', 'siempre conviene chequear el código'— no puede superar 50 en 'Claridad'. No se gatilla por ser breve: se gatilla por no decir nada de ESTE caso.",
+      "effect": {
+        "type": "cap",
+        "value": 50,
+        "dimensions": [
+          "claridad"
+        ]
+      }
+    }
+  ],
+  "globalPenalties": [
+    "Escribir el nombre de una columna con otras mayúsculas o mal escrito: para R es otra columna y la línea no corre. Es la lección que la clase vio con `Las condes` y `las condes`.",
+    "Volver a nombrar la base adentro de la función después de habérsela pasado con el pipe: `curso %>% filter(curso, ...)`. Es la señal de que el pipe se copió sin entender qué hace.",
+    "Entregar la mitad de lo que se pidió: un solo paso de la cadena, o el porqué del error sin el peligro. Una mitad perfecta sigue sin responder la pregunta.",
+    "Diagnosticar el filtro con algo que el enunciado no muestra: valores perdidos, el operador mal elegido, o que R sólo leyó parte de las filas.",
+    "Vaguedad intercambiable: una respuesta que se podría pegar debajo de cualquier pregunta del curso.",
+    "Extensión como sustituto de contenido: una respuesta larga que repite la misma idea vale lo que la idea dicha una vez. En la ronda de código, la explicación en prosa que nadie pidió no suma.",
+    "Invocar márgenes de error, tests o representatividad formal: está fuera del curso y no suma."
+  ],
+  "bonusIndicators": [
+    "En código: entrega exactamente la cadena pedida y nada más, lista para pegar en Colab",
+    "En código: usa una escritura correcta que el cuaderno no mostró, y la usa bien",
+    "En lectura: dice, en una frase, que R comparó los números como si fueran palabras",
+    "En lectura: nombra que el error se comió justo a los casos extremos, que suelen ser los que importan",
+    "En lectura: dice que el resultado se habría copiado al informe sin que nadie lo revisara",
+    "Propone además cómo arreglarlo, que es materia de la clase siguiente y nadie le pidió",
+    "Objeta el enunciado con razón"
+  ],
+  "penaltyIndicators": [
+    "Nombre de columna con mayúscula o mal escrito",
+    "La base nombrada de nuevo adentro de la función después del pipe",
+    "Falta uno de los dos pasos, o una de las dos mitades que la pregunta pedía",
+    "Atribuye el error a valores perdidos, al operador, o a que R leyó pocas filas",
+    "Explica el diagnóstico y no dice nada sobre por qué es peligroso"
+  ]
+}

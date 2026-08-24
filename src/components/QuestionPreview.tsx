@@ -65,7 +65,7 @@ function OptionCard({
         <span className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black shrink-0 ${isCorrect ? 'bg-ink/20 text-ink' : MC_KEY_COLORS[index % MC_KEY_COLORS.length]}`}>
           {option.id}
         </span>
-        <span className="flex-1">{option.text || <em className="text-muted">(sin texto)</em>}</span>
+        <span className="flex-1">{option.text ? <RichText text={option.text} /> : <em className="text-muted">(sin texto)</em>}</span>
         {isCorrect && <CheckCircle className="w-5 h-5 shrink-0" />}
       </span>
     </div>

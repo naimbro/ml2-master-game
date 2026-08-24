@@ -921,7 +921,7 @@ export default function Round() {
                             >
                               {opt.id}
                             </span>
-                            <span className="flex-1">{opt.text}</span>
+                            <span className="flex-1"><RichText text={opt.text} /></span>
                             {nEsta !== undefined && (
                               <span
                                 className="shrink-0 tabular-nums text-sm font-black px-2 py-0.5 rounded-full bg-ink/15"

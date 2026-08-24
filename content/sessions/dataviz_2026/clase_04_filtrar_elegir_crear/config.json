@@ -1,0 +1,46 @@
+{
+  "sessionId": "clase_04_filtrar_elegir_crear",
+  "courseId": "dataviz_2026",
+  "title": "Clase 4: Filtrar, elegir y crear",
+  "description": "5 rondas (~19 min): 3 de alternativas y 2 abiertas, alternadas. R1 calienta con cuál de las tres funciones recorta columnas; R2 es abierta DE CÓDIGO (150 s) y pide la cadena de tres pasos con %>%; R3 vuelve sobre esa misma línea y muestra las cuatro formas de escribirla, sólo una correcta —`=` en vez de `==`, la minúscula y la mayúscula de más—; R4 es la abierta grande (165 s) sobre el filtro que devolvió 10 cuando eran 14, sin dar ningún error; R5 cierra con la audiencia del Sprint 1, que se entrega el 31 de agosto. R2 lleva `answerFormat: \"code\"`, que apaga autocorrección y autocapitalización en el teclado del teléfono: sin eso `filter(curso, dominio == \"Deporte\")` llega a los jueces como `Filter(Curso, Dominio)`. R2 va ANTES que R3 a propósito: la revelación de R3 muestra la línea escrita bien, y verla antes convertiría R2 en copiar. Las 5 compiten.",
+  "date": "2026-08-24",
+  "roundCount": 5,
+  "roundDurationSeconds": 150,
+  "bufferSeconds": 45,
+  "conceptTags": [
+    "las_tres_funciones",
+    "escribir_el_filtro",
+    "el_pipe",
+    "mutate_y_count",
+    "un_filtro_puede_mentir",
+    "audiencia_y_sprint1"
+  ],
+  "judges": [
+    {
+      "judgeId": "generic_specialist",
+      "weight": 0.35
+    },
+    {
+      "judgeId": "generic_praxis",
+      "weight": 0.35
+    },
+    {
+      "judgeId": "generic_teacher",
+      "weight": 0.3
+    }
+  ],
+  "judgeConfig": {
+    "generic_specialist": {
+      "sessionLens": "Tu lente es LA EXACTITUD DE LO ENTREGADO. En la ronda de código (R2) tu única pregunta es si esa cadena, pegada en un Colab que ya tiene `curso` cargado, corre y responde: la función correcta en cada paso, y el nombre de la columna escrito tal cual está en los datos. Sé estricto con el nombre de la columna —R distingue mayúsculas y es justo lo que la clase enseñó a mirar— y deliberadamente indulgente con todo lo demás: espacios, comillas, indentación, saltos de línea y un paréntesis que falta no son errores en un teclado de teléfono. Y no confundas 'no está en el cuaderno' con 'está mal': `|>`, `subset()`, `curso[curso$dominio == \"Deporte\", ]` y guardar pasos intermedios en vez de encadenar funcionan y valen igual que la versión que se enseñó. En la ronda de lectura (R4) tu lente es si el diagnóstico es el correcto: la columna es texto y R, al comparar texto, deletrea en vez de medir. No exijas que sepa arreglarlo —convertir la columna a número es la clase siguiente y no se ha enseñado—. Es la CUARTA clase del semestre y llevan TRES clases programando.",
+      "weightFormula": "score = 0.75 * exactitud + 0.15 * completitud + 0.10 * claridad"
+    },
+    "generic_praxis": {
+      "sessionLens": "Tú eres quien va a tomar lo que el estudiante escribió y usarlo sin poder preguntarle nada. En la ronda de código eso significa literalmente copiar y pegar: ¿está todo lo que hace falta, en un orden en que correría, sin que tengas que adivinar qué va primero? Una respuesta que es puro código, sin una palabra de prosa, es exactamente lo que se pidió y no te molesta: lo que te molesta es el código enterrado en un párrafo, o los fragmentos sueltos que no llegan a ser una línea. En la ronda de lectura eres el compañero de grupo que va a poner ese número en el informe del Sprint: tu pregunta es si después de leer la respuesta sabrías por qué no puedes confiar en ese 10, y qué tendrías que mirar antes de escribirlo. Premia lo que se entiende a la primera; penaliza el rodeo y la frase de relleno.",
+      "weightFormula": "score = 0.60 * exactitud + 0.15 * completitud + 0.25 * claridad"
+    },
+    "generic_teacher": {
+      "sessionLens": "Estas rondas SÍ entran al ranking, así que puntúa con honestidad y sin inflar: un puntaje regalado le quita el puesto a otro. Lo que más te importa es que ENTREGUEN TODO LO QUE SE PIDIÓ. R2 pide una cadena con DOS pasos después de `curso` —filtrar y después elegir columnas—, y R4 pide DOS cosas: por qué el filtro dejó fuera a esas cuatro personas Y por qué este error es peligroso. En R4 la mitad que casi nadie entrega es la segunda: la respuesta parcial típica de esta sesión explica bien que la columna es texto y se detiene ahí. Media respuesta perfecta sigue siendo media respuesta. En la de código caza el error que la clase enseñó a mirar —el nombre de columna con otra mayúscula— y el que revela que no entendió el pipe: volver a escribir `curso` adentro de `filter()` después de haberlo pasado con `%>%`. Recuerda que llevan tres clases programando: no exijas elegancia, exige que corra. En tu feedback escribe en primera persona e incluye un 'yo habría...' concreto a ESTA respuesta, con la línea exacta que le habría escrito.",
+      "weightFormula": "score = 0.60 * exactitud + 0.32 * completitud + 0.08 * claridad"
+    }
+  }
+}
