@@ -1,0 +1,97 @@
+{
+  "_doc": "Rúbrica propia de clase_04_ia_intimidad_afecto. MGT300 NO tiene _shared/base_rubric.json — nunca se escribió—, así que no hay de dónde heredar y cada sesión trae la suya. Esta continúa la de clase_03_enjambre, con dos cambios deliberados:\n\n(1) 'fidelidad_al_texto' pasa a llamarse 'fidelidad_al_material'. En clase 3 había un solo autor y un solo texto; hoy hay CUATRO fuentes que dicen cosas distintas y que se confunden entre sí con facilidad: el capítulo de Han (2012, sin una sola cifra, sin ninguna tecnología), el reportaje de The Economist (que describe un mercado y NO lo juzga), el recuadro de cifras de la guía y las láminas del curso. El error más caro de esta sesión no es deformar a Han: es atribuirle a una fuente lo que dijo otra — ponerle a Han una opinión sobre las apps, o a The Economist un juicio moral que el artículo explícitamente no hace. La dimensión tenía que nombrar eso, y 'fidelidad_al_texto' en singular no lo nombraba.\n\n(2) Se subió 'mecanismo' de 0,40 a 0,45 y se bajó 'fidelidad_al_material' de 0,35 a 0,30. Es el pedido explícito de esta sesión: una respuesta que nombra a Han y agrega 'es preocupante' tiene que puntuar bajo, y una que explica por qué una diferencia consumible no es alteridad tiene que puntuar alto aunque no use el vocabulario. Con mecanismo en 0,45 y las otras dos en 0,30 y 0,25, una respuesta fluida pero equivocada en el fondo (fidelidad 60, mecanismo 40, concreción 80) toca techo en 56, que es donde tiene que estar. La aritmética está hecha con las penalizaciones APAGADAS, porque las penalizaciones se disparan entre 0% y 4% de las veces: acá son el cinturón, no el sostén.\n\nLas dos rondas juzgadas son distintas entre sí a propósito y las dimensiones tienen que servir a las dos. R4 es de lectura: por qué la señora Shuai describe el problema justo cuando cree describir la solución, y por qué más personalización no lo arregla. R5 es de aplicación: qué mecánica de retención eliminarías si tu métrica fuera el bienestar a seis meses, qué indicador se cae y qué medirías. Por eso cada dimensión trae abajo un párrafo propio para cada ronda.\n\nLas tres rondas de opción múltiple (R1, R2, R3) se corrigen en el cliente (src/lib/mcScoring.ts) y no pasan por los jueces ni por la recalibración pareada.\n\nLos ids de las dimensiones están comprometidos con las weightFormula de config.json: no renombrarlos sin tocar las dos cosas.",
+  "sessionId": "clase_04_ia_intimidad_afecto",
+  "globalInstructions": "Evalúa SOLO lo que está escrito. No completes la respuesta con lo que el estudiante 'seguramente quiso decir'.\n\nEs la CUARTA CLASE del semestre de un curso de teoría social y argumentación de Ingeniería Comercial. De este curso han leído cuatro cosas: el artículo de Ines Lee (clase 1), una guía en papel con Byung-Chul Han y Barbara Ehrenreich (clase 2), otra guía con cuatro capítulos de Han, 'En el enjambre' (clase 3), y HOY MISMO una tercera guía en papel: el capítulo «Melancolía» de 'La agonía del Eros' de Han, una síntesis del reportaje de The Economist sobre las apps chinas de compañía, y un recuadro con tres cifras. La leyeron en silencio quince minutos, sin celular y sin IA, al inicio de la clase, y la tienen al lado. No manejan nada más del curso.\n\nEL LARGO ES UNA SUGERENCIA, NO UNA REGLA. El enunciado dice 'con 4 o 5 líneas basta' para indicar el estándar, no para poner un techo. NO BAJES EL PUNTAJE POR PASARSE DEL LARGO NI POR QUEDARSE CORTO. Escribir más no sube ni baja: cuenta lo que agrega. Tres líneas bien puestas pueden valer 100, y nueve también, si las nueve agregan.\n\nEstán escribiendo desde el teléfono, en cuatro minutos, al final de una clase de dos horas y media en la que además hubo presentaciones grupales, un episodio de Black Mirror y una actividad de diseño en grupos. NO EXIJAS: ortografía perfecta, tildes, introducción, estructura, conectores ni vocabulario académico. Nadie tiene que decir 'alteridad', 'atopía', 'negatividad', 'Eros' ni 'retención' para sacar 100: si explican la idea con sus palabras, vale exactamente igual. En la ronda de negocio tampoco se exige vocabulario de negocios ni nombres de métricas en inglés.\n\nNUNCA PENALICES QUE OBJETEN EL ENUNCIADO O AL AUTOR. Si alguien escribe que Han construye una tesis entera con una película y un cuadro elegidos a favor, que un texto de 2012 no podía anticipar nada de esto, que la señora Shuai es adulta y sabe lo que le sirve, o que estas apps le hacen bien a gente que si no estaría sola, eso NO es evadir la pregunta: es exactamente lo que este curso enseña. Una objeción bien argumentada puede sacar el puntaje más alto de la ronda. Lo único que se exige es que muestre haber entendido primero qué sostiene el material.\n\nLOS DOS ERRORES DE LECTURA QUE MÁS IMPORTA CAZAR. Primero: creer que el problema de Han es que la IA 'no es real', 'es artificial' o 'no siente de verdad'. Han no está hablando de la máquina — su texto es de 2012 y no menciona ninguna tecnología. Está hablando de qué le pasa al deseo cuando nada le opone resistencia, y su crítica le cabría igual a una persona complaciente. Segundo, y es la trampa exacta de la ronda 4: sostener que se arreglaría con una IA más personalizada, con opiniones propias o capaz de contradecir. Eso es pedir más DIFERENCIA, y para Han la diferencia es una positividad que se elige de un catálogo — es justamente lo que desplaza a la alteridad, no lo que la repone.\n\nOJO CON LAS CIFRAS Y CON QUIÉN DICE QUÉ. El capítulo de Han no trae ninguna cifra, ningún estudio y ningún nombre de empresa: su evidencia es una etimología, una película, un cuadro y una ópera. Las cifras del día son las del reportaje de The Economist y las del recuadro, y están todas en el material de referencia. Si aparece una que no está ahí, la inventaron. Y el reportaje de The Economist NO dice que estas apps sean malas: describe un mercado y cierra con una preocupación demográfica, no psicológica. Atribuirle un juicio moral es un error de lectura, no una opinión.\n\nCUIDADO CON EL DOBLE COBRO. Cada error se castiga en UNA sola dimensión: la que lo mide. Cada dimensión dice abajo qué NO mide y qué dimensión sí lo mide. No bajes el puntaje de una dimensión por un problema que ya pagó en otra.\n\nLAS DOS RONDAS ADMITEN MÁS DE UNA RESPUESTA CORRECTA, y la ronda 5 admite muchas. Los ejemplos que aparecen en el judgeFocus y en esta rúbrica son ILUSTRATIVOS, NUNCA UNA LISTA CERRADA. Una respuesta que cumple el criterio con un camino que no está enumerado vale exactamente lo mismo que una que usa el ejemplo previsto. Si dudas entre castigar una respuesta correcta que no esperabas y premiarla, premiala.\n\nPREMIA EL MECANISMO POR SOBRE EL RELLENO. Una respuesta que nombra a Han con el vocabulario correcto y concluye que 'es preocupante' o 'es peligroso' sin decir qué se pierde ni por qué, puntúa BAJO por más bien escrita que esté. Una que explica por qué una diferencia consumible no es alteridad puntúa alto aunque no use ninguna de esas dos palabras.\n\nEl juego compite y hay podio, pero no es una nota del curso. Puntúa igual con honestidad y sin inflar: un puntaje regalado le quita el puesto a otra persona.\n\nEl judgeFocus del escenario es tu prioridad absoluta y manda sobre estas instrucciones generales si hay tensión.",
+  "scoring": {
+    "scaleLevels": [
+      100,
+      80,
+      60,
+      40,
+      20,
+      0
+    ],
+    "instructions": "Elige uno de los seis niveles escritos por dimensión. No inventes valores intermedios. Si la respuesta satisface un nivel solo parcialmente, baja al nivel inferior."
+  },
+  "dimensions": [
+    {
+      "id": "fidelidad_al_material",
+      "name": "Fidelidad al material",
+      "weight": 0.3,
+      "description": "¿Lo que le atribuye a cada fuente está efectivamente en esa fuente? Hoy hay cuatro y se confunden fácil: el capítulo de Han (2012, sin cifras y sin ninguna tecnología), el reportaje de The Economist (que describe un mercado y NO lo juzga), el recuadro de cifras de la guía y las láminas del curso.\n\nEN R4 lo que se verifica es que no le ponga a Han la tesis de que la IA es mala por ser artificial, ni un juicio sobre apps que su texto no menciona, ni una cifra; y que no invierta la distinción del pasaje poniendo la diferencia del lado de la alteridad. EN R5 se verifica que las tácticas, el bucle y las cifras estén como el curso las vio: el 37%, las 1.200 despedidas, los 3.300 adultos, el factor catorce. Si inventa un número, una ley o un estudio, acá se paga.\n\nNO MIDE si la explicación es profunda ni si cierra el porqué: eso lo mide 'Mecanismo' y sólo 'Mecanismo'. NO MIDE si trae detalle específico: eso lo mide 'Concreción'. Una respuesta fiel pero superficial saca alto acá y bajo allá, y eso es correcto.",
+      "level_100": "Todo lo que le atribuye a cada fuente está en esa fuente, incluido el matiz que separa el diagnóstico de la moralina: para Han lo que falla es una condición del vínculo, no la honestidad de nadie ni la naturaleza de la máquina.",
+      "level_80": "Lo central es correcto, pero se le escapa un matiz que la guía sí marca, o mezcla levemente lo que dice una fuente con lo que dice otra.",
+      "level_60": "La idea general es correcta, pero mezcla lo que dice el material con una interpretación propia sin distinguir cuál es cuál.",
+      "level_40": "Contesta con su propia impresión sobre la IA cuando el enunciado pedía el argumento del material, o le atribuye a The Economist un juicio sobre si las apps son buenas o malas.",
+      "level_20": "Le atribuye a Han una tesis que no sostiene: que el problema es que la IA es artificial o que no siente; que la culpa es de las empresas como agente externo; que las personas empeoraron.",
+      "level_0": "Contradice algo que el material dice de forma explícita, o inventa una cifra, un estudio, una ley, una app o una cita que no está en el material."
+    },
+    {
+      "id": "mecanismo",
+      "name": "Mecanismo",
+      "weight": 0.45,
+      "description": "¿Explica POR QUÉ una cosa lleva a la otra, o repite la conclusión con otras palabras? Es la dimensión que separa a quien entendió de quien reconoció, y la que más pesa.\n\nEN R4 el mecanismo es el paso 2 del enunciado: por qué la pérdida no se repara con más personalización. Nombrar el fenómeno —'se pierde la alteridad', 'es el infierno de lo igual', 'hay narcisismo'— no es explicarlo. EN R5 el mecanismo es el par costo/medición: reconocer que eliminar la mecánica tumba un número concreto, y proponer una medición del bienestar que no sea la métrica vieja con otro nombre. Proponer medir 'si vuelven a la app' es exactamente no haber entendido el problema, y acá va bajo.\n\nNO MIDE si lo que dice está en el material: eso lo mide 'Fidelidad al material'. Una explicación bien cerrada sobre una lectura equivocada saca alto acá y bajo allá, y eso también es correcto: el juicio de fondo lo componen las dos juntas, no una sola cobrando dos veces.",
+      "level_100": "Cierra el paso completo. En R4: dice qué se pierde y por qué más diferencia no lo repone. En R5: nombra el indicador que cae y una medición que corresponde al bienestar a seis meses y no al uso.",
+      "level_80": "Nombra el mecanismo correcto pero lo deja a medio cerrar: en R4 llega al paso 2 sin argumentarlo, o en R5 da el costo y la medición pero una de las dos queda a medias.",
+      "level_60": "Repite la conclusión con otras palabras, o pone el nombre del fenómeno en lugar de su explicación. En R5: elige bien la mecánica y no entrega ni el costo ni la medición.",
+      "level_40": "Da una explicación plausible pero equivocada: en R4, que se arreglaría con una IA más personalizada o con opiniones propias; en R5, que el bienestar se mide por el uso, la vuelta a la app o la satisfacción dentro de ella.",
+      "level_20": "Menciona los elementos correctos sin establecer ninguna relación entre ellos.",
+      "level_0": "No hay razonamiento: una afirmación suelta, un juicio moral sobre la IA, o algo que no responde lo que se preguntó. ESTO INCLUYE la respuesta que se limita a reordenar lo que el enunciado ya traía escrito —la cita de Han, el caso de la señora Shuai, el bucle o las tres tácticas— sin agregar ningún paso."
+    },
+    {
+      "id": "concrecion",
+      "name": "Concreción",
+      "weight": 0.25,
+      "description": "¿Se compromete con algo específico de ESTA clase, o dice algo que serviría igual para cualquier conversación sobre IA y soledad?\n\nEN R4 se mide si trae el detalle que sólo puede traer quien leyó: el espejo que confirma el ego, el don del otro que no te puedes dar solo, la emperatriz y su ministro, el marido que discute, la diferencia que se elige de un catálogo, el desastre que es un no-astro. EN R5 se mide que la mecánica sea UNA y reconocible —no 'las prácticas manipuladoras' en general— y que el indicador y la medición sean cosas que alguien podría efectivamente mirar el lunes.\n\nNO MIDE si es correcto ni si está bien argumentado: eso ya lo miden las otras dos. Una respuesta llena de detalle y equivocada saca alto acá; el error ya se cobró donde corresponde. Lo único que sí descuenta acá es el detalle que no está al servicio de lo que se preguntó: citas acumuladas de adorno, o el enunciado copiado de vuelta donde iba el paso que se pedía.",
+      "level_100": "Todo lo que dice está anclado en algo específico del material o en una decisión de producto que se puede ejecutar: un detalle que nadie que no haya estado en esta clase podría traer.",
+      "level_80": "Mayormente concreto, con una parte que se queda en lo general.",
+      "level_60": "Nombra algo específico pero lo desarrolla en términos genéricos, o al revés.",
+      "level_40": "Casi todo serviría igual para cualquier otra conversación sobre IA y soledad sin cambiar una palabra.",
+      "level_20": "Enteramente genérico: usa las palabras del autor o el vocabulario de negocios como relleno, sin engancharse con nada.",
+      "level_0": "Vacío, o una sola frase que no se compromete con nada."
+    }
+  ],
+  "penalties": [
+    {
+      "id": "es_que_no_es_real",
+      "description": "Explicar el problema de R4 por el hecho de que la IA es artificial, no es real, no siente o es un programa, no puede superar 40 en 'Mecanismo'. No es la tesis de Han y no puede serlo: su capítulo es de 2012 y no menciona ninguna tecnología. Lo que sostiene es que el deseo necesita algo que le resista, y esa crítica le cabe igual a una persona complaciente. OJO: esto NO aplica a quien lo diga como objeción propia contra Han —'me parece que acá sí importa que del otro lado no haya nadie, y Han no lo distingue'—; eso es una objeción legítima y puede puntuar alto. Aplica sólo a quien se lo atribuye al texto como si fuera su argumento.",
+      "effect": {
+        "type": "cap",
+        "value": 40,
+        "dimensions": [
+          "mecanismo"
+        ]
+      }
+    },
+    {
+      "id": "medir_el_uso_como_bienestar",
+      "description": "En R5, proponer como medida del bienestar un indicador de uso —que sigan usando la app, que vuelvan, la retención, la satisfacción dentro de la app, el tiempo de conversación— no puede superar 40 en 'Mecanismo'. Es la métrica vieja con otro nombre y es el error central de la ronda: el enunciado cambió la métrica justamente para salir de ahí. NO se dispara con quien propone mirar el uso COMO COSTO, es decir en el paso (1): reconocer que la retención cae es exactamente lo que se pedía.",
+      "effect": {
+        "type": "cap",
+        "value": 40,
+        "dimensions": [
+          "mecanismo"
+        ]
+      }
+    },
+    {
+      "id": "cifra_inventada",
+      "description": "Atribuir una cifra, un porcentaje, un estudio, una ley o una app que el material no trae no puede superar 20 en 'Fidelidad al material'. Las únicas cifras del día son las del reportaje de The Economist, las del recuadro de la guía y las de las láminas, y están todas en el material de referencia. Citarlas correctamente NO dispara esta penalización. Atribuirle cualquier cifra a Han sí: su capítulo no trae ninguna.",
+      "effect": {
+        "type": "cap",
+        "value": 20,
+        "dimensions": [
+          "fidelidad_al_material"
+        ]
+      }
+    }
+  ],
+  "globalPenalties": [
+    "Explicar el problema de Han por el hecho de que la IA sea artificial o no sienta, cuando su tesis es sobre qué le pasa al deseo cuando nada le resiste.",
+    "Sostener que se arreglaría con una IA más personalizada o capaz de contradecir: eso es más diferencia, y la diferencia es lo que desplaza a la alteridad.",
+    "Medir el bienestar del usuario con un indicador de uso: es la métrica que el enunciado acaba de abandonar.",
+    "Poner el nombre del fenómeno donde iba la explicación de por qué se sigue, o eliminar una mecánica y concluir que el producto ya es responsable, sin costo ni medición.",
+    "Atribuirle a The Economist un juicio sobre si estas apps son buenas o malas: el artículo no lo hace y la guía se los subrayó.",
+    "Inventar una cifra, un estudio, una ley o un caso para no dejar el campo vacío."
+  ]
+}

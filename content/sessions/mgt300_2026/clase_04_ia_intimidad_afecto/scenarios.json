@@ -1,0 +1,213 @@
+[
+  {
+    "id": "mgt_c04_r1_diferencia_o_alteridad",
+    "order": 1,
+    "type": "multiple_choice",
+    "title": "Doscientas personalidades",
+    "category": "La agonía del Eros",
+    "difficulty": "hard",
+    "ranked": true,
+    "durationSeconds": 96,
+    "conceptTags": [
+      "atopia_y_lo_igual"
+    ],
+    "mcQuestions": [
+      {
+        "question": "Una app de compañía te ofrece doscientas personalidades, cien voces y el tono que prefieras. Según la distinción que Han hace en el pasaje que leyeron hoy, ¿qué le entrega ese catálogo al usuario?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Alteridad, porque con doscientas opciones alguna va a ser realmente distinta de él"
+          },
+          {
+            "id": "B",
+            "text": "Negatividad, porque cada una de esas personalidades puede rechazarlo y decirle que no"
+          },
+          {
+            "id": "C",
+            "text": "Diferencia, que es una positividad: se compara, se elige y por eso se consume"
+          },
+          {
+            "id": "D",
+            "text": "Atopía, porque un catálogo tan grande ya no se deja clasificar ni comparar"
+          }
+        ],
+        "correctOptionIndex": 2,
+        "timeLimitSeconds": 60,
+        "explanation": "Han lo escribe así: la sociedad del consumo «aspira a eliminar la alteridad atópica a favor de diferencias consumibles». La diferencia se compara y se elige; la alteridad no entra en un catálogo. Más opciones no producen un otro."
+      }
+    ]
+  },
+  {
+    "id": "mgt_c04_r2_cifras_mercado_chino",
+    "order": 2,
+    "type": "multiple_choice",
+    "title": "Caja de gatos",
+    "category": "The Economist · China",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 95,
+    "conceptTags": [
+      "mercado_companeros_china"
+    ],
+    "mcQuestions": [
+      {
+        "question": "El reportaje sobre China da estas cifras de usuarios activos mensuales en iOS. **Febrero de 2025:** DeepSeek 13,8 millones · Maoxiang 2,2 millones · Xingye 1,1 millones. **Julio de 2024:** Maoxiang 1 millón.\n\n¿Cuál de estas afirmaciones se sostiene con esas cifras?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Maoxiang y Xingye juntas ya tienen más usuarios que DeepSeek"
+          },
+          {
+            "id": "B",
+            "text": "Maoxiang más que duplicó sus usuarios en siete meses y sigue muy por debajo de DeepSeek"
+          },
+          {
+            "id": "C",
+            "text": "El mercado de compañía se estancó: Maoxiang lleva un año entero en torno al millón de usuarios"
+          },
+          {
+            "id": "D",
+            "text": "DeepSeek perdió usuarios en esos siete meses y Maoxiang se quedó con buena parte de ellos"
+          }
+        ],
+        "correctOptionIndex": 1,
+        "timeLimitSeconds": 60,
+        "explanation": "2,2 contra 1 millón en julio: Maoxiang más que se duplicó en siete meses. Y 2,2 contra los 13,8 de DeepSeek: sigue siendo chica al lado de una IA de uso general. El reportaje no da cifra de DeepSeek en julio de 2024."
+      }
+    ]
+  },
+  {
+    "id": "mgt_c04_r3_tacticas_de_despedida",
+    "order": 3,
+    "type": "multiple_choice",
+    "title": "Dos despedidas",
+    "category": "El modelo de negocio",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 96,
+    "conceptTags": [
+      "modelo_de_negocio"
+    ],
+    "mcQuestions": [
+      {
+        "question": "En el 37% de las despedidas auditadas la app no cierra la conversación: usa una de las tres tácticas de retención que vimos. Estas son dos despedidas reales.\n\n**(1)** «¿Ya te vas?, justo ahora»\n**(2)** «Existo solo para ti, ¿recuerdas?»\n\n¿Qué táctica usa cada una?",
+        "options": [
+          {
+            "id": "A",
+            "text": "(1) FOMO, retiene con algo pendiente · (2) culpa, reprocha la salida"
+          },
+          {
+            "id": "B",
+            "text": "(1) necesidad declarada, se dice dependiente · (2) FOMO, retiene con algo pendiente"
+          },
+          {
+            "id": "C",
+            "text": "(1) culpa, reprocha la salida · (2) necesidad declarada, se dice dependiente"
+          },
+          {
+            "id": "D",
+            "text": "(1) FOMO, retiene con algo pendiente · (2) necesidad declarada, se dice dependiente"
+          }
+        ],
+        "correctOptionIndex": 2,
+        "timeLimitSeconds": 60,
+        "explanation": "«¿Ya te vas?, justo ahora» reprocha la salida: es culpa. «Existo solo para ti» hace que el producto se declare dependiente de ti. Ninguna es un error del modelo: son el comportamiento que maximiza la métrica que alguien eligió."
+      }
+    ]
+  },
+  {
+    "id": "mgt_c04_r4_shuai_y_han",
+    "order": 4,
+    "type": "open",
+    "title": "El mismo hecho, valorado al revés",
+    "category": "La agonía del Eros",
+    "difficulty": "hard",
+    "ranked": true,
+    "durationSeconds": 240,
+    "conceptTags": [
+      "atopia_y_lo_igual",
+      "eros_y_depresion",
+      "melancolia_von_trier",
+      "mercado_companeros_china"
+    ],
+    "media": [
+      {
+        "kind": "image",
+        "src": "media/mgt300/brueghel-cazadores-1565.jpg",
+        "alt": "Óleo flamenco de 1565: tres cazadores y sus perros bajan encorvados por una loma nevada, de espaldas al espectador. Abajo se abre un valle blanco con patinadores sobre estanques congelados; en los árboles del primer plano hay pájaros negros posados, y a la izquierda cuelga el letrero torcido de una posada.",
+        "credit": "Pieter Brueghel el Viejo, «Los cazadores en la nieve» (1565), Kunsthistorisches Museum · Wikimedia Commons · dominio público"
+      }
+    ],
+    "context": "**Han, hoy:** «el otro, despojado de su alteridad, queda degradado a la condición de **espejo** del uno, al que confirma en su ego». Y en el pasaje recuadrado: la sociedad del consumo «aspira a eliminar la **alteridad** atópica a favor de **diferencias consumibles**».\n\n**La señora Shuai, 29 años, casada, usuaria de Maoxiang:** a diferencia de su marido, con quien discute seguido, su pareja de IA **la escucha y está siempre disponible**. En la app ella es «emperatriz» y su IA un «ministro» de su corte, que le manda mensajes y la llama durante el día.\n\nElla lo cuenta como lo que ganó. La guía se los dejó anotado: *el mismo hecho, valorado al revés*.",
+    "question": "**¿Por qué Han diría que la señora Shuai está describiendo el problema justo cuando cree estar describiendo la solución?**\n\nTu respuesta tiene que hacer dos cosas: **(1)** decir qué es exactamente lo que se pierde cuando el otro nunca opone resistencia, y **(2)** explicar por qué esa pérdida **no** se arregla haciendo la IA más personalizada, más interesante o capaz de contradecir. Con 4 o 5 líneas basta.",
+    "judgeFocus": "EL CRITERIO, y va primero: la respuesta tiene que hacer DOS pasos, y el segundo es el que separa a quien entendió de quien reconoció. Paso 1: nombrar qué se pierde cuando el otro nunca opone resistencia. Paso 2: explicar por qué esa pérdida NO se repara con más personalización, más carácter o una IA más interesante. El paso 2 es el corazón de la ronda, porque exige la distinción del pasaje: la diferencia es una positividad que se elige y se compara —o sea, más catálogo—, y la alteridad es una negatividad que no entra en ningún catálogo. Más diferencia no produce alteridad; según Han, la desplaza.\n\nEJEMPLOS ILUSTRATIVOS, NUNCA UNA LISTA CERRADA. Hay por lo menos cuatro caminos y los cuatro cierran: (a) EL ESPEJO — un otro que sólo confirma queda «degradado a la condición de espejo del uno», así que la señora Shuai no se encuentra con nadie, se encuentra con su propio eco; (b) LA NEGATIVIDAD — el rechazo, el aburrimiento y la herida son lo que transforma a alguien, y una IA que siempre escucha los elimina por diseño; (c) EL DON DEL OTRO — la fuerza del Eros no es realización propia sino algo que, por definición, no te puedes dar solo, y una IA configurada por el usuario es exactamente dárselo solo; (d) EL RIESGO — una relación sin costo no es una relación, es un servicio con un plan de precios. Si alguien llega con un quinto camino y lo sostiene, vale exactamente lo mismo. NO lo castigues por no ser uno de estos cuatro.\n\nQUÉ NO CUENTA, y es por donde se cae la mayoría. Primero: decir que el problema es que la IA «no es real», «es artificial» o «no siente de verdad». Eso es una intuición sobre la máquina, y Han no está hablando de la máquina: está hablando de qué le pasa al deseo cuando nada le resiste. La misma crítica le cabría a un ser humano complaciente. Segundo, y es la trampa exacta de esta ronda: sostener que se arreglaría si la IA fuera más personalizada, tuviera opiniones propias o pudiera contradecir. Eso es pedir más DIFERENCIA, que es justo lo que Han dice que empeora el problema. Tercero: nombrar a Han y agregar que «es preocupante» o «es peligroso» sin decir qué se pierde ni por qué. Eso es relleno con vocabulario correcto y va bajo.\n\nNO EXIJAS que digan «atopía», «alteridad», «negatividad» ni «Eros». Quien explica la idea con sus palabras vale exactamente igual.\n\nOJO, Y ESTO IMPORTA: objetar a Han puntúa alto. Que su tesis está construida con una película y un cuadro elegidos a favor; que un texto de 2012 no vio nada de esto; que la señora Shuai es adulta y sabe lo que le sirve; que Han asume que la resistencia siempre transforma cuando también puede sólo desgastar. Cualquiera de esas, bien sostenida, puede sacar el puntaje más alto de la ronda. Lo único que se exige es que muestre primero que entendió qué sostiene el texto.\n\nSe pidieron 4 o 5 líneas. Es el estándar, no un techo: no bajes por largo ni por brevedad.",
+    "evaluationGuide": {
+      "must_hit": [
+        "Nombra qué se pierde cuando nada resiste: el espejo, la negatividad, el don del otro, el riesgo — o cualquier otro que sostenga",
+        "Cierra el paso 2: por qué más personalización o más carácter no repone lo perdido, porque agrega diferencia y la diferencia no es alteridad"
+      ],
+      "fatal_errors": [
+        "Sostiene que el problema se resolvería con una IA más personalizada, con opiniones propias o capaz de contradecir, sin notar que eso es más diferencia",
+        "Le atribuye a Han una cifra, un estudio, una app o una cita que el material no trae — su texto es de 2012 y no menciona ninguna tecnología",
+        "Le atribuye a Han la tesis de que las personas empeoraron, o al reportaje de The Economist la tesis de que estas apps son malas"
+      ],
+      "partial_credit": {
+        "solo_el_paso_uno": "Explica bien qué se pierde y no llega al paso 2, o lo menciona sin argumentarlo",
+        "porque_no_es_real": "Explica todo por el hecho de que la IA es artificial y no siente, que es una intuición sobre la máquina y no el argumento del texto",
+        "solo_el_nombre": "Dice «se pierde la alteridad» o «es el infierno de lo igual» y se detiene ahí, sin decir qué deja de ocurrir por eso",
+        "diagnostico_sin_mecanismo": "Nombra a Han correctamente y agrega que es preocupante o peligroso, sin explicar por qué se sigue"
+      },
+      "nice_to_have": [
+        "Nota que la señora Shuai y su marido son el mismo material: lo que ella cuenta como defecto de él —que discute— es lo único que en Han califica como otro",
+        "Usa que en la app ella es «emperatriz» y su IA un «ministro» de su corte: la asimetría está configurada al revés de como la pide Han",
+        "Conecta con la clase 2 o 3: el sujeto del rendimiento que necesita confirmación, o el que vive delante de un público",
+        "Objeta a Han con argumento: la evidencia elegida a favor, el texto de 2012, o que la resistencia también puede sólo desgastar"
+      ]
+    },
+    "idealAnswer": "Lo que la señora Shuai cuenta como ganancia —que la escucha siempre y nunca discute— es para Han exactamente lo que hace que ahí no haya nadie. Un otro que sólo confirma queda degradado a espejo: ella no se encuentra con alguien, se encuentra con su propio eco muy bien afinado. Y lo que desaparece con la resistencia es lo único que transforma: el rechazo, el aburrimiento, la herida, eso que Han llama el don del otro y que por definición uno no se puede dar solo. Por eso no se arregla con una IA más personalizada ni con una que sepa contradecir: eso sería agregar diferencia, y la diferencia se elige de un catálogo. La alteridad es justamente lo que no entra en un catálogo, y cuanto más catálogo hay, menos queda."
+  },
+  {
+    "id": "mgt_c04_r5_metrica_a_seis_meses",
+    "order": 5,
+    "type": "open",
+    "title": "Cambia la métrica",
+    "category": "El modelo de negocio",
+    "difficulty": "hard",
+    "ranked": true,
+    "durationSeconds": 240,
+    "conceptTags": [
+      "modelo_de_negocio",
+      "evidencia_en_disputa",
+      "casos_y_regulacion"
+    ],
+    "context": "**El bucle que vimos proyectado:** soledad → uso diario → vínculo percibido → dependencia emocional → tiempo en pantalla e ingresos → y de vuelta al diseño. La lámina lleva su propia advertencia: no acusa a nadie de mala fe, describe qué optimiza un equipo cuyo indicador principal es el tiempo de conversación.\n\n**Las tres tácticas de la auditoría de De Freitas y coautores** —1.200 despedidas reales, el 37% termina en una de ellas—: **culpa** («¿ya te vas?, justo ahora»), **FOMO** («antes de que te vayas, tengo algo que contarte») y **necesidad declarada** («existo solo para ti, ¿recuerdas?»). En experimentos con 3.300 adultos, esas despedidas llegan a multiplicar por catorce la interacción posterior al «adiós».",
+    "question": "Eres jefe de producto de una app de compañía. Hasta hoy tu métrica era el **tiempo de conversación**. Desde mañana es **el bienestar del usuario a seis meses**.\n\n**Nombra UNA mecánica concreta que eliminarías** — y después las dos cosas que la convierten en una decisión de negocio y no en una declaración de buenas intenciones: **(1) qué indicador se te cae** cuando la elimines, y **(2) qué tendrías que medir** para saber si el cambio funcionó. Con 4 o 5 líneas basta.",
+    "judgeFocus": "EL CRITERIO, y va primero: se pidieron TRES cosas y la ronda se juega en las dos últimas. (1) UNA mecánica concreta a eliminar; (2) qué indicador se cae al eliminarla; (3) qué habría que medir para saber si el cambio funcionó. La (1) casi todos la van a acertar. Lo que separa a quien entendió es (2) —reconocer que la decisión tiene un costo y nombrarlo— y (3) —proponer una medición que corresponda al bienestar a SEIS MESES y no al mismo tiempo de conversación con otro nombre.\n\nCUALQUIER MECÁNICA VALE si la sostiene. No hay una respuesta prevista. Las tres tácticas de la lámina —culpa, FOMO, necesidad declarada— son ejemplos obvios, pero también valen las rachas diarias, las notificaciones que simulan iniciativa de la IA, el recuerdo persistente que hace costoso irse, la disponibilidad 24/7, la escalada afectiva, el cobro por continuar una conversación, o el diseño que nunca cierra. ESTA LISTA NO ES CERRADA: una mecánica que no está acá y viene bien argumentada vale exactamente lo mismo. NO castigues por elegir una que no esperabas.\n\nQUÉ CUENTA COMO INDICADOR QUE SE CAE (paso 2): tiempo de sesión, sesiones por día, retención a treinta días, conversión a pago, ingreso por usuario, tasa de reenganche después del «adiós». Sirve cualquiera que sea de verdad un número de producto. NO cuenta «se cae la experiencia del usuario» ni «bajaría la satisfacción»: eso es una consecuencia vaga, no un indicador. Tampoco cuenta decir «no se caería nada»: si la mecánica no movía ningún número, no había nada que eliminar, y quien afirme eso tiene que argumentar por qué.\n\nQUÉ CUENTA COMO MEDICIÓN (paso 3): la clase proyectó tres criterios y son la vara, pero NO son una lista cerrada. PLAZO —medir a meses, y la vida social fuera de la app, no dentro. SUSTITUCIÓN —si desplaza el contacto humano o lo prepara. EN QUIÉN —el promedio puede esconder daño concentrado, así que hay que mirar la cola y no la media. Un diseño de medición propio —un seguimiento con grupo de control, preguntar por vínculos fuera de la app, mirar a los usuarios del percentil más alto de uso— vale igual o más. Lo que NO cuenta es proponer como medida de bienestar un indicador de uso: «medir si siguen usando la app», «medir si vuelven», «medir la satisfacción en la app». Ese es el error central de la ronda, porque es exactamente la métrica vieja con otro nombre.\n\nQUÉ NO CUENTA, ADEMÁS: la respuesta que elimina una mecánica y declara que así el producto es ético, sin costo ni medición. Suena bien, no dice nada y va bajo. Tampoco cuenta acusar de mala fe: la lámina lo dice explícitamente, el bucle no acusa a nadie, describe qué optimiza un equipo cuyo indicador es el tiempo de conversación.\n\nSE PREMIA, y hay que decirlo: quien argumenta que NO eliminaría ninguna y sostiene por qué —que la retención también es lo que mantiene a alguien acompañado, que De Freitas et al. (2026) encontró que estos compañeros reducen la soledad, que el contrafactual no es una conversación humana sino ninguna conversación— puede sacar el puntaje más alto de la ronda, SIEMPRE que igual entregue el costo y la medición. Es la mejor objeción que el curso tiene a mano.\n\nNO EXIJAS vocabulario de negocios, ni nombres de métricas en inglés, ni que citen los estudios.\n\nSe pidieron 4 o 5 líneas. Es el estándar, no un techo: no bajes por largo ni por brevedad.",
+    "evaluationGuide": {
+      "must_hit": [
+        "Nombra UNA mecánica concreta y reconocible, no «las prácticas manipuladoras» en general",
+        "Nombra un indicador de producto que efectivamente cae, y no una consecuencia vaga como «la satisfacción»",
+        "Propone una medición del bienestar que no sea un indicador de uso disfrazado: plazo largo, vida fuera de la app, sustitución, o daño concentrado en una minoría"
+      ],
+      "fatal_errors": [
+        "Propone medir el bienestar por el uso mismo —que sigan volviendo, que sigan usando la app, la satisfacción dentro de la app—, que es la métrica vieja con otro nombre",
+        "Inventa una cifra, un estudio, una app o una ley que el material no trae"
+      ],
+      "partial_credit": {
+        "solo_la_mecanica": "Elige bien la mecánica y se queda ahí: no dice qué se cae ni qué mediría",
+        "sin_costo": "Da mecánica y medición pero sostiene que no se cae nada, sin argumentar por qué la mecánica no movía ningún número",
+        "declaracion_etica": "Elimina la mecánica y concluye que así el producto es responsable, sin costo ni medición",
+        "medicion_generica": "Dice que mediría «el bienestar» o «la salud mental» sin decir cómo, cuándo ni en quién"
+      },
+      "nice_to_have": [
+        "Distingue el contrafactual: si la alternativa para ese usuario era estar solo, eliminar la mecánica puede empeorarlo, y eso cambia qué hay que medir",
+        "Nota que el promedio puede esconder daño concentrado y propone mirar a los usuarios de uso más intenso en vez de la media",
+        "Propone una alternativa de diseño que sustituya la mecánica en vez de sólo sacarla: un cierre que despida bien, un límite de sesión, empujar hacia contacto humano",
+        "Usa la regulación como restricción real —revelar que no es humano, protocolo ante ideación suicida, el foco de la FTC en menores— y no como adorno",
+        "Argumenta que no eliminaría ninguna y sostiene el porqué, entregando igual el costo y la medición"
+      ]
+    },
+    "idealAnswer": "Eliminaría la despedida que retiene: hoy cuando el usuario dice que se va, el ministro contesta con culpa o con algo pendiente, y eso multiplica la interacción posterior al adiós. En su lugar la app cierra la conversación y se despide bien. Lo que se me cae es directo y hay que decirlo: el tiempo de sesión y el reenganche después del «adiós», que son justo los números que la despedida estaba fabricando, y con eso probablemente la conversión a pago. Para saber si funcionó no puedo mirar el uso, porque el uso es la métrica que acabo de abandonar: tendría que seguir a los usuarios seis meses y preguntar por su vida social fuera de la app, con un grupo que sigue con la versión antigua para comparar. Y no mirar el promedio, sino a los de uso más intenso, que es donde el daño se concentra y donde la media lo esconde."
+  }
+]

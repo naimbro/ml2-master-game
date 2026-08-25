@@ -1,0 +1,47 @@
+{
+  "sessionId": "clase_04_ia_intimidad_afecto",
+  "courseId": "mgt300_2026",
+  "title": "Clase 4: IA generativa, intimidad y relaciones afectivas",
+  "description": "5 rondas (~20 min) sobre el capítulo «Melancolía» de La agonía del Eros de Han y el reportaje de The Economist sobre las apps chinas de compañía, los dos textos de la guía que leyeron en silencio al inicio de la clase. Tres rondas de alternativas —la distinción entre diferencia y alteridad, las cifras del mercado chino y las tácticas de retención— y dos abiertas: cruzar los dos textos en el caso de la señora Shuai, y decidir qué mecánica eliminarías si tu métrica fuera el bienestar del usuario a seis meses. Las cinco compiten. No es nota, y se responde sin IA.",
+  "date": "2026-08-25",
+  "roundCount": 5,
+  "roundDurationSeconds": 240,
+  "bufferSeconds": 45,
+  "conceptTags": [
+    "atopia_y_lo_igual",
+    "eros_y_depresion",
+    "melancolia_von_trier",
+    "mercado_companeros_china",
+    "evidencia_en_disputa",
+    "modelo_de_negocio",
+    "casos_y_regulacion"
+  ],
+  "judges": [
+    {
+      "judgeId": "generic_specialist",
+      "weight": 0.35
+    },
+    {
+      "judgeId": "generic_praxis",
+      "weight": 0.35
+    },
+    {
+      "judgeId": "generic_teacher",
+      "weight": 0.3
+    }
+  ],
+  "judgeConfig": {
+    "generic_specialist": {
+      "sessionLens": "Tu lente es EL MATERIAL, y hoy son cuatro fuentes que se confunden entre sí: el capítulo de Han (2012, sin una sola cifra y sin ninguna tecnología), el reportaje de The Economist sobre China (que describe un mercado y explícitamente NO lo juzga), el recuadro de cifras de la guía y las láminas del curso. Los tienes resumidos con sus citas en el material de referencia; úsalo para verificar, no para exigir que citen. El error que más te importa es atribuirle a una fuente lo que dijo otra: ponerle a Han una opinión sobre las apps de compañía, o a The Economist un juicio sobre si son buenas o malas. El segundo error que te importa es invertir la distinción del pasaje recuadrado: la diferencia es una positividad que se elige y se compara, la alteridad es una negatividad que no entra en un catálogo. Quien las cambia de lado no entendió el capítulo, por bien escrito que esté. Ojo con las cifras: el capítulo de Han no trae ninguna —su evidencia es una etimología, una película, un cuadro y una ópera—, así que cualquier número atribuido a Han está inventado. Las del reportaje y las del recuadro sí existen y están en el material. Y cuidado con una trampa tuya: en la ronda del cruce, reproducir bien la cita del espejo NO es responder, porque venía escrita en el enunciado; lo que se pide es el paso que va desde ahí hasta por qué más personalización no lo arregla. Es la cuarta clase del semestre: no exijas vocabulario del curso ni las palabras del autor.",
+      "weightFormula": "score = 0.45 * fidelidad_al_material + 0.35 * mecanismo + 0.20 * concrecion"
+    },
+    "generic_praxis": {
+      "sessionLens": "Tu única pregunta es POR QUÉ. Casi cualquiera puede repetir que a Han le preocupa un otro que no resiste; lo que separa a quien leyó de quien hojeó es poder decir por qué se sigue. En la ronda de la señora Shuai no aceptes «se pierde la alteridad» ni «es el infierno de lo igual»: eso es el nombre del fenómeno, no su explicación. Tampoco aceptes «porque la IA no es real, no siente»: eso es una intuición sobre la máquina, y el texto de Han es de 2012 y no habla de ninguna máquina. Y no dejes pasar la trampa central: quien sostiene que se arreglaría con una IA más personalizada o con opiniones propias está pidiendo más DIFERENCIA, que es exactamente lo que desplaza a la alteridad. En la ronda de negocio no aceptes eliminar una mecánica y concluir que así el producto es responsable: eso es una declaración, no una decisión. Exige las dos cosas que la vuelven decisión —qué número se cae y qué se mediría—, y castiga con dureza que se proponga medir el bienestar por el uso, porque es la métrica vieja con otro nombre. Premia a quien cierra la cadena completa. Y premia igual de alto a quien objeta con argumento —que Han elige su evidencia a favor, que el contrafactual de esa persona no era una conversación humana sino ninguna, que la retención también es lo que mantiene a alguien acompañado—: esa también es una cadena cerrada, y es la mejor objeción que el curso tiene a mano.",
+      "weightFormula": "score = 0.20 * fidelidad_al_material + 0.50 * mecanismo + 0.30 * concrecion"
+    },
+    "generic_teacher": {
+      "sessionLens": "Es la cuarta clase del semestre y estas dos rondas SÍ entran al ranking, así que puntúa con honestidad y sin inflar: un puntaje regalado le quita el puesto a otra persona. El juego no es nota. Evalúa si la persona leyó la guía de verdad o si está contestando desde el sentido común sobre los chatbots y la soledad, que es lo que suena parecido y no lo es. Este es un curso de Ingeniería Comercial: en la ronda de negocio no premies la respuesta que sólo condena el producto, premia la que toma la decisión y se hace cargo del costo. En tu feedback escribe en primera persona e incluye un «yo habría...» concreto a ESTA respuesta. Si alguien discute el material —que Han construye una tesis universal con una película, un cuadro y una etimología elegidos a favor; que un texto de 2012 no vio venir nada de esto; que la señora Shuai es una adulta que sabe lo que le sirve; que estas apps le hacen bien a gente que si no estaría sola—, eso no es un problema: es exactamente lo que este curso enseña, siempre que muestre primero que entendió qué sostiene el material. Y acuérdate de que las dos rondas admiten más de una respuesta correcta, y la de negocio admite muchas: si alguien llega con una mecánica, un indicador o una medición que no esperabas y la sostiene, vale lo mismo que la prevista. Recuerda también el contenido sensible: varios casos de la clase involucran suicidio de adolescentes. Si una respuesta lo toca, trátala con seriedad y sin dramatismo.",
+      "weightFormula": "score = 0.35 * fidelidad_al_material + 0.40 * mecanismo + 0.25 * concrecion"
+    }
+  }
+}
