@@ -3,81 +3,128 @@
     "id": "dv_c05_r1_filas_y_columnas",
     "order": 1,
     "title": "Filas por un lado, columnas por el otro",
-    "category": "Las tres funciones",
-    "type": "multiple_choice",
+    "category": "Las dos direcciones de recortar",
+    "difficulty": "medium",
     "ranked": true,
-    "durationSeconds": 79,
-    "context": "",
-    "question": "",
+    "durationSeconds": 140,
+    "answerFormat": "prose",
     "conceptTags": [
       "las_tres_funciones"
     ],
-    "mcQuestions": [
-      {
-        "question": "La tabla `curso` tiene 33 filas y 16 columnas, y 5 personas usan Android. Corres esto:\n\n```r\ncurso %>%\n  filter(sistema_operativo == \"Android\") %>%\n  select(comuna, dominio)\n```\n\n¿Qué tabla devuelve?",
-        "options": [
-          {
-            "id": "A",
-            "text": "5 filas y 16 columnas"
-          },
-          {
-            "id": "B",
-            "text": "5 filas y 2 columnas"
-          },
-          {
-            "id": "C",
-            "text": "33 filas y 2 columnas"
-          },
-          {
-            "id": "D",
-            "text": "2 filas y 5 columnas"
-          }
-        ],
-        "correctOptionIndex": 1,
-        "timeLimitSeconds": 45,
-        "explanation": "`filter()` recorta filas y `select()` recorta columnas: son las dos direcciones de la misma tabla y no se estorban. Quedan las 5 personas con Android, y de ellas sólo `comuna` y `dominio`."
+    "context": "La tabla `curso` tiene **33 filas y 16 columnas**. De las 33 personas, **5 usan Android**.\n\nCorres esta cadena, que es el ejercicio 1 del cuaderno de hoy:\n\n```r\ncurso %>%\n  filter(sistema_operativo == \"Android\") %>%\n  select(comuna, dominio)\n```",
+    "question": "Dos cosas:\n\n**(1)** ¿Cuántas **filas** y cuántas **columnas** tiene la tabla que devuelve?\n\n**(2)** En una línea, en castellano: de dónde sale cada uno de esos dos números.\n\nDos líneas bastan.",
+    "judgeFocus": "Esta ronda pide DOS COSAS y las dos se califican: (1) cuántas filas y cuántas columnas devuelve la cadena; (2) de dónde sale cada uno de esos dos números. Se pidieron DOS LÍNEAS en castellano, escritas en poco más de dos minutos desde un teléfono. Eso bien puesto vale 100 y escribir más no sube el puntaje.\n\nLOS NÚMEROS SON 5 FILAS Y 2 COLUMNAS, y los dos tienen que estar. Un solo número correcto es media parte (1).\n\nEL CRITERIO DE LA PARTE (2), y manda sobre cualquier ejemplo: la respuesta tiene que mostrar que `filter()` y `select()` cortan en EJES DISTINTOS y que ninguno toca lo del otro — el filtro decide cuántas filas quedan, el select decide cuántas columnas. Cualquier vocabulario sirve y no hace falta una sola palabra técnica: «el filtro deja sólo a los 5 de Android, y como pedí dos columnas quedan dos» vale exactamente lo mismo que «filter opera sobre filas y select sobre columnas». Lo que NO cuenta como explicación: repetir los números con otras palabras («quedan 5 filas porque son 5 personas con Android» y nada más sobre las columnas), o decir en general que «la cadena recorta la tabla» sin distinguir los dos ejes.\n\nEL ERROR QUE HAY QUE CAZAR es el de los ejes cruzados, en cualquiera de sus formas: dar vuelta los números (2 filas y 5 columnas), decir que quedan 16 columnas porque el select no saca nada, o decir que quedan 33 filas porque el select no filtra. Los tres son el mismo malentendido y van al mismo lugar.\n\nNO EXIJAS: nombres de funciones, tildes, ortografía, estructura, ni que mencione el pipe. Tampoco exijas que diga 33 ni 16: los tenía escritos en el enunciado.",
+    "evaluationGuide": {
+      "must_hit": [
+        "PARTE (1): dice 5 filas",
+        "PARTE (1): dice 2 columnas",
+        "PARTE (2): explica que el número de filas lo decide el `filter()` — quedaron las 5 personas con Android",
+        "PARTE (2): explica que el número de columnas lo decide el `select()` — se pidieron dos y quedan dos"
+      ],
+      "nice_to_have": [
+        "Dice explícitamente que un paso no toca lo que hace el otro",
+        "Nota que `select()` no cambia cuántas personas hay, sólo qué se sabe de ellas",
+        "Nombra el orden: primero se recorta a lo alto y después a lo ancho",
+        "Responde en dos líneas y ni una palabra más"
+      ],
+      "fatal_errors": [
+        "Da vuelta los ejes: 2 filas y 5 columnas",
+        "Dice que quedan 16 columnas, o las 33 filas, porque uno de los dos pasos no hace nada",
+        "Atribuye el número de columnas al `filter()` o el de filas al `select()`",
+        "Afirma que la cadena da error o que hay que escribir `curso` adentro del `filter()`"
+      ],
+      "partial_credit": {
+        "solo_los_numeros": "Da 5 y 2 correctos y no explica de dónde salen: techo 40 en Exactitud. Es la respuesta parcial más probable de esta ronda, porque el número se puede acertar de memoria del ejercicio de hoy.",
+        "solo_la_explicacion": "Explica bien los dos ejes y no llega a dar los dos números: techo 40 en Exactitud.",
+        "un_numero_de_dos": "Acierta uno de los dos números y explica bien los dos ejes: no es media respuesta, es la respuesta completa con un error. Va por Exactitud, no por el techo de entrega incompleta."
       }
-    ]
+    },
+    "idealAnswer": {
+      "keyPoints": [
+        "5 filas y 2 columnas",
+        "Las filas las decide el filter: de las 33 quedan las 5 que usan Android",
+        "Las columnas las decide el select: de las 16 quedan las 2 que nombré, comuna y dominio"
+      ],
+      "expectedConcepts": [
+        "las_tres_funciones"
+      ],
+      "commonMistakes": [
+        "Dar vuelta los ejes y decir 2 filas y 5 columnas",
+        "Decir 5 filas y 16 columnas, como si el select no sacara nada",
+        "Dar los dos números correctos sin explicar de dónde sale ninguno",
+        "Explicar los dos ejes sin comprometerse con los números"
+      ],
+      "excellentResponseIndicators": [
+        "Deja claro en una frase que los dos pasos cortan en direcciones distintas",
+        "Usa lenguaje llano —personas y datos de esas personas— en vez de vocabulario técnico",
+        "Cabe en dos líneas"
+      ]
+    }
   },
   {
-    "id": "dv_c05_r2_dos_iguales",
+    "id": "dv_c05_r2_metro_y_micro_a_la_vez",
     "order": 2,
-    "title": "Dos iguales, no uno",
-    "category": "Escribir el filtro",
-    "type": "multiple_choice",
+    "title": "Metro y micro a la vez",
+    "category": "El filtro que pide un imposible",
+    "difficulty": "hard",
     "ranked": true,
-    "durationSeconds": 83,
-    "context": "",
-    "question": "",
+    "durationSeconds": 140,
+    "answerFormat": "code",
     "conceptTags": [
-      "escribir_el_filtro"
+      "escribir_el_filtro",
+      "dos_condiciones"
     ],
-    "mcQuestions": [
-      {
-        "question": "Quieres quedarte sólo con las personas del curso que llegan en metro. ¿Cuál de estas cuatro líneas lo hace?",
-        "options": [
-          {
-            "id": "A",
-            "text": "`filter(curso, transporte = \"Metro\")`"
-          },
-          {
-            "id": "B",
-            "text": "`filter(curso, transporte == \"metro\")`"
-          },
-          {
-            "id": "C",
-            "text": "`filter(curso, transporte == \"Metro\")`"
-          },
-          {
-            "id": "D",
-            "text": "`filter(curso, Transporte == \"Metro\")`"
-          }
-        ],
-        "correctOptionIndex": 2,
-        "timeLimitSeconds": 50,
-        "explanation": "Sólo C. Un `=` guarda, `==` pregunta. Y el texto va exacto: `\"metro\"` en minúscula devuelve cero filas, y `Transporte` con mayúscula no es una columna de esta base."
+    "context": "Quieres quedarte con quienes usan **transporte público**: metro o micro.\n\nEn la columna `transporte` los valores están escritos exactamente así: `\"Metro\"` (6 personas), `\"Micro o bus\"` (15) y `\"Auto\"` (12).\n\nUn compañero escribió esto:\n\n```r\ncurso %>%\n  filter(transporte == \"Metro\" & transporte == \"Micro o bus\")\n```\n\nCorre sin ningún error, y devuelve **cero filas**.",
+    "question": "Dos cosas:\n\n**(1)** En una línea, en castellano: por qué devuelve cero.\n\n**(2)** Escribe la línea de R que sí se queda con quienes usan metro o micro.\n\n```r\ncurso %>%\n  filter(...)\n```\n\nSólo esa línea, sin explicarla.",
+    "judgeFocus": "Esta ronda pide DOS COSAS y las dos se califican: (1) por qué esa línea devuelve cero, en castellano; (2) la línea de R que sí se queda con quienes usan metro o micro. Se pidió UNA LÍNEA de castellano y UNA LÍNEA de R. El enunciado dice «sólo esa línea, sin explicarla», así que una línea de código pelada es EXACTAMENTE lo que se pidió: no le bajes nada por no venir explicada.\n\nEL CRITERIO DE LA PARTE (1), que manda sobre cualquier ejemplo: la respuesta tiene que llegar a que `&` exige que las dos condiciones sean verdad EN LA MISMA FILA, y una persona tiene anotado un solo medio de transporte — ninguna fila puede decir «Metro» y «Micro o bus» al mismo tiempo. Cualquier vocabulario vale y no hace falta una sola palabra técnica: «nadie usa los dos a la vez» dicho de cualquier forma es la respuesta correcta. Lo que NO alcanza: decir sólo «está mal el operador» o «había que usar `|`» sin decir por qué el `&` no puede ser verdad nunca; eso es reconocer el arreglo sin el diagnóstico.\n\nEL CRITERIO DE LA PARTE (2): esa línea, pegada en un Colab que ya tiene `curso` cargado, tiene que dejar a las personas de metro Y a las de micro. CUALQUIER ESCRITURA QUE FUNCIONE VALE 100, aunque no se te haya ocurrido a ti y aunque no sea la del cuaderno. En particular `filter(transporte != \"Auto\")` es CORRECTA y vale lo mismo que la versión con `|`: la columna tiene sólo tres valores, así que deja exactamente a las mismas personas. Si el estudiante escribe algo que funciona y no está en esta nota, vale igual: el criterio es si corre y deja a los dos grupos.\n\nLO QUE SÍ SE EXIGE EN EL CÓDIGO: el nombre de la columna y los valores escritos tal cual están en los datos — `\"Metro\"` con mayúscula y `\"Micro o bus\"` completo. `\"metro\"` corre y devuelve cero, que es el mismo síntoma que estaban arreglando, y es la lección que la clase vio con `Las condes` y `las condes`. El error propio de esta ronda es repetir el valor sin repetir la columna —`filter(transporte == \"Metro\" | \"Micro o bus\")`—: no corre.\n\nLO QUE NO IMPORTA: espacios, indentación, saltos de línea, tipo de comillas, que venga o no con `curso %>%` adelante, ni un paréntesis de cierre que falte cuando la intención es inequívoca. Escriben desde un teclado de teléfono.\n\nNO EXIJAS que diga cuántas personas quedan: no se pidió. Si lo dice y da 21, es un plus.",
+    "evaluationGuide": {
+      "must_hit": [
+        "PARTE (1): llega a que `&` pide que las dos condiciones se cumplan en la misma fila, y que ninguna persona tiene los dos transportes anotados",
+        "PARTE (2): entrega una línea de R, no una descripción en palabras de lo que habría que hacer",
+        "PARTE (2): la línea deja a las personas de metro Y a las de micro — con `|`, con `!=` o con cualquier otra escritura que funcione",
+        "PARTE (2): el nombre de la columna y los valores escritos tal cual están en los datos"
+      ],
+      "nice_to_have": [
+        "Dice que `&` sirve cuando las dos condiciones son sobre columnas distintas, y que el problema acá es que son sobre la misma",
+        "Nota que el resultado son 21 personas",
+        "Llega al arreglo por otro camino que también funciona, y lo escribe bien",
+        "Entrega la línea pelada, lista para pegar, sin explicarla"
+      ],
+      "fatal_errors": [
+        "Escribe el valor sin repetir la columna: `filter(transporte == \"Metro\" | \"Micro o bus\")`",
+        "Escribe `\"metro\"` o `\"micro o bus\"` en minúscula, o `Transporte` con mayúscula",
+        "Vuelve a nombrar la base adentro de la función después del pipe: `curso %>% filter(curso, ...)`",
+        "Atribuye el cero a que los valores están mal escritos en la base, a una coma que falta, o a que la columna es texto: nada de eso es lo que pasa acá",
+        "Deja el `&` y cambia otra cosa"
+      ],
+      "partial_credit": {
+        "solo_el_diagnostico": "Explica bien por qué da cero y no escribe ninguna línea de R: techo 40 en Exactitud.",
+        "solo_el_codigo": "La línea correcta y ni una palabra de por qué daba cero: techo 40 en Exactitud.",
+        "arreglo_sin_diagnostico": "Dice «había que usar `|`» y escribe la línea correcta, pero nunca explica por qué el `&` no podía ser verdad: la parte (1) llegó incompleta. Va por Exactitud, no por el techo."
       }
-    ]
+    },
+    "idealAnswer": {
+      "keyPoints": [
+        "El `&` pide que las dos cosas sean verdad en la misma fila, y nadie tiene anotado metro y micro a la vez",
+        "curso %>%",
+        "  filter(transporte == \"Metro\" | transporte == \"Micro o bus\")"
+      ],
+      "expectedConcepts": [
+        "escribir_el_filtro",
+        "dos_condiciones"
+      ],
+      "commonMistakes": [
+        "Decir sólo «había que usar `|`» sin explicar por qué el `&` daba cero",
+        "Escribir `filter(transporte == \"Metro\" | \"Micro o bus\")`, repitiendo el valor pero no la columna",
+        "Escribir el valor en minúscula: `\"metro\"` corre y devuelve cero",
+        "Explicar impecablemente y no escribir la línea"
+      ],
+      "excellentResponseIndicators": [
+        "Dice en una frase que las dos condiciones son sobre la misma columna, y que por eso no pueden cumplirse juntas",
+        "La línea queda lista para pegar en Colab",
+        "Llega al mismo resultado por un camino correcto que el cuaderno no mostró, como `!=`"
+      ]
+    }
   },
   {
     "id": "dv_c05_r3_diez_y_eran_catorce",
@@ -158,80 +205,60 @@
     "id": "dv_c05_r4_aviso_rojo_y_na",
     "order": 4,
     "title": "El aviso rojo",
-    "category": "class() y as.numeric()",
-    "type": "multiple_choice",
+    "category": "El aviso que no es un error",
+    "difficulty": "medium",
     "ranked": true,
-    "durationSeconds": 81,
-    "context": "",
-    "question": "",
+    "durationSeconds": 140,
+    "answerFormat": "prose",
     "conceptTags": [
       "class_y_as_numeric"
     ],
-    "mcQuestions": [
-      {
-        "question": "La columna `minutos_viaje` es texto, porque una persona escribió `10 min`. Corres esto:\n\n```r\ncurso %>%\n  mutate(minutos_num = as.numeric(minutos_viaje)) %>%\n  count(minutos_num)\n```\n\n¿Qué pasa?",
-        "options": [
-          {
-            "id": "A",
-            "text": "R se detiene con un error y no llega a crear la columna nueva."
-          },
-          {
-            "id": "B",
-            "text": "La columna se crea sin avisar nada, y `10 min` queda como 10."
-          },
-          {
-            "id": "C",
-            "text": "No pasa nada: esa columna ya era numérica desde el principio."
-          },
-          {
-            "id": "D",
-            "text": "Sale un aviso en rojo, y en la tabla `10 min` queda como `NA`."
-          }
-        ],
-        "correctOptionIndex": 3,
-        "timeLimitSeconds": 45,
-        "explanation": "No es un error: R avisa —*NAs introduced by coercion*— y sigue. La columna nueva se crea, y ese único `10 min` queda como `NA`, que significa «no sé». Cambiar un error silencioso por uno visible es todo el negocio de limpiar."
+    "context": "La columna `minutos_viaje` es **texto**, porque una persona escribió `10 min` en vez de un número.\n\nCorres esto:\n\n```r\ncurso %>%\n  mutate(minutos_num = as.numeric(minutos_viaje)) %>%\n  count(minutos_num)\n```",
+    "question": "Dos cosas, una línea cada una:\n\n**(1)** Qué aparece en la pantalla al correrlo.\n\n**(2)** Qué le pasó a ese `10 min` en la tabla nueva.\n\nDos líneas bastan.",
+    "judgeFocus": "Esta ronda pide DOS COSAS y las dos se califican: (1) qué aparece en la pantalla al correr eso; (2) qué le pasó al `10 min` en la tabla nueva. Se pidió UNA LÍNEA por cada una. Eso bien puesto vale 100 y escribir más no sube el puntaje.\n\nEL CRITERIO DE LA PARTE (1), que manda sobre cualquier ejemplo: la respuesta tiene que llegar a que sale un AVISO y que NO ES UN ERROR — R no se detiene, la columna nueva se crea igual. Las dos mitades importan, y la que se va a caer es la segunda. No hace falta citar el texto en inglés, ni la palabra «coerción», ni decir que es rojo. «Sale una advertencia pero el código igual corrió» vale 100. Lo que NO alcanza: decir sólo «sale algo en rojo» sin decir que igual corrió, porque justamente eso es lo que la clase enseñó a distinguir.\n\nEL CRITERIO DE LA PARTE (2): el `10 min` quedó como `NA` en la columna nueva. Cualquier palabra sirve —«NA», «vacío», «sin dato», «R dice que no sabe»— y todas valen igual. Lo que NO vale: decir que quedó como 10, que se convirtió igual, o que la fila desapareció de la tabla. La fila sigue estando; lo que cambió es el valor.\n\nEL ERROR QUE HAY QUE CAZAR es afirmar que R se detiene con un error y no alcanza a crear la columna. Es el malentendido central de la ronda, no un descuido, y va abajo aunque el resto esté impecable.\n\nNO EXIJAS: el texto exacto del aviso, el término «coerción», saber qué hacer con el `NA` después, ni ninguna función para manejarlo — este curso todavía no las ha visto. Hoy el `NA` se entiende, no se maneja.",
+    "evaluationGuide": {
+      "must_hit": [
+        "PARTE (1): sale un aviso o advertencia",
+        "PARTE (1): NO es un error — R no se detiene y la columna nueva se crea igual",
+        "PARTE (2): ese `10 min` quedó como `NA`, en cualquier vocabulario: vacío, sin dato, «R no sabe»"
+      ],
+      "nice_to_have": [
+        "Nota que en la tabla del `count()` aparece una fila `NA` con un solo caso",
+        "Dice que el `NA` es preferible al error silencioso de antes: ahora el problema se declara",
+        "Nombra que el aviso aparece por esa única respuesta escrita con letras",
+        "Responde en dos líneas y nada más"
+      ],
+      "fatal_errors": [
+        "Dice que R se detiene con un error y no alcanza a crear la columna",
+        "Dice que `10 min` quedó como 10, o que se convirtió sin problema",
+        "Dice que no pasa nada porque esa columna ya era numérica",
+        "Dice que la fila desapareció de la tabla"
+      ],
+      "partial_credit": {
+        "aviso_sin_na": "Dice que sale una advertencia y que igual corre, pero nunca dice qué le pasó al `10 min`: techo 40 en Exactitud.",
+        "na_sin_aviso": "Dice que ese valor quedó como `NA` y no dice nada de lo que aparece en pantalla: techo 40 en Exactitud.",
+        "rojo_sin_la_distincion": "Dice «sale algo en rojo» y acierta el `NA`, pero nunca dice que el código igual corrió: la parte (1) llegó a medias. Va por Exactitud, no por el techo."
       }
-    ]
-  },
-  {
-    "id": "dv_c05_r5_metro_o_micro",
-    "order": 5,
-    "title": "Metro o micro",
-    "category": "Dos condiciones",
-    "type": "multiple_choice",
-    "ranked": true,
-    "durationSeconds": 83,
-    "context": "",
-    "question": "",
-    "conceptTags": [
-      "dos_condiciones"
-    ],
-    "mcQuestions": [
-      {
-        "question": "Quieres quedarte con quienes usan transporte público, o sea metro **o** micro. ¿Cuál de estas cuatro líneas lo hace?",
-        "options": [
-          {
-            "id": "A",
-            "text": "`filter(transporte == \"Metro\" | transporte == \"Micro o bus\")`"
-          },
-          {
-            "id": "B",
-            "text": "`filter(transporte == \"Metro\" & transporte == \"Micro o bus\")`"
-          },
-          {
-            "id": "C",
-            "text": "`filter(transporte == \"Metro\" | \"Micro o bus\")`"
-          },
-          {
-            "id": "D",
-            "text": "`filter(transporte == \"Metro\", \"Micro o bus\")`"
-          }
-        ],
-        "correctOptionIndex": 0,
-        "timeLimitSeconds": 50,
-        "explanation": "`|` es «o»: basta con que se cumpla una. `&` pide las dos a la vez, y nadie viaja en metro y en micro en el mismo viaje: esa línea devuelve cero filas sin dar ningún error."
-      }
-    ]
+    },
+    "idealAnswer": {
+      "keyPoints": [
+        "Sale un aviso en rojo, pero no es un error: R no se detiene y la columna nueva se crea igual",
+        "Ese `10 min` no se pudo convertir y quedó como `NA` — una fila `NA` con un caso en el conteo"
+      ],
+      "expectedConcepts": [
+        "class_y_as_numeric"
+      ],
+      "commonMistakes": [
+        "Confundir el aviso con un error y decir que R se detuvo",
+        "Decir que `10 min` quedó como 10",
+        "Decir sólo «sale algo en rojo» sin aclarar que el código igual corrió",
+        "Creer que la fila entera se borra"
+      ],
+      "excellentResponseIndicators": [
+        "Distingue en una frase advertencia de error",
+        "Dice que el `NA` es la respuesta honesta: R prefiere decir que no sabe antes que inventar un número",
+        "Cabe en dos líneas"
+      ]
+    }
   }
 ]
