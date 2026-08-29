@@ -1,0 +1,45 @@
+{
+  "sessionId": "clase_05_arreglar_y_crear",
+  "courseId": "dataviz_2026",
+  "title": "Clase 5: Arreglar y crear",
+  "description": "Control de código de ~18 min: 4 rondas de alternativas con código proyectado y UNA sola abierta. R1 lee una cadena de dos pasos y pregunta cuántas filas y cuántas columnas quedan; R2 es la de `=` contra `==`, reciclada tal cual de la clase 4; R3 es la abierta (180 s, `answerFormat: \"code\"`) y retoma el filtro que devolvió 10 cuando eran 14, pero ahora exige EL ARREGLO además del diagnóstico —eso es lo que cambió respecto de la clase 4, donde `as.numeric()` todavía no se había enseñado—; R4 pregunta qué pasa exactamente al correr `as.numeric()` sobre la columna sucia (aviso en rojo, no error, y un `NA`); R5 cierra con `&` contra `|`. R3 va al MEDIO a propósito: R4 y R5 tocan `as.numeric()` y le regalarían el diagnóstico si fueran antes, y si el bloque se estira lo que se pierde es R5 y no la ronda que importa. Las 5 compiten.",
+  "date": "2026-08-31",
+  "roundCount": 5,
+  "roundDurationSeconds": 180,
+  "bufferSeconds": 45,
+  "conceptTags": [
+    "las_tres_funciones",
+    "escribir_el_filtro",
+    "la_columna_que_mentia",
+    "class_y_as_numeric",
+    "dos_condiciones"
+  ],
+  "judges": [
+    {
+      "judgeId": "generic_specialist",
+      "weight": 0.35
+    },
+    {
+      "judgeId": "generic_praxis",
+      "weight": 0.35
+    },
+    {
+      "judgeId": "generic_teacher",
+      "weight": 0.3
+    }
+  ],
+  "judgeConfig": {
+    "generic_specialist": {
+      "sessionLens": "Tu lente es LA EXACTITUD DE LO ENTREGADO. Esta sesión tiene UNA SOLA ronda juzgada y pide dos cosas de naturaleza distinta: un diagnóstico en castellano y una cadena de R. Júzgalas con estándares distintos y no las mezcles. En el diagnóstico, tu pregunta es si llega a que esa columna no se está comparando como número —que R la lee como texto y deletrea en vez de medir—; un razonamiento correcto dicho sin una sola palabra técnica vale exactamente lo mismo que uno con vocabulario. En el código, tu única pregunta es si esa cadena, pegada en un Colab que ya tiene `curso` cargado, corre y devuelve catorce: el `mutate()` con `as.numeric()` presente, y el nombre de la columna escrito tal cual está en los datos. Sé estricto con el nombre de la columna —R distingue mayúsculas y es justo lo que la clase enseñó a mirar— y deliberadamente indulgente con todo lo demás: espacios, comillas, indentación, saltos de línea y un paréntesis que falta no son errores en un teclado de teléfono. ATENCIÓN, ESTO CAMBIÓ RESPECTO DE LA CLASE PASADA: convertir la columna a número YA SE ENSEÑÓ, hoy mismo, y por lo tanto SÍ SE EXIGE. Una respuesta que diagnostica bien y no arregla nada está incompleta. Y no confundas 'no está en el cuaderno' con 'está mal': sobrescribir la columna original, guardar pasos intermedios, `|>`, `curso$minutos_viaje <- as.numeric(...)` o cerrar con `nrow()` en vez de `count()` funcionan y valen igual que la versión que se enseñó. El nombre de la columna nueva lo elige el estudiante: cualquiera vale, con tal de que sea el mismo que después aparece en el `filter()`. Es la QUINTA clase del semestre y llevan CUATRO clases programando.",
+      "weightFormula": "score = 0.75 * exactitud + 0.15 * completitud + 0.10 * claridad"
+    },
+    "generic_praxis": {
+      "sessionLens": "Tú eres quien va a tomar lo que el estudiante escribió y usarlo sin poder preguntarle nada. En la cadena de R eso significa literalmente copiar y pegar: ¿está todo lo que hace falta, en un orden en que correría, sin que tengas que adivinar qué va primero? Que el `mutate()` vaya ANTES del `filter()` no es una preferencia de estilo: al revés no corre, porque la columna nueva todavía no existe cuando el filtro la busca. Una respuesta cuyo código es puro código, sin una palabra de prosa alrededor, es exactamente lo que se pidió y no te molesta: lo que te molesta es el código enterrado en un párrafo, o los fragmentos sueltos que no llegan a ser una línea. En el diagnóstico eres el compañero de grupo que va a poner ese número en el informe del Sprint: tu pregunta es si después de leer esas dos líneas sabrías por qué el diez estaba mal y qué hay que mirar antes de escribir cualquier cifra que salga de una comparación. Premia lo que se entiende a la primera; penaliza el rodeo y la frase de relleno. Y no pidas prosa donde se pidió código: el enunciado dijo «sólo el código, sin explicarlo».",
+      "weightFormula": "score = 0.60 * exactitud + 0.15 * completitud + 0.25 * claridad"
+    },
+    "generic_teacher": {
+      "sessionLens": "Esta ronda SÍ entra al ranking, así que puntúa con honestidad y sin inflar: un puntaje regalado le quita el puesto a otro. Lo que más te importa es que ENTREGUEN LAS DOS COSAS QUE SE PIDIERON: el porqué en castellano Y la cadena de R que llega a catorce. La respuesta parcial típica de esta sesión es la inversa de la de la clase pasada: ahora el diagnóstico lo tienen fresco —lo acaban de leer en el cuaderno— y lo que falta es el código. Media respuesta perfecta sigue siendo media respuesta, y esta vez la mitad que se cae es la de la derecha. En el código caza los dos errores que la clase enseñó a mirar: el `as.numeric()` que no está —sin él la respuesta sigue siendo diez— y el nombre de columna con otra mayúscula. Caza también el que revela que no entendió `mutate()`: filtrar por una columna que todavía no se ha creado. Recuerda que llevan cuatro clases programando: no exijas elegancia, exige que corra. En tu feedback escribe en primera persona e incluye un 'yo habría...' concreto a ESTA respuesta, con la línea exacta que le habría escrito.",
+      "weightFormula": "score = 0.60 * exactitud + 0.32 * completitud + 0.08 * claridad"
+    }
+  }
+}

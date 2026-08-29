@@ -1,0 +1,237 @@
+[
+  {
+    "id": "dv_c05_r1_filas_y_columnas",
+    "order": 1,
+    "title": "Filas por un lado, columnas por el otro",
+    "category": "Las tres funciones",
+    "type": "multiple_choice",
+    "ranked": true,
+    "durationSeconds": 79,
+    "context": "",
+    "question": "",
+    "conceptTags": [
+      "las_tres_funciones"
+    ],
+    "mcQuestions": [
+      {
+        "question": "La tabla `curso` tiene 33 filas y 16 columnas, y 5 personas usan Android. Corres esto:\n\n```r\ncurso %>%\n  filter(sistema_operativo == \"Android\") %>%\n  select(comuna, dominio)\n```\n\n¿Qué tabla devuelve?",
+        "options": [
+          {
+            "id": "A",
+            "text": "5 filas y 16 columnas"
+          },
+          {
+            "id": "B",
+            "text": "5 filas y 2 columnas"
+          },
+          {
+            "id": "C",
+            "text": "33 filas y 2 columnas"
+          },
+          {
+            "id": "D",
+            "text": "2 filas y 5 columnas"
+          }
+        ],
+        "correctOptionIndex": 1,
+        "timeLimitSeconds": 45,
+        "explanation": "`filter()` recorta filas y `select()` recorta columnas: son las dos direcciones de la misma tabla y no se estorban. Quedan las 5 personas con Android, y de ellas sólo `comuna` y `dominio`."
+      }
+    ]
+  },
+  {
+    "id": "dv_c05_r2_dos_iguales",
+    "order": 2,
+    "title": "Dos iguales, no uno",
+    "category": "Escribir el filtro",
+    "type": "multiple_choice",
+    "ranked": true,
+    "durationSeconds": 83,
+    "context": "",
+    "question": "",
+    "conceptTags": [
+      "escribir_el_filtro"
+    ],
+    "mcQuestions": [
+      {
+        "question": "Quieres quedarte sólo con las personas del curso que llegan en metro. ¿Cuál de estas cuatro líneas lo hace?",
+        "options": [
+          {
+            "id": "A",
+            "text": "`filter(curso, transporte = \"Metro\")`"
+          },
+          {
+            "id": "B",
+            "text": "`filter(curso, transporte == \"metro\")`"
+          },
+          {
+            "id": "C",
+            "text": "`filter(curso, transporte == \"Metro\")`"
+          },
+          {
+            "id": "D",
+            "text": "`filter(curso, Transporte == \"Metro\")`"
+          }
+        ],
+        "correctOptionIndex": 2,
+        "timeLimitSeconds": 50,
+        "explanation": "Sólo C. Un `=` guarda, `==` pregunta. Y el texto va exacto: `\"metro\"` en minúscula devuelve cero filas, y `Transporte` con mayúscula no es una columna de esta base."
+      }
+    ]
+  },
+  {
+    "id": "dv_c05_r3_diez_y_eran_catorce",
+    "order": 3,
+    "title": "Diez, y eran catorce",
+    "category": "La columna que mentía",
+    "difficulty": "hard",
+    "ranked": true,
+    "durationSeconds": 180,
+    "answerFormat": "code",
+    "conceptTags": [
+      "la_columna_que_mentia"
+    ],
+    "context": "La tabla `curso` ya está cargada. La clase pasada preguntamos cuántas personas se demoran **más de una hora** en llegar, y escribimos esto:\n\n```r\ncurso %>%\n  filter(minutos_viaje > 60) %>%\n  count(minutos_viaje)\n```\n\nR devolvió **diez** personas, sin un solo error ni advertencia en pantalla.\n\nPero son **catorce**. Las cuatro que faltan pusieron 100, 130, 150 y 180 minutos: son justo las que más viajan de todo el curso.",
+    "question": "Dos cosas:\n\n**(1)** En una o dos líneas, en castellano: por qué el filtro dejó fuera justo a esas cuatro personas.\n\n**(2)** Escribe la cadena de R —**tres líneas después de `curso`**— que responde bien la misma pregunta y llega a catorce.\n\nSólo el código, sin explicarlo.",
+    "judgeFocus": "Esta ronda pide DOS COSAS y las dos se califican: (1) el porqué del error, en castellano; (2) una cadena de R que responda bien la misma pregunta. Se pidieron UNA O DOS LÍNEAS de castellano y TRES LÍNEAS DE R, escritas en tres minutos desde un teléfono, al final de una clase larga. Eso bien puesto vale 100 y escribir más no sube el puntaje.\n\nLO PRIMERO QUE TIENES QUE SABER, PORQUE CAMBIÓ DESDE LA CLASE PASADA. En la clase 4 esta misma trampa se pedía SÓLO diagnosticar, y la rúbrica decía expresamente que no se podía exigir el arreglo porque convertir una columna a número no se había enseñado. SE ENSEÑÓ HOY. `class()`, `as.numeric()` dentro de un `mutate()`, `ifelse()` y los operadores `&` y `|` son la materia de esta clase. Ahora el arreglo SÍ SE EXIGE: una respuesta que explica impecablemente por qué el filtro mintió y no escribe ninguna línea de R está incompleta.\n\nPARTE (1) — POR QUÉ EL FILTRO DEJÓ FUERA A ESAS CUATRO. El criterio, que manda sobre cualquier ejemplo: la respuesta tiene que llegar a que esa columna NO SE ESTÁ COMPARANDO COMO NÚMERO. Basta con eso dicho en cualquier vocabulario, y no hace falta una sola palabra técnica. Valen igual, y la lista que sigue NO ES EXHAUSTIVA: «la columna es texto porque alguien escribió 10 min», «R la está leyendo como palabra y no como cantidad», «las comparó letra por letra, y como 130 empieza con 1 le pareció menor que 60», «las ordenó como si fueran nombres, igual que una guía de teléfonos», «no son números, son palabras que parecen números». Cualquier formulación que llegue a esa idea cumple, esté o no en la lista.\n\nLO QUE NO CUENTA COMO PARTE (1): decir sólo «la columna está sucia», «hay un dato mal escrito» o «faltaba limpiar los datos». Van en la dirección correcta pero no llegan: no explican por qué desaparecieron justo las cuatro más grandes, que es lo que la pregunta pide.\n\nPARTE (2) — LA CADENA DE R. El criterio, y manda sobre cualquier ejemplo: puntúa alto todo código que, pegado en un Colab donde `curso` ya está cargado, DEVUELVA CATORCE. Lo único que no puede faltar es que la columna se convierta a número ANTES de compararla; sin eso el código corre perfecto y sigue contestando diez, que es justamente lo que había que arreglar. La versión canónica es:\n\ncurso %>%\n  mutate(minutos_num = as.numeric(minutos_viaje)) %>%\n  filter(minutos_num > 60) %>%\n  count(minutos_num)\n\npero CUALQUIER OTRA QUE DEVUELVA CATORCE VALE EXACTAMENTE IGUAL, esté o no en la lista que sigue, que tampoco es exhaustiva. Entre otras vas a ver: `|>` en vez de `%>%`; sobrescribir la columna original con `mutate(minutos_viaje = as.numeric(minutos_viaje))`; la conversión metida adentro del propio filtro, `filter(as.numeric(minutos_viaje) > 60)`; `curso$minutos_viaje <- as.numeric(curso$minutos_viaje)` en una línea aparte antes de la cadena; los pasos guardados en objetos intermedios; y cerrar con `nrow()`, con `count()` o dejando la tabla a la vista, que responden lo mismo. La pregunta que te tienes que hacer no es si la variante está en la lista, sino si ese código corre y devuelve catorce. Si corre y lo devuelve, vale 100 aunque no se te haya ocurrido a ti.\n\nEL NOMBRE DE LA COLUMNA NUEVA LO INVENTA EL ESTUDIANTE. `minutos_num`, `min_num`, `viaje`, `minutos2`: cualquiera vale. Lo único exigible es que sea EL MISMO que aparece después en el `filter()`. No le bajes por haber elegido otro nombre que el del cuaderno.\n\nLO QUE SÍ ES ERROR EN EL CÓDIGO, y es donde se decide el puntaje:\n- QUE NO HAYA NINGUNA CONVERSIÓN A NÚMERO. La cadena corre y sigue devolviendo diez. Es el error propio de esta sesión: la forma del cuaderno sin la lección del cuaderno.\n- EL NOMBRE DE UNA COLUMNA QUE YA EXISTE, ESCRITO CON OTRAS MAYÚSCULAS O MAL: `Minutos_viaje`, `Curso`. R distingue mayúsculas —es la misma lección que la clase vio con `Las condes` y `las condes`— y con ese nombre la cadena no corre. Es error de fondo, no un detalle de tipeo.\n- FILTRAR POR UNA COLUMNA QUE TODAVÍA NO SE HA CREADO: poner el `filter(minutos_num > 60)` ANTES del `mutate()` que crea `minutos_num`. `mutate()` trabaja de arriba hacia abajo y esa columna todavía no existe cuando el filtro la busca.\n- Volver a nombrar la base adentro de la función después de habérsela pasado con el pipe: `curso %>% filter(curso, minutos_num > 60)`.\n- Inventar una función que no existe: `convertir()`, `anumerico()`, `filtrar()`.\n\nLO QUE NO SE EXIGE, NUNCA: `library(dplyr)` ni `read.csv()` —el enunciado dice que `curso` ya está cargada—, ni el tipo exacto de comillas, ni la indentación, ni los saltos de línea, ni `head()`, ni comentarios, ni explicación en prosa del código. El enunciado dijo «sólo el código, sin explicarlo»: una respuesta cuyo código es puro código es exactamente lo que se pidió, y no le baja nada. Tampoco se exige `count()`: cualquier cierre que deje ver el resultado responde la pregunta.\n\nLA RESPUESTA PARCIAL TÍPICA DE ESTA SESIÓN es entregar (1) impecable y no entregar (2) — al revés que la clase pasada, porque el diagnóstico lo acaban de leer resuelto en el cuaderno de hoy y el código hay que escribirlo. Está previsto y tiene que doler: media respuesta no puede pasar de 40 en Exactitud, por muy bien explicada que esté la mitad que entregó. Esto es lo que esta ronda mide.\n\nDIAGNÓSTICOS EQUIVOCADOS que usan el vocabulario correcto, y que van bajo: que a esas cuatro filas les faltan datos o tienen NA; que el operador debía ser `>=` en vez de `>`; que R sólo leyó las primeras filas de la tabla; que `count()` escondió el resto. Ninguno de ésos es lo que pasó, y el enunciado no da pie para ninguno.\n\nNO EXIJAS ortografía, tildes, estructura, introducción ni vocabulario académico. Y si el estudiante objeta el enunciado —dice que los números no le calzan o que le falta información— eso NO se penaliza nunca: si tiene razón, el problema es del enunciado.",
+    "evaluationGuide": {
+      "must_hit": [
+        "PARTE (1): llega a que esa columna no se está comparando como número, en cualquier vocabulario — que R la lee como texto y deletrea en vez de medir",
+        "PARTE (2): entrega código de R, no una descripción en palabras de lo que habría que hacer",
+        "PARTE (2): la columna se convierte a número ANTES de compararla, en cualquier forma que funcione — sin eso el código sigue devolviendo diez",
+        "PARTE (2): el filtro compara contra 60 sobre la columna ya convertida, y el resultado se puede leer como un número de personas"
+      ],
+      "nice_to_have": [
+        "Nombra el `10 min` como el origen de que la columna entera sea texto",
+        "Explica la comparación letra por letra: `130` empieza con 1 y por eso le pareció menor que 60",
+        "Nota que el filtro se comió justo a los casos extremos, que suelen ser los que importan",
+        "Menciona que la conversión deja un `NA` y que ése es el aviso que antes no existía",
+        "Entrega la cadena y nada más, lista para pegar en Colab, un paso por línea"
+      ],
+      "fatal_errors": [
+        "La cadena no convierte la columna a número en ninguna parte: corre y sigue devolviendo diez",
+        "Escribe el nombre de una columna que ya existe con otras mayúsculas o mal: `Minutos_viaje`, `Curso`",
+        "Filtra por la columna nueva antes de haberla creado",
+        "Vuelve a nombrar la base adentro de la función después del pipe: `curso %>% filter(curso, ...)`",
+        "Atribuye el resultado a valores perdidos o NA en esas cuatro filas",
+        "Dice que el error fue haber usado `>` en vez de `>=`",
+        "Afirma que el filtro dio un error o una advertencia, cuando el enunciado dice lo contrario"
+      ],
+      "partial_credit": {
+        "solo_el_diagnostico": "Explica bien por qué pasó y no escribe ninguna línea de R: techo 40 en Exactitud. Es la respuesta parcial más común de esta sesión.",
+        "solo_el_codigo": "Entrega la cadena correcta y no dice una palabra de por qué: techo 40 en Exactitud.",
+        "cadena_sin_conversion": "La cadena está completa y corre, pero nunca convierte la columna: techo 40 en Exactitud, y a lo más 60 en Completitud, porque falta uno de los tres pasos que se pidieron.",
+        "otra_escritura_correcta": "Resuelve el arreglo de una forma que el cuaderno no mostró —sobrescribiendo la columna, con `as.numeric()` adentro del filtro, con objetos intermedios, cerrando con `nrow()`—: es CORRECTA. No baja en Exactitud; a lo más 80 en Completitud si cambió la forma pedida por otra equivalente.",
+        "columna_sucia_sin_mas": "Dice que la columna está sucia o mal escrita sin llegar a que se comparó como texto: 40 en Exactitud, porque no explica por qué desaparecieron justo las cuatro más grandes.",
+        "prosa_en_vez_de_codigo": "Describe en palabras el arreglo —«hay que convertirla a número»— sin escribir ninguna línea de R: para la parte (2) es media respuesta, techo 40 en Exactitud."
+      }
+    },
+    "idealAnswer": {
+      "keyPoints": [
+        "Alguien escribió `10 min`, así que esa columna es texto y no número",
+        "R compara texto letra por letra: `130` empieza con 1, le pareció menor que 60 y quedó fuera",
+        "curso %>%",
+        "  mutate(minutos_num = as.numeric(minutos_viaje)) %>%",
+        "  filter(minutos_num > 60) %>%",
+        "  count(minutos_num)"
+      ],
+      "expectedConcepts": [
+        "la_columna_que_mentia"
+      ],
+      "commonMistakes": [
+        "Explicar el porqué impecablemente y no escribir ninguna línea de R",
+        "Escribir la cadena entera sin el `as.numeric()`: corre y sigue devolviendo diez",
+        "Poner el `filter()` antes del `mutate()` que crea la columna nueva",
+        "Escribir `Minutos_viaje` con mayúscula: R lo trata como otra columna y la cadena no corre",
+        "Atribuirlo a datos faltantes o NA en esas cuatro filas",
+        "Quedarse en «la columna está sucia» sin llegar a la comparación como texto"
+      ],
+      "excellentResponseIndicators": [
+        "Explica la comparación letra por letra en lenguaje llano, sin necesitar vocabulario técnico",
+        "La cadena queda lista para pegar en Colab, un paso por línea",
+        "Usa el mismo nombre de columna nueva en el `mutate()` y en el `filter()`",
+        "Dice en una frase que el arreglo cambia el resultado de diez a catorce"
+      ]
+    }
+  },
+  {
+    "id": "dv_c05_r4_aviso_rojo_y_na",
+    "order": 4,
+    "title": "El aviso rojo",
+    "category": "class() y as.numeric()",
+    "type": "multiple_choice",
+    "ranked": true,
+    "durationSeconds": 81,
+    "context": "",
+    "question": "",
+    "conceptTags": [
+      "class_y_as_numeric"
+    ],
+    "mcQuestions": [
+      {
+        "question": "La columna `minutos_viaje` es texto, porque una persona escribió `10 min`. Corres esto:\n\n```r\ncurso %>%\n  mutate(minutos_num = as.numeric(minutos_viaje)) %>%\n  count(minutos_num)\n```\n\n¿Qué pasa?",
+        "options": [
+          {
+            "id": "A",
+            "text": "R se detiene con un error y no llega a crear la columna nueva."
+          },
+          {
+            "id": "B",
+            "text": "La columna se crea sin avisar nada, y `10 min` queda como 10."
+          },
+          {
+            "id": "C",
+            "text": "No pasa nada: esa columna ya era numérica desde el principio."
+          },
+          {
+            "id": "D",
+            "text": "Sale un aviso en rojo, y en la tabla `10 min` queda como `NA`."
+          }
+        ],
+        "correctOptionIndex": 3,
+        "timeLimitSeconds": 45,
+        "explanation": "No es un error: R avisa —*NAs introduced by coercion*— y sigue. La columna nueva se crea, y ese único `10 min` queda como `NA`, que significa «no sé». Cambiar un error silencioso por uno visible es todo el negocio de limpiar."
+      }
+    ]
+  },
+  {
+    "id": "dv_c05_r5_metro_o_micro",
+    "order": 5,
+    "title": "Metro o micro",
+    "category": "Dos condiciones",
+    "type": "multiple_choice",
+    "ranked": true,
+    "durationSeconds": 83,
+    "context": "",
+    "question": "",
+    "conceptTags": [
+      "dos_condiciones"
+    ],
+    "mcQuestions": [
+      {
+        "question": "Quieres quedarte con quienes usan transporte público, o sea metro **o** micro. ¿Cuál de estas cuatro líneas lo hace?",
+        "options": [
+          {
+            "id": "A",
+            "text": "`filter(transporte == \"Metro\" | transporte == \"Micro o bus\")`"
+          },
+          {
+            "id": "B",
+            "text": "`filter(transporte == \"Metro\" & transporte == \"Micro o bus\")`"
+          },
+          {
+            "id": "C",
+            "text": "`filter(transporte == \"Metro\" | \"Micro o bus\")`"
+          },
+          {
+            "id": "D",
+            "text": "`filter(transporte == \"Metro\", \"Micro o bus\")`"
+          }
+        ],
+        "correctOptionIndex": 0,
+        "timeLimitSeconds": 50,
+        "explanation": "`|` es «o»: basta con que se cumpla una. `&` pide las dos a la vez, y nadie viaja en metro y en micro en el mismo viaje: esa línea devuelve cero filas sin dar ningún error."
+      }
+    ]
+  }
+]

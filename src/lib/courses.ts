@@ -72,6 +72,10 @@ import dvC04Config from '../../content/sessions/dataviz_2026/clase_04_filtrar_el
 import dvC04Scenarios from '../../content/sessions/dataviz_2026/clase_04_filtrar_elegir_crear/scenarios.json';
 import dvC04Rubric from '../../content/sessions/dataviz_2026/clase_04_filtrar_elegir_crear/rubric.json';
 import dvC04KnowledgeBase from '../../content/sessions/dataviz_2026/clase_04_filtrar_elegir_crear/knowledge_base.md?raw';
+import dvC05Config from '../../content/sessions/dataviz_2026/clase_05_arreglar_y_crear/config.json';
+import dvC05Scenarios from '../../content/sessions/dataviz_2026/clase_05_arreglar_y_crear/scenarios.json';
+import dvC05Rubric from '../../content/sessions/dataviz_2026/clase_05_arreglar_y_crear/rubric.json';
+import dvC05KnowledgeBase from '../../content/sessions/dataviz_2026/clase_05_arreglar_y_crear/knowledge_base.md?raw';
 
 import mgtC01Config from '../../content/sessions/mgt300_2026/clase_01_piensa_primero/config.json';
 import mgtC01Scenarios from '../../content/sessions/mgt300_2026/clase_01_piensa_primero/scenarios.json';
@@ -352,6 +356,18 @@ export const SESSIONS: SessionOption[] = [
     scenarios: dvC04Scenarios,
     rubric: dvC04Rubric,
     knowledgeBase: dvC04KnowledgeBase,
+  },
+  {
+    id: 'clase_05_arreglar_y_crear',
+    courseId: 'dataviz_2026',
+    title: dvC05Config.title,
+    description: dvC05Config.description,
+    rounds: dvC05Scenarios.length,
+    duration: Math.round(dvC05Config.roundDurationSeconds / 60),
+    config: dvC05Config,
+    scenarios: dvC05Scenarios,
+    rubric: dvC05Rubric,
+    knowledgeBase: dvC05KnowledgeBase,
   },
   {
     id: 'clase_01_piensa_primero',
