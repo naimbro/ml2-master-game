@@ -1,0 +1,46 @@
+{
+  "sessionId": "clase_05_repaso_unidad_1",
+  "courseId": "mgt300_2026",
+  "title": "Clase 5: Repaso de la Unidad 1",
+  "description": "5 rondas abiertas (~22 min) de repaso de toda la Unidad 1, de cara a la Prueba de análisis 1 del 8 de septiembre. No es la actividad de cierre habitual: ocupa la segunda mitad de la clase, y después de cada ronda el profesor detiene el juego y repasa esa materia en voz alta. Una ronda de la clase 2 (Han, La sociedad del cansancio), dos de la clase 3 (En el enjambre) y dos de la clase 5 (Pariser y el capítulo 2 de Infocracia). La clase 4 queda fuera. Todas compiten. Respuestas de 2 o 3 frases. No es nota.",
+  "date": "2026-09-01",
+  "roundCount": 5,
+  "roundDurationSeconds": 150,
+  "bufferSeconds": 45,
+  "conceptTags": [
+    "c02_disciplinaria_rendimiento",
+    "c03_carta_al_director",
+    "c03_concentracion_congregacion",
+    "c05_pariser_filtro",
+    "c05_han_infocracia",
+    "c05_deck_extra"
+  ],
+  "judges": [
+    {
+      "judgeId": "generic_specialist",
+      "weight": 0.35
+    },
+    {
+      "judgeId": "generic_praxis",
+      "weight": 0.35
+    },
+    {
+      "judgeId": "generic_teacher",
+      "weight": 0.3
+    }
+  ],
+  "judgeConfig": {
+    "generic_specialist": {
+      "sessionLens": "Tu lente es el TEXTO: si lo que el estudiante le atribuye a Han o a Pariser está efectivamente en el material del curso, y si lo reconstruye sin deformarlo. Tienes los cinco pasajes con sus citas en el material de referencia; úsalo para verificar, no para exigir que citen. ANTES QUE NADA, ENTIENDE QUÉ SESIÓN ES ÉSTA: es un REPASO de la Unidad 1 antes de la prueba del 8 de septiembre, y lo único que se pide es refrescar qué dice cada texto y por qué. No se pide abstraer, no se pide aplicar a un caso, no se pide cruzar dos autores — eso es lo que va a pedir la prueba, no el juego. Una respuesta de DOS O TRES FRASES que dice bien lo que el texto dice, y por qué, está completa y saca 100. No le restes por 'poco desarrollo', por 'le faltó profundidad' ni por 'no lo conectó con nada': nada de eso se pidió. Dos errores que sí te tocan: atribuirle al texto una tesis moral sobre las personas (que la gente empeoró, que se volvió más agresiva, que perdió los valores) donde el argumento es sobre condiciones del medio; e inventar cifras, estudios o nombres de empresa — los tres textos de Han no traen ni uno, y las únicas cifras legítimas están en el material de referencia. Ojo con una trampa tuya: los cinco enunciados TRAEN EL PASAJE ESCRITO, así que repetirlo de vuelta con otras palabras es fiel al texto y no es responder; la fidelidad la mides tú, pero el paso que falta lo mide 'Mecanismo'. Es la quinta clase del semestre: no exijas vocabulario del curso ni las palabras del autor.",
+      "weightFormula": "score = 0.45 * fidelidad_al_texto + 0.35 * mecanismo + 0.20 * completitud"
+    },
+    "generic_praxis": {
+      "sessionLens": "Tu única pregunta es POR QUÉ. Las cinco rondas de hoy le entregan al estudiante el pasaje ya escrito en el enunciado, así que reconocerlo no separa a nadie: lo que separa a quien leyó de quien hojeó es poder dar el paso que el pasaje no dice en voz alta. En R1 no aceptes 'antes castigaban y ahora no': pide por qué una sociedad que prohíbe produce desviados y una que dice 'poder sin límites' produce gente que no le alcanzó a sí misma. En R2 no aceptes 'porque las redes son inmediatas' a secas ni 'porque la gente hoy se enoja más': pide qué hacía la demora, y por qué sacarla deja pasar lo que antes se evaporaba. En R3 no aceptes 'porque están dispersos' ni 'porque no tienen voz', que son las palabras del propio Han devueltas: pide qué produce la congregación y qué se pierde sin eso. En R4 no aceptes 'el algoritmo te muestra lo que te gusta': eso no dice por qué era IMPOSIBLE NOTARLO, que es lo que se pregunta. En R5 no aceptes 'antes se debatía mejor': el enunciado ya descartó a los oradores. PERO ojo con el otro lado, y es importante hoy: esto es un REPASO, no la prueba. Con que cierren el paso en dos frases ya está — no les pidas desarrollarlo más, ni ejemplificarlo, ni llevarlo a un caso. Cerrado y corto es 100. Y premia igual de alto a quien objeta con fundamento: quien sostiene que Han se equivoca, o que el estallido de 2019 y el #MeToo sí produjeron un nosotros, está haciendo exactamente lo que este curso enseña.",
+      "weightFormula": "score = 0.20 * fidelidad_al_texto + 0.55 * mecanismo + 0.25 * completitud"
+    },
+    "generic_teacher": {
+      "sessionLens": "Es la última clase antes de la Prueba de análisis 1 y estas cinco rondas SÍ entran al ranking, así que puntúa con honestidad y sin inflar: un puntaje regalado le quita el puesto a otra persona. El juego no es nota. Tu trabajo es distinguir a quien leyó los textos de la unidad de quien está contestando desde el sentido común sobre redes sociales, celulares y algoritmos, que suena parecido y no lo es. MIRA ESPECIALMENTE SI CONTESTÓ TODO LO QUE SE PREGUNTÓ: tres de las cinco rondas piden dos cosas (qué le falta Y qué se pierde; qué recibió cada una Y por qué no podían notarlo; qué parte de la escena Y qué prueba con ella), y la respuesta que contesta sólo una mitad, por impecable que esté esa mitad, no está completa. No la trates igual que la que contesta las dos. En tu feedback escribe en primera persona e incluye un «yo habría...» concreto a ESTA respuesta. Y acuérdate del registro de hoy: es repaso, se pidieron DOS O TRES FRASES, y quien las escribe bien ya hizo lo que se le pidió — no le pongas de tarea la profundidad que va a pedir la prueba. Si alguien discute a los autores —que Han construye diagnósticos enormes sobre una etimología o un caballo de circo, que sus ejemplos están elegidos a favor, que Pariser envejeció en lo técnico—, eso no es un problema: es lo que este curso enseña, siempre que muestre primero que entendió qué sostiene el texto.",
+      "weightFormula": "score = 0.30 * fidelidad_al_texto + 0.40 * mecanismo + 0.30 * completitud"
+    }
+  }
+}

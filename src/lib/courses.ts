@@ -93,6 +93,10 @@ import mgtC04Config from '../../content/sessions/mgt300_2026/clase_04_ia_intimid
 import mgtC04Scenarios from '../../content/sessions/mgt300_2026/clase_04_ia_intimidad_afecto/scenarios.json';
 import mgtC04Rubric from '../../content/sessions/mgt300_2026/clase_04_ia_intimidad_afecto/rubric.json';
 import mgtC04KnowledgeBase from '../../content/sessions/mgt300_2026/clase_04_ia_intimidad_afecto/knowledge_base.md?raw';
+import mgtC05Config from '../../content/sessions/mgt300_2026/clase_05_repaso_unidad_1/config.json';
+import mgtC05Scenarios from '../../content/sessions/mgt300_2026/clase_05_repaso_unidad_1/scenarios.json';
+import mgtC05Rubric from '../../content/sessions/mgt300_2026/clase_05_repaso_unidad_1/rubric.json';
+import mgtC05KnowledgeBase from '../../content/sessions/mgt300_2026/clase_05_repaso_unidad_1/knowledge_base.md?raw';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyJson = any;
@@ -416,6 +420,18 @@ export const SESSIONS: SessionOption[] = [
     scenarios: mgtC04Scenarios,
     rubric: mgtC04Rubric,
     knowledgeBase: mgtC04KnowledgeBase,
+  },
+  {
+    id: 'clase_05_repaso_unidad_1',
+    courseId: 'mgt300_2026',
+    title: mgtC05Config.title,
+    description: mgtC05Config.description,
+    rounds: mgtC05Scenarios.length,
+    duration: Math.round(mgtC05Config.roundDurationSeconds / 60),
+    config: mgtC05Config,
+    scenarios: mgtC05Scenarios,
+    rubric: mgtC05Rubric,
+    knowledgeBase: mgtC05KnowledgeBase,
   },
 ];
 

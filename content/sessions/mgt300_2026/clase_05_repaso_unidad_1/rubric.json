@@ -1,0 +1,83 @@
+{
+  "_doc": "Rúbrica propia de clase_05_repaso_unidad_1. MGT300 no tiene _shared/base_rubric.json. Es una sesión de REPASO y por eso no reusa tal cual la rúbrica de la clase 3: allá la tercera dimensión era 'concreción' —si traía el detalle que sólo puede traer quien leyó—, y acá esa dimensión no discrimina, porque los cinco enunciados entregan el pasaje escrito y cualquiera puede devolver el detalle. La tercera dimensión de esta sesión es COMPLETITUD, y existe por un motivo medido: tres de las cinco rondas piden DOS cosas, y sin una dimensión que lo mida se invierte el orden entre la respuesta completa con un error y la respuesta incompleta pero impecable. Las cinco rondas son juzgadas: no hay opción múltiple en esta sesión. Los ids de las dimensiones están comprometidos con las weightFormula de config.json: no renombrarlos sin tocar las dos cosas. LAS CINCO RONDAS ADMITEN MÁS DE UNA RESPUESTA CORRECTA y por eso los criterios están escritos como criterio primero y ejemplos después, marcados como no exhaustivos.",
+  "sessionId": "clase_05_repaso_unidad_1",
+  "globalInstructions": "Evalúa SOLO lo que está escrito. No completes la respuesta con lo que el estudiante 'seguramente quiso decir'.\n\nQUÉ SESIÓN ES ÉSTA, Y POR QUÉ CAMBIA EL ESTÁNDAR. Es la QUINTA CLASE del semestre de un curso de teoría social y argumentación, y este juego NO es la actividad de cierre habitual: es un REPASO de toda la Unidad 1, de cara a la Prueba de análisis 1 del 8 de septiembre. Ocupa la segunda mitad de la clase, y después de cada ronda el profesor detiene el juego y repasa esa materia en voz alta.\n\nLO ÚNICO QUE SE PIDE HOY ES REFRESCAR QUÉ DICE CADA TEXTO Y POR QUÉ. No se pide abstraer, no se pide aplicar a un caso, no se pide cruzar dos autores ni relacionar dos lecturas. Eso es lo que va a pedir la prueba del 8 de septiembre; esto es lo que la prepara. UNA RESPUESTA QUE DICE BIEN LO QUE EL TEXTO DICE, Y POR QUÉ, ESTÁ COMPLETA Y VALE 100. No bajes el puntaje porque 'le faltó profundidad', 'no lo desarrolló', 'no lo conectó con otro autor' o 'no lo aplicó a un ejemplo'. Nada de eso se pidió, y castigarlo sería corregir la prueba en vez del repaso.\n\nEL LARGO PEDIDO ES DE DOS O TRES FRASES, y los cinco enunciados lo dicen. Es una indicación del estándar, no un techo ni un piso. NO BAJES EL PUNTAJE POR PASARSE NI POR QUEDARSE CORTO. Dos frases bien puestas valen 100; ocho también, si las ocho agregan.\n\nQUÉ HAN LEÍDO. De este curso han leído, en orden: el artículo de Ines Lee (clase 1); una guía en papel con extractos de Byung-Chul Han, 'La sociedad del cansancio', y de Barbara Ehrenreich (clase 2); otra guía en papel con capítulos de Han, 'En el enjambre' (clase 3); Han 'Melancolía' y textos sobre apps de compañía (clase 4, que NO entra hoy); y HOY MISMO, hace poco más de una hora, una guía en papel con el capítulo 2 de 'Infocracia' de Han y la introducción de 'El filtro burbuja' de Eli Pariser. Nada más. No han leído a Sen, ni a Acemoglu, ni a Schneier: eso viene en las unidades 2 y 3.\n\nEstán escribiendo desde el TELÉFONO, en dos minutos y medio, al final de una clase de dos horas y media en la que además hubo presentaciones grupales y quince minutos de lectura en silencio. NO EXIJAS: ortografía perfecta, tildes, introducción, estructura, conectores ni vocabulario académico. Nadie tiene que decir 'sujeto de rendimiento', 'potencia negativa', 'medio del afecto', 'congregación', 'capital de acercamiento' ni 'infocracia' para sacar 100: si explican la idea con sus palabras, vale exactamente igual.\n\nCUIDADO CON LA TRAMPA PROPIA DE ESTA SESIÓN: LOS CINCO ENUNCIADOS TRAEN EL PASAJE ESCRITO. Eso está hecho a propósito, para que nadie tenga que recordar una cita de memoria. Pero significa que devolver el pasaje con otras palabras es fiel al texto y NO es responder: lo que se pide en cada ronda es el paso que el pasaje no dice en voz alta. Una paráfrasis correcta y bien redactada es una respuesta incompleta, no una respuesta buena.\n\nNUNCA PENALICES QUE OBJETEN EL ENUNCIADO O AL AUTOR. Si alguien escribe que Han exagera, que construir un diagnóstico social entero sobre una etimología o sobre un caballo de circo es endeble, que sus ejemplos están elegidos a favor, que un libro de 2013 no anticipó los algoritmos de recomendación, o que Pariser envejeció en las partes técnicas, eso NO es evadir la pregunta: es exactamente lo que este curso enseña. Una objeción bien argumentada puede sacar el puntaje más alto de la ronda. Lo único que se exige es que muestre haber entendido primero qué sostiene el texto. Y si alguien corrige un dato del enunciado —por ejemplo, que los debates Lincoln-Douglas más conocidos son de 1858 y no de 1854—, eso NO se penaliza en ninguna dimensión: el material del curso dice 1854 siguiendo a Han, y quien note la diferencia está leyendo bien.\n\nEL ERROR DE LECTURA QUE MÁS IMPORTA CAZAR es leer a Han como un texto moral sobre las personas: 'la gente se volvió más agresiva', 'las redes sacan lo peor de nosotros', 'perdimos los valores', 'hoy nadie aguanta nada'. Han NO sostiene que las personas empeoraron. Sostiene que se cayeron CONDICIONES ESTRUCTURALES —la prohibición como forma, la demora entre sentir y publicar, la congregación, la atención sostenida— y que sin ellas ciertas cosas dejan de ser posibles. El diagnóstico es sobre la forma social y el medio, no sobre el carácter de las personas.\n\nOJO CON LAS CIFRAS. Los tres textos de Han que entran hoy no contienen ni una sola cifra propia. Las únicas cifras legítimas son las que están escritas en el material de referencia (las de Pariser, las de America in One Room y las siete horas de 1854). Si aparece un porcentaje, un estudio, una encuesta o un nombre de empresa que no está ahí, lo inventaron.\n\nCUIDADO CON EL DOBLE COBRO. Cada error se castiga en UNA sola dimensión: la que lo mide. Cada dimensión dice abajo qué NO mide y qué dimensión sí lo mide. No bajes el puntaje de una dimensión por un problema que ya pagó en otra.\n\nLAS CINCO RONDAS ADMITEN MÁS DE UNA RESPUESTA CORRECTA. Los ejemplos que aparecen en el judgeFocus y en esta rúbrica son ILUSTRATIVOS, NUNCA UNA LISTA CERRADA. Una respuesta que cumple el criterio por un camino que no está enumerado vale exactamente lo mismo que la prevista. Si dudas entre castigar una respuesta correcta que no esperabas y premiarla, premiala.\n\nEl juego compite y hay podio, pero no es una nota del curso y no reemplaza la prueba. Puntúa igual con honestidad y sin inflar: un puntaje regalado le quita el puesto a otra persona.\n\nEl judgeFocus del escenario es tu prioridad absoluta y manda sobre estas instrucciones generales si hay tensión.",
+  "scoring": {
+    "scaleLevels": [100, 80, 60, 40, 20, 0],
+    "instructions": "Elige uno de los seis niveles escritos por dimensión. No inventes valores intermedios. Si la respuesta satisface un nivel solo parcialmente, baja al nivel inferior."
+  },
+  "dimensions": [
+    {
+      "id": "fidelidad_al_texto",
+      "name": "Fidelidad al texto",
+      "weight": 0.3,
+      "description": "¿Lo que le atribuye al autor está efectivamente en el material del curso? Lo que más importa es que no le ponga la tesis moral —que la gente empeoró, que se perdieron los valores, que las redes sacan lo peor— y que no le atribuya una cifra, un estudio, un caso o una afirmación que el material no trae. NO MIDE si la explicación cierra el porqué: eso lo mide 'Mecanismo' y sólo 'Mecanismo'. NO MIDE si contestó todo lo que se preguntó: eso lo mide 'Completitud' y sólo 'Completitud'. Una respuesta fiel pero que se queda a mitad de camino saca alto acá y bajo allá, y eso es correcto. Y al revés: una respuesta que cierra un razonamiento impecable sobre una lectura equivocada saca alto en 'Mecanismo' y bajo acá — el juicio de fondo lo componen las dimensiones juntas, no una sola cobrando dos veces.",
+      "level_100": "Todo lo que le atribuye al texto está en el texto, incluido el matiz que separa el diagnóstico de la moralina: lo que se perdió es una condición de la forma social o del medio, no una virtud de las personas.",
+      "level_80": "Lo central es correcto, pero se le escapa un matiz que el material sí marca.",
+      "level_60": "La idea general es correcta, pero mezcla lo que dice el texto con una interpretación propia sin distinguir cuál es cuál.",
+      "level_40": "Contesta con su impresión personal sobre las redes, los celulares o la época cuando se pedía el argumento del texto; o afirma como del texto algo que el enunciado ya había descartado.",
+      "level_20": "Le atribuye al autor una tesis que no sostiene: que las personas se volvieron peores, más agresivas o menos educadas; que el problema es cuántas horas pasamos conectados; que hay un culpable externo —las empresas, las plataformas— donde el texto dice que la coacción funciona sin emisor.",
+      "level_0": "Contradice algo que el texto dice de forma explícita, o inventa una cifra, un estudio, una encuesta, una cita o un nombre de empresa que no está en el material."
+    },
+    {
+      "id": "mecanismo",
+      "name": "Mecanismo",
+      "weight": 0.45,
+      "description": "¿Explica POR QUÉ una cosa lleva a la otra, o devuelve el pasaje que el enunciado ya traía? Es la dimensión que separa a quien leyó de quien reconoció, y en esta sesión es la que carga el peso, porque los cinco enunciados entregan la cita escrita. Nombrar el fenómeno —'porque es inmediato', 'porque están aislados', 'porque el algoritmo personaliza'— no es explicarlo: el mecanismo es el paso intermedio, qué deja de ser posible, necesario o gratuito cuando falta la condición que nombró. NO MIDE si lo que dice está en el texto: eso lo mide 'Fidelidad al texto'. NO MIDE si contestó las dos partes de la pregunta: eso lo mide 'Completitud'. Una respuesta que cierra impecablemente una sola de las dos mitades saca alto acá y bajo en 'Completitud', y eso es exactamente lo que se busca.",
+      "level_100": "Cierra el paso intermedio completo —por qué de esa condición se sigue ese efecto— y lo dice con sus propias palabras, no con las del enunciado. Dos frases bastan: cerrado y corto es 100.",
+      "level_80": "Nombra el mecanismo correcto pero lo deja a medio cerrar: se entiende hacia dónde va y falta decir el último paso en voz alta.",
+      "level_60": "Repite la conclusión con otras palabras, o pone el nombre del fenómeno en lugar de su explicación.",
+      "level_40": "Da una explicación plausible pero equivocada: atribuye el efecto a una causa que el texto descarta o no menciona.",
+      "level_20": "Menciona los elementos correctos sin establecer ninguna relación entre ellos.",
+      "level_0": "No hay razonamiento. ESTO INCLUYE, y en esta sesión es el caso más frecuente, la respuesta que se limita a parafrasear el pasaje que el enunciado ya traía escrito: por bien redactada que esté, no agregó ningún paso, y acá va 0. También va 0 el juicio moral suelto sobre las redes o sobre la época."
+    },
+    {
+      "id": "completitud",
+      "name": "Completitud",
+      "weight": 0.25,
+      "description": "¿Contestó todo lo que se preguntó? Tres de las cinco rondas piden DOS cosas explícitamente —qué le falta Y qué se pierde; qué recibió cada una Y por qué ninguna podía notarlo; qué parte de la escena Y qué prueba con ella— y las otras dos piden una sola, bien delimitada. Esta dimensión existe para que la respuesta impecable que contesta la mitad no le gane a la respuesta completa que trae un error: la primera se ahorró el riesgo, y eso tiene que verse en alguna parte. NO MIDE si lo que dice es correcto ni si está bien argumentado: eso ya lo miden las otras dos, y una respuesta completa y equivocada saca alto acá con toda razón, porque el error ya se cobró donde corresponde. NO MIDE el largo: dos frases pueden contestar las dos mitades y sacar 100, y un párrafo largo que sólo desarrolla una mitad saca bajo. TAMPOCO MIDE profundidad: no descuentes porque la respuesta pudo haber dicho más de lo que se preguntó.",
+      "level_100": "Contesta todo lo que la pregunta pedía, y cada parte se sostiene por sí sola en vez de quedar insinuada.",
+      "level_80": "Contesta todo, pero una de las partes queda apenas enunciada donde la otra sí se desarrolla.",
+      "level_60": "Contesta una parte completa y la otra la deja implícita: se puede inferir de lo escrito, pero no está dicha.",
+      "level_40": "Contesta sólo una de las dos partes que se pidieron, aunque esa la conteste bien.",
+      "level_20": "Contesta parcialmente una sola parte, o responde a una pregunta parecida que no es la que se hizo.",
+      "level_0": "No contesta lo que se preguntó, o está en blanco."
+    }
+  ],
+  "penalties": [
+    {
+      "id": "moralina",
+      "description": "Atribuirle al autor la tesis de que las personas empeoraron —que se volvieron más agresivas, más groseras, más superficiales, que se perdieron los valores o la educación, que hoy nadie aguanta nada— no puede superar 40 en 'Fidelidad al texto'. Los textos sostienen lo contrario: se cayeron condiciones de la forma social o del medio, no virtudes de las personas. OJO: esto NO aplica a quien critique al autor desde afuera —'me parece que Han subestima que la gente igual elige cómo comportarse' es una objeción legítima y puede puntuar alto—; aplica sólo a quien se lo atribuye al texto como si fuera su tesis.",
+      "effect": {
+        "type": "cap",
+        "value": 40,
+        "dimensions": ["fidelidad_al_texto"]
+      }
+    },
+    {
+      "id": "parafrasis_del_enunciado",
+      "description": "Devolver el pasaje que el enunciado ya traía escrito, con otras palabras y sin agregar el paso que se pedía, no puede superar 40 en 'Mecanismo'. Es la falla propia de esta sesión, porque las cinco rondas entregan la cita. Ejemplos de lo que dispara esto: en R2, decir que el medio digital es inmediato y por eso transporta el afecto —eso es la cita—; en R3, decir que a los habitantes de la red les falta un nosotros —eso también es la cita—; en R5, decir que a Han le interesa el público sin decir qué prueba con eso. NO aplica a quien usa el pasaje como punto de partida y después agrega el paso: ése es exactamente el camino esperado.",
+      "effect": {
+        "type": "cap",
+        "value": 40,
+        "dimensions": ["mecanismo"]
+      }
+    },
+    {
+      "id": "dato_inventado",
+      "description": "Atribuirle a un texto una cifra, un estudio, una encuesta, un porcentaje o un nombre de empresa que no está en el material no puede superar 20 en 'Fidelidad al texto'. Los tres textos de Han que entran hoy no traen ninguna cifra propia. Las cifras que SÍ están en el material y que citarlas correctamente NO dispara esta penalización: los 57 indicadores de Google, el 4 de diciembre de 2009, los 180 y 139 millones de resultados, las siete horas de 1854, y los 523 votantes / 22 de 26 / +13 y +14 de America in One Room.",
+      "effect": {
+        "type": "cap",
+        "value": 20,
+        "dimensions": ["fidelidad_al_texto"]
+      }
+    }
+  ],
+  "globalPenalties": [
+    "Atribuirle a Han o a Pariser que las personas empeoraron —más agresivas, más groseras, sin valores— cuando su tesis es que se cayeron condiciones de la forma social o del medio.",
+    "Parafrasear el pasaje que el enunciado ya trae escrito en vez de dar el paso que se pedía.",
+    "Poner el nombre del fenómeno donde iba la explicación de por qué se sigue.",
+    "Contestar sólo una de las dos partes que la pregunta pedía.",
+    "Inventar una cifra, un estudio o un caso para no dejar el campo vacío."
+  ]
+}

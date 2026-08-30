@@ -1,0 +1,200 @@
+[
+  {
+    "id": "mgt_c05_r1_locos_y_depresivos",
+    "order": 1,
+    "type": "open",
+    "title": "Locos y depresivos",
+    "category": "Clase 2 — La sociedad del cansancio",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 150,
+    "conceptTags": ["c02_disciplinaria_rendimiento"],
+    "context": "Volvemos a la clase 2. Han cierra así la comparación entre las dos sociedades:\n\n> «A la sociedad disciplinaria todavía la rige el **no**. Su negatividad genera **locos y criminales**. La sociedad de rendimiento, por el contrario, produce **depresivos y fracasados**.»\n\nLa disciplinaria funciona con **prohibición**. La de rendimiento, con el «**poder sin límites**» del *Yes, we can*.",
+    "question": "**¿Por qué cada una produce lo suyo?** Con 2 o 3 frases basta.",
+    "judgeFocus": "ES UNA RONDA DE REPASO Y CON DOS FRASES SE CONTESTA ENTERA. No pidas más desarrollo, ni ejemplos, ni que lo lleve a un caso: nada de eso se pidió hoy.\n\nEL CRITERIO, y va primero: la respuesta tiene que ligar la FORMA de cada sociedad con la FIGURA que produce. O sea, decir que donde hay una prohibición existe algo contra qué medirse —y por lo tanto alguien que la cruza o que no cabe en ella— y que donde sólo hay 'poder sin límites' no hay ningún punto de llegada, así que el que no llega no desobedeció a nadie: quedó debiéndose a sí mismo. Con que la respuesta sostenga esa relación en una de las dos direcciones y deje clara la otra, ya está completa.\n\nEJEMPLOS ILUSTRATIVOS, NO UNA LISTA CERRADA. Hay varias rutas y todas valen lo mismo: (a) la norma externa — una sociedad con reglas produce desviados respecto de la regla, una sin reglas produce gente que falla contra sí misma; (b) contra quién se falla — el criminal desobedeció a otro, el fracasado no le alcanzó a él; (c) la ruta que el propio Han da y que muchos van a recordar: 'el deprimido dice nada es posible porque vive en una sociedad que le dice nada es imposible'. Cualquiera de las tres, bien cerrada, es 100. Y si alguien llega por una cuarta ruta que el material sostiene, vale exactamente igual: NO la castigues por no ser una de éstas.\n\nQUÉ NO CUENTA, y es por donde se cae la mayoría: 'antes castigaban y ahora no', o 'antes había más disciplina y hoy hay más libertad'. Eso describe el cambio sin decir por qué produce esas figuras concretas, que es lo único que se preguntó. Tampoco cuenta 'hoy la gente está más estresada' ni 'hay más ansiedad que antes': es una impresión sobre la época, no el argumento del texto, y Han no está haciendo una afirmación epidemiológica. Tampoco cuenta 'las empresas nos explotan más', que pone un culpable externo justo donde el texto dice que ya no lo hay.\n\nDOS COSAS MÁS. Primero, no exijas las palabras del autor: quien dice 'antes te castigaban por romper una regla, ahora no hay regla que romper, así que si no llegas es tu culpa' contestó perfecto sin decir 'negatividad' ni 'positividad'. Segundo, atribuirle a Foucault la sociedad de rendimiento, o a Han la disciplinaria, sí es un error de lectura y se paga en 'Fidelidad al texto'.",
+    "evaluationGuide": {
+      "must_hit": [
+        "Liga la forma de la sociedad disciplinaria —la prohibición, la regla externa— con la figura que produce: alguien que la cruza o que no cabe en ella, definido CONTRA una norma.",
+        "Liga la forma de la sociedad de rendimiento —'poder sin límites', sin punto de llegada— con la figura que produce: alguien que no le alcanzó a sí mismo, definido contra sí mismo y no contra una regla."
+      ],
+      "fatal_errors": [
+        "Atribuirle a Foucault la sociedad de rendimiento o a Han la sociedad disciplinaria.",
+        "Sostener que el problema es que hoy se trabaja más horas, o que las empresas exigen más: el texto dice que la coacción funciona sin emisor.",
+        "Inventar una cifra, un estudio o un porcentaje: el extracto de Han no trae ninguno."
+      ],
+      "partial_credit": {
+        "una_sola_direccion": "Explica bien por qué la disciplinaria produce locos y criminales, o bien por qué la de rendimiento produce depresivos y fracasados, pero deja la otra mitad sin decir. Alto en 'Mecanismo', bajo en 'Completitud'.",
+        "nombra_sin_ligar": "Repite que una prohíbe y la otra dice 'poder sin límites' —que es lo que el enunciado ya traía— sin decir por qué de ahí salen esas figuras. Es la paráfrasis del enunciado y va bajo en 'Mecanismo'.",
+        "solo_la_frase_de_han": "Cita 'nada es posible / nada es imposible' sin desplegar qué significa. Va por la ruta correcta a medio cerrar."
+      },
+      "nice_to_have": [
+        "Traer la tesis de la autoexplotación —que es más eficaz porque va acompañada de un sentimiento de libertad, y que víctima y verdugo ya no se distinguen— al servicio de la respuesta.",
+        "Traer la discusión con Ehrenberg: que para Han lo que agota no es el imperativo de ser uno mismo sino la presión por el rendimiento.",
+        "Objetar a Han con fundamento: por ejemplo, que las dos sociedades conviven y que un trabajador con jefe y con métricas está bajo las dos a la vez. Si muestra primero que entendió el argumento, puede sacar el puntaje más alto de la ronda."
+      ]
+    },
+    "idealAnswer": "La disciplinaria funciona prohibiendo, así que hay una regla clara y lo que produce es gente que la rompe o que no cabe en ella: criminales y locos, o sea desviados respecto de una norma que puso otro. La de rendimiento no prohíbe nada, te dice que puedes todo, y como no hay un punto en que ya cumpliste, el que no llega no le desobedeció a nadie: le quedó debiendo a sí mismo. Por eso produce depresivos y fracasados; es lo que Han resume como que uno dice «nada es posible» justo porque vive donde le repiten que «nada es imposible»."
+  },
+  {
+    "id": "mgt_c05_r2_carta_al_director",
+    "order": 2,
+    "type": "open",
+    "title": "La carta al director",
+    "category": "Clase 3 — En el enjambre",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 150,
+    "conceptTags": ["c03_carta_al_director"],
+    "context": "Clase 3. Han compara la *shitstorm* con la carta al director de un diario:\n\n> «La carta del lector está caracterizada también por otra temporalidad. **Mientras la redactamos, de manera laboriosa, a mano o a máquina, la excitación inmediata se ha evaporado ya.**»\n\nY de ahí concluye que **el medio digital es «un medio del afecto»**: transporta *más* afecto que la comunicación analógica.",
+    "question": "**No es que hoy la gente sienta más rabia que antes. Entonces, ¿por qué llega más?** Con 2 o 3 frases basta.",
+    "judgeFocus": "ES UNA RONDA DE REPASO Y CON DOS FRASES SE CONTESTA ENTERA. No pidas desarrollo extra ni un ejemplo: no se pidieron.\n\nEL CRITERIO, y va primero: la respuesta tiene que decir que lo que cambió es EL TIEMPO ENTRE SENTIR Y PUBLICAR, y qué hacía ese tiempo. La demora de escribir a mano o a máquina enfriaba el afecto antes de que llegara a destino; el medio digital saca la demora, así que llega caliente lo que antes se evaporaba en el camino. La palabra clave del criterio es que el medio NO PRODUCE más afecto: DEJA PASAR el que antes se perdía. Quien sostenga esa relación, con las palabras que sea, contestó completo.\n\nQUÉ NO CUENTA, y es por donde se cae la mayoría. Primero: 'antes la gente era más educada', 'las redes sacan lo peor de nosotros', 'hoy nos ofendemos por todo'. El enunciado ya descartó esa lectura de frente, y además es justo la tesis que Han no sostiene: el diagnóstico es sobre el medio, no sobre el carácter. Segundo: 'porque es inmediato' o 'porque es más rápido', a secas. Eso es la cita del enunciado devuelta; lo que falta es qué HACÍA la lentitud, que es todo el argumento. Tercero: 'porque en internet uno es anónimo y se atreve a más'. Es una explicación plausible y está en otro tramo del mismo capítulo —el del nombre—, pero no es la que sostiene la frase 'medio del afecto'. Si alguien la trae ADEMÁS de la demora, suma; si la trae EN LUGAR de la demora, contestó otra cosa y va a media tabla, no a cero.\n\nLA RESPUESTA DE AL LADO QUE TAMBIÉN VALE 100: quien lo formula como un filtro que se cayó —'antes el tiempo funcionaba como filtro y hoy no hay filtro'— o como una fricción que desapareció, o quien dice que antes había que decidir dos veces (sentirlo y después mandarlo) y ahora es una sola. Todas son la misma relación dicha de otro modo. NO exijas la palabra 'demora' ni 'temporalidad'.",
+    "evaluationGuide": {
+      "must_hit": [
+        "Identifica que lo que cambió es el tiempo que media entre sentir y publicar, no la cantidad de rabia ni el carácter de las personas.",
+        "Dice qué hacía ese tiempo: enfriaba, filtraba o disolvía el afecto antes de que llegara, de modo que al desaparecer pasa lo que antes se perdía en el camino."
+      ],
+      "fatal_errors": [
+        "Sostener que la gente se volvió más agresiva, más grosera o menos respetuosa: el enunciado ya lo descartó y el texto sostiene lo contrario.",
+        "Sostener que el medio digital produce o genera más rabia, en vez de dejar pasar la que antes se evaporaba.",
+        "Inventar una cifra, un estudio o un caso: el capítulo no trae ninguno."
+      ],
+      "partial_credit": {
+        "solo_inmediatez": "Dice que lo digital es inmediato y por eso llega el afecto, sin decir qué hacía la demora. Es la cita devuelta: bajo en 'Mecanismo'.",
+        "ruta_del_anonimato": "Explica bien pero por el tramo del nombre y no por el de la demora. Correcto sobre el texto, responde otra pregunta: media tabla, no cero.",
+        "intuye_el_filtro": "Dice que antes uno se arrepentía o se le pasaba, sin llegar a nombrarlo como una propiedad del medio. Va por la ruta correcta a medio cerrar."
+      },
+      "nice_to_have": [
+        "Notar que por eso Han dice que las cartas anónimas terminaban en la papelera: el filtro era doble, el tiempo y la redacción.",
+        "Conectarlo con que sin distancia el mirar se vuelve el del mirón, o con que el medio digital destruye el nombre — siempre que la demora esté contestada.",
+        "Objetar con fundamento: por ejemplo, que hoy existen las notas de voz y los borradores, o que uno igual puede esperar antes de publicar, así que la demora no desapareció sino que se volvió opcional. Bien sostenido, puede sacar el puntaje más alto de la ronda."
+      ]
+    },
+    "idealAnswer": "Porque lo que cambió no es cuánta rabia hay, sino cuánto tiempo pasa entre sentirla y mandarla. Escribir la carta a mano tomaba rato, y en ese rato la excitación se te evaporaba: mucho de lo que uno sentía nunca alcanzaba a llegar al diario. Lo digital saca esa demora, así que el afecto viaja tal como salió y llega todo lo que antes se perdía en el camino."
+  },
+  {
+    "id": "mgt_c05_r3_concentracion_sin_congregacion",
+    "order": 3,
+    "type": "open",
+    "title": "Concentración sin congregación",
+    "category": "Clase 3 — En el enjambre",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 150,
+    "conceptTags": ["c03_concentracion_congregacion"],
+    "context": "Sigue la clase 3:\n\n> «Los habitantes digitales de la red no se congregan. **Les falta la intimidad de la congregación, que produciría un nosotros.** Constituyen **una concentración sin congregación** […]. **Medios electrónicos como la radio congregan a hombres, mientras que los medios digitales los aíslan.**»\n\nEn una y en otra hay mucha gente atendiendo a lo mismo, al mismo tiempo.",
+    "question": "**¿Qué le falta entonces a una concentración para ser una congregación, y qué se pierde con eso?** Con 2 o 3 frases basta.",
+    "judgeFocus": "ES UNA RONDA DE REPASO Y CON DOS FRASES SE CONTESTA ENTERA. LA PREGUNTA TIENE DOS MITADES y las dos se miden: qué falta, y qué se pierde. La respuesta que contesta una sola, por buena que esté, no está completa — eso se cobra en 'Completitud' y NO en 'Mecanismo'.\n\nEL CRITERIO, y va primero. Primera mitad: lo que falta es que la gente esté junta de un modo que produzca un nosotros, y no sólo atendiendo en paralelo a la misma cosa. El enunciado ya dice que en las dos hay mucha gente en lo mismo al mismo tiempo, así que lo que se pide es la diferencia: estar frente a lo mismo no es estar juntos, y sin eso cada uno sigue solo delante de su pantalla. Segunda mitad: lo que se pierde es el sujeto colectivo, y con él la capacidad de actuar — no hay quien marche, quien sostenga algo en el tiempo, quien negocie ni a quién exigirle; el enjambre se disuelve tan rápido como surgió.\n\nEJEMPLOS ILUSTRATIVOS, NO UNA LISTA CERRADA, para la segunda mitad: se pierde el nosotros; se pierde la capacidad de marchar o de durar; se pierde la voz, porque sin un sujeto que hable el ruido no tiene con quién negociar; se pierde la energía política. Todas son la misma pérdida vista de un lado distinto y CUALQUIERA basta. NO exijas que nombre más de una.\n\nQUÉ NO CUENTA, y es por donde se cae la mayoría: 'porque la gente es egoísta, narcisista o poco comprometida'. Eso nombra a las personas donde Han describe una propiedad de la forma social — el enjambre no falla porque sus miembros sean peores. Tampoco cuenta 'porque están dispersos' ni 'porque no tienen voz' a secas: son las palabras del propio Han devueltas, y la ronda pide qué falta y qué se pierde. 'Porque no se ven la cara' va en la dirección correcta pero todavía no dice qué produciría esa presencia; si además dice que sin eso no se forma un nosotros, ya está completa.\n\nLA OBJECIÓN QUE VALE PUNTAJE ALTO: el curso vio en la clase 3 el #MeToo, el #BlackLivesMatter y el estallido social de 2019. Quien sostenga que Han se equivoca, o que esos casos sí produjeron un nosotros y por eso no eran enjambres puros, está haciendo exactamente lo que este curso enseña y puede sacar el puntaje más alto de la ronda, siempre que muestre primero que entendió qué sostiene Han.",
+    "evaluationGuide": {
+      "must_hit": [
+        "Primera mitad: nombra que lo que falta es estar juntos de un modo que produzca un nosotros, y no sólo coincidir en atender a lo mismo — estar frente a la misma cosa no es estar juntos.",
+        "Segunda mitad: dice qué se pierde con eso — el sujeto colectivo y su capacidad de actuar, durar, hablar con una voz o sostener algo en el tiempo."
+      ],
+      "fatal_errors": [
+        "Explicarlo por el carácter de las personas: que son egoístas, narcisistas, indiferentes o poco comprometidas.",
+        "Atribuirle a Han que el enjambre sí tiene una voz o sí desarrolla un nosotros: es lo contrario de lo que dice.",
+        "Inventar una cifra, un caso o un estudio que no está en el material."
+      ],
+      "partial_credit": {
+        "solo_que_falta": "Dice bien qué falta y no dice qué se pierde. Alto en 'Mecanismo', 40 en 'Completitud'.",
+        "solo_que_se_pierde": "Dice bien que se pierde la capacidad de actuar sin decir qué es lo que falta para llegar ahí. Mismo tratamiento, al revés.",
+        "devuelve_la_cita": "Repite que les falta la intimidad de la congregación que produciría un nosotros, que es lo que el enunciado ya traía, sin agregar el paso. Bajo en 'Mecanismo'.",
+        "no_se_ven_la_cara": "Nombra la presencia física sin decir qué produce. Va por la ruta correcta a medio cerrar."
+      },
+      "nice_to_have": [
+        "Usar el contraste de la radio: se escuchaba junta y a la misma hora, y por eso congregaba.",
+        "Traer que la masa marchaba porque tenía un alma que la unía, y que el enjambre no marcha y se disuelve tan rápido como surge.",
+        "Objetar con un caso —el estallido de 2019, el #MeToo, el #BlackLivesMatter— sosteniendo por qué ese enjambre sí actuó. Bien argumentado, es el puntaje más alto de la ronda."
+      ]
+    },
+    "idealAnswer": "Le falta que la gente esté junta de verdad, no sólo mirando todos lo mismo desde su casa: estar frente a la misma pantalla al mismo tiempo no arma un nosotros, y cada uno sigue solo. Y lo que se pierde con eso es justamente el sujeto colectivo, o sea alguien que pueda actuar: sin un nosotros no hay quien marche, quien sostenga la cosa más de dos días ni con quién negociar. Por eso Han dice que el enjambre se disuelve tan rápido como aparece."
+  },
+  {
+    "id": "mgt_c05_r4_dos_amigas_bp",
+    "order": 4,
+    "type": "open",
+    "title": "Las dos amigas y «BP»",
+    "category": "Clase 5 — El filtro burbuja",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 150,
+    "conceptTags": ["c05_pariser_filtro"],
+    "media": [
+      {
+        "kind": "image",
+        "src": "media/mgt300/pariser-ted-2011.jpg",
+        "alt": "Eli Pariser, de camisa celeste, hablando en el escenario de una charla TED en 2011.",
+        "credit": "Eli Pariser presentando el filtro burbuja en TED, marzo de 2011. Foto de Steve Jurvetson, vía Wikimedia Commons, CC BY 2.0."
+      }
+    ],
+    "context": "Lo de hoy. Primavera de 2010, mientras la plataforma Deepwater Horizon vertía crudo en el golfo de México. Pariser le pidió a **dos amigas** que buscaran «**BP**» en Google.\n\nLas dos se parecen mucho: blancas, con educación universitaria, de izquierdas, del nordeste de Estados Unidos. Y recibieron **dos Google distintos**.",
+    "question": "**¿Qué recibió cada una — y por qué ninguna de las dos podía darse cuenta sola?** Con 2 o 3 frases basta.",
+    "judgeFocus": "ES UNA RONDA DE REPASO Y CON DOS FRASES SE CONTESTA ENTERA. LA PREGUNTA TIENE DOS MITADES y las dos se miden: qué recibió cada una, y por qué no podían notarlo. La segunda es la que carga la ronda.\n\nEL CRITERIO. Primera mitad: basta con dar el contraste concreto — una recibió resultados sobre inversiones y la otra noticias, y en la página de una estaba el derrame y en la de la otra no. NO HACE FALTA RECORDAR LAS CIFRAS (180 y 139 millones) y no recordarlas NO DESCUENTA en ninguna dimensión; si alguien las trae bien, suma en 'nice to have' y nada más. Segunda mitad, que es la que separa: cada una veía UNA SOLA página, la suya, y no tenía con qué compararla. Google no te dice quién cree que eres, ni por qué te muestra lo que te muestra, ni si acertó — o sea, el filtro es INVISIBLE, y desde adentro de la burbuja no se ve lo sesgada que es. La diferencia sólo aparece poniendo las dos pantallas lado a lado, que es exactamente lo que hizo el experimento.\n\nCUALQUIER FORMULACIÓN DE ESA IDEA VALE, y no hay que nombrar 'invisible' ni citar las tres propiedades: 'no tenían con qué comparar', 'para ti tu Google es EL Google', 'nunca ves lo que no te mostró', 'no sabes lo que te falta' son todas 100.\n\nQUÉ NO CUENTA. 'Porque el algoritmo te muestra lo que te gusta': es cierto y no responde, porque no dice por qué era imposible NOTARLO. 'Porque no sabían de tecnología' o 'porque no revisaron su configuración': el punto de Pariser es lo contrario, no hay nada que revisar, el buscador no informa el criterio. Y culpar a las amigas por estar en su burbuja por elección contradice directamente al texto, que dice que estos filtros no se eligen.\n\nUNA COSA MÁS: el enunciado ya dice que recibieron 'dos Google distintos', así que repetir eso no es contestar la primera mitad. La primera mitad pide el contraste concreto.",
+    "evaluationGuide": {
+      "must_hit": [
+        "Primera mitad: da el contraste concreto entre las dos búsquedas — inversiones contra noticias, y el derrame presente en una página y ausente en la otra.",
+        "Segunda mitad: explica que cada una veía sólo su propia página y no tenía con qué compararla, y que Google no informa el criterio con el que eligió. La diferencia sólo aparece comparando las dos pantallas."
+      ],
+      "fatal_errors": [
+        "Sostener que las amigas eligieron su burbuja o que es su responsabilidad haberla configurado así: el texto dice explícitamente que estos filtros no se eligen.",
+        "Sostener que el problema es que no sabían usar la herramienta o que no revisaron sus ajustes.",
+        "Inventar cifras o detalles del experimento que no están en el material."
+      ],
+      "partial_credit": {
+        "solo_el_contraste": "Cuenta bien qué recibió cada una y no llega a por qué no podían notarlo. Contó el experimento sin llegar a lo que muestra: 40 en 'Completitud'.",
+        "solo_la_invisibilidad": "Explica bien por qué es imposible notarlo sin decir qué recibió cada una. Mismo tratamiento, al revés.",
+        "personalizacion_a_secas": "Dice que el algoritmo personaliza según tus datos, sin llegar a la imposibilidad de notarlo. Va por la ruta correcta a medio cerrar."
+      },
+      "nice_to_have": [
+        "Nombrarlo como una de las tres propiedades de Pariser, o traer el contraste con la radio de derecha o Fox News, donde uno sí sabe qué está mirando.",
+        "Traer los 57 indicadores del 4 de diciembre de 2009, o el 'ya no existe un Google estándar', al servicio de la respuesta.",
+        "Traer las cifras exactas (180 contra 139 millones de resultados). Suma, y no traerlas no resta.",
+        "Objetar con fundamento: por ejemplo, que hoy sí existen el modo incógnito o comparar con un amigo, así que la invisibilidad es menos total que en 2010. Bien sostenido, puede sacar el puntaje más alto de la ronda."
+      ]
+    },
+    "idealAnswer": "Una recibió resultados sobre inversiones y la otra noticias: en la primera página de una aparecían los enlaces al derrame y en la de la otra no había nada del derrame, sólo un aviso de BP. Y no podían notarlo porque cada una veía únicamente su propia página y no tenía con qué compararla: Google no te avisa quién cree que eres ni por qué te muestra eso, así que desde adentro tu Google parece EL Google. La diferencia recién aparece cuando las dos se sientan juntas a mirar las dos pantallas."
+  },
+  {
+    "id": "mgt_c05_r5_siete_horas",
+    "order": 5,
+    "type": "open",
+    "title": "Siete horas",
+    "category": "Clase 5 — Infocracia",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 150,
+    "conceptTags": ["c05_han_infocracia"],
+    "media": [
+      {
+        "kind": "image",
+        "src": "media/mgt300/lincoln-douglas-1858.jpg",
+        "alt": "Dos retratos fotográficos del siglo XIX, lado a lado: a la izquierda Abraham Lincoln sin barba, a la derecha Stephen A. Douglas.",
+        "credit": "Lincoln (izq.), retratado el 11 de octubre de 1858, y Douglas (der.), Brady-Handy Collection, Library of Congress. Ambas del siglo XIX y de dominio público, vía Wikimedia Commons."
+      }
+    ],
+    "context": "También de hoy. El ejemplo con que Han abre el capítulo es de **1854**: en uno de sus duelos públicos, **Douglas** habló primero durante **tres horas**; **Lincoln** tuvo otras **tres** para responder; y Douglas volvió a hablar **una hora más**.\n\nSiete horas seguidas, sobre temas complejos, con formulaciones que Han describe como «en parte muy complicadas».",
+    "question": "**A Han no le interesa la elocuencia de los dos hombres. ¿Qué parte de la escena le interesa, y qué prueba con ella?** Con 2 o 3 frases basta.",
+    "judgeFocus": "ES UNA RONDA DE REPASO Y CON DOS FRASES SE CONTESTA ENTERA. LA PREGUNTA TIENE DOS MITADES y las dos se miden: qué parte de la escena, y qué prueba con ella.\n\nEL CRITERIO. Primera mitad: le interesa EL PÚBLICO — el auditorio que era capaz de seguir siete horas de discurso complejo, y para el cual participar de eso era parte normal de la vida social. No los oradores, no el tema, no la calidad de los argumentos. Segunda mitad, que es la que carga la ronda: que la democracia descansaba en una capacidad de atención sostenida que existía entonces y que hoy no existe; o sea que la esfera pública discursiva no se sostenía sólo en instituciones o en libertad de expresión, sino en un tipo de atención que la digitalización volvió imposible. Las siete horas son la unidad de medida contra la que Han va a comparar todo lo que viene después.\n\nLA SEGUNDA MITAD ADMITE VARIAS FORMULACIONES Y TODAS VALEN LO MISMO: que la democracia necesitaba tiempo; que necesitaba un público capaz de concentrarse; que el discurso es una práctica lenta y la información no; que si esa capacidad se pierde, se pierde la condición de la que dependía la esfera pública. NO exijas ninguna en particular ni el vocabulario de Han: quien dice 'que la democracia funcionaba porque la gente aguantaba escuchar, y eso hoy no pasa' contestó las dos mitades.\n\nQUÉ NO CUENTA, y es por donde se cae la mayoría. 'Le interesa que antes se debatía mejor' o 'que los políticos eran más preparados': el enunciado YA descartó a los oradores, así que esto es contestar contra lo que se preguntó. 'Que la gente hoy tiene menos capacidad de atención', dicho solo, se salta la escena: hay que decir que lo que la escena muestra es el público, no los oradores. 'Que antes no había celulares' es una observación sobre la época, no el argumento.\n\nOJO CON DOS COSAS. Primero: decir 'le interesa el público' y parar ahí es media respuesta — está bien la primera mitad y falta la segunda, y eso se cobra en 'Completitud', NO en 'Mecanismo'. Segundo: si alguien corrige la fecha —que los debates Lincoln-Douglas conocidos son de 1858 y no de 1854—, NO LO PENALICES EN NINGUNA DIMENSIÓN. El material del curso dice 1854 siguiendo a Han, y quien nota la diferencia está leyendo bien.",
+    "evaluationGuide": {
+      "must_hit": [
+        "Primera mitad: identifica que lo que le interesa a Han es el público —su capacidad de concentración, y que seguir eso era vida social normal— y no los oradores.",
+        "Segunda mitad: dice qué prueba con eso — que la esfera pública democrática descansaba en un tipo de atención sostenida que existía entonces, y que es la medida contra la que se compara lo que vino después."
+      ],
+      "fatal_errors": [
+        "Contestar que a Han le interesa la calidad de los oradores, del debate o de los argumentos: el enunciado lo descarta de frente.",
+        "Atribuirle a Han una cifra, un estudio o una encuesta: el capítulo no trae ninguno, y de eso mismo se le hizo notar en clase.",
+        "Sostener que el punto es que antes no existía la tecnología, sin ningún argumento del texto detrás."
+      ],
+      "partial_credit": {
+        "solo_el_publico": "Dice que le interesa el público y no dice qué prueba con eso. Primera mitad correcta: 40 en 'Completitud'.",
+        "solo_la_conclusion": "Dice que la democracia necesitaba otro tipo de atención sin anclarlo en que lo que la escena muestra es el auditorio. Mismo tratamiento, al revés.",
+        "atencion_generica": "Dice que hoy tenemos menos capacidad de atención sin pasar por la escena ni por lo que Han saca de ella. Va por la ruta correcta a medio cerrar."
+      },
+      "nice_to_have": [
+        "Traer que Han sigue a Habermas y que la esfera pública discursiva 'debía su existencia al público lector'.",
+        "Traer el contraste con lo que viene: que el discurso es una práctica que requiere mucho tiempo y la información vive del atractivo de la sorpresa.",
+        "Objetar con fundamento: por ejemplo, que un público de 1854 sin otra cosa que hacer no prueba una capacidad de atención superior sino la ausencia de alternativas, o que la evidencia de Han son ejemplos escogidos y ninguna encuesta. Bien sostenido, es el puntaje más alto de la ronda."
+      ]
+    },
+    "idealAnswer": "Le interesa el público, no Lincoln ni Douglas: que hubiera un auditorio capaz de seguir siete horas de discusión complicada, y que para esa gente ir a escuchar eso fuera algo normal de la vida social. Con eso prueba que la democracia descansaba en un tipo de atención sostenida, no sólo en tener elecciones o libertad para hablar. Y por eso deja las siete horas como la vara contra la que después va a comparar todo lo que vino con la digitalización."
+  }
+]
