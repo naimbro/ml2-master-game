@@ -1,0 +1,46 @@
+{
+  "sessionId": "clase_05_oligarquia",
+  "courseId": "ai_democracy_2026",
+  "title": "Semana 5: ¿Quién controla las máquinas?",
+  "description": "Una sola ronda abierta (~8 min) que cierra la clase del lunes 31 de agosto. Seis minutos para escribir un ensayo corto en dos movimientos: qué es exactamente lo que se está concentrando, y si eso puede pasar en Chile, donde el gran capital viene del retail, la banca y la minería y ninguno de los cinco se llama Dario, Demis, Elon, Mark ni Sam. Compite.",
+  "date": "2026-08-31",
+  "roundCount": 1,
+  "roundDurationSeconds": 360,
+  "bufferSeconds": 45,
+  "conceptTags": [
+    "el_desacuerdo",
+    "la_concentracion",
+    "las_dos_vias",
+    "populismo_de_ia",
+    "underclass",
+    "la_direccion_es_una_eleccion"
+  ],
+  "judges": [
+    {
+      "judgeId": "democracy_scholar",
+      "weight": 0.4
+    },
+    {
+      "judgeId": "policy_lawyer",
+      "weight": 0.3
+    },
+    {
+      "judgeId": "professor_twin_ayd",
+      "weight": 0.3
+    }
+  ],
+  "judgeConfig": {
+    "democracy_scholar": {
+      "sessionLens": "Tu lente es QUE SE CONCENTRA. La clase entera se armo contra una frase: 'son muy ricos'. La lamina de la Parte II lo dice asi —'tener plata no es tener poder, falta el mecanismo'— y tu trabajo es distinguir a quien supero esa frase. En el primer movimiento buscas que el estudiante nombre el objeto y no solo el hecho: que lo que se concentra es la capacidad de decidir sobre otros y no la fortuna; o que lo decisivo es la velocidad y no el nivel, porque a comienzos de los noventa era cerca del 3% del producto mundial y hoy es casi un quinto; o que no es un mercado difuso sino cinco personas a las que basta llamar por el nombre de pila. Cualquier otra forma verdadera de nombrar el patron vale igual. NO PERSIGAS CIFRAS: 'se concentro rapido y en muy pocas manos' vale exactamente lo mismo que los 20,1 billones, y castigar un numero mal recordado desde un telefono es medir memoria en vez de pensamiento. En el segundo movimiento aplicas la prueba de copiar y pegar: si la razon sobre Chile serviria igual para Peru o para Polonia, no es una razon. Y corrige a proposito una asimetria: acaban de ver quince laminas de concentracion, asi que 'si cruza' es la respuesta comoda. Si alguien sostiene que la objecion tiene razon y da una razon propia de Chile, esa respuesta vale mas que la comoda con una razon generica. Es la quinta semana y del modulo democratico alcanzaron a ver dos clases: no exijas teoria institucional, y si aparece bien usada, premiala.",
+      "weightFormula": "score = 0.34 * diagnostico + 0.32 * traslado + 0.22 * anclaje + 0.12 * economia"
+    },
+    "policy_lawyer": {
+      "sessionLens": "Tu lente es EL TRASLADO. Toda la ronda existe para el segundo movimiento, y tu eres el juez que mas lo pesa: la pregunta no es si el estudiante entendio el caso gringo, es si puede decir algo verdadero sobre Chile. Te obsesionan dos cosas. Una: que se quede con una respuesta. 'Depende', 'en parte si y en parte no' y 'las dos cosas' valen poco por bien escritos que esten, salvo que digan de que depende y aun asi se queden con una; elegir un lado reconociendo lo que el otro tiene de cierto es lo mejor que puede pasar, no una indecision. Dos: que la razon sea de Chile y no de cualquier parte. 'Estamos conectados', 'la globalizacion nos afecta a todos' y 'igual usamos la tecnologia' son relleno con forma de argumento. Lo que si vale: un rasgo de nuestra economia, de nuestras instituciones o de nuestra posicion frente a quienes construyen la tecnologia; o decir cual de las dos vias que vimos —la politica y la donacion— opera o no opera aca, y por que esa. IMPORTANTE: el deck no dice absolutamente nada de Chile, asi que todo lo que el estudiante afirme aca sale de su cabeza. Traer un grupo economico, una ley, un caso o un dato chileno que no estaba en ninguna lamina y usarlo bien es lo mejor de la ronda, no una salida del material. Y las dos posiciones valen exactamente lo mismo: no premies la que te parezca mas sensata ni la que el profesor parecia estar sugiriendo.",
+      "weightFormula": "score = 0.22 * diagnostico + 0.48 * traslado + 0.20 * anclaje + 0.10 * economia"
+    },
+    "professor_twin_ayd": {
+      "sessionLens": "Esta es la UNICA ronda de la sesion y SI entra al ranking, asi que un puntaje regalado pesa el doble: no hay otra ronda que lo compense. Puntua sin inflar y sin apretar. Se pidieron dos o tres frases para cada movimiento, escritas en seis minutos desde un telefono al final de una clase de 70 que se fue casi entera en el deck. Eso es todo lo que cabe: no esperes introduccion, ni estructura formal, ni ortografia perfecta, ni vocabulario academico, y escribir mas NO sube el puntaje. Lo que mas te molesta esta semana es la respuesta que recita la clase: nombra a Zucman, los 20,1 billones, los 430 mil millones y las dos vias, queda impecable, y nunca aparece la palabra Chile. Eso no es media respuesta buena — es media pregunta sin contestar, y va bajo aunque este mejor escrita que casi todas. Al reves, el que trae algo de Chile que no estaba en ninguna lamina y lo usa bien es lo mejor que puede pasar hoy. Y hay una cosa que casi nadie va a hacer y que si aparece premias fuerte: la clase abrio con Musk diciendo que la concentracion de poder 'siempre fue asi' y Minton Beddoes contestandole que lo nuevo es la velocidad. Ese es exactamente el desacuerdo que se juega en Chile, donde pocas familias concentrando poder economico no es ninguna novedad. Ojo tambien: la premisa sobre el capital chileno la puso el enunciado y no el deck, asi que si alguien la discute con fundamento, premialo. Si alguien duda de otra premisa, evalua lo que hizo despues de dudar. En tu feedback escribe en primera persona e incluye un 'yo habria...' concreto a esta respuesta.",
+      "weightFormula": "score = 0.27 * diagnostico + 0.32 * traslado + 0.19 * anclaje + 0.22 * economia"
+    }
+  }
+}

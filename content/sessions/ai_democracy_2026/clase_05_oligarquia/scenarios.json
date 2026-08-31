@@ -1,0 +1,55 @@
+[
+  {
+    "id": "ayd_c05_r1_problema_de_alla",
+    "order": 1,
+    "title": "Un problema de allá",
+    "category": "Argumentación",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 360,
+    "conceptTags": [
+      "el_desacuerdo",
+      "la_concentracion",
+      "las_dos_vias",
+      "populismo_de_ia",
+      "underclass",
+      "la_direccion_es_una_eleccion"
+    ],
+    "context": "Hoy vimos el hecho —la riqueza se concentró, y rápido— y las dos vías por las que una fortuna se convierte en capacidad de decidir sobre otros: **la política** y **la donación**.\n\nLa objeción obvia a todo eso es que **es un problema de allá**. Los cinco que sostienen esto en sus manos son Dario, Demis, Elon, Mark y Sam: ninguno es chileno, y ninguna de sus empresas lo es. Los grandes grupos económicos de acá vienen del retail, la banca, la minería y el sector forestal — casi ninguno es tecnológico. Así que el diagnóstico no cruzaría.",
+    "question": "¿Tiene razón esa objeción?\n\nAntes de contestarla, nombra **qué es exactamente lo que se está concentrando** — no necesitas las cifras exactas. Recién ahí decide **si eso puede pasar en Chile, y por qué**.\n\nDos o tres frases para cada cosa.",
+    "judgeFocus": "La respuesta tiene DOS MOVIMIENTOS y se evaluan por separado: (1) nombrar que es lo que se esta concentrando; (2) decidir si eso cruza a Chile y dar una razon propia de Chile. El segundo pesa mas, pero una respuesta que hace uno solo no puede quedar arriba.\n\nMOVIMIENTO 1 — QUE SE CONCENTRA. Lo que vale es el PATRON, no el decimal. NO EXIJAS CIFRAS: el enunciado dice explicitamente que no hacen falta, y perseguir un numero mal recordado desde un telefono mide memoria y no pensamiento. 'La riqueza se concentro muy rapido y en muy pocas manos' vale exactamente lo mismo que citar los 20,1 billones.\n\nLo mejor que puede pasar en este movimiento es que el estudiante vaya mas alla de 'mucha plata en pocas manos' de alguna de estas formas, SIN QUE ESTO SEA UNA LISTA CERRADA: que lo que se concentra no es la fortuna sino la capacidad de decidir sobre otros —que es el punto entero de la Parte II, 'tener plata no es tener poder'—; que lo decisivo es la VELOCIDAD y no el nivel, porque a comienzos de los noventa era cerca del 3% del producto mundial y hoy es casi un quinto; que no es un mercado difuso sino cinco personas con nombre de pila. Cualquier otra forma verdadera de nombrar el patron vale exactamente igual.\n\nMOVIMIENTO 2 — CHILE. Aca esta la pregunta. Se evaluan dos cosas: que se quede con una respuesta, y que la razon sea PROPIA DE CHILE. 'Estamos conectados', 'la globalizacion nos afecta a todos', 'igual usamos la tecnologia' son razones que servirian para cualquier pais y para cualquier tecnologia: no son razones.\n\nNO HAY RESPUESTA CORRECTA, y hay al menos tres posiciones verdaderas y opuestas. SIN QUE ESTO SEA UNA LISTA CERRADA: que si cruza por dependencia —Chile no va a ser dueno de nada, va a depender de modelos, datos y computo decididos afuera, y no hace falta ser dueno para que te decidan cosas—; que si cruza por los grupos de siempre —el retail y la banca son los que van a poder pagar la IA que reemplaza trabajo, y son los mismos que ya financian campanas y ya tienen fundaciones, asi que la IA no crea la concentracion sino que le da una herramienta nueva—; que NO cruza igual —sin capital tecnologico local la via de la politica y la de la donacion no operan del mismo modo, y el riesgo chileno es otro—. Hay otras posiciones verdaderas que no estan escritas aca y valen exactamente igual.\n\nLA POSICION 'LA OBJECION TIENE RAZON' VALE 100. Esto importa mas que cualquier otra cosa en esta ronda: el profesor acaba de proyectar quince laminas de concentracion, asi que 'si cruza' es la respuesta comoda. Un estudiante que igual sostiene que el diagnostico no cruza esta haciendo exactamente lo que se le pidio. No la trates como negacionismo, como falta de atencion ni como una respuesta menos madura. Una respuesta que dice 'no cruza' con una razon propia de Chile vale MAS que una que dice 'si cruza' con una razon generica.\n\nLO QUE NO CUENTA: describir el caso global —aunque sea con las cifras exactas, con Zucman y con las dos vias— y no llegar nunca a Chile. Ese es el error mas comun y el mas enganoso, porque usa el vocabulario de la clase y se lee muy bien. Movimiento 1 impecable y movimiento 2 ausente NO es media respuesta buena: es una respuesta que no contesto la pregunta.\n\nTampoco cuenta: opinar sobre si la IA es buena o mala; decir que hay que regular sin decir que se concentra ni que pasa aca; ni contestar Chile sin haber nombrado antes que se concentra.\n\nTRES ADVERTENCIAS.\n\n(1) La premisa sobre Chile —que nuestros grandes grupos vienen del retail, la banca, la mineria y el forestal, y que casi ninguno es tecnologico— la pone el enunciado y NO estaba en el deck. Si un estudiante la discute y nombra capital tecnologico chileno, eso NO es un error: es lo mejor que puede pasar, siempre que despues sostenga algo. Objetar el enunciado nunca baja el puntaje.\n\n(2) El deck no dice NADA de Chile, asi que todo lo que el estudiante afirme sobre el pais sale de su cabeza. Traer un grupo economico, una ley, un caso o un dato chileno que no estaba en ninguna lamina y usarlo bien vale MAS que citar el deck. No lo trates como salirse del material.\n\n(3) 'Depende' y 'en parte si y en parte no' valen poco, salvo que digan de que depende y aun asi se queden con una. Elegir un lado reconociendo lo que el otro tiene de cierto es lo mejor que puede pasar, no una indecision.\n\nSe pidieron DOS O TRES FRASES PARA CADA COSA. Eso es todo lo que cabe: se escribe desde un telefono, en seis minutos, al final de una clase de 70. No esperes introduccion, ni estructura formal, ni ortografia perfecta, ni vocabulario academico, y escribir mas NO sube el puntaje.",
+    "evaluationGuide": {
+      "must_hit": [
+        "Nombra que es lo que se esta concentrando, aunque sea sin cifras",
+        "Se queda con una respuesta sobre si la objecion tiene razon o no",
+        "La razon sobre Chile es propia de Chile y no serviria para cualquier pais"
+      ],
+      "fatal_errors": [
+        "Describe el caso global y nunca llega a Chile",
+        "Contesta si la IA es buena o mala, en vez de si el diagnostico cruza",
+        "Da como razon algo que valdria para cualquier pais y cualquier tecnologia, sin nada de Chile",
+        "Inventa un dato con aire de precision sobre Chile: una cifra, una ley, una empresa que no existe"
+      ],
+      "partial_credit": {
+        "solo_movimiento_1": "Nombra impecablemente que se concentra y nunca argumenta sobre Chile: 100 en diagnostico, 0 en traslado. Media pregunta sin responder, no media respuesta buena",
+        "solo_movimiento_2": "Argumento sobre Chile agudo y decidido, pero nunca dice que se concentra: 20 o 40 en diagnostico, 100 en traslado",
+        "chile_generico": "Decide con claridad y la razon es 'estamos conectados' o 'igual usamos la tecnologia': 40 en traslado",
+        "no_decide": "Los dos movimientos bien hechos y termina en 'depende' o 'en parte si y en parte no': 40 en traslado",
+        "deck_recitado": "Cifras y autores correctos que no sostienen ninguna afirmacion del argumento: 40 en anclaje, sin tocar diagnostico",
+        "error_de_hecho": "El argumento entero funciona y se equivoca en un dato del deck (dice 300 personas donde eran unas 3.000): 20 en anclaje, sin tocar diagnostico ni traslado"
+      },
+      "nice_to_have": [
+        "Nota que lo que se concentra no es la fortuna sino la capacidad de decidir",
+        "Se agarra de la velocidad y no del nivel: del 3% del producto mundial a casi un quinto",
+        "Usa que son cinco personas con nombre de pila y no un mercado difuso",
+        "Nombra cual de las dos vias opera o no opera en Chile, y por que esa",
+        "Trae un grupo economico, una ley o un caso chileno que no estaba en ninguna lamina",
+        "Usa el desacuerdo del clip —Musk dice que siempre fue asi, Minton Beddoes que lo nuevo es la velocidad— y nota que 'siempre fue asi' es justo lo que se diria en Chile",
+        "Elige un lado reconociendo lo que el otro tiene de cierto",
+        "Discute la premisa del enunciado sobre el capital chileno y despues sostiene algo",
+        "Distingue ser dueno de la tecnologia de depender de ella"
+      ]
+    },
+    "idealAnswer": "Lo que se concentra no es solo plata: es la capacidad de decidir sobre otros, y lo raro no es el nivel sino la velocidad — pasamos de un 3% del producto mundial a casi un quinto en manos de unas pocas miles de personas, y de ahi a cinco tipos a los que basta llamar por el nombre de pila. La objecion se equivoca, pero no por donde uno creeria. En Chile no hace falta que aparezca un dueno: vamos a depender de modelos, datos y computo que se deciden afuera, y las reglas que nos van a regir las va a haber escrito gente que no elegimos. No cruza el dueno, cruza la dependencia."
+  }
+]

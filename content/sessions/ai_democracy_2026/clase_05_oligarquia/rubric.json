@@ -1,0 +1,129 @@
+{
+  "_doc": "Rubrica escrita para la UNICA ronda de esta sesion, que es abierta y entra al ranking. No usa las dimensiones de _shared/base_rubric.json (process_structuring / institutional_realism / precision_clarity) porque aca no se pide disenar un proceso ni mapear actores: se pide un ensayo corto en DOS MOVIMIENTOS —nombrar que se concentra en el caso global, y despues decidir si eso cruza a Chile y por que—. Por eso hay una dimension por movimiento. Las tres formulas de peso viven en config.json y usan estos mismos ids.\n\nARITMETICA DE LOS PESOS, para que no se pierda al editarla. La unica dimension que una respuesta corta gana gratis es 'economia': quien escribe poco y bien la saca en 100 sin arriesgarse a nada. Por eso el fondo —diagnostico + traslado— tiene que pesar 0,59 o mas en CADA juez, o una respuesta equivocada pero bien escrita pasa de 65. Como quedo: democracy_scholar 0,66; policy_lawyer 0,70; professor_twin_ayd 0,59 exacto, que es el piso. Si alguien sube 'economia' en el juez del profe, se rompe.\n\nPrueba: una respuesta generica pero decidida y bien escrita (diagnostico 40, traslado 40, anclaje 40, economia 100) queda en 47 / 46 / 53.\n\nPOR QUE 'traslado' PESA MAS QUE 'diagnostico'. El primer movimiento se acerca peligrosamente a recordar lo que estuvo proyectado, y eso esta medido: la ronda de dataviz que pidio recordar codigo saco mediana 24 y ninguna respuesta buena. Por eso el enunciado dice que no hacen falta las cifras, la rubrica premia el patron y no el decimal, y el peso mayor esta en el movimiento donde el alumno tiene que pensar algo que no estaba en ninguna lamina.\n\nCALIBRACION CON LAS PENALIZACIONES APAGADAS. Las penalizaciones se gatillan entre 0% y 4% de las veces, asi que los niveles sostienen el puntaje solos. Siete respuestas sinteticas, con el promedio ponderado del panel (0,4 / 0,3 / 0,3):\n\n  96  la de al lado #2 — 'la objecion TIENE razon': sin capital tecnologico local las dos vias no operan igual, y el riesgo chileno es que las reglas se escriban afuera (100/100/80/100)\n  90  la de al lado #1 — cruza por los grupos de siempre: el retail y la banca pagan la IA que reemplaza trabajo, y ya financian campanas (80/100/80/100)\n  84  la completa con un error de hecho — los dos movimientos, y dice 300 personas donde eran unas 3.000 (100/100/20/100)\n  79  la buena — los dos movimientos, correctos y algo delgados (80/80/60/100)\n  55  la incompleta impecable — movimiento 1 perfecto, Chile ausente (100/0/60/100)\n  53  la mediana — decide, pero la razon es 'estamos conectados' (40/60/40/80)\n  44  la enganosa — cifras y autores impecables del deck, cero Chile (80/0/60/60)\n\nOJO AL EDITAR: el deck cambio el 31-ago por la manana y esta rubrica esta escrita contra ESA version, de 15 laminas. Desaparecieron la Via 3 (Musk proponiendo que los pioneros se revisen entre si), el caso de Saline Township y la lamina de la bolsa con el 0,1%. Ahora son DOS vias, no tres, y el hecho estilizado 'esas empresas emplean poco' YA NO ESTA en ninguna lamina: por eso no aparece como ejemplar en 'diagnostico'. Si vuelve al deck, vuelve aca.\n\nLOS TRES CONTROLES QUE IMPORTAN. Primero: LAS DOS DE AL LADO encabezan la tabla, muy por encima del piso de 60 — y la que dice que la objecion TIENE razon es la mas alta de las siete. Si esa bajara, la rubrica estaria castigando la posicion incomoda y habria que reescribirla; es el riesgo real de esta ronda, porque el profesor acaba de proyectar quince laminas de concentracion. Segundo: la completa-con-un-error queda POR ENCIMA de la incompleta-impecable, que es el par que mas se da vuelta; solo se sostiene porque el error de hecho se cobra UNA vez, en 'anclaje', y por eso cada dimension dice por escrito que NO mide. Tercero: la enganosa —el deck recitado sin Chile— es la mas baja de las siete, y el juez que mas la castiga es policy_lawyer, que es el que mas pesa 'traslado'. Eso es el panel decorrelacionando y sirve.",
+  "sessionId": "clase_05_oligarquia",
+  "globalInstructions": "Evalua SOLO lo que esta escrito. Es la QUINTA semana del curso 'Inteligencia Artificial y Democracia' (Escuela de Gobierno UAI, 2026). Es la unica ronda de la sesion y entra al ranking, asi que un puntaje regalado le quita el puesto a otro y no hay otra ronda que lo compense.\n\nLa respuesta se escribe en SEIS MINUTOS desde un telefono, al final de una clase de 70 minutos que se fue casi entera en la presentacion.\n\nLA RONDA PIDE UN ENSAYO CORTO EN DOS MOVIMIENTOS: primero nombrar que es lo que se esta concentrando en el caso global, y despues decidir si eso puede pasar en Chile y por que. Los dos se evaluan por separado y los dos hacen falta. Una respuesta que hace uno solo, por impecable que sea, dejo media pregunta sin contestar.\n\nTODO lo que el estudiante necesita esta en el enunciado y en el deck que se proyecto hoy lunes, destilado completo en el knowledge base. NO exijas nada fuera de ahi. En particular, los alumnos NO han visto todavia los fragmentos del podcast de Acemoglu con Jon Hernandez, NO han visto la charla de Estavillo y NO han leido los capitulos 32 y 39 de Schneier & Sanders: todo eso es tarea para el jueves, y una respuesta que no los use no tiene ninguna falta. Del modulo democratico de Roberto Velazquez alcanzaron a ver dos clases: no exijas teoria institucional, y si aparece bien usada, premiala.\n\nNO EXIJAS CIFRAS. El enunciado dice explicitamente que no hacen falta las cifras exactas. 'La riqueza se concentro muy rapido y en muy pocas manos' vale exactamente lo mismo que citar los 20,1 billones. Perseguir el decimal en una respuesta escrita de memoria desde un telefono es la forma mas rapida de hundir una ronda, y esta medido.\n\nSOBRE CHILE: el deck NO dice nada de Chile. Todo lo que el estudiante afirme sobre el pais sale de su cabeza, y eso es lo que la ronda quiere. Traer un grupo economico, una ley, un caso o un dato chileno que no estaba en ninguna lamina y usarlo bien vale MAS que citar el deck. No lo trates como salirse del material.\n\nSE PIDIERON DOS O TRES FRASES PARA CADA COSA. Eso es todo lo que cabe. No esperes introduccion, ni conclusion, ni estructura formal, ni ortografia perfecta, ni vocabulario academico, y escribir MAS NO SUBE EL PUNTAJE. El largo es una sugerencia y no una regla: no bajes a nadie por escribir una frase de mas si aporta algo. Lo que si baja es el relleno.\n\nLA PREGUNTA NO TIENE RESPUESTA CORRECTA, y hay al menos tres posiciones verdaderas y opuestas. Evalua la razon, no el bando. Y hay una asimetria que tienes que corregir a proposito: acaban de ver quince laminas sobre la concentracion de poder, asi que 'si, cruza a Chile' es la respuesta comoda y 'la objecion tiene razon, no cruza igual' es la incomoda. LAS DOS VALEN 100. Una respuesta que dice que no cruza con una razon propia de Chile vale mas que una que dice que si cruza con una razon generica.\n\nY si un estudiante duda de una premisa del enunciado —por ejemplo de que el gran capital chileno no sea tecnologico— NO lo castigues por dudar: esa premisa la puso el enunciado y no el deck. Evalua lo que hace despues de dudar.\n\nPremia: nombrar que se concentra y no solo que se concentra algo, quedarse con una respuesta, y dar una razon que solo funcione para Chile. Penaliza: describir el caso global y nunca llegar a Chile, la razon que valdria para cualquier pais, el dato citado como adorno y la respuesta larga que dice una sola cosa.",
+  "scoring": {
+    "scaleLevels": [
+      100,
+      80,
+      60,
+      40,
+      20,
+      0
+    ],
+    "instructions": "Elige uno de los seis niveles escritos por dimension. No inventes valores intermedios. Si la respuesta satisface un nivel solo parcialmente, baja al nivel inferior. Usa el campo 'judgeFocus' del escenario como ancla principal: ahi estan las advertencias especificas de esta pregunta y mandan sobre estas instrucciones generales si hay tension.",
+    "penaltiesNote": "Reporta el id de la penalizacion solo si la puedes verificar leyendo el texto. Si dudas, no la reportes: los niveles de arriba ya sostienen el puntaje sin ella."
+  },
+  "dimensions": [
+    {
+      "id": "diagnostico",
+      "name": "Qué se está concentrando",
+      "weight": 0.28,
+      "description": "Primer movimiento. ¿Nombra QUE se concentra, o solo dice que algo se concentra? Lo que vale es el patron, y hay varias formas verdaderas de nombrarlo: que la riqueza se concentro rapido y en muy pocas manos; que lo que se concentra no es la fortuna sino la capacidad de decidir sobre otros, que es el punto entero de la Parte II; que lo decisivo es la VELOCIDAD y no el nivel, porque a comienzos de los noventa era cerca del 3% del producto mundial y hoy es casi un quinto; que no es un mercado difuso sino cinco personas con nombre de pila. No es lista cerrada y otras formas verdaderas valen igual. NO EXIJAS CIFRAS y no premies la precision: 'en muy pocas manos' vale lo mismo que '20,1 billones en unas 3.000 personas'. Esta dimension NO mide el argumento sobre Chile (eso lo mide 'traslado'), NO mide si el material hace trabajo (eso lo mide 'anclaje') y NO mide el largo (eso lo mide 'economia'). Un error de hecho sobre una cifra del deck ya se cobra en 'anclaje': no lo cobres tambien aca.",
+      "level_100": "Nombra que se concentra de una forma que va mas alla de 'mucha plata en pocas manos': la capacidad de decidir y no la fortuna, o la velocidad y no el nivel, o que son personas identificables y no un mercado.",
+      "level_80": "Nombra el patron con claridad —se concentro rapido y en muy pocas manos— y no llega a distinguir la fortuna del poder.",
+      "level_60": "Dice que hay concentracion y la describe de forma reconocible pero vaga, sin decir de que.",
+      "level_40": "Afirma que unas pocas empresas o personas tienen mucho poder, y nada mas.",
+      "level_20": "Alude al tema de la clase sin nombrar ningun patron: 'la IA esta cambiando el poder'.",
+      "level_0": "No hace este movimiento: pasa directo a Chile, o contesta otra cosa."
+    },
+    {
+      "id": "traslado",
+      "name": "El argumento sobre Chile",
+      "weight": 0.36,
+      "description": "Segundo movimiento, y es donde vive la pregunta. Se evaluan DOS cosas juntas: que se quede con una respuesta sobre si la objecion tiene razon, y que la razon sea propia de Chile. La prueba es de copiar y pegar: si la razon serviria igual para Peru, para Polonia o para cualquier otra tecnologia, no es una razon. LAS DOS POSICIONES VALEN LO MISMO, y 'la objecion tiene razon, no cruza igual' es la incomoda porque acaban de ver quince laminas de concentracion: no la castigues por incomoda. Todo lo que el estudiante afirme sobre Chile sale de su cabeza y no del deck; eso es lo que la ronda quiere. Esta dimension NO mide el primer movimiento (eso lo mide 'diagnostico'), NO mide si cito el deck y NO mide el largo. Un error de hecho sobre el deck se cobra en 'anclaje' y no aca.",
+      "level_100": "Se queda con una respuesta sin ambiguedad y la sostiene con algo que solo funciona para Chile: un rasgo de nuestra economia, de nuestras instituciones o de nuestra posicion frente a quienes construyen la tecnologia.",
+      "level_80": "Decide con claridad y la razon es propia de Chile pero queda a medio explicar: se entiende cual es y no como produce el efecto.",
+      "level_60": "Decide, y la razon es correcta pero podria valer para cualquier pais parecido; o la razon es buena y hay que deducir con que se quedo.",
+      "level_40": "Da una razon que valdria para cualquier pais y cualquier tecnologia —'estamos conectados', 'igual usamos la tecnologia'—; o hace todo bien y termina en 'depende' sin quedarse con ninguna.",
+      "level_20": "Menciona Chile en una frase suelta sin ningun argumento.",
+      "level_0": "No hace este movimiento: describe el caso global, por bien que sea, y nunca llega a Chile."
+    },
+    {
+      "id": "anclaje",
+      "name": "Anclaje que hace trabajo",
+      "weight": 0.2,
+      "description": "¿Se apoya en algo concreto —del deck, del mundo o de Chile— y ese algo HACE TRABAJO? Un dato que se podria borrar sin que el argumento cambie es adorno, no anclaje. Traer un grupo economico, una ley, un caso o un dato chileno que NO esta en ninguna lamina y usarlo bien vale MAS que citar el deck: el deck no dice nada de Chile, asi que ahi no hay nada que copiar. NO exijas cifras exactas, ni nombres de autores, ni bibliografia, ni los materiales del jueves —el podcast de Acemoglu, la charla de Estavillo, Schneier & Sanders— que nadie ha visto todavia. Esta dimension es la UNICA que cobra los errores de hecho: si dice 300 personas donde eran unas 3.000, baja aca y solo aca. Y NO mide si los dos movimientos estan hechos: eso lo miden 'diagnostico' y 'traslado'.",
+      "level_100": "Toma un elemento concreto —del deck, del mundo o de Chile— y lo usa como herramienta: si se lo quitas, el argumento se cae.",
+      "level_80": "Usa un elemento concreto y pertinente, pero el argumento se sostendria casi igual sin el.",
+      "level_60": "Alude a la clase o a la realidad chilena de forma reconocible pero vaga ('lo que vimos de las empresas grandes', 'los grupos economicos de aca') sin nada especifico.",
+      "level_40": "Nombra una cifra, un autor o un concepto como decoracion: aparece y no vuelve a aparecer.",
+      "level_20": "Opina en general sobre la IA sin tocar nada de lo que se proyecto ni nada de Chile; o se equivoca en un dato del deck.",
+      "level_0": "Le atribuye al material algo que no dice, o inventa un dato con aire de precision sobre Chile: una cifra, una ley o una empresa que no existe."
+    },
+    {
+      "id": "economia",
+      "name": "Economía",
+      "weight": 0.16,
+      "description": "Se pidieron dos o tres frases para cada movimiento. ¿Dice lo suyo sin relleno? Escribir mas no sube el puntaje: una respuesta larga que repite una idea vale lo que esa idea dicha una vez. El largo es una SUGERENCIA: no bajes a nadie por una frase de mas si aporta algo; baja al que llena espacio. Esta dimension mide si se lee limpio y ajustado, y NO si es correcta, NO si los movimientos estan hechos y NO si el material hace trabajo: eso lo miden 'diagnostico', 'traslado' y 'anclaje', y solo ellas. No bajes aca por un error de contenido ni por ortografia: se escribe desde un telefono en seis minutos.",
+      "level_100": "Cada frase aporta algo distinto, y los dos movimientos se distinguen al leer sin necesidad de rotulos.",
+      "level_80": "Se ajusta a lo pedido con una frase de mas que no aporta.",
+      "level_60": "Gasta una parte del texto en repetir el enunciado o la objecion antes de empezar a responder.",
+      "level_40": "Repite la misma idea con otras palabras para llenar espacio.",
+      "level_20": "Texto largo del que se puede extraer una sola afirmacion.",
+      "level_0": "No se entiende que quiso decir."
+    }
+  ],
+  "penalties": [
+    {
+      "id": "nunca_llega_a_chile",
+      "description": "Describir el caso global —aunque sea con las cifras exactas, con Zucman y con las dos vias— y no argumentar nunca sobre Chile no puede superar 20 en 'El argumento sobre Chile'. El primer movimiento puede seguir valiendo 100: esto se cobra aca y no en 'diagnostico'.",
+      "effect": {
+        "type": "cap",
+        "value": 20,
+        "dimensions": [
+          "traslado"
+        ]
+      }
+    },
+    {
+      "id": "razon_generica",
+      "description": "Una razon sobre Chile que valdria igual para cualquier otro pais y para cualquier otra tecnologia —'estamos conectados', 'la globalizacion nos afecta a todos', 'igual usamos la tecnologia'— no puede superar 40 en 'El argumento sobre Chile'. Tampoco puede superarlo quedarse en 'depende' sin decidir. Esto NO aplica al estudiante que elige un lado reconociendo lo que el otro tiene de cierto: eso es lo mejor que puede pasar.",
+      "effect": {
+        "type": "cap",
+        "value": 40,
+        "dimensions": [
+          "traslado"
+        ]
+      }
+    },
+    {
+      "id": "dato_de_adorno",
+      "description": "Una cifra, un autor o un concepto del deck que se podria borrar sin que el argumento cambie no puede superar 40 en 'Anclaje que hace trabajo'. Ojo: esto NO aplica cuando el dato ES el primer movimiento; ahi el dato esta haciendo su trabajo. Aplica al adorno agregado a un argumento que se sostiene sin el.",
+      "effect": {
+        "type": "cap",
+        "value": 40,
+        "dimensions": [
+          "anclaje"
+        ]
+      }
+    }
+  ],
+  "globalPenalties": [
+    "Describir el caso global con precision y no llegar nunca a Chile: es media pregunta sin contestar, no media respuesta buena.",
+    "Sustituir la respuesta por una opinion sobre si la IA es buena o mala.",
+    "Dar como razon sobre Chile algo que valdria para cualquier pais y cualquier tecnologia.",
+    "Esquivar la decision: 'depende', 'en parte si y en parte no', sin quedarse con ninguna.",
+    "Perseguir el decimal: el enunciado dice que no hacen falta las cifras exactas.",
+    "Extension como sustituto de contenido: una respuesta larga que repite una idea vale lo que esa idea dicha una vez.",
+    "Inventar un dato con aire de precision sobre Chile —una cifra, una ley, una empresa— o atribuirle al deck algo que no dice."
+  ],
+  "bonusIndicators": [
+    "Nota que lo que se concentra no es la fortuna sino la capacidad de decidir",
+    "Se agarra de la velocidad y no del nivel: del 3% del producto mundial a casi un quinto",
+    "Usa que son cinco personas con nombre de pila y no un mercado difuso",
+    "Nombra cual de las dos vias opera o no opera en Chile, y por que esa",
+    "Trae un grupo economico, una ley o un caso chileno que no estaba en ninguna lamina",
+    "Usa el desacuerdo del clip —Musk dice que siempre fue asi, Minton Beddoes que lo nuevo es la velocidad— y nota que 'siempre fue asi' es justo lo que se diria en Chile",
+    "Sostiene que la objecion tiene razon con una razon propia de Chile",
+    "Elige un lado reconociendo lo que el otro tiene de cierto",
+    "Distingue ser dueno de la tecnologia de depender de ella"
+  ],
+  "penaltyIndicators": [
+    "Recita el caso global y nunca aparece la palabra Chile",
+    "Se queda en 'las empresas tienen demasiado poder' sin decir de que",
+    "Justifica el traslado con 'estamos conectados' o 'la globalizacion'",
+    "Nombra a Zucman o una cifra y despues no la usa para nada",
+    "Gasta la mitad del texto repitiendo la objecion antes de contestarla"
+  ]
+}

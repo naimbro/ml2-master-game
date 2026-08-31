@@ -36,6 +36,11 @@ import aydC03Scenarios from '../../content/sessions/ai_democracy_2026/clase_03_b
 import aydC03Rubric from '../../content/sessions/ai_democracy_2026/clase_03_backlash/rubric.json';
 import aydC03KnowledgeBase from '../../content/sessions/ai_democracy_2026/clase_03_backlash/knowledge_base.md?raw';
 
+import aydC05Config from '../../content/sessions/ai_democracy_2026/clase_05_oligarquia/config.json';
+import aydC05Scenarios from '../../content/sessions/ai_democracy_2026/clase_05_oligarquia/scenarios.json';
+import aydC05Rubric from '../../content/sessions/ai_democracy_2026/clase_05_oligarquia/rubric.json';
+import aydC05KnowledgeBase from '../../content/sessions/ai_democracy_2026/clase_05_oligarquia/knowledge_base.md?raw';
+
 import teB2Config from '../../content/sessions/temas_emergentes_2026/bloque_2_concentracion_frontera/config.json';
 import teB2Scenarios from '../../content/sessions/temas_emergentes_2026/bloque_2_concentracion_frontera/scenarios.json';
 import teB2Rubric from '../../content/sessions/temas_emergentes_2026/bloque_2_concentracion_frontera/rubric.json';
@@ -264,6 +269,18 @@ export const SESSIONS: SessionOption[] = [
     scenarios: aydC03Scenarios,
     rubric: aydC03Rubric,
     knowledgeBase: aydC03KnowledgeBase,
+  },
+  {
+    id: 'clase_05_oligarquia',
+    courseId: 'ai_democracy_2026',
+    title: aydC05Config.title,
+    description: aydC05Config.description,
+    rounds: aydC05Scenarios.length,
+    duration: Math.round(aydC05Config.roundDurationSeconds / 60),
+    config: aydC05Config,
+    scenarios: aydC05Scenarios,
+    rubric: aydC05Rubric,
+    knowledgeBase: aydC05KnowledgeBase,
   },
   {
     id: 'bloque_2_concentracion_frontera',
