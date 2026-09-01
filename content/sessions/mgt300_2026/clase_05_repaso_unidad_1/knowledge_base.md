@@ -35,9 +35,9 @@ decir «sujeto de rendimiento», «potencia negativa», «medio del afecto»,
 «congregación», «capital de acercamiento» ni «infocracia» para sacar 100. Quien
 explica la idea con sus palabras vale exactamente igual.
 
-Están escribiendo **desde el teléfono**, al final de una clase de dos horas y
-media en la que además hubo presentaciones grupales y quince minutos de lectura
-en silencio. **No exijas ortografía, tildes, estructura, conectores ni
+Están escribiendo **desde el teléfono**, con cinco minutos por ronda, al final
+de una clase de dos horas y media en la que además hubo presentaciones grupales
+y quince minutos de lectura en silencio. **No exijas ortografía, tildes, estructura, conectores ni
 vocabulario académico.**
 
 El juego compite y hay podio, pero **no es una nota** y no reemplaza los
@@ -71,6 +71,23 @@ a Galor: todo eso viene en las unidades 2 y 3. Nadie tiene por qué saber quién
 es Habermas, Postman, Luhmann, Putnam, Boyd, Foucault, Ehrenberg, Le Bon,
 McLuhan, Lacan, Barthes o Schmitt más allá de lo que el material del curso dice
 de ellos.
+
+**Y ojo con leer esa lista al revés, porque ya pasó una vez.** Esos nombres
+**no son autores de afuera**: son los que los propios textos de Han y de Pariser
+discuten adentro, y el curso los vio ahí. **Citarlos no es un error y no se
+penaliza — ni en el puntaje ni en el feedback.** Lo que se penaliza es
+**inventar** un dato, una cifra o un estudio. Los cuatro que más van a aparecer,
+y los cuatro son legítimos:
+
+- **Foucault** — el extracto de la clase 2 abre nombrándolo: la sociedad
+  disciplinaria «de Foucault», con sus hospitales, cárceles y fábricas. Decir que
+  Han la toma de Foucault es correcto.
+- **Le Bon** — el capítulo «En el enjambre» **abre con él** (ver la ronda 3).
+- **Ehrenberg** — Han discute con él en *La sociedad del cansancio*.
+- **Ehrenreich** — es la otra lectura de la clase 2.
+
+Lo que sí es cierto es que **nadie está obligado a nombrarlos**: quien contesta
+sin citar a nadie vale exactamente igual.
 
 **Aviso sobre las cifras.** Los textos de Han —los tres— **no contienen ni una
 sola cifra propia**. Las únicas cifras que este curso vio en toda la unidad y
@@ -172,6 +189,25 @@ legítimamente en una respuesta:
 Traer cualquiera de estas dos al servicio de la respuesta es correcto y suma.
 **No traerlas no resta**: la pregunta es sobre el par locos/depresivos.
 
+### Una paráfrasis fiel es una traducción, no una generalidad
+
+Este es el error de corrección que ya se cometió en esta ronda, y se cometió en
+el feedback y no en el puntaje: un juez le puso **100 en fidelidad al texto** a
+una respuesta y en el mismo aliento le escribió *«evitar generalidades como
+"podemos ser lo que queremos" y reemplazarlas por el "poder sin límites"»*.
+
+**«Podemos ser lo que queremos» ES «poder sin límites» dicho en chileno.** No es
+una generalidad: es exactamente el término del libro traducido, que es lo que
+esta sesión pide. Pedirle que lo cambie por la frase del autor no es un consejo,
+**es pedirle que copie el enunciado** — y el enunciado ya trae la cita escrita.
+
+La regla, y vale para las cinco rondas: **la misma instrucción que prohíbe bajar
+el puntaje por no usar el vocabulario del autor prohíbe pedírselo en el
+feedback.** Si a la respuesta le falta algo, hay que decirle **qué paso** falta,
+nunca **qué palabra**. Otras paráfrasis fieles que no se tocan: «uno se explota
+solo» por autoexplotación, «no hay nadie que te mande» por la coacción sin
+emisor, «nunca terminas» por la falta de un punto de llegada.
+
 ### Qué NO cuenta como respuesta
 
 - **«Antes castigaban y ahora no» / «antes había más disciplina»** — describe el
@@ -233,6 +269,20 @@ explicación plausible, y está en OTRO tramo del capítulo (el del nombre), per
 no es la que sostiene la frase «medio del afecto». Si alguien la trae **además**
 de la demora, suma; si la trae **en lugar de** la demora, contestó otra cosa.
 
+### La ruta de la ola: material del curso, y no se saca
+
+Quien conteste que el afecto **se potencia porque mucha gente lo está expresando
+al mismo tiempo** no está inventando nada. Es de la misma guía de la clase 3:
+las olas de indignación son «**muy eficientes para movilizar y aglutinar la
+atención**», «**crecen súbitamente**», y la palabra *shitstorm* nombra
+precisamente afecto que se acumula sobre un blanco.
+
+Entonces: si lo trae **además** de la demora, **suma**. Si lo trae **en lugar de**
+la demora, le falta el mecanismo y va a media tabla — **pero en el feedback no se
+le pide que lo saque, ni que «se enfoque sólo en la temporalidad».** Lo que le
+falta no es quitar la ola: es agregar la demora. Esto también se corrigió mal una
+vez.
+
 ### Material del mismo capítulo que puede aparecer legítimamente
 
 - **El nombre:** «El respeto va unido al nombre. **Anonimato y respeto se excluyen
@@ -284,11 +334,21 @@ ellas, basta:
   concentrados en lo mismo y siguen solos — «*hikikomoris* aislados» delante de
   una pantalla, cada uno en su casa.
 
-**Por qué la radio sí congrega y lo digital no** — el contraste que Han usa, y
-que la mayoría de las respuestas buenas va a nombrar: la radio se escuchaba
-**junta** y **lo mismo al mismo tiempo**; lo digital pone a cada uno frente a su
-propia pantalla, y **estar frente a la misma cosa no es lo mismo que estar
-juntos**.
+**Por qué la radio sí congrega y lo digital no.** Conviene decirlo con
+honestidad, porque no es obvio: **Han lo afirma más que lo demuestra.** Lo único
+que el texto pone de su lado es el contraste con los ***hikikomoris* aislados,
+singularizados, que se sientan solitarios ante el *display*** — la radio se
+escuchaba **junta**, la pantalla deja a cada uno **solo**. Ése es todo el
+argumento, y **por eso el enunciado de esta ronda trae la cita completa**, con
+los *hikikomoris* incluidos: para que nadie tenga que adivinar de dónde sale el
+contraste. **Estar frente a la misma cosa no es lo mismo que estar juntos.**
+
+Consecuencia para la corrección: **no le exijas a nadie justificar por qué la
+radio congrega.** Basta con que use el contraste que el enunciado ya le entregó.
+Y si alguien objeta que la radio también se escuchaba solo, o que hoy se ve una
+serie en familia, **eso es una objeción legítima y bien argumentada puede sacar
+el puntaje más alto de la ronda**: el propio Han no da más base que la
+afirmación.
 
 Y la consecuencia política, que está en el mismo capítulo y cierra la respuesta
 si alguien la trae:
@@ -301,6 +361,32 @@ si alguien la trae:
 Y la fórmula con la que Han cierra el capítulo, contra Hardt y Negri: «**El socio
 deja paso al solo.** Lo que caracteriza la actual constitución social no es la
 multitud, sino más bien la soledad (***non multitudo, sed solitudo***).»
+
+### Le Bon y la masa: el capítulo abre con él, y citarlo NO es traer un autor de afuera
+
+Esto se corrigió mal una vez —un juez le advirtió a un estudiante que «ojo con
+traer autores que el curso no vio en este material»— y es al revés: **el capítulo
+«En el enjambre» empieza justamente con Le Bon.**
+
+> «En la ***Psicología de las masas* (1895) Gustave Le Bon** define la modernidad
+> como la "época de las masas". […] "La era en la que entramos será,
+> verdaderamente, la era de las masas". […] Para Le Bon la rebelión de las masas
+> conduce tanto a la crisis de la soberanía como a la decadencia de la cultura.»
+
+Y de ahí sale la frase de Han: «**La nueva masa es el enjambre digital.**» Además
+el curso proyectó en la clase 3 la tabla de dos columnas:
+
+| La masa (modernidad industrial) | El enjambre (era digital) |
+|---|---|
+| Unida física y emocionalmente | Dispersa: individuos aislados |
+| Tiene un alma: la une una ideología | No desarrolla ningún nosotros |
+| Se manifiesta en una voz | No tiene voz: se percibe como ruido |
+| El individuo pierde ahí su identidad | El individuo conserva y optimiza su perfil |
+
+**Quien traiga a Le Bon, la masa o ese contraste está usando el material de este
+curso.** No se penaliza en ninguna dimensión y no se le advierte nada en el
+feedback. Lo que sí se le puede pedir, igual que a todos, es que cierre el paso:
+nombrar la masa es el punto de partida, no la respuesta.
 
 ### Qué NO cuenta como respuesta
 

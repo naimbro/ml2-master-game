@@ -88,6 +88,20 @@ De ahí sale la tabla, y es más apretada de lo que parece:
 | 6 | 8 min | 4 MC + 2 abiertas |
 | 7 | 6 min | 5 MC + **una sola** abierta |
 
+**El reloj de una abierta depende del tipo de sesión, y son dos números, no uno.**
+Decidido con Naim el 1-sep-2026, después de jugar el repaso de MGT300:
+
+| Tipo de sesión | Reloj de una abierta | Cuántas caben |
+|---|---|---|
+| **Actividad de cierre** (el caso normal, 15-20 min) | **150 s** | 3 abiertas, o 3 MC + 3 abiertas |
+| **Repaso o sesión que ocupa medio bloque** (~35 min, con pausas del profesor entre rondas) | **300 s** | 5 abiertas |
+
+Los 150 s de una sesión de cierre no son generosos y se sienten cortos —lo dijo
+Naim jugando—, pero subirlos ahí **cuesta rondas**: a 300 s sólo entran tres, y
+lo que se pierde es la ronda del final. En un repaso ese costo no existe, porque
+el bloque es el doble y el profesor ya está parando entre ronda y ronda. **No
+heredar el número de la sesión anterior sin mirar de qué tipo es.**
+
 **Una abierta de 150 s cuesta casi el doble que una MC de 45 s**, así que la
 decisión real no es cuántas rondas sino **cuántas abiertas caben**. Decidirlo con
 Naim acá, antes de escribir nada: es más barato descartar una ronda en una tabla
@@ -155,6 +169,18 @@ cada ocho.
   preferencia no es competencia: rankearlo incentiva escribir la respuesta que
   puntúa en vez de la verdadera. Si todas las rondas van `ranked: false`, el
   podio muestra ceros.
+- **Toda cita lleva escrito de qué texto sale, en el propio enunciado.** No basta
+  con «volvemos a la clase 3» ni con ponerlo en `category`: hay que nombrar
+  **autor, libro y capítulo** —«Byung-Chul Han, *En el enjambre* (2013), capítulo
+  "En el enjambre"»—. El alumno está repasando para una prueba y necesita saber a
+  qué texto volver; y el juez, que también lo lee, deja de tratar como material
+  ajeno lo que es del propio libro. Salió del feedback de MGT300 clase 5: tres de
+  cinco enunciados traían la cita sin decir de dónde.
+
+  **Y el capítulo se verifica, no se recuerda.** El `knowledge_base.md` de la
+  sesión trae la ficha bibliográfica exacta; si ahí no está el capítulo, se pone
+  sólo autor y libro. Inventar un título de capítulo que suena plausible es
+  inventar un hecho, igual que inventar una cifra.
 - **El alumno ve la imagen en su teléfono**, no solo proyectada. Un gráfico de
   dos paneles es ilegible ahí.
 - El juego es actividad de cierre de clase. **15-20 minutos de pared**, con el

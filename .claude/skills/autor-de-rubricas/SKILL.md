@@ -143,6 +143,50 @@ rúbrica no está calibrada — está apostando.
 - **Los jueces hablan chileno neutro**: sin voseo argentino y sin chilenismo
   caricaturizado.
 
+## El feedback también se corrige, y no lo cubre ninguna regla de puntaje
+
+Las reglas de arriba gobiernan el **número**. El estudiante no se lleva el
+número: se lleva los bullets de `improvements`, que ninguna instrucción sobre
+anclas ni pesos alcanza. **Hay que escribir las reglas del feedback aparte, y en
+`globalInstructions`.** Tres, y las tres salieron de correcciones reales.
+
+### 1. Nunca pedirle que cambie sus palabras por las del autor
+
+En MGT300 clase 5, el mismo juez que puso **100 en «Fidelidad al texto»** escribió
+en el mismo aliento: *«evitar generalidades como "podemos ser lo que queremos" y
+reemplazarlas por el "poder sin límites"»*. Pero **«podemos ser lo que queremos»
+ES «poder sin límites» dicho en chileno**: es el término del libro traducido, que
+es justo lo que la rúbrica premia. El puntaje estuvo bien y el consejo estuvo mal.
+
+La regla que hay que escribir, textual: **la misma instrucción que prohíbe bajar
+el puntaje por no usar el vocabulario del autor prohíbe pedírselo en el
+feedback.** Si a la respuesta le falta algo, se le dice **qué paso** falta, nunca
+**qué palabra**. Y conviene dejar escritos dos o tres ejemplos de paráfrasis
+fieles de esa sesión, para que el juez las reconozca.
+
+### 2. Verificar el material antes de advertirle que trajo un autor de afuera
+
+En la misma sesión, un juez le advirtió a un estudiante «ojo con traer autores
+que el curso no vio en este material» por citar a **Le Bon** — con quien **abre**
+el capítulo de Han que la ronda estaba preguntando. Lo que lo indujo fue una
+frase del propio `knowledge_base.md` que listaba a Le Bon entre los nombres que
+«nadie tiene por qué saber».
+
+Consecuencia para el knowledge base: **cuando listes nombres que no se exigen,
+di en la misma frase que citarlos igual es legítimo**, y enumera los que sí están
+dentro de los textos. Una lista de nombres sin esa aclaración la lee el juez como
+lista de prohibidos, y castiga por leer de más.
+
+### 3. Cerrar atando a la próxima evaluación, con la fecha completa
+
+Lo único del feedback de MGT300 clase 5 que Naim pidió **más**, no menos: que los
+jueces conecten la respuesta con la prueba que viene. Va en `globalInstructions`
+y en los tres `sessionLens`, y con dos condiciones: **concreto sobre esta
+respuesta** (qué eslabón dejar explícito), no un consejo genérico de estudio; y
+**con la fecha escrita entera** — «la prueba del 8 de septiembre», nunca «la
+prueba del 8», que en un teléfono no se entiende.
+
+
 ## Verificar
 
 ```bash
