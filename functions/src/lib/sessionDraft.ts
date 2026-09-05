@@ -56,11 +56,11 @@ export function validateGeneratedDraft(draft: any, input: SessionDraftInput): st
     // sintoma aparece semanas despues, en puntajes que no separan a nadie.
     // El piso es bajo a proposito: pilla el campo ausente y el "N/A", nada mas.
     if (!esTextoUtil(s.idealAnswer) || s.idealAnswer.trim().length < 80) {
-      return `El escenario '${s.id}' necesita idealAnswer: 3-5 frases con lo que contestaria un alumno de 80 puntos`;
+      return `El escenario '${s.id}' necesita idealAnswer: 3-5 frases con lo que contestaría un alumno de 80 puntos`;
     }
     const guia = s.evaluationGuide;
     if (!guia || typeof guia !== 'object') {
-      return `El escenario '${s.id}' necesita evaluationGuide con must_hit y fatal_errors`;
+      return `El escenario '${s.id}' necesita evaluationGuide: { "must_hit": string[], "fatal_errors": string[] }, con al menos un elemento en cada lista`;
     }
     if (!Array.isArray(guia.must_hit) || !guia.must_hit.some(esTextoUtil)) {
       return `El escenario '${s.id}' necesita al menos un must_hit en evaluationGuide`;

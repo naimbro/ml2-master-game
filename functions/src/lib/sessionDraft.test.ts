@@ -18,9 +18,9 @@ const validInput: SessionDraftInput = {
 
 function guiaValida() {
   return {
-    idealAnswer: 'Una respuesta de ochenta puntos toma posicion, la justifica con un dato del material y nombra la restriccion que la vuelve dificil.',
+    idealAnswer: 'Una respuesta de ochenta puntos toma posición, la justifica con un dato del material y nombra la restricción que la vuelve difícil.',
     evaluationGuide: {
-      must_hit: ['Toma una posicion explicita', 'La justifica con algo del material'],
+      must_hit: ['Toma una posición explícita', 'La justifica con algo del material'],
       fatal_errors: ['Enumera consideraciones sin elegir', 'Inventa una cifra'],
     },
   };
@@ -133,20 +133,30 @@ describe('validateGeneratedDraft', () => {
     d.scenarios[0].idealAnswer = 'N/A';
     expect(validateGeneratedDraft(d, validInput)).toMatch(/idealAnswer/i);
   });
+  it('acepta un idealAnswer de exactamente 80 caracteres y rechaza uno de 79', () => {
+    const justo = validDraft();
+    justo.scenarios[0].idealAnswer = 'x'.repeat(80);
+    expect(validateGeneratedDraft(justo, validInput)).toBeNull();
+
+    const corto = validDraft();
+    corto.scenarios[0].idealAnswer = 'x'.repeat(79);
+    expect(validateGeneratedDraft(corto, validInput)).toMatch(/idealAnswer/i);
+  });
   it('rechaza un escenario sin evaluationGuide', () => {
     const d = validDraft();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (d.scenarios[2] as any).evaluationGuide;
     expect(validateGeneratedDraft(d, validInput)).toMatch(/evaluationGuide/i);
   });
-  it('rechaza listas vacias en evaluationGuide', () => {
-    const sinMustHit = validDraft();
-    sinMustHit.scenarios[0].evaluationGuide.must_hit = [];
-    expect(validateGeneratedDraft(sinMustHit, validInput)).toMatch(/must_hit/i);
-
-    const sinFatales = validDraft();
-    sinFatales.scenarios[0].evaluationGuide.fatal_errors = ['   '];
-    expect(validateGeneratedDraft(sinFatales, validInput)).toMatch(/fatal_errors/i);
+  it('rechaza must_hit vacio en evaluationGuide', () => {
+    const d = validDraft();
+    d.scenarios[0].evaluationGuide.must_hit = [];
+    expect(validateGeneratedDraft(d, validInput)).toMatch(/must_hit/i);
+  });
+  it('rechaza fatal_errors sin texto util en evaluationGuide', () => {
+    const d = validDraft();
+    d.scenarios[0].evaluationGuide.fatal_errors = ['   '];
+    expect(validateGeneratedDraft(d, validInput)).toMatch(/fatal_errors/i);
   });
 });
 
