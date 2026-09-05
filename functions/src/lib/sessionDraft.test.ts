@@ -16,6 +16,16 @@ const validInput: SessionDraftInput = {
   language: 'español',
 };
 
+function guiaValida() {
+  return {
+    idealAnswer: 'Una respuesta de ochenta puntos toma posición, la justifica con un dato del material y nombra la restricción que la vuelve difícil.',
+    evaluationGuide: {
+      must_hit: ['Toma una posición explícita', 'La justifica con algo del material'],
+      fatal_errors: ['Enumera consideraciones sin elegir', 'Inventa una cifra'],
+    },
+  };
+}
+
 function validDraft() {
   const dim = (id: string, weight: number) => ({
     id, name: id, weight, description: 'desc',
@@ -37,9 +47,9 @@ function validDraft() {
       },
     },
     scenarios: [
-      { id: 'r1', title: 'Ronda 1', prompt: 'p1', judgeFocus: 'f1' },
-      { id: 'r2', title: 'Ronda 2', prompt: 'p2', judgeFocus: 'f2' },
-      { id: 'r3', title: 'Ronda 3', prompt: 'p3', judgeFocus: 'f3' },
+      { id: 'r1', title: 'Ronda 1', prompt: 'p1', judgeFocus: 'f1', ...guiaValida() },
+      { id: 'r2', title: 'Ronda 2', prompt: 'p2', judgeFocus: 'f2', ...guiaValida() },
+      { id: 'r3', title: 'Ronda 3', prompt: 'p3', judgeFocus: 'f3', ...guiaValida() },
     ],
     rubric: {
       globalInstructions: 'gi',
@@ -112,6 +122,42 @@ describe('validateGeneratedDraft', () => {
     d.config.judgeConfig.generic_teacher.weightFormula = '';
     expect(validateGeneratedDraft(d, validInput)).toMatch(/weightFormula/i);
   });
+  it('rechaza un escenario sin idealAnswer', () => {
+    const d = validDraft();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    delete (d.scenarios[1] as any).idealAnswer;
+    expect(validateGeneratedDraft(d, validInput)).toMatch(/idealAnswer/i);
+  });
+  it('rechaza un idealAnswer de relleno', () => {
+    const d = validDraft();
+    d.scenarios[0].idealAnswer = 'N/A';
+    expect(validateGeneratedDraft(d, validInput)).toMatch(/idealAnswer/i);
+  });
+  it('acepta un idealAnswer de exactamente 80 caracteres y rechaza uno de 79', () => {
+    const justo = validDraft();
+    justo.scenarios[0].idealAnswer = 'x'.repeat(80);
+    expect(validateGeneratedDraft(justo, validInput)).toBeNull();
+
+    const corto = validDraft();
+    corto.scenarios[0].idealAnswer = 'x'.repeat(79);
+    expect(validateGeneratedDraft(corto, validInput)).toMatch(/idealAnswer/i);
+  });
+  it('rechaza un escenario sin evaluationGuide', () => {
+    const d = validDraft();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    delete (d.scenarios[2] as any).evaluationGuide;
+    expect(validateGeneratedDraft(d, validInput)).toMatch(/evaluationGuide/i);
+  });
+  it('rechaza must_hit vacio en evaluationGuide', () => {
+    const d = validDraft();
+    d.scenarios[0].evaluationGuide.must_hit = [];
+    expect(validateGeneratedDraft(d, validInput)).toMatch(/must_hit/i);
+  });
+  it('rechaza fatal_errors sin texto util en evaluationGuide', () => {
+    const d = validDraft();
+    d.scenarios[0].evaluationGuide.fatal_errors = ['   '];
+    expect(validateGeneratedDraft(d, validInput)).toMatch(/fatal_errors/i);
+  });
 });
 
 describe('buildGenerationPrompt', () => {
@@ -121,5 +167,26 @@ describe('buildGenerationPrompt', () => {
     expect(prompt).toContain(validInput.topicDescription);
     expect(prompt).toContain('3');
     expect(prompt).toContain('generic_specialist');
+  });
+
+  it('pide la knowledge base ANTES que los escenarios', () => {
+    // El modelo escribe el JSON en el orden en que se le pide. Si los escenarios
+    // vinieran primero, la respuesta ideal se escribiria antes de existir el
+    // material del que tiene que salir.
+    const prompt = buildGenerationPrompt(validInput);
+    expect(prompt.indexOf('"knowledgeBase"')).toBeGreaterThan(-1);
+    expect(prompt.indexOf('"knowledgeBase"')).toBeLessThan(prompt.indexOf('"scenarios"'));
+  });
+
+  it('pide respuesta ideal y guia de evaluacion en cada escenario', () => {
+    const prompt = buildGenerationPrompt(validInput);
+    expect(prompt).toContain('"idealAnswer"');
+    expect(prompt).toContain('"must_hit"');
+    expect(prompt).toContain('"fatal_errors"');
+  });
+
+  it('prohibe inventar hechos fuera de la knowledge base', () => {
+    const prompt = buildGenerationPrompt(validInput);
+    expect(prompt).toMatch(/solo pueden usar hechos que esten en/i);
   });
 });

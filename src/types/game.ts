@@ -266,7 +266,13 @@ export interface Scenario {
   context: string;
   question: string;
   conceptTags: string[];
-  idealAnswer?: IdealAnswer;
+  /**
+   * Dos formas, las dos vivas. El objeto es la original; el texto corrido es lo
+   * que usan todas las sesiones escritas desde 2026 y lo que genera el asistente
+   * (`functions/src/lib/sessionDraft.ts`). El prompt del juez le pasa un
+   * `JSON.stringify` encima, asi que las dos llegan legibles.
+   */
+  idealAnswer?: IdealAnswer | string;
   referenceAnswer?: string;
   // AI-generated scenarios carry their full case text in a single `prompt`
   // field instead of separate `context`/`question`.

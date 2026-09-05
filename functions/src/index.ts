@@ -2011,7 +2011,9 @@ export const generateSessionDraft = functions
       const completion = await openai.chat.completions.create({
         model: 'gpt-4o',
         temperature: 0.7,
-        max_tokens: 8000,
+        // 12000 y no 8000 desde que cada ronda trae ademas su respuesta ideal y su
+        // guia de evaluacion. El techo de salida de gpt-4o es 16384.
+        max_tokens: 12000,
         response_format: { type: 'json_object' },
         messages: [
           { role: 'user' as const, content: prompt },
