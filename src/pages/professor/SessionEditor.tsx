@@ -119,6 +119,66 @@ function MediaEditor({
   );
 }
 
+/**
+ * Las dos listas de la guia de evaluacion que genera el asistente. Las sesiones
+ * escritas a mano llevan ademas `partial_credit` y `nice_to_have`: este editor no
+ * los muestra pero los deja pasar intactos (el spread de `guia`), asi que abrir
+ * una de esas sesiones aca no le borra nada.
+ */
+function GuiaDeEvaluacionEditor({
+  guia,
+  onChange,
+}: {
+  guia: AnyJson;
+  onChange: (next: AnyJson) => void;
+}) {
+  const listas = [
+    { key: 'must_hit', label: 'No puede faltar', hint: 'Lo que una buena respuesta tiene que decir.' },
+    { key: 'fatal_errors', label: 'Errores que la hunden', hint: 'Lo que la deja abajo aunque este bien escrita.' },
+  ];
+
+  const items = (key: string): string[] => (Array.isArray(guia?.[key]) ? guia[key] : []);
+  const escribir = (key: string, next: string[]) => onChange({ ...(guia ?? {}), [key]: next });
+
+  return (
+    <div className="space-y-4">
+      {listas.map(({ key, label, hint }) => (
+        <div key={key}>
+          <label className="block text-sm text-ink-soft mb-1">{label}</label>
+          <p className="text-xs text-faint mb-2">{hint}</p>
+          <div className="space-y-2">
+            {items(key).map((item, j) => (
+              <div key={j} className="flex items-center gap-2">
+                <input
+                  type="text"
+                  value={item}
+                  onChange={(e) => escribir(key, items(key).map((v, k) => (k === j ? e.target.value : v)))}
+                  className={SMALL_INPUT_CLASS}
+                />
+                <button
+                  type="button"
+                  onClick={() => escribir(key, items(key).filter((_, k) => k !== j))}
+                  className="text-faint hover:text-rose-400 transition-colors shrink-0"
+                  aria-label={`Eliminar item de ${label}`}
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={() => escribir(key, [...items(key), ''])}
+            className="mt-2 flex items-center gap-1 text-xs text-cyan-400 hover:text-cyan-700 font-semibold"
+          >
+            <Plus className="w-3 h-3" /> Añadir
+          </button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function newScenarioId() {
   return `r_${Math.random().toString(36).slice(2, 8)}`;
 }
@@ -255,6 +315,8 @@ export default function SessionEditor() {
                 durationSeconds: DEFAULT_OPEN_DURATION,
                 prompt: '',
                 judgeFocus: '',
+                idealAnswer: '',
+                evaluationGuide: { must_hit: [], fatal_errors: [] },
                 conceptTags: [],
               },
             ],
@@ -693,6 +755,29 @@ export default function SessionEditor() {
                           className={`${INPUT_CLASS} resize-none`}
                         />
                       </div>
+
+                      <div>
+                        <label className="block text-sm text-ink-soft mb-1">
+                          Respuesta ideal
+                        </label>
+                        <p className="text-xs text-faint mb-2">
+                          Lo que contestaría un alumno de 80 puntos. Los jueces calibran
+                          contra esto: si la escribió el asistente, léela antes de
+                          publicar — una respuesta ideal inventada castiga al alumno que
+                          sí estudió.
+                        </p>
+                        <textarea
+                          value={typeof scenario.idealAnswer === 'string' ? scenario.idealAnswer : ''}
+                          rows={4}
+                          onChange={(e) => updateScenario(i, 'idealAnswer', e.target.value)}
+                          className={`${INPUT_CLASS} resize-y`}
+                        />
+                      </div>
+
+                      <GuiaDeEvaluacionEditor
+                        guia={scenario.evaluationGuide}
+                        onChange={(next) => updateScenario(i, 'evaluationGuide', next)}
+                      />
                     </>
                   )}
 
