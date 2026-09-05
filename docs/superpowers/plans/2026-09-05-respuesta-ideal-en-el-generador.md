@@ -664,8 +664,10 @@ npx vitest run
 cd functions && npx vitest run
 ```
 
-Esperado: las dos en verde. Antes de este plan la raíz iba en 651 tests; deberían ser
-653 (los dos de `game.test.ts`).
+Esperado: las dos en verde. Medido en el árbol antes de empezar este plan: la raíz iba
+en **664 tests / 44 archivos** y `functions/` en **168 tests / 11 archivos**. Al terminar
+deberían ser 666 en la raíz (los dos de `game.test.ts`) y 175 en `functions/` (los siete
+de `sessionDraft.test.ts`).
 
 - [ ] **Step 2: Build limpio**
 
