@@ -16,6 +16,16 @@ const validInput: SessionDraftInput = {
   language: 'español',
 };
 
+function guiaValida() {
+  return {
+    idealAnswer: 'Una respuesta de ochenta puntos toma posicion, la justifica con un dato del material y nombra la restriccion que la vuelve dificil.',
+    evaluationGuide: {
+      must_hit: ['Toma una posicion explicita', 'La justifica con algo del material'],
+      fatal_errors: ['Enumera consideraciones sin elegir', 'Inventa una cifra'],
+    },
+  };
+}
+
 function validDraft() {
   const dim = (id: string, weight: number) => ({
     id, name: id, weight, description: 'desc',
@@ -37,9 +47,9 @@ function validDraft() {
       },
     },
     scenarios: [
-      { id: 'r1', title: 'Ronda 1', prompt: 'p1', judgeFocus: 'f1' },
-      { id: 'r2', title: 'Ronda 2', prompt: 'p2', judgeFocus: 'f2' },
-      { id: 'r3', title: 'Ronda 3', prompt: 'p3', judgeFocus: 'f3' },
+      { id: 'r1', title: 'Ronda 1', prompt: 'p1', judgeFocus: 'f1', ...guiaValida() },
+      { id: 'r2', title: 'Ronda 2', prompt: 'p2', judgeFocus: 'f2', ...guiaValida() },
+      { id: 'r3', title: 'Ronda 3', prompt: 'p3', judgeFocus: 'f3', ...guiaValida() },
     ],
     rubric: {
       globalInstructions: 'gi',
@@ -111,6 +121,32 @@ describe('validateGeneratedDraft', () => {
     const d = validDraft();
     d.config.judgeConfig.generic_teacher.weightFormula = '';
     expect(validateGeneratedDraft(d, validInput)).toMatch(/weightFormula/i);
+  });
+  it('rechaza un escenario sin idealAnswer', () => {
+    const d = validDraft();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    delete (d.scenarios[1] as any).idealAnswer;
+    expect(validateGeneratedDraft(d, validInput)).toMatch(/idealAnswer/i);
+  });
+  it('rechaza un idealAnswer de relleno', () => {
+    const d = validDraft();
+    d.scenarios[0].idealAnswer = 'N/A';
+    expect(validateGeneratedDraft(d, validInput)).toMatch(/idealAnswer/i);
+  });
+  it('rechaza un escenario sin evaluationGuide', () => {
+    const d = validDraft();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    delete (d.scenarios[2] as any).evaluationGuide;
+    expect(validateGeneratedDraft(d, validInput)).toMatch(/evaluationGuide/i);
+  });
+  it('rechaza listas vacias en evaluationGuide', () => {
+    const sinMustHit = validDraft();
+    sinMustHit.scenarios[0].evaluationGuide.must_hit = [];
+    expect(validateGeneratedDraft(sinMustHit, validInput)).toMatch(/must_hit/i);
+
+    const sinFatales = validDraft();
+    sinFatales.scenarios[0].evaluationGuide.fatal_errors = ['   '];
+    expect(validateGeneratedDraft(sinFatales, validInput)).toMatch(/fatal_errors/i);
   });
 });
 

@@ -36,6 +36,8 @@ export function validateDraftInput(data: unknown): string | null {
   return null;
 }
 
+const esTextoUtil = (x: unknown): boolean => typeof x === 'string' && x.trim().length > 0;
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function validateGeneratedDraft(draft: any, input: SessionDraftInput): string | null {
   if (!draft || typeof draft !== 'object') return 'El borrador generado no es un objeto';
@@ -48,6 +50,24 @@ export function validateGeneratedDraft(draft: any, input: SessionDraftInput): st
   }
   for (const s of scenarios) {
     if (!s?.id || !s?.title || !s?.prompt) return 'Cada escenario necesita id, title y prompt';
+
+    // La respuesta ideal y la guia son la mitad que ancla al juez a ESTA pregunta;
+    // la rubrica solo trae la escala. Sin ellas la sesion se publica igual y el
+    // sintoma aparece semanas despues, en puntajes que no separan a nadie.
+    // El piso es bajo a proposito: pilla el campo ausente y el "N/A", nada mas.
+    if (!esTextoUtil(s.idealAnswer) || s.idealAnswer.trim().length < 80) {
+      return `El escenario '${s.id}' necesita idealAnswer: 3-5 frases con lo que contestaria un alumno de 80 puntos`;
+    }
+    const guia = s.evaluationGuide;
+    if (!guia || typeof guia !== 'object') {
+      return `El escenario '${s.id}' necesita evaluationGuide con must_hit y fatal_errors`;
+    }
+    if (!Array.isArray(guia.must_hit) || !guia.must_hit.some(esTextoUtil)) {
+      return `El escenario '${s.id}' necesita al menos un must_hit en evaluationGuide`;
+    }
+    if (!Array.isArray(guia.fatal_errors) || !guia.fatal_errors.some(esTextoUtil)) {
+      return `El escenario '${s.id}' necesita al menos un fatal_errors en evaluationGuide`;
+    }
   }
 
   if (!rubric || !Array.isArray(rubric.dimensions) || rubric.dimensions.length < 2) {
