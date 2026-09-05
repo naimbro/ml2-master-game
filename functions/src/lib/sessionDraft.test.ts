@@ -168,4 +168,25 @@ describe('buildGenerationPrompt', () => {
     expect(prompt).toContain('3');
     expect(prompt).toContain('generic_specialist');
   });
+
+  it('pide la knowledge base ANTES que los escenarios', () => {
+    // El modelo escribe el JSON en el orden en que se le pide. Si los escenarios
+    // vinieran primero, la respuesta ideal se escribiria antes de existir el
+    // material del que tiene que salir.
+    const prompt = buildGenerationPrompt(validInput);
+    expect(prompt.indexOf('"knowledgeBase"')).toBeGreaterThan(-1);
+    expect(prompt.indexOf('"knowledgeBase"')).toBeLessThan(prompt.indexOf('"scenarios"'));
+  });
+
+  it('pide respuesta ideal y guia de evaluacion en cada escenario', () => {
+    const prompt = buildGenerationPrompt(validInput);
+    expect(prompt).toContain('"idealAnswer"');
+    expect(prompt).toContain('"must_hit"');
+    expect(prompt).toContain('"fatal_errors"');
+  });
+
+  it('prohibe inventar hechos fuera de la knowledge base', () => {
+    const prompt = buildGenerationPrompt(validInput);
+    expect(prompt).toMatch(/solo pueden usar hechos que esten en/i);
+  });
 });

@@ -34,6 +34,7 @@ function validateDraftInput(data) {
         return 'Falta el idioma';
     return null;
 }
+const esTextoUtil = (x) => typeof x === 'string' && x.trim().length > 0;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function validateGeneratedDraft(draft, input) {
     if (!draft || typeof draft !== 'object')
@@ -47,6 +48,23 @@ function validateGeneratedDraft(draft, input) {
     for (const s of scenarios) {
         if (!(s === null || s === void 0 ? void 0 : s.id) || !(s === null || s === void 0 ? void 0 : s.title) || !(s === null || s === void 0 ? void 0 : s.prompt))
             return 'Cada escenario necesita id, title y prompt';
+        // La respuesta ideal y la guia son la mitad que ancla al juez a ESTA pregunta;
+        // la rubrica solo trae la escala. Sin ellas la sesion se publica igual y el
+        // sintoma aparece semanas despues, en puntajes que no separan a nadie.
+        // El piso es bajo a proposito: pilla el campo ausente y el "N/A", nada mas.
+        if (!esTextoUtil(s.idealAnswer) || s.idealAnswer.trim().length < 80) {
+            return `El escenario '${s.id}' necesita idealAnswer: 3-5 frases con lo que contestaría un alumno de 80 puntos`;
+        }
+        const guia = s.evaluationGuide;
+        if (!guia || typeof guia !== 'object') {
+            return `El escenario '${s.id}' necesita evaluationGuide: { "must_hit": string[], "fatal_errors": string[] }, con al menos un elemento en cada lista`;
+        }
+        if (!Array.isArray(guia.must_hit) || !guia.must_hit.some(esTextoUtil)) {
+            return `El escenario '${s.id}' necesita al menos un must_hit en evaluationGuide`;
+        }
+        if (!Array.isArray(guia.fatal_errors) || !guia.fatal_errors.some(esTextoUtil)) {
+            return `El escenario '${s.id}' necesita al menos un fatal_errors en evaluationGuide`;
+        }
     }
     if (!rubric || !Array.isArray(rubric.dimensions) || rubric.dimensions.length < 2) {
         return 'La rúbrica necesita al menos 2 dimensiones';
@@ -120,9 +138,11 @@ PRINCIPIOS DE DISEÑO (síguelos estrictamente):
 3. La rúbrica premia especificidad, realismo y estructura; penaliza respuestas genéricas, listas sin posición y soluciones mágicas.
 4. La knowledge base entrega el contexto mínimo que un estudiante necesita para responder bien (conceptos clave, datos del caso, definiciones) en 800-1500 palabras, formato markdown.
 5. La dificultad crece levemente entre rondas.
+6. Escribes la knowledge base PRIMERO y todo lo demás sale de ella. La respuesta ideal de cada ronda es lo que un alumno que leyó ese material podría efectivamente contestar.
 
-RESPONDE SOLO CON UN JSON VÁLIDO con esta estructura EXACTA:
+RESPONDE SOLO CON UN JSON VÁLIDO con esta estructura EXACTA, y en ESTE ORDEN de claves:
 {
+  "knowledgeBase": "# Título\\n\\nContenido markdown de 800-1500 palabras...",
   "config": {
     "title": "${input.title}",
     "description": "Descripción de 1-2 líneas de la sesión",
@@ -147,6 +167,11 @@ RESPONDE SOLO CON UN JSON VÁLIDO con esta estructura EXACTA:
       "title": "Título corto de la ronda",
       "prompt": "El escenario completo que ve el estudiante: contexto del caso (3-6 frases) + tarea específica con instrucciones de formato si aplica",
       "judgeFocus": "1-2 frases: qué deben priorizar los jueces al evaluar esta ronda",
+      "idealAnswer": "3-5 frases EN PROSA con lo que contestaría un alumno de 80 puntos a ESTA ronda. Escríbela como la escribiría el alumno, no como una lista de requisitos: es la calibración de largo y de tono para los jueces.",
+      "evaluationGuide": {
+        "must_hit": ["2-3 cosas que una buena respuesta no puede dejar de decir"],
+        "fatal_errors": ["2-3 errores que hunden la respuesta aunque esté bien escrita"]
+      },
       "ranked": true
     }
   ],
@@ -159,8 +184,7 @@ RESPONDE SOLO CON UN JSON VÁLIDO con esta estructura EXACTA:
     "dimensions": [
       ${dimensionExample}
     ]
-  },
-  "knowledgeBase": "# Título\\n\\nContenido markdown de 800-1500 palabras..."
+  }
 }
 
 REGLAS DURAS:
@@ -170,6 +194,10 @@ REGLAS DURAS:
 - judges usa SOLO los judgeIds generic_specialist (rigor conceptual), generic_praxis
   (aplicabilidad y restricciones reales) y generic_teacher (comprension y claridad).
   Los sessionLens deben respetar ese reparto de lentes, no repetirse entre si.
+- La respuesta ideal y los errores fatales SOLO pueden usar hechos que esten en la
+  knowledgeBase que escribiste. Si un hecho no esta ahi, no lo menciones: cambia la
+  respuesta ideal, no agregues el hecho. Nada de cifras, estudios ni porcentajes
+  inventados.
 - Todo el texto en ${input.language}.`;
 }
 //# sourceMappingURL=sessionDraft.js.map
