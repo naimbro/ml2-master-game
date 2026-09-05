@@ -103,8 +103,11 @@ que hoy hace con `judgeFocus`.
 `commonMistakes`) en `src/types/game.ts:298`, pero **todas** las sesiones reales
 lo usan como texto corrido. El tipo pasa a `IdealAnswer | string`.
 
-Es deuda que ya existe y que este cambio obliga a pagar: sin ampliarlo,
-TypeScript rechaza lo que hace meses está en producción.
+Es deuda que ya existe y que este cambio destapa. Ojo con el motivo: **hoy nada
+falla**, porque `src/lib/courses.ts:117` carga los escenarios como `AnyJson` y el
+tipo nunca llega a chequearse contra el contenido. El problema es que el tipo
+miente sobre lo que hay en producción, y este cambio agrega una pantalla que lee
+ese campo.
 
 ## Qué NO se toca
 
