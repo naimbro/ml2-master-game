@@ -125,6 +125,11 @@ export function buildGenerationPrompt(input: SessionDraftInput): string {
       "level_0": "No responde o texto irrelevante"
     }`;
 
+  // El orden de las claves NO es cosmetico: gpt-4o escribe el JSON en el orden en
+  // que se le pide, asi que la knowledgeBase va primero y todo lo que tiene que
+  // estar anclado a ella —la respuesta ideal, la guia de evaluacion— se escribe
+  // despues. Al reves, la respuesta ideal saldria de la nada y el juez terminaria
+  // castigando al alumno que si leyo el material.
   return `Eres un diseñador instruccional experto en juegos educativos competitivos con evaluación por IA.
 
 Diseña una sesión de juego para la plataforma ML2. Los estudiantes responden por escrito, bajo presión de tiempo, a escenarios desafiantes; tres jueces IA evalúan cada respuesta con una rúbrica.
@@ -193,13 +198,14 @@ RESPONDE SOLO CON UN JSON VÁLIDO con esta estructura EXACTA, y en ESTE ORDEN de
 }
 
 REGLAS DURAS:
+- Genera las claves en el orden mostrado arriba: la knowledgeBase PRIMERO, antes de los escenarios.
 - Exactamente ${input.roundCount} escenarios.
 - Exactamente 3 dimensiones en la rúbrica, con pesos que suman 1.0.
 - Los weightFormula usan los MISMOS ids de las dimensiones.
 - judges usa SOLO los judgeIds generic_specialist (rigor conceptual), generic_praxis
   (aplicabilidad y restricciones reales) y generic_teacher (comprension y claridad).
   Los sessionLens deben respetar ese reparto de lentes, no repetirse entre si.
-- La respuesta ideal y los errores fatales SOLO pueden usar hechos que esten en la
+- La respuesta ideal, los must_hit y los errores fatales SOLO pueden usar hechos que esten en la
   knowledgeBase que escribiste. Si un hecho no esta ahi, no lo menciones: cambia la
   respuesta ideal, no agregues el hecho. Nada de cifras, estudios ni porcentajes
   inventados.
