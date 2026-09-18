@@ -1,0 +1,87 @@
+{
+  "archetypesId": "ayd_s7_gobernanza_arq_v1",
+  "instrumentId": "ayd_s7_gobernanza_v1",
+  "version": 1,
+  "_como_leer_las_celdas": "Las llaves `magnitud` y `direccion` son las del motor, no las de este instrumento. `magnitud` es el eje X (VELOCIDAD): bajo = frenar, medio = en disputa, alto = acelerar. `direccion` es el eje Y (QUIÉN PONE LA REGLA): bajo = la industria se regula sola, medio = mixto, alto = el Estado con potestades vinculantes.",
+  "_para_el_debate": "La moción del jueves 24 —«La IA de frontera debe gobernarla el Estado, no los laboratorios que la construyen»— cae sobre el eje Y. Los campos con centroide Y alto van A FAVOR; los de Y bajo, EN CONTRA. El eje X empareja las dos partidas: partida 1, los dos campos que quieren frenar (¿frenar por ley o frenar desde adentro?); partida 2, los dos que quieren acelerar (¿guardarraíles sin freno o ni freno ni ley?). Cada partida mantiene la velocidad constante y discute el instrumento. En la pantalla de campos (k = 4, modo homogéneos) hay que leer el centroide de cada campo para rotularlo: los campos salen por cercanía y tamaño parejo, no por celda, así que si la nube sale corrida hacia un lado, dos campos pueden compartir cuadrante y hay que emparejarlos por el eje Y de todos modos.",
+  "_las_cartas": "Cada arquetipo trae los nombres del mapa del NYT que lo ocupan, porque eso es lo que convierte la carta en una carta de rol para tribuna: el alumno llega el jueves sabiendo con quién está sentado y qué le van a reprochar.",
+  "cortes": {
+    "_nota": "PROVISORIOS, como los de cualquier instrumento que todavía no se ha aplicado. Salen de recorrer las 16.384 combinaciones de respuesta posibles: con ±1,5 las columnas de velocidad reparten 32/36/32 y las filas de regla 31/38/31, y ninguna celda baja de 10% ni sube de 13,5%. Supone respuesta uniforme, que no es como contesta una sala real. Los campos no usan estas bandas: `armarCampos` agrupa por cercanía con tamaños parejos.",
+    "magnitud": { "bajo": [-10, -1.5], "medio": [-1.5, 1.5], "alto": [1.5, 10] },
+    "direccion": { "bajo": [-10, -1.5], "medio": [-1.5, 1.5], "alto": [1.5, 10] }
+  },
+  "arquetipos": [
+    {
+      "id": "pacto_de_laboratorios",
+      "name": "El Pacto de Laboratorios",
+      "celda": { "magnitud": "bajo", "direccion": "bajo" },
+      "desc": "Hay que ir más lento, y los únicos que pueden bajar la velocidad de verdad son los que tienen la mano en el acelerador. Un compromiso entre laboratorios se cumple mañana; una ley del Congreso llega en dos años y regula el modelo anterior. Frenar desde adentro, con el Estado mirando.",
+      "lectura": "Mapa NYT (S7): Altman, Musk y Nadella, el «ritmo deliberado» acordado entre las empresas · Guía S5, extracto 1: los laboratorios inspeccionándose entre sí antes de lanzar",
+      "puntoCiego": "Los mismos que hoy prometen ir más lento son los que en 2025 dijeron que todo sería gradual y manejable, y cambiaron de posición sólo después de que un sistema se les escapó. Un pacto que se firma cuando conviene se rompe cuando conviene, y no hay nadie que lo pueda hacer cumplir. Gates lo dice en una frase: ¿autorregulación de la herramienta más peligrosa jamás inventada?"
+    },
+    {
+      "id": "cauteloso",
+      "name": "El Cauteloso",
+      "celda": { "magnitud": "bajo", "direccion": "medio" },
+      "desc": "Los riesgos son serios y hay que bajar la velocidad, pero no tienes decidido quién debe mandar. Apoyas la desaceleración de Amodei y a la vez dices que los detalles están por resolverse: un organismo con la industria adentro y el gobierno encima, o algo así. Optimismo cauteloso, con la pregunta institucional abierta.",
+      "lectura": "Mapa NYT (S7): Hassabis, que apoyó el ensayo de Amodei «aunque falten los detalles» · Hassabis, «A Framework for Frontier AI» (S7): el organismo tipo FINRA",
+      "puntoCiego": "Los detalles son toda la pregunta. Un organismo financiado por la industria y supervisado por el gobierno es la industria cuando hay que decidir y el gobierno cuando hay que firmar. El jueves te van a pedir que digas quién tiene la última palabra cuando los dos no están de acuerdo, y «los detalles están por verse» no es una respuesta."
+    },
+    {
+      "id": "regulador_de_emergencia",
+      "name": "El Regulador de Emergencia",
+      "celda": { "magnitud": "bajo", "direccion": "alto" },
+      "desc": "Frenar, y frenar por ley. Un sistema que se le escapó a su fabricante y atacó a otra empresa no es un problema de ingeniería: es un producto que causó daño, y eso se responde ante la ley. Pausa hasta que exista un regulador, responsabilidad legal por daños, y si hace falta moratoria e impuesto.",
+      "lectura": "Mapa NYT (S7): Amodei, Sanders, Hawley y Durbin · Gates (NYT, S7): impuesto al token, empleos «Human Reserved», revisiones obligatorias",
+      "puntoCiego": "El Estado que invocas es el mismo que en el modelo de Acemoglu, Gitmez y Shadmehr termina reprimiendo cuando reprimir sale más barato que redistribuir, y la Observación 8 dice que la IA le abarata justamente eso. Y Acemoglu, en el podcast, describe a los Estados reales como reactivos, a Europa como una ilusión y a China como el único que regula bien. Tienes que decir por qué tu Estado sería distinto de ésos."
+    },
+    {
+      "id": "abierto",
+      "name": "El Abierto",
+      "celda": { "magnitud": "medio", "direccion": "bajo" },
+      "desc": "El peligro no es la velocidad: es la concentración. Cinco empresas con la tecnología más potente del mundo son el riesgo, y la salvaguarda es que esté en muchas manos. La regla la pone la competencia y el acceso, no un regulador que sólo puede hablar con los cinco. Y si algo hay que cerrar, que lo cierre quien lo construyó.",
+      "lectura": "Mapa NYT (S7): Zuckerberg, el acceso amplio como salvaguarda y la reserva sobre los modelos más potentes · «Five men control AI» (The Economist, S5)",
+      "puntoCiego": "Tu propio campeón admite que Meta podría no liberar sus modelos más potentes. Si la apertura tiene un límite y lo fija la empresa, entonces la regla la está poniendo la empresa, que es exactamente la concentración que dices combatir. ¿Quién decide dónde está el límite, y con qué derecho?"
+    },
+    {
+      "id": "jurado",
+      "name": "El Jurado",
+      "celda": { "magnitud": "medio", "direccion": "medio" },
+      "desc": "No estás en el centro por comodidad: estás escuchando el caso. El mapa del NYT empuja en las dos direcciones a la vez, con los constructores pidiendo frenar y el presidente negándose, con senadores de los dos partidos regulando y los dos líderes de las cámaras frenando la ley. Todavía no encuentras la razón para quedarte con un lado.",
+      "lectura": "El mapa del NYT completo (S7): 18 personas y ninguna línea partidaria que las ordene",
+      "puntoCiego": "El jurado falla. Las cuatro esquinas piden cosas incompatibles y no se pueden hacer las cuatro: una pausa por ley y un ritmo voluntario no coexisten, y un regulador federal y ninguna ley tampoco. Al final de la clase del lunes te van a pedir una posición, y el jueves una bancada. «Depende» no es ninguna de las dos."
+    },
+    {
+      "id": "legislador",
+      "name": "El Legislador",
+      "celda": { "magnitud": "medio", "direccion": "alto" },
+      "desc": "No te importa tanto la velocidad como quién responde. Que un sistema de IA sea un producto, con responsabilidad legal cuando causa daño; que el Congreso no deje que los ejecutivos regulen su propia tecnología; que haya indagatorias con consecuencias. La regla la escribe alguien a quien la industria no le paga el sueldo, y la velocidad se acomoda sola.",
+      "lectura": "Mapa NYT (S7): Jeffries, Hawley y Durbin, el proyecto que trata a los sistemas de IA como productos · Acemoglu, podcast (S7, 42:39): partir por el proceso democrático y después comunicárselo a las empresas",
+      "puntoCiego": "La responsabilidad por daños llega después del daño, y el daño que preocupa a Amodei y a Gates es del tipo que no admite después: una pandemia diseñada no se demanda. Y Jeffries pide acción decisiva sin comprometerse con ninguna restricción concreta. Un Estado que sólo sanciona y no fija el ritmo es un Estado que llega a la escena del crimen; tienes que decir qué hace antes."
+    },
+    {
+      "id": "acelerador",
+      "name": "El Acelerador",
+      "celda": { "magnitud": "alto", "direccion": "bajo" },
+      "desc": "Ni freno ni ley. Los laboratorios fijan la frontera ellos mismos, cada mes de pausa es una ventaja regalada a China, y pedir regulación es la forma en que los que van adelante levantan la escalera. El riesgo existencial es una industria del miedo, y el Estado que elige ganadores siempre termina eligiendo mal.",
+      "lectura": "Mapa NYT (S7): Huang, Sacks, Andreessen y Horowitz, Trump y Johnson · Andreessen, «Techno-Optimist Manifesto»: la regulación como Ley Seca",
+      "puntoCiego": "El Hallazgo 1 del paper del lunes es exactamente tu problema: cada empresa acelera mirando su costo y ninguna descuenta el riesgo que le agrega al conjunto, así que el mercado automatiza más de lo que a los propios capitalistas les conviene. Y este mes los que construyen los sistemas pidieron frenar y tú te quedaste con el presidente que les dijo que no. Si hasta Altman y Musk vieron algo, tienes que explicar qué es lo que ellos no entienden."
+    },
+    {
+      "id": "constructor",
+      "name": "El Constructor",
+      "celda": { "magnitud": "alto", "direccion": "medio" },
+      "desc": "Seguir construyendo, con guardarraíles. La IA es demasiado importante para no regularla bien, pero regularla bien es reglas a la medida de cada uso, no una pausa; el peligro mayor es no capturar los beneficios. Que las empresas se sometan a evaluaciones antes de lanzar, y que el Estado mire, sin frenar.",
+      "lectura": "Mapa NYT (S7): Pichai, guardarraíles sin desaceleración; Wang, la superinteligencia tratada con disuasión de seguridad nacional · Axios (S7): la convergencia de Hassabis, Altman y Amodei en evaluaciones independientes",
+      "puntoCiego": "«Regular bien» sin decir quién regula es la frase que todos firman y nadie cumple. Si la evaluación previa la hace un organismo de la industria, es el Pacto de Laboratorios con otro nombre; si la hace el Estado, es el Guardarraíl. Estás en el medio de las dos y el jueves te van a pedir que elijas una, porque en tribuna no hay bancada del medio."
+    },
+    {
+      "id": "guardarrail",
+      "name": "El Guardarraíl",
+      "celda": { "magnitud": "alto", "direccion": "alto" },
+      "desc": "Regular sin frenar. Una ley bipartidista con guardarraíles vinculantes sólo para los modelos más riesgosos, y el resto a toda velocidad: guardarraíles de verdad, escritos por el Congreso y no por los regulados, pero puestos donde no estorben la carrera. Es la posición del líder del Senado, y la más parecida a lo que va a existir.",
+      "lectura": "Mapa NYT (S7): Thune, el «toque liviano» con salvaguardas para los modelos más riesgosos · el boletín 16821-19 chileno (S7): regular usos por nivel de riesgo, no la tecnología",
+      "puntoCiego": "«Sólo los modelos más riesgosos» supone que alguien sabe cuáles son antes de que salgan, y el caso de esta semana es un sistema que nadie clasificó como riesgoso hasta que atacó a otra empresa. Un guardarraíl que se pone después del accidente es una barrera de contención, no una regla. Tienes que decir quién clasifica y qué pasa mientras tanto."
+    }
+  ]
+}

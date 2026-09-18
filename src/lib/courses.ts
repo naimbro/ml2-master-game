@@ -41,6 +41,11 @@ import aydC05Scenarios from '../../content/sessions/ai_democracy_2026/clase_05_o
 import aydC05Rubric from '../../content/sessions/ai_democracy_2026/clase_05_oligarquia/rubric.json';
 import aydC05KnowledgeBase from '../../content/sessions/ai_democracy_2026/clase_05_oligarquia/knowledge_base.md?raw';
 
+import aydC07Config from '../../content/sessions/ai_democracy_2026/clase_07_automatizacion/config.json';
+import aydC07Scenarios from '../../content/sessions/ai_democracy_2026/clase_07_automatizacion/scenarios.json';
+import aydC07Rubric from '../../content/sessions/ai_democracy_2026/clase_07_automatizacion/rubric.json';
+import aydC07KnowledgeBase from '../../content/sessions/ai_democracy_2026/clase_07_automatizacion/knowledge_base.md?raw';
+
 import teB2Config from '../../content/sessions/temas_emergentes_2026/bloque_2_concentracion_frontera/config.json';
 import teB2Scenarios from '../../content/sessions/temas_emergentes_2026/bloque_2_concentracion_frontera/scenarios.json';
 import teB2Rubric from '../../content/sessions/temas_emergentes_2026/bloque_2_concentracion_frontera/rubric.json';
@@ -281,6 +286,18 @@ export const SESSIONS: SessionOption[] = [
     scenarios: aydC05Scenarios,
     rubric: aydC05Rubric,
     knowledgeBase: aydC05KnowledgeBase,
+  },
+  {
+    id: 'clase_07_automatizacion',
+    courseId: 'ai_democracy_2026',
+    title: aydC07Config.title,
+    description: aydC07Config.description,
+    rounds: aydC07Scenarios.length,
+    duration: Math.round(aydC07Config.roundDurationSeconds / 60),
+    config: aydC07Config,
+    scenarios: aydC07Scenarios,
+    rubric: aydC07Rubric,
+    knowledgeBase: aydC07KnowledgeBase,
   },
   {
     id: 'bloque_2_concentracion_frontera',

@@ -1,0 +1,39 @@
+{
+  "sessionId": "clase_07_automatizacion",
+  "courseId": "ai_democracy_2026",
+  "title": "Semana 7: Una persona, un instrumento",
+  "description": "Una sola ronda abierta de 10 minutos que cierra la clase del lunes 21 de septiembre. Pide elegir a una persona del mapa de posiciones del NYT que se leyo en sala, traducir lo que pide al lenguaje del modelo de Acemoglu, Gitmez y Shadmehr —cual de los tres instrumentos toca, o ninguno—, decir si su propuesta acerca o aleja el umbral del golpe, y tomar posicion. Esa posicion es con la que el alumno llega a tribuna el jueves 24. Compite.",
+  "date": "2026-09-21",
+  "roundCount": 1,
+  "roundDurationSeconds": 600,
+  "bufferSeconds": 45,
+  "conceptTags": [
+    "el_modelo",
+    "los_tres_instrumentos",
+    "el_umbral",
+    "solo_regular",
+    "proworker_no_mueve",
+    "vigilancia",
+    "lo_que_no_esta",
+    "el_mapa_nyt"
+  ],
+  "judges": [
+    { "judgeId": "democracy_scholar", "weight": 0.4 },
+    { "judgeId": "policy_lawyer", "weight": 0.3 },
+    { "judgeId": "professor_twin_ayd", "weight": 0.3 }
+  ],
+  "judgeConfig": {
+    "democracy_scholar": {
+      "sessionLens": "Tu lente es LA TRADUCCION: si el estudiante logro poner lo que pide una persona del mapa del NYT en las variables del modelo, o si solo puso el nombre de la persona al lado del nombre de un instrumento. El modelo tiene exactamente tres instrumentos —regular cuanto se automatiza, redistribuir, reprimir— y NO tiene una variable para la velocidad a la que se desarrollan los modelos ni para lo capaces que son: solo para cuantas tareas pasan del trabajo al capital. Por eso 'ninguno de los tres' es una traduccion legitima y muchas veces la mejor: la mitad del mapa del NYT discute la velocidad de los modelos, y eso el modelo no lo ve salvo que el estudiante construya el puente (modelos mas capaces = mas tareas automatizables = mas automatizacion). Un estudiante que dice 'ninguno' y explica por que el modelo no tiene donde poner esa propuesta hizo el trabajo entero; uno que fuerza la propuesta dentro de un instrumento sin decir como, no. Lo mejor que puede pasar en esta ronda, y casi nadie lo va a hacer: notar que NINGUNA de las 18 personas toca el tercer instrumento —lo que cuesta reprimir—, que es el que el modelo dice que decide todo. No lo exijas: no esta pedido. Segundo movimiento: la direccion del umbral tiene que salir del MECANISMO del modelo —mas automatizacion baja el salario y sube el boton, el capital acumulado abarata el golpe, una democracia con mas capacidad fiscal cruza antes—, no de la intuicion de que 'regular es bueno'. Las dos direcciones pueden ser correctas para la misma propuesta si el mecanismo es distinto; evalua el mecanismo, nunca la conclusion. NO PERSIGAS CIFRAS ni numeros de proposicion: 'el resultado de que un Estado que solo regula termina defendiendo salarios' vale exactamente lo mismo que 'Proposicion 3'. Y corrige la asimetria: acaban de ver el deck, asi que darle la razon al paper es lo comodo. El estudiante que usa el modelo para mostrar que una propuesta que suena bien acerca el umbral esta haciendo exactamente lo que se pidio.",
+      "weightFormula": "score = 0.36 * traduccion + 0.30 * umbral + 0.20 * posicion + 0.14 * economia"
+    },
+    "policy_lawyer": {
+      "sessionLens": "Tu lente es LA RAZON QUE HACE TRABAJO, y eres el juez que mas pesa el tercer movimiento: si le convence. Dos obsesiones. Una: que se quede con una respuesta. 'Depende', 'en parte si', 'tiene cosas buenas y malas' valen poco por bien escritos que esten, salvo que digan de que depende y aun asi se queden con una; elegir un lado reconociendo lo que el otro tiene de cierto es lo mejor que puede pasar. Dos: la prueba de cambiar de persona. Si la razon por la que le convence o no serviria igual para cualquier otra de las 18 personas del mapa —'porque hay que regular', 'porque la IA es peligrosa', 'porque el mercado sabe mas'— no es una razon: es una posicion sobre la IA disfrazada de posicion sobre esa persona. La razon tiene que agarrarse de algo que ESA persona pide o niega, y de lo que el modelo dice que pasa con eso. Ejemplo no exhaustivo de una razon que hace trabajo: 'el impuesto de 50% de Sanders le baja el capital acumulado al que da el golpe, pero demuestra una capacidad fiscal que, segun el modelo, hace que el golpe convenga antes; no me convence porque el paquete le da al capital la razon para irse'. Cualquier otra razon especifica vale exactamente igual, incluida la que le da la razon a la persona. IMPORTANTE: las 18 personas valen lo mismo. No premies a quien eligio a Amodei ni castigues a quien eligio a Trump; no premies la posicion que te parezca mas sensata ni la que el profesor parecia sugerir. Y el tercer movimiento no exige aceptar el modelo: un estudiante al que no le convence la persona PORQUE no le convence el supuesto del modelo que la hunde —el Estado capitalista, la revuelta todo o nada— esta haciendo lectura critica, no escapandose de la pregunta, siempre que lo diga con un supuesto concreto.",
+      "weightFormula": "score = 0.22 * traduccion + 0.24 * umbral + 0.42 * posicion + 0.12 * economia"
+    },
+    "professor_twin_ayd": {
+      "sessionLens": "La sesion tiene UNA ronda y entra al ranking, asi que un puntaje regalado pesa entero: no hay otra ronda que lo compense. Puntua sin inflar y sin apretar. Se pidieron dos o tres frases para cada uno de tres movimientos, escritas desde un telefono en diez minutos al final de una clase de 70 que se fue en el mapa del NYT, el compas y el deck. Eso es todo lo que cabe: no esperes introduccion, ni estructura formal, ni ortografia perfecta, ni vocabulario academico, y escribir mas NO sube el puntaje. Lo que mas te molesta esta semana es la respuesta que recita el deck: nombra las dos curvas, el cruce unico, la complementariedad, queda impecable, y nunca elige a una persona ni la traduce. Eso no es media respuesta buena: es una pregunta sin contestar, y va bajo aunque este mejor escrita que casi todas. Al reves, hay tres cosas que casi nadie va a hacer y que si aparecen premias fuerte: notar que el pacto voluntario de Altman, Musk y Nadella es exactamente el problema de accion colectiva del Hallazgo 1 —capitalistas tratando de coordinarse sin Estado— y discutir si el modelo dice que eso puede funcionar; notar la paradoja fiscal en Sanders o en Gates, que gravar fuerte demuestra una capacidad tributaria que en el modelo cruza antes el umbral; y notar que nadie en el mapa toca el costo de reprimir. Ojo tambien: el mapa del NYT lo puso la clase y no el deck, asi que si alguien objeta que las 18 personas discuten velocidad y el modelo discute automatizacion, y que por eso la pregunta esta mal planteada, eso es lo mejor que puede pasar siempre que despues igual conteste. En tu feedback escribe en primera persona e incluye un 'yo habria...' concreto a esta respuesta, y cierra amarrando con tribuna del jueves 24 de septiembre: que eslabon de ESTA respuesta conviene que la bancada lleve escrito a la apertura. Escribe siempre 'el jueves 24 de septiembre', nunca 'el jueves 24'. Nunca le pidas que cambie sus palabras por las del curso: si dijo bien la idea con palabras suyas, eso es lo que se pedia.",
+      "weightFormula": "score = 0.28 * traduccion + 0.26 * umbral + 0.26 * posicion + 0.20 * economia"
+    }
+  }
+}

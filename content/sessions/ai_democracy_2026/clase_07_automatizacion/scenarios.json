@@ -1,0 +1,60 @@
+[
+  {
+    "id": "ayd_c07_r1_una_persona_un_instrumento",
+    "order": 1,
+    "title": "Una persona, un instrumento",
+    "category": "Argumentación",
+    "difficulty": "hard",
+    "ranked": true,
+    "durationSeconds": 600,
+    "conceptTags": [
+      "el_modelo",
+      "los_tres_instrumentos",
+      "el_umbral",
+      "solo_regular",
+      "proworker_no_mueve",
+      "vigilancia",
+      "lo_que_no_esta",
+      "el_mapa_nyt"
+    ],
+    "context": "Hoy vimos el modelo de Acemoglu, Gitmez y Shadmehr. Un «Estado capitalista» con **tres instrumentos**: regular cuánto se automatiza, redistribuir y reprimir. Y dos resultados incómodos: **el instrumento disponible determina el resultado** (un Estado al que sólo le dejan regular termina, por cálculo, defendiendo salarios), y orientar la IA en dirección *proworker* **no mueve el umbral** del golpe.\n\nAl empezar la clase leíste el mapa del *New York Times*: 18 personas que le piden o le niegan algo al Estado. Frenar, acelerar, un impuesto de 50%, una moratoria a los centros de datos, responsabilidad legal por daños, un pacto voluntario entre laboratorios, ninguna ley.",
+    "question": "Elige a **una** persona del mapa.\n\n**(1) Traduce** lo que pide, o lo que rechaza, a los instrumentos del modelo: ¿toca cuánto se automatiza, cuánto se redistribuye, o cuánto cuesta reprimir? ¿O ninguno de los tres?\n\n**(2)** Según el modelo, ¿su propuesta **acerca o aleja el umbral** del golpe, y por qué?\n\n**(3) ¿Te convence?** Di por qué, con una razón que no valdría para cualquier otra persona del mapa. Esa es la posición con la que llegas a tribuna el jueves.\n\nDos o tres frases para cada cosa.",
+    "judgeFocus": "La respuesta tiene TRES MOVIMIENTOS y se evaluan por separado: (1) traducir lo que pide una persona concreta del mapa a los instrumentos del modelo, incluida la traduccion 'ninguno'; (2) decir hacia donde mueve el umbral del golpe, con el mecanismo del modelo; (3) tomar posicion con una razon que se agarre de ESA persona. Los tres hacen falta: una respuesta que hace uno o dos, por impecable que sea, dejo la pregunta a medio contestar.\n\nMOVIMIENTO 1 — LA TRADUCCION. El modelo tiene tres instrumentos: cuanto se automatiza (que tareas pasan del trabajo al capital), cuanto se redistribuye (impuestos y bienes publicos que el trabajador pierde si se rebela) y cuanto cuesta reprimir. NO tiene una variable para la velocidad a la que se desarrollan los modelos ni para lo capaces que son. Por eso 'ninguno de los tres' es una traduccion legitima y muchas veces la mejor: buena parte del mapa discute velocidad, y el modelo no la ve. Lo que vale es que el estudiante DIGA COMO llega de la propuesta al instrumento —o por que no llega—. EJEMPLOS NO EXHAUSTIVOS de traducciones que hacen trabajo, y hay muchas mas que valen exactamente igual: el impuesto al token de Gates encarece automatizar, o sea regula cuanto se automatiza; el impuesto de 50% de Sanders es redistribucion, y la moratoria a los centros de datos es regular la automatizacion por la puerta de la infraestructura; la responsabilidad por producto de Hawley y Durbin encarece automatizar mal, o no toca ninguno; el 'no intervenir' de Trump deja el nivel de mercado, que el Hallazgo 1 dice que automatiza de mas; el pacto voluntario de Altman, Musk y Nadella es un intento de los capitalistas de coordinarse sin Estado, que es justo lo que el Hallazgo 1 dice que no pueden hacer solos; 'frenar los modelos' de Amodei solo entra al modelo si el estudiante construye el puente (modelos mas capaces = mas tareas automatizables). Cualquier traduccion verdadera que no este en esta lista vale igual. LO QUE NO CUENTA: poner el nombre de la persona al lado del nombre de un instrumento sin decir como se conectan ('Sanders: redistribuir').\n\nMOVIMIENTO 2 — EL UMBRAL. Lo que se evalua es el MECANISMO, nunca la conclusion. Las dos direcciones pueden ser correctas para la misma propuesta si el mecanismo es distinto, y decir que no mueve el umbral tambien es una respuesta —es exactamente lo que el modelo dice de la IA proworker—. Mecanismos del modelo, sin que sea lista cerrada: mas automatizacion baja el salario que el trabajador arriesga y sube el capital que se reparte, y las dos cosas acercan la revuelta; el capital acumulado abarata proporcionalmente el golpe; una democracia con mas capacidad fiscal le sale mas cara al capital y cruza antes; bajar el costo de reprimir agrava todo; un Estado que solo puede regular maximiza salarios. Lo mejor que puede pasar aca: notar la paradoja fiscal en una propuesta que grava fuerte (Sanders, Gates): reduce el capital que da el golpe y a la vez demuestra la capacidad tributaria que, segun la Proposicion 12, hace que el golpe convenga antes. NO EXIJAS numeros de proposicion ni de lamina: el mecanismo dicho en palabras vale exactamente lo mismo.\n\nMOVIMIENTO 3 — LA POSICION. Se evaluan dos cosas: que se quede con una respuesta, y que la razon se agarre de ESA persona. La prueba es cambiar de persona: si la razon serviria igual para cualquiera de las otras 17 —'porque hay que regular', 'porque la IA es peligrosa', 'porque el mercado sabe mas'— no es una razon. TODAS LAS PERSONAS VALEN LO MISMO Y LAS DOS POSICIONES VALEN 100: no premies a quien eligio a Amodei ni castigues a quien eligio a Trump o a Sacks, y no premies la posicion que te parezca mas sensata. Y no le convence PORQUE no le convence un supuesto del modelo —el Estado capitalista, la revuelta todo o nada, la ausencia de tribunales— es lectura critica, no evasion, siempre que nombre el supuesto.\n\nLO QUE NO CUENTA EN NINGUN MOVIMIENTO: recitar el deck —las dos curvas, el cruce unico, la complementariedad, las horcas y los fusiles— sin elegir nunca a una persona ni traducirla. Es el error mas comun y el mas enganoso, porque usa el vocabulario de la clase y se lee muy bien. Tampoco cuenta contestar si la IA es buena o mala, ni si hay que regular en general, ni elegir a dos o tres personas y no traducir a ninguna.\n\nTRES ADVERTENCIAS. (1) El mapa del NYT lo puso la clase y NO estaba en el deck: si un estudiante objeta que las 18 personas discuten velocidad y el modelo discute automatizacion, y que por eso la pregunta calza mal, eso es lo mejor que puede pasar, siempre que despues igual traduzca y conteste. Objetar el enunciado nunca baja el puntaje. (2) NO exijas las lecturas de la casa —el podcast, The Economist sobre el boom de empleo, la entrevista a Gates—: son la tarea para el jueves y el lunes nadie las ha leido. Si aparecen bien usadas, premialas; si no aparecen, no falta nada. (3) Notar que ninguna de las 18 personas toca el costo de reprimir, que es el instrumento que el modelo dice que decide todo, es lo mejor que puede pasar en toda la sesion. No lo exijas: no esta pedido.\n\nSe pidieron DOS O TRES FRASES PARA CADA MOVIMIENTO. Eso es todo lo que cabe: se escribe desde un telefono, en diez minutos, al final de una clase de 70. No esperes introduccion, ni estructura formal, ni ortografia perfecta, ni vocabulario academico, y escribir mas NO sube el puntaje.",
+    "evaluationGuide": {
+      "must_hit": [
+        "Elige a UNA persona del mapa y la nombra",
+        "Traduce lo que esa persona pide o rechaza a un instrumento del modelo, o explica por que no cabe en ninguno",
+        "Dice hacia donde mueve el umbral con un mecanismo del modelo, no con una intuicion",
+        "Se queda con una posicion, con una razon que no serviria para otra persona del mapa"
+      ],
+      "fatal_errors": [
+        "Recita el modelo sin elegir nunca a una persona ni traducir nada",
+        "Pone el nombre de la persona al lado de un instrumento sin decir como se conectan",
+        "Declara la direccion del umbral sin ningun mecanismo, o con uno que el modelo no tiene",
+        "Da como razon algo que valdria para cualquiera de las 18 personas",
+        "Le atribuye al modelo algo que no dice, o inventa una propuesta que la persona no hizo"
+      ],
+      "partial_credit": {
+        "solo_traduccion": "Traduce impecablemente y nunca dice hacia donde va el umbral ni toma posicion: 100 en traduccion, 0 en umbral, 0 en posicion. Una pregunta a un tercio de contestar, no un tercio de respuesta buena",
+        "umbral_sin_mecanismo": "Traduce bien y dice 'acerca' o 'aleja' sin decir por que pasa eso en el modelo: 40 en umbral",
+        "ninguno_sin_explicar": "Dice que la propuesta no cabe en ningun instrumento y no dice por que: 40 en traduccion. Dicho con la razon —el modelo no tiene variable para la velocidad de los modelos—: 100",
+        "no_decide": "Los dos primeros movimientos bien hechos y termina en 'depende' o 'tiene cosas buenas y malas': 40 en posicion",
+        "razon_intercambiable": "Decide con claridad y la razon es 'porque hay que regular' o 'porque el mercado sabe mas': 40 en posicion",
+        "dos_personas": "Elige a dos personas y traduce a las dos a medias: se evalua la mejor de las dos traducciones y se baja un nivel en economia",
+        "deck_recitado": "Conceptos del deck correctos que no sostienen ningun paso del argumento: 40 en anclaje dentro de traduccion y umbral, sin tocar posicion",
+        "error_de_hecho": "El argumento entero funciona y se equivoca en un detalle del mapa (le atribuye a Durbin lo de Hawley, que es el mismo proyecto): sin castigo. Le atribuye a una persona una propuesta que no hizo: 20 en traduccion"
+      },
+      "nice_to_have": [
+        "Nota que el modelo no tiene variable para la velocidad de los modelos y construye o rechaza el puente explicitamente",
+        "Nota que el pacto voluntario entre laboratorios es el problema de accion colectiva del Hallazgo 1 y discute si el modelo dice que puede funcionar",
+        "Nota la paradoja fiscal: gravar fuerte demuestra una capacidad tributaria que en el modelo cruza antes el umbral",
+        "Nota que ninguna de las 18 personas toca el costo de reprimir",
+        "Usa la Observacion 8 —la IA abarata la vigilancia— para leer una propuesta de 'no intervenir'",
+        "No le convence la persona porque no le convence un supuesto concreto del modelo, y lo nombra",
+        "Elige un lado reconociendo lo que el otro tiene de cierto",
+        "Objeta que la pregunta calza mal —velocidad contra automatizacion— y despues igual contesta"
+      ]
+    },
+    "idealAnswer": "Elijo a Sanders. Lo que pide es casi todo redistribucion: el impuesto de 50% y el fondo publico son la salida redistributiva del modelo, y la moratoria a los centros de datos es regular cuanto se automatiza por la puerta de la infraestructura. Lo unico que no cabe es la prohibicion de la superinteligencia: el modelo no tiene una variable para lo capaces que son los modelos, solo para cuantas tareas hacen.\n\nSegun el modelo su paquete empuja para los dos lados. Reducir el capital acumulado y frenar la automatizacion aleja el umbral, porque el golpe se abarata con el capital y la revuelta se acerca con la automatizacion. Pero una democracia capaz de cobrar 50% a las empresas mas grandes del mundo es exactamente la democracia fiscalmente fuerte que, en la seccion 8, cruza antes: le sale tan cara al capital que derrocarla conviene.\n\nNo me convence, y no porque sea maximalista: porque el paquete usa dos de los tres instrumentos y no toca el tercero. No dice nada sobre lo que cuesta reprimir, que es lo que el modelo dice que decide todo, y una moratoria y un impuesto le dan al capital la razon para irse sin hacerle mas caro quedarse a la fuerza. Con eso llego el jueves: el Estado tiene que gobernar la IA, pero el instrumento que importa no esta en la lista de nadie."
+  }
+]

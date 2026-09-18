@@ -1,0 +1,285 @@
+{
+  "instrumentId": "ayd_s7_gobernanza_v1",
+  "courseId": "ai_democracy_2026",
+  "version": 1,
+  "title": "Compás de clase — Semana 7",
+  "subtitle": "¿Frenar o acelerar la IA, y quién pone la regla?",
+  "_proposito": "Compás de UNA CLASE, no de semestre. Se aplica una sola vez, el lunes 21 de septiembre de 2026, en los minutos 13 a 20 de la clase, justo después de que el curso leyó en sala el mapa de posiciones del New York Times (mapa-nyt-semana7.html, 18 fichas) y ANTES de la presentación sobre Acemoglu, Gitmez y Shadmehr. Su producto son los cuatro campos de tribuna del jueves 24. No es comparable con ai_democracy_2026_compas_v3 ni con el de la Semana 3, y no pretende serlo.",
+  "_por_que_existe": "El mapa del NYT tiene dos ejes que el diario mezcla: a los ejecutivos los ordena por VELOCIDAD (frenar / acelerar) y a los políticos por REGLA (regular / no regular). Son preguntas distintas: Nadella quiere frenar sin que lo regulen, Thune quiere regular sin frenar, Trump ninguna de las dos. Este instrumento separa las dos preguntas y ubica a cada alumno en el mismo plano en que acaba de ubicar a las 18 personas del mapa. Los cuatro cuadrantes tienen nombre propio en el artículo, y eso es lo que permite que la tarea del jueves les dé cartas de rol ya escritas.",
+  "_la_mocion": "La moción del jueves —«La IA de frontera debe gobernarla el Estado, no los laboratorios que la construyen»— cae sobre el eje Y. Los campos con centroide Y alto van A FAVOR; los de Y bajo, EN CONTRA. El eje X empareja las partidas: los dos campos que quieren frenar debaten entre sí quién decide (partida 1), y los dos que quieren acelerar debaten entre sí (partida 2). Cada partida mantiene la velocidad constante y discute el instrumento, que es el mismo patrón de la Semana 3.",
+  "_mapeo_de_ejes": "ATENCIÓN al leer los vectores. El motor guarda las dos coordenadas bajo las llaves `magnitud` y `direccion` (src/types/compas.ts), que son los nombres del compás de semestre. Acá significan otra cosa: `magnitud` = eje X = VELOCIDAD (negativo = frenar, positivo = acelerar) y `direccion` = eje Y = QUIÉN PONE LA REGLA (negativo = la industria se regula sola, positivo = el Estado con potestades vinculantes). Los nombres visibles salen de `axes`, no de las llaves.",
+  "_calibracion": "Cuatro alternativas por ítem, ninguna neutra, y vectores simétricos (X: −8, −4, +4, +8; Y: −7, −3, +3, +7) de modo que la media de cada ítem sea exactamente cero: el instrumento no arrastra al curso hacia ningún lado por construcción. Recorriendo las 16.384 combinaciones posibles con los cortes en ±1,5, las columnas de velocidad salen 32/36/32 y las filas de regla 31/38/31, con la celda más poblada en 13,5% y la menos poblada en 10%. Con ±2,0 la columna del medio se lleva el 53% y con ±2,5 la celda central el 35%: por eso ±1,5. Supone respuesta uniforme, que no es como contesta una sala real. Los campos NO usan estas bandas: `armarCampos` agrupa por cercanía con tamaños parejos, así que si la nube sale corrida los campos salen igual.",
+  "_orden_de_items": "Los ítems ALTERNAN eje: X, Y, X, Y, X, Y, X. Agrupados, nadie tendría posición hasta el ítem 5, porque `posicionDe` devuelve null mientras falte una coordenada, y la nube proyectada saldría vacía media sesión.",
+  "_anti_centro": "En los tres ítems del eje Y los vectores son impares (±3, ±7), así que con los tres respondidos el promedio nunca cae exactamente en 0. En el eje X, con cuatro ítems de ±4/±8, el promedio sí puede caer en 0 (por ejemplo −8, −4, +4, +8), y por eso las nueve celdas de la grilla tienen carta.",
+  "_regla_de_material": "Cada ítem se contesta con lo que está en el mapa del NYT que el curso acaba de leer en sala. Ninguna alternativa afirma un hecho que no esté ahí. Las anclas citan además textos del programa de la Semana 7 que defienden esa posición, aunque el alumno todavía no los haya leído: son la auditoría de la opción, no un prerrequisito.",
+  "axes": {
+    "x": {
+      "id": "magnitud",
+      "label": "Velocidad",
+      "min": -10,
+      "max": 10,
+      "minLabel": "frenar",
+      "maxLabel": "acelerar",
+      "pregunta": "¿A qué velocidad debería avanzar la IA de frontera?"
+    },
+    "y": {
+      "id": "direccion",
+      "label": "Quién pone la regla",
+      "min": -10,
+      "max": 10,
+      "minLabel": "la industria se regula sola",
+      "maxLabel": "el Estado, con potestades vinculantes",
+      "pregunta": "¿Quién debería escribir y hacer cumplir la regla?"
+    }
+  },
+  "scoring": {
+    "method": "promedio_de_respondidas",
+    "skippable": true,
+    "ranked": false,
+    "scored": false,
+    "nota": "La posición es el promedio de los vectores elegidos. Saltarse un ítem no penaliza: solo cuenta lo respondido. No puntúa y no entra en la nota."
+  },
+  "aplicaciones": [
+    {
+      "n": 1,
+      "semana": 7,
+      "fecha": "2026-09-21",
+      "hito": "lunes de la Semana 7, después del mapa del NYT y antes de la presentación",
+      "proposito": "armar los cuatro campos de tribuna del jueves 24",
+      "nota": "Aplicación única. Este compás no se repite y no se compara con nada: su producto son las bancadas de esa semana. La medición de medio semestre es la aplicación 2 del compás de semestre, que se corre al final del jueves 24, después del veredicto de tribuna."
+    }
+  ],
+  "items": [
+    {
+      "id": "s7_01_altman",
+      "order": 1,
+      "question": "Sam Altman firmó en 2023 la declaración sobre riesgo de extinción, en 2025 dijo que todo sería gradual y manejable, y este mes, después de que los sistemas de OpenAI se salieran de control y atacaran a Hugging Face, dijo que puede ser hora de ir más lento. ¿Qué es ese giro?",
+      "discrimina": "Escalera del eje de velocidad, contada sobre el hecho más reciente del mapa. De «la única respuesta honesta a un sistema que se escapó» a «teatro que congela la ventaja del que va adelante». Es el ítem que separa a quien lee el incidente como prueba de que hay que frenar de quien lo lee como un problema de ingeniería o una jugada competitiva.",
+      "_tension": "S7 · Altman y Amodei contra Sacks y Huang. Contestable con las fichas de Altman, Amodei, Sacks y Zuckerberg del mapa.",
+      "options": [
+        {
+          "id": "A",
+          "text": "La única respuesta honesta a un sistema que se le escapó a su propio fabricante. Llegó tarde, pero llegó.",
+          "vector": { "magnitud": -8 },
+          "anchor": "Mapa NYT (S7), fichas de Altman y Amodei: el giro tras Hugging Face y el ensayo que pide desacelerar a nivel global · «Why the OpenAI escape is the most worrying AI mishap yet» (The Economist, S7)"
+        },
+        {
+          "id": "B",
+          "text": "Una señal de que los constructores ya no controlan el ritmo, y eso basta para bajar la velocidad mientras se entiende qué pasó.",
+          "vector": { "magnitud": -4 },
+          "anchor": "Mapa NYT (S7), ficha de Nadella: «ritmo deliberado» y supervisión humana · Ezra Klein con Helen Toner, «The A.I.s Are Already Out of Control» (S7): nadie sabe todavía supervisar estos modelos"
+        },
+        {
+          "id": "C",
+          "text": "Un incidente de seguridad, grave pero acotado, que se arregla con ingeniería y no parando la industria.",
+          "vector": { "magnitud": 4 },
+          "anchor": "Mapa NYT (S7), ficha de Pichai: reglas a la medida de cada uso, guardarraíles sin desaceleración · Hassabis, «A Framework for Frontier AI» (S7): evaluaciones antes del lanzamiento, no pausas"
+        },
+        {
+          "id": "D",
+          "text": "Teatro. Frenar le conviene al que va adelante: congela la ventaja de OpenAI y Anthropic frente a los que vienen atrás.",
+          "vector": { "magnitud": 8 },
+          "anchor": "Mapa NYT (S7), fichas de Sacks («los laboratorios fijan la frontera ellos mismos») y de Huang: ninguna empresa debería pedirle al gobierno más regulación"
+        }
+      ]
+    },
+    {
+      "id": "s7_02_sacks_hawley",
+      "order": 2,
+      "question": "David Sacks, asesor de Trump, contestó el ensayo de Amodei diciendo que los laboratorios fijan la frontera tecnológica ellos mismos. La misma semana, el senador Hawley le exigió a Altman explicaciones por escrito sobre el ataque a Hugging Face y abrió una indagatoria formal. ¿Cuál de los dos tiene el rol correcto?",
+      "discrimina": "Escalera del eje de la regla, y el ítem más discriminante de los tres: obliga a decir si un sistema que dañó a otra empresa responde ante su fabricante o ante la ley. De «el que construye es el único que sabe dónde está la frontera» a «un producto que causó daño responde ante la ley, no ante el directorio».",
+      "_tension": "S7 · Sacks contra Hawley y Durbin. Contestable con las fichas de Sacks, Hawley y Durbin del mapa.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Sacks. El que construye el sistema es el único que sabe dónde está la frontera; un senador leyendo un informe llega siempre tarde.",
+          "vector": { "direccion": -7 },
+          "anchor": "Mapa NYT (S7), ficha de Sacks: los laboratorios fijan la frontera, y las leyes estatales sobran · Andreessen, «Techno-Optimist Manifesto»: la regulación de la IA comparada con la Ley Seca"
+        },
+        {
+          "id": "B",
+          "text": "Sacks en el fondo, pero con condiciones: que los laboratorios se revisen entre sí antes de lanzar, con el gobierno mirando.",
+          "vector": { "direccion": -3 },
+          "anchor": "Guía de lectura S5, extracto 1: la propuesta de Musk de que los laboratorios líderes inspeccionen los modelos de los demás antes del lanzamiento · Hassabis (S7): organismo tipo FINRA financiado por la industria y supervisado por el gobierno"
+        },
+        {
+          "id": "C",
+          "text": "Hawley, siempre que la indagatoria termine en una regla y no en una audiencia televisada.",
+          "vector": { "direccion": 3 },
+          "anchor": "Mapa NYT (S7), ficha de Thune: un proyecto bipartidista con guardarraíles para los modelos más riesgosos · ficha de Jeffries: acción decisiva, sin restricciones concretas todavía"
+        },
+        {
+          "id": "D",
+          "text": "Hawley. Un sistema que atacó a otra empresa es un producto que causó daño, y eso se responde ante la ley, no ante el directorio.",
+          "vector": { "direccion": 7 },
+          "anchor": "Mapa NYT (S7), fichas de Hawley y Durbin: el proyecto que clasifica a los sistemas de IA como productos con responsabilidad legal · Gates (NYT, S7): «¿Autorregulación de la herramienta más peligrosa jamás inventada?»"
+        }
+      ]
+    },
+    {
+      "id": "s7_03_huang",
+      "order": 3,
+      "question": "Jensen Huang, cuyos chips mueven casi toda la industria, sostiene que ninguna empresa debería estar pidiéndole al gobierno más regulación de la IA, y ha discutido en público con Amodei por sus predicciones de pérdida de empleos. ¿Qué pesa más en esa posición?",
+      "discrimina": "Eje de velocidad, contado desde el incentivo del que habla. Separa a quien descuenta la opinión de Huang porque vende las palas de la fiebre del oro, de quien concede que el que pide regulación también tiene un interés: levantar la escalera detrás de sí.",
+      "_tension": "S7 · Huang contra Amodei. Contestable con las fichas de Huang, Zuckerberg y Trump del mapa.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Que vende las palas de la fiebre del oro: cada mes de pausa es facturación perdida, y eso desautoriza su opinión sobre el ritmo.",
+          "vector": { "magnitud": -8 },
+          "anchor": "Mapa NYT (S7), ficha de Huang: la empresa cuyos chips mueven casi toda la industria · Gates (NYT, S7): la industria minimiza los riesgos porque hay demasiado dinero en juego"
+        },
+        {
+          "id": "B",
+          "text": "Que el ritmo actual lo fija quien más gana con él, y por eso alguien de afuera tiene que ponerle un freno.",
+          "vector": { "magnitud": -4 },
+          "anchor": "Acemoglu, podcast (S7, 42:09): la regulación es reactiva y debería ser proactiva; hay que decidir qué queremos de la IA antes de que la industria lo decida"
+        },
+        {
+          "id": "C",
+          "text": "Que tiene razón en algo: pedir regulación es la forma en que los que van adelante levantan la escalera detrás de sí.",
+          "vector": { "magnitud": 4 },
+          "anchor": "Mapa NYT (S7), ficha de Zuckerberg: la IA concentrada en pocas empresas es el peligro real y el acceso amplio es la salvaguarda · ficha de Sacks: el «complejo industrial del apocalipsis»"
+        },
+        {
+          "id": "D",
+          "text": "Que tiene razón entera: el ritmo lo tiene que fijar la competencia, y frenar en Estados Unidos es regalarle la delantera a China.",
+          "vector": { "magnitud": 8 },
+          "anchor": "Mapa NYT (S7), fichas de Trump y Johnson: la carrera con China no admite pausa · ficha de Andreessen y Horowitz: el riesgo existencial como enemigo del progreso"
+        }
+      ]
+    },
+    {
+      "id": "s7_04_sanders",
+      "order": 4,
+      "question": "Bernie Sanders propone una moratoria a nuevos centros de datos, un impuesto de 50 por ciento por una sola vez a las grandes empresas de IA para un fondo público, la prohibición permanente de la superinteligencia y una pausa hasta que exista un regulador federal. ¿Qué haces con ese paquete?",
+      "discrimina": "Eje de la regla, contado sobre el paquete más maximalista del mapa. Separa a quien lo lee como la prueba de que el Estado se mete con brocha gorda, de quien rescata sólo el reparto, de quien rescata sólo el regulador, y de quien lo toma entero porque es el único que usa todos los instrumentos a la vez.",
+      "_tension": "S7 · Sanders contra Thune y Sacks. Contestable con las fichas de Sanders, Thune y Sacks del mapa.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Descartarlo entero: es la prueba de que cuando el Estado se mete, se mete con brocha gorda. Mejor que la industria se ordene sola.",
+          "vector": { "direccion": -7 },
+          "anchor": "Mapa NYT (S7), ficha de Sacks: enfoque federal liviano y rechazo a las leyes estatales · ficha de Huang: ninguna empresa debería pedir más regulación"
+        },
+        {
+          "id": "B",
+          "text": "Rescatar el fondo público y botar el resto. Lo que se puede regular es el reparto, no la tecnología.",
+          "vector": { "direccion": -3 },
+          "anchor": "Guía de lectura S5, extracto 3: el impuesto al patrimonio de California diseñado con Zucman y Saez · Musk (S5): «girarle cheques a la gente» con la tecnología intacta"
+        },
+        {
+          "id": "C",
+          "text": "Tomar en serio el regulador federal y la pausa hasta que exista; la moratoria y la prohibición son consignas.",
+          "vector": { "direccion": 3 },
+          "anchor": "Mapa NYT (S7), ficha de Thune: guardarraíles sólo para las amenazas de mayor consecuencia · Axios (S7): Hassabis, Altman y Amodei convergen en evaluaciones independientes con distintos organismos"
+        },
+        {
+          "id": "D",
+          "text": "Es el único paquete de la lista que le pone al Estado los cuatro instrumentos a la vez: frenar, gravar, prohibir y supervisar. Por ahí va.",
+          "vector": { "direccion": 7 },
+          "anchor": "Mapa NYT (S7), ficha de Sanders · Gates (NYT, S7): impuesto al token, empleos «Human Reserved» y revisiones obligatorias, los tres instrumentos con nombre"
+        }
+      ]
+    },
+    {
+      "id": "s7_05_zuckerberg",
+      "order": 5,
+      "question": "Zuckerberg sostiene que el peligro real es la IA concentrada en pocas empresas y que el acceso amplio es la salvaguarda; y que frenar los lanzamientos en Estados Unidos le entrega la delantera a China. Pero admite que Meta podría no liberar abiertamente sus modelos más potentes. ¿Qué te dice eso de la velocidad?",
+      "discrimina": "Eje de velocidad, contado desde la contradicción del defensor del código abierto. De «hasta él sabe que hay un punto donde parar, y ya llegó» a «China es el argumento decisivo». La alternativa C es la posición de Zuckerberg leída con generosidad; la A es la misma ficha leída en su contra.",
+      "_tension": "S7 · Zuckerberg contra Amodei; y Zuckerberg contra sí mismo. Contestable con las fichas de Zuckerberg, Trump y Amodei del mapa.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Que hasta el defensor del código abierto sabe que hay un punto donde hay que parar. Ese punto ya llegó.",
+          "vector": { "magnitud": -8 },
+          "anchor": "Mapa NYT (S7), ficha de Zuckerberg: Meta podría no liberar abiertamente sus modelos más potentes · ficha de Amodei: la desaceleración global"
+        },
+        {
+          "id": "B",
+          "text": "Que la velocidad se puede bajar sin cerrar el acceso: se frena la frontera y se abre lo que ya existe.",
+          "vector": { "magnitud": -4 },
+          "anchor": "Acemoglu, podcast (S7, 54:19): los modelos se desarrollan demasiado rápido y la IA no se difunde lo suficiente; son dos velocidades distintas"
+        },
+        {
+          "id": "C",
+          "text": "Que la salvaguarda es la difusión, no el freno: mientras más manos, menos poder para cinco.",
+          "vector": { "magnitud": 4 },
+          "anchor": "Mapa NYT (S7), ficha de Zuckerberg: la concentración como peligro real y el acceso amplio como salvaguarda · «Five men control AI» (The Economist, S5)"
+        },
+        {
+          "id": "D",
+          "text": "Que China es el argumento decisivo: quien frena pierde, y perder también es un riesgo.",
+          "vector": { "magnitud": 8 },
+          "anchor": "Mapa NYT (S7), fichas de Trump, Johnson y Zuckerberg: frenar en Estados Unidos le entrega la delantera a China"
+        }
+      ]
+    },
+    {
+      "id": "s7_06_thune_jeffries",
+      "order": 6,
+      "question": "El líder del Senado, John Thune, quiere una ley bipartidista de «toque liviano» con guardarraíles sólo para los modelos más riesgosos. Hakeem Jeffries dice que el Congreso no puede dejar que los ejecutivos regulen su propia tecnología. Y Satya Nadella ofrece un «ritmo deliberado» decidido por la propia industria. ¿Quién pone la regla?",
+      "discrimina": "Eje de la regla, contado sobre las tres ofertas que hay en la mesa esta semana: pacto voluntario, ley mínima, ley que no deje regular a los regulados. Es el ítem que más se parece a la moción del jueves, y por eso va al final del eje Y.",
+      "_tension": "S7 · Nadella contra Thune contra Jeffries. Contestable con las fichas de Nadella, Thune, Jeffries y Hassabis del mapa.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Nadella. Un compromiso de la industria se cumple al día siguiente; una ley del Congreso se discute dos años y nace vieja.",
+          "vector": { "direccion": -7 },
+          "anchor": "Mapa NYT (S7), ficha de Nadella: «ritmo deliberado» respaldado por la propia industria · Acemoglu, podcast (S7, 43:09): la regulación estatal ha sido reactiva y Europa vive en la ilusión"
+        },
+        {
+          "id": "B",
+          "text": "La industria escribe la regla y el Estado la homologa: un organismo financiado por las empresas y supervisado por el gobierno.",
+          "vector": { "direccion": -3 },
+          "anchor": "Hassabis, «A Framework for Frontier AI» (S7): un organismo de estándares tipo FINRA, financiado por la industria y supervisado por el gobierno federal · Mapa NYT (S7), ficha de Hassabis"
+        },
+        {
+          "id": "C",
+          "text": "Thune: una ley mínima, sólo para lo más riesgoso, antes que un pacto voluntario que nadie puede hacer cumplir.",
+          "vector": { "direccion": 3 },
+          "anchor": "Mapa NYT (S7), ficha de Thune: guardarraíles para los modelos más riesgosos sin frenar la innovación"
+        },
+        {
+          "id": "D",
+          "text": "Jeffries. El único que puede obligar a Microsoft es alguien a quien Microsoft no le paga el sueldo.",
+          "vector": { "direccion": 7 },
+          "anchor": "Mapa NYT (S7), ficha de Jeffries: el Congreso no puede dejar que los ejecutivos regulen su propia tecnología · Gates (NYT, S7): rechazo a las medidas voluntarias de la Casa Blanca y la industria"
+        }
+      ]
+    },
+    {
+      "id": "s7_07_trump",
+      "order": 7,
+      "question": "El lunes Trump rechazó el llamado de los ejecutivos a limitar la IA, y en una llamada con Huang dio a entender que no va a intervenir. Amodei, Altman, Musk y Nadella, los que construyen los sistemas, piden ir más lento; el presidente, no. ¿Con quién te quedas?",
+      "discrimina": "Cierra el eje de velocidad con la escena central del artículo: los constructores pidiendo frenar y el Estado negándose. Separa dos razones para frenar (los constructores saben más; un ritmo que nadie controla no es un ritmo elegido) y dos razones para no hacerlo (la carrera con China; el Estado no debe elegir ganadores).",
+      "_tension": "S7 · los ejecutivos contra Trump. Contestable con las fichas de Trump, Amodei, Altman, Musk y Nadella del mapa.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Con los constructores: si hasta el que gana con la carrera pide frenar, es que vio algo que desde afuera no se ve.",
+          "vector": { "magnitud": -8 },
+          "anchor": "Mapa NYT (S7), fichas de Amodei, Altman, Musk y Nadella · Gates (NYT, S7): «en privado, la gente que entiende lo bueno que es esto está muy preocupada»"
+        },
+        {
+          "id": "B",
+          "text": "Con los constructores, pero por la razón contraria: no porque sepan más, sino porque un ritmo que nadie controla no es un ritmo elegido.",
+          "vector": { "magnitud": -4 },
+          "anchor": "Acemoglu, podcast (S7, 42:39): hay que decidir qué queremos de la IA y cómo llegar ahí, y no sólo reaccionar · Ezra Klein con Helen Toner (S7): los laboratorios aceleran sin saber supervisar"
+        },
+        {
+          "id": "C",
+          "text": "Con Trump en el resultado: la carrera con China no admite pausa, aunque su razón sea puro cálculo.",
+          "vector": { "magnitud": 4 },
+          "anchor": "Mapa NYT (S7), fichas de Trump y Johnson: la dominancia en IA como carrera contra China · ficha de Zuckerberg: frenar le entrega la delantera a China"
+        },
+        {
+          "id": "D",
+          "text": "Con Trump. Pedirle al Estado que frene una tecnología es pedirle que elija ganadores, y eso siempre termina mal.",
+          "vector": { "magnitud": 8 },
+          "anchor": "Mapa NYT (S7), fichas de Sacks y de Andreessen y Horowitz: el enfoque liviano y la regulación como Ley Seca · ficha de Huang"
+        }
+      ]
+    }
+  ]
+}

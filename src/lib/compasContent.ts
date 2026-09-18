@@ -26,6 +26,8 @@ import instrumentoAyD from '../../content/compas/ai_democracy_2026/instrumento_v
 import arquetiposAyD from '../../content/compas/ai_democracy_2026/arquetipos_v3.json';
 import instrumentoAyDs3 from '../../content/compas/ai_democracy_2026/instrumento_s3_v1.json';
 import arquetiposAyDs3 from '../../content/compas/ai_democracy_2026/arquetipos_s3_v1.json';
+import instrumentoAyDs7 from '../../content/compas/ai_democracy_2026/instrumento_s7_v1.json';
+import arquetiposAyDs7 from '../../content/compas/ai_democracy_2026/arquetipos_s7_v1.json';
 import instrumentoMgt from '../../content/compas/mgt300_2026/instrumento_v2.json';
 import arquetiposMgt from '../../content/compas/mgt300_2026/arquetipos_v2.json';
 
@@ -82,6 +84,19 @@ export const COMPASES: Record<string, CompasPack> = {
     courseId: 'ai_democracy_2026',
     instrumento: instrumentoAyDs3 as CompasInstrument,
     arquetipos: arquetiposAyDs3 as CompasArquetipos,
+  },
+  // Compas de UNA CLASE, Semana 7. Se aplica el lunes 21 de septiembre justo
+  // despues de leer en sala el mapa de posiciones del NYT, y separa las dos
+  // preguntas que el diario mezcla: a que velocidad (frenar / acelerar) y
+  // quien pone la regla (la industria / el Estado). Su producto son las cuatro
+  // bancadas de tribuna del jueves 24. No se compara con nada.
+  ayd_s7_gobernanza_v1: {
+    compasId: 'ayd_s7_gobernanza_v1',
+    curso: 'AyD · IA y Democracia',
+    nombre: 'Compás de clase · Semana 7, gobernanza (velocidad × quién pone la regla)',
+    courseId: 'ai_democracy_2026',
+    instrumento: instrumentoAyDs7 as CompasInstrument,
+    arquetipos: arquetiposAyDs7 as CompasArquetipos,
   },
   // v2: diez PROPOSICIONES con tres grados de acuerdo, dos ejes, sin tercer
   // eje. La v1 --diez items con cinco alternativas sustantivas-- queda en el
