@@ -16,12 +16,12 @@ sus rondas siguen sin quemar y la R3 se recicló como semilla de la R6 de hoy).
 | 1 | La columna que no venía | 120 s | 2 líneas de R | Cuaderno 7, A1 (forma 2) y ejercicio 3: `mutate(mujer = sexo == "Mujer")` |
 | 2 | El promedio que salió NA | 120 s | castellano + 1 línea de R | Cuaderno 7, A2 («sin el `na.rm = TRUE` el promedio sale NA»); cuaderno 6, Parte 2 |
 | 3 | La receta completa | 180 s | 4 líneas de R + castellano | Cuaderno 7, A4 (1999, 63,4%); cuaderno 6, control 1 (no hay 2020) |
-| 4 | De número a categoría | 150 s | 1 línea de R + castellano | Cuaderno 7, A1 (forma 3): `ifelse()` y los 4.562 NA que forman una tercera fila |
+| 4 | El grupo sin nombre | 120 s | castellano + 1 línea de R | Cuaderno 7, ejercicio 5 (`gse` vacío, 5 personas); cuaderno 6, control 3 y el `!= ""` del control 2 |
 | 5 | El año que dio cero | 120 s | castellano + 1 línea de R | Cuaderno 7, ejercicio 6 (2005, 0,0%, `filter(anio == 2005) %>% count(chile_hoy)`); cuaderno 6, control 2 |
 | 6 | Limpiar y comparar | 180 s | 3 líneas de R + 1 línea de R | Cuaderno 7, Parte C, ejercicios 9 y 10; cuaderno 5 (`10 min`, `as.numeric()`) |
 
-Presupuesto: 870 s de relojes + 2 min por ronda de overhead medido = **26,5 min**.
-Con la banda medida de 1,7× a 2,4× la suma de relojes: 24,7 a 34,8 min. Si el
+Presupuesto: 840 s de relojes + 2 min por ronda de overhead medido = **26 min**.
+Con la banda medida de 1,7× a 2,4× la suma de relojes: 23,8 a 33,6 min. Si el
 día se porta como el peor de los siete juegos medidos, se pasa de las 12:40 y se
 cae la R6 — por eso la R3 va al medio.
 
@@ -29,12 +29,16 @@ Las cifras se recalcularon contra los dos CSV el 20 de septiembre, no se
 copiaron del prompt: 58,9% mujeres; 4.562 edades vacías; 46,7 de promedio; 1999
 con 63,4% y 2010 con 27,1%; 32 años sin 2020; 2005 con `chile_hoy` vacío en las
 4.515 personas; Auto 12 / Metro 6 / Micro o bus 15 con promedios 40,5 / 83,3 /
-77,0 y porcentajes largos 9,1 / 50,0 / 66,7.
+77,0 y porcentajes largos 9,1 / 50,0 / 66,7; `gse` vacío en 5 personas con 40,0
+de edad promedio.
 
 ## Las decisiones que no son obvias
 
 **Nueve semillas para seis lugares.** Naim propuso 1 → 4 → 3 → 5 → 7 → 9 (con la
-numeración de su prompt). Se cambió la 5 (`group_by()` solo) por la 8 (el año que
+numeración de su prompt). La 7 (`ifelse()`) se sacó esa misma noche porque
+`ifelse()` no se pasa en clase aunque esté en el cuaderno; entró en su lugar el
+grupo sin nombre del ejercicio 5, que cubre la idea «siempre `n()`» que la
+sesión no tenía. Se cambió la 5 (`group_by()` solo) por la 8 (el año que
 dio cero): después de escribir la receta completa en la R3, `summarise(personas =
 n())` es una línea que acaban de teclear y el porqué está textual en el cuaderno.
 La 8 exige juicio, sigue pidiendo una línea de R, y calza con el bloque del Sprint
@@ -46,7 +50,7 @@ para toda la base) está contenida en la 1 y la 3.
 semillas de Naim para la 1, la 3 y la 7 eran de una sola pieza; se les agregó la
 segunda para mantener la forma: en la R1 la cuenta, en la R3 cuántas filas
 devuelve (que es la idea de «una fila por grupo» que perdimos al sacar la semilla
-5), en la R4 por qué `count(tramo)` da tres filas y no dos.
+5).
 
 **La R2 dice que `edad` es numérica.** Sin eso, «la columna es texto» sería un
 diagnóstico defendible (el `mean()` de texto también devuelve NA), y la rúbrica

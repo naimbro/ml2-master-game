@@ -50,10 +50,13 @@ del enunciado.
 y con `sort = TRUE`), `select()`, `filter()`, `mutate()`, el pipe `%>%`, y desde
 la clase 6: `group_by()`, `summarise()`, `n()`, `arrange()` y `desc()`. De R
 base: `nrow()`, `ncol()`, `names()`, `head()`, `class()`, `as.numeric()`,
-`ifelse()`, `mean()` con `na.rm = TRUE`, `sum()`, `is.na()` y `!`, los
+`mean()` con `na.rm = TRUE`, `sum()`, `is.na()` y `!`, los
 operadores `==`, `!=`, `>`, `<`, `>=`, `<=`, `&` y `|`.
 
-**No han visto** `ggplot2` (es la clase siguiente), `if_else()`, `case_when()`,
+**No han visto** `ggplot2` (es la clase siguiente), `case_when()`, ni `if_else()`.
+**`ifelse()` aparece en el cuaderno de hoy pero NO se pasa en clase**: ninguna
+ronda lo pregunta, no se exige, y si alguien lo usa y corre, vale igual. Tampoco
+han visto
 `filter(!is.na(...))` como técnica enseñada, `n_distinct()`, `mutate(across())`,
 `pivot_*`, ni `left_join()`. Y **no van a ver inferencia estadística en ningún
 momento del curso**: nada de tests, valores-p, intervalos de confianza, márgenes
@@ -62,7 +65,7 @@ cualquiera de esas cosas, no está siendo sofisticada: está fuera de lo que se
 enseñó, y no suma.
 
 **Regla de arbitraje, y manda sobre cualquier lista.** Si un estudiante responde
-con algo correcto que no se enseñó —`|>`, `if_else()`, `%in%`, `n = n()`,
+con algo correcto que no se enseñó —`|>`, `%in%`, `n = n()`,
 `sum(x) / n()` en vez de `mean(x)`, `na.rm = T`, `count()` donde cabe, la
 comparación metida directamente adentro del `mean()` sin pasar por `mutate()`,
 sobrescribir la columna original, guardar pasos en objetos intermedios— **vale
@@ -149,22 +152,10 @@ contestó algo en esa columna. Cada lado del `|` es una comparación completa:
 columna sale `FALSE` para todos, porque nadie contestó las dos cosas a la vez:
 corre sin error y contesta mal.
 
-**Forma 3: de un número a una categoría.** `ifelse()` toma una pregunta y dos
-respuestas, en este orden: `ifelse(la pregunta, qué poner si es TRUE, qué poner
-si es FALSE)`.
+**Forma 3 (`ifelse()`) no se pasa en clase**: está en el cuaderno como
+lectura, pero ninguna ronda la pregunta ni la exige.
 
-```r
-cep %>%
-  mutate(tramo = ifelse(edad < 30, "Menor de 30", "30 o más")) %>%
-  count(tramo)
-```
-
-72.929 de `"30 o más"`, 18.631 de `"Menor de 30"`, **y los mismos 4.562 `NA` de
-antes: sin edad no hay tramo.** Ese `count()` devuelve **tres filas**, no dos.
-Las dos categorías del `ifelse()` más la fila `NA`, porque `ifelse()` no inventa
-una respuesta para quien no tiene edad.
-
-> Tres formas, una sola idea: **`mutate(nombre_nuevo = cálculo)`**.
+> Distintas formas, una sola idea: **`mutate(nombre_nuevo = cálculo)`**.
 
 **Un solo `mutate()` puede crear dos columnas**, separadas por coma, y la
 segunda puede usar la primera, porque `mutate()` trabaja de arriba hacia abajo.
@@ -182,13 +173,10 @@ devuelve dos filas: `TRUE` 56.595 y `FALSE` 39.527, sin `NA`.
 | `mutate(mujer = sexo == "mujer")` | Corre, y `mujer` sale `FALSE` para las 96.122 personas: el valor está escrito `Mujer`. |
 | `mutate(mujer = Sexo == "Mujer")` | `Sexo` con mayúscula no es una columna de esta base. No corre. |
 | `mutate(mujer = sexo == Mujer)` | Sin comillas, R busca un objeto llamado `Mujer`. No corre. |
-| `ifelse(edad < 30, "30 o más", "Menor de 30")` | Los dos textos al revés: corre y etiqueta a todo el mundo al revés. |
-| `ifelse("Menor de 30", edad < 30, "30 o más")` | El orden de los tres argumentos cambiado. No hace lo que se pidió. |
-| `filter(tramo == "Menor de 30")` antes del `mutate()` que crea `tramo` | La columna todavía no existe cuando el filtro la busca. No corre. |
+| `filter(mujer == TRUE)` antes del `mutate()` que crea `mujer` | La columna todavía no existe cuando el filtro la busca. No corre. |
 
 `mutate(mujer = sexo == "Mujer")` y `mutate(mujer = (sexo == "Mujer"))` son lo
-mismo. `mutate(mujer = ifelse(sexo == "Mujer", TRUE, FALSE))` da vueltas de más
-pero también contesta bien.
+mismo. 
 
 <!-- section: summarise_y_na -->
 
@@ -291,8 +279,9 @@ ordenado y sólo las diez primeras filas.
 
 **Una fila por grupo.** `summarise()` después de `group_by()` devuelve
 exactamente **tantas filas como valores distintos tenga la columna del
-`group_by()`**, y los `NA` cuentan como un grupo más: agrupando por `tramo`
-aparece una tercera fila `NA` con 4.562 personas y `edad_promedio` en `NaN`.
+`group_by()`**, y los `NA` cuentan como un grupo más: agrupando por una
+columna calculada desde `edad` aparece una fila `NA` con 4.562 personas y
+`edad_promedio` en `NaN`.
 Textual: *«No es un error, es la base diciéndote que ese grupo existe. En un
 indicador publicado esa fila se filtra o se declara; nunca se ignora.»*
 
@@ -373,6 +362,59 @@ con `sum(!is.na(anios_escolaridad))`: esa columna está **vacía desde 2021**.
 **Control 3 — ¿Cuántos son en cada grupo?** El segmento **E tiene 9 personas**
 en 2026 (C3 tiene 791). Textual: *«Un promedio sin `n()` es una opinión con
 decimales.»* En la serie completa E tiene 3.674.
+
+### El grupo sin nombre (ejercicio 5 del cuaderno 7)
+
+Textual del enunciado: *«Agrupa por `gse` (nivel socioeconómico) y pide dos
+cosas: `personas` con `n()` y `edad_promedio` con `mean()`. […] Mira la primera
+fila de la tabla con atención: hay un grupo que no tiene nombre. ¿Cuántas
+personas tiene?»*
+
+```r
+cep %>%
+  group_by(gse) %>%
+  summarise(personas = n(),
+            edad_promedio = mean(edad, na.rm = TRUE))
+```
+
+| gse | personas | edad_promedio |
+|---|---|---|
+| `""` (vacío) | **5** | 40,0 |
+| ABC1 | 3.515 | 45,4 |
+| C2 | 10.028 | 46,6 |
+| C3 | 38.998 | 46,7 |
+| D | 39.902 | 46,8 |
+| E | 3.674 | 47,2 |
+
+La primera fila **no es un nivel socioeconómico**: son cinco personas (dos
+encuestas, 2005 y 2024) a las que les falta el dato, y `group_by()` las trata
+como un grupo más porque para R `""` es un valor como cualquier otro. Es la
+misma lección que la fila `NA` de la Parte A del cuaderno: *«en un indicador
+publicado esa fila se filtra o se declara; nunca se ignora»*. Y es el control 3
+en su forma más pura: cinco personas no sostienen ningún titular, por muy
+prolija que se vea la fila.
+
+**Cómo se saca.** Esas celdas son **texto vacío, no `NA`**: `is.na(gse)` no las
+encuentra. La forma que la clase 6 usó para lo mismo con `posicion_politica` es
+`!= ""`:
+
+```r
+cep %>%
+  filter(gse != "") %>%
+  group_by(gse) %>%
+  summarise(personas = n(),
+            edad_promedio = mean(edad, na.rm = TRUE))
+```
+
+También sirven `filter(gse %in% c("ABC1", "C2", "C3", "D", "E"))`, la lista de
+los cinco con `|`, o `filter(!(gse == ""))`. **No sirve** `filter(!is.na(gse))`:
+corre sin error y no saca nada. Y `filter(gse == "")` hace lo contrario: se
+queda sólo con los cinco.
+
+**Las dos salidas correctas** son sacar la fila con el filtro o dejarla y
+declararla en una nota («5 casos sin GSE excluidos»). Lo que no corresponde es
+tratarla como un grupo real: «el grupo más joven de la CEP tiene 40 años» es un
+titular sobre cinco personas sin dato.
 
 ### El año que dio cero (ejercicio 6 del cuaderno 7)
 
@@ -483,7 +525,7 @@ misma receta del porcentaje de todo el cuaderno: el promedio de una columna de
 fondo. Sin el `na.rm = TRUE`, Auto vuelve a salir `NA`.
 
 **Escrituras que también valen:** sobrescribir la columna
-(`mutate(minutos_viaje = as.numeric(minutos_viaje))`), `|>`, `if_else()`,
+(`mutate(minutos_viaje = as.numeric(minutos_viaje))`), `|>`,
 `n = n()`, otro nombre para la columna nueva —con tal de que sea el mismo que
 aparece después en el `summarise()`—, o hacerlo en dos pasos guardados en objetos
 intermedios. **Errores de fondo:** `Minutos_viaje` o `Transporte` con
