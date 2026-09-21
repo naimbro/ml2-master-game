@@ -1,0 +1,416 @@
+[
+  {
+    "id": "dv_c07_r1_la_columna_que_no_venia",
+    "order": 1,
+    "title": "La columna que no venía",
+    "category": "mutate()",
+    "difficulty": "easy",
+    "ranked": true,
+    "durationSeconds": 120,
+    "answerFormat": "code",
+    "conceptTags": [
+      "mutate_tres_formas"
+    ],
+    "context": "La tabla `cep` ya está cargada: **96.122 personas**, de 1994 a 2026.\n\nLa columna `sexo` tiene exactamente dos valores, escritos así: `\"Mujer\"` (56.595 personas) y `\"Hombre\"` (39.527).\n\nQuieres una columna nueva, `mujer`, que valga `TRUE` cuando la persona es mujer y `FALSE` cuando no.",
+    "question": "Dos cosas, una línea de R cada una:\n\n**(1)** La línea de `mutate()` que crea `mujer`.\n\n**(2)** La línea que cuenta cuántas `TRUE` y cuántas `FALSE` quedaron.\n\n```r\ncep %>%\n  mutate(...) %>%\n  ...\n```\n\nSólo el código, sin explicarlo.",
+    "judgeFocus": "Esta ronda pide DOS LÍNEAS DE R y las dos se califican: (1) el `mutate()` que crea la columna `mujer`; (2) la línea que cuenta cuántas `TRUE` y cuántas `FALSE` quedaron. Se pidieron dos líneas, escritas en dos minutos desde un teléfono, y eso bien puesto vale 100. Es la ronda de apertura y la más fácil de la sesión: el ejercicio 3 del cuaderno de hoy tenía exactamente esta línea.\n\nEL CRITERIO, QUE MANDA SOBRE CUALQUIER EJEMPLO: puntúa alto todo código que, pegado en un Colab con `cep` cargada, cree una columna que sea TRUE para las 56.595 mujeres y FALSE para los 39.527 hombres, y después muestre esos dos números. La versión canónica es\n\ncep %>%\n  mutate(mujer = sexo == \"Mujer\") %>%\n  count(mujer)\n\npero CUALQUIER OTRA QUE HAGA LO MISMO VALE IGUAL, esté o no en esta lista, que no es exhaustiva: `ifelse(sexo == \"Mujer\", TRUE, FALSE)` adentro del mutate; `mujer = (sexo == \"Mujer\")` con paréntesis; cerrar con `group_by(mujer) %>% summarise(personas = n())`, con `summarise(mujeres = sum(mujer), personas = n())` o con `table()`; `|>` en vez de `%>%`. La pregunta no es si la variante está en la lista sino si crea la columna pedida y la cuenta.\n\nEL NOMBRE DE LA COLUMNA NUEVA ES `mujer` porque así lo pidió el enunciado, pero si le puso `es_mujer` o `mujeres` y lo usa igual en la cuenta, NO es un error: la columna existe y contesta.\n\nLO QUE SÍ ES ERROR, y es donde se decide el puntaje:\n- `sexo = \"Mujer\"` con UN solo igual adentro de la comparación: no corre. Es «el detalle que más errores causa en todo el curso» según el cuaderno 4.\n- `\"mujer\"` en minúscula: corre, y la columna sale FALSE para las 96.122 personas. El enunciado tenía el valor escrito `\"Mujer\"`. Código que corre y contesta mal.\n- `Sexo` con mayúscula: no es una columna de esta base, no corre.\n- `sexo == Mujer` sin comillas: R busca un objeto que no existe, no corre.\n- `filter(sexo == \"Mujer\")` en vez de `mutate()`: cuenta mujeres pero no crea ninguna columna, que era la parte (1). Está respondiendo otra pregunta.\n\nLA RESPUESTA PARCIAL TÍPICA DE ESTA RONDA es entregar sólo la línea del `mutate()` y no contarla, o al revés. Media respuesta no puede pasar de 40 en Exactitud. Y la que entregó las dos líneas con `\"mujer\"` en minúscula va POR ENCIMA de la que entregó una sola línea perfecta.\n\nLO QUE NO SE EXIGE, NUNCA: `library(dplyr)` ni `read.csv()` —el enunciado dice que la tabla ya está cargada—, ni el tipo de comillas, ni la indentación, ni los saltos de línea, ni comentarios, ni explicación en prosa del código. Tampoco ortografía, tildes ni vocabulario académico en la parte de castellano. Y si el estudiante objeta el enunciado —dice que los números no le calzan o que le falta información— eso NO se penaliza nunca: si tiene razón, el problema es del enunciado.\n\nEN EL FEEDBACK: si su escritura corre y no es la del cuaderno, no le pidas que la cambie; dile qué paso falta, no qué palabra. Y cierra con una frase concreta sobre qué línea de ESTA respuesta va a necesitar en su propia base para la entrega del Sprint 2 del lunes 28 de septiembre de 2026.",
+    "evaluationGuide": {
+      "must_hit": [
+        "PARTE (1): un `mutate()` que cree una columna nueva comparando `sexo` con `\"Mujer\"` escrito tal cual, con `==` (o un `ifelse()` equivalente)",
+        "PARTE (2): una línea que muestre cuántas TRUE y cuántas FALSE quedaron: `count(mujer)` o cualquier resumen equivalente",
+        "Las dos líneas usan el mismo nombre para la columna nueva"
+      ],
+      "nice_to_have": [
+        "Entrega exactamente las dos líneas y nada más, listas para pegar en Colab",
+        "Usa `count()` sobre la columna nueva, que es la forma más corta",
+        "Llega por otro camino que también funciona (`ifelse()`, `group_by() + summarise()`, `sum(mujer)`)"
+      ],
+      "fatal_errors": [
+        "`sexo = \"Mujer\"` con un solo igual: no corre",
+        "`\"mujer\"` en minúscula: corre y deja FALSE a todo el mundo",
+        "`Sexo` con mayúscula, o `sexo == Mujer` sin comillas: no corre",
+        "Usa `filter()` en vez de `mutate()`: no crea ninguna columna",
+        "Deja los `...` de la forma vacía sin rellenar"
+      ],
+      "partial_credit": {
+        "solo_el_mutate": "Sólo la línea del `mutate()`, perfecta, y ninguna cuenta: techo 40 en Exactitud, 40 en Completitud.",
+        "solo_la_cuenta": "Sólo `count(mujer)` sin la línea que crea `mujer`: techo 40 en Exactitud; ese código, además, no corre porque la columna no existe.",
+        "valor_en_minuscula": "Las dos líneas, con `\"mujer\"` en minúscula: corre y contesta mal, techo 40 en Exactitud, pero Completitud 100 y queda POR ENCIMA de la media respuesta.",
+        "un_solo_igual": "Las dos líneas con `sexo = \"Mujer\"`: no corre, techo 40 en Exactitud, Completitud 100.",
+        "otra_escritura_correcta": "`ifelse()`, `group_by() + summarise()`, `sum(mujer)`, `|>`: correctas, no bajan en Exactitud; a lo más 80 en Completitud si cambió la forma pedida por otra equivalente.",
+        "otro_nombre_de_columna": "Le puso otro nombre que `mujer` y lo usa igual en la cuenta: no es error."
+      }
+    },
+    "idealAnswer": {
+      "keyPoints": [
+        "cep %>%",
+        "  mutate(mujer = sexo == \"Mujer\") %>%",
+        "  count(mujer)"
+      ],
+      "expectedConcepts": [
+        "mutate_tres_formas"
+      ],
+      "commonMistakes": [
+        "Un solo `=` adentro de la comparación",
+        "`\"mujer\"` en minúscula: corre y sale FALSE para todos",
+        "`Sexo` con mayúscula: no existe",
+        "Entregar sólo el `mutate()` sin contarlo",
+        "Usar `filter()` y contar mujeres sin crear la columna"
+      ],
+      "excellentResponseIndicators": [
+        "Dos líneas limpias, una por paso, listas para pegar",
+        "La comparación con `==` y el valor escrito exactamente `\"Mujer\"`",
+        "El mismo nombre de columna en las dos líneas"
+      ]
+    }
+  },
+  {
+    "id": "dv_c07_r2_el_promedio_que_salio_na",
+    "order": 2,
+    "title": "El promedio que salió NA",
+    "category": "summarise()",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 120,
+    "answerFormat": "code",
+    "conceptTags": [
+      "summarise_y_na"
+    ],
+    "context": "Sobre la misma tabla `cep`, corres esto:\n\n```r\ncep %>%\n  summarise(edad_promedio = mean(edad))\n```\n\nR devuelve una tabla de una fila, y en `edad_promedio` dice **`NA`**. No hay ningún error ni ningún aviso en rojo.\n\nLa columna `edad` **sí es de números**: `class(cep$edad)` devuelve `\"numeric\"`.",
+    "question": "Dos cosas:\n\n**(1)** En una línea, en castellano: por qué el promedio salió `NA`.\n\n**(2)** La misma línea, arreglada, para que devuelva la edad promedio de verdad (46,7).\n\n```r\ncep %>%\n  summarise(edad_promedio = ...)\n```\n\nSólo la línea, sin explicarla.",
+    "judgeFocus": "Esta ronda pide DOS COSAS y las dos se califican: (1) UNA LÍNEA de castellano con el porqué del `NA`; (2) la línea de `summarise()` arreglada. Escritas en dos minutos desde un teléfono; eso bien puesto vale 100 y escribir más no sube el puntaje.\n\nPARTE (1) — POR QUÉ SALIÓ NA. El criterio, que manda sobre cualquier ejemplo: la respuesta tiene que llegar a que HAY EDADES QUE FALTAN EN LA COLUMNA (valores NA) Y `mean()` NO LAS IGNORA A MENOS QUE SE LE PIDA. Basta con eso, en cualquier vocabulario, y sin una sola palabra técnica. Valen igual, y la lista NO es exhaustiva: «hay personas sin edad y el promedio con un NA es NA», «hay celdas vacías en edad y R no las salta solo», «el promedio de algo que incluye un no sé es no sé», «faltan 4.562 edades y eso contamina el promedio». Cualquier formulación que llegue a esa idea cumple.\n\nLO QUE NO CUENTA COMO PARTE (1): «la columna es texto / hay que convertirla a número». El enunciado dice expresamente que `class()` devuelve `\"numeric\"`: ése es el diagnóstico de la clase 5 aplicado donde no corresponde, vocabulario correcto para algo que no pasó. Tampoco cuenta «summarise está mal escrito», «hay que usar count()», ni «R dio un error» (no lo dio: devolvió NA sin aviso). Y «la columna tiene datos malos» sin llegar a que son valores que faltan va en la dirección correcta pero se queda corto.\n\nPARTE (2) — LA LÍNEA ARREGLADA. El criterio: puntúa alto toda línea que, pegada en el Colab con `cep` cargada, DEVUELVA 46,7. La versión canónica es\n\ncep %>%\n  summarise(edad_promedio = mean(edad, na.rm = TRUE))\n\npero cualquier otra que devuelva 46,7 vale igual, esté o no en esta lista no exhaustiva: `na.rm = T`; `filter(!is.na(edad))` antes del `summarise()`; `mean(edad[!is.na(edad)])`; `|>`. La pregunta es si devuelve el promedio real.\n\nLO QUE SÍ ES ERROR en la parte (2):\n- El `na.rm = TRUE` FUERA del `mean()`: `summarise(edad_promedio = mean(edad), na.rm = TRUE)`. Corre, crea una columna que se llama `na.rm`, y el promedio sigue en NA. Código que corre y contesta mal.\n- `mean(as.numeric(edad))`: la columna ya era numérica, sigue NA.\n- `mean(edad, na.rm)` sin `= TRUE`, o `narm = TRUE`, o `na.rm = \"TRUE\"`: no hace lo pedido.\n- `Edad` con mayúscula: no corre.\n- Describir el arreglo en palabras («hay que sacar los NA», «agregar na.rm») SIN escribir la línea: para la parte (2) es media respuesta.\n\nLA RESPUESTA PARCIAL TÍPICA DE ESTA RONDA es la línea arreglada correcta sin una palabra de por qué, o el porqué correcto con «hay que ignorar los NA» sin la línea. Las dos son media respuesta: techo 40 en Exactitud. Y la que entregó las dos partes con el `na.rm` fuera del `mean()` va POR ENCIMA de la mitad impecable.\n\nLO QUE NO SE EXIGE, NUNCA: `library(dplyr)` ni `read.csv()` —el enunciado dice que la tabla ya está cargada—, ni el tipo de comillas, ni la indentación, ni los saltos de línea, ni comentarios, ni explicación en prosa del código. Tampoco ortografía, tildes ni vocabulario académico en la parte de castellano. Y si el estudiante objeta el enunciado —dice que los números no le calzan o que le falta información— eso NO se penaliza nunca: si tiene razón, el problema es del enunciado.\n\nEN EL FEEDBACK: si su escritura corre y no es la del cuaderno, no le pidas que la cambie; dile qué paso falta, no qué palabra. Y cierra con una frase concreta sobre qué línea de ESTA respuesta va a necesitar en su propia base para la entrega del Sprint 2 del lunes 28 de septiembre de 2026.",
+    "evaluationGuide": {
+      "must_hit": [
+        "PARTE (1): llega a que hay edades que faltan (NA) y que el promedio no las ignora solo, en cualquier vocabulario",
+        "PARTE (2): entrega una línea de R que devuelve el promedio real, con `na.rm = TRUE` adentro del `mean()` o un equivalente que funcione",
+        "PARTE (2): la línea sigue siendo un `summarise()` sobre `edad` escrita tal cual"
+      ],
+      "nice_to_have": [
+        "Nombra que son 4.562 personas sin edad, o que vienen sobre todo de 1996 a 1998",
+        "Dice que `n()` igual habría contado 96.122 aunque el promedio se calcule con menos",
+        "Distingue explícitamente este caso del de la columna de texto de la clase 5",
+        "Llega por otro camino correcto: `filter(!is.na(edad))`, `na.rm = T`"
+      ],
+      "fatal_errors": [
+        "Dice que la columna es texto o que hay que convertirla con `as.numeric()`: el enunciado dice que es numérica",
+        "`na.rm = TRUE` fuera del `mean()`: corre y sigue devolviendo NA",
+        "Afirma que R dio un error, cuando el enunciado dice que no lo dio",
+        "Describe el arreglo en palabras sin escribir la línea"
+      ],
+      "partial_credit": {
+        "solo_la_linea": "La línea arreglada correcta y ni una palabra de por qué: techo 40 en Exactitud.",
+        "solo_el_porque": "El porqué correcto y ninguna línea de R, o «hay que agregar na.rm» dicho en prosa: techo 40 en Exactitud.",
+        "na_rm_fuera_del_mean": "Las dos partes, con el `na.rm` como argumento del `summarise()`: corre y contesta mal, techo 40 en Exactitud, Completitud 100, por encima de la media respuesta.",
+        "diagnostico_texto": "«Es texto» + `mean(as.numeric(edad))`: contradice el enunciado y sigue NA. Exactitud 20.",
+        "sintoma_sin_causa": "«La columna tiene datos raros» + la línea correcta: la parte (1) se queda corta, Exactitud 40 para esa parte, a lo más 60 en total.",
+        "otra_escritura_correcta": "`filter(!is.na(edad))` antes del `summarise()`, `na.rm = T`: correcta, no baja en Exactitud."
+      }
+    },
+    "idealAnswer": {
+      "keyPoints": [
+        "Hay personas sin edad en la base (NA), y el promedio de algo que incluye un «no sé» es «no sé»: `mean()` no los ignora a menos que se lo pidan",
+        "cep %>%",
+        "  summarise(edad_promedio = mean(edad, na.rm = TRUE))"
+      ],
+      "expectedConcepts": [
+        "summarise_y_na"
+      ],
+      "commonMistakes": [
+        "Decir que la columna es texto (el enunciado dice que es numérica)",
+        "Poner el `na.rm = TRUE` fuera del `mean()`",
+        "Escribir sólo la línea arreglada sin el porqué",
+        "Decir «hay que sacar los NA» sin escribir la línea"
+      ],
+      "excellentResponseIndicators": [
+        "Una frase que llega a la causa en lenguaje llano",
+        "El `na.rm = TRUE` adentro del `mean()`",
+        "Nombra las 4.562 edades vacías o distingue este caso del de la clase 5"
+      ]
+    }
+  },
+  {
+    "id": "dv_c07_r3_la_receta_completa",
+    "order": 3,
+    "title": "La receta completa",
+    "category": "group_by() + summarise() + arrange()",
+    "difficulty": "hard",
+    "ranked": true,
+    "durationSeconds": 180,
+    "answerFormat": "code",
+    "conceptTags": [
+      "group_by_y_receta",
+      "mutate_tres_formas"
+    ],
+    "context": "La tabla `cep` ya está cargada. La columna `sit_econ_pais` dice cómo ve cada persona la economía del país, y sus valores están escritos exactamente así: `\"Muy buena\"`, `\"Buena\"`, `\"Ni buena, ni mala\"`, `\"Mala\"`, `\"Muy mala\"`, más unos pocos `\"No sabe\"` y `\"No contesta\"`. Nadie tiene esa columna vacía.\n\nLa columna `anio` va de 1994 a 2026, y la CEP **no salió a terreno en 2020**.\n\nLa pregunta del editor: **¿en qué año Chile vio peor su economía?** Es decir, el porcentaje de personas que la ve «Mala» o «Muy mala», año por año, ordenado de mayor a menor.",
+    "question": "Dos cosas:\n\n**(1)** La cadena de R, **cuatro líneas después de `cep`**, que devuelve esa tabla: una fila por año, con `personas` y `pct_econ_mala`, de mayor a menor.\n\n```r\ncep %>%\n  ... %>%\n  ... %>%\n  ... %>%\n  ...\n```\n\n**(2)** En una línea, en castellano: cuántas filas tiene la tabla que devuelve, y por qué.\n\nSólo el código y esa línea, sin más explicación.",
+    "judgeFocus": "ES LA RONDA GRANDE DE LA SESIÓN: 180 segundos. Pide DOS COSAS y las dos se califican: (1) la cadena de CUATRO LÍNEAS después de `cep` que devuelve el porcentaje que ve la economía «Mala» o «Muy mala», por año, de mayor a menor; (2) UNA LÍNEA de castellano: cuántas filas tiene esa tabla y por qué. Eso bien puesto vale 100.\n\nPARTE (1) — LA CADENA. El criterio, que manda sobre cualquier ejemplo: puntúa alto todo código que, pegado en un Colab con `cep` cargada, DEVUELVA UNA FILA POR AÑO CON `personas` Y `pct_econ_mala`, ORDENADA DE MAYOR A MENOR, con 1999 (63,4%) primero. La versión canónica es\n\ncep %>%\n  mutate(econ_mala = sit_econ_pais == \"Mala\" | sit_econ_pais == \"Muy mala\") %>%\n  group_by(anio) %>%\n  summarise(personas = n(), pct_econ_mala = mean(econ_mala) * 100) %>%\n  arrange(desc(pct_econ_mala))\n\npero CUALQUIER OTRA QUE DEVUELVA ESA TABLA VALE IGUAL, esté o no en esta lista no exhaustiva: la comparación metida directo adentro del `summarise()` sin `mutate()` (son tres líneas y está perfecto); `%in% c(\"Mala\", \"Muy mala\")`; `|>`; `n = n()` en vez de `personas = n()`; `sum(econ_mala) / n() * 100`; `arrange(-pct_econ_mala)`; otro nombre para la columna nueva o para las columnas del resumen. El enunciado dijo «cuatro líneas» para dar la forma, no para cobrar el conteo: tres líneas que devuelven la misma tabla valen 100 en Exactitud.\n\nLO QUE SÍ ES ERROR, y es donde se decide el puntaje:\n- `&` en vez de `|`: corre, nadie contesta las dos cosas a la vez, y el porcentaje da 0,0% en los 32 años. Código que corre y contesta mal. Es el error propio de esta ronda.\n- `group_by(anio)` DESPUÉS del `summarise()`: no corre, porque después de resumir la columna `anio` ya no existe. Y sin `group_by()`, devuelve una sola fila (41,9%) en vez de 32.\n- `sit_econ_pais == \"Mala\" | \"Muy mala\"`: el segundo valor sin repetir la columna. No corre.\n- `n` sin paréntesis: no corre.\n- `sort = TRUE` adentro del `summarise()`: corre, crea una columna que se llama `sort`, y no ordena nada. Corre y contesta mal.\n- `\"Muy Mala\"`, `\"mala\"`, `Sit_econ_pais`, `Anio`: valor o columna con otra mayúscula. La columna no corre; el valor deja FALSE a esos casos.\n- Usar `econ_mala` en el `summarise()` sin haberla creado antes en un `mutate()`: no corre.\n\nERRORES MENORES que NO son techo: `arrange()` sin `desc()` ordena al revés (2010 primero): la tabla está bien y el orden no, nivel 60. Sin `* 100` queda la proporción (0,634): nivel 80. Sin `n()` falta la columna `personas` que se pidió: incompleto, nivel 60, no incorrecto.\n\nPARTE (2) — CUÁNTAS FILAS. El criterio: 32 FILAS, UNA POR AÑO, porque `group_by(anio)` produce una fila por cada valor distinto de `anio` y son 32 (de 1994 a 2026 sin 2020, que el enunciado dice). Lo esencial es la idea de UNA FILA POR GRUPO; la cifra exacta la deja deducible el enunciado. «Una por año, como 32» vale 100. «Una por año, 33» acierta el concepto y se equivoca en la resta: nivel 60 en esa parte. «Una sola fila porque summarise aplasta» es el error conceptual de la sesión (olvida el `group_by()`): nivel 20. «96.122 filas» es no haber entendido `summarise()`: nivel 20.\n\nLA RESPUESTA PARCIAL TÍPICA DE ESTA RONDA es la cadena entera y ninguna frase: la parte (2) es corta y se olvida. Media respuesta, techo 40 en Exactitud. Y la que entregó las dos partes con `&` en vez de `|` va POR ENCIMA de la cadena impecable sin frase.\n\nLO QUE NO SE EXIGE, NUNCA: `library(dplyr)` ni `read.csv()` —el enunciado dice que la tabla ya está cargada—, ni el tipo de comillas, ni la indentación, ni los saltos de línea, ni comentarios, ni explicación en prosa del código. Tampoco ortografía, tildes ni vocabulario académico en la parte de castellano. Y si el estudiante objeta el enunciado —dice que los números no le calzan o que le falta información— eso NO se penaliza nunca: si tiene razón, el problema es del enunciado.\n\nEN EL FEEDBACK: si su escritura corre y no es la del cuaderno, no le pidas que la cambie; dile qué paso falta, no qué palabra. Y cierra con una frase concreta sobre qué línea de ESTA respuesta va a necesitar en su propia base para la entrega del Sprint 2 del lunes 28 de septiembre de 2026.",
+    "evaluationGuide": {
+      "must_hit": [
+        "PARTE (1): crea la comparación con `|` (o `%in%`) sobre `sit_econ_pais` con los valores `\"Mala\"` y `\"Muy mala\"` escritos tal cual",
+        "PARTE (1): agrupa por `anio` ANTES de resumir, y resume con `n()` y el promedio de la comparación",
+        "PARTE (1): ordena de mayor a menor con `arrange(desc(...))` o equivalente",
+        "PARTE (2): dice que la tabla tiene una fila por año, 32, y por qué (un grupo por valor distinto de `anio`; no hay 2020)"
+      ],
+      "nice_to_have": [
+        "Nombra que 1999 queda primero con 63,4%, o que 2022 viene pegado",
+        "Menciona que no aparece fila NA porque nadie tiene `sit_econ_pais` vacío",
+        "Llega por un camino distinto del cuaderno: la comparación adentro del `summarise()`, `%in%`, `arrange(-pct)`",
+        "Cuatro pasos, uno por línea, en el orden mutate → group_by → summarise → arrange"
+      ],
+      "fatal_errors": [
+        "`&` en vez de `|`: corre y da 0,0% en todos los años",
+        "`group_by()` después del `summarise()`: no corre",
+        "El segundo valor sin repetir la columna: `== \"Mala\" | \"Muy mala\"`",
+        "`n` sin paréntesis, `Sit_econ_pais` o `Anio` con mayúscula",
+        "`sort = TRUE` adentro del `summarise()` en vez de `arrange()`",
+        "Parte (2): «una sola fila porque summarise aplasta», o «96.122 filas»"
+      ],
+      "partial_credit": {
+        "solo_la_cadena": "Las cuatro líneas perfectas y ninguna frase: techo 40 en Exactitud, 40 en Completitud. Es la parcial más probable.",
+        "solo_la_frase": "«32 filas, una por año» y ninguna línea de R: techo 40 en Exactitud.",
+        "cadena_con_and": "La cadena con `&` + la frase correcta: corre y contesta mal, techo 40 en Exactitud, Completitud 100, por encima de la media respuesta.",
+        "treinta_y_tres": "La cadena perfecta + «33 filas, una por año»: el concepto está y la cuenta no. Exactitud 60.",
+        "sin_arrange_o_al_reves": "La cadena sin `arrange()` o con `arrange()` sin `desc()`: la tabla está y el orden no. Exactitud 60, Completitud 60 si falta el paso.",
+        "sin_n": "Sin `n()`: falta la columna `personas` que se pidió. Exactitud 60, Completitud 60.",
+        "sin_por_100": "Deja la proporción en vez del porcentaje: Exactitud 80.",
+        "tres_lineas_correctas": "La comparación adentro del `summarise()`, sin `mutate()`: CORRECTA, 100 en Exactitud; a lo más 80 en Completitud por cambiar la forma pedida."
+      }
+    },
+    "idealAnswer": {
+      "keyPoints": [
+        "cep %>%",
+        "  mutate(econ_mala = sit_econ_pais == \"Mala\" | sit_econ_pais == \"Muy mala\") %>%",
+        "  group_by(anio) %>%",
+        "  summarise(personas = n(), pct_econ_mala = mean(econ_mala) * 100) %>%",
+        "  arrange(desc(pct_econ_mala))",
+        "32 filas: una por año, porque `group_by(anio)` hace un grupo por cada año distinto, y de 1994 a 2026 son 32 porque no hay 2020"
+      ],
+      "expectedConcepts": [
+        "group_by_y_receta",
+        "mutate_tres_formas"
+      ],
+      "commonMistakes": [
+        "`&` en vez de `|`: 0,0% en todos los años",
+        "Entregar la cadena y olvidar la frase de cuántas filas",
+        "`group_by()` después del `summarise()`",
+        "`n` sin paréntesis",
+        "`sort = TRUE` adentro del `summarise()`",
+        "Decir que devuelve una sola fila"
+      ],
+      "excellentResponseIndicators": [
+        "Cuatro pasos en orden, uno por línea, listos para pegar",
+        "Los valores escritos exactamente `\"Mala\"` y `\"Muy mala\"`",
+        "Dice «una fila por año» y explica los 32 con el 2020 que falta"
+      ]
+    }
+  },
+  {
+    "id": "dv_c07_r4_de_numero_a_categoria",
+    "order": 4,
+    "title": "De número a categoría",
+    "category": "ifelse()",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 150,
+    "answerFormat": "code",
+    "conceptTags": [
+      "mutate_tres_formas"
+    ],
+    "context": "La columna `edad` de `cep` es numérica, y **4.562 personas no tienen edad** en la base (`NA`).\n\nQuieres una columna nueva, `tramo`, con dos valores: `\"Menor de 30\"` cuando `edad` es menor que 30, y `\"30 o más\"` en el resto.\n\n```r\ncep %>%\n  mutate(tramo = ...) %>%\n  count(tramo)\n```",
+    "question": "Dos cosas:\n\n**(1)** Completa la línea del `mutate()`, con `ifelse()`, para que cree `tramo`.\n\n**(2)** En una línea, en castellano: cuántas filas devuelve ese `count(tramo)`, y por qué esa cantidad.\n\nSólo la línea de R y esa frase.",
+    "judgeFocus": "Esta ronda pide DOS COSAS y las dos se califican: (1) la línea del `mutate()` con `ifelse()` que crea `tramo`; (2) UNA LÍNEA de castellano: cuántas filas devuelve `count(tramo)` y por qué. Eso bien puesto vale 100.\n\nPARTE (1) — EL IFELSE. El criterio, que manda sobre cualquier ejemplo: puntúa alto toda línea que, dentro del `mutate()` del enunciado, cree una columna que diga `\"Menor de 30\"` a quien tiene menos de 30 años y `\"30 o más\"` al resto. La versión canónica es\n\nmutate(tramo = ifelse(edad < 30, \"Menor de 30\", \"30 o más\"))\n\npero cualquier otra que etiquete igual vale lo mismo, esté o no en esta lista no exhaustiva: `ifelse(edad >= 30, \"30 o más\", \"Menor de 30\")` (la pregunta al revés con las respuestas al revés, que es lo mismo); `if_else()`; `case_when()`; las etiquetas con otra mayúscula o sin tilde (`\"menor de 30\"`, `\"30 o mas\"`), porque las etiquetas las inventa el estudiante y no existen en la base. La forma de `ifelse()` es siempre `ifelse(la pregunta, qué poner si es TRUE, qué poner si es FALSE)`.\n\nLO QUE SÍ ES ERROR en la parte (1):\n- Las dos etiquetas al revés con la misma pregunta: `ifelse(edad < 30, \"30 o más\", \"Menor de 30\")`. Corre y etiqueta a todo el mundo al revés. Código que corre y contesta mal.\n- Los tres argumentos en otro orden: `ifelse(\"Menor de 30\", edad < 30, \"30 o más\")`. No hace lo pedido.\n- Etiquetas sin comillas: no corre.\n- `Edad` con mayúscula: no corre.\n- `mutate(tramo = edad < 30)` sin `ifelse()`: crea TRUE/FALSE, no las dos etiquetas que se pidieron. Contesta otra cosa.\n- `= ` en vez de `==` no aplica acá (es `<`), pero `edad =< 30` o `edad => 30` no existen en R.\n\nPARTE (2) — CUÁNTAS FILAS. El criterio: TRES FILAS, porque además de los dos tramos aparece una fila `NA` con las 4.562 personas que no tienen edad — sin edad, `ifelse()` no puede decidir y deja `NA`, y `count()` cuenta los NA como un grupo más. Lo esencial es la idea de que EL NA SE ARRASTRA Y FORMA UNA TERCERA FILA; el número 4.562 está en el enunciado y no hace falta repetirlo. Valen igual, lista no exhaustiva: «3, los dos tramos y los NA», «tres: sin edad no hay tramo y R los deja como NA», «dos tramos más una fila de los que no tienen edad». Lo que NO cuenta: «2 filas, una por tramo» (el enunciado ya avisó que hay 4.562 sin edad: es el error conceptual de esta ronda, nivel 40); «96.122 filas» (no entendió `count()`); «4 filas» sin justificación.\n\nLA RESPUESTA PARCIAL TÍPICA DE ESTA RONDA es la línea del `ifelse()` correcta y ninguna frase. Media respuesta, techo 40 en Exactitud. La que entregó las dos partes con las etiquetas al revés, o con «2 filas», va POR ENCIMA de la línea impecable sin frase.\n\nLO QUE NO SE EXIGE, NUNCA: `library(dplyr)` ni `read.csv()` —el enunciado dice que la tabla ya está cargada—, ni el tipo de comillas, ni la indentación, ni los saltos de línea, ni comentarios, ni explicación en prosa del código. Tampoco ortografía, tildes ni vocabulario académico en la parte de castellano. Y si el estudiante objeta el enunciado —dice que los números no le calzan o que le falta información— eso NO se penaliza nunca: si tiene razón, el problema es del enunciado.\n\nEN EL FEEDBACK: si su escritura corre y no es la del cuaderno, no le pidas que la cambie; dile qué paso falta, no qué palabra. Y cierra con una frase concreta sobre qué línea de ESTA respuesta va a necesitar en su propia base para la entrega del Sprint 2 del lunes 28 de septiembre de 2026.",
+    "evaluationGuide": {
+      "must_hit": [
+        "PARTE (1): un `ifelse()` con una comparación de `edad` contra 30 y las dos etiquetas en el orden que corresponde a esa comparación",
+        "PARTE (1): las etiquetas entre comillas y `edad` escrita tal cual",
+        "PARTE (2): dice que son tres filas y que la tercera es la de los NA, porque sin edad no hay tramo"
+      ],
+      "nice_to_have": [
+        "Explica que `ifelse()` no inventa una respuesta para quien no tiene edad",
+        "Dice que esa fila NA se declara o se filtra, nunca se ignora",
+        "Llega por otro camino correcto: `edad >= 30` con las etiquetas invertidas, `if_else()`",
+        "Nombra los tamaños: 72.929, 18.631 y 4.562"
+      ],
+      "fatal_errors": [
+        "Las dos etiquetas al revés respecto de la comparación: corre y etiqueta al revés",
+        "Los tres argumentos del `ifelse()` en otro orden",
+        "Etiquetas sin comillas o `Edad` con mayúscula: no corre",
+        "`mutate(tramo = edad < 30)` sin `ifelse()`: TRUE/FALSE en vez de las etiquetas",
+        "Parte (2): «dos filas, una por tramo», contra el enunciado que avisa que hay 4.562 sin edad"
+      ],
+      "partial_credit": {
+        "solo_el_ifelse": "La línea perfecta y ninguna frase: techo 40 en Exactitud, 40 en Completitud.",
+        "solo_la_frase": "«3 filas por los NA» y ninguna línea de R: techo 40 en Exactitud.",
+        "etiquetas_al_reves": "Las dos partes, con las etiquetas al revés: corre y contesta mal, techo 40 en Exactitud, Completitud 100, por encima de la media respuesta.",
+        "dos_filas": "La línea perfecta + «2 filas»: la parte (2) contradice el enunciado, Exactitud 40, Completitud 100, por encima de la media respuesta.",
+        "true_false_sin_ifelse": "`mutate(tramo = edad < 30)` + «3 filas»: la columna no tiene las etiquetas pedidas, Exactitud 40.",
+        "otra_escritura_correcta": "`edad >= 30` con las etiquetas invertidas, `if_else()`, etiquetas sin tilde: correctas, no bajan en Exactitud."
+      }
+    },
+    "idealAnswer": {
+      "keyPoints": [
+        "cep %>%",
+        "  mutate(tramo = ifelse(edad < 30, \"Menor de 30\", \"30 o más\")) %>%",
+        "  count(tramo)",
+        "Tres filas: «Menor de 30», «30 o más» y una fila NA con las 4.562 personas sin edad, porque sin edad `ifelse()` no puede decidir el tramo"
+      ],
+      "expectedConcepts": [
+        "mutate_tres_formas"
+      ],
+      "commonMistakes": [
+        "Las dos etiquetas al revés",
+        "Los tres argumentos del `ifelse()` en otro orden",
+        "Etiquetas sin comillas",
+        "Decir que `count(tramo)` devuelve dos filas",
+        "Entregar sólo la línea sin la frase"
+      ],
+      "excellentResponseIndicators": [
+        "La forma pregunta / si TRUE / si FALSE en el orden correcto",
+        "Explica en una frase que el NA se arrastra y forma una tercera fila",
+        "Dice qué hacer con esa fila: declararla o filtrarla"
+      ]
+    }
+  },
+  {
+    "id": "dv_c07_r5_el_ano_que_dio_cero",
+    "order": 5,
+    "title": "El año que dio cero",
+    "category": "Los tres controles",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 120,
+    "answerFormat": "code",
+    "conceptTags": [
+      "los_tres_controles",
+      "group_by_y_receta"
+    ],
+    "context": "Un compañero corrió la receta sobre `cep` con la columna `chile_hoy`, que dice si la persona cree que Chile está `\"Progresando\"`, `\"Estancado\"` o `\"En decadencia\"`: el porcentaje que dice «Progresando», año por año, ordenado **de menor a mayor**.\n\nLa primera fila de su tabla dice:\n\n| anio | personas | pct_progresando |\n|---|---|---|\n| 2005 | 4.515 | **0,0** |\n\nQuiere titular: *«2005, el año en que nadie creía que Chile progresaba»*.",
+    "question": "Dos cosas:\n\n**(1)** En una línea, en castellano: por qué ese cero **no se publica todavía**, y qué sospechas que pasó.\n\n**(2)** La línea (o las dos) de R que correrías sobre `cep` para comprobarlo.\n\n```r\ncep %>%\n  ...\n```\n\nSólo esa frase y ese código.",
+    "judgeFocus": "Esta ronda pide DOS COSAS y las dos se califican: (1) UNA LÍNEA de castellano: por qué el 0,0% de 2005 no se publica todavía y qué sospecha que pasó; (2) la línea (o las dos) de R que correría para comprobarlo. Es la ronda de criterio de la sesión, y es corta: eso bien puesto vale 100.\n\nPARTE (1) — POR QUÉ NO SE PUBLICA. El criterio, que manda sobre cualquier ejemplo: la respuesta tiene que llegar a que UN CERO EXACTO SOBRE 4.515 PERSONAS ES SOSPECHOSO Y LO MÁS PROBABLE ES QUE ESE AÑO LA COLUMNA NO TENGA DATO — la pregunta no se hizo, o quedó vacía en esta base—, así que el cero no dice que nadie creyera que Chile progresaba: dice que no hay respuestas. Basta con eso, en cualquier vocabulario, y la lista NO es exhaustiva: «0 de 4.515 es imposible, seguro ese año no preguntaron eso», «la columna debe estar vacía en 2005», «es el control 2 de la clase 6: la columna no estuvo siempre», «un cero redondo con tanta gente es un dato que falta, no una opinión unánime». Cualquier formulación que llegue a la sospecha de la columna vacía cumple. También vale, con menos precisión, «antes de publicar hay que mirar qué contestaron ese año» si la parte (2) muestra que sabe qué mirar.\n\nLO QUE NO CUENTA COMO PARTE (1): creerle al cero («se publica, es lo que dice la tabla»); decir que en 2005 la CEP no hizo encuesta (sí la hizo: la tabla muestra 4.515 personas); decir que el código está mal o que `arrange()` ordenó mal (el código está bien; el problema está en la base); decir que el `n()` es chico (4.515 no es chico: ése es el control 3, no el 2).\n\nPARTE (2) — LA LÍNEA PARA COMPROBARLO. El criterio: puntúa alto toda línea que, pegada en el Colab con `cep` cargada, MUESTRE QUÉ HAY ADENTRO DE `chile_hoy` EN 2005. La versión del cuaderno es\n\ncep %>%\n  filter(anio == 2005) %>%\n  count(chile_hoy)\n\npero cualquier otra que mire esa columna en ese año vale igual, esté o no en esta lista no exhaustiva: `count(anio, chile_hoy)` y buscar 2005; `group_by(anio) %>% summarise(con_dato = sum(chile_hoy != \"\"))`; `filter(anio == 2005) %>% count(chile_hoy == \"Progresando\")`; `filter(anio == 2005 & chile_hoy == \"\") %>% nrow()`; `|>`. La pregunta es si la línea le mostraría que la columna está vacía.\n\nLO QUE SÍ ES ERROR en la parte (2):\n- `count(anio)` o `filter(anio == 2005) %>% nrow()`: corre, dice cuántas personas hay en 2005 (4.515, que ya estaba en la tabla) y no mira la columna. Código que corre y no comprueba nada.\n- Volver a correr la misma receta, con o sin `desc()`: no comprueba nada.\n- `filter(anio = 2005)` con un solo igual, `Anio` o `Chile_hoy` con mayúscula: no corre.\n- Describir en palabras («revisaría los datos de 2005») sin escribir la línea: para la parte (2) es media respuesta.\n\nLA RESPUESTA PARCIAL TÍPICA DE ESTA RONDA es la sospecha correcta con «habría que revisar» y ninguna línea de R, o la línea del cuaderno sin decir por qué el cero no se publica. Media respuesta, techo 40 en Exactitud. Y la que entregó las dos partes con `count(anio)` va POR ENCIMA de la mitad impecable.\n\nLO QUE NO SE EXIGE, NUNCA: `library(dplyr)` ni `read.csv()` —el enunciado dice que la tabla ya está cargada—, ni el tipo de comillas, ni la indentación, ni los saltos de línea, ni comentarios, ni explicación en prosa del código. Tampoco ortografía, tildes ni vocabulario académico en la parte de castellano. Y si el estudiante objeta el enunciado —dice que los números no le calzan o que le falta información— eso NO se penaliza nunca: si tiene razón, el problema es del enunciado.\n\nEN EL FEEDBACK: si su escritura corre y no es la del cuaderno, no le pidas que la cambie; dile qué paso falta, no qué palabra. Y cierra con una frase concreta sobre qué línea de ESTA respuesta va a necesitar en su propia base para la entrega del Sprint 2 del lunes 28 de septiembre de 2026.",
+    "evaluationGuide": {
+      "must_hit": [
+        "PARTE (1): sospecha que la columna no tiene dato ese año, y por eso el cero no significa que nadie creyera eso",
+        "PARTE (1): dice o implica que no se publica sin comprobarlo",
+        "PARTE (2): una línea de R que mire qué hay adentro de `chile_hoy` en 2005 (un `filter()` por `anio` con un `count()` de `chile_hoy`, o equivalente)"
+      ],
+      "nice_to_have": [
+        "Lo conecta con el control 2 de la clase 6 (la columna que dejó de preguntarse) o con la ficha de calidad del Sprint 2",
+        "Dice qué haría después: sacar 2005 de la serie o declararlo",
+        "Distingue «nadie contestó eso» de «la columna está vacía»",
+        "Llega por otro camino correcto: `count(anio, chile_hoy)`, `sum(chile_hoy != \"\")` por año"
+      ],
+      "fatal_errors": [
+        "Le cree al cero y lo publica",
+        "Dice que en 2005 no hubo encuesta, contra los 4.515 de la tabla",
+        "Atribuye el cero a un error del código o del `arrange()`",
+        "`count(anio)` o `nrow()` como comprobación: no mira la columna",
+        "`filter(anio = 2005)` con un solo igual, o columnas con mayúscula"
+      ],
+      "partial_credit": {
+        "solo_la_sospecha": "La sospecha correcta + «habría que revisar los datos» sin ninguna línea de R: techo 40 en Exactitud.",
+        "solo_la_linea": "La línea del cuaderno y ni una palabra de por qué no se publica: techo 40 en Exactitud.",
+        "count_anio": "La sospecha correcta + `count(anio)`: corre y no comprueba nada. Techo 40 en Exactitud, Completitud 100, por encima de la media respuesta.",
+        "no_hubo_encuesta": "«En 2005 no se hizo la encuesta» + la línea correcta: la parte (1) contradice la tabla. Exactitud 40.",
+        "arrange_mal": "«arrange ordenó mal» + `arrange(desc(...))`: diagnóstico equivocado y línea que no comprueba nada. Exactitud 20.",
+        "otra_escritura_correcta": "`count(anio, chile_hoy)`, `sum(chile_hoy != \"\")` por año, `filter(anio == 2005 & chile_hoy == \"\")`: correctas, no bajan en Exactitud."
+      }
+    },
+    "idealAnswer": {
+      "keyPoints": [
+        "Un 0,0% exacto con 4.515 personas no es una opinión unánime: lo más probable es que ese año la columna esté vacía (no se preguntó), y eso hay que mirarlo antes de publicar",
+        "cep %>%",
+        "  filter(anio == 2005) %>%",
+        "  count(chile_hoy)"
+      ],
+      "expectedConcepts": [
+        "los_tres_controles",
+        "group_by_y_receta"
+      ],
+      "commonMistakes": [
+        "Creerle al cero",
+        "Decir que en 2005 no hubo encuesta",
+        "Comprobar con `count(anio)`, que no mira la columna",
+        "Decir «habría que revisar» sin escribir la línea",
+        "Culpar al `arrange()`"
+      ],
+      "excellentResponseIndicators": [
+        "Distingue en una frase «nadie contestó eso» de «la columna está vacía»",
+        "La línea filtra el año y cuenta la columna",
+        "Dice qué haría con 2005 en la serie: sacarlo o declararlo"
+      ]
+    }
+  },
+  {
+    "id": "dv_c07_r6_limpiar_y_comparar",
+    "order": 6,
+    "title": "Limpiar y comparar en la misma cadena",
+    "category": "as.numeric() + group_by()",
+    "difficulty": "hard",
+    "ranked": true,
+    "durationSeconds": 180,
+    "answerFormat": "code",
+    "conceptTags": [
+      "limpiar_y_comparar",
+      "summarise_y_na"
+    ],
+    "context": "Volvemos a la encuesta del curso: la tabla `curso` ya está cargada, **33 personas**.\n\nEn `transporte` los valores están escritos exactamente así: `\"Auto\"` (12 personas), `\"Metro\"` (6) y `\"Micro o bus\"` (15).\n\n`minutos_viaje` es **texto**, porque una persona escribió `10 min` en vez de un número (lo vimos en la clase 5).\n\nLa pregunta: **¿cuántos minutos se demora en promedio cada grupo de `transporte`?**",
+    "question": "Dos cosas:\n\n**(1)** La cadena de R, **tres líneas después de `curso`**, que devuelve una fila por transporte con `personas` y `minutos_promedio`.\n\n```r\ncurso %>%\n  ... %>%\n  ... %>%\n  ...\n```\n\n**(2)** Sólo la línea de `summarise()` cambiada para que, en vez del promedio, devuelva `pct_largo`: el porcentaje de cada grupo que se demora **más de 60 minutos**.\n\nSólo el código, sin explicarlo.",
+    "judgeFocus": "Esta ronda pide DOS COSAS de código y las dos se califican: (1) la cadena de TRES LÍNEAS después de `curso` con los minutos promedio por transporte; (2) la línea de `summarise()` cambiada para devolver `pct_largo`, el porcentaje de cada grupo con más de 60 minutos. Es la última ronda y la que junta las dos lecciones —limpiar (clase 5) y comparar (clases 6 y 7)—. Eso bien puesto vale 100.\n\nPARTE (1) — LA CADENA. El criterio, que manda sobre cualquier ejemplo: puntúa alto todo código que, pegado en un Colab con `curso` cargada, DEVUELVA UNA FILA POR TRANSPORTE CON `personas` Y `minutos_promedio`, Y LOS TRES PROMEDIOS SEAN NÚMEROS (Auto 40,5 · Metro 83,3 · Micro o bus 77,0). La versión canónica es\n\ncurso %>%\n  mutate(minutos_num = as.numeric(minutos_viaje)) %>%\n  group_by(transporte) %>%\n  summarise(personas = n(), minutos_promedio = mean(minutos_num, na.rm = TRUE))\n\npero CUALQUIER OTRA QUE DEVUELVA ESA TABLA VALE IGUAL, esté o no en esta lista no exhaustiva: sobrescribir la columna (`mutate(minutos_viaje = as.numeric(minutos_viaje))`); otro nombre para la columna nueva, con tal de que sea el mismo en el `summarise()`; `na.rm = T`; `|>`; `n = n()`; `curso$minutos_viaje <- as.numeric(curso$minutos_viaje)` antes de la cadena; `as.numeric()` metido directo adentro del `mean()` (`mean(as.numeric(minutos_viaje), na.rm = TRUE)`), que son dos líneas y está perfecto.\n\nLO QUE SÍ ES ERROR en la parte (1), y es donde se decide el puntaje:\n- SIN `na.rm = TRUE`: corre, y el grupo Auto sale `NA` porque ahí está la persona del `10 min`, que `as.numeric()` dejó en NA. La tabla se ve prolija y falta uno de los tres números que se pidieron. Código que corre y contesta mal.\n- SIN `as.numeric()` en ninguna parte: `mean(minutos_viaje)` promedia texto y no devuelve ningún promedio válido. Es la lección de la clase 5 que falta. Código que corre y contesta mal.\n- `Minutos_viaje` o `Transporte` con mayúscula: no corre.\n- `mean(minutos_num)` ANTES del `mutate()` que crea `minutos_num`, o `group_by()` después del `summarise()`: no corre.\n- `n` sin paréntesis: no corre.\n- Dejar los `...` de la forma vacía sin rellenar.\n\nPARTE (2) — EL PORCENTAJE. El criterio: puntúa alto toda línea de `summarise()` que devuelva, por transporte, el porcentaje con más de 60 minutos (Auto 9,1 · Metro 50,0 · Micro o bus 66,7). La versión canónica es\n\nsummarise(personas = n(), pct_largo = mean(minutos_num > 60, na.rm = TRUE) * 100)\n\ny valen igual, lista no exhaustiva: crear `largo = minutos_num > 60` en el `mutate()` y promediar `largo`; `sum(minutos_num > 60, na.rm = TRUE) / n() * 100` (otro denominador, que incluye al NA: sigue siendo el porcentaje de cada grupo y vale); `>= 61`. El enunciado pidió «sólo la línea de summarise()», pero si escribió la cadena entera de nuevo no le bajes nada. Sin `* 100` queda la proporción: nivel 80, no techo. Sin `na.rm = TRUE`, Auto vuelve a salir NA: corre y contesta mal. `filter(minutos_num > 60) %>% count(transporte)` cuenta a los que viajan largo pero no da el porcentaje que se pidió: contesta otra cosa, nivel 40. Comparar `minutos_viaje` sin convertir (`minutos_viaje > 60`) es el filtro de la clase 5 que dejaba fuera a los que más viajan: corre y contesta mal.\n\nLA RESPUESTA PARCIAL TÍPICA DE ESTA RONDA es la cadena de (1) perfecta y ninguna línea para (2): es la última ronda, el reloj se acaba y la segunda parte se cae. Media respuesta, techo 40 en Exactitud. Y la que entregó las dos partes sin `na.rm = TRUE` va POR ENCIMA de la cadena impecable sin la segunda parte.\n\nLO QUE NO SE EXIGE, NUNCA: `library(dplyr)` ni `read.csv()` —el enunciado dice que la tabla ya está cargada—, ni el tipo de comillas, ni la indentación, ni los saltos de línea, ni comentarios, ni explicación en prosa del código. Tampoco ortografía, tildes ni vocabulario académico en la parte de castellano. Y si el estudiante objeta el enunciado —dice que los números no le calzan o que le falta información— eso NO se penaliza nunca: si tiene razón, el problema es del enunciado.\n\nEN EL FEEDBACK: si su escritura corre y no es la del cuaderno, no le pidas que la cambie; dile qué paso falta, no qué palabra. Y cierra con una frase concreta sobre qué línea de ESTA respuesta va a necesitar en su propia base para la entrega del Sprint 2 del lunes 28 de septiembre de 2026.",
+    "evaluationGuide": {
+      "must_hit": [
+        "PARTE (1): convierte `minutos_viaje` a número antes de promediarla, en cualquier forma que funcione",
+        "PARTE (1): agrupa por `transporte` antes del `summarise()`, y resume con `n()` y `mean()`",
+        "PARTE (1): el `mean()` lleva `na.rm = TRUE` (o filtra el NA antes), para que Auto no salga NA",
+        "PARTE (2): un `summarise()` cuyo porcentaje es el promedio de la comparación `> 60` sobre la columna convertida, por 100, con `na.rm = TRUE`"
+      ],
+      "nice_to_have": [
+        "Dice o muestra que sin `na.rm` Auto saldría NA por el `10 min`",
+        "Usa la misma receta del porcentaje del cuaderno: el promedio de una columna TRUE/FALSE",
+        "Llega por otro camino correcto: sobrescribe la columna, `as.numeric()` adentro del `mean()`, crea `largo` en el `mutate()`",
+        "Tres pasos en orden, uno por línea: limpiar, agrupar, resumir"
+      ],
+      "fatal_errors": [
+        "Sin `na.rm = TRUE`: corre y Auto sale NA",
+        "Sin `as.numeric()` en ninguna parte: promedia texto",
+        "`Minutos_viaje` o `Transporte` con mayúscula: no corre",
+        "Usa la columna nueva antes del `mutate()` que la crea, o `group_by()` después del `summarise()`",
+        "Parte (2): compara `minutos_viaje` sin convertir, o cuenta con `filter()` en vez de dar el porcentaje",
+        "Deja los `...` de la forma vacía sin rellenar"
+      ],
+      "partial_credit": {
+        "solo_la_cadena": "La cadena de (1) perfecta y ninguna línea para (2): techo 40 en Exactitud, 40 en Completitud. Es la parcial más probable de la ronda.",
+        "solo_el_porcentaje": "Sólo el `summarise()` de (2) sin la cadena de (1): techo 40 en Exactitud.",
+        "sin_na_rm": "Las dos partes sin `na.rm = TRUE`: corre y Auto sale NA en las dos. Techo 40 en Exactitud, Completitud 100, por encima de la media respuesta.",
+        "sin_as_numeric": "Las dos partes sobre `minutos_viaje` sin convertir: la lección de la clase 5 que falta. Techo 40 en Exactitud, Completitud 100.",
+        "sin_por_100": "El porcentaje como proporción (0,091): Exactitud 80.",
+        "filter_en_vez_de_porcentaje": "Parte (2) con `filter(minutos_num > 60) %>% count(transporte)`: cuenta pero no da el porcentaje. Exactitud 40 para esa parte, a lo más 60 en total.",
+        "otra_escritura_correcta": "Sobrescribir la columna, `as.numeric()` adentro del `mean()`, `largo` en el `mutate()`, `sum(...) / n()`: correctas, no bajan en Exactitud; a lo más 80 en Completitud si cambió la forma pedida."
+      }
+    },
+    "idealAnswer": {
+      "keyPoints": [
+        "curso %>%",
+        "  mutate(minutos_num = as.numeric(minutos_viaje)) %>%",
+        "  group_by(transporte) %>%",
+        "  summarise(personas = n(), minutos_promedio = mean(minutos_num, na.rm = TRUE))",
+        "summarise(personas = n(), pct_largo = mean(minutos_num > 60, na.rm = TRUE) * 100)"
+      ],
+      "expectedConcepts": [
+        "limpiar_y_comparar",
+        "summarise_y_na"
+      ],
+      "commonMistakes": [
+        "Olvidar el `na.rm = TRUE`: Auto sale NA",
+        "Promediar `minutos_viaje` sin convertirla",
+        "Usar `minutos_num` antes del `mutate()` que la crea",
+        "Entregar sólo la cadena y no la línea del porcentaje",
+        "Contar con `filter()` en vez de dar el porcentaje"
+      ],
+      "excellentResponseIndicators": [
+        "Limpiar, agrupar y resumir, un paso por línea",
+        "El `na.rm = TRUE` adentro del `mean()` en las dos partes",
+        "El porcentaje escrito como el promedio de una comparación, por 100"
+      ]
+    }
+  }
+]

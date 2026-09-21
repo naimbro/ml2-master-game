@@ -1,0 +1,45 @@
+{
+  "sessionId": "clase_07_mutate_agrupar_resumir",
+  "courseId": "dataviz_2026",
+  "title": "Clase 7: Mutate, agrupar y resumir",
+  "description": "Control de código de ~27 min de pared: SEIS rondas abiertas, ninguna de alternativas, y las seis piden escribir R (`answerFormat: code`). Cubre el material de las clases 6 y 7 —`mutate()` en sus tres formas, `summarise()` con `n()` y `mean(na.rm = TRUE)`, `group_by()`, `arrange(desc())` y los controles antes de publicar—, que nunca se había preguntado porque la clase 6 no jugó. R1 crea `mujer` y la cuenta (120 s). R2 diagnostica el `mean(edad)` que dio `NA` y lo arregla (120 s). R3 es la grande (180 s): la receta de cuatro líneas que dice en qué año Chile vio peor su economía, más cuántas filas devuelve. R4 crea `tramo` con `ifelse()` y explica por qué `count()` devuelve tres filas y no dos (150 s). R5 es el 0,0% de 2005 que no se publica y la línea que lo comprueba (120 s). R6 limpia `minutos_viaje` con `as.numeric()` y compara por transporte, y cambia el `summarise()` a un porcentaje (180 s). R3 va al MEDIO a propósito: si el bloque se estira, lo que se cae es R6 y no la ronda que importa. Cada enunciado numera (1) y (2), y la rúbrica cobra media respuesta con techo de 40 en exactitud. Las seis compiten y las seis pasan por los jueces.",
+  "date": "2026-09-21",
+  "roundCount": 6,
+  "roundDurationSeconds": 150,
+  "bufferSeconds": 45,
+  "conceptTags": [
+    "mutate_tres_formas",
+    "summarise_y_na",
+    "group_by_y_receta",
+    "los_tres_controles",
+    "limpiar_y_comparar"
+  ],
+  "judges": [
+    {
+      "judgeId": "generic_specialist",
+      "weight": 0.35
+    },
+    {
+      "judgeId": "generic_praxis",
+      "weight": 0.35
+    },
+    {
+      "judgeId": "generic_teacher",
+      "weight": 0.3
+    }
+  ],
+  "judgeConfig": {
+    "generic_specialist": {
+      "sessionLens": "Tu lente es LA EXACTITUD DE LO ENTREGADO, y en esta sesión eso significa casi siempre una sola pregunta: ¿ESTE CÓDIGO, PEGADO EN UN COLAB QUE YA TIENE `cep` (O `curso`) CARGADA, CORRE Y CONTESTA LO QUE SE PREGUNTÓ? Las seis rondas son abiertas, las seis pasan por ti, y las seis piden escribir R. Cada una pide DOS COSAS numeradas; en R2, R3, R4 y R5 una de las dos es una línea de castellano, y ahí tu pregunta es si lo que afirma es correcto y se sostiene con lo que tiene al frente, sin exigir una sola palabra técnica. No confundas 'no está en el cuaderno' con 'está mal': `|>` en vez de `%>%`, `if_else()`, `%in%`, `n = n()` en vez de `personas = n()`, `count()` donde cabe, la comparación metida directo adentro del `mean()` sin pasar por `mutate()`, sobrescribir la columna, objetos intermedios, `na.rm = T`, `sum(x)/n()` en vez de `mean(x)`: todo eso corre y contesta bien, y vale 100. Lo que SÍ cobras, porque es exactamente lo que el cuaderno de hoy repasó: el ORDEN (`mutate()` antes de usar la columna nueva, `group_by()` antes de `summarise()`), los NOMBRES de columna y los VALORES escritos tal cual están en los datos (`sexo`, `\"Mujer\"`, `sit_econ_pais`, `\"Muy mala\"`, `transporte`, `\"Micro o bus\"`), el `n()` CON paréntesis, `==` y no `=` para comparar, `|` y no `&` para juntar dos valores de la misma columna, y el `na.rm = TRUE` donde la columna tiene `NA` (`edad` en R2, `minutos_num` en R6). Y deliberadamente indulgente con todo lo demás: indentación, tipo de comillas, saltos de línea, un paréntesis de cierre que falta cuando la intención es inequívoca — escriben desde un teléfono. Llevan seis clases programando y el cuaderno de hoy fue puro repaso: exige que corra, no elegancia.",
+      "weightFormula": "score = 0.75 * exactitud + 0.15 * completitud + 0.10 * claridad"
+    },
+    "generic_praxis": {
+      "sessionLens": "Tú eres quien va a tomar lo que el estudiante escribió y pegarlo en el Colab del Sprint 2 sin poder preguntarle nada. Las seis rondas de esta sesión piden código, y para ti eso significa literalmente copiar y pegar: ¿está todo lo que hace falta, en un orden en que correría, sin que tengas que adivinar qué va primero ni completar un hueco? Que el `mutate()` vaya ANTES de la línea que usa la columna nueva, y el `group_by()` ANTES del `summarise()`, no es estilo: al revés no corre o no agrupa. Una respuesta cuyo código es puro código, sin una palabra de prosa alrededor, es exactamente lo que se pidió y no te molesta; lo que te molesta es el código enterrado en un párrafo, los `...` que quedaron sin rellenar, o los fragmentos sueltos que no llegan a ser una línea. Cuatro rondas (R2, R3, R4, R5) piden además una línea de castellano: ahí eres el compañero de grupo que va a usar esa frase en la ficha de calidad del Sprint 2, y tu pregunta es si después de leerla sabrías qué pasó y qué hay que mirar antes de publicar una cifra. Premia lo que se entiende a la primera; penaliza el rodeo. Y no pidas prosa donde se pidió código: los enunciados dicen «sólo el código, sin explicarlo».",
+      "weightFormula": "score = 0.60 * exactitud + 0.15 * completitud + 0.25 * claridad"
+    },
+    "generic_teacher": {
+      "sessionLens": "Las seis rondas de esta sesión entran al ranking, así que puntúa con honestidad y sin inflar: un puntaje regalado le quita el puesto a otro. Lo que más te importa es que ENTREGUEN LAS DOS COSAS QUE SE PIDIERON EN CADA RONDA — las seis numeran (1) y (2) en el enunciado, y ése es el error más probable de toda la sesión. Media respuesta perfecta sigue siendo media respuesta. Pero cuidado con el reverso, que es donde estas rúbricas se dan vuelta solas: la respuesta que entregó LAS DOS PARTES y se equivocó en una va POR ENCIMA de la mitad impecable, porque la incompleta se ganó gratis las dimensiones de forma al no arriesgarse a nada. Si al terminar te quedó al revés, revísalo. En el código caza los errores que el cuaderno de hoy enseñó a mirar: el `na.rm = TRUE` que falta donde la columna tiene `NA`, el `&` donde iba `|`, el `n` sin paréntesis, el `=` donde iba `==`, el `group_by()` después del `summarise()`, el `filter()` o el `mean()` sobre una columna que la cadena todavía no ha creado, y el nombre de columna o el valor con otra mayúscula. Recuerda que llevan seis clases programando: no exijas elegancia, exige que corra. En tu feedback escribe en primera persona e incluye un 'yo habría...' concreto a ESTA respuesta, con la línea exacta que le habrías escrito.",
+      "weightFormula": "score = 0.60 * exactitud + 0.32 * completitud + 0.08 * claridad"
+    }
+  }
+}
