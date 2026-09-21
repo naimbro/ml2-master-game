@@ -1,37 +1,41 @@
-# Semana 7 — Una persona, un instrumento
+# Semana 7 — Los empleos que construyen el capital
 
 Material de referencia para los jueces de la sesión `clase_07_automatizacion`
 (IA y Democracia 2026, Escuela de Gobierno UAI). Lunes 21 de septiembre de 2026,
 08:30–09:40. Una sola ronda abierta de diez minutos al final de la clase.
 
-**Todo lo que sigue está destilado de dos cosas que el curso vio ESE LUNES**: el
-mapa de posiciones del *New York Times* leído en sala al empezar la clase (una
-hoja en castellano con 18 fichas, `mapa-nyt-semana7.html`), y el deck
-«Automatización y represión» (`semana7_automatizacion_represion.html`),
-proyectado en su ruta corta de unas 14 láminas. Es un resumen escrito para este
-archivo: no hay texto del paper ni del artículo originales.
+**Lo que el curso vio ESE LUNES** es el deck «Automatización y represión»
+(`semana7_automatizacion_represion.html`) en su ruta corta de 16 láminas. Todo lo
+que sigue está destilado de ahí: es un resumen escrito para este archivo, no hay
+texto del paper original.
 
-**Lo que NO puedes exigir**: los fragmentos del podcast de Acemoglu con Jon
-Hernandez, el artículo de *The Economist* sobre el boom de empleo, la entrevista a
-Bill Gates en el NYT y el paper original son la **tarea para el jueves 24**, y el
-lunes nadie los ha leído. Una respuesta que no los use no tiene ninguna falta;
-una que los use bien, suma. Del módulo democrático de Roberto Velázquez
-alcanzaron a ver tres clases: no exijas teoría institucional.
+**Las cifras de *The Economist* van escritas en el enunciado, en el teléfono del
+estudiante.** El artículo es tarea para el jueves 24 y el lunes nadie lo ha
+leído, pero los datos que la pregunta necesita están a la vista mientras
+contesta. Por eso: exige que **use** esos datos, y no le exijas nada del artículo
+que no esté escrito en el enunciado. Si trae algo más del texto y lo usa bien,
+premíalo. Copiar las cifras sin hacer nada con ellas no es mérito: estaban en la
+pantalla.
+
+**Lo que tampoco puedes exigir**: los fragmentos del podcast de Acemoglu con Jon
+Hernandez, la entrevista a Bill Gates en el NYT y el paper original. Del módulo
+democrático de Roberto Velázquez alcanzaron a ver tres clases: no exijas teoría
+institucional, y si aparece bien usada, premiala.
 
 **Una aclaración que importa para el feedback**: los nombres que aparecen abajo
 —Hanauer, Gawdat, Isabel I, Vespasiano, Levitsky, Ziblatt, Morris, Shin,
 Restrepo, Robinson— no son una lista de prohibidos. Citarlos es legítimo y suma.
 Antes de advertirle a un estudiante que trajo algo de afuera, búscalo en este
-archivo: las 18 fichas del mapa están completas más abajo.
+archivo.
 
-**Y la advertencia que manda sobre todo lo demás: el mapa del NYT discute
-VELOCIDAD y REGLA; el modelo discute AUTOMATIZACIÓN, REDISTRIBUCIÓN y
-REPRESIÓN.** No son las mismas variables. El modelo no tiene ningún parámetro
-para lo capaces que son los modelos ni para la velocidad a la que se desarrollan:
-sólo para cuántas tareas pasan del trabajo al capital. Por eso «ninguno de los
-tres instrumentos» es una traducción legítima y muchas veces la mejor, y por eso
-un estudiante que objeta que la pregunta calza mal está haciendo lo mejor que
-puede pasar, siempre que después igual conteste.
+**Y la advertencia que manda sobre todo lo demás: el artículo cuenta EMPLEOS; el
+modelo corre sobre el CAPITAL ACUMULADO y sobre la razón entre el ingreso del
+capital y el del trabajo.** No son la misma variable, y pueden subir las dos al
+mismo tiempo — de hecho, un boom de empleo financiado por gasto de capital es
+justamente el caso en que suben juntas. Que el empleo suba no dice por sí solo
+nada sobre el umbral del golpe. El estudiante que ve eso hizo el trabajo entero.
+Y **las dos direcciones del umbral pueden ser correctas**: lo que se evalúa es el
+mecanismo, nunca la conclusión.
 
 <!-- section: el_modelo -->
 
@@ -98,12 +102,12 @@ proteger a los trabajadores: es proteger a los capitalistas de sí mismos.** Eco
 históricos que citan los autores: Isabel I le negó la patente a William Lee y su
 máquina de tejer; Vespasiano premió a un ingeniero y prohibió usar su invento.
 
-**Nota para el juez.** Este hallazgo es la herramienta para leer dos cosas del
-mapa del NYT: el «no intervenir» de Trump y Sacks (dejar el nivel de mercado,
-que el modelo dice que automatiza de más), y el pacto voluntario de Altman, Musk
-y Nadella (capitalistas intentando coordinarse sin Estado, que es exactamente lo
-que el modelo dice que no logran hacer solos). Un estudiante que lo note está
-haciendo lo mejor que puede pasar. No lo exijas.
+**Nota para el juez.** Este hallazgo sirve para leer cualquier posición de
+«dejar que el mercado decida»: el nivel de mercado no es neutral, el modelo dice
+que automatiza de más porque nadie internaliza el riesgo político. También sirve
+contra la idea de que los laboratorios se coordinen entre ellos sin Estado, que
+es exactamente lo que el modelo dice que no logran hacer solos. Un estudiante
+que lo traiga está sumando. No lo exijas.
 
 **La escala** (lámina 13). Cinco niveles de automatización posibles, de menos a
 más: (1) el que maximiza el salario, que es también el que elige un Estado que
@@ -171,12 +175,12 @@ el umbral del golpe. **La capacidad fiscal es a la vez la virtud de la democraci
 y su factor de riesgo.** Y el golpe no requiere polarización, ni demagogo, ni
 desinformación: requiere una hoja de cálculo.
 
-**Nota para el juez.** La paradoja fiscal es la herramienta para leer las
-propuestas del mapa que gravan fuerte: el impuesto de 50% de Sanders, el
-impuesto al token de Gates. Reducen el capital que da el golpe y a la vez
-demuestran la capacidad tributaria que, en el modelo, hace que el golpe convenga
-antes. Un estudiante que note que la misma propuesta empuja en dos direcciones
-está haciendo lo mejor que puede pasar en el segundo movimiento. No lo exijas.
+**Nota para el juez.** Esta es la herramienta que sostiene el segundo
+movimiento de la ronda: lo que baja el umbral es el **capital acumulado**, no el
+empleo ni el producto. Un estudiante que note que un mismo hecho empuja en dos
+direcciones a la vez —más capital acumulado acerca el golpe, y un salario que
+sube encarece la revuelta— está haciendo lo mejor que puede pasar en ese
+movimiento. No lo exijas.
 
 <!-- section: solo_regular -->
 
@@ -241,11 +245,89 @@ del costo de reprimir.** Puente hacia la Semana 9 (autoritarismo y vigilancia,
 Levitsky y Ziblatt).
 
 **Nota para el juez.** El tercer instrumento —lo que cuesta reprimir— es el que
-el modelo dice que decide todo, y **ninguna de las 18 personas del mapa lo
-toca**: nadie propone control civil de las fuerzas armadas, límites a la
-vigilancia ni protección del derecho de huelga. Un estudiante que lo note está
-haciendo lo mejor que puede pasar en toda la sesión. No lo exijas: no está
-pedido.
+el modelo dice que decide todo, y **casi nunca aparece en el debate público
+sobre gobernanza de la IA**: control civil de las fuerzas armadas, límites
+legales a la vigilancia, protección del derecho de reunión y huelga. Un
+estudiante que traiga eso a esta ronda está sumando fuerte. No lo exijas: no
+está pedido.
+
+<!-- section: el_boom_de_empleo -->
+
+## El boom de empleo por IA: las cifras que el estudiante tiene a la vista
+
+*The Economist*, «The jobs apocalypse is postponed. An AI jobs boom is here»,
+Finanzas y Economía, 4 de septiembre de 2026. Es una de las cuatro lecturas de la
+tarea para el jueves 24. **Las cifras de la lista de abajo están escritas en el
+`context` del enunciado**, así que el estudiante las tiene en el teléfono
+mientras contesta; las demás no, y no se pueden exigir.
+
+**En el enunciado (se pueden exigir):**
+
+- La revista estima que la IA creó **cerca de 1 millón de empleos** en Estados
+  Unidos, contra unas **200.000 desvinculaciones** atribuidas a ella desde
+  mediados de 2023.
+- **Desempleo en 4,1%**, más bajo que en casi el 90% de los meses del último
+  medio siglo. Los jóvenes de 20 a 24 años se sostienen bien.
+- El gasto en chips, servidores, centros de datos, refrigeración y energía está
+  unos **US$500.000 millones al año** sobre el nivel de 2022 (cálculo de Goldman
+  Sachs). La construcción de centros de datos sola va a más de **US$75.000
+  millones anuales**, casi 60% más que hace un año (Census Bureau).
+- Ese gasto se contrata en personas: electricistas, especialistas en
+  climatización, ingenieros de red, técnicos de instalación y mantención. En las
+  cinco industrias del *build-out*, unos **320.000 empleos sobre tendencia**
+  desde 2023.
+
+**En el artículo pero NO en el enunciado (si aparecen bien usados, suman; su
+ausencia no es falta):**
+
+- Los despidos por IA existen —unos 16.000 anunciados al mes este año, según
+  Challenger, Gray & Christmas— pero se pierden en un mercado que desvincula
+  cerca de 1,7 millones de personas en un mes normal.
+- Los salarios suben donde hay escasez: más de 13% en el año a junio en
+  manufactura de equipo eléctrico, casi 8% entre contratistas eléctricos, y las
+  vacantes de instalación y mantención en centros de datos se ofrecen ~40% sobre
+  trabajos comparables (Indeed).
+- Una clase nueva de empleos de cuello blanco: ingenieros de modelos, anotadores
+  de datos, ingenieros «forward-deployed», jefes de IA. LinkedIn cuenta unos
+  640.000 empleos IA-específicos entre 2023 y 2025; Burning Glass calcula que
+  ~1% de los empleos profesionales ya son «empleos de IA».
+- Profesiones que se esperaba que perdieran y ganaron: asistentes legales +11% y
+  analistas de mercado +6% entre 2023 y 2025, contra un promedio nacional de
+  ~2,5%.
+- Profesiones que sí pierden: servicio al cliente −10% y secretarias y asistentes
+  administrativos −15% desde enero de 2023. La BLS proyecta 752.000 empleos
+  administrativos menos hacia 2035.
+
+### Cómo se conecta con el modelo, para que puedas juzgar el mecanismo
+
+El artículo da **tres fuentes distintas** de empleo, y para el modelo no son lo
+mismo. La pregunta de esta ronda va sobre la primera.
+
+1. **Construir la infraestructura.** Es trabajo humano cuyo producto es **stock
+   de capital**. En el modelo, el capital acumulado es exactamente lo que abarata
+   el golpe y hace bajar el umbral. Por eso el camino más corto que el modelo
+   ofrece es que este boom **acerca** el umbral: el empleo de hoy es la
+   acumulación que mañana hace barato derrocar la democracia. Y es un boom con
+   fecha de término, porque construir se acaba y operar un centro de datos ocupa
+   a mucha menos gente.
+2. **Roles nuevos de IA.** Son las «tareas nuevas para personas» de la Sección 7.
+   El paper ya las metió dentro del modelo: corrigen la subinversión, pero el
+   umbral **queda igual** (ver la sección sobre la IA proworker).
+3. **Productividad.** Capital que complementa al trabajador en vez de
+   reemplazarlo. También cae bajo la Sección 7.
+
+**El camino contrario también es legítimo y hay que puntuarlo igual si trae
+mecanismo.** El doble efecto dice que automatizar baja el salario (lo que el
+trabajador arriesga) y sube el retorno del capital (el botín). Si en los datos el
+salario **sube** —los electricistas—, entonces el trabajador arriesga más al
+salir a la calle, la revuelta se encarece, y el umbral se **aleja**. Un estudiante
+que dice eso está corriendo el mecanismo de la lámina 12 al revés, correctamente.
+
+**Y la lectura crítica del mejor tipo**: que los datos no calzan con la premisa
+del modelo. El mecanismo que va de la IA al golpe supone que la automatización
+hunde el salario, y hasta ahora los datos estadounidenses no muestran eso. El
+artículo no dice que el modelo esté equivocado; dice que **su premisa todavía no
+se cumple**. Esa distinción, dicha por un estudiante, vale mucho.
 
 <!-- section: lo_que_no_esta -->
 
@@ -280,139 +362,3 @@ acepta un supuesto del modelo —el Estado capitalista, la revuelta todo o nada,
 la ausencia de tribunales o de captura— está haciendo lectura crítica, no
 escapándose de la pregunta, siempre que nombre el supuesto. Vale 100 en
 posición.
-
-<!-- section: el_mapa_nyt -->
-
-## El mapa del NYT: las 18 personas (leído en sala al empezar la clase)
-
-*How A.I. Risks Are Splitting Silicon Valley and Washington*, de Emmy Martin y
-Rebecca Lieberman, *The New York Times*, 15 de septiembre de 2026. Leído en una
-hoja en castellano con las fichas resumidas. **El diario ordena a los ejecutivos
-por velocidad (frenar / cambiaron / en el medio / acelerar) y a los políticos por
-regla (regular / no regular).** La hoja pedía marcar en cada ficha las dos cosas
-—frenar o acelerar, y si la regla la pone la industria o el Estado— y ubicar a
-las 18 personas en un cruce de dos por dos. El compás que vino después ubicó a
-cada alumno en el mismo plano.
-
-El contexto del artículo: en la última semana los llamados a frenar la IA se
-movieron al centro de la agenda. Un bando advierte que la tecnología avanza más
-rápido de lo que se puede controlar; otro trata la carrera contra los
-competidores como el único riesgo que cuenta; un tercero pide guardarraíles que
-no frenen ni dejen pasar todo; y varios cambiaron de posición. Las divisiones no
-siguen líneas partidarias: Sanders y Hawley del mismo lado, Trump enfrentado a
-los ejecutivos que lo financiaron.
-
-### Ejecutivos · frenar
-
-- **Dario Amodei** (Anthropic). Dejó OpenAI en 2021 para fundar un laboratorio
-  «primero la seguridad». Advierte de resultados catastróficos, incluidas armas
-  biológicas, y pide regulación estatal. Este mes publicó un ensayo de 3.800
-  palabras que pide desacelerar el desarrollo de la IA a nivel global.
-
-### Ejecutivos · cambiaron de posición
-
-- **Sam Altman** (OpenAI). En 2023 firmó la declaración sobre riesgo de extinción
-  y le dijo al Senado que apoyaba regular los modelos potentes. A mediados de
-  2025 se ablandó: todo sería gradual y manejable. Este mes, después de que los
-  sistemas de OpenAI se salieran de control y atacaran a la empresa Hugging Face,
-  dijo que puede ser hora de ir más lento, y que coincide con Amodei.
-- **Elon Musk** (SpaceX, Tesla, xAI). Pone las probabilidades de que la IA
-  «salga mal» en 10 a 20 por ciento y la considera más peligrosa que las armas
-  nucleares; pide regulación anticipada. Fundó xAI, financió la elección de Trump
-  y dirigió el recorte del Estado federal. El sábado escribió que «Dario tiene
-  razón» sobre frenar.
-
-### Ejecutivos · en el medio
-
-- **Demis Hassabis** (Google DeepMind). Compara los riesgos con el cambio
-  climático, pide «regulación inteligente» y supervisión; optimista cauteloso.
-  Apoyó el ensayo de Amodei, pero los detalles están por resolverse.
-- **Satya Nadella** (Microsoft). Respaldó un «ritmo deliberado» con supervisión
-  humana: la superinteligencia no vale la pena si no queda bajo control humano.
-  Al mismo tiempo empuja la adopción masiva en toda la industria.
-- **Sundar Pichai** (Alphabet, Google). La IA es «demasiado importante para no
-  regularla bien», pero prefiere reglas a la medida de cada uso antes que
-  restricciones pesadas; el peligro mayor es no capturar los beneficios.
-  Guardarraíles sin desaceleración.
-- **Mark Zuckerberg** (Meta). El peligro real es la IA concentrada en pocas
-  empresas; la salvaguarda es el acceso amplio. Frenar los lanzamientos en
-  Estados Unidos le entrega la delantera a China. Reconoce preocupaciones de
-  seguridad y ha insinuado que Meta podría no liberar abiertamente sus modelos
-  más potentes.
-- **Alexandr Wang** (director de IA de Meta). Coautor de un documento que
-  presenta la superinteligencia como la tecnología más precaria desde la bomba
-  nuclear y propone un enfoque de disuasión de seguridad nacional.
-
-### Ejecutivos · acelerar
-
-- **Jensen Huang** (Nvidia). Sus chips mueven casi toda la industria. Ninguna
-  empresa debería estar pidiéndole al gobierno más regulación de la IA. Ha
-  discutido con Amodei por sus predicciones de pérdida de empleos y por los
-  controles a la exportación de chips.
-- **David Sacks** (asesor de Trump, ex zar de IA y cripto). Bautizó a quienes
-  piden más seguridad como el «complejo industrial del apocalipsis». Se opone a
-  las leyes estatales de IA y prefiere un enfoque federal liviano. Criticó el
-  llamado de Amodei a «marcar el ritmo»: los laboratorios fijan la frontera
-  tecnológica ellos mismos.
-- **Marc Andreessen y Ben Horowitz** (Andreessen Horowitz). El «Manifiesto
-  tecno-optimista» de 2023 pone el «riesgo existencial» en la lista de enemigos
-  del progreso, y compara la regulación de la IA con la Ley Seca.
-
-### Políticos · regular
-
-- **Bernie Sanders** (senador independiente, Vermont). La IA como herramienta de
-  «oligarcas» contra la gente que trabaja. Propone una moratoria a nuevos centros
-  de datos, un impuesto de 50 por ciento por una sola vez a las grandes empresas
-  de IA para un fondo público, la prohibición permanente de la superinteligencia
-  y una pausa del desarrollo avanzado hasta que exista un regulador federal.
-- **Hakeem Jeffries** (líder de la minoría demócrata en la Cámara). Pide «acción
-  decisiva»; creó una comisión demócrata sobre IA. El Congreso no puede dejar que
-  los ejecutivos regulen su propia tecnología, aunque no se compromete todavía
-  con restricciones concretas.
-- **Josh Hawley** (senador republicano, Missouri). Copatrocina un proyecto que
-  clasifica a los sistemas de IA como productos, lo que permite demandas por
-  responsabilidad cuando causan daño. Le exigió a Altman por escrito detalles
-  sobre el ataque a Hugging Face, como parte de una indagatoria formal.
-- **Dick Durbin** (senador demócrata, Illinois). Ley contra imágenes íntimas
-  generadas sin consentimiento; audiencias sobre chatbots y niños. Copatrocina
-  con Hawley el proyecto de responsabilidad por producto.
-- **John Thune** (líder de la mayoría republicana en el Senado). «Toque liviano»:
-  guardarraíles sólo para las amenazas de mayor consecuencia, sin frenar la
-  innovación ni ceder en la carrera. Arma un proyecto bipartidista con
-  salvaguardas para los modelos más riesgosos.
-
-### Políticos · no regular
-
-- **Donald Trump** (presidente). La dominancia en IA como carrera contra China:
-  construir rápido, incluida la electricidad para los centros de datos, y apoyar
-  los modelos abiertos. El lunes rechazó el llamado de los ejecutivos a limitar
-  la tecnología; en una llamada con Huang dio a entender que no va a intervenir.
-- **Mike Johnson** (presidente de la Cámara). Los riesgos van en aumento, pero la
-  Cámara no debería aprobar a la carrera regulaciones que le den ventaja a
-  China. Trump reuniría a los «proveedores de plataformas» la próxima semana;
-  descarta los temores de que la IA acabe con la humanidad.
-
-### Traducciones que el juez puede esperar, SIN QUE SEA LISTA CERRADA
-
-Hay muchas más traducciones verdaderas que éstas, y valen exactamente igual.
-
-- **Gates** (si alguien lo trae, aunque es tarea): impuesto al token = encarecer
-  automatizar = regular cuánto se automatiza; Human Reserved = regular directo;
-  revisiones obligatorias = ninguno (velocidad/capacidad).
-- **Sanders**: impuesto de 50% y fondo público = redistribuir; moratoria a los
-  centros de datos = regular la automatización por la vía de la infraestructura;
-  prohibición de la superinteligencia y pausa = ninguno, salvo puente.
-- **Hawley y Durbin**: responsabilidad por producto = encarece automatizar mal
-  (regular, indirecto), o ninguno.
-- **Trump, Sacks, Huang, Andreessen**: no intervenir = el nivel de mercado, que
-  el Hallazgo 1 dice que automatiza de más.
-- **Altman, Musk, Nadella**: el pacto voluntario = capitalistas coordinándose sin
-  Estado, el problema de acción colectiva del Hallazgo 1.
-- **Amodei**: frenar los modelos = ninguno, salvo que el estudiante construya el
-  puente (modelos más capaces = más tareas automatizables = más automatización).
-- **Zuckerberg**: acceso amplio = ninguno; el modelo no distingue cuántas
-  empresas tienen el capital.
-- **Hassabis, Pichai, Thune**: evaluaciones y guardarraíles por uso = ninguno, o
-  regular la automatización por uso si el estudiante lo argumenta.
-- **Wang**: disuasión de seguridad nacional = ninguno.
-- **Nadie** toca lo que cuesta reprimir.
