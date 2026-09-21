@@ -86,22 +86,33 @@ costoDeLectura = 13 s + 0,32 s × palabra      (prosa)
 
 `validate-content.cjs` **falla el build** si `durationSeconds` queda por debajo del derivado.
 
+Con dos correcciones que aparecieron al leer el código:
+
+- **Hoy el validador no está enganchado a nada.** No lo llama `npm run build` ni
+  `.github/workflows/deploy.yml`; es un script que se corre a mano. «Falla el build» es una forma
+  de decir. Engancharlo como `prebuild` es parte de este trabajo, y va *después* de la migración
+  de contenido para no dejar `main` en rojo.
+- **Error en los cursos vivos, advertencia en los retirados.** `dataviz_2026`, `mgt300_2026` y
+  `ai_democracy_2026` fallan; `ml2-2025`, `temas_emergentes_2026` y `mundial_2026` avisan. El
+  reloj de una sesión que no se va a volver a dictar no le puede hacer daño a nadie, y son 37
+  escenarios de juicio sin destinatario.
+
 **Efecto secundario deliberado:** un enunciado largo encarece su propia ronda, y como el
 presupuesto de 15-20 minutos de pared no se mueve, la verborrea se paga sacando una ronda. Es la
 única forma de que «escribe más corto» tenga consecuencia en vez de ser un consejo.
 
 ### 2. `difficulty` deja de ser decorativo
 
-Hoy el campo existe en el schema, el scaffold lo escribe siempre `medium`, y no hace nada. Pasa a
-significar **cuánto se tarda en teclear la respuesta**, que es lo único de la dificultad que
-consume reloj:
+Hoy el campo existe en el schema, se le muestra al alumno, y no hace nada. Pasa a significar
+**cuánto se tarda en teclear la respuesta**, que es lo único de la dificultad que consume reloj.
 
-| `difficulty` | respuesta esperada | escritura |
-|---|---|---|
-| `easy` | una frase, un nombre de función | 45 s |
-| `medium` | una línea de código, una definición | 70 s |
-| `hard` | dos o tres pasos encadenados | 120 s |
-| `prose` | argumento con evidencia | 150 s |
+El presupuesto de escritura sale de **dos campos que ya existen**, `answerFormat` y `difficulty`.
+Un `difficulty` con un cuarto valor `prose` sería un enum mintiendo sobre su nombre:
+
+| | `easy` | `medium` | `hard` |
+|---|---|---|---|
+| `answerFormat: 'code'` | 45 s — un nombre de función | 70 s — una línea | 120 s — dos o tres pasos encadenados |
+| prosa (por defecto) | 90 s — una frase | 150 s — un párrafo | 210 s — argumento con evidencia |
 
 **Se deja de mostrar al alumno** (`Round.tsx:1034-1047`). Leer «difícil» antes de empezar
 desanima a quien iba a intentarlo, y la etiqueta ya no describe la dificultad conceptual sino el
@@ -123,7 +134,11 @@ respuesta el puntaje deja de subir?* Ese es el presupuesto defendible para prosa
 - **No se ofrece en rondas MC.** Las MC no leen `roundEndTime`: derivan todo de `roundStartTime`
   más los límites por pregunta (`mcTimeline`). Empujar el fin desincroniza el bloque en vez de
   alargarlo.
-- **Cada apretón se registra** en `rounds/round_{n}.segundosAgregados`. Sin ese registro el botón
+- **Cada apretón se registra** en `game.roundExtensions`, un mapa `{ "4": 60 }` de ronda a segundos
+  agregados. NO en `rounds/round_{n}`: esa subcolección es `allow write: if false` en
+  `firestore.rules:241` y sólo la escriben las Cloud Functions. El doc del juego es
+  `allow update: if isAuthenticated()`, así que el botón no necesita tocar las reglas.
+  Sin ese registro el botón
   rompe la medición que lo justificó: el diagnóstico compararía los envíos contra el
   `durationSeconds` escrito y vería al curso entero entregando al 150% del reloj. Con el registro,
   «en R4 tuviste que apretar +30 dos veces» es la señal más fuerte que existe para la próxima
@@ -180,9 +195,11 @@ en el presupuesto. La regla dura ya está en el punto 1.
 
 - **El botón +30 s sin registro corrompe el diagnóstico.** Mitigado por `segundosAgregados`, y es
   lo primero que hay que probar jugando.
-- **Los `difficulty` del repo están todos en `medium`.** Estrenar el validador con ese estado deja
-  todas las sesiones existentes con un piso de 70 s de escritura, que en varias va a fallar el
-  build. Hay que revisar y etiquetar las sesiones vivas en la misma pasada.
+- **Las etiquetas `difficulty` que ya existen significan otra cosa.** Los 88 escenarios abiertos
+  del repo tienen una, escrita con el sentido «qué tan difícil es el concepto». La R4 de la clase
+  7 —la que necesitaba 190 s— está en `medium`. O sea que la migración de verdad es
+  **reetiquetar**, y los relojes salen solos después. Con las etiquetas de hoy fallarían 27
+  escenarios de 12 sesiones, pero esa lista es engañosa: se recalcula después de reetiquetar.
 - **El coeficiente sale de 5 cursos pero 28 de las 35 rondas son de prosa.** El 0,25 de código
   descansa en 8 rondas, seis de ellas del mismo juego. Se recalibra después de la próxima clase
   de dataviz.
