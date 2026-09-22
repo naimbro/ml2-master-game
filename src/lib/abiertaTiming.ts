@@ -166,3 +166,37 @@ export function relojEfectivoDeRonda(
 ): number {
   return durationSeconds + (roundExtensions?.[String(round)] ?? 0);
 }
+
+/**
+ * El margen en el que apretar el botón ya no es seguro.
+ *
+ * No sale del reloj sino de las dos cosas que el botón no controla: la latencia
+ * del `updateDoc` en el wifi de una sala, y el desfase de reloj entre teléfonos
+ * —cada uno compara `roundEndTime` contra su propio `Date.now()`—. Por debajo
+ * de estos 15 s ya no se puede garantizar que el nuevo `roundEndTime` llegue a
+ * cada teléfono antes de que el suyo marque cero, y el que marque cero envía
+ * solo y queda bloqueado: no pierde la respuesta, pierde los 30 s.
+ */
+export const EXTENSION_MARGEN_SEGUNDOS = 15;
+
+/**
+ * En qué estado está el botón «+30 s» del anfitrión.
+ *
+ * - `ok`: queda margen, la extensión va a llegar a todos los teléfonos.
+ * - `sobre_la_hora`: se puede apretar, pero hay teléfonos a punto de enviar
+ *   solos y esos no van a poder seguir escribiendo.
+ * - `tarde`: el reloj llegó a cero, los teléfonos ya enviaron y extender no le
+ *   devuelve tiempo a nadie. El botón se deshabilita.
+ */
+export type EstadoBotonExtender = 'ok' | 'sobre_la_hora' | 'tarde';
+
+/**
+ * Decide el estado del botón a partir del `timeLeft` que la pantalla ya calcula.
+ * Vive acá, y no como comparaciones en el JSX, para que el umbral sea un número
+ * con nombre y con test.
+ */
+export function estadoDelBotonExtender(timeLeft: number): EstadoBotonExtender {
+  if (timeLeft <= 0) return 'tarde';
+  if (timeLeft <= EXTENSION_MARGEN_SEGUNDOS) return 'sobre_la_hora';
+  return 'ok';
+}

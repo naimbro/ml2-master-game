@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
-import { doc, onSnapshot, updateDoc, setDoc, collection, query, where, addDoc, Timestamp, serverTimestamp, deleteField } from 'firebase/firestore';
+import { doc, onSnapshot, updateDoc, setDoc, collection, query, where, addDoc, Timestamp, serverTimestamp, deleteField, runTransaction } from 'firebase/firestore';
 import { httpsCallable } from 'firebase/functions';
 import { db, functions } from '../lib/firebase';
 import type { Game, Player, Submission, RoundResults, GameStatus, MCResponse } from '../types/game';
@@ -522,20 +522,47 @@ export function useGame(gameCode: string | undefined): UseGameReturn {
    *
    * No se ofrece en rondas MC — ahí el bloque se deriva de `roundStartTime` y
    * empujar el fin lo desincroniza en vez de alargarlo.
+   *
+   * Va en TRANSACCIÓN, y no con el snapshot del hook, por dos fallas que se
+   * escriben en silencio:
+   *
+   * 1. **Extensión fantasma.** Si el intervalo del auto-cierre llegó a
+   *    `now >= endTime` mientras este `updateDoc` viajaba, la ronda ya está en
+   *    `round_end`: todas las pantallas navegaron a resultados y quien no había
+   *    enviado se fue con cero. Sin la guarda, la extensión se escribía igual y
+   *    `roundExtensions` quedaba registrando 30 s que la ronda nunca tuvo —que
+   *    es exactamente el dato que el diagnóstico existe para leer—. Por eso la
+   *    transacción sale sin escribir nada si `status !== 'active'` o si ya no
+   *    hay `roundEndTime`.
+   * 2. **Apretón perdido.** Dos apretones seguidos leían el mismo snapshot de
+   *    `game` y el segundo escribía el mismo total. Leyendo `roundEndTime` y
+   *    `roundExtensions` DENTRO de la transacción, dos apretones suman 60.
    */
   const extendRound = useCallback(async () => {
-    if (!gameCode || !isHost || !game?.roundEndTime) return;
+    if (!gameCode || !isHost) return;
 
-    const ronda = String(game.currentRound);
-    const yaAgregado = game.roundExtensions?.[ronda] ?? 0;
-    const fin = game.roundEndTime.toMillis() + EXTENSION_SEGUNDOS * 1000;
+    const gameRef = doc(db, 'games', gameCode);
+    await runTransaction(db, async (tx) => {
+      const snap = await tx.get(gameRef);
+      if (!snap.exists()) return;
 
-    await updateDoc(doc(db, 'games', gameCode), {
-      roundEndTime: Timestamp.fromMillis(fin),
-      [`roundExtensions.${ronda}`]: yaAgregado + EXTENSION_SEGUNDOS,
-      updatedAt: serverTimestamp(),
+      const data = snap.data() as Game;
+      // La ronda ya cerró: los teléfonos enviaron y las pantallas navegaron.
+      // Extender ahora no le devuelve tiempo a nadie, y anotarlo mentiría.
+      if (data.status !== 'active') return;
+      if (!data.roundEndTime) return;
+
+      const ronda = String(data.currentRound);
+      const yaAgregado = data.roundExtensions?.[ronda] ?? 0;
+      const fin = data.roundEndTime.toMillis() + EXTENSION_SEGUNDOS * 1000;
+
+      tx.update(gameRef, {
+        roundEndTime: Timestamp.fromMillis(fin),
+        [`roundExtensions.${ronda}`]: yaAgregado + EXTENSION_SEGUNDOS,
+        updatedAt: serverTimestamp(),
+      });
     });
-  }, [gameCode, isHost, game?.roundEndTime, game?.currentRound, game?.roundExtensions]);
+  }, [gameCode, isHost]);
 
   // Auto-end round when timer expires (host only)
   useEffect(() => {

@@ -20,6 +20,7 @@ import { resolveMediaSrc } from '../../lib/media';
 import { scoreMCQuestion, scoreMCBlock, MC_SCORING_LEGEND } from '../../lib/mcScoring';
 import { mcTimeline, mcGateSeconds, mcAnswerRevealed, mcBeatSeconds } from '../../lib/mcTiming';
 import { mcStatsKey } from '../../lib/mcStats';
+import { estadoDelBotonExtender, type EstadoBotonExtender } from '../../lib/abiertaTiming';
 import { modelLabel } from '../../lib/modelLabel';
 import { RichText } from '../../components/RichText';
 import type { MCResponse } from '../../types/game';
@@ -30,6 +31,42 @@ import type { MCResponse } from '../../types/game';
  * invitaria a que alguien la cambie creyendo que altera el sonido.
  */
 const DRUM_ROLL_MS = 1500;
+
+/**
+ * Los tres aspectos del boton «+30 s» del anfitrion. Que estado corresponde lo
+ * decide `estadoDelBotonExtender` (src/lib/abiertaTiming.ts), que es donde vive
+ * el umbral y su razon; aca solo esta como se ve y que dice cada uno.
+ *
+ * El del medio existe porque apretar "en un segundo" ya es tarde para parte del
+ * curso: el telefono que llega a cero envia solo y queda bloqueado, asi que no
+ * pierde la respuesta pero pierde los 30 s, y la ronda queda medida con dos
+ * relojes distintos.
+ */
+const EXTENDER_ASPECTO: Record<
+  EstadoBotonExtender,
+  { clase: string; texto: string; title: string; habilitado: boolean }
+> = {
+  ok: {
+    habilitado: true,
+    clase: 'bg-kahoot-green/80 hover:bg-kahoot-green text-ink',
+    texto: '+30 s',
+    title: 'Le agrega 30 s a esta ronda. Se puede apretar varias veces.',
+  },
+  sobre_la_hora: {
+    habilitado: true,
+    clase: 'bg-kahoot-orange/80 hover:bg-kahoot-orange text-ink',
+    texto: '+30 s · sobre la hora',
+    title:
+      'Con menos de 15 s ya hay telefonos a punto de enviar solos: los que envien no van a poder seguir escribiendo.',
+  },
+  tarde: {
+    habilitado: false,
+    clase: 'bg-surface-2 text-ink-soft border-2 border-line',
+    texto: 'ya es tarde',
+    title:
+      'El reloj llego a cero y los telefonos ya enviaron. Extender ahora no le devuelve tiempo a nadie.',
+  },
+};
 
 // On a light ground the four Kahoot fills would be four shouting rectangles, so
 // the tile itself is a white card with an ink border and a hard bottom shadow,
@@ -514,6 +551,7 @@ export default function Round() {
   const isLowTime = timeLeft <= 60;
   const totalTime = currentScenario?.durationSeconds || game.roundDurationSeconds || 300;
   const timeProgress = ((totalTime - timeLeft) / totalTime) * 100;
+  const extender = EXTENDER_ASPECTO[estadoDelBotonExtender(timeLeft)];
 
   // Picture-answer questions need a wider grid so three portraits sit side by
   // side on a laptop/projector while still stacking on a phone.
@@ -587,11 +625,12 @@ export default function Round() {
               {!isMC && (
                 <button
                   onClick={() => extendRound()}
-                  title="Le agrega 30 s a esta ronda. Apretalo ANTES de que el reloj llegue a cero: al llegar a cero cada telefono envia solo."
-                  className="flex items-center gap-2 px-4 py-2 bg-kahoot-green/80 hover:bg-kahoot-green text-ink rounded-lg font-bold text-sm transition-all"
+                  disabled={!extender.habilitado}
+                  title={extender.title}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-sm transition-all disabled:opacity-50 ${extender.clase}`}
                 >
                   <Plus className="w-4 h-4" />
-                  +30 s
+                  {extender.texto}
                 </button>
               )}
               <button

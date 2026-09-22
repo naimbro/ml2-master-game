@@ -4,6 +4,7 @@ import {
   palabrasDelEnunciado, costoDeLectura, costoDeEscritura, relojDerivadoAbierta,
   formatoDe, dificultadDe, ESCRITURA_SEGUNDOS,
   relojEfectivoDeRonda, EXTENSION_SEGUNDOS,
+  estadoDelBotonExtender, EXTENSION_MARGEN_SEGUNDOS,
 } from './abiertaTiming';
 
 describe('palabrasDelEnunciado', () => {
@@ -180,5 +181,33 @@ describe('relojEfectivoDeRonda', () => {
 
   it('un apreton son 30 s', () => {
     expect(EXTENSION_SEGUNDOS).toBe(30);
+  });
+});
+
+describe('estadoDelBotonExtender', () => {
+  it('con tiempo de sobra, se puede apretar', () => {
+    expect(estadoDelBotonExtender(120)).toBe('ok');
+    expect(estadoDelBotonExtender(16)).toBe('ok');
+  });
+
+  it('en los ultimos 15 s avisa que es sobre la hora', () => {
+    // Los telefonos comparan contra su propio Date.now() y el updateDoc tarda:
+    // aca ya no se puede prometer que la extension llegue antes del cero.
+    expect(estadoDelBotonExtender(15)).toBe('sobre_la_hora');
+    expect(estadoDelBotonExtender(7)).toBe('sobre_la_hora');
+    expect(estadoDelBotonExtender(1)).toBe('sobre_la_hora');
+  });
+
+  it('en cero esta deshabilitado: los telefonos ya enviaron', () => {
+    expect(estadoDelBotonExtender(0)).toBe('tarde');
+    // timeLeft nace de un Math.max(0, ...) y no deberia ser negativo, pero si
+    // lo fuera tambien es tarde: no hay un estado peor que tarde.
+    expect(estadoDelBotonExtender(-3)).toBe('tarde');
+  });
+
+  it('el umbral son 15 s, no un numero suelto en el JSX', () => {
+    expect(EXTENSION_MARGEN_SEGUNDOS).toBe(15);
+    expect(estadoDelBotonExtender(EXTENSION_MARGEN_SEGUNDOS)).toBe('sobre_la_hora');
+    expect(estadoDelBotonExtender(EXTENSION_MARGEN_SEGUNDOS + 1)).toBe('ok');
   });
 });
