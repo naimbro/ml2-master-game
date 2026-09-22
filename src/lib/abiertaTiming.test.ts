@@ -1,6 +1,9 @@
 // src/lib/abiertaTiming.test.ts
 import { describe, it, expect } from 'vitest';
-import { palabrasDelEnunciado, costoDeLectura } from './abiertaTiming';
+import {
+  palabrasDelEnunciado, costoDeLectura, costoDeEscritura, relojDerivadoAbierta,
+  formatoDe, dificultadDe, ESCRITURA_SEGUNDOS,
+} from './abiertaTiming';
 
 describe('palabrasDelEnunciado', () => {
   it('suma context y question, que es como viaja un escenario', () => {
@@ -16,6 +19,16 @@ describe('palabrasDelEnunciado', () => {
 
   it('un escenario vacío no rompe', () => {
     expect(palabrasDelEnunciado({})).toBe(0);
+  });
+
+  it('cobra context O prompt, no los dos: la pantalla muestra uno solo', () => {
+    // Round.tsx renderiza `context ?? prompt`. Cobrar los dos seria exigir
+    // reloj por texto que el alumno nunca ve.
+    expect(palabrasDelEnunciado({
+      context: 'una dos tres',
+      prompt: 'cuatro cinco seis siete ocho',
+      question: 'nueve diez',
+    })).toBe(5);
   });
 });
 
@@ -40,10 +53,6 @@ describe('costoDeLectura', () => {
   });
 });
 
-import {
-  costoDeEscritura, relojDerivadoAbierta, formatoDe, dificultadDe,
-} from './abiertaTiming';
-
 describe('costoDeEscritura', () => {
   it('una línea de código son 70 s, medidos en la R1 de 9XR4Z6', () => {
     // 72 s de escritura mediana, y sólo el 9% seguía escribiendo al final.
@@ -64,6 +73,16 @@ describe('costoDeEscritura', () => {
   it('sin etiqueta asume medium, que es lo que escribe el scaffold', () => {
     expect(costoDeEscritura('prose', undefined)).toBe(costoDeEscritura('prose', 'medium'));
   });
+
+  it('la tabla completa, que es el producto de este modulo', () => {
+    // Las seis celdas con su valor exacto. El redondeo a 15 s del reloj puede
+    // esconder un error de hasta 14 segundos en una celda, asi que no alcanza
+    // con probarlas a traves de relojDerivadoAbierta().
+    expect(ESCRITURA_SEGUNDOS).toEqual({
+      code: { easy: 45, medium: 70, hard: 120 },
+      prose: { easy: 90, medium: 150, hard: 210 },
+    });
+  });
 });
 
 describe('normalización de lo que viene del JSON', () => {
@@ -71,13 +90,13 @@ describe('normalización de lo que viene del JSON', () => {
   // en runtime. Sin esto el reloj sale NaN y el validador falla con un mensaje
   // que no se entiende.
   it('un answerFormat que no existe se trata como prosa', () => {
-    expect(formatoDe({ answerFormat: 'Code' as never })).toBe('prose');
+    expect(formatoDe({ answerFormat: 'Code' })).toBe('prose');
     expect(formatoDe({})).toBe('prose');
     expect(formatoDe({ answerFormat: 'code' })).toBe('code');
   });
 
   it('un difficulty que no existe se trata como medium', () => {
-    expect(dificultadDe('medio' as never)).toBe('medium');
+    expect(dificultadDe('medio')).toBe('medium');
     expect(dificultadDe(undefined)).toBe('medium');
     expect(dificultadDe('hard')).toBe('hard');
   });
@@ -131,5 +150,16 @@ describe('relojDerivadoAbierta', () => {
     expect(relojDerivadoAbierta({ context: palabras, difficulty: 'medium' })).toBe(
       relojDerivadoAbierta({ context: palabras, answerFormat: 'prose', difficulty: 'medium' }),
     );
+  });
+
+  it('un crudo que ya es multiplo de 15 se queda quieto', () => {
+    // prose/easy, 52 palabras: lectura = round(13 + 0,32*52) = round(29,64) = 30;
+    // escritura = 90; crudo = 120, ya multiplo de 15 -> ceil() no debe moverlo
+    // a 135. Es el caso que un `+15` en vez de un `ceil` rompería.
+    const reloj = relojDerivadoAbierta({
+      context: 'x '.repeat(52).trim(),
+      difficulty: 'easy',
+    });
+    expect(reloj).toBe(120);
   });
 });

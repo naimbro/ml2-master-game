@@ -12,6 +12,13 @@
 // La R4 de ese juego tenía 179 palabras: 54 segundos leyendo, de un reloj de
 // 120. Quedaban 66 para escribir un group_by + summarise completo.
 //
+// El módulo devuelve el reloj COMPLETO de la ronda —lectura + escritura—,
+// servido en escalones de 15 s (nunca hacia abajo: ver RELOJ_ESCALON_SEGUNDOS).
+// `difficulty` cambió de significado: ya no dice qué tan difícil es el
+// concepto, dice cuánto se tarda en TECLEAR la respuesta. `scripts/
+// validate-content.cjs` espeja este cálculo número por número y falla el
+// build si el `durationSeconds` de una ronda abierta queda corto.
+//
 // Ver docs/superpowers/specs/2026-09-21-diagnostico-de-clase-design.md
 
 /** Cómo se escribe la respuesta. Espejo de `Scenario.answerFormat`. */
@@ -37,15 +44,22 @@ export const LECTURA_SEGUNDOS_POR_PALABRA: Record<FormatoDeRespuesta, number> = 
 export interface EnunciadoLike {
   context?: string;
   question?: string;
-  /** Los escenarios que genera el asistente traen todo el caso acá. */
+  /**
+   * Alternativa a `context`, no un campo extra: la pantalla del alumno
+   * (`Round.tsx`) muestra `context ?? prompt`, nunca los dos a la vez. Los
+   * escenarios que genera el asistente traen todo el caso acá, sin `context`.
+   */
   prompt?: string;
 }
 
 export function palabrasDelEnunciado(sc: EnunciadoLike): number {
-  const texto = [sc.context, sc.question, sc.prompt].filter(Boolean).join(' ');
+  // context y prompt son alternativas, no se cobran los dos: la pantalla del
+  // alumno renderiza `context ?? prompt`, nunca ambos.
+  const texto = [sc.context ?? sc.prompt, sc.question].filter(Boolean).join(' ');
   return texto.trim().split(/\s+/).filter(Boolean).length;
 }
 
+/** Espera `formato` ya normalizado (ver `formatoDe`), no el valor crudo del JSON. */
 export function costoDeLectura(palabras: number, formato: FormatoDeRespuesta): number {
   return Math.round(LECTURA_PISO_SEGUNDOS + LECTURA_SEGUNDOS_POR_PALABRA[formato] * palabras);
 }
@@ -92,14 +106,20 @@ export const FORMATO_POR_DEFECTO: FormatoDeRespuesta = 'prose';
  * (`sc.answerFormat === 'code' ? 'code' : 'prose'`): hay un test que compara
  * las dos implementaciones número por número.
  */
-export function formatoDe(sc: { answerFormat?: FormatoDeRespuesta }): FormatoDeRespuesta {
+export function formatoDe(sc: { answerFormat?: string }): FormatoDeRespuesta {
   return sc.answerFormat === 'code' ? 'code' : FORMATO_POR_DEFECTO;
 }
 
-export function dificultadDe(difficulty: Dificultad | undefined): Dificultad {
+export function dificultadDe(difficulty: string | undefined): Dificultad {
   return difficulty === 'easy' || difficulty === 'hard' ? difficulty : DIFICULTAD_POR_DEFECTO;
 }
 
+/**
+ * Espera `formato` y `dificultad` ya normalizados (ver `formatoDe` /
+ * `dificultadDe`), no el valor crudo del JSON: un valor no normalizado indexa
+ * el Record con una clave que no existe y tira TypeError, en vez de caer al
+ * default como hacen los normalizadores.
+ */
 export function costoDeEscritura(
   formato: FormatoDeRespuesta,
   dificultad: Dificultad | undefined,
