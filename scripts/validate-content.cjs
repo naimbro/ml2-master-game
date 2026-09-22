@@ -216,7 +216,9 @@ const ESCRITURA_SEGUNDOS = {
 const RELOJ_ESCALON_SEGUNDOS = 15;
 
 function palabrasDelEnunciadoCJS(sc) {
-  const texto = [sc.context, sc.question, sc.prompt].filter(Boolean).join(' ');
+  // context y prompt son alternativas, no se cobran los dos: la pantalla del
+  // alumno renderiza `context ?? prompt`, nunca ambos.
+  const texto = [sc.context ?? sc.prompt, sc.question].filter(Boolean).join(' ');
   return texto.trim().split(/\s+/).filter(Boolean).length;
 }
 
@@ -290,6 +292,55 @@ function validateRelojAbierto(scope, sc, curso, roundDurationSecondsDeLaSesion) 
     `cabiendo en 20 min de pared (suma de relojes + 2 min por ronda).`;
 
   return { nivel: relojEsErrorEn(curso) ? 'error' : 'warn', mensaje };
+}
+
+const DIFICULTAD_VALORES_CJS = ['easy', 'medium', 'hard'];
+const DIFICULTAD_DEFECTO_CJS = 'medium';
+const FORMATO_VALORES_CJS = ['prose', 'code'];
+const FORMATO_DEFECTO_CJS = 'prose';
+
+/**
+ * `relojDerivadoAbiertaCJS` normaliza cualquier `difficulty`/`answerFormat`
+ * fuera del enum a un default, y eso esta bien: un NaN en el reloj es peor.
+ * Pero la caida es asimetrica. Un `answerFormat` mal escrito cae a 'prose',
+ * que es MAS caro por palabra y por tecleo — falla dando mas tiempo,
+ * inofensivo. Un `difficulty` mal escrito cae a 'medium': 150s en vez de los
+ * 210 de 'hard', sesenta segundos menos, en silencio. Y los errores
+ * verosimiles en un JSON escrito a mano en castellano ("dificil", "difícil",
+ * "Hard", "medium-hard") fallan justo para ese lado.
+ *
+ * Misma politica que `validateRelojAbierto`: error en curso vivo, warn en
+ * retirado (`relojEsErrorEn`) — un valor malformado en un curso que no se va
+ * a volver a dictar no le hace dano a nadie.
+ *
+ * Devuelve un array (0, 1 o 2 problemas) en vez de un solo veredicto, porque
+ * `difficulty` y `answerFormat` fallan de forma independiente.
+ */
+function validateEtiquetasAbierta(scope, sc, curso) {
+  if (sc.type === 'multiple_choice') return [];
+
+  const nivel = relojEsErrorEn(curso) ? 'error' : 'warn';
+  const problemas = [];
+
+  if (sc.difficulty !== undefined && !DIFICULTAD_VALORES_CJS.includes(sc.difficulty)) {
+    problemas.push({
+      nivel,
+      mensaje:
+        `difficulty='${sc.difficulty}' no es un valor valido (${DIFICULTAD_VALORES_CJS.join('/')}) ` +
+        `— cae en silencio al default '${DIFICULTAD_DEFECTO_CJS}'.`,
+    });
+  }
+
+  if (sc.answerFormat !== undefined && !FORMATO_VALORES_CJS.includes(sc.answerFormat)) {
+    problemas.push({
+      nivel,
+      mensaje:
+        `answerFormat='${sc.answerFormat}' no es un valor valido (${FORMATO_VALORES_CJS.join('/')}) ` +
+        `— cae en silencio al default '${FORMATO_DEFECTO_CJS}'.`,
+    });
+  }
+
+  return problemas;
 }
 
 function validateMCQuestions(scope, sc) {
@@ -475,6 +526,10 @@ function validateSession(courseId, sessionId, sessionDir, knownJudgeIds) {
         if (veredictoReloj.nivel === 'error') err(sScope, veredictoReloj.mensaje);
         else warn(sScope, veredictoReloj.mensaje);
       }
+      for (const problema of validateEtiquetasAbierta(sScope, sc, courseId)) {
+        if (problema.nivel === 'error') err(sScope, problema.mensaje);
+        else warn(sScope, problema.mensaje);
+      }
     }
   }
 
@@ -573,4 +628,5 @@ module.exports = {
   CURSOS_VIVOS,
   relojEsErrorEn,
   validateRelojAbierto,
+  validateEtiquetasAbierta,
 };

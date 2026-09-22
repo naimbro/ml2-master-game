@@ -23,6 +23,9 @@ describe('el espejo del reloj en validate-content.cjs', () => {
     { context: 'x '.repeat(50).trim(), answerFormat: 'CODIGO', difficulty: 'dificil' },
     { context: 'hola', question: 'y chau' },
     {},
+    // El caso que se le escapaba al espejo: los dos campos juntos. La pantalla
+    // muestra `context ?? prompt`, asi que prompt no se cobra cuando hay context.
+    { context: 'a b c', prompt: 'd e f g h', question: 'i j' },
   ];
 
   for (const [i, caso] of casos.entries()) {
@@ -125,5 +128,65 @@ describe('el reloj heredado de la sesion tambien se valida', () => {
       undefined,
     );
     expect(veredicto).toBeNull();
+  });
+});
+
+const { validateEtiquetasAbierta } = require('./validate-content.cjs') as {
+  validateEtiquetasAbierta: (
+    scope: string,
+    sc: Record<string, unknown>,
+    curso: string,
+  ) => { nivel: 'error' | 'warn'; mensaje: string }[];
+};
+
+/**
+ * `difficulty` y `answerFormat` desconocidos caen en silencio a un default
+ * dentro del calculo del reloj (necesario: un valor fuera del enum no puede
+ * indexar el Record). Pero un `difficulty` mal escrito cae a 'medium' —
+ * sesenta segundos menos que 'hard', en silencio — asi que este chequeo
+ * tiene que avisar antes de que el reloj derivado tape el error tipografico.
+ */
+describe('difficulty/answerFormat desconocidos se avisan', () => {
+  it('un difficulty valido no reporta nada', () => {
+    const problemas = validateEtiquetasAbierta('escenario', { difficulty: 'hard' }, 'dataviz_2026');
+    expect(problemas).toEqual([]);
+  });
+
+  it('un difficulty invalido reporta en un curso vivo', () => {
+    const problemas = validateEtiquetasAbierta(
+      'escenario',
+      { difficulty: 'medium-hard' },
+      'dataviz_2026',
+    );
+    expect(problemas).toHaveLength(1);
+    expect(problemas[0].nivel).toBe('error');
+    expect(problemas[0].mensaje).toMatch(/medium-hard/);
+    expect(problemas[0].mensaje).toMatch(/medium/); // el default al que cae
+  });
+
+  it('el mismo caso solo avisa en un curso retirado', () => {
+    const problemas = validateEtiquetasAbierta(
+      'escenario',
+      { difficulty: 'medium-hard' },
+      'ml2-2025',
+    );
+    expect(problemas).toHaveLength(1);
+    expect(problemas[0].nivel).toBe('warn');
+  });
+
+  it('un answerFormat invalido reporta', () => {
+    const problemas = validateEtiquetasAbierta(
+      'escenario',
+      { answerFormat: 'CODIGO' },
+      'dataviz_2026',
+    );
+    expect(problemas).toHaveLength(1);
+    expect(problemas[0].mensaje).toMatch(/CODIGO/);
+    expect(problemas[0].mensaje).toMatch(/prose/); // el default al que cae
+  });
+
+  it('un escenario sin ninguno de los dos campos no reporta nada (ausente no es invalido)', () => {
+    const problemas = validateEtiquetasAbierta('escenario', {}, 'dataviz_2026');
+    expect(problemas).toEqual([]);
   });
 });
