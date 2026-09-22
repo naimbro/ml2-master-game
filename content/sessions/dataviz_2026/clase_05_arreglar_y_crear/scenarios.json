@@ -6,7 +6,7 @@
     "category": "Las dos direcciones de recortar",
     "difficulty": "medium",
     "ranked": true,
-    "durationSeconds": 140,
+    "durationSeconds": 195,
     "answerFormat": "prose",
     "conceptTags": [
       "las_tres_funciones"
@@ -68,7 +68,7 @@
     "category": "El filtro que pide un imposible",
     "difficulty": "hard",
     "ranked": true,
-    "durationSeconds": 140,
+    "durationSeconds": 165,
     "answerFormat": "code",
     "conceptTags": [
       "escribir_el_filtro",
@@ -208,7 +208,7 @@
     "category": "El aviso que no es un error",
     "difficulty": "medium",
     "ranked": true,
-    "durationSeconds": 140,
+    "durationSeconds": 195,
     "answerFormat": "prose",
     "conceptTags": [
       "class_y_as_numeric"
