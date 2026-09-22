@@ -126,9 +126,9 @@
     "order": 4,
     "title": "Las tres líneas del principio",
     "category": "Contar con dplyr",
-    "difficulty": "easy",
+    "difficulty": "hard",
     "ranked": true,
-    "durationSeconds": 150,
+    "durationSeconds": 165,
     "answerFormat": "code",
     "conceptTags": [
       "contar_con_dplyr"
@@ -184,9 +184,9 @@
     "order": 5,
     "title": "Dos columnas, y de mayor a menor",
     "category": "Contar con dplyr",
-    "difficulty": "medium",
+    "difficulty": "hard",
     "ranked": true,
-    "durationSeconds": 150,
+    "durationSeconds": 165,
     "answerFormat": "code",
     "conceptTags": [
       "contar_con_dplyr"
@@ -282,9 +282,9 @@
     "order": 7,
     "title": "El titular del empleo",
     "category": "La Encuesta CEP",
-    "difficulty": "medium",
+    "difficulty": "hard",
     "ranked": true,
-    "durationSeconds": 150,
+    "durationSeconds": 255,
     "conceptTags": [
       "la_encuesta_cep",
       "evaluar_una_fuente"
