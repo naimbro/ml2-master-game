@@ -4,10 +4,26 @@
 // Dataviz clase 7 (9XR4Z6, 21-sep-2026) sacó 4,50/7 — la nota más baja del año —
 // y los quince comentarios hablaban de tiempo. Medidas las 36 rondas abiertas
 // con telemetría del repo, la mediana del curso tarda en escribir su primer
-// carácter lo que el enunciado mide:
+// carácter lo que el enunciado mide — pero hay DOS ajustes distintos acá
+// abajo, y conviene no mezclarlos:
 //
-//   corr(palabras del enunciado, segundos hasta la 1ª tecla) = 0,91
+//   con las 36 rondas:     a = 7,7 s   b = 0,391 s/palabra
+//                           RMSE 12,4 s   corr = 0,91
+//
+// Ese 0,91 lo decide un solo punto: NPX5EE R1, 421 palabras, 2,4 veces más
+// largo que el siguiente enunciado del repo (179). Sacándolo queda el ajuste
+// que el código usa de verdad:
+//
+//   sin ese punto (n = 35): a = 13,3 s   b = 0,319 s/palabra
+//                           RMSE 11,9 s   corr = 0,77 pooled
+//                           (corr = 0,90 mirando sólo las rondas de prosa,
+//                            n = 27 — código tiene su propia recta, más plana)
+//
 //   lectura ≈ 13 s + 0,32 s × palabra      (n = 35, RMSE 12 s)
+//
+// `npm run diagnostico -- --calibrar` reproduce los dos ajustes y excluye el
+// mismo punto por la misma razón (`PALABRAS_FUERA_DE_RANGO` en
+// `scripts/diagnostico.ts`).
 //
 // La R4 de ese juego tenía 179 palabras: 54 segundos leyendo, de un reloj de
 // 120. Quedaban 66 para escribir un group_by + summarise completo.

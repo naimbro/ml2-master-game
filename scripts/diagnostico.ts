@@ -89,6 +89,19 @@ const UMBRAL_APRETADO = 0.6;
 /** Sobre este residual, el enunciado confunde. Ver el encabezado. */
 const RESIDUAL_MALA_REDACCION = 15;
 
+/**
+ * Debajo de este largo, la recta predice casi su propio piso (13 s + 0,32 s ×
+ * palabra) y CUALQUIER titubeo —pensar la respuesta, no saberla, entrar tarde
+ * a la ronda— se cobra como si el enunciado estuviera mal escrito, aunque no
+ * lo esté. Caso real: 6CNGSG R2, 26 palabras, residual +23 s, y no hay nada
+ * mal redactado ahí.
+ *
+ * Es un número ELEGIDO, no medido. Separa ese caso de las cuatro rondas del
+ * repo que sí conviene reescribir (92, 139, 145 y 421 palabras); cualquier
+ * piso entre 60 y 80 palabras deja el mismo corte.
+ */
+const PISO_PALABRAS_VEREDICTO = 70;
+
 /** Sobre este % colgando (sólo código), el reloj no alcanzó. */
 const COLGANDO_RELOJ_CORTO = 40;
 
@@ -623,10 +636,18 @@ function veredictos(j: Juego): string[] {
   for (const f of j.abiertas) {
     const veces = extensionesDe(j.game, f.ronda);
     if (f.residual > RESIDUAL_MALA_REDACCION) {
-      out.push(
-        `R${f.ronda} EL ENUNCIADO CONFUNDE: ${firmado(f.residual)} sobre lo que sus ` +
-          `${f.palabras} palabras predicen. Reescribirlo, no alargar el reloj.`,
-      );
+      if (f.palabras >= PISO_PALABRAS_VEREDICTO) {
+        out.push(
+          `R${f.ronda} EL ENUNCIADO CONFUNDE: ${firmado(f.residual)} sobre lo que sus ` +
+            `${f.palabras} palabras predicen. Reescribirlo, no alargar el reloj.`,
+        );
+      } else {
+        out.push(
+          `R${f.ronda} tardaron ${firmado(f.residual)} más de lo predicho, pero con ` +
+            `${f.palabras} palabras el largo no explica nada: mirá la pregunta, puede ser ` +
+            'que no supieran por dónde empezar.',
+        );
+      }
     }
     if (f.colgando !== null && f.colgando > COLGANDO_RELOJ_CORTO) {
       out.push(
