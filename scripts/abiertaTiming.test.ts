@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { createRequire } from 'node:module';
-import { relojDerivadoAbierta } from '../src/lib/abiertaTiming';
+import { relojDerivadoAbierta, DIFICULTAD_VALORES, FORMATO_VALORES } from '../src/lib/abiertaTiming';
 
 const require = createRequire(import.meta.url);
 const { relojDerivadoAbiertaCJS } = require('./validate-content.cjs') as {
@@ -188,5 +188,23 @@ describe('difficulty/answerFormat desconocidos se avisan', () => {
   it('un escenario sin ninguno de los dos campos no reporta nada (ausente no es invalido)', () => {
     const problemas = validateEtiquetasAbierta('escenario', {}, 'dataviz_2026');
     expect(problemas).toEqual([]);
+  });
+});
+
+const { DIFICULTAD_VALORES_CJS, FORMATO_VALORES_CJS } = require('./validate-content.cjs') as {
+  DIFICULTAD_VALORES_CJS: string[];
+  FORMATO_VALORES_CJS: string[];
+};
+
+describe('las listas de valores validos, atadas al original', () => {
+  // El espejo las copia a mano porque un tipo de TypeScript no existe en
+  // runtime. Sin este test, agregar un valor al tipo sin avisarle al validador
+  // haria que el build rechace una etiqueta CORRECTA de un curso vivo.
+  it('difficulty: el espejo conoce los mismos valores que el modulo', () => {
+    expect(DIFICULTAD_VALORES_CJS).toEqual([...DIFICULTAD_VALORES]);
+  });
+
+  it('answerFormat: idem', () => {
+    expect(FORMATO_VALORES_CJS).toEqual([...FORMATO_VALORES]);
   });
 });

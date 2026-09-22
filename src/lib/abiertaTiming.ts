@@ -21,8 +21,22 @@
 //
 // Ver docs/superpowers/specs/2026-09-21-diagnostico-de-clase-design.md
 
-/** Cómo se escribe la respuesta. Espejo de `Scenario.answerFormat`. */
-export type FormatoDeRespuesta = 'prose' | 'code';
+/**
+ * Cómo se escribe la respuesta. Espejo de `Scenario.answerFormat`.
+ *
+ * Los valores válidos, como VALORES y no sólo como tipo.
+ *
+ * El orden importa: van de menos a más tecleo, que es lo que la etiqueta
+ * significa.
+ *
+ * Existen en runtime porque `scripts/validate-content.cjs` necesita avisar
+ * cuando el contenido trae una etiqueta que no está en la lista, y un tipo de
+ * TypeScript no se puede consultar desde ahí. Con el tipo derivado de esta
+ * constante, agregar un valor es un solo cambio y el test del espejo obliga a
+ * que el validador lo aprenda en la misma sentada.
+ */
+export const FORMATO_VALORES = ['prose', 'code'] as const;
+export type FormatoDeRespuesta = (typeof FORMATO_VALORES)[number];
 
 /**
  * El piso de la recta: abrir la pantalla, ubicarse, leer el título. No baja de
@@ -69,8 +83,20 @@ export function costoDeLectura(palabras: number, formato: FormatoDeRespuesta): n
  * "qué tan difícil es el concepto": significa CUÁNTO SE TARDA EN TECLEAR LA
  * RESPUESTA, que es lo único de la dificultad que consume reloj. Una pregunta
  * conceptualmente durísima de respuesta corta necesita poco tiempo.
+ *
+ * Los valores válidos, como VALORES y no sólo como tipo.
+ *
+ * El orden importa: van de menos a más tecleo, que es lo que la etiqueta
+ * significa.
+ *
+ * Existen en runtime porque `scripts/validate-content.cjs` necesita avisar
+ * cuando el contenido trae una etiqueta que no está en la lista, y un tipo de
+ * TypeScript no se puede consultar desde ahí. Con el tipo derivado de esta
+ * constante, agregar un valor es un solo cambio y el test del espejo obliga a
+ * que el validador lo aprenda en la misma sentada.
  */
-export type Dificultad = 'easy' | 'medium' | 'hard';
+export const DIFICULTAD_VALORES = ['easy', 'medium', 'hard'] as const;
+export type Dificultad = (typeof DIFICULTAD_VALORES)[number];
 
 /**
  * Segundos de tecleo, por formato y etiqueta.

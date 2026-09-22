@@ -205,7 +205,9 @@ function validateMedia(scope, media, whereLabel) {
 // midiendo otra cosa. El ternario de `formato` y el de `dificultad` tienen que
 // normalizar IGUAL que `formatoDe()` y `dificultadDe()` del modulo TS, porque
 // `answerFormat` y `difficulty` llegan de JSON escrito a mano y una clave fuera
-// del tipo daria un reloj NaN.
+// del tipo daria un reloj NaN. DIFICULTAD_VALORES_CJS y FORMATO_VALORES_CJS,
+// mas abajo, tambien estan atadas por ese mismo test contra
+// DIFICULTAD_VALORES/FORMATO_VALORES del modulo TS.
 // ---------------------------------------------------------------------------
 const LECTURA_PISO_SEGUNDOS = 13;
 const LECTURA_SEGUNDOS_POR_PALABRA = { prose: 0.32, code: 0.25 };
@@ -629,4 +631,6 @@ module.exports = {
   relojEsErrorEn,
   validateRelojAbierto,
   validateEtiquetasAbierta,
+  DIFICULTAD_VALORES_CJS,
+  FORMATO_VALORES_CJS,
 };
