@@ -197,6 +197,39 @@ function validateMedia(scope, media, whereLabel) {
   }
 }
 
+// ---------------------------------------------------------------------------
+// ESPEJO de src/lib/abiertaTiming.ts. Si se cambia alla, cambiar aca.
+//
+// `scripts/abiertaTiming.test.ts` falla si las dos copias se separan, y es la
+// unica defensa que hay: una divergencia aca no da error, da un build verde
+// midiendo otra cosa. El ternario de `formato` y el de `dificultad` tienen que
+// normalizar IGUAL que `formatoDe()` y `dificultadDe()` del modulo TS, porque
+// `answerFormat` y `difficulty` llegan de JSON escrito a mano y una clave fuera
+// del tipo daria un reloj NaN.
+// ---------------------------------------------------------------------------
+const LECTURA_PISO_SEGUNDOS = 13;
+const LECTURA_SEGUNDOS_POR_PALABRA = { prose: 0.32, code: 0.25 };
+const ESCRITURA_SEGUNDOS = {
+  code: { easy: 45, medium: 70, hard: 120 },
+  prose: { easy: 90, medium: 150, hard: 210 },
+};
+const RELOJ_ESCALON_SEGUNDOS = 15;
+
+function palabrasDelEnunciadoCJS(sc) {
+  const texto = [sc.context, sc.question, sc.prompt].filter(Boolean).join(' ');
+  return texto.trim().split(/\s+/).filter(Boolean).length;
+}
+
+function relojDerivadoAbiertaCJS(sc) {
+  const formato = sc.answerFormat === 'code' ? 'code' : 'prose';
+  const dificultad = sc.difficulty === 'easy' || sc.difficulty === 'hard' ? sc.difficulty : 'medium';
+  const lectura = Math.round(
+    LECTURA_PISO_SEGUNDOS + LECTURA_SEGUNDOS_POR_PALABRA[formato] * palabrasDelEnunciadoCJS(sc),
+  );
+  const escritura = ESCRITURA_SEGUNDOS[formato][dificultad];
+  return Math.ceil((lectura + escritura) / RELOJ_ESCALON_SEGUNDOS) * RELOJ_ESCALON_SEGUNDOS;
+}
+
 function validateMCQuestions(scope, sc) {
   const questions = sc.mcQuestions;
   if (!Array.isArray(questions) || questions.length === 0) {
@@ -464,4 +497,10 @@ if (require.main === module) {
   main();
 }
 
-module.exports = { esParMinimo, palabrasNormalizadas, MC_PAR_MINIMO_MIN_SECONDS };
+module.exports = {
+  esParMinimo,
+  palabrasNormalizadas,
+  MC_PAR_MINIMO_MIN_SECONDS,
+  relojDerivadoAbiertaCJS,
+  palabrasDelEnunciadoCJS,
+};
