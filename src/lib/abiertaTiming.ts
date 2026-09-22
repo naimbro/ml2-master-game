@@ -49,3 +49,83 @@ export function palabrasDelEnunciado(sc: EnunciadoLike): number {
 export function costoDeLectura(palabras: number, formato: FormatoDeRespuesta): number {
   return Math.round(LECTURA_PISO_SEGUNDOS + LECTURA_SEGUNDOS_POR_PALABRA[formato] * palabras);
 }
+
+/**
+ * Espejo de `Scenario.difficulty`. Desde 2026-09-21 la etiqueta NO significa
+ * "qué tan difícil es el concepto": significa CUÁNTO SE TARDA EN TECLEAR LA
+ * RESPUESTA, que es lo único de la dificultad que consume reloj. Una pregunta
+ * conceptualmente durísima de respuesta corta necesita poco tiempo.
+ */
+export type Dificultad = 'easy' | 'medium' | 'hard';
+
+/**
+ * Segundos de tecleo, por formato y etiqueta.
+ *
+ * Los de código están MEDIDOS en 9XR4Z6: 72 s de escritura mediana para una
+ * línea (9% seguía escribiendo al final), ~120 s para una cadena de dos o tres
+ * pasos (14-33% colgando).
+ *
+ * Los de prosa son una DECISIÓN y no una medición, y conviene no olvidarlo:
+ * toda ronda de prosa del repo está censurada por el reloj —entre el 76% y el
+ * 100% del curso sigue escribiendo cuando suena la chicharra, en los cinco
+ * cursos—, así que nunca observamos cuánto habrían escrito. La pregunta que lo
+ * resolvería es a partir de qué largo de respuesta el puntaje deja de subir, y
+ * la puede contestar `scripts/diagnostico.ts` cuando haya datos.
+ */
+export const ESCRITURA_SEGUNDOS: Record<FormatoDeRespuesta, Record<Dificultad, number>> = {
+  code: { easy: 45, medium: 70, hard: 120 },
+  prose: { easy: 90, medium: 150, hard: 210 },
+};
+
+/** Lo que asume el cálculo cuando el escenario no eligió. */
+export const DIFICULTAD_POR_DEFECTO: Dificultad = 'medium';
+export const FORMATO_POR_DEFECTO: FormatoDeRespuesta = 'prose';
+
+/**
+ * Los dos normalizadores existen porque `answerFormat` y `difficulty` llegan de
+ * archivos JSON de contenido, que TypeScript no verifica en runtime. Sin ellos,
+ * un `answerFormat: "Code"` indexa el Record con una clave que no está, el
+ * reloj sale NaN, y el validador falla con un mensaje incomprensible en vez de
+ * decir cuántos segundos faltan.
+ *
+ * `formatoDe` tiene que normalizar IGUAL que el espejo de validate-content.cjs
+ * (`sc.answerFormat === 'code' ? 'code' : 'prose'`): hay un test que compara
+ * las dos implementaciones número por número.
+ */
+export function formatoDe(sc: { answerFormat?: FormatoDeRespuesta }): FormatoDeRespuesta {
+  return sc.answerFormat === 'code' ? 'code' : FORMATO_POR_DEFECTO;
+}
+
+export function dificultadDe(difficulty: Dificultad | undefined): Dificultad {
+  return difficulty === 'easy' || difficulty === 'hard' ? difficulty : DIFICULTAD_POR_DEFECTO;
+}
+
+export function costoDeEscritura(
+  formato: FormatoDeRespuesta,
+  dificultad: Dificultad | undefined,
+): number {
+  return ESCRITURA_SEGUNDOS[formato][dificultadDe(dificultad)];
+}
+
+/** El reloj se sirve en múltiplos de esto: un 178 en pantalla no dice nada. */
+export const RELOJ_ESCALON_SEGUNDOS = 15;
+
+export interface EscenarioAbiertoLike extends EnunciadoLike {
+  answerFormat?: FormatoDeRespuesta;
+  difficulty?: Dificultad;
+}
+
+/**
+ * El piso del reloj de una ronda abierta. `validate-content.cjs` rechaza una
+ * sesión cuyo `durationSeconds` quede por debajo.
+ *
+ * Efecto secundario deliberado: un enunciado largo encarece su propia ronda, y
+ * como el presupuesto de pared no se mueve (15-20 min por juego), la verborrea
+ * se paga sacando una ronda.
+ */
+export function relojDerivadoAbierta(sc: EscenarioAbiertoLike): number {
+  const formato = formatoDe(sc);
+  const crudo =
+    costoDeLectura(palabrasDelEnunciado(sc), formato) + costoDeEscritura(formato, sc.difficulty);
+  return Math.ceil(crudo / RELOJ_ESCALON_SEGUNDOS) * RELOJ_ESCALON_SEGUNDOS;
+}

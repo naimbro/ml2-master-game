@@ -39,3 +39,97 @@ describe('costoDeLectura', () => {
     expect(costoDeLectura(0, 'prose')).toBe(13);
   });
 });
+
+import {
+  costoDeEscritura, relojDerivadoAbierta, formatoDe, dificultadDe,
+} from './abiertaTiming';
+
+describe('costoDeEscritura', () => {
+  it('una línea de código son 70 s, medidos en la R1 de 9XR4Z6', () => {
+    // 72 s de escritura mediana, y sólo el 9% seguía escribiendo al final.
+    expect(costoDeEscritura('code', 'medium')).toBe(70);
+  });
+
+  it('una cadena de dos o tres pasos son 120 s', () => {
+    // R3 y R6 de 9XR4Z6: ~120 s de escritura, 33% y 14% colgando.
+    expect(costoDeEscritura('code', 'hard')).toBe(120);
+  });
+
+  it('la prosa cuesta más que el código a igual etiqueta', () => {
+    expect(costoDeEscritura('prose', 'medium')).toBeGreaterThan(
+      costoDeEscritura('code', 'medium'),
+    );
+  });
+
+  it('sin etiqueta asume medium, que es lo que escribe el scaffold', () => {
+    expect(costoDeEscritura('prose', undefined)).toBe(costoDeEscritura('prose', 'medium'));
+  });
+});
+
+describe('normalización de lo que viene del JSON', () => {
+  // Los dos campos vienen de archivos de contenido, que TypeScript no verifica
+  // en runtime. Sin esto el reloj sale NaN y el validador falla con un mensaje
+  // que no se entiende.
+  it('un answerFormat que no existe se trata como prosa', () => {
+    expect(formatoDe({ answerFormat: 'Code' as never })).toBe('prose');
+    expect(formatoDe({})).toBe('prose');
+    expect(formatoDe({ answerFormat: 'code' })).toBe('code');
+  });
+
+  it('un difficulty que no existe se trata como medium', () => {
+    expect(dificultadDe('medio' as never)).toBe('medium');
+    expect(dificultadDe(undefined)).toBe('medium');
+    expect(dificultadDe('hard')).toBe('hard');
+  });
+
+  it('un escenario con basura en los dos campos da un número, no NaN', () => {
+    const reloj = relojDerivadoAbierta({
+      context: 'x '.repeat(50).trim(),
+      answerFormat: 'CODIGO' as never,
+      difficulty: 'dificil' as never,
+    });
+    expect(Number.isFinite(reloj)).toBe(true);
+    // Cae en prosa + medium: 13 + 0,32*50 = 29 -> +150 = 179 -> 180
+    expect(reloj).toBe(180);
+  });
+});
+
+describe('relojDerivadoAbierta', () => {
+  it('le habría dado 180 s a la R4 de 9XR4Z6 en vez de 120', () => {
+    const reloj = relojDerivadoAbierta({
+      context: 'x '.repeat(179).trim(),
+      answerFormat: 'code',
+      difficulty: 'hard',
+    });
+    // 58 s de lectura + 120 de escritura = 178, redondeado a 180.
+    expect(reloj).toBe(180);
+  });
+
+  it('deja pasar la R1 de 9XR4Z6, que alcanzó de sobra', () => {
+    const reloj = relojDerivadoAbierta({
+      context: 'x '.repeat(83).trim(),
+      answerFormat: 'code',
+      difficulty: 'medium',
+    });
+    // 34 + 70 = 104 -> 105, y la ronda tenía 120.
+    expect(reloj).toBe(105);
+    expect(reloj).toBeLessThanOrEqual(120);
+  });
+
+  it('redondea hacia arriba al múltiplo de 15, nunca hacia abajo', () => {
+    const reloj = relojDerivadoAbierta({
+      context: 'x '.repeat(10).trim(),
+      difficulty: 'easy',
+    });
+    // 16 + 90 = 106 -> 120
+    expect(reloj % 15).toBe(0);
+    expect(reloj).toBe(120);
+  });
+
+  it('sin answerFormat asume prosa, que es el default del schema', () => {
+    const palabras = 'x '.repeat(50).trim();
+    expect(relojDerivadoAbierta({ context: palabras, difficulty: 'medium' })).toBe(
+      relojDerivadoAbierta({ context: palabras, answerFormat: 'prose', difficulty: 'medium' }),
+    );
+  });
+});
