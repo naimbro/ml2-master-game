@@ -271,7 +271,7 @@
     "category": "Síntesis",
     "difficulty": "medium",
     "ranked": true,
-    "durationSeconds": 180,
+    "durationSeconds": 210,
     "conceptTags": [
       "articulo_lee",
       "estudio_mit",
@@ -387,9 +387,9 @@
     "order": 6,
     "title": "Tu próximo trabajo",
     "category": "Aplicación",
-    "difficulty": "medium",
+    "difficulty": "hard",
     "ranked": true,
-    "durationSeconds": 240,
+    "durationSeconds": 270,
     "conceptTags": [
       "tres_principios",
       "activo_vs_pasivo"
