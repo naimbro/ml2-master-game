@@ -126,7 +126,7 @@
     "category": "Describir datos",
     "difficulty": "medium",
     "ranked": true,
-    "durationSeconds": 150,
+    "durationSeconds": 195,
     "conceptTags": [
       "tipos_de_variable"
     ],
@@ -303,7 +303,7 @@
     "category": "Describir datos",
     "difficulty": "medium",
     "ranked": true,
-    "durationSeconds": 150,
+    "durationSeconds": 180,
     "conceptTags": [
       "describir_una_muestra",
       "frecuencias_y_porcentajes"
