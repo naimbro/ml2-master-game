@@ -83,21 +83,35 @@ Las columnas de la tabla de abiertas:
 
 ### Las reglas de lectura
 
-**`resid > +15 s` → el enunciado confunde. Se reescribe la pregunta, NO se
-alarga el reloj.** Una pregunta que cuesta mucho más de lo que su largo predice
-es una pregunta confusa. Los peores del repo: +31 s, +22 s, +18 s. Alargar el
-reloj de un enunciado confuso compra tiempo para seguir sin entender.
+**`resid > +15 s` → la ronda costó más de lo que su largo explica.** De ahí
+salen **dos veredictos distintos**, y el script elige cuál imprime según el largo
+del enunciado. **No hay nada que aplicar a mano acá: hay que saber leer cuál de
+los dos salió.**
 
-> **La salvedad, y hay que aplicarla a mano:** la recta tiene un **piso de 13 s**
-> (`LECTURA_PISO_SEGUNDOS`) que es abrir la pantalla y ubicarse, y un error de
-> ajuste de ~12 s. En un enunciado corto la predicción es casi todo piso, así que
-> cualquier titubeo se cobra como mala redacción. Regla práctica: si la parte que
-> depende de las palabras (`pal × 0,25` en código, `× 0,32` en prosa) es menor
-> que el error del ajuste —o sea **por debajo de ~50 palabras en código y ~40 en
-> prosa**— un residual alto **no** significa "mal redactada": significa **"no
-> supieron por dónde empezar"**, que es un problema de la pregunta, no de su
-> texto. El caso real: `6CNGSG` R2, **26 palabras**, predice 22 s y costó 44 s.
-> Veintiséis palabras no alcanzan para redactar mal nada.
+**«EL ENUNCIADO CONFUNDE» (70 palabras o más) → se reescribe la pregunta, NO se
+alarga el reloj.** Un enunciado largo que además cuesta más de lo que su largo
+predice es un enunciado confuso. Alargarle el reloj compra tiempo para seguir sin
+entender. Cuáles son los peores del repo en cada momento lo dice
+`npm run diagnostico -- --calibrar`, que los lista ordenados; no vale la pena
+memorizar una lista que envejece con cada juego nuevo.
+
+**«el largo no explica nada: puede ser que no supieran por dónde empezar» (menos
+de 70 palabras) → el problema es la pregunta, no su texto.** Debajo de ese largo
+la recta predice casi su propio piso —13 s de abrir la pantalla y ubicarse— y
+**cualquier titubeo se cobra como mala redacción aunque no lo sea**: pensar la
+respuesta, no saberla, entrar tarde a la ronda. El caso real: `6CNGSG` R2,
+**26 palabras**, residual **+23 s**, y no hay nada mal redactado ahí. Veintiséis
+palabras no alcanzan para redactar mal nada. Lo que hay que mirar es si la
+pregunta da un punto de partida.
+
+> **El corte son 70 palabras** (`PISO_PALABRAS_VEREDICTO` en
+> `scripts/diagnostico.ts`), y es un número **elegido, no medido**. Lo que lo
+> respalda es que separa el caso de 26 palabras que no está mal escrita de las
+> cuatro del repo que sí conviene reescribir —92, 139, 145 y 421 palabras—, y que
+> cualquier piso entre 60 y 80 deja el mismo corte. **Si alguna vez hay que
+> moverlo, se mueve en el script y no acá**: dos umbrales para la misma regla,
+> uno en el medidor y otro en este skill, es exactamente la divergencia silenciosa
+> que todo este trabajo existe para matar.
 
 **`colg > 40%` → el reloj no alcanzó.** Se corta el enunciado o se sube
 `difficulty`, que es lo que paga el tecleo. **Sólo existe en código.** En prosa
