@@ -4,9 +4,9 @@
     "order": 1,
     "title": "La columna que no venía",
     "category": "mutate()",
-    "difficulty": "easy",
+    "difficulty": "hard",
     "ranked": true,
-    "durationSeconds": 120,
+    "durationSeconds": 165,
     "answerFormat": "code",
     "conceptTags": [
       "mutate_tres_formas"
@@ -209,9 +209,9 @@
     "order": 4,
     "title": "El grupo sin nombre",
     "category": "Los tres controles",
-    "difficulty": "medium",
+    "difficulty": "hard",
     "ranked": true,
-    "durationSeconds": 120,
+    "durationSeconds": 180,
     "answerFormat": "code",
     "conceptTags": [
       "los_tres_controles",
@@ -280,9 +280,9 @@
     "order": 5,
     "title": "El año que dio cero",
     "category": "Los tres controles",
-    "difficulty": "medium",
+    "difficulty": "hard",
     "ranked": true,
-    "durationSeconds": 120,
+    "durationSeconds": 165,
     "answerFormat": "code",
     "conceptTags": [
       "los_tres_controles",
