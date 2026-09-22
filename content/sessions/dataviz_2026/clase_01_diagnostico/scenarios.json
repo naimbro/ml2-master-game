@@ -53,9 +53,9 @@
     "order": 2,
     "title": "Por qué se alegra de que no existiera",
     "category": "Lectura",
-    "difficulty": "medium",
+    "difficulty": "hard",
     "ranked": true,
-    "durationSeconds": 180,
+    "durationSeconds": 255,
     "conceptTags": [
       "articulo_parrott"
     ],
@@ -105,9 +105,9 @@
     "order": 3,
     "title": "Qué le entrega a la IA y qué no",
     "category": "Lectura",
-    "difficulty": "medium",
+    "difficulty": "hard",
     "ranked": true,
-    "durationSeconds": 180,
+    "durationSeconds": 255,
     "conceptTags": [
       "articulo_parrott"
     ],
