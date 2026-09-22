@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Clock, Send, AlertCircle, StopCircle, Info, MessageSquare, Code, CheckCircle, XCircle, Zap } from 'lucide-react';
+import { Clock, Send, AlertCircle, StopCircle, Info, MessageSquare, Code, CheckCircle, XCircle, Zap, Plus } from 'lucide-react';
 import { useGame } from '../../hooks/useGame';
 import VueltaAlJuego from '../../components/VueltaAlJuego';
 import { useAuth } from '../../hooks/useAuth';
@@ -45,7 +45,7 @@ export default function Round() {
   const { gameCode } = useParams<{ gameCode: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { game, loading, error, submitAnswer, submitMCBlock, submissions, isHost, currentPlayer, markAnswered, answeredByQuestion } = useGame(gameCode);
+  const { game, loading, error, submitAnswer, submitMCBlock, submissions, isHost, currentPlayer, markAnswered, answeredByQuestion, extendRound } = useGame(gameCode);
 
   // Profesor que dirige sin jugar (`hostPlays: false` al crear el juego). Sigue
   // viendo la ronda entera porque ESTA pantalla es la que se proyecta al curso;
@@ -584,6 +584,16 @@ export default function Round() {
           {isHost && (
             <div className="mt-3 flex justify-end gap-2">
               <MusicSelector />
+              {!isMC && (
+                <button
+                  onClick={() => extendRound()}
+                  title="Le agrega 30 s a esta ronda. Apretalo ANTES de que el reloj llegue a cero: al llegar a cero cada telefono envia solo."
+                  className="flex items-center gap-2 px-4 py-2 bg-kahoot-green/80 hover:bg-kahoot-green text-ink rounded-lg font-bold text-sm transition-all"
+                >
+                  <Plus className="w-4 h-4" />
+                  +30 s
+                </button>
+              )}
               <button
                 onClick={handleEndRound}
                 disabled={endingRound}

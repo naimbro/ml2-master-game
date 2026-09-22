@@ -7,6 +7,7 @@ import type { TelemetriaCaptura } from '../lib/telemetriaDerived';
 import { useAuth } from './useAuth';
 import { mcTimeline, mcGateSeconds, shouldCutQuestion } from '../lib/mcTiming';
 import { aggregateChoices, mcStatsKey, type ChoiceInput } from '../lib/mcStats';
+import { EXTENSION_SEGUNDOS } from '../lib/abiertaTiming';
 
 interface UseGameReturn {
   game: Game | null;
@@ -23,6 +24,8 @@ interface UseGameReturn {
   nextRound: () => Promise<void>;
   endGame: () => Promise<void>;
   recalibrateRound: (round: number) => Promise<void>;
+  /** Le agrega 30 s a la ronda abierta en curso (anfitrion). */
+  extendRound: () => Promise<void>;
   /**
    * MC: avisa que este jugador ya contesto una pregunta, para que el host corte.
    * `choice` ademas guarda QUE eligio, en una subcoleccion que solo lee el
@@ -508,6 +511,32 @@ export function useGame(gameCode: string | undefined): UseGameReturn {
     });
   }, [gameCode, isHost]);
 
+  /**
+   * Le agrega 30 s a la ronda que está corriendo. Apretable cuantas veces haga
+   * falta.
+   *
+   * Empujar `roundEndTime` alcanza porque ese campo es lo que miran las dos
+   * puntas: el reloj del alumno (Round.tsx) y el auto-cierre del anfitrión más
+   * abajo en este archivo. `roundExtensions` no cambia nada en vivo: existe
+   * para que el diagnóstico sepa después que esta ronda duró más.
+   *
+   * No se ofrece en rondas MC — ahí el bloque se deriva de `roundStartTime` y
+   * empujar el fin lo desincroniza en vez de alargarlo.
+   */
+  const extendRound = useCallback(async () => {
+    if (!gameCode || !isHost || !game?.roundEndTime) return;
+
+    const ronda = String(game.currentRound);
+    const yaAgregado = game.roundExtensions?.[ronda] ?? 0;
+    const fin = game.roundEndTime.toMillis() + EXTENSION_SEGUNDOS * 1000;
+
+    await updateDoc(doc(db, 'games', gameCode), {
+      roundEndTime: Timestamp.fromMillis(fin),
+      [`roundExtensions.${ronda}`]: yaAgregado + EXTENSION_SEGUNDOS,
+      updatedAt: serverTimestamp(),
+    });
+  }, [gameCode, isHost, game?.roundEndTime, game?.currentRound, game?.roundExtensions]);
+
   // Auto-end round when timer expires (host only)
   useEffect(() => {
     if (!isHost || !game || game.status !== 'active' || !game.roundEndTime) return;
@@ -610,6 +639,7 @@ export function useGame(gameCode: string | undefined): UseGameReturn {
     nextRound,
     endGame,
     recalibrateRound,
+    extendRound,
     submissions,
     roundResults,
     markAnswered,

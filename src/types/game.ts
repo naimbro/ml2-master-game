@@ -52,6 +52,19 @@ export interface Game {
    */
   mcAllAnsweredAt?: Timestamp;
   /**
+   * Segundos que el anfitrión agregó a mano, por ronda: `{ "4": 60 }`.
+   *
+   * Existe para que el diagnóstico no mida mal. Sin este registro, una ronda
+   * extendida se ve como un curso entero entregando al 150% de su reloj, y el
+   * diagnóstico concluiría exactamente lo contrario de lo que pasó. Y de paso es
+   * la señal más fuerte que hay para la próxima edición de esa clase: "en R4
+   * tuviste que apretar +30 dos veces".
+   *
+   * Sólo rondas abiertas: las MC derivan todo de `roundStartTime` y empujar el
+   * fin las desincroniza en vez de alargarlas.
+   */
+  roundExtensions?: Record<string, number>;
+  /**
    * MC only: cuantos eligieron cada alternativa, por pregunta ya cerrada.
    * Clave `r{ronda}q{indice}` (ver `src/lib/mcStats.ts`). Lo escribe el
    * anfitrion al entrar la pregunta en 'feedback', agregando la subcoleccion

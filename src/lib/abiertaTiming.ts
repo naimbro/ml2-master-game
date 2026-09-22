@@ -149,3 +149,20 @@ export function relojDerivadoAbierta(sc: EscenarioAbiertoLike): number {
     costoDeLectura(palabrasDelEnunciado(sc), formato) + costoDeEscritura(formato, sc.difficulty);
   return Math.ceil(crudo / RELOJ_ESCALON_SEGUNDOS) * RELOJ_ESCALON_SEGUNDOS;
 }
+
+/** Cuánto agrega un apretón del botón del anfitrión. */
+export const EXTENSION_SEGUNDOS = 30;
+
+/**
+ * El reloj que la ronda tuvo DE VERDAD: el escrito más lo que el anfitrión
+ * agregó en vivo. Es lo que el diagnóstico tiene que usar como denominador;
+ * contra el escrito, una ronda extendida se ve como un curso entregando al
+ * 150% de su tiempo.
+ */
+export function relojEfectivoDeRonda(
+  durationSeconds: number,
+  roundExtensions: Record<string, number> | undefined,
+  round: number,
+): number {
+  return durationSeconds + (roundExtensions?.[String(round)] ?? 0);
+}

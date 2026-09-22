@@ -3,6 +3,7 @@ import { describe, it, expect } from 'vitest';
 import {
   palabrasDelEnunciado, costoDeLectura, costoDeEscritura, relojDerivadoAbierta,
   formatoDe, dificultadDe, ESCRITURA_SEGUNDOS,
+  relojEfectivoDeRonda, EXTENSION_SEGUNDOS,
 } from './abiertaTiming';
 
 describe('palabrasDelEnunciado', () => {
@@ -161,5 +162,23 @@ describe('relojDerivadoAbierta', () => {
       difficulty: 'easy',
     });
     expect(reloj).toBe(120);
+  });
+});
+
+describe('relojEfectivoDeRonda', () => {
+  it('sin extensiones es el reloj escrito', () => {
+    expect(relojEfectivoDeRonda(120, undefined, 4)).toBe(120);
+  });
+
+  it('suma los segundos que el profe agrego en esa ronda', () => {
+    expect(relojEfectivoDeRonda(120, { '4': 60 }, 4)).toBe(180);
+  });
+
+  it('no mezcla la extension de otra ronda', () => {
+    expect(relojEfectivoDeRonda(120, { '3': 60 }, 4)).toBe(120);
+  });
+
+  it('un apreton son 30 s', () => {
+    expect(EXTENSION_SEGUNDOS).toBe(30);
   });
 });
