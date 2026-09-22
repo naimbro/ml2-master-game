@@ -12,12 +12,18 @@
  * con la telemetría del repo salieron las tres cosas que este script reporta:
  *
  *  1. La mediana del curso tarda en escribir su primer carácter lo que el
- *     enunciado mide: corr(palabras, segundos hasta la 1ª tecla) = 0,91, con
- *     la recta `13 s + 0,32 s × palabra` (n = 35). El cálculo vive en
- *     `src/lib/abiertaTiming.ts` y se importa de ahí, nunca se copia.
+ *     enunciado mide. La recta que el código usa es `13 s + 0,32 s × palabra`
+ *     (n = 35, RMSE 11,9 s, corr 0,77 pooled y 0,90 en las rondas de prosa).
+ *     El 0,91 que se cita por ahí es de OTRO ajuste, el de los 36 puntos, que
+ *     incluye un enunciado de 421 palabras —2,4 veces el siguiente— y que por
+ *     eso infla la correlación; ver el encabezado de
+ *     `src/lib/abiertaTiming.ts`, donde están los dos ajustes al lado. El
+ *     cálculo vive en ese archivo y se importa de ahí, nunca se copia.
  *  2. **El residual de esa recta es el detector de mala redacción.** Una
  *     pregunta que cuesta mucho más de lo que su largo predice es una pregunta
- *     confusa. Las peores del año: +31 s, +22 s, +18 s.
+ *     confusa. Cuáles son las peores en cada momento lo dice
+ *     `--calibrar`, que las lista ordenadas: no vale la pena escribir acá una
+ *     lista que envejece con cada juego nuevo.
  *  3. «Cuántos seguían escribiendo al final» sirve para CÓDIGO y no para
  *     prosa. En prosa ese número es 76-100% en los cinco cursos —en un ensayo
  *     la gente escribe hasta la chicharra por definición—, así que una sola
