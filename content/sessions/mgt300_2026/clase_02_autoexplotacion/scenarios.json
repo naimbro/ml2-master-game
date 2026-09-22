@@ -46,7 +46,7 @@
     "category": "Han",
     "difficulty": "medium",
     "ranked": true,
-    "durationSeconds": 180,
+    "durationSeconds": 210,
     "conceptTags": [
       "han_rendimiento"
     ],
@@ -81,9 +81,9 @@
     "order": 3,
     "title": "Éxito 1994",
     "category": "Ehrenreich",
-    "difficulty": "hard",
+    "difficulty": "medium",
     "ranked": true,
-    "durationSeconds": 180,
+    "durationSeconds": 195,
     "conceptTags": [
       "ehrenreich_motivacion",
       "ehrenreich_despidos"
@@ -160,7 +160,7 @@
     "category": "Foucault y Han",
     "difficulty": "hard",
     "ranked": true,
-    "durationSeconds": 240,
+    "durationSeconds": 255,
     "conceptTags": [
       "sociedad_disciplinaria",
       "han_rendimiento"
@@ -207,7 +207,7 @@
     "category": "Chile",
     "difficulty": "hard",
     "ranked": true,
-    "durationSeconds": 180,
+    "durationSeconds": 255,
     "conceptTags": [
       "chile_2026",
       "han_rendimiento"
