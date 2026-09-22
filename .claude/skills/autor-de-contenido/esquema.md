@@ -36,8 +36,9 @@ las dos formas, pero `courses.ts` hace `scenarios.length` y la envuelta deja
   "title": "...",
   "category": "Lectura",
   "difficulty": "medium",
+  "answerFormat": "prose",
   "ranked": true,
-  "durationSeconds": 180,
+  "durationSeconds": 195,
   "conceptTags": ["nombre_de_seccion_del_kb"],
   "judgeFocus": "...",
   "context": "...",
@@ -49,6 +50,50 @@ las dos formas, pero `courses.ts` hace `scenarios.length` y la envuelta deja
 
 `judgeFocus`, `evaluationGuide` e `idealAnswer` los escribe el skill
 **`autor-de-rubricas`**, no este.
+
+#### `difficulty`: cuánto se tarda en TECLEAR, no qué tan difícil es el concepto
+
+Desde el 21-sep-2026 la etiqueta cambió de significado. **No es qué tan difícil
+es el concepto: es cuánto se tarda en teclear la respuesta**, que es lo único de
+la dificultad que consume reloj. Una pregunta conceptualmente durísima de
+respuesta corta necesita poco tiempo, y se etiqueta `easy` sin culpa.
+
+Los segundos de tecleo que compra cada etiqueta, cruzados con `answerFormat`:
+
+| | `easy` | `medium` | `hard` |
+|---|---|---|---|
+| `answerFormat: "code"` | **45 s** — un nombre de función | **70 s** — una línea | **120 s** — dos o tres pasos encadenados |
+| prosa (el default) | **90 s** — una frase | **150 s** — un párrafo | **210 s** — argumento con evidencia |
+
+Los de código están **medidos** en 9XR4Z6. Los de prosa son una **decisión**, y
+conviene no olvidarlo: toda ronda de prosa del repo está censurada por el reloj
+—entre el 76% y el 100% del curso sigue escribiendo cuando suena la chicharra,
+en los cinco cursos—, así que nunca se observó cuánto habrían escrito.
+
+**La etiqueta se elige mirando el `idealAnswer`, no la ambición del enunciado.**
+Si la respuesta ideal son dos líneas de R, es `medium` de código aunque el
+enunciado monte un caso entero. Y si se piden dos entregables —una frase *y* una
+línea de código—, es `hard`: son dos tipos de escritura con un solo reloj.
+
+A eso `relojDerivadoAbierta()` le suma la lectura del enunciado
+(`13 s + 0,32 s × palabra`, o 0,25 si es código) y lo sirve en escalones de 15 s.
+Eso es `durationSeconds`, y **no se escribe a ojo**: sale de
+`src/lib/abiertaTiming.ts`, igual que el de las MC sale de `mcTiming.ts`.
+`scripts/validate-content.cjs` espeja el cálculo número por número y falla el
+build si el reloj escrito queda corto. El techo de palabras del enunciado —100—
+está en el SKILL, sección 4c.
+
+**Ya no se le muestra al alumno.** Era una insignia en la pantalla de la ronda;
+con el significado nuevo mentía —anunciaba «difícil» en una pregunta de respuesta
+corta— y además desanimaba a quien iba a intentarla.
+
+**Y el valor se escribe bien o se pierden 60 segundos en silencio.** Un
+`difficulty` fuera del enum cae al default `medium`: 150 s donde correspondían
+210. Los errores verosímiles en un JSON escrito a mano en castellano
+(`"dificil"`, `"difícil"`, `"Hard"`, `"medium-hard"`) fallan justo para ese lado.
+El validador **avisa** cuando el valor no está en el enum — es un aviso que hay
+que leer, no un NaN que se ve. Mismo caso para `answerFormat`, que cae a `prose`;
+esa caída es inofensiva, porque `prose` es más caro por palabra y por tecleo.
 
 ### Ronda de opción múltiple
 
@@ -87,7 +132,8 @@ las dos formas, pero `courses.ts` hace `scenarios.length` y la envuelta deja
   `question`); la rama MC dibuja la portada, el enunciado y las opciones, y nunca
   el contexto. Escribirlo no da error, no rompe ningún validador y se pierde
   entero — así que **todo lo que la pregunta necesita va DENTRO del `question`**,
-  aunque quede largo. La carga de lectura no es el problema (ver más abajo);
+  aunque quede largo. En una MC la carga de lectura no es el problema (ver más
+  abajo — en una abierta sí, y se cobra por palabra);
   el enunciado que depende de un texto invisible sí.
 - **La imagen de una MC va en dos lugares distintos y no dan lo mismo.** En el
   escenario (`scenario.media`) se muestra **solo en la portada**, antes de que
@@ -133,6 +179,13 @@ las dos formas, pero `courses.ts` hace `scenarios.length` y la envuelta deja
   de acierto usando la mitad del reloj; la que se cayó al 43% tenía *menos*
   carga. Escribir preguntas más cortas no arregla nada, y peor: indexar el reloj
   al largo le habría dado más tiempo justo a la que no lo necesitaba.
+
+  **Ojo con el alcance: esto vale para el acierto de una MC, no para el reloj de
+  una abierta.** Son dos cosas distintas, medidas aparte. En alternativas, más
+  caracteres no predice menos acierto. En una ronda abierta, cada palabra del
+  enunciado cuesta 0,32 s que el alumno no pasa escribiendo, y eso sí está
+  correlacionado (0,91). Acortar el enunciado de una MC no compra nada; acortar
+  el de una abierta compra segundos.
 
   Lo que las hunde es conceptual — pedir **clasificar o explicar un mecanismo**
   en vez de reconocer. Una o dos de mecanismo por juego está bien y son las que

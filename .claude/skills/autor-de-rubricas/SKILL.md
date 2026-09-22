@@ -15,6 +15,34 @@ salió. Criterios escritos sobre una pregunta que todavía se puede caer son
 criterios que no la van a calzar. Las preguntas las escribe el skill
 **`autor-de-contenido`**; este empieza cuando Naim ya eligió.
 
+## Lo primero: las fichas de diagnóstico de este curso
+
+**Antes de escribir un criterio, leer las fichas de diagnóstico de las clases
+anteriores del curso:** `content/sessions/<curso>/*/diagnostico.md`.
+
+Importa acá por una razón propia: **un puntaje bajo que en realidad fue falta de
+tiempo no se arregla tocando anclas.** La ficha dice cuánto tardaron en leer el
+enunciado, qué relojes no alcanzaron, cuántos seguían escribiendo cuando sonó la
+chicharra y si el profesor apretó «+30 s» en vivo. Si una ronda quedó censurada
+por el reloj, sus respuestas están truncas y **calibrar sobre ellas es calibrar
+sobre respuestas que nadie terminó**: bajar las anclas para que «pasen» premia
+justamente a quien escribió poco. Eso se arregla en el enunciado y en el reloj
+—`autor-de-contenido`, sección 4c—, no en la rúbrica.
+
+La ficha también trae lo único que ninguna respuesta sintética puede dar: qué
+enunciado confundió al curso, y qué puntajes salieron de eso.
+
+**Si la carpeta del curso no tiene ninguna ficha todavía** —hoy no hay
+ninguna—, correr el diagnóstico sobre el último juego de ese curso antes de
+escribir:
+
+```bash
+npm run diagnostico <CODIGO>     # el código de 6 letras del último juego del curso
+```
+
+Y si el curso nunca se jugó, decirlo en voz alta: la rúbrica se va a calibrar
+contra respuestas sintéticas y nada más, que es el caso más frágil de todos.
+
 ## Dónde vive "una rúbrica por pregunta"
 
 El motor tiene **un solo juego de dimensiones por sesión**. Lo que sí es por
