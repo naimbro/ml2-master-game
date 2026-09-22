@@ -184,7 +184,9 @@ esa caída es inofensiva, porque `prose` es más caro por palabra y por tecleo.
   una abierta.** Son dos cosas distintas, medidas aparte. En alternativas, más
   caracteres no predice menos acierto. En una ronda abierta, cada palabra del
   enunciado cuesta 0,32 s que el alumno no pasa escribiendo, y eso sí está
-  correlacionado (0,91). Acortar el enunciado de una MC no compra nada; acortar
+  correlacionado (0,77 pooled, 0,90 en prosa sola — el 0,91 que se cita por ahí
+  es de otro ajuste, ver `abiertaTiming.ts`). Acortar el enunciado de una MC no
+  compra nada; acortar
   el de una abierta compra segundos.
 
   Lo que las hunde es conceptual — pedir **clasificar o explicar un mecanismo**
@@ -193,7 +195,7 @@ esa caída es inofensiva, porque `prose` es más caro por palabra y por tecleo.
 
 - **Después de jugar, medir el reloj. Esto no es opcional.** El reloj se escribe
   a ojo y no hay forma de saber si estuvo bien hasta que treinta personas lo
-  corran. Correr **`npx tsx scripts/mc-clock.ts <CODIGO>`** después de cada clase.
+  corran. Correr **`npm run diagnostico <CODIGO>`** después de cada clase.
 
   **El número que manda es qué fracción del límite consumió la mediana del
   curso. Sobre el 60%, el reloj quedó corto.** El corte se ve limpio en dataviz

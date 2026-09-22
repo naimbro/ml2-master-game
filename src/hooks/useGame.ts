@@ -537,6 +537,17 @@ export function useGame(gameCode: string | undefined): UseGameReturn {
    * 2. **Apretón perdido.** Dos apretones seguidos leían el mismo snapshot de
    *    `game` y el segundo escribía el mismo total. Leyendo `roundEndTime` y
    *    `roundExtensions` DENTRO de la transacción, dos apretones suman 60.
+   *
+   * **Lo que esta transacción NO cierra, y conviene no creer que sí:** el orden
+   * inverso del caso 1. Si el apretón entra con 1 o 2 s de reloj, la
+   * transacción ve `status: 'active'` y escribe; pero el intervalo del
+   * auto-cierre (más abajo en este archivo) compara `Date.now()` contra el
+   * `roundEndTime` que capturó en su closure, o sea el viejo, así que puede
+   * llamar a `endRound()` igual antes de que llegue el snapshot nuevo. Queda lo
+   * peor de los dos mundos: la ronda cierra sin extenderse Y los 30 s quedan
+   * anotados. Cerrarlo del todo pide que `endRound` también sea transacción y
+   * aborte si `now < roundEndTime`. Mientras tanto la defensa es el botón, que
+   * avisa bajo los 15 s y se deshabilita en cero (`estadoDelBotonExtender`).
    */
   const extendRound = useCallback(async () => {
     if (!gameCode || !isHost) return;

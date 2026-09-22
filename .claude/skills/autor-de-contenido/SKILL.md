@@ -163,13 +163,19 @@ la única ronda de criterio sobre fuentes de toda la sesión.
 ### 4c. El enunciado se cobra por palabra
 
 **Un enunciado cuesta 0,32 s por palabra** —0,25 si la respuesta es código— y
-eso está medido, no estimado: la correlación entre palabras del enunciado y
-segundos hasta la primera tecla es **0,91** sobre las 36 rondas abiertas de 16
-juegos y 5 cursos. La recta vive en `src/lib/abiertaTiming.ts`:
+eso está medido, no estimado: sale de las 36 rondas abiertas de 16 juegos y 5
+cursos. La recta vive en `src/lib/abiertaTiming.ts`:
 
 ```
-lectura ≈ 13 s + 0,32 s × palabra      (n = 35, RMSE 12 s)
+lectura ≈ 13 s + 0,32 s × palabra      (n = 35, RMSE 11,9 s)
+                                        corr 0,77 pooled, 0,90 en prosa sola
 ```
+
+**Cuidado con el 0,91 que anda dando vueltas:** es de OTRO ajuste, el de los 36
+puntos, que incluye un enunciado de 421 palabras —2,4 veces el siguiente— y que
+por eso infla la correlación. Su pendiente no es 0,32 sino 0,391. Los dos
+ajustes están al lado en el encabezado de `abiertaTiming.ts`, y
+`npm run diagnostico -- --calibrar` los reproduce.
 
 En plata: **un enunciado de 180 palabras son 60 segundos de reloj que se van
 antes de que nadie escriba un carácter.** La R4 de dataviz clase 7 tenía 179
@@ -182,7 +188,7 @@ del ejercicio».
 
 **El techo: 100 palabras** entre `context` y `question`. Por encima, la ronda
 cuesta 40 s o más de pura lectura y empieza a competir con las demás por el
-presupuesto de pared de la sección 4b. Nueve de los 19 escenarios abiertos de
+presupuesto de pared de la sección 4b. Siete de los 19 escenarios abiertos de
 dataviz pasan ese umbral, y las cuatro peores —179, 162, 127 y 126 palabras— son
 rondas **que el reloj ya no puede arreglar**: el reloj honesto de una de ellas
 son **4,5 minutos para una sola ronda**, casi un cuarto del juego.
@@ -271,7 +277,7 @@ Naim jugándolo en el teléfono.** Decírselo, no darlo por hecho.
 ### 8. Después de la clase, medir el reloj
 
 ```bash
-npx tsx scripts/mc-clock.ts <CODIGO>              # ¿alcanzó el tiempo?
+npm run diagnostico <CODIGO>                      # ¿alcanzó el tiempo?
 npx tsx scripts/game-feedback.ts <courseId>       # qué dijeron los alumnos
 ```
 

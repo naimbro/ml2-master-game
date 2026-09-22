@@ -26,8 +26,11 @@ escritura —que existe desde agosto para otra cosa: detectar copiado— resulta
 su texto segundo a segundo.
 
 ```
-corr(palabras del enunciado, segundos hasta la 1ª tecla) = 0,91
-lectura ≈ 13 s + 0,32 s × palabra        (n = 35, RMSE 12 s)
+lectura ≈ 13 s + 0,32 s × palabra   (n = 35, RMSE 11,9 s, corr 0,77 pooled)
+                                     corr 0,90 mirando sólo las rondas de prosa
+
+El corr = 0,91 que se cita a veces es de OTRO ajuste, el de los 36 puntos, que
+incluye un enunciado de 421 palabras y cuya pendiente es 0,391, no 0,32.
 ```
 
 El enunciado cuesta **un tercio de segundo por palabra**, y el código se lee más rápido que la
