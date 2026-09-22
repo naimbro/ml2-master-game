@@ -1031,23 +1031,6 @@ export default function Round() {
                       {currentScenario.category}
                     </span>
                   )}
-                  {currentScenario.difficulty && (
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
-                        currentScenario.difficulty === 'easy'
-                          ? 'bg-kahoot-green/25 text-emerald-700'
-                          : currentScenario.difficulty === 'medium'
-                          ? 'bg-kahoot-orange/25 text-orange-800'
-                          : 'bg-kahoot-red/25 text-red-700'
-                      }`}
-                    >
-                      {currentScenario.difficulty === 'easy'
-                        ? 'Facil'
-                        : currentScenario.difficulty === 'medium'
-                        ? 'Medio'
-                        : 'Dificil'}
-                    </span>
-                  )}
                 </div>
 
                 <h2 className="text-2xl font-black mb-4">{currentScenario.title}</h2>

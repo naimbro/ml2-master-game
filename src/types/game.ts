@@ -250,6 +250,16 @@ export interface Scenario {
   order: number;
   title: string;
   category?: string;
+  /**
+   * CUÁNTO SE TARDA EN TECLEAR LA RESPUESTA, no qué tan difícil es el concepto.
+   * Es lo único de la dificultad que consume reloj: una pregunta
+   * conceptualmente durísima de respuesta corta necesita poco tiempo.
+   * Alimenta `relojDerivadoAbierta()` en src/lib/abiertaTiming.ts, y
+   * scripts/validate-content.cjs falla el build si el reloj no alcanza.
+   *
+   * NO se le muestra al alumno desde 2026-09-21: con este significado, un
+   * cartel de "difícil" desanima a quien iba a intentarlo y además miente.
+   */
   difficulty?: 'easy' | 'medium' | 'hard';
   ranked?: boolean;
   durationSeconds?: number;
