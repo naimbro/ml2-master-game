@@ -246,22 +246,50 @@ function relojEsErrorEn(curso) {
   return !CURSOS_RETIRADOS.includes(curso);
 }
 
-function validateRelojAbierto(scope, sc, curso) {
-  if (sc.type === 'multiple_choice') return;
-  if (sc.durationSeconds === undefined) return; // ya lo reporta el chequeo de siempre
+/**
+ * Un escenario abierto SIN `durationSeconds` propio no corre sin reloj: hereda
+ * `roundDurationSeconds` del `config.json` de su sesion (ver
+ * `src/hooks/useGame.ts`, `firstScenario?.durationSeconds || game?.roundDurationSeconds
+ * || 300`). Por eso este chequeo tiene que resolver esa herencia y validar el
+ * numero que la ronda va a tener DE VERDAD, no exigir que el campo este
+ * escrito — eso cambiaria el esquema del contenido por comodidad del validador.
+ *
+ * Devuelve `null` si el escenario no necesita chequeo o el reloj efectivo
+ * alcanza, o `{ nivel, mensaje }` si hay que reportar algo. No llama a
+ * `err`/`warn` directamente: quien invoca decide, lo que permite testear el
+ * veredicto sin depender del estado global del modulo (`errorCount`/`warnCount`).
+ */
+function validateRelojAbierto(scope, sc, curso, roundDurationSecondsDeLaSesion) {
+  if (sc.type === 'multiple_choice') return null;
+
+  const tienePropio = sc.durationSeconds !== undefined;
+  const efectivo = tienePropio ? Number(sc.durationSeconds) : roundDurationSecondsDeLaSesion;
+
+  if (efectivo === undefined || efectivo === null || !Number.isFinite(Number(efectivo))) {
+    return {
+      nivel: 'error',
+      mensaje:
+        `escenario abierto sin reloj: no tiene durationSeconds propio y la sesion ` +
+        `no tiene roundDurationSeconds en config.json — esta ronda no tiene reloj ` +
+        `definido en ninguna parte.`,
+    };
+  }
 
   const pide = relojDerivadoAbiertaCJS(sc);
-  if (Number(sc.durationSeconds) >= pide) return;
+  if (Number(efectivo) >= pide) return null;
 
   const palabras = palabrasDelEnunciadoCJS(sc);
+  const origen = tienePropio
+    ? ''
+    : ` (heredado de roundDurationSeconds en config.json — este escenario no tiene ` +
+      `durationSeconds propio)`;
   const mensaje =
-    `durationSeconds=${sc.durationSeconds} no alcanza: ${palabras} palabras de enunciado ` +
+    `durationSeconds=${efectivo}${origen} no alcanza: ${palabras} palabras de enunciado ` +
     `y una respuesta '${sc.difficulty || 'medium'}' piden ${pide}s. ` +
     `Corta el enunciado o subi el reloj — y si sube el reloj, revisa que el juego siga ` +
     `cabiendo en 20 min de pared (suma de relojes + 2 min por ronda).`;
 
-  if (relojEsErrorEn(curso)) err(scope, mensaje);
-  else warn(scope, mensaje);
+  return { nivel: relojEsErrorEn(curso) ? 'error' : 'warn', mensaje };
 }
 
 function validateMCQuestions(scope, sc) {
@@ -442,7 +470,11 @@ function validateSession(courseId, sessionId, sessionDir, knownJudgeIds) {
       } else if (sc.idealAnswer === undefined && sc.referenceAnswer === undefined) {
         warn(sScope, `escenario '${sc.id || i}' no tiene idealAnswer ni referenceAnswer (el juez tendra menos calibracion)`);
       }
-      validateRelojAbierto(sScope, sc, courseId);
+      const veredictoReloj = validateRelojAbierto(sScope, sc, courseId, config.roundDurationSeconds);
+      if (veredictoReloj) {
+        if (veredictoReloj.nivel === 'error') err(sScope, veredictoReloj.mensaje);
+        else warn(sScope, veredictoReloj.mensaje);
+      }
     }
   }
 
@@ -540,4 +572,5 @@ module.exports = {
   palabrasDelEnunciadoCJS,
   CURSOS_VIVOS,
   relojEsErrorEn,
+  validateRelojAbierto,
 };

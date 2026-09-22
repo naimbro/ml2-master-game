@@ -58,3 +58,72 @@ describe('a quien le falla el reloj corto', () => {
     expect(CURSOS_VIVOS).toContain('dataviz_2026');
   });
 });
+
+const { validateRelojAbierto } = require('./validate-content.cjs') as {
+  validateRelojAbierto: (
+    scope: string,
+    sc: Record<string, unknown>,
+    curso: string,
+    roundDurationSecondsDeLaSesion: number | undefined,
+  ) => { nivel: 'error' | 'warn'; mensaje: string } | null;
+};
+
+/**
+ * `validateRelojAbierto` hoy se saltea en silencio un escenario sin
+ * `durationSeconds`, confiando en un comentario ("ya lo reporta el chequeo de
+ * siempre") que es falso: nada mas exige ese campo. Un escenario asi NO corre
+ * sin reloj — hereda `roundDurationSeconds` de la sesion — asi que el chequeo
+ * tiene que resolver esa herencia, no exigir el campo.
+ */
+describe('el reloj heredado de la sesion tambien se valida', () => {
+  // Enunciado largo de dificultad dura: el propio calculo exige bastante mas
+  // que un reloj corto cualquiera, asi que sirve para separar "propio" de
+  // "heredado" sin ambiguedad.
+  const enunciadoCaro = { context: 'x '.repeat(180).trim(), difficulty: 'hard' as const };
+  const pideCaro = relojDerivadoAbiertaCJS(enunciadoCaro);
+
+  it('gana el reloj propio aunque el heredado de la sesion no alcanzaria', () => {
+    const sc = { ...enunciadoCaro, durationSeconds: pideCaro }; // propio, justo alcanza
+    const veredicto = validateRelojAbierto('escenario', sc, 'dataviz_2026', 1 /* heredado insuficiente */);
+    expect(veredicto).toBeNull();
+  });
+
+  it('sin reloj propio, hereda uno de la sesion que alcanza: pasa', () => {
+    const sc = { ...enunciadoCaro }; // sin durationSeconds
+    const veredicto = validateRelojAbierto('escenario', sc, 'dataviz_2026', pideCaro);
+    expect(veredicto).toBeNull();
+  });
+
+  it('sin reloj propio, hereda uno de la sesion que no alcanza: falla y dice que es heredado', () => {
+    const sc = { ...enunciadoCaro }; // sin durationSeconds
+    const veredicto = validateRelojAbierto('escenario', sc, 'dataviz_2026', pideCaro - 15);
+    expect(veredicto).not.toBeNull();
+    expect(veredicto!.nivel).toBe('error'); // dataviz_2026 esta en CURSOS_VIVOS
+    expect(veredicto!.mensaje).toMatch(/heredad/i);
+  });
+
+  it('en un curso retirado, el reloj heredado insuficiente solo avisa', () => {
+    const sc = { ...enunciadoCaro };
+    const veredicto = validateRelojAbierto('escenario', sc, 'ml2-2025', pideCaro - 15);
+    expect(veredicto).not.toBeNull();
+    expect(veredicto!.nivel).toBe('warn');
+  });
+
+  it('sin reloj propio y sin reloj de sesion: error explicito, no un return mudo', () => {
+    const sc = { ...enunciadoCaro };
+    const veredicto = validateRelojAbierto('escenario', sc, 'dataviz_2026', undefined);
+    expect(veredicto).not.toBeNull();
+    expect(veredicto!.nivel).toBe('error');
+    expect(veredicto!.mensaje).toMatch(/sin reloj/i);
+  });
+
+  it('multiple_choice nunca entra a este chequeo', () => {
+    const veredicto = validateRelojAbierto(
+      'escenario',
+      { type: 'multiple_choice' },
+      'dataviz_2026',
+      undefined,
+    );
+    expect(veredicto).toBeNull();
+  });
+});
