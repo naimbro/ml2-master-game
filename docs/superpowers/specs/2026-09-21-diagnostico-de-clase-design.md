@@ -48,7 +48,8 @@ pero se escanea).
 | R6 | 127 | 41 s | 180 s | 139 s | **14%** |
 
 Las dos rondas que alcanzaron (R1, R6) son exactamente las que dejaban ~90-140 s después de leer.
-La cuenta honesta para R4 era **190 s, no 120**.
+La cuenta honesta para R4 era **180 s, no 120**: 58 s de lectura predicha (54 medidos) más los
+~120 s que cuesta teclear una cadena de dos o tres pasos.
 
 **2. «Cuántos seguían escribiendo al final» sirve para código y NO para prosa.**
 En las rondas de prosa ese número es 76-100% **siempre**, en los cinco cursos: en un ensayo la
@@ -82,7 +83,12 @@ reloj = costoDeLectura(enunciado, answerFormat) + costoDeEscritura(difficulty)
 
 costoDeLectura = 13 s + 0,32 s × palabra      (prosa)
                = 13 s + 0,25 s × palabra      (answerFormat: 'code')
+
+y el resultado se sirve redondeado hacia arriba al múltiplo de 15 s
 ```
+
+El escalón de 15 s no es cosmético: un reloj de 178 en pantalla no dice nada, y redondear hacia
+abajo convertiría el piso en un techo.
 
 `validate-content.cjs` **falla el build** si `durationSeconds` queda por debajo del derivado.
 
