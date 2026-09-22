@@ -44,9 +44,9 @@
     "order": 2,
     "title": "Una sola cadena",
     "category": "El pipe",
-    "difficulty": "medium",
+    "difficulty": "hard",
     "ranked": true,
-    "durationSeconds": 150,
+    "durationSeconds": 165,
     "answerFormat": "code",
     "conceptTags": [
       "el_pipe"
@@ -146,7 +146,7 @@
     "category": "Un filtro puede mentir",
     "difficulty": "hard",
     "ranked": true,
-    "durationSeconds": 165,
+    "durationSeconds": 270,
     "conceptTags": [
       "un_filtro_puede_mentir"
     ],
