@@ -92,7 +92,7 @@ en el repo. Lo que ningún chequeo puede decir: si los relojes alcanzan. Despué
 de jugar:
 
 ```bash
-npx tsx scripts/mc-clock.ts <CODIGO>          # ¿alcanzó el tiempo de las MC?
+npm run diagnostico <CODIGO>                  # ¿alcanzó el reloj? (abiertas y MC)
 npx tsx scripts/game-feedback.ts dataviz_2026 # qué dijo el curso
 node scripts/judge-levels.cjs <CODIGO>        # ¿quedaron parejos los jueces?
 ```

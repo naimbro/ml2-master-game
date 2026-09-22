@@ -77,7 +77,7 @@ en el `_doc` de `rubric.json`.
 ## Después de jugar
 
 ```bash
-npx tsx scripts/mc-clock.ts <CODIGO>        # ¿alcanzó el reloj? (>60% de la mediana = corto)
+npm run diagnostico <CODIGO>                # ¿alcanzó el reloj? (abiertas y MC)
 node scripts/judge-levels.cjs               # desnivel entre jueces
 npx tsx scripts/game-feedback.ts dataviz_2026
 ```
