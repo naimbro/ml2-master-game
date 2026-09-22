@@ -230,6 +230,40 @@ function relojDerivadoAbiertaCJS(sc) {
   return Math.ceil((lectura + escritura) / RELOJ_ESCALON_SEGUNDOS) * RELOJ_ESCALON_SEGUNDOS;
 }
 
+/**
+ * Los cursos que se estan dictando. Un reloj corto aca le cuesta respuestas a
+ * un curso de verdad la semana que viene; en un curso retirado no se lo cobra
+ * nadie, y reetiquetar 37 escenarios de clases que no se van a volver a dictar
+ * es trabajo de juicio sin destinatario.
+ *
+ * Un curso que no este en esta lista falla, que es el lado seguro: lo que se
+ * olvida es sacar un curso de aca, no meterlo.
+ */
+const CURSOS_VIVOS = ['dataviz_2026', 'mgt300_2026', 'ai_democracy_2026'];
+const CURSOS_RETIRADOS = ['ml2-2025', 'temas_emergentes_2026', 'mundial_2026'];
+
+function relojEsErrorEn(curso) {
+  return !CURSOS_RETIRADOS.includes(curso);
+}
+
+function validateRelojAbierto(scope, sc, curso) {
+  if (sc.type === 'multiple_choice') return;
+  if (sc.durationSeconds === undefined) return; // ya lo reporta el chequeo de siempre
+
+  const pide = relojDerivadoAbiertaCJS(sc);
+  if (Number(sc.durationSeconds) >= pide) return;
+
+  const palabras = palabrasDelEnunciadoCJS(sc);
+  const mensaje =
+    `durationSeconds=${sc.durationSeconds} no alcanza: ${palabras} palabras de enunciado ` +
+    `y una respuesta '${sc.difficulty || 'medium'}' piden ${pide}s. ` +
+    `Corta el enunciado o subi el reloj — y si sube el reloj, revisa que el juego siga ` +
+    `cabiendo en 20 min de pared (suma de relojes + 2 min por ronda).`;
+
+  if (relojEsErrorEn(curso)) err(scope, mensaje);
+  else warn(scope, mensaje);
+}
+
 function validateMCQuestions(scope, sc) {
   const questions = sc.mcQuestions;
   if (!Array.isArray(questions) || questions.length === 0) {
@@ -408,6 +442,7 @@ function validateSession(courseId, sessionId, sessionDir, knownJudgeIds) {
       } else if (sc.idealAnswer === undefined && sc.referenceAnswer === undefined) {
         warn(sScope, `escenario '${sc.id || i}' no tiene idealAnswer ni referenceAnswer (el juez tendra menos calibracion)`);
       }
+      validateRelojAbierto(sScope, sc, courseId);
     }
   }
 
@@ -503,4 +538,6 @@ module.exports = {
   MC_PAR_MINIMO_MIN_SECONDS,
   relojDerivadoAbiertaCJS,
   palabrasDelEnunciadoCJS,
+  CURSOS_VIVOS,
+  relojEsErrorEn,
 };

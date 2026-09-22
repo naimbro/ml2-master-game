@@ -31,3 +31,30 @@ describe('el espejo del reloj en validate-content.cjs', () => {
     });
   }
 });
+
+const { CURSOS_VIVOS, relojEsErrorEn } = require('./validate-content.cjs') as {
+  CURSOS_VIVOS: string[];
+  relojEsErrorEn: (curso: string) => boolean;
+};
+
+describe('a quien le falla el reloj corto', () => {
+  it('los tres cursos que se dictan en 2026-2 fallan', () => {
+    expect(relojEsErrorEn('dataviz_2026')).toBe(true);
+    expect(relojEsErrorEn('mgt300_2026')).toBe(true);
+    expect(relojEsErrorEn('ai_democracy_2026')).toBe(true);
+  });
+
+  it('un curso retirado solo avisa: su reloj ya no le puede hacer dano a nadie', () => {
+    expect(relojEsErrorEn('ml2-2025')).toBe(false);
+    expect(relojEsErrorEn('temas_emergentes_2026')).toBe(false);
+    expect(relojEsErrorEn('mundial_2026')).toBe(false);
+  });
+
+  it('un curso nuevo falla por defecto, que es el lado seguro', () => {
+    expect(relojEsErrorEn('curso_que_no_existe_todavia')).toBe(true);
+  });
+
+  it('CURSOS_VIVOS es la lista, no una heuristica sobre el nombre', () => {
+    expect(CURSOS_VIVOS).toContain('dataviz_2026');
+  });
+});
