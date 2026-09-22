@@ -5,9 +5,9 @@
     "order": 1,
     "title": "[PLACEHOLDER] Como afecta la concentracion en pocas empresas a la soberania democratica?",
     "category": "Por definir",
-    "difficulty": "medium",
+    "difficulty": "hard",
     "ranked": true,
-    "durationSeconds": 240,
+    "durationSeconds": 255,
     "requiredTags": [
       "ACTOR_AFECTADO",
       "ASIMETRIA_DE_PODER",
