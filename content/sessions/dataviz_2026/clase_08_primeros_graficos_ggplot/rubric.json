@@ -1,0 +1,120 @@
+{
+  "_doc": "Rúbrica PROPIA de clase_08_primeros_graficos_ggplot. Hereda de la clase 7 las tres dimensiones (exactitud 0,60 · completitud 0,25 · claridad 0,15), sus tres techos (entrega incompleta, código que corre y contesta mal, código que no corre), los pesos por juez (0,75 / 0,60 / 0,60 de exactitud) y los dos arreglos de calibración de la clase 3: el doble cobro y la media respuesta resuelta en el ancla de nivel 40.\n\nLO QUE CAMBIA RESPECTO DE LA CLASE 7: el objeto. Ya no se pregunta si la tabla sale bien sino si EL GRÁFICO SE DIBUJA, y es el PRIMER DÍA con ggplot2. Y R1 pide UNA sola cosa (el gráfico de barras): en esa ronda no existe la media respuesta y el techo de entrega incompleta no se aplica. R2, R3 y R4 piden dos cosas numeradas.\n\nEL TECHO «CÓDIGO QUE CORRE Y CONTESTA MAL» TIENE HOY CUATRO CASOS, todos verificados en R 4.3.3 con ggplot2 3.5.2 el 28-sep-2026: `aes(x = \"transporte\")` con comillas dibuja una sola barra de 33 (R1); `ggplot(curso, aes(x = transporte, y = minutos_num)) + geom_col()` apila sumas, 445 · 500 · 1.155, en vez de promedios (R2); `geom_col() %>% labs(...)` dibuja el título y SIN columnas (R3); `geom_bar()` sobre `horas_redes` cuenta textos en diez barras y no es un histograma (R4). Y NO CORREN: `%>%` en vez de `+` entre `ggplot()` y la geometría; `geom_bar` sin paréntesis; `geom_bar()` con x e y (`stat_count()`); `ggplot(curso, ...)` con `y = minutos`; `y` fuera de `aes()`; el histograma sobre `horas_redes` (`stat_bin()`).\n\nCALIBRACIÓN, con las penalizaciones APAGADAS y la fórmula del juez especialista (0,75 / 0,15 / 0,10):\n\nR1 — las tres piezas (una sola cosa)\n| 100 | `ggplot(curso, aes(x = transporte)) + geom_bar()` |\n| 97 | LA DE AL LADO: `curso %>% ggplot(aes(y = transporte)) + geom_bar()`, o `count(transporte)` + `geom_col(aes(x = transporte, y = n))` |\n| 55 | CON UN ERROR: `%>%` en vez de `+` (no corre), o `aes(x = \"transporte\")` (una barra de 33) |\n| 49 | SIN GEOMETRÍA: `ggplot(curso, aes(x = transporte))` — el eje sin barras (Exactitud 40, Completitud 60) |\n| 31 | ENGAÑOSA: `curso %>% count(transporte)` — los números correctos y ningún gráfico |\n\nR2 — geom_bar() o geom_col()\n| 100 | «geom_col, porque los minutos ya están calculados; geom_bar cuenta filas» + `ggplot(viajes, aes(x = transporte, y = minutos)) + geom_col()` |\n| 97 | LA DE AL LADO: «geom_bar también sirve con stat = \"identity\"» + ese código, o las columnas acostadas |\n| 55 | COMPLETA CON UN ERROR: la frase correcta + `ggplot(curso, ...)` (no corre, o apila sumas con `minutos_num`) |\n| 46 | MEDIA RESPUESTA IMPECABLE: el código perfecto y ninguna frase |\n| 40 | ENGAÑOSA: «geom_bar, porque son barras» + `geom_bar()` con x e y (no corre): las dos partes mal, Exactitud 20 |\n\nR3 — terminarlo\n| 100 | `geom_col() + labs(title = \"En auto se llega en la mitad del tiempo\", y = \"Minutos (promedio)\", caption = \"Fuente: encuesta del curso DVD 2026, 33 estudiantes\")` |\n| 97 | LA DE AL LADO: otro hallazgo verdadero («En metro el viaje dura el doble que en auto») con `ggtitle()` + `ylab()` + `labs(caption = ...)` |\n| 85 | título con hallazgo + eje y + fuente sin el número de personas, o con el `+` al comienzo de la línea (Exactitud 80) |\n| 70 | COMPLETA CON UN ERROR DE FONDO: «Gráfico de transporte» + eje + fuente (título sin hallazgo, Exactitud 60) |\n| 55 | COMPLETA CON UN ERROR DE CÓDIGO: todo bien pero `%>%` antes de `labs()` — sale sin columnas |\n| 46 | MEDIA RESPUESTA IMPECABLE: sólo un título perfecto |\n| 40 | ENGAÑOSA: «En micro se tarda más que en ningún otro medio» + eje + fuente (hallazgo falso según la tabla: Exactitud 20) |\n\nR4 — el histograma que no corre\n| 100 | «horas_redes es texto y el histograma necesita números» + `ggplot(curso, aes(x = redes_num)) + geom_histogram(binwidth = 1)` |\n| 97 | LA DE AL LADO: la misma frase + `aes(x = as.numeric(horas_redes))` |\n| 55 | COMPLETA CON UN ERROR: la frase correcta + `geom_bar()` sobre `horas_redes` (corre, no es histograma) |\n| 46 | MEDIA RESPUESTA IMPECABLE: el código con `redes_num` y ninguna frase |\n| 40 | ENGAÑOSA: «falta cargar ggplot2» + el mismo código con `library(ggplot2)` arriba (sigue sin correr): las dos partes mal, Exactitud 20 |\n\nLOS DOS PARES QUE IMPORTAN: la COMPLETA-CON-UN-ERROR por encima de la MEDIA-RESPUESTA-IMPECABLE (55 > 46) en R2, R3 y R4 —y la ENGAÑOSA, con las dos partes mal o un hallazgo falso, por debajo de las dos (40)—, y la DE AL LADO junto a la de 100 (97 ≈ 100). R3 es donde lo segundo se pone a prueba: cualquier título verdadero con un número o una comparación vale, no sólo el del cuaderno.\n\nNINGUNA DE ESTAS CUATRO RÚBRICAS HA CORREGIDO UNA RESPUESTA REAL TODAVÍA. Los puntajes de arriba son predicciones, no mediciones. Después de jugar: `npm run diagnostico <CODIGO>` y `node scripts/judge-levels.cjs`.",
+  "sessionId": "clase_08_primeros_graficos_ggplot",
+  "globalInstructions": "Evalúa SOLO lo que está escrito. No completes la respuesta con lo que el estudiante 'seguramente quiso decir'.\n\nEsta es la OCTAVA clase del semestre, llevan SIETE CLASES PROGRAMANDO EN SUS VIDAS, y HOY FUE SU PRIMER DÍA CON `ggplot2`: ninguno había visto la librería antes de esta mañana. Son de primer año, de sociología y negocios. El estándar es «¿corre y dibuja lo que se pidió?», no elegancia.\n\nLAS CUATRO RONDAS DE ESTA SESIÓN SON ABIERTAS, LAS CUATRO PASAN POR TI Y LAS CUATRO PIDEN ESCRIBIR R. R1 pide UNA SOLA COSA (el gráfico de barras): ahí no existe la media respuesta. R2, R3 y R4 piden DOS COSAS numeradas (1) y (2), y las dos partes se califican: en R2 y R4 una es UNA LÍNEA de castellano y la otra el código; en R3 las dos van dentro del mismo `labs()`. Qué mira exactamente cada ronda está en su judgeFocus, que manda sobre estas instrucciones generales si hay tensión.\n\nCUANDO SE PIDIÓ CÓDIGO, lo que se evalúa es si ese código, pegado en un Colab que ya tiene `curso` (o `viajes`) y `ggplot2` cargados, CORRE Y DIBUJA LO QUE SE PIDIÓ. Un bloque de R sin una palabra de prosa alrededor es EXACTAMENTE lo que se pidió: no le bajes nada por eso, y no premies la explicación que nadie pidió.\n\nCUANDO SE PIDIÓ CASTELLANO, no se necesita código ni vocabulario técnico. «Esa columna es texto y el histograma necesita números» vale exactamente lo mismo que «`stat_bin()` requiere una estética x continua».\n\nMÁS DE UNA ESCRITURA ES CORRECTA, Y EL CRITERIO MANDA SOBRE CUALQUIER LISTA: si el código corre y dibuja lo pedido, vale 100 aunque no se te haya ocurrido a ti y aunque el cuaderno no lo haya mostrado. `data =` y `mapping =` explícitos, barras acostadas con `aes(y = ...)`, el `aes()` adentro de la geometría, el pipe que ENTRA al `ggplot()` (`curso %>% ggplot(aes(...)) + geom_bar()` corre), `count()` + `geom_col()`, `geom_bar(stat = \"identity\")`, `ggtitle()`/`xlab()`/`ylab()`, un `labs()` con más campos, sin `theme_minimal()`, `as.numeric()` adentro del `aes()`: todo eso corre y dibuja bien. Que una escritura no esté en el material no la hace incorrecta.\n\nLO QUE SÍ SE COBRA EN CÓDIGO, porque es exactamente lo que el cuaderno de hoy enseñó a mirar: el `+` ENTRE LAS PIEZAS (con `%>%` entre `ggplot()` y la geometría no corre, y R lo dice: «Did you use %>% or |> instead of +?»); las columnas DENTRO de `aes()` y SIN comillas (`aes(x = \"transporte\")` dibuja una sola barra de 33); la TABLA CORRECTA como primer argumento (`viajes` para `geom_col()`, porque `minutos` no existe en `curso`); la COLUMNA LIMPIA (`redes_num`, no `horas_redes`, que es texto); los PARÉNTESIS de `geom_...()`; y los nombres de columna escritos tal cual. Lo que NO importa: espacios, indentación, saltos de línea, tipo de comillas, comentarios, `theme_minimal()`, ni un paréntesis de cierre que falta cuando la intención es inequívoca. Escriben desde un teclado de teléfono.\n\nEste curso NO enseña inferencia estadística en ningún momento: nada de tests, valores-p, intervalos de confianza, márgenes de error, regresión ni representatividad muestral formal. Si una respuesta invoca cualquiera de esas cosas, no está siendo sofisticada: está fuera de lo que se enseñó, y no suma.\n\nEL LARGO PEDIDO. Una o dos líneas de R por parte —cuatro en R3— y, donde se pidió, UNA línea de castellano, escritas en dos o tres minutos desde un teléfono. Eso bien puesto vale 100: no esperes párrafos, ni estructura, ni introducción, ni ortografía perfecta, ni tildes. ESCRIBIR MÁS NO SUBE EL PUNTAJE. Premia densidad, no extensión. No penalices la brevedad; penaliza la vaguedad.\n\nMEDIA RESPUESTA NO ES MEDIA NOTA, en R2, R3 y R4. Esas tres rondas piden DOS cosas explícitamente, y una mitad perfecta sigue sin responder la pregunta que se hizo: por eso no puede pasar de 40 en Exactitud, por muy limpia que esté. Cuál de las dos mitades se va a caer cambia por ronda y está escrito en cada judgeFocus.\n\nY SU REVERSO, QUE IMPORTA IGUAL: la respuesta que entregó LAS DOS PARTES y tiene un error en una de ellas va POR ENCIMA de la media respuesta impecable. La incompleta gana gratis las dimensiones de forma justamente por no haberse arriesgado a nada. Si al terminar de puntuar una ronda la respuesta completa-con-un-error quedó abajo de la mitad-perfecta, el orden está dado vuelta y hay que revisarlo.\n\nSi un estudiante objeta el enunciado —dice que la premisa le suena falsa, que los números no le calzan, o que falta información para responder— eso NO se penaliza nunca. Si tiene razón, el problema es del enunciado.\n\nSOBRE EL FEEDBACK QUE ESCRIBES, que es lo único que el estudiante se lleva. Tres reglas. (1) La misma regla que te prohíbe bajar el puntaje por una escritura que corre y no es la del cuaderno te prohíbe pedirle en el feedback que la cambie por la del cuaderno: si su `ggtitle()`, sus barras acostadas o su `geom_bar(stat = \"identity\")` funcionan, no le sugieras «usar labs() / geom_col() como en clase». Si a la respuesta le falta algo, dile QUÉ PIEZA falta —el `+`, la geometría, la fuente, la segunda parte—, nunca qué palabra o qué forma. (2) Antes de advertirle que usó «algo que no se ha visto», revisa el material de referencia: `ggplot()`, `aes()`, `geom_bar()`, `geom_histogram()` con `binwidth`, `geom_col()`, `geom_point()`, `geom_count()`, `color =` dentro de `aes()`, `labs()` con `title`, `subtitle`, `x`, `y` y `caption`, y `theme_minimal()` SÍ se enseñaron hoy. Y aunque algo no se haya enseñado —`fill =`, `scale_...()`, `ggtitle()`, `reorder()`—, si corre y dibuja lo pedido es legítimo. (3) Cierra atando la respuesta a la entrega del Sprint 3, el prototipo visual, que es el lunes 26 de octubre de 2026, de forma CONCRETA sobre esta respuesta: qué línea de este mismo gráfico va a necesitar con la base de su grupo y qué le habría fallado ahí. No un consejo genérico de estudio.\n\nEl judgeFocus del escenario es tu prioridad absoluta y manda sobre estas instrucciones generales si hay tensión.",
+  "scoring": {
+    "scaleLevels": [
+      100,
+      80,
+      60,
+      40,
+      20,
+      0
+    ],
+    "instructions": "Elige uno de los seis niveles escritos por dimensión. No inventes valores intermedios. Si la respuesta satisface un nivel solo parcialmente, baja al nivel inferior."
+  },
+  "dimensions": [
+    {
+      "id": "exactitud",
+      "name": "Exactitud",
+      "weight": 0.6,
+      "description": "¿Responde correctamente la pregunta que se hizo? Donde se pidió código: ¿corre tal cual está escrito y DIBUJA el gráfico que se pidió, con las piezas sumadas con `+`, las columnas dentro de `aes()` sin comillas, la tabla correcta como primer argumento y la columna limpia? Donde se pidió castellano: ¿lo que afirma es correcto y se sostiene con lo que tiene al frente? En R3: ¿el título dice un hallazgo verdadero según la tabla, y el eje y la fuente dicen lo que tienen que decir? Esta dimensión NO mide si se lee ordenado —eso lo mide Claridad y sólo Claridad—. Sí mide, en cambio, si lo entregado responde la pregunta completa: R2, R3 y R4 piden dos cosas, y una respuesta que hace bien la mitad no la responde. Ese caso está escrito en el nivel 40.",
+      "level_100": "Todo lo que la ronda pidió está y es correcto (en R1 es una sola cosa; en R2, R3 y R4, las dos partes). CÓDIGO: corre tal cual y dibuja lo pedido — el `+` entre las piezas, la geometría con paréntesis, la tabla y la columna correctas, cada nombre escrito tal cual. Cualquier escritura que dibuje lo mismo cuenta igual que la del cuaderno. CASTELLANO: la frase es correcta y llega a la causa. TÍTULO (R3): dice un hallazgo con un número o una comparación, y es verdad según la tabla.",
+      "level_80": "En lo esencial acierta, con un detalle que no rompe nada. CÓDIGO: corre y dibuja lo pedido, con algo de más que nadie pidió, otro `binwidth`, un histograma sin `binwidth`, o el `+` puesto al comienzo de la línea siguiente en vez de al final. R3: la fuente no dice cuántas personas son. CASTELLANO: correcta pero dicha a medio camino — nombra el síntoma sin llegar del todo a la causa.",
+      "level_60": "Está todo lo pedido, y una parte tiene un error real que no da vuelta la respuesta. CÓDIGO: corre pero dibuja otra cosa cercana a lo pedido. R3: un título que nombra el tema sin decir qué se ve («Gráfico de transporte»); un eje y sin unidad; o falta uno solo de los dos elementos de la parte (2), el eje o la fuente. CASTELLANO: acierta la elección pero la razón no toca lo que importa (en R2, elige `geom_col()` sin llegar a que `geom_bar()` cuenta filas).",
+      "level_40": "CUATRO CASOS, TODOS ACÁ. (1) MEDIA RESPUESTA en R2, R3 o R4, aunque esa mitad esté impecable: la ronda pidió dos cosas y llegó una sola. (2) CÓDIGO QUE NO CORRE aunque la estructura sea la correcta: `%>%` en vez de `+` entre `ggplot()` y la geometría, la geometría sin paréntesis, `curso` donde la columna sólo existe en `viajes`, `geom_bar()` con x e y, la `y` fuera de `aes()`, el histograma sobre `horas_redes`, campos de `labs()` sin comillas. (3) CÓDIGO QUE CORRE Y DIBUJA MAL: `aes(x = \"transporte\")` con comillas (una barra de 33), `geom_col()` sobre `curso` con `minutos_num` (suma en vez de promedio), `%>% labs()` (el título sin columnas), `geom_bar()` sobre texto en vez de un histograma, o en R1 el eje sin ninguna geometría. (4) CASTELLANO QUE SE EQUIVOCA DE CAUSA cuando el código sí está bien.",
+      "level_20": "LAS DOS PARTES MAL A LA VEZ: la causa equivocada y el código que no corre, o la geometría equivocada elegida y escrita. TÍTULO DE R3 CON UNA COMPARACIÓN FALSA según la tabla («En micro se tarda más»): afirma algo que el gráfico desmiente. CÓDIGO: inventa funciones o argumentos que no existen, deja los `...` sin rellenar, entrega una tabla (`count()`) donde se pidió un gráfico, o describe en palabras lo que habría que hacer sin escribir ninguna línea. CASTELLANO: afirma como hecho algo que el enunciado desmiente, con el vocabulario correcto para un diagnóstico equivocado.",
+      "level_0": "No hay respuesta, o lo que hay no tiene relación con lo que se pidió, o contradice de plano lo que el enunciado muestra."
+    },
+    {
+      "id": "completitud",
+      "name": "Completitud de la entrega",
+      "weight": 0.25,
+      "description": "¿Cuánto de lo que la pregunta pidió llegó? R1 pide UNA cosa (el gráfico completo: datos, `aes()` y geometría); R2, R3 y R4 piden DOS, numeradas (1) y (2). Esta dimensión mide SÓLO cuánto llegó, no qué tan bien hecho está: si una parte llegó y está equivocada, para esta dimensión llegó igual. Lo bien o mal hecha que esté lo mide Exactitud, y no se cobra dos veces acá.",
+      "level_100": "Está todo lo que se pidió —en R1 las tres piezas, en las demás las dos partes—, cada parte cumpliendo la suya, y nada innecesario alrededor.",
+      "level_80": "Está todo, con algo de más que no se pidió y que no molesta: una línea extra, una explicación en prosa del código donde se pedía sólo el código, `theme_minimal()` o un `subtitle`, el gráfico reescrito entero en R3 en vez de empezar desde `geom_col()`.",
+      "level_60": "Está todo, pero una parte apenas: la frase de castellano nombrada de pasada en tres palabras; en R1, el `ggplot()` con su `aes()` pero sin ninguna geometría; en R3, sólo uno de los dos elementos de la parte (2).",
+      "level_40": "Falta la mitad de lo pedido: sólo la frase y ningún código, sólo el código y ni una palabra de la parte en castellano, o en R3 sólo el título o sólo el eje y la fuente.",
+      "level_20": "Llegó una fracción menor: un fragmento que no llega a ser una línea ejecutable, los `...` sin rellenar, o una frase que apunta a una de las partes sin llegar a contestarla.",
+      "level_0": "No entrega ninguna de las partes que se pidieron."
+    },
+    {
+      "id": "claridad",
+      "name": "Claridad",
+      "weight": 0.15,
+      "description": "¿Se entiende de inmediato lo que entregó? En código: se lee limpio, una pieza por línea o todas en una línea que se sigue sin esfuerzo. En castellano: lo entendería alguien de fuera a la primera lectura. ESTA DIMENSIÓN NO MIDE SI LA RESPUESTA ES CORRECTA. Un código con `%>%` en vez de `+` que se lee perfecto es CLARO: ya pagó su error en Exactitud, y volvérselo a cobrar acá es cobrar dos veces el mismo error. Tampoco mide si llegaron las dos partes —eso lo mide Completitud—: una media respuesta bien escrita es clara. Tampoco mide si el título de R3 dice un hallazgo —eso es Exactitud—. Lo único que se pregunta acá es si se entiende.",
+      "level_100": "CÓDIGO: las piezas en orden, se lee como una receta, sin adorno ni relleno. CASTELLANO: un lector sin formación técnica lo entiende a la primera; hay una afirmación principal identificable.",
+      "level_80": "CÓDIGO: se lee bien, con algo suelto — todo apretado en una línea larga, o un comentario que sobra. CASTELLANO: se entiende bien, con una frase ambigua o un término técnico sin explicar.",
+      "level_60": "CÓDIGO: hay que reordenarlo mentalmente para saber qué va primero, o el código está enterrado en un párrafo. CASTELLANO: se entiende con esfuerzo: la idea está, pero el lector tiene que reordenarla.",
+      "level_40": "CÓDIGO: fragmentos sueltos que no llegan a formar un gráfico. CASTELLANO: enumera observaciones sueltas sin una afirmación principal.",
+      "level_20": "CÓDIGO: mezcla de pseudocódigo y prosa donde no se distingue qué es una instrucción. CASTELLANO: usa vocabulario técnico como sustituto del argumento, o es tan general que no se sabe de qué está hablando.",
+      "level_0": "Ininteligible, o no responde la pregunta que se hizo."
+    }
+  ],
+  "penalties": [
+    {
+      "id": "entrega_incompleta",
+      "description": "R2, R3 y R4 piden DOS cosas explícitamente, numeradas (1) y (2) en el enunciado. Entregar sólo una de las dos no puede superar 40 en 'Exactitud', por perfecta que esté la parte entregada. NO SE APLICA EN R1, que pide una sola cosa. Se gatilla por lo que FALTA, no por errores en lo que sí está: una respuesta que entregó las dos partes y se equivocó en una NO cae acá — va por las anclas de Exactitud, y queda por encima de la media respuesta impecable. En R3, si falta sólo el eje o sólo la fuente, tampoco cae acá: es nivel 60.",
+      "effect": {
+        "type": "cap",
+        "value": 40,
+        "dimensions": [
+          "exactitud"
+        ]
+      }
+    },
+    {
+      "id": "codigo_que_corre_y_contesta_mal",
+      "description": "El código está entero y corre sin error, pero dibuja otra cosa que la pedida, justamente por la lección del cuaderno que falta: `aes(x = \"transporte\")` con comillas, que dibuja una sola barra de 33 (R1); `ggplot(curso, aes(x = transporte, y = minutos_num)) + geom_col()`, que apila sumas (445 · 500 · 1.155) en vez de promedios (R2); `geom_col() %>% labs(...)`, que dibuja el título y SIN columnas (R3); `geom_bar()` sobre `horas_redes`, que cuenta textos y no es un histograma (R4). No puede superar 40 en 'Exactitud'.\n\nNO CAE ACÁ ninguna escritura que dibuje lo pedido, esté o no en el cuaderno: barras acostadas, `data =`/`mapping =`, `geom_bar(stat = \"identity\")`, `count()` + `geom_col()`, `ggtitle()`/`ylab()`, `as.numeric()` adentro del `aes()`, un histograma sin `binwidth`. Tampoco el `+` al comienzo de la línea siguiente (nivel 80) ni un título sin hallazgo (nivel 60). Lo que se castiga es que el gráfico salga mal, no la forma en que se escribió.",
+      "effect": {
+        "type": "cap",
+        "value": 40,
+        "dimensions": [
+          "exactitud"
+        ]
+      }
+    },
+    {
+      "id": "codigo_que_no_corre",
+      "description": "Código que NO CORRE tal cual está escrito no puede superar 40 en 'Exactitud'. Los casos: (1) `%>%` en vez de `+` entre `ggplot()` y la geometría, o ningún operador entre ellas; (2) una geometría sin paréntesis (`geom_bar`); (3) `ggplot(curso, ...)` con `y = minutos`, que sólo existe en `viajes`; (4) `geom_bar()` con `x` e `y` dentro de `aes()`; (5) la `y` fuera de `aes()` en `geom_col()`; (6) el histograma sobre `horas_redes`, que es texto; (7) un nombre de columna con otras mayúsculas (`Transporte`, `Redes_num`); (8) campos de `labs()` sin comillas o sin comas; (9) una función o un argumento que no existe; (10) prosa que describe lo que habría que hacer sin ninguna línea de R.\n\nEste techo toca UNA SOLA dimensión a propósito: el error ya se paga acá y no se vuelve a cobrar en 'Claridad'. Un código que no corre puede leerse perfectamente claro.\n\nNO CAE ACÁ una escritura que existe y funciona aunque el cuaderno no la haya mostrado, ni un paréntesis de cierre que falta cuando la intención es inequívoca y todo lo demás está bien, ni el `+` al comienzo de la línea siguiente (en Colab no corre, pero es un salto de línea escrito en un teléfono: nivel 80). Lo que se castiga es equivocar la pieza, no salirse del cuaderno.",
+      "effect": {
+        "type": "cap",
+        "value": 40,
+        "dimensions": [
+          "exactitud"
+        ]
+      }
+    }
+  ],
+  "globalPenalties": [
+    "Entregar la mitad de lo que se pidió en R2, R3 o R4: una mitad perfecta sigue sin responder la pregunta.",
+    "`%>%` en vez de `+` entre las piezas del gráfico: no corre, o en R3 se come las columnas.",
+    "Una columna entre comillas dentro de `aes()`: dibuja una sola barra con todo el curso.",
+    "Graficar `curso` donde había que graficar `viajes`, o `horas_redes` donde había que graficar `redes_num`.",
+    "Una geometría sin paréntesis, `geom_bar()` con x e y, o la `y` fuera de `aes()`: no corre.",
+    "Un título que nombra el tema sin decir qué se ve, o que afirma una comparación que la tabla desmiente.",
+    "Vaguedad intercambiable: una frase que se podría pegar debajo de cualquier otra pregunta del curso sin cambiarle una palabra."
+  ],
+  "bonusIndicators": [
+    "Llega al gráfico correcto por un camino que el cuaderno no mostró, y lo escribe bien",
+    "Nombra que `geom_bar()` hace el `count()` por ti",
+    "Dice que `geom_bar()` cuenta filas y `geom_col()` dibuja un número ya calculado",
+    "Un título con un hallazgo verdadero y un número",
+    "La fuente dice de dónde vienen los datos y cuántas personas son",
+    "Reconoce el aviso de la fila removida como el NA esperado, no como un error",
+    "Cita el `\"5 horas\"` como la razón de que `horas_redes` sea texto",
+    "Entrega exactamente lo que se pidió y nada más, listo para pegar en Colab",
+    "Objeta el enunciado con razón"
+  ],
+  "penaltyIndicators": [
+    "Falta una de las dos partes que la pregunta pedía (R2, R3, R4)",
+    "`%>%` en vez de `+` entre las piezas",
+    "Columna entre comillas dentro de `aes()`",
+    "Geometría sin paréntesis",
+    "`curso` en vez de `viajes` con `geom_col()`",
+    "`geom_bar()` con x e y",
+    "`horas_redes` en vez de `redes_num` en el histograma, o `geom_bar()` en vez de histograma",
+    "Título sin hallazgo, eje y sin unidad, o sin fuente",
+    "Deja los `...` sin rellenar"
+  ]
+}

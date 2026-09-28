@@ -1,0 +1,257 @@
+[
+  {
+    "id": "dv_c08_r1_las_tres_piezas",
+    "order": 1,
+    "title": "Las tres piezas",
+    "category": "ggplot2: datos, aes() y geom",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 120,
+    "answerFormat": "code",
+    "conceptTags": [
+      "tres_piezas_y_barras"
+    ],
+    "context": "La tabla `curso` ya está cargada (33 personas), y `ggplot2` también. La columna `transporte` tiene tres valores: `\"Auto\"`, `\"Metro\"` y `\"Micro o bus\"`.",
+    "question": "El gráfico de barras que muestra cuántas personas usan cada `transporte`.\n\n```r\nggplot(...) ...\n```\n\nSólo el código.",
+    "judgeFocus": "Esta ronda pide UNA SOLA COSA: el código del gráfico de barras que cuenta cuántas personas usan cada `transporte`. Una o dos líneas de R escritas desde un teléfono; eso bien puesto vale 100 y escribir más no sube el puntaje. Es la ÚNICA ronda de la sesión que no pide dos partes: acá no existe la media respuesta, y la penalización de entrega incompleta no se aplica.\n\nEL CRITERIO, que manda sobre cualquier ejemplo: puntúa 100 todo código que, pegado en un Colab con `curso` y `ggplot2` cargados, CORRA Y DIBUJE UNA BARRA POR TRANSPORTE CON SU CONTEO (Auto 12 · Metro 6 · Micro o bus 15). Tiene las tres piezas del cuaderno —los datos, `aes()` con la columna, y una geometría— unidas con `+`. La versión del cuaderno es\n\nggplot(curso, aes(x = transporte)) +\n  geom_bar()\n\npero valen igual, y la lista NO es exhaustiva: `data =` y `mapping =` escritos explícitos; `aes(y = transporte)` (barras acostadas, ejercicio 2 del cuaderno); el `aes()` adentro de `geom_bar()`; `curso %>% ggplot(aes(x = transporte)) + geom_bar()` (el pipe ENTRA al `ggplot()` y después las piezas se suman: corre); `count(transporte)` y después `geom_col()` con `y = n`. La pregunta es siempre si corre y dibuja las tres barras.\n\nLO QUE SÍ ES ERROR, porque es exactamente lo que el cuaderno de hoy enseñó a mirar:\n- `%>%` en vez de `+` entre `ggplot()` y `geom_bar()`: NO CORRE. R responde que el `mapping` debe crearse con `aes()` y pregunta si se usó `%>%` en vez de `+`. Es «el error más común de hoy», textual del cuaderno.\n- Sin ningún operador entre las piezas: no corre.\n- `geom_bar` SIN paréntesis: no corre (R pregunta si se olvidaron los paréntesis).\n- `aes(x = \"transporte\")` CON COMILLAS: corre y dibuja UNA SOLA BARRA DE 33, porque toma la palabra como un valor fijo y no como la columna. Código que corre y contesta mal.\n- `Transporte` con mayúscula, o `ggplot(transporte)` sin los datos: no corre.\n- Sólo `ggplot(curso, aes(x = transporte))`, sin geometría: corre y dibuja el eje SIN BARRAS. Le falta la forma.\n- `curso %>% count(transporte)` solo: es la tabla, no el gráfico.\n\nLO QUE NO SE EXIGE, NUNCA: `library(ggplot2)` ni la limpieza de la Parte 0 —el enunciado dice que la tabla ya está cargada—, `theme_minimal()`, el tipo de comillas (rectas o tipográficas), la indentación, los saltos de línea, comentarios, ni un paréntesis de cierre que falta cuando la intención es inequívoca. Escriben desde un teléfono. Y si el estudiante objeta el enunciado —dice que la premisa le suena falsa o que le falta información— eso NO se penaliza nunca: si tiene razón, el problema es del enunciado.\n\nEN EL FEEDBACK: si su escritura corre y dibuja lo pedido aunque no sea la del cuaderno, no le pidas que la cambie; dile qué pieza falta, no qué palabra. Y cierra con una frase concreta sobre qué línea de ESTA respuesta va a necesitar en el gráfico de su grupo para la entrega del Sprint 3 del lunes 26 de octubre de 2026.",
+    "evaluationGuide": {
+      "must_hit": [
+        "Los datos: `curso` como primer argumento de `ggplot()` (o entrando por el pipe)",
+        "`transporte` dentro de `aes()`, sin comillas",
+        "Una geometría con paréntesis que dibuja barras con el conteo, sumada con `+`"
+      ],
+      "nice_to_have": [
+        "Nombra que `geom_bar()` hace el `count()` por ti",
+        "Acuesta las barras con `aes(y = transporte)`",
+        "Llega por otro camino que corre: `count()` + `geom_col()`, `data =` y `mapping =` explícitos"
+      ],
+      "fatal_errors": [
+        "`%>%` en vez de `+` entre `ggplot()` y la geometría: no corre",
+        "`geom_bar` sin paréntesis: no corre",
+        "`aes(x = \"transporte\")` con comillas: dibuja una sola barra de 33",
+        "Falta la geometría: queda el eje sin barras",
+        "Entrega la tabla de `count()` y ningún gráfico"
+      ],
+      "partial_credit": {
+        "pipe_en_vez_de_mas": "Las tres piezas bien, unidas con `%>%`: no corre, techo 40 en Exactitud; Completitud 100.",
+        "comillas_en_aes": "`aes(x = \"transporte\")`: corre y dibuja una barra de 33, techo 40 en Exactitud.",
+        "sin_parentesis": "`+ geom_bar` sin paréntesis: no corre, techo 40 en Exactitud.",
+        "sin_geometria": "Sólo `ggplot(curso, aes(x = transporte))`: el eje sin barras, Exactitud 40 y Completitud 60.",
+        "solo_la_tabla": "`curso %>% count(transporte)` sin gráfico: los números correctos pero no lo pedido, Exactitud 20.",
+        "otra_escritura_correcta": "Barras acostadas, `data =`/`mapping =`, `aes()` adentro del `geom_bar()`, pipe que entra al `ggplot()`, `count()` + `geom_col()`: correctas, no bajan."
+      }
+    },
+    "idealAnswer": {
+      "keyPoints": [
+        "ggplot(curso, aes(x = transporte)) +",
+        "  geom_bar()"
+      ],
+      "expectedConcepts": [
+        "tres_piezas_y_barras"
+      ],
+      "commonMistakes": [
+        "Unir las piezas con `%>%` en vez de `+`",
+        "`geom_bar` sin paréntesis",
+        "`transporte` entre comillas dentro de `aes()`",
+        "Olvidar la geometría: el eje queda sin barras"
+      ],
+      "excellentResponseIndicators": [
+        "Las tres piezas en orden, unidas con `+`",
+        "El `+` al final de la línea",
+        "Cualquier escritura que dibuje las tres barras con 12, 6 y 15"
+      ]
+    }
+  },
+  {
+    "id": "dv_c08_r2_bar_o_col",
+    "order": 2,
+    "title": "¿geom_bar() o geom_col()?",
+    "category": "ggplot2: un número por grupo",
+    "difficulty": "hard",
+    "ranked": true,
+    "durationSeconds": 165,
+    "answerFormat": "code",
+    "conceptTags": [
+      "geom_col_numero_calculado"
+    ],
+    "context": "Ya hiciste la tabla `viajes`, con los minutos promedio de viaje:\n\n| transporte | minutos |\n|---|---|\n| Auto | 40,5 |\n| Metro | 83,3 |\n| Micro o bus | 77,0 |\n\nQuieres dibujarla: una barra por transporte, con la altura en minutos.",
+    "question": "**(1)** En una línea, en castellano: ¿`geom_bar()` o `geom_col()`? ¿Por qué la otra no sirve?\n\n**(2)** El código del gráfico.\n\nSólo esa frase y ese código.",
+    "judgeFocus": "Esta ronda pide DOS COSAS y las dos se califican: (1) UNA LÍNEA de castellano que elige la geometría y dice por qué la otra no sirve; (2) el código del gráfico. Escritas en dos o tres minutos desde un teléfono; eso bien puesto vale 100 y escribir más no sube el puntaje.\n\nPARTE (1) — CUÁL Y POR QUÉ. El criterio, que manda sobre cualquier ejemplo: elige `geom_col()` y llega a que LA ALTURA YA ESTÁ CALCULADA en la tabla (los minutos promedio), mientras que `geom_bar()` CUENTA FILAS. Basta con eso, en cualquier vocabulario. Valen igual, y la lista NO es exhaustiva: «geom_col, porque los minutos ya los calculé y geom_bar cuenta cuántas filas hay»; «col dibuja el número que le doy, bar cuenta»; «geom_bar sólo lleva x y cuenta; acá hay x e y»; «con geom_bar saldría un 1 por transporte, porque viajes tiene una fila por grupo». Si alguien dice que `geom_bar()` también sirve con `stat = \"identity\"`, TIENE RAZÓN (corre y dibuja lo mismo): no lo cobres, aunque el cuaderno no lo muestre.\n\nLO QUE NO CUENTA COMO PARTE (1): elegir `geom_bar()` sin más; «geom_col porque es más bonito / más nuevo»; o una razón que no toca la diferencia entre contar y dibujar un número ya calculado.\n\nPARTE (2) — EL CÓDIGO. El criterio: puntúa alto todo código que, con `viajes` cargada, CORRA Y DIBUJE TRES COLUMNAS CON 40,5 · 83,3 · 77,0. La versión del cuaderno es\n\nggplot(viajes, aes(x = transporte, y = minutos)) +\n  geom_col()\n\npero valen igual, y la lista NO es exhaustiva: columnas acostadas con `aes(x = minutos, y = transporte)`; `data =`/`mapping =` explícitos; `geom_bar(stat = \"identity\")`; `viajes %>% ggplot(...) + geom_col()`; rehacer la tabla con `group_by()` y `summarise()` antes de graficarla.\n\nLO QUE SÍ ES ERROR en la parte (2):\n- `ggplot(curso, ...)` en vez de `viajes`: la columna `minutos` no existe en `curso` y NO CORRE. El cuaderno lo dice: «el primer argumento ya no es `curso`, sino `viajes`: se grafica la tabla que acabas de hacer».\n- `ggplot(curso, aes(x = transporte, y = minutos_num)) + geom_col()`: CORRE PERO APILA SUMAS (445 · 500 · 1.155), no promedios. Código que corre y contesta mal.\n- `geom_bar()` con `x` e `y` dentro de `aes()`: NO CORRE (R dice que `stat_count()` sólo acepta una x o una y). Si la parte (1) eligió `geom_bar()`, las dos partes caen juntas.\n- `y = minutos` FUERA de `aes()`: no corre (a `geom_col()` le falta la `y`).\n- `%>%` en vez de `+`, geometría sin paréntesis, o `\"transporte\"` entre comillas dentro de `aes()`: los errores de la ronda 1.\n\nLA RESPUESTA PARCIAL TÍPICA DE ESTA RONDA es el código correcto sin una palabra de por qué, o «geom_col porque ya está calculado» sin el código. Las dos son media respuesta: techo 40 en Exactitud. Y la que entregó las dos partes con `curso` en vez de `viajes` va POR ENCIMA de la mitad impecable.\n\nLO QUE NO SE EXIGE, NUNCA: `library(ggplot2)` ni la limpieza de la Parte 0 —el enunciado dice que la tabla ya está cargada—, `theme_minimal()`, el tipo de comillas (rectas o tipográficas), la indentación, los saltos de línea, comentarios, ni un paréntesis de cierre que falta cuando la intención es inequívoca. Escriben desde un teléfono. Y si el estudiante objeta el enunciado —dice que la premisa le suena falsa o que le falta información— eso NO se penaliza nunca: si tiene razón, el problema es del enunciado.\n\nEN EL FEEDBACK: si su escritura corre y dibuja lo pedido aunque no sea la del cuaderno, no le pidas que la cambie; dile qué pieza falta, no qué palabra. Y cierra con una frase concreta sobre qué línea de ESTA respuesta va a necesitar en el gráfico de su grupo para la entrega del Sprint 3 del lunes 26 de octubre de 2026.",
+    "evaluationGuide": {
+      "must_hit": [
+        "PARTE (1): elige `geom_col()` (o `geom_bar(stat = \"identity\")`) y dice que la altura ya está calculada y que `geom_bar()` cuenta filas, en cualquier vocabulario",
+        "PARTE (2): `viajes` como datos, `transporte` y `minutos` dentro de `aes()`, sin comillas",
+        "PARTE (2): `geom_col()` con paréntesis, sumado con `+`"
+      ],
+      "nice_to_have": [
+        "Dice que con `geom_bar()` saldría una barra de altura 1 por transporte",
+        "Acuesta las columnas",
+        "Nota que la tabla tiene una fila por grupo"
+      ],
+      "fatal_errors": [
+        "Elige `geom_bar()` con `x` e `y`: no corre",
+        "`ggplot(curso, ...)` con `y = minutos`: no corre",
+        "`ggplot(curso, ...)` con `y = minutos_num` y `geom_col()`: apila sumas en vez de promedios",
+        "`y` fuera de `aes()`",
+        "`%>%` en vez de `+`"
+      ],
+      "partial_credit": {
+        "solo_el_codigo": "El código correcto sin la frase: techo 40 en Exactitud.",
+        "solo_la_frase": "La frase correcta sin código: techo 40 en Exactitud.",
+        "curso_en_vez_de_viajes": "Las dos partes, con `curso` en el `ggplot()`: no corre o apila sumas, techo 40 en Exactitud, Completitud 100, por encima de la media respuesta.",
+        "razon_vaga": "`geom_col()` bien escrito, con una razón que no toca contar vs. número calculado: a lo más 60.",
+        "otra_escritura_correcta": "`geom_bar(stat = \"identity\")`, columnas acostadas, `data =`/`mapping =`: correctas, no bajan."
+      }
+    },
+    "idealAnswer": {
+      "keyPoints": [
+        "`geom_col()`: los minutos ya los calculé en `viajes`; `geom_bar()` cuenta filas, no dibuja un número que ya tengo",
+        "ggplot(viajes, aes(x = transporte, y = minutos)) +",
+        "  geom_col()"
+      ],
+      "expectedConcepts": [
+        "geom_col_numero_calculado"
+      ],
+      "commonMistakes": [
+        "Poner `curso` en vez de `viajes` como primer argumento",
+        "Usar `geom_bar()` con `x` e `y`",
+        "Dejar la `y` fuera de `aes()`",
+        "Entregar sólo el código, sin la frase"
+      ],
+      "excellentResponseIndicators": [
+        "La diferencia contar / número ya calculado dicha en una frase llana",
+        "`viajes` como primer argumento",
+        "Las dos columnas dentro de `aes()`"
+      ]
+    }
+  },
+  {
+    "id": "dv_c08_r3_terminarlo",
+    "order": 3,
+    "title": "Terminarlo",
+    "category": "ggplot2: labs()",
+    "difficulty": "hard",
+    "ranked": true,
+    "durationSeconds": 180,
+    "answerFormat": "code",
+    "conceptTags": [
+      "terminar_con_labs"
+    ],
+    "context": "El gráfico de columnas de `viajes` (encuesta del curso, 33 estudiantes):\n\n```r\nggplot(viajes, aes(x = transporte, y = minutos)) +\n  geom_col()\n```\n\n| transporte | minutos |\n|---|---|\n| Auto | 40,5 |\n| Metro | 83,3 |\n| Micro o bus | 77,0 |\n\nCorre, pero es un gráfico de trabajo: quien lo lea no ve tu código.",
+    "question": "Súmale el `labs()` que lo deja listo para mostrar, con **(1)** un título que diga un hallazgo, con un número o una comparación, y **(2)** el eje y con su unidad, y la fuente.\n\nEscribe desde `geom_col()` hasta el final.",
+    "judgeFocus": "Esta es la ronda grande de la sesión. Pide DOS COSAS dentro de un mismo `labs()`, y las dos se califican: (1) un TÍTULO QUE DIGA UN HALLAZGO; (2) el EJE Y CON SU UNIDAD y la FUENTE. Unas cuatro líneas de R escritas en tres minutos desde un teléfono; eso bien puesto vale 100 y escribir más no sube el puntaje. El cuaderno de hoy lo llama «el control antes de mostrar»: título, ejes, fuente.\n\nPARTE (1) — EL TÍTULO. El criterio, que manda sobre cualquier ejemplo: el título DICE LO QUE SE VE, con un número o una comparación, y ESO QUE DICE ES VERDAD SEGÚN LA TABLA (Auto 40,5 · Metro 83,3 · Micro o bus 77,0). Vale CUALQUIER hallazgo verdadero, no sólo el del cuaderno. Ejemplos, y la lista NO es exhaustiva: «En auto se llega en la mitad del tiempo» (el del cuaderno: 40,5 contra 83,3); «En metro el viaje dura el doble que en auto»; «Metro y micro pasan la hora y cuarto; el auto, 40 minutos»; «El auto es el viaje más corto: 40 minutos en promedio»; «Quienes van en metro tardan 83 minutos». Redondear (40, 83, 77, «el doble», «la mitad», «casi el doble») está bien.\n\nLO QUE NO CUENTA COMO HALLAZGO: un título que sólo nombra el tema —«Gráfico de transporte», «Minutos por transporte», «Tiempo de viaje del curso»—. Describe el gráfico pero no dice qué se ve: es un error real de la parte (1). Y un título con una comparación FALSA según la tabla —«En micro se tarda más» (tarda más el metro), «En auto se tarda el doble»— es peor: afirma algo que el gráfico desmiente, y va a Exactitud 20, por debajo de la media respuesta.\n\nPARTE (2) — EL EJE Y Y LA FUENTE. El eje y dice qué mide Y EN QUÉ UNIDAD: «Minutos (promedio)», «Minutos de viaje, promedio», «Minutos promedio». Un eje y que dice sólo «minutos» en minúscula cumple la unidad; uno que dice «Promedio» o «Tiempo» sin unidad, no. La fuente va en `caption` y dice de dónde vienen los datos: «Fuente: encuesta del curso DVD 2026, 33 estudiantes». Si la fuente no dice cuántas personas son, es un detalle (el cuaderno lo pide en el control, pero no rompe nada). El eje x, el `subtitle` y `theme_minimal()` NO se pidieron: suman si están, no restan si faltan.\n\nOTRAS ESCRITURAS QUE VALEN IGUAL, lista NO exhaustiva: `ggtitle()`, `ylab()` o `xlab()` en vez de `labs()`; varios `labs()` sumados; el `labs()` con más campos; reescribir el gráfico entero desde `ggplot(viajes, ...)`.\n\nLO QUE SÍ ES ERROR:\n- `geom_col() %>% labs(...)`: CORRE, PERO EL GRÁFICO SALE CON EL TÍTULO Y SIN COLUMNAS (el `%>%` se come la geometría). Código que corre y contesta mal.\n- Sin ningún operador entre `geom_col()` y `labs()`: no corre.\n- `labs()` con los campos sin comillas (`title = En auto...`) o sin las comas entre campos: no corre.\n- El `+` al COMIENZO de la línea de `labs()` en vez de al final de la de `geom_col()`: el cuaderno dice que va al final, y en Colab así no corre. Pero es un salto de línea escrito en un teléfono: cóbralo como DETALLE (nivel 80) y nómbralo en el feedback, no como código que no corre.\n\nLA RESPUESTA PARCIAL TÍPICA DE ESTA RONDA es un `labs()` con título y nada más, o un `labs()` con eje y fuente y sin título. Las dos son media respuesta: techo 40 en Exactitud. Si falta sólo uno de los dos elementos de la parte (2) —el eje y o la fuente— es una parte (2) a medias: nivel 60. Y la respuesta que entregó título + eje + fuente con un título sin hallazgo va POR ENCIMA de la media respuesta impecable.\n\nLO QUE NO SE EXIGE, NUNCA: `library(ggplot2)` ni la limpieza de la Parte 0 —el enunciado dice que la tabla ya está cargada—, `theme_minimal()`, el tipo de comillas (rectas o tipográficas), la indentación, los saltos de línea, comentarios, ni un paréntesis de cierre que falta cuando la intención es inequívoca. Escriben desde un teléfono. Y si el estudiante objeta el enunciado —dice que la premisa le suena falsa o que le falta información— eso NO se penaliza nunca: si tiene razón, el problema es del enunciado.\n\nEN EL FEEDBACK: si su escritura corre y dibuja lo pedido aunque no sea la del cuaderno, no le pidas que la cambie; dile qué pieza falta, no qué palabra. Y cierra con una frase concreta sobre qué línea de ESTA respuesta va a necesitar en el gráfico de su grupo para la entrega del Sprint 3 del lunes 26 de octubre de 2026.",
+    "evaluationGuide": {
+      "must_hit": [
+        "PARTE (1): un título que dice un hallazgo con un número o una comparación, y que es verdad según la tabla",
+        "PARTE (2): el eje y dice qué mide y en qué unidad (minutos)",
+        "PARTE (2): una fuente en `caption` que dice de dónde vienen los datos",
+        "Las piezas unidas con `+`, y el texto de cada campo entre comillas"
+      ],
+      "nice_to_have": [
+        "La fuente dice cuántas personas son (33 estudiantes)",
+        "Agrega el eje x, un `subtitle` o `theme_minimal()`",
+        "El `+` al final de la línea de `geom_col()`"
+      ],
+      "fatal_errors": [
+        "`%>%` en vez de `+` antes de `labs()`: el gráfico sale sin columnas",
+        "Título con una comparación falsa según la tabla",
+        "Campos de `labs()` sin comillas o sin comas: no corre",
+        "Sin ningún operador entre `geom_col()` y `labs()`"
+      ],
+      "partial_credit": {
+        "solo_titulo": "Sólo el título, sin eje y ni fuente: techo 40 en Exactitud.",
+        "sin_titulo": "Eje y fuente, sin título: techo 40 en Exactitud.",
+        "titulo_sin_hallazgo": "Título que nombra el tema («Gráfico de transporte») + eje + fuente: Exactitud 60, Completitud 100.",
+        "falta_eje_o_fuente": "Título con hallazgo y sólo uno de eje/fuente: Exactitud 60.",
+        "eje_sin_unidad": "Eje y «Promedio» o «Tiempo» sin decir minutos: Exactitud 60.",
+        "pipe_antes_de_labs": "Todo completo pero con `%>%` antes de `labs()`: corre sin columnas, techo 40 en Exactitud, Completitud 100.",
+        "titulo_falso": "Un título con una comparación que la tabla desmiente («En micro se tarda más») + eje + fuente: Exactitud 20.",
+        "mas_al_comienzo": "El `+` al comienzo de la línea de `labs()`: Exactitud 80.",
+        "otra_escritura_correcta": "`ggtitle()`/`ylab()`, otro hallazgo verdadero, redondeos, `labs()` con más campos: correctas, no bajan."
+      }
+    },
+    "idealAnswer": {
+      "keyPoints": [
+        "  geom_col() +",
+        "  labs(title = \"En auto se llega en la mitad del tiempo\",",
+        "       y = \"Minutos (promedio)\",",
+        "       caption = \"Fuente: encuesta del curso DVD 2026, 33 estudiantes\")"
+      ],
+      "expectedConcepts": [
+        "terminar_con_labs"
+      ],
+      "commonMistakes": [
+        "Un título que nombra el tema sin decir qué se ve",
+        "Un eje y sin unidad",
+        "Olvidar la fuente",
+        "`%>%` en vez de `+` antes de `labs()`"
+      ],
+      "excellentResponseIndicators": [
+        "Un título con un hallazgo verdadero, con número o comparación",
+        "Eje y con unidad y fuente con el número de personas",
+        "El `+` al final de la línea de `geom_col()`"
+      ]
+    }
+  },
+  {
+    "id": "dv_c08_r4_histograma_que_no_corre",
+    "order": 4,
+    "title": "El histograma que no corre",
+    "category": "ggplot2: histograma",
+    "difficulty": "hard",
+    "ranked": true,
+    "durationSeconds": 150,
+    "answerFormat": "code",
+    "conceptTags": [
+      "histograma_y_columna_limpia"
+    ],
+    "context": "`curso` tiene dos columnas de horas en redes: `horas_redes`, la original, y `redes_num`, la que creaste en la Parte 0 con `as.numeric()`.\n\nUn compañero corre esto y le sale error:\n\n```r\nggplot(curso, aes(x = horas_redes)) +\n  geom_histogram(binwidth = 1)\n```",
+    "question": "**(1)** En una línea, en castellano: por qué no corre.\n\n**(2)** El código que sí dibuja el histograma.\n\nSólo esa frase y ese código.",
+    "judgeFocus": "Esta ronda pide DOS COSAS y las dos se califican: (1) UNA LÍNEA de castellano con el porqué del error; (2) el código que sí dibuja el histograma. Escritas en dos minutos desde un teléfono; eso bien puesto vale 100 y escribir más no sube el puntaje.\n\nPARTE (1) — POR QUÉ NO CORRE. El criterio, que manda sobre cualquier ejemplo: llega a que `horas_redes` ES TEXTO y UN HISTOGRAMA NECESITA NÚMEROS. Basta con eso, en cualquier vocabulario. Valen igual, y la lista NO es exhaustiva: «horas_redes es texto y el histograma necesita números»; «es la columna sin limpiar: tiene el \"5 horas\" y R la lee como texto»; «un histograma agrupa números en tramos, y esa columna son palabras para R»; «hay que usar la columna que pasamos a número». Nombrar el mensaje de R (*`stat_bin()` requires a continuous x aesthetic*) suma, pero no se exige.\n\nLO QUE NO CUENTA COMO PARTE (1): «falta cargar ggplot2»; «el binwidth está mal»; «falta `na.rm = TRUE`»; «hay que usar `count()` primero»; «falta el `%>%`». Ninguna de esas es la causa: el código está bien armado, la columna es la equivocada.\n\nPARTE (2) — EL CÓDIGO. El criterio: puntúa alto todo código que corra y DIBUJE UN HISTOGRAMA DE LAS HORAS EN REDES COMO NÚMEROS. La versión del cuaderno es\n\nggplot(curso, aes(x = redes_num)) +\n  geom_histogram(binwidth = 1)\n\npero valen igual, y la lista NO es exhaustiva: `aes(x = as.numeric(horas_redes))` (convierte adentro, corre y dibuja lo mismo); otro `binwidth` razonable; sin `binwidth` (corre: R avisa que usó 30 tramos y dibuja igual un histograma, es un detalle); `data =`/`mapping =` explícitos. El aviso *Removed 1 row containing non-finite...* NO es un error: es el `NA` del `\"5 horas\"`, y el cuaderno lo dice. Si alguien lo menciona como aviso esperado, suma.\n\nLO QUE SÍ ES ERROR en la parte (2):\n- Cambiar a `geom_bar()` sobre `horas_redes`: CORRE, pero cuenta cada texto como una categoría y NO ES UN HISTOGRAMA. Código que corre y contesta mal.\n- Dejar `horas_redes` y sólo cambiar el `binwidth` o agregar `na.rm`: sigue sin correr.\n- `redes_num` entre comillas dentro de `aes()`, o con otra mayúscula: no corre o no dibuja lo pedido.\n- `%>%` en vez de `+`, o `geom_histogram` sin paréntesis: los errores de la ronda 1.\n\nLA RESPUESTA PARCIAL TÍPICA DE ESTA RONDA es la línea con `redes_num` sin una palabra de por qué, o «es texto» sin código. Las dos son media respuesta: techo 40 en Exactitud. Y la que entregó las dos partes con `geom_bar()` en vez del histograma va POR ENCIMA de la mitad impecable.\n\nLO QUE NO SE EXIGE, NUNCA: `library(ggplot2)` ni la limpieza de la Parte 0 —el enunciado dice que la tabla ya está cargada—, `theme_minimal()`, el tipo de comillas (rectas o tipográficas), la indentación, los saltos de línea, comentarios, ni un paréntesis de cierre que falta cuando la intención es inequívoca. Escriben desde un teléfono. Y si el estudiante objeta el enunciado —dice que la premisa le suena falsa o que le falta información— eso NO se penaliza nunca: si tiene razón, el problema es del enunciado.\n\nEN EL FEEDBACK: si su escritura corre y dibuja lo pedido aunque no sea la del cuaderno, no le pidas que la cambie; dile qué pieza falta, no qué palabra. Y cierra con una frase concreta sobre qué línea de ESTA respuesta va a necesitar en el gráfico de su grupo para la entrega del Sprint 3 del lunes 26 de octubre de 2026.",
+    "evaluationGuide": {
+      "must_hit": [
+        "PARTE (1): `horas_redes` es texto y un histograma necesita números, en cualquier vocabulario",
+        "PARTE (2): el histograma sobre `redes_num` (o sobre `as.numeric(horas_redes)`)",
+        "PARTE (2): `geom_histogram()` con paréntesis, sumado con `+`"
+      ],
+      "nice_to_have": [
+        "Cita el `\"5 horas\"` como la respuesta que dejó la columna como texto",
+        "Dice que el aviso de la fila removida es el NA y no un error",
+        "Nombra el mensaje de R sobre `stat_bin()`"
+      ],
+      "fatal_errors": [
+        "Diagnostica otra causa: ggplot2 sin cargar, el binwidth, falta `na.rm`, falta `count()`",
+        "Cambia a `geom_bar()` sobre `horas_redes`: corre pero no es un histograma",
+        "Deja `horas_redes` en el código arreglado"
+      ],
+      "partial_credit": {
+        "solo_el_codigo": "El código con `redes_num` sin la frase: techo 40 en Exactitud.",
+        "solo_el_porque": "«Es texto» sin código: techo 40 en Exactitud.",
+        "geom_bar_sobre_texto": "Las dos partes, con `geom_bar()` sobre `horas_redes`: corre y no es un histograma, techo 40 en Exactitud, Completitud 100.",
+        "causa_equivocada": "«Falta library(ggplot2)» + el código con `redes_num`: la parte (1) contradice lo que pasa, Exactitud 40.",
+        "sin_binwidth": "`geom_histogram()` sin `binwidth` sobre `redes_num`: corre y es un histograma, Exactitud 80.",
+        "otra_escritura_correcta": "`as.numeric()` adentro de `aes()`, otro `binwidth` razonable: correctas, no bajan."
+      }
+    },
+    "idealAnswer": {
+      "keyPoints": [
+        "`horas_redes` es texto (tiene el \"5 horas\"), y un histograma necesita números",
+        "ggplot(curso, aes(x = redes_num)) +",
+        "  geom_histogram(binwidth = 1)"
+      ],
+      "expectedConcepts": [
+        "histograma_y_columna_limpia"
+      ],
+      "commonMistakes": [
+        "Decir que falta cargar ggplot2 o que el binwidth está mal",
+        "Cambiar a `geom_bar()`, que corre pero cuenta textos",
+        "Entregar sólo el código, sin la frase"
+      ],
+      "excellentResponseIndicators": [
+        "La causa en una frase llana: texto vs. números",
+        "`redes_num` en el `aes()`",
+        "Reconoce el aviso de la fila removida como el NA esperado"
+      ]
+    }
+  }
+]

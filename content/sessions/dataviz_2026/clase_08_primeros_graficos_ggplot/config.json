@@ -1,0 +1,44 @@
+{
+  "sessionId": "clase_08_primeros_graficos_ggplot",
+  "courseId": "dataviz_2026",
+  "title": "Clase 8: Primeros gráficos con ggplot2",
+  "description": "Control de código de ~18 min de pared: CUATRO rondas abiertas, todas de R (`answerFormat: code`), sobre la primera clase de `ggplot2`. R1 son las tres piezas —datos, `aes()`, `geom_bar()`— unidas con `+` (120 s, una sola cosa). R2 elige entre `geom_bar()` y `geom_col()` para la tabla `viajes` y la dibuja (165 s). R3 es la grande (180 s): el `labs()` que termina el gráfico, con un título que dice un hallazgo, el eje y con su unidad y la fuente. R4 es el histograma sobre `horas_redes`, que no corre porque la columna es texto, y el que sí corre con `redes_num` (150 s). R3 va en el tercer lugar a propósito: si el bloque se estira, lo que se cae es el histograma y no la ronda que importa. R2, R3 y R4 numeran (1) y (2), y la media respuesta tiene techo 40 en exactitud. Las cuatro compiten y las cuatro pasan por los jueces.",
+  "date": "2026-09-28",
+  "roundCount": 4,
+  "roundDurationSeconds": 150,
+  "bufferSeconds": 45,
+  "conceptTags": [
+    "tres_piezas_y_barras",
+    "geom_col_numero_calculado",
+    "terminar_con_labs",
+    "histograma_y_columna_limpia"
+  ],
+  "judges": [
+    {
+      "judgeId": "generic_specialist",
+      "weight": 0.35
+    },
+    {
+      "judgeId": "generic_praxis",
+      "weight": 0.35
+    },
+    {
+      "judgeId": "generic_teacher",
+      "weight": 0.3
+    }
+  ],
+  "judgeConfig": {
+    "generic_specialist": {
+      "sessionLens": "Tu lente es LA EXACTITUD DE LO ENTREGADO, y en esta sesión eso significa casi siempre una sola pregunta: ¿ESTE CÓDIGO, PEGADO EN UN COLAB QUE YA TIENE `curso` (O `viajes`) Y `ggplot2` CARGADOS, CORRE Y DIBUJA EL GRÁFICO QUE SE PIDIÓ? Es su PRIMER DÍA con `ggplot2`. Las cuatro rondas son abiertas, las cuatro pasan por ti y las cuatro piden escribir R; R2 y R4 piden además una línea de castellano, y ahí tu pregunta es si lo que afirma es correcto, sin exigir una sola palabra técnica. No confundas 'no está en el cuaderno' con 'está mal': `data =` y `mapping =` explícitos, barras acostadas con `aes(y = ...)`, el `aes()` adentro de la geometría, el pipe que ENTRA al `ggplot()`, `count()` + `geom_col()`, `geom_bar(stat = \"identity\")`, `ggtitle()` o `ylab()` en vez de `labs()`, un `labs()` con más campos, sin `theme_minimal()`: todo eso corre y dibuja lo pedido, y vale 100. Lo que SÍ cobras, porque es exactamente lo que el cuaderno de hoy enseñó: el `+` entre las piezas (con `%>%` no corre, o en R3 se come las columnas), las columnas dentro de `aes()` SIN comillas, la tabla correcta como primer argumento (`viajes` para `geom_col()`), la columna limpia (`redes_num`, no `horas_redes`) y los paréntesis de `geom_...()`. Y en R3, que el título diga un hallazgo VERDADERO según la tabla. Deliberadamente indulgente con todo lo demás: indentación, tipo de comillas, saltos de línea, un paréntesis de cierre que falta cuando la intención es inequívoca — escriben desde un teléfono. Cierra el feedback atando la respuesta a la entrega del Sprint 3 del lunes 26 de octubre de 2026 (el prototipo visual), de forma concreta sobre ESTA respuesta.",
+      "weightFormula": "score = 0.75 * exactitud + 0.15 * completitud + 0.10 * claridad"
+    },
+    "generic_praxis": {
+      "sessionLens": "Tú eres quien va a tomar lo que el estudiante escribió y pegarlo en el Colab del Sprint 3 de su grupo sin poder preguntarle nada. Las cuatro rondas piden código, y para ti eso significa literalmente copiar y pegar: ¿están las piezas que hacen falta —los datos, `aes()`, la geometría— sumadas con `+` en un orden en que correrían, sin que tengas que adivinar ni completar un hueco? Una respuesta que es puro código, sin una palabra de prosa alrededor, es exactamente lo que se pidió y no te molesta; lo que te molesta es el código enterrado en un párrafo, los `...` sin rellenar, o los fragmentos sueltos que no llegan a ser un gráfico. En R3 eres además QUIEN VA A LEER EL GRÁFICO sin ver el código: ¿el título te dice qué se ve, el eje y te dice en qué unidad está, y sabes de dónde salen los datos? Un título que sólo nombra el tema («Gráfico de transporte») no te dice nada. R2 y R4 piden una línea de castellano: ahí eres el compañero de grupo que va a usar esa frase para no repetir el error, y tu pregunta es si después de leerla sabrías qué pasó. Premia lo que se entiende a la primera; penaliza el rodeo. Y no pidas prosa donde se pidió código. Cierra el feedback atando la respuesta a la entrega del Sprint 3 del lunes 26 de octubre de 2026 (el prototipo visual), de forma concreta sobre ESTA respuesta.",
+      "weightFormula": "score = 0.60 * exactitud + 0.15 * completitud + 0.25 * claridad"
+    },
+    "generic_teacher": {
+      "sessionLens": "Las cuatro rondas de esta sesión entran al ranking, así que puntúa con honestidad y sin inflar: un puntaje regalado le quita el puesto a otro. Es su primer día con `ggplot2` y llevan siete clases programando: no exijas elegancia, exige que corra y dibuje lo pedido. R2, R3 y R4 piden DOS COSAS numeradas (1) y (2), y lo que más te importa es que entreguen las dos: media respuesta perfecta sigue siendo media respuesta. R1 pide una sola cosa, y ahí no existe la media respuesta. Cuidado con el reverso, que es donde estas rúbricas se dan vuelta solas: la respuesta que entregó LAS DOS PARTES y se equivocó en una va POR ENCIMA de la mitad impecable, porque la incompleta se ganó gratis las dimensiones de forma al no arriesgarse a nada. Si al terminar te quedó al revés, revísalo. En el código caza los errores que el cuaderno de hoy enseñó a mirar: el `%>%` donde iba `+`, la columna entre comillas dentro de `aes()`, la geometría sin paréntesis, `curso` donde iba `viajes`, `geom_bar()` con `x` e `y`, `horas_redes` donde iba `redes_num`, y en R3 el título que nombra el tema sin decir qué se ve. En tu feedback escribe en primera persona e incluye un 'yo habría...' concreto a ESTA respuesta, con la línea exacta que le habrías escrito. Cierra el feedback atando la respuesta a la entrega del Sprint 3 del lunes 26 de octubre de 2026 (el prototipo visual), de forma concreta sobre ESTA respuesta.",
+      "weightFormula": "score = 0.60 * exactitud + 0.32 * completitud + 0.08 * claridad"
+    }
+  }
+}
