@@ -1,0 +1,318 @@
+[
+  {
+    "id": "ayd_rp1_r1_dos_alternancias",
+    "order": 1,
+    "title": "Dos alternancias",
+    "category": "Semana 2 · Democracia",
+    "type": "multiple_choice",
+    "ranked": true,
+    "durationSeconds": 79,
+    "context": "",
+    "question": "",
+    "conceptTags": [
+      "canonicas"
+    ],
+    "mcQuestions": [
+      {
+        "question": "Semana 2 (Roberto Velázquez), «¿Qué es la democracia?»: las cuatro definiciones canónicas.\n\nCaso hipotético: en un país, el partido que condujo la transición pierde una elección y entrega el poder. Ocho años después, el nuevo gobierno también pierde y lo entrega.\n\n¿Qué definición usa exactamente ese hecho como criterio de una democracia consolidada?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Schumpeter: la lucha competitiva por el voto popular como método para decidir"
+          },
+          {
+            "id": "B",
+            "text": "Przeworski: un sistema en el que los partidos pierden elecciones y el resultado está en juego"
+          },
+          {
+            "id": "C",
+            "text": "Dahl: la poliarquía, medible en contestación pública e inclusividad"
+          },
+          {
+            "id": "D",
+            "text": "Huntington: el poder cambia de manos por elecciones en dos ocasiones consecutivas"
+          }
+        ],
+        "correctOptionIndex": 3,
+        "timeLimitSeconds": 45,
+        "explanation": "Huntington, The Third Wave: la prueba de las dos alternancias. Przeworski se parece, pero le basta con que el resultado esté en juego; no cuenta alternancias ni habla de consolidación."
+      }
+    ]
+  },
+  {
+    "id": "ayd_rp1_r2_creo_pero_no_confio",
+    "order": 2,
+    "title": "Creo en la democracia, pero…",
+    "category": "Semana 2 · Democracia",
+    "difficulty": "hard",
+    "answerFormat": "prose",
+    "ranked": true,
+    "durationSeconds": 270,
+    "conceptTags": [
+      "critical_citizens",
+      "niveles_apoyo"
+    ],
+    "context": "Norris, P. (1999). «The Growth of Critical Citizens?», cap. 1 de *Critical Citizens* — discusión del jueves 13 de agosto.\n\nUna encuestada hipotética dice:\n\n«La democracia es el mejor sistema de gobierno, pero no confío ni en el Congreso ni en los partidos.»",
+    "question": "**(a)** ¿Es una ciudadana crítica (*critical citizen*) según Norris? Justifica con la definición.\n\n**(b)** ¿En cuál de los cinco niveles de apoyo político está alto su apoyo, y en cuál está bajo?\n\nDos o tres frases por parte, redactadas.",
+    "judgeFocus": "Dos partes. PARTE (a) -> dimension 'concepto' y la justificacion va a 'aplicacion'. El concepto es la definicion de ciudadano critico de Norris (1999) y tiene DOS PIEZAS: adhiere firmemente a los ideales o valores de la democracia, Y a la vez esta insatisfecho o desconfia de las instituciones representativas concretas (parlamentos, partidos, gobiernos). Con las dos piezas y cada una amarrada a una mitad de la frase de la encuestada, la (a) vale 100. La respuesta esperada es SI; un NO solo vale si se sostiene con la definicion, y evalua ese razonamiento, no el bando. Decir que es 'antidemocratica' o que 'rechaza la democracia' es confundir el concepto: el deck dice explicitamente que esa tension no implica rechazo.\n\nPARTE (b) -> dimension 'aplicacion'. El criterio es ubicar el apoyo ALTO en el nivel de los principios del regimen (adhesion a los valores democraticos) y el BAJO en el de las instituciones del regimen (confianza en parlamentos y partidos). No exijas el numero del nivel: nombrarlo o describirlo basta. Agregar tambien actores politicos como nivel bajo es correcto y no resta. Poner el bajo en 'desempeno del regimen' sin mencionar instituciones es media aplicacion (60): ella habla de confiar en el Congreso y los partidos, no de satisfaccion con el funcionamiento. Poner el alto en 'comunidad politica' es un error: la encuestada no dice nada de identidad nacional.\n\nLo que NO cuenta: recitar los cinco niveles sin ubicar a la encuestada; definir ciudadano critico sin decir si ella lo es.\n\nSi el estudiante objeta el caso hipotetico o una premisa del enunciado, NO lo castigues por dudar: evalua lo que hace despues.\n\nSe pidieron DOS O TRES FRASES REDACTADAS POR PARTE. Dos o tres frases bien puestas por parte valen 100 y escribir mas no sube el puntaje.",
+    "evaluationGuide": {
+      "must_hit": [
+        "En (a), la definicion con sus dos piezas: adhesion a los ideales democraticos e insatisfaccion o desconfianza hacia las instituciones representativas concretas",
+        "En (a), amarra cada pieza a una mitad de lo que dice la encuestada",
+        "En (b), apoyo alto en los principios del regimen y bajo en las instituciones del regimen, dichos por nombre o por su contenido"
+      ],
+      "fatal_errors": [
+        "Dice que la encuestada es antidemocratica o que rechaza la democracia",
+        "Pone el apoyo bajo en los principios democraticos",
+        "Responde solo una de las dos partes"
+      ],
+      "partial_credit": {
+        "una_sola_pieza": "La definicion de (a) tiene solo una de las dos piezas: 60 en concepto",
+        "nivel_vecino": "En (b) pone el bajo en desempeno del regimen sin mencionar instituciones: 60 en aplicacion",
+        "niveles_sin_ubicar": "Recita los niveles sin decir cual es alto y cual bajo para ella: 40 en aplicacion"
+      },
+      "nice_to_have": [
+        "Nota que las instituciones del regimen son el nivel que Norris marca como el mas preocupante",
+        "Dice que la insatisfaccion de un ciudadano critico es una demanda de reforma y no un rechazo",
+        "Usa bien alguna de las cuatro hipotesis de Norris para explicar por que desconfia"
+      ]
+    },
+    "idealAnswer": "(a) Si. Norris llama ciudadanos criticos a quienes adhieren firmemente a los ideales de la democracia pero estan insatisfechos con sus instituciones representativas concretas. Ella dice que la democracia es el mejor sistema y, a la vez, desconfia del Congreso y de los partidos: tiene las dos mitades, y no es antidemocratica, pide que las instituciones funcionen mejor.\n\n(b) Su apoyo esta alto en los principios del regimen, la adhesion a los valores democraticos, y bajo en las instituciones del regimen, la confianza en parlamentos y partidos, que es justo el nivel que Norris marca como el mas preocupante."
+  },
+  {
+    "id": "ayd_rp1_r3_diez_mil_contadores",
+    "order": 3,
+    "title": "Diez mil contadores",
+    "category": "Semana 3 · IA",
+    "type": "multiple_choice",
+    "ranked": true,
+    "durationSeconds": 81,
+    "context": "",
+    "question": "",
+    "conceptTags": [
+      "lump_of_labour"
+    ],
+    "mcQuestions": [
+      {
+        "question": "Semana 3 (Naim Bro), «¿Un backlash contra la IA?», lámina 4.\n\nUn ministro hipotético declara: «Si la IA hace el trabajo de 10.000 contadores, habrá 10.000 empleos menos en el país».\n\nSegún la clase, ¿qué error comete?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Confunde una preferencia declarada sin costo con una decisión que tiene consecuencias"
+          },
+          {
+            "id": "B",
+            "text": "Trata el mercado laboral como si tuviera una cantidad fija de trabajo por repartir"
+          },
+          {
+            "id": "C",
+            "text": "Olvida que la gente teme más por los jóvenes que por su propia familia"
+          },
+          {
+            "id": "D",
+            "text": "Confunde un tema impopular con un tema que ya es prioritario para los votantes"
+          }
+        ],
+        "correctOptionIndex": 1,
+        "timeLimitSeconds": 45,
+        "explanation": "La falacia del lump of labour. Lo que se ahorra en un sector enriquece a otros, que gastan ese ingreso y crean empleo donde no lo había. La duda abierta de la clase: si la IA golpea a la vez todo lo que se aprende leyendo."
+      }
+    ]
+  },
+  {
+    "id": "ayd_rp1_r4_cinco_colegios",
+    "order": 4,
+    "title": "Cinco colegios",
+    "category": "Semana 4 · Democracia",
+    "type": "multiple_choice",
+    "ranked": true,
+    "durationSeconds": 80,
+    "context": "",
+    "question": "",
+    "conceptTags": [
+      "nobleza_de_estado"
+    ],
+    "mcQuestions": [
+      {
+        "question": "Semana 4 (Roberto Velázquez), «Poder, élites y democracia».\n\nCaso hipotético: un país recluta a sus altos funcionarios solo por un examen muy exigente. Casi todos los que lo aprueban vienen de cinco colegios caros, y el país lo celebra como una administración pública elegida por mérito.\n\n¿Qué concepto lo describe mejor?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Nobleza de Estado (Bourdieu): el Estado consagra como mérito un privilegio heredado"
+          },
+          {
+            "id": "B",
+            "text": "Circulación de élites (Pareto): toda élite se desgasta y es reemplazada por otra"
+          },
+          {
+            "id": "C",
+            "text": "Élite del poder (Mills): la convergencia de las esferas corporativa, militar y política"
+          },
+          {
+            "id": "D",
+            "text": "Fórmula política (Mosca): la ideología que legitima a la minoría que gobierna"
+          }
+        ],
+        "correctOptionIndex": 0,
+        "timeLimitSeconds": 45,
+        "explanation": "Nobleza de Estado: las escuelas de élite no seleccionan mérito, consagran capital cultural heredado y lo disfrazan de logro individual. Por eso la meritocracia hace invisible la reproducción de las élites."
+      }
+    ]
+  },
+  {
+    "id": "ayd_rp1_r5_dos_piezas_de_un_discurso",
+    "order": 5,
+    "title": "Dos piezas de un discurso",
+    "category": "Semana 4 · Democracia",
+    "difficulty": "hard",
+    "answerFormat": "prose",
+    "ranked": true,
+    "durationSeconds": 270,
+    "conceptTags": [
+      "populismo_autoritarismo"
+    ],
+    "context": "Norris, P. e Inglehart, R. (2019). *Cultural Backlash*, cap. 1 «Understanding Populism» — discusión del jueves 27 de agosto.\n\nDiscurso hipotético de un candidato:\n\n«Los jueces y la prensa están vendidos a la élite; solo el pueblo sabe lo que es justo. Y para proteger a nuestras familias: mano dura contra los extranjeros y obediencia al líder.»",
+    "question": "**(a)** Define populismo y autoritarismo según Norris e Inglehart.\n\n**(b)** ¿Qué parte del discurso es cada cosa? Justifica con tus definiciones.\n\nDos o tres frases por parte, redactadas.",
+    "judgeFocus": "Dos partes. PARTE (a) -> dimension 'concepto'. Son DOS definiciones de Norris e Inglehart (2019), y cada una tiene su pieza central. POPULISMO: un estilo de retorica, no una ideologia, sobre quien debe gobernar; cuestiona la autoridad del establishment (medios, jueces, partidos, expertos) y situa la autoridad legitima en 'el pueblo'. AUTORITARISMO: un conjunto de valores —seguridad, conformidad y obediencia— que priorizan la seguridad del grupo por sobre la autonomia individual. Las dos bien dichas valen 100; una sola, 60. Definir el populismo como 'ideologia delgada' que opone el pueblo puro a la elite corrupta es la definicion de Mudde, que el curso vio el lunes 24 de agosto: NO es un error de material ni material 'de afuera'. Vale 80 en concepto si el resto calza, y 100 si el estudiante nota que Norris e Inglehart lo llaman retorica y no ideologia.\n\nPARTE (b) -> dimension 'aplicacion'. El criterio es asignar cada parte del discurso a su concepto y decir por que. La primera frase (jueces y prensa vendidos a la elite; solo el pueblo sabe lo que es justo) es populismo: deslegitima al establishment y pone la autoridad en el pueblo. La segunda (proteger a las familias, mano dura contra los extranjeros, obediencia al lider) es autoritarismo: seguridad frente a 'los otros' y obediencia a un lider fuerte. Basta con amarrar cada parte a su pieza; no exijas que nombre los tres valores uno por uno. Decir que atacar a los jueces TAMBIEN facilita el autoritarismo es un matiz que el propio material sostiene (la combinacion), no un error, siempre que la asignacion principal este bien.\n\nLo que NO cuenta: invertir la asignacion; definir el populismo como un conjunto de valores; decir 'todo el discurso es populista' sin separar.\n\nSi el estudiante objeta el caso hipotetico o una premisa del enunciado, NO lo castigues por dudar: evalua lo que hace despues.\n\nSe pidieron DOS O TRES FRASES REDACTADAS POR PARTE. Dos o tres frases bien puestas por parte valen 100 y escribir mas no sube el puntaje.",
+    "evaluationGuide": {
+      "must_hit": [
+        "En (a), populismo como retorica sobre quien debe gobernar: contra el establishment y con la autoridad en el pueblo",
+        "En (a), autoritarismo como valores de seguridad, conformidad y obediencia que ponen al grupo por sobre el individuo",
+        "En (b), la frase sobre jueces, prensa y pueblo asignada al populismo, y la de mano dura y obediencia al autoritarismo, cada una con su por que"
+      ],
+      "fatal_errors": [
+        "Invierte la asignacion de las dos partes del discurso",
+        "Define el populismo con los valores del autoritarismo, o al reves",
+        "Responde solo una de las dos partes"
+      ],
+      "partial_credit": {
+        "una_definicion": "Define bien solo uno de los dos conceptos: 60 en concepto",
+        "mudde": "Define populismo como ideologia delgada (Mudde) y el resto calza: 80 en concepto; 100 si nota la diferencia con Norris e Inglehart",
+        "asigna_sin_justificar": "Asigna bien las dos partes pero no dice por que: 60 en aplicacion"
+      },
+      "nice_to_have": [
+        "Explica por que la combinacion es la mas peligrosa: la retorica populista desarma los contrapesos que podrian frenar las politicas autoritarias",
+        "Nota que el populismo es camaleonico: puede combinarse con cualquier contenido ideologico",
+        "Nota la diferencia entre la definicion de Mudde y la de Norris e Inglehart"
+      ]
+    },
+    "idealAnswer": "(a) Para Norris e Inglehart el populismo es un estilo de retorica y no una ideologia: habla de quien debe gobernar, cuestiona la autoridad del establishment y pone la autoridad legitima en el pueblo. El autoritarismo, en cambio, es un conjunto de valores —seguridad, conformidad y obediencia— que ponen la seguridad del grupo por sobre la autonomia de cada persona.\n\n(b) La primera frase es populismo: trata a jueces y prensa como parte de la elite y dice que solo el pueblo sabe lo que es justo. La segunda es autoritarismo: mano dura contra los extranjeros es seguridad frente a 'los otros', y obediencia al lider es el tercer valor tal cual."
+  },
+  {
+    "id": "ayd_rp1_r6_doscientos_mil_traductores",
+    "order": 6,
+    "title": "Doscientos mil traductores",
+    "category": "Semana 5 · IA",
+    "difficulty": "hard",
+    "answerFormat": "prose",
+    "ranked": true,
+    "durationSeconds": 270,
+    "conceptTags": [
+      "underclass"
+    ],
+    "context": "Semana 5 (Naim Bro), «¿Quién controla las máquinas?», lámina de la *underclass*:\n\n«No es perder el trabajo. Es quedar excluido a la vez de la movilidad social, la autonomía económica y la influencia política.»\n\nCaso hipotético: en un país, la IA reemplaza a 200.000 traductores en dos años.",
+    "question": "**(a)** Con el criterio de la clase, ¿qué tendría que pasar para que fueran una *underclass* y no simplemente desempleados?\n\n**(b)** ¿Qué palanca pierden, y por qué eso importa para que su malestar llegue a una institución?\n\nDos o tres frases por parte, redactadas.",
+    "judgeFocus": "Dos partes. PARTE (a) -> dimension 'concepto' (el criterio) y 'aplicacion' (usarlo en los traductores). El concepto es el CRITERIO DE REVERSIBILIDAD de la clase: del desempleo se sale con crecimiento; de la underclass no, porque lo que se pierde es la palanca para exigir la salida. La definicion (quedar excluido A LA VEZ de la movilidad social, la autonomia economica y la influencia politica) esta escrita en el enunciado: repetirla no es merito, usarla si. La (a) vale 100 si dice que perder el trabajo no basta y nombra que tendria que pasar para que la exclusion no se revierta —por ejemplo que el crecimiento no los reabsorba porque su tarea la hace la maquina, o que pierdan a la vez las tres cosas y no puedan recuperarlas—. Son ejemplos, no una lista cerrada: cualquier condicion que haga irreversible la exclusion cuenta.\n\nPARTE (b) -> dimension 'aplicacion'. La palanca, segun la clase, es un trabajo que se pueda parar y un voto que amenace: 'sin voto que amenace y sin trabajo que se pueda parar, ¿con que se negocia?'. Y el porque importa: la reaccion del siglo XIX consiguio instituciones (salud publica, demanda de democracia, sindicatos legalizados) porque esa palanca existia; sin ella, el malestar o el populismo puede crecer sin llegar nunca a una institucion. Nombrar la palanca sin decir por que importa es 60.\n\nLA RESPUESTA DE AL LADO, que vale lo mismo: concluir que estos traductores NO serian underclass —porque siguen votando, o porque 200.000 es un grupo acotado que el crecimiento puede reabsorber— es correcto si usa el criterio para llegar ahi. La clase misma dice que la underclass 'es una hipotesis, no un hallazgo'.\n\nLo que NO cuenta: tratar underclass como sinonimo de desempleo; decir que la palanca es 'el dinero' o 'los subsidios', que no son capacidad de negociar.\n\nSi el estudiante objeta el caso hipotetico o una premisa del enunciado, NO lo castigues por dudar: evalua lo que hace despues.\n\nSe pidieron DOS O TRES FRASES REDACTADAS POR PARTE. Dos o tres frases bien puestas por parte valen 100 y escribir mas no sube el puntaje.",
+    "evaluationGuide": {
+      "must_hit": [
+        "En (a), que perder el trabajo no basta: el criterio es la reversibilidad, y nombra una condicion que haria irreversible la exclusion",
+        "En (b), la palanca: un trabajo que se pueda parar o un voto que amenace, es decir, capacidad de negociar",
+        "En (b), por que importa: sin palanca el malestar no llega a una institucion"
+      ],
+      "fatal_errors": [
+        "Trata underclass como sinonimo de desempleo",
+        "Dice que la palanca es el dinero, un subsidio o la ayuda del Estado",
+        "Responde solo una de las dos partes"
+      ],
+      "partial_credit": {
+        "repite_definicion": "En (a) solo repite la definicion del enunciado sin el criterio de reversibilidad: 60 en concepto",
+        "palanca_sin_porque": "Nombra la palanca pero no dice por que importa para llegar a una institucion: 60 en aplicacion"
+      },
+      "nice_to_have": [
+        "Usa el precedente del siglo XIX: la reaccion logro salud publica y sindicatos porque la palanca existia",
+        "Menciona una de las tres objeciones de la clase: es hipotesis, estigmatiza, se profetiza sola",
+        "Concluye con razones que estos traductores no serian underclass"
+      ]
+    },
+    "idealAnswer": "(a) Perder el trabajo no basta: del desempleo se sale con crecimiento. Serian una underclass si, aunque la economia crezca, no vuelven a entrar porque su tarea ya la hace la maquina, y quedan excluidos a la vez de la movilidad, de la autonomia economica y de la influencia politica. La marca es que la exclusion no se revierte.\n\n(b) Pierden la palanca para exigir la salida: un trabajo que se pueda parar y un voto que amenace. Sin eso no tienen con que negociar, y su malestar puede crecer como populismo sin llegar nunca a una institucion, al reves de la reaccion del siglo XIX, que consiguio sindicatos y salud publica porque esa palanca existia."
+  },
+  {
+    "id": "ayd_rp1_r7_el_historial_medico",
+    "order": 7,
+    "title": "El historial médico",
+    "category": "Semana 6 · Democracia",
+    "type": "multiple_choice",
+    "ranked": true,
+    "durationSeconds": 79,
+    "context": "",
+    "question": "",
+    "conceptTags": [
+      "desinformacion"
+    ],
+    "mcQuestions": [
+      {
+        "question": "Semana 6 (Roberto Velázquez), «Esfera pública, desinformación y democracia», lámina 10.\n\nCaso hipotético: la semana antes de una elección, un funcionario le filtra a la prensa el historial médico verdadero de una candidata, para hundirla.\n\n¿Qué es?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Misinformation: información falsa que se comparte creyendo que es verdadera"
+          },
+          {
+            "id": "B",
+            "text": "Disinformation: información falsa creada deliberadamente para engañar o dañar"
+          },
+          {
+            "id": "C",
+            "text": "Malinformation: información genuina divulgada fuera de contexto para dañar"
+          },
+          {
+            "id": "D",
+            "text": "Fake news: contenido fabricado que imita el formato de una noticia periodística"
+          }
+        ],
+        "correctOptionIndex": 2,
+        "timeLimitSeconds": 45,
+        "explanation": "Malinformation: la información es verdadera y aun así es un trastorno informativo, porque hay intención de dañar. La clase clasifica con dos ejes: si es falsa y si hay intención de daño."
+      }
+    ]
+  },
+  {
+    "id": "ayd_rp1_r8_prohibir_la_supervigilancia",
+    "order": 8,
+    "title": "Prohibir la supervigilancia",
+    "category": "Semana 7 · IA",
+    "difficulty": "hard",
+    "answerFormat": "prose",
+    "ranked": true,
+    "durationSeconds": 270,
+    "conceptTags": [
+      "vigilancia_costo_reprimir"
+    ],
+    "context": "Acemoglu, Gitmez y Shadmehr (2026), *Automation and Repression* — Semana 7, lámina 21.\n\nEn el reportaje de *La Tercera* de la guía, el diputado Johannes Kaiser (PNL) rechaza el uso de la IA para un «estado de supervigilancia masivo».\n\nSupón que esa postura se vuelve ley: el Estado no puede usar IA para vigilar.",
+    "question": "**(a)** Según el modelo, ¿qué le pasa al costo de reprimir?\n\n**(b)** ¿Qué le pasa entonces al umbral en que al Estado le conviene reprimir en vez de redistribuir? Explica con el mecanismo.\n\nDos o tres frases por parte, redactadas.",
+    "judgeFocus": "Dos partes. PARTE (a) -> dimension 'concepto'. Lo que dice el modelo (lamina 21, Observacion 8): el costo de reprimir es un numero dado desde afuera, y los autores senalan que la IA probablemente lo hace BAJAR (el 'Estado de vigilancia con IA'). Por lo tanto prohibir la vigilancia con IA IMPIDE QUE BAJE: lo mantiene donde estaba. Esa es la respuesta precisa y vale 100. 'Lo sube' es aceptable (80) si lo que sigue en (b) es correcto; no lo trates como error grave.\n\nPARTE (b) -> dimension 'aplicacion'. El criterio es el mecanismo de las dos curvas: redistribuir cuesta mas a medida que se automatiza y el capital se acumula; reprimir cuesta mas o menos lo mismo. Si reprimir no se abarata, el cruce llega MAS TARDE, con mas capital acumulado: el Estado sigue prefiriendo redistribuir por mas tiempo, y el golpe de la seccion 8 necesita mas capital para ser rentable. Con el umbral que se aleja y el porque, vale 100. Decir que se aleja sin mecanismo es 60.\n\nMATIZ QUE SUBE, no que se exige: la ley posterga el umbral pero no lo borra, porque el capital se sigue acumulando y el cruce es unico. Decir que 'el Estado ya nunca va a reprimir' es un error de aplicacion (40). Tambien vale, y es respuesta de al lado de pleno derecho: notar que la ley solo quita una herramienta —ejercito y policia siguen existiendo—, o que una ley asi es justo meterle al modelo un juez o un contrapeso que su supuesto 2 no tiene.\n\nLo que NO cuenta: responder solo con privacidad y derechos sin tocar el costo de reprimir; decir que el umbral se acerca; confundir el costo de reprimir con el de redistribuir.\n\nSi el estudiante objeta el caso hipotetico o una premisa del enunciado, NO lo castigues por dudar: evalua lo que hace despues.\n\nSe pidieron DOS O TRES FRASES REDACTADAS POR PARTE. Dos o tres frases bien puestas por parte valen 100 y escribir mas no sube el puntaje.",
+    "evaluationGuide": {
+      "must_hit": [
+        "En (a), que sin IA para vigilar el costo de reprimir no baja (o se mantiene alto), porque el modelo dice que la IA lo abarataria",
+        "En (b), que el umbral se aleja: el cruce entre redistribuir y reprimir llega mas tarde, con mas capital acumulado",
+        "En (b), el porque con las curvas: redistribuir se encarece con la automatizacion y reprimir no se abarata"
+      ],
+      "fatal_errors": [
+        "Dice que el umbral se acerca o que la represion se vuelve mas conveniente",
+        "Confunde el costo de reprimir con el costo de redistribuir",
+        "Responde solo una de las dos partes"
+      ],
+      "partial_credit": {
+        "lo_sube": "En (a) dice que el costo de reprimir sube, y (b) es correcta: 80 en concepto",
+        "se_aleja_sin_mecanismo": "Dice que el umbral se aleja sin explicar con las curvas: 60 en aplicacion",
+        "nunca_reprime": "Dice que con la ley el Estado ya nunca va a reprimir: 40 en aplicacion"
+      },
+      "nice_to_have": [
+        "Nota que la ley posterga el umbral pero no lo borra, porque el capital se sigue acumulando",
+        "Usa la frase de la clase: regular la vigilancia es una politica de mantencion del costo de reprimir",
+        "Nota que la ley le agrega al modelo un contrapeso que su supuesto 2 no tiene"
+      ]
+    },
+    "idealAnswer": "(a) En el modelo el costo de reprimir viene dado, y los autores dicen que la IA probablemente lo abarata con vigilancia masiva. Prohibirla no lo sube: impide que baje, lo mantiene donde estaba.\n\n(b) Redistribuir se encarece a medida que el capital se acumula y reprimir no se abarata, asi que las dos curvas se cruzan mas tarde, con mas capital acumulado. El Estado sigue prefiriendo redistribuir por mas tiempo y el golpe necesita mas capital para ser rentable. Pero no borra el umbral: lo posterga, porque el capital se sigue acumulando."
+  }
+]
