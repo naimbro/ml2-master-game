@@ -1,8 +1,8 @@
 # Material de referencia — Repaso para la Prueba I, IA y Democracia 2026
 
 **Sesión de repaso del lunes 28 de septiembre de 2026**, tres días antes de la Prueba I (jueves 1 de
-octubre). Cubre las seis semanas del semestre: el módulo de Democracia (Prof. Roberto Velázquez,
-semanas 2, 4 y 6) y el módulo de IA (Prof. Naim Bro, semanas 3, 5 y 7).
+octubre). Cubre las seis semanas del semestre, de la semana 2 a la 7. En el feedback, nunca nombres a los
+profesores: habla de «la clase de la semana N».
 
 Cada sección de abajo transcribe **textual** lo que los estudiantes vieron proyectado en el deck de
 esa semana. Sirve para **verificar** lo que un estudiante afirma, no para exigir que lo cite. Si
@@ -14,16 +14,16 @@ Tres advertencias que importan para puntuar:
 - **Los casos de los enunciados son hipotéticos** («una encuestada», «un discurso», «200.000
   traductores»). No son hechos del mundo: son el material sobre el que se aplica el concepto. No
   castigues a quien objete que el caso es artificial; evalúa lo que hace después.
-- **Es un repaso para una prueba escrita.** Las rondas abiertas imitan su formato: dos partes, (a)
-  y (b), dos o tres frases redactadas por parte. Premia la definición precisa y la aplicación al
-  caso; no premies el largo.
+- **Es un repaso para una prueba escrita.** Cada ronda abierta es una sola pregunta que pide usar
+  un concepto para resolver un caso, en un párrafo corto. Premia el concepto preciso y la aplicación
+  al caso; no premies el largo.
 - **Los autores no se exigen con año ni página.** Basta con usar bien el concepto.
 
 <!-- section: canonicas -->
 
 ## Semana 2 · «¿Qué es la democracia?» — las cuatro definiciones canónicas (lám. 9)
 
-Deck de Roberto Velázquez, lunes 10 de agosto. Lámina «Definiciones canónicas · ciencia política —
+Deck de la semana 2, lunes 10 de agosto. Lámina «Definiciones canónicas · ciencia política —
 Cuatro formas de operacionalizar el concepto»:
 
 - **Definición 1 — Método competitivo · Schumpeter (1942)**, *Capitalism, Socialism and Democracy*:
@@ -83,7 +83,7 @@ La ronda no las pide; si un estudiante usa una bien para explicar el caso, es un
 
 ## Semana 3 · «¿Un backlash contra la IA?» — la falacia del lump of labour (lám. 4)
 
-Deck de Naim Bro, lunes 17 de agosto. Lámina sobre The Economist, «The jobs apocalypse: a (very)
+Deck de la semana 3, lunes 17 de agosto. Lámina sobre The Economist, «The jobs apocalypse: a (very)
 short history» (14 de mayo de 2026):
 
 - «la tasa de empleo en edad de trabajar de la OCDE sigue rompiendo récords. El desempleo del club
@@ -103,7 +103,7 @@ jóvenes, solo 56% por su propia familia»— y «Impopular, todavía no priorit
 
 ## Semana 4 · «Poder, élites y democracia» — élites y nobleza de Estado (lám. 5, 9–11)
 
-Deck de Roberto Velázquez, lunes 24 de agosto.
+Deck de la semana 4, lunes 24 de agosto.
 
 - **Pareto (1848–1923) — Circulación de élites.** «Toda élite se desgasta y es reemplazada por otra.
   Las revoluciones no eliminan las élites: cambian de élite.»
@@ -154,7 +154,7 @@ qué hacer una vez que esos árbitros ya no importan.» «P1: el populismo es re
 de la autoridad legítima — "el pueblo" vs. "la élite".» «P2: el autoritarismo son valores de
 seguridad, conformidad y obediencia — no un estilo discursivo.»
 
-**Ojo, una tensión legítima en el material:** el lunes 24 (lám. 17) Roberto proyectó a Cas Mudde
+**Ojo, una tensión legítima en el material:** el lunes 24 (lám. 17) la clase proyectó a Cas Mudde
 (2004), para quien el populismo es «una ideología delgada (*thin-centered ideology*)» que opone «el
 pueblo puro» a «la élite corrupta». El jueves 27, Norris e Inglehart dicen «un estilo de retórica,
 no una ideología». Un estudiante que define el populismo con Mudde está usando material del curso:
@@ -164,7 +164,7 @@ no es un error, pero la ronda pide la definición de Norris e Inglehart.
 
 ## Semana 5 · «¿Quién controla las máquinas?» — la hipótesis de la underclass (lám. 14)
 
-Deck de Naim Bro, lunes 31 de agosto.
+Deck de la semana 5, lunes 31 de agosto.
 
 - **Definición:** «No es perder el trabajo. Es quedar excluido a la vez de la movilidad social, la
   autonomía económica y la influencia política.»
@@ -184,7 +184,7 @@ Deck de Naim Bro, lunes 31 de agosto.
 
 ## Semana 6 · «Esfera pública, desinformación y democracia» — los trastornos informativos (lám. 10)
 
-Deck de Roberto Velázquez, jueves 10 de septiembre. «No toda información falsa es igual. La
+Deck de la semana 6, jueves 10 de septiembre. «No toda información falsa es igual. La
 literatura sobre trastornos informativos distingue tres fenómenos según **si la información es
 falsa** y **si hay intención de dañar**.»
 
@@ -203,7 +203,7 @@ ambos».
 
 ## Semana 7 · Acemoglu, Gitmez & Shadmehr (2026), *Automation and Repression*, NBER WP 35336
 
-Deck de Naim Bro, lunes 21 de septiembre (se vieron las 27 láminas).
+Deck de la semana 7, lunes 21 de septiembre (se vieron las 27 láminas).
 
 **El montaje (lám. 8):** el Estado del modelo tiene «tres instrumentos: regular la automatización,
 redistribuir y reprimir». Es un supuesto de trabajo: un Estado que maximiza lo que ganan los dueños

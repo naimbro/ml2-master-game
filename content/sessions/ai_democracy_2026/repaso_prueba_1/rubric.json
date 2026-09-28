@@ -1,16 +1,23 @@
 {
-  "_doc": "Rubrica de las CUATRO rondas abiertas del repaso (R2, R5, R6, R8). Las rondas 1, 3, 4 y 7 son de opcion multiple y se puntuan en el cliente: esta rubrica no las toca. Rubrica propia y no la de _shared/base_rubric.json porque las cuatro abiertas tienen la misma forma que la Prueba I del jueves 1 de octubre: (a) el concepto de la clase, (b) aplicarlo a un caso hipotetico. Por eso dos dimensiones de fondo —concepto y aplicacion— y una de forma de peso bajo. Las formulas de los tres jueces viven en config.json y usan estos mismos ids.\n\nARITMETICA DE LOS PESOS, para que no se pierda al editarla. (1) Generica pero bien escrita (concepto 40, aplicacion 40, economia 100): 49 / 48 / 51. (2) Enganosa, vocabulario correcto y aplicacion invertida (60, 20, 100): 50 / 44 / 50. (3) Incompleta pero impecable, solo la parte (a) (100, 20, 100): 68 / 58 / 66. (4) Completa con un error en (a) (60, 80, 100): 74 / 76 / 76. (4) tiene que quedar SOBRE (3) en los tres jueces; si alguien sube el peso de 'concepto' o de 'economia', ese orden se da vuelta. El fondo (concepto + aplicacion) pesa 0,82 o mas en cada juez.",
+  "_doc": "Rubrica de las CUATRO rondas abiertas del repaso (R2, R5, R6, R8). Las rondas 1, 3, 4 y 7 son de opcion multiple y se puntuan en el cliente: esta rubrica no las toca. Rubrica propia y no la de _shared/base_rubric.json porque las cuatro abiertas piden lo mismo que la Prueba I del jueves 1 de octubre: usar un concepto de la clase para resolver un caso hipotetico. Cada ronda es UNA sola pregunta (decidido con Naim el 28-sep, despues de jugarla: las versiones en dos partes (a)/(b) confundian). Por eso dos dimensiones de fondo —concepto y aplicacion— y una de forma de peso bajo. Las formulas de los tres jueces viven en config.json y usan estos mismos ids.\n\nARITMETICA DE LOS PESOS, para que no se pierda al editarla. (1) Generica pero bien escrita (concepto 40, aplicacion 40, economia 100): 49 / 48 / 51. (2) Enganosa, vocabulario correcto y aplicacion invertida (60, 20, 100): 50 / 44 / 50. (3) Concepto impecable recitado sin resolver el caso (100, 20, 100): 68 / 58 / 66. (4) Caso resuelto con un error en el concepto (60, 80, 100): 74 / 76 / 76. (4) tiene que quedar SOBRE (3) en los tres jueces; si alguien sube el peso de 'concepto' o de 'economia', ese orden se da vuelta. El fondo (concepto + aplicacion) pesa 0,82 o mas en cada juez.",
   "sessionId": "repaso_prueba_1",
-  "globalInstructions": "Evalua SOLO lo que esta escrito. Es una SESION DE REPASO del curso 'Inteligencia Artificial y Democracia' (UAI, 2026), el lunes 28 de septiembre, tres dias antes de la Prueba I del jueves 1 de octubre. Cubre las seis semanas del semestre: el modulo de Democracia (Roberto Velazquez) y el modulo de IA (Naim Bro).\n\nLAS CUATRO RONDAS ABIERTAS TIENEN LA FORMA DE LA PRUEBA: una parte (a) que pide el concepto de la clase —una definicion, un criterio, lo que dice el modelo— y una parte (b) que pide aplicarlo al caso hipotetico del enunciado. Se pidieron DOS O TRES FRASES REDACTADAS POR PARTE, escritas desde un telefono en cuatro minutos y medio. Dos o tres frases bien puestas por parte valen 100. No esperes introduccion, ni conclusion, ni ortografia perfecta, ni vocabulario academico, y escribir mas NO sube el puntaje.\n\nTODO lo que el estudiante necesita esta en el enunciado o en el material de la semana correspondiente, transcrito en el knowledge base. NO exijas nada fuera de ahi: ni anos, ni paginas, ni numeros de lamina, ni el numero de un nivel si nombra bien el nivel. Una PARAFRASIS FIEL vale exactamente lo mismo que la frase del deck: 'cree en la democracia pero no en el Congreso' ES la definicion de ciudadano critico; 'un discurso sobre quien manda, no un programa' ES populismo como retorica; 'que no pueda volver a entrar aunque la economia crezca' ES el criterio de reversibilidad.\n\nLOS CASOS SON HIPOTETICOS. Si un estudiante objeta el caso o duda de una premisa del enunciado, NO lo castigues por dudar: evalua lo que hace despues de dudar. Y si trae un autor o un concepto de OTRA semana del curso y lo usa bien —Mudde, Pateman, Slovic, la complementariedad del modelo—, es material del curso: no le adviertas que es 'de afuera'.\n\nREGLAS DEL FEEDBACK, que valen tanto como las del puntaje: (1) Nunca le pidas que cambie sus palabras por las del autor o del deck: si le falta algo, dile QUE PASO falta, nunca QUE PALABRA. (2) Antes de advertirle que algo no esta en el material, verificalo en el knowledge base. (3) Cierra SIEMPRE atando a la Prueba I del jueves 1 de octubre: que eslabon concreto de ESTA respuesta tiene que quedar explicito en la prueba para no perder puntos. Escribe siempre 'el jueves 1 de octubre', nunca 'el jueves 1'. (4) Si respondio en punteo de palabras sueltas, recuerdale que la prueba del jueves 1 de octubre no acepta punteos y pide redactar.\n\nPremia: el concepto dicho con sus piezas, y cada pieza amarrada a un rasgo del caso. Penaliza: la definicion recitada que no toca el caso, la aplicacion sin concepto, confundir un concepto con su vecino y la respuesta larga que dice una sola cosa.",
+  "globalInstructions": "Evalua SOLO lo que esta escrito. Es una SESION DE REPASO del curso 'Inteligencia Artificial y Democracia' (UAI, 2026), el lunes 28 de septiembre, tres dias antes de la Prueba I del jueves 1 de octubre. Cubre las seis semanas del semestre, de la semana 2 a la 7. NUNCA menciones a los profesores por nombre en el feedback: habla de 'la clase de la semana N'. El curso es uno solo, no dos modulos.\n\nCADA RONDA ABIERTA ES UNA SOLA PREGUNTA que pide usar un concepto de la clase —una definicion, un criterio, lo que dice el modelo— para resolver el caso hipotetico del enunciado. Se espera UN PARRAFO CORTO, de dos a cuatro frases, escrito desde un telefono en menos de cuatro minutos. Un parrafo bien puesto vale 100. No esperes introduccion, ni conclusion, ni ortografia perfecta, ni vocabulario academico, y escribir mas NO sube el puntaje.\n\nTODO lo que el estudiante necesita esta en el enunciado o en el material de la semana correspondiente, transcrito en el knowledge base. NO exijas nada fuera de ahi: ni anos, ni paginas, ni numeros de lamina, ni el numero de un nivel si nombra bien el nivel. Una PARAFRASIS FIEL vale exactamente lo mismo que la frase del deck: 'cree en la democracia pero no en el Congreso' ES la definicion de ciudadano critico; 'un discurso sobre quien manda, no un programa' ES populismo como retorica; 'que no pueda volver a entrar aunque la economia crezca' ES el criterio de reversibilidad.\n\nLOS CASOS SON HIPOTETICOS. Si un estudiante objeta el caso o duda de una premisa del enunciado, NO lo castigues por dudar: evalua lo que hace despues de dudar. Y si trae un autor o un concepto de OTRA semana del curso y lo usa bien —Mudde, Pateman, Slovic, la complementariedad del modelo—, es material del curso: no le adviertas que es 'de afuera'.\n\nREGLAS DEL FEEDBACK, que valen tanto como las del puntaje: (1) Nunca le pidas que cambie sus palabras por las del autor o del deck: si le falta algo, dile QUE PASO falta, nunca QUE PALABRA. (2) Antes de advertirle que algo no esta en el material, verificalo en el knowledge base. (3) Cierra SIEMPRE atando a la Prueba I del jueves 1 de octubre: que eslabon concreto de ESTA respuesta tiene que quedar explicito en la prueba para no perder puntos. Escribe siempre 'el jueves 1 de octubre', nunca 'el jueves 1'. (4) Si respondio en punteo de palabras sueltas, recuerdale que la prueba del jueves 1 de octubre no acepta punteos y pide redactar.\n\nPremia: el concepto dicho con sus piezas, y cada pieza amarrada a un rasgo del caso. Penaliza: la definicion recitada que no resuelve el caso, la conclusion sin concepto, confundir un concepto con su vecino y la respuesta larga que dice una sola cosa.",
   "scoring": {
-    "scaleLevels": [100, 80, 60, 40, 20, 0],
+    "scaleLevels": [
+      100,
+      80,
+      60,
+      40,
+      20,
+      0
+    ],
     "instructions": "Elige uno de los seis niveles escritos por dimension. No inventes valores intermedios. Si la respuesta satisface un nivel solo parcialmente, baja al nivel inferior. Usa el campo 'judgeFocus' del escenario como ancla principal para esa ronda: ahi esta que pieza del concepto pide cada parte y que cuenta como aplicacion correcta, y manda sobre estas instrucciones generales si hay tension."
   },
   "dimensions": [
     {
       "id": "concepto",
       "name": "Concepto de la clase",
-      "weight": 0.40,
+      "weight": 0.4,
       "description": "¿La respuesta dice el concepto que la ronda pide —la definicion, el criterio, lo que dice el modelo— como lo dio la clase, con sus piezas? El judgeFocus de cada ronda dice cuales son las piezas. Una parafrasis fiel vale 100. Esta dimension NO mide si lo aplica bien al caso: eso lo mide 'aplicacion', y solo 'aplicacion'. NO mide la redaccion: eso lo mide 'economia'. Si el concepto esta bien y la aplicacion mal, esta dimension queda alta.",
       "level_100": "Dice el concepto con todas sus piezas, fiel a la clase, con palabras propias o del deck.",
       "level_80": "El concepto es correcto, pero una pieza menor falta o queda imprecisa.",
@@ -23,22 +30,22 @@
       "id": "aplicacion",
       "name": "Aplicacion al caso",
       "weight": 0.45,
-      "description": "¿Usa el concepto para resolver el caso hipotetico del enunciado, diciendo que rasgo del caso activa que pieza del concepto? Esto es lo que pide la parte (b), y tambien la justificacion que pida la (a). Esta dimension NO mide si la definicion estaba completa: eso ya lo mide 'concepto', y un error pagado ahi no se cobra otra vez aca, salvo que produzca una aplicacion equivocada. NO mide la redaccion. Si falta una de las dos partes pedidas, esta dimension no pasa de 20.",
+      "description": "¿Usa el concepto para resolver el caso hipotetico del enunciado, diciendo que rasgo del caso activa que pieza del concepto, y llega a la conclusion que la pregunta pide? Esta dimension NO mide si la definicion estaba completa: eso ya lo mide 'concepto', y un error pagado ahi no se cobra otra vez aca, salvo que produzca una conclusion equivocada. NO mide la redaccion. Si recita el concepto y nunca vuelve al caso, esta dimension no pasa de 20.",
       "level_100": "Resuelve el caso completo: cada afirmacion amarrada a un rasgo concreto del caso y a una pieza del concepto.",
       "level_80": "La aplicacion es correcta, pero una conexion entre el caso y el concepto queda implicita.",
-      "level_60": "Resuelve la mitad de lo pedido, o llega a la conclusion correcta sin decir por que.",
+      "level_60": "Resuelve la mitad del caso, o llega a la conclusion correcta sin decir por que.",
       "level_40": "Repite el caso o da una conclusion sin mecanismo; el concepto no hace trabajo.",
-      "level_20": "La aplicacion esta equivocada o invertida, o falta entera una de las dos partes pedidas.",
+      "level_20": "La conclusion esta equivocada o invertida, o recita el concepto sin volver nunca al caso.",
       "level_0": "No aplica nada al caso, o contesta otra pregunta."
     },
     {
       "id": "economia",
       "name": "Redaccion breve",
       "weight": 0.15,
-      "description": "¿Se lee limpio, redactado, en dos o tres frases por parte? Esta dimension mide SOLO la forma. NO mide si es correcta: eso lo miden 'concepto' y 'aplicacion', y un error de fondo no se cobra aca. Una respuesta corta y equivocada puede sacar 100 aca. Un punteo de palabras sueltas vale 60 aca, y solo aca, porque la prueba del jueves 1 de octubre pide redactar.",
-      "level_100": "Redactada y directa: dos o tres frases por parte, sin relleno.",
+      "description": "¿Se lee limpio, redactado, en un parrafo corto? Esta dimension mide SOLO la forma. NO mide si es correcta: eso lo miden 'concepto' y 'aplicacion', y un error de fondo no se cobra aca. Una respuesta corta y equivocada puede sacar 100 aca. Un punteo de palabras sueltas vale 60 aca, y solo aca, porque la prueba del jueves 1 de octubre pide redactar.",
+      "level_100": "Redactada y directa: un parrafo corto, sin relleno.",
       "level_80": "Se entiende bien, con algo de relleno o una frase que sobra.",
-      "level_60": "Punteo de palabras sueltas, o un parrafo que mezcla las dos partes sin separarlas.",
+      "level_60": "Punteo de palabras sueltas, o frases sin conexion entre si.",
       "level_40": "Cuesta seguirla: repite la misma idea varias veces o se desordena.",
       "level_20": "Muy larga y repetitiva, o casi ilegible.",
       "level_0": "Vacia o ilegible."
@@ -46,40 +53,58 @@
   ],
   "penalties": [
     {
-      "id": "solo_una_parte",
-      "description": "Responde solo la parte (a) o solo la parte (b): no puede superar 20 en 'Aplicacion al caso', por impecable que este la parte que si respondio.",
-      "effect": { "type": "cap", "value": 20, "dimensions": ["aplicacion"] }
+      "id": "recita_sin_resolver",
+      "description": "Recita la definicion o el concepto y nunca lo usa para resolver el caso del enunciado: no puede superar 20 en 'Aplicacion al caso', por impecable que este la definicion.",
+      "effect": {
+        "type": "cap",
+        "value": 20,
+        "dimensions": [
+          "aplicacion"
+        ]
+      }
     },
     {
       "id": "concepto_vecino",
       "description": "Le atribuye al concepto pedido las piezas de otro concepto del curso (populismo con los valores del autoritarismo, underclass igual a desempleo, ciudadano critico igual a antidemocratico): no puede superar 20 en 'Concepto de la clase'.",
-      "effect": { "type": "cap", "value": 20, "dimensions": ["concepto"] }
+      "effect": {
+        "type": "cap",
+        "value": 20,
+        "dimensions": [
+          "concepto"
+        ]
+      }
     },
     {
       "id": "opinion_en_vez_de_concepto",
       "description": "Sustituye la respuesta por una opinion sobre la IA, la democracia o el caso, sin usar el concepto de la clase: no puede superar 40 en 'Aplicacion al caso'.",
-      "effect": { "type": "cap", "value": 40, "dimensions": ["aplicacion"] }
+      "effect": {
+        "type": "cap",
+        "value": 40,
+        "dimensions": [
+          "aplicacion"
+        ]
+      }
     }
   ],
   "globalPenalties": [
     "Recitar la definicion sin tocar el caso del enunciado.",
     "Aplicar al caso sin decir que concepto se esta usando.",
     "Confundir el concepto pedido con su vecino del curso.",
-    "Responder una sola de las dos partes pedidas.",
     "Extension como sustituto de contenido: una respuesta larga que repite una idea vale lo que esa idea dicha una vez.",
-    "Atribuirle al material algo que no dice."
+    "Atribuirle al material algo que no dice.",
+    "Mencionar a los profesores por nombre en el feedback."
   ],
   "bonusIndicators": [
     "Cada pieza del concepto amarrada a una frase o un rasgo concreto del caso",
     "Dice el concepto con palabras propias y fieles",
-    "Separa limpio la parte (a) de la parte (b)",
+    "Llega a la conclusion que la pregunta pide, sin rodeos",
     "Nota un limite o un matiz del concepto que la clase tambien noto",
     "Dice en dos frases lo que otro diria en seis"
   ],
   "penaltyIndicators": [
     "La definicion podria copiarse a otra ronda sin cambiar una palabra",
     "Nombra el concepto y despues no lo usa para resolver el caso",
-    "Mezcla las dos partes y no se sabe que responde a que",
+    "Da la definicion y no dice que concluye sobre el caso",
     "Rellena con frases que servirian para cualquier pregunta del curso"
   ]
 }
