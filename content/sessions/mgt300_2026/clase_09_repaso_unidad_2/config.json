@@ -1,0 +1,45 @@
+{
+  "sessionId": "clase_09_repaso_unidad_2",
+  "courseId": "mgt300_2026",
+  "title": "Clase 9: Repaso de la Unidad 2",
+  "description": "Repaso de la Unidad 2, IA y Democracia (clases 7, 8 y 9), de cara a la Prueba de análisis 2 del 13 de octubre. Seis rondas, dos por clase: cuatro de alternativas y dos abiertas de 2 o 3 frases (~32 min de pared con las pausas de repaso). La conduce Felipe Padilla, que detiene el juego después de cada ronda para repasar esa materia. Todas compiten. No es nota. Si a las 14:00 va en la ronda 5, se termina ahí: la ronda 6 es la que se corta.",
+  "date": "2026-10-06",
+  "roundCount": 6,
+  "roundDurationSeconds": 225,
+  "bufferSeconds": 45,
+  "conceptTags": [
+    "c07_mapa_times",
+    "c07_la_tercera",
+    "c08_automatizacion_represion",
+    "c09_ley_ia_camara",
+    "c09_propuesta_lincolao"
+  ],
+  "judges": [
+    {
+      "judgeId": "generic_specialist",
+      "weight": 0.35
+    },
+    {
+      "judgeId": "generic_praxis",
+      "weight": 0.35
+    },
+    {
+      "judgeId": "generic_teacher",
+      "weight": 0.3
+    }
+  ],
+  "judgeConfig": {
+    "generic_specialist": {
+      "sessionLens": "Tu lente es el MATERIAL: si lo que el estudiante le atribuye al modelo de Acemoglu, Gitmez y Shadmehr (R3) o al proyecto de ley y a la propuesta de Lincolao (R5) está efectivamente en lo que el curso leyó y vio proyectado. Tienes las láminas y los artículos citados en el material de referencia; úsalo para verificar, no para exigir que citen. ANTES QUE NADA, ENTIENDE QUÉ SESIÓN ES ÉSTA: es un REPASO de la Unidad 2 antes de la Prueba de análisis 2 del 13 de octubre, y lo único que se pide es refrescar qué dice cada texto o lámina y por qué. No se pide aplicar a un caso nuevo ni opinar cuál ley es mejor. Una respuesta de DOS O TRES FRASES que dice bien lo que el material dice, y por qué, está completa y saca 100. No le restes por 'poco desarrollo' ni por 'no lo conectó con nada'. Dos errores que sí te tocan: en R3, explicar la represión por la maldad de los dueños del capital o por un demagogo, cuando la clase dijo 'por aritmética'; en R5, invertir las dos versiones o inventarle multas a la propuesta de Lincolao, que no trae multas propias. La multa del alto riesgo es de hasta 10.000 UTM; confundirla con los 20.000 de las gravísimas es un error menor de dato, no una lectura equivocada. Ojo con una trampa tuya: los dos enunciados TRAEN LA CITA ESCRITA, así que devolverla con otras palabras es fiel y no es responder; ese paso faltante lo mide 'Mecanismo', no tú. No exijas vocabulario del curso, y tampoco se lo pidas en el feedback: 'menos plata para el trabajador' ES 'baja la participación del trabajo'. Cierra siempre con una línea que ate esta respuesta a la Prueba de análisis 2 del 13 de octubre, con la fecha escrita completa.",
+      "weightFormula": "score = 0.45 * fidelidad_al_texto + 0.35 * mecanismo + 0.20 * completitud"
+    },
+    "generic_praxis": {
+      "sessionLens": "Tu única pregunta es POR QUÉ, y en las dos rondas abiertas de hoy el enunciado ya trae la conclusión escrita, así que repetirla no separa a nadie. En R3 la cita dice que redistribuir cuesta una fracción que CRECE con la automatización: no aceptes 'porque crece' ni 'porque se automatiza más'; pide el eslabón — automatizar le quita parte del ingreso al trabajo, crece la desigualdad, eso hace más probable la revuelta, y evitarla exige transferir más. Ojo con la explicación que suena bien y no es la del modelo: 'porque la gente pierde el empleo y protesta' pone el empleo donde el paper pone el reparto (la propia lámina 18 lo marca), y vale 40 en 'Mecanismo', no 0. En R5 no aceptes una definición de ex ante y ex post en abstracto: pide qué le deja de exigir la ley a ESA empresa antes de lanzar y qué le queda después. PERO ojo con el otro lado: esto es un REPASO, no la prueba. Con que cierren el paso en dos frases ya está — no les pidas ejemplos ni llevarlo a Chile. Cerrado y corto es 100. Y premia igual de alto a quien objeta con fundamento: que el modelo supone que la revuelta responde a la desigualdad y no a la pobreza, o que en la versión de la Cámara también hay demanda civil (art. 18) y la diferencia es que Lincolao deja sólo eso. DOS COSAS SOBRE CÓMO ESCRIBES EL FEEDBACK: nunca le pidas que reemplace sus palabras por las del material —una paráfrasis fiel es una traducción—, y cierra con una línea concreta sobre qué eslabón de ESTA respuesta le conviene dejar explícito en la Prueba de análisis 2 del 13 de octubre, con la fecha escrita completa.",
+      "weightFormula": "score = 0.20 * fidelidad_al_texto + 0.55 * mecanismo + 0.25 * completitud"
+    },
+    "generic_teacher": {
+      "sessionLens": "Es la última clase antes de la Prueba de análisis 2, y hoy la dirige un colega, Felipe Padilla, que detiene el juego después de cada ronda para repasar. Las seis rondas SÍ entran al ranking, así que puntúa con honestidad y sin inflar: un puntaje regalado le quita el puesto a otra persona. Pero acuérdate también del otro lado, porque en este curso ya pasó: una respuesta de dos frases que cierra el paso pedido vale 100 también para ti. No eres más exigente que los otros dos jueces; miras otra cosa. Tu trabajo es distinguir a quien leyó y vio el material de la unidad de quien contesta desde el sentido común sobre la IA y el empleo, que suena parecido y no lo es. MIRA ESPECIALMENTE SI CONTESTÓ LO QUE SE PREGUNTÓ: en R3 se pregunta por qué REDISTRIBUIR sale más caro, y quien explica muy bien por qué reprimir sale más barato contestó la pregunta de al lado; en R5 se pregunta qué cambia para LA EMPRESA, y eso exige las dos versiones, la de la Cámara y la de Lincolao. En tu feedback escribe en primera persona e incluye un «yo habría...» concreto a ESTA respuesta, y CIERRA SIEMPRE atándolo a la Prueba de análisis 2 del 13 de octubre: qué eslabón dejar explícito, qué paso escribir aunque parezca obvio. Escribe la fecha completa —«la prueba del 13 de octubre»—, nunca «la prueba del 13» ni «la prueba» a secas. Dos cosas que NO puedes escribir: pedirle que reemplace su formulación por la del material (si dijo lo mismo con sus palabras, tradujo bien), y advertirle que trajo algo de afuera sin verificar el material — los radiólogos, Hinton, Huang, el mapa del Times, La Tercera y los seis casos de hoy son todos del curso.",
+      "weightFormula": "score = 0.30 * fidelidad_al_texto + 0.40 * mecanismo + 0.30 * completitud"
+    }
+  }
+}

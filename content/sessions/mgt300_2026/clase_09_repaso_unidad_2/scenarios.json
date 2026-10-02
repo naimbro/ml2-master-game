@@ -1,0 +1,250 @@
+[
+  {
+    "id": "mgt_c09_r1_dos_preguntas",
+    "order": 1,
+    "type": "multiple_choice",
+    "title": "Dos preguntas distintas",
+    "category": "Clase 7 — El mapa del New York Times",
+    "ranked": true,
+    "durationSeconds": 65,
+    "conceptTags": [
+      "c07_mapa_times"
+    ],
+    "mcQuestions": [
+      {
+        "question": "En la guía de lectura de la clase 7, el mapa del *New York Times* (Martin y Lieberman, 15 de septiembre de 2026) separa **dos preguntas distintas** sobre la IA. ¿Cuáles son?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Cuántos empleos va a destruir, y de quién va a ser la renta"
+          },
+          {
+            "id": "B",
+            "text": "Si se regula la tecnología en general, o cada uno de sus usos"
+          },
+          {
+            "id": "C",
+            "text": "A qué velocidad debe avanzar la IA, y quién pone la regla"
+          },
+          {
+            "id": "D",
+            "text": "Si la ley es sobre el trabajo y el reparto, o sobre los derechos y los límites del Estado"
+          }
+        ],
+        "correctOptionIndex": 2,
+        "timeLimitSeconds": 30,
+        "explanation": "Son dos ejes independientes: hay quien quiere frenar sin que lo regulen, y quien quiere regular sin frenar. La regla la puede poner la industria o el Estado. Es la grilla que volvió hoy en la lámina 12."
+      }
+    ]
+  },
+  {
+    "id": "mgt_c09_r2_el_umbral",
+    "order": 2,
+    "type": "multiple_choice",
+    "title": "A la derecha del umbral",
+    "category": "Clase 8 — Automatización y represión",
+    "ranked": true,
+    "durationSeconds": 75,
+    "conceptTags": [
+      "c08_automatizacion_represion"
+    ],
+    "mcQuestions": [
+      {
+        "question": "El gráfico central de la clase 8 (lámina 8), del modelo de **Acemoglu, Gitmez y Shadmehr**, «Automation and Repression» (NBER, 2026). **A la derecha del umbral, ¿qué hace el Estado del capital, y por qué?**",
+        "media": [
+          {
+            "kind": "image",
+            "src": "media/mgt300/ags-umbral-lamina8.png",
+            "alt": "Gráfico con dos curvas. Eje horizontal: capital acumulado. Eje vertical: lo que le cuesta al capital, en % de su ingreso, de 55% a 70%. La curva verde, redistribuir, sube desde 55%; la curva roja, reprimir, baja suave desde 66%. Se cruzan una sola vez en un punto dorado marcado «el umbral»; a la derecha del cruce la roja queda bajo la verde.",
+            "credit": "Lámina 8 de la clase 8 (Figura 3 del paper, recalculada), redibujada para el teléfono y sin los rótulos de las dos zonas."
+          }
+        ],
+        "options": [
+          {
+            "id": "A",
+            "text": "Redistribuye: la IA hace crecer tanto la torta que ya alcanza para comprar la paz"
+          },
+          {
+            "id": "B",
+            "text": "Reprime: porque aparece un demagogo que amenaza a los dueños del capital"
+          },
+          {
+            "id": "C",
+            "text": "Redistribuye: pasado el umbral, redistribuir le cuesta menos que reprimir"
+          },
+          {
+            "id": "D",
+            "text": "Reprime: con mucho capital acumulado, reprimir le cuesta menos que redistribuir"
+          }
+        ],
+        "correctOptionIndex": 3,
+        "timeLimitSeconds": 40,
+        "explanation": "A la derecha del cruce la curva roja queda bajo la verde: redistribuir cuesta una fracción que crece con la automatización y reprimir una fija. «No porque aparezca un demagogo. Por aritmética.» (lámina 5)."
+      }
+    ]
+  },
+  {
+    "id": "mgt_c09_r3_por_aritmetica",
+    "order": 3,
+    "type": "open",
+    "title": "Por aritmética",
+    "category": "Clase 8 — Automatización y represión",
+    "difficulty": "medium",
+    "answerFormat": "prose",
+    "ranked": true,
+    "durationSeconds": 225,
+    "conceptTags": [
+      "c08_automatizacion_represion"
+    ],
+    "media": [
+      {
+        "kind": "image",
+        "src": "media/mgt300/acemoglu-nobel-2024.jpg",
+        "alt": "Daron Acemoglu, con anteojos, terno oscuro y corbata celeste, habla con las manos abiertas detrás de un atril de la Real Academia Sueca de Ciencias.",
+        "credit": "Daron Acemoglu en las conferencias del Premio Nobel, Estocolmo, 8 de diciembre de 2024. Foto de Jay Dixit, vía Wikimedia Commons, CC BY-SA 4.0."
+      }
+    ],
+    "context": "Clase 8: **Daron Acemoglu, A. Arda Gitmez y Mehdi Shadmehr**, «Automation and Repression», NBER Working Paper 35336 (2026). La lámina 5 lo resumía así:\n\n> «Comprar la paz con redistribución cuesta una fracción del ingreso que **crece** con la automatización. Comprarla con represión cuesta una fracción **fija**. Con suficiente capital, la fija gana.»",
+    "question": "**¿Por qué comprar la paz con impuestos sale cada vez más caro a medida que se automatiza?** Con 2 o 3 frases basta.",
+    "judgeFocus": "ES UNA RONDA DE REPASO Y CON DOS FRASES SE CONTESTA ENTERA. No pidas más desarrollo, ni ejemplos, ni que lo lleve a un caso o a Chile: nada de eso se pidió hoy.\n\nEL CRITERIO, y va primero: el enunciado ya trae la conclusión —la fracción de la redistribución CRECE con la automatización—. Lo que la ronda pide es el eslabón que la cita no dice: POR QUÉ crece. La respuesta tiene que ligar la automatización con algo que hace más caro mantener a los trabajadores tranquilos. En el material del curso ese eslabón es el reparto: automatizar es mover una tarea del trabajo al capital, así que la parte del ingreso que queda para el trabajo se achica; esa desigualdad entre capital y trabajo es lo que hace más probable la revuelta; y para evitarla hay que devolverles por impuestos una parte cada vez mayor. Con que la respuesta cierre esa cadena —automatizar → menos para el trabajo / más desigualdad → más riesgo de revuelta → hay que transferir más— está completa y vale 100.\n\nEJEMPLOS ILUSTRATIVOS, NO UNA LISTA CERRADA. Hay varias rutas y todas valen lo mismo: (a) la de la lámina 6 — cada tarea automatizada baja la parte del trabajo, y lo que hay que devolver para comprar la paz es justamente esa diferencia; (b) la del resumen del paper — más desigualdad entre capital y trabajo hace más probable una revuelta exitosa, así que el precio de evitarla sube; (c) la de la lámina 9 — aunque la torta crezca casi cuatro veces, el precio de la paz sube de 42% a 48% de ella, porque lo que se transfiere es una fracción, y esa fracción crece. Cualquiera de las tres, bien cerrada, es 100. Si alguien llega por una cuarta ruta que el material sostiene, vale exactamente igual: NO la castigues por no ser una de éstas. Tampoco exijas que mencione el lado de la represión ni el umbral: se preguntó por la redistribución.\n\nQUÉ NO CUENTA COMO MECANISMO. (1) 'Porque los trabajadores pierden el empleo y protestan': el modelo no mira cuántos empleos hay sino cómo se reparte el ingreso entre capital y trabajo — la lámina 18 de la clase 8 lo dice: 'discuten empleos; el paper mira el reparto entre capital y trabajo'. Es una explicación plausible y equivocada respecto del modelo: va a 40 en 'Mecanismo', no a 0. (2) 'Porque la IA abarata la represión': es material correcto (lámina 10), pero contesta por qué reprimir se vuelve conveniente, no por qué redistribuir sale más caro, que es lo que se preguntó. (3) Devolver la cita del enunciado ('porque la fracción crece con la automatización') sin decir por qué: es la paráfrasis y va bajo en 'Mecanismo'. (4) 'Porque los dueños del capital son codiciosos' o cualquier explicación por la mala intención de alguien: el punto de la clase es justo el contrario, 'no porque aparezca un demagogo, por aritmética'.\n\nTRES COSAS MÁS. Primero, no exijas las palabras del modelo NI EN EL PUNTAJE NI EN EL FEEDBACK: 'mientras más hacen las máquinas, menos se lleva el trabajador, y más hay que pasarle para que no se levante' contestó perfecto sin decir 'participación del trabajo', 'desigualdad' ni 'redistribución'. Si a la respuesta le falta algo, dile qué PASO falta, nunca qué PALABRA. Segundo, quien OBJETA el modelo con fundamento puede sacar el puntaje más alto de la ronda —por ejemplo, que supone que la gente se rebela por desigualdad relativa y no por pobreza, y que con una torta cuatro veces más grande quizás nadie se rebela; o que la lámina 15 mostró que en radiología el empleo creció—, siempre que primero muestre que entendió por qué el modelo predice lo que predice. Tercero, el paper no habla de Chile ni de radiología: aplicarlo a eso no es un error, pero no le atribuyas al paper lo que es aplicación del curso.",
+    "evaluationGuide": {
+      "must_hit": [
+        "Liga la automatización con un cambio en el reparto: más ingreso para el capital y menos para el trabajo, o más desigualdad entre los dos.",
+        "Liga ese cambio con el precio de la paz: más desigualdad hace más probable la revuelta, y evitarla exige transferir una parte mayor."
+      ],
+      "fatal_errors": [
+        "Atribuirle al modelo que la represión gana porque los dueños del capital son malos o porque aparece un demagogo: la lámina 5 dice 'por aritmética'.",
+        "Decir que redistribuir sale MÁS BARATO con la automatización, o que a la derecha del umbral el Estado redistribuye: es lo contrario del gráfico.",
+        "Inventar una cifra, un estudio o un caso que no está en el material."
+      ],
+      "partial_credit": {
+        "solo_empleo": "Explica por pérdida de empleos y protestas, sin el reparto entre capital y trabajo. Plausible y equivocado respecto del modelo: 40 en 'Mecanismo'.",
+        "solo_represion": "Explica bien por qué reprimir se vuelve conveniente (la fracción fija, o la IA que la abarata) pero no por qué redistribuir sube. Material correcto que contesta otra pregunta: bajo en 'Completitud'.",
+        "parafrasis": "Repite que la fracción crece con la automatización sin decir por qué. Es la paráfrasis del enunciado y va bajo en 'Mecanismo'.",
+        "a_medio_cerrar": "Dice que con la automatización hay más desigualdad pero no la conecta con el riesgo de revuelta o con lo que hay que transferir. 80 en 'Mecanismo'."
+      },
+      "nice_to_have": [
+        "Traer la cifra de la lámina 9: la torta crece casi cuatro veces y el precio de la paz sube de 42% a 48% de ella; en el límite, la mitad.",
+        "Cerrar el contraste con la represión: como esa fracción no crece, con suficiente capital acumulado las curvas se cruzan y reprimir sale más barato (lámina 8).",
+        "Objetar el supuesto con fundamento, por ejemplo que la revuelta podría responder a la pobreza y no a la desigualdad relativa."
+      ]
+    },
+    "idealAnswer": "Porque automatizar es pasar tareas del trabajo al capital, así que cada vez una parte más chica del ingreso le queda al trabajador y crece la desigualdad entre capital y trabajo. Esa desigualdad es lo que hace más probable una revuelta, entonces para comprar la paz hay que devolverle por impuestos una fracción cada vez mayor (en la lámina 9 sube de 42% a 48%). La represión, en cambio, cuesta una fracción fija, y por eso con suficiente capital termina saliendo más barata."
+  },
+  {
+    "id": "mgt_c09_r4_alto_riesgo",
+    "order": 4,
+    "type": "multiple_choice",
+    "title": "Alto riesgo",
+    "category": "Clase 9 — El proyecto de ley de IA",
+    "ranked": true,
+    "durationSeconds": 65,
+    "conceptTags": [
+      "c09_ley_ia_camara"
+    ],
+    "mcQuestions": [
+      {
+        "question": "Clase 9, el proyecto de ley de IA que aprobó la Cámara (Oficio 20.843, art. 6). Si un uso de un sistema de IA es de **alto riesgo**, ¿qué pasa con él?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Está prohibido: no puede salir al mercado (art. 7)"
+          },
+          {
+            "id": "B",
+            "text": "Está permitido, pero tiene que cumplir seis reglas (art. 9)"
+          },
+          {
+            "id": "C",
+            "text": "Basta con que le avise a la persona que es una IA (art. 11)"
+          },
+          {
+            "id": "D",
+            "text": "Queda libre: no tiene ninguna obligación propia de esta ley"
+          }
+        ],
+        "correctOptionIndex": 1,
+        "timeLimitSeconds": 30,
+        "explanation": "Lámina 5: inaceptable, prohibido (art. 7); alto, permitido con seis reglas (art. 9); limitado, avisar que es una IA (art. 11); sin riesgo evidente, libre. Si incumple las seis reglas: hasta 10.000 UTM (lámina 7)."
+      }
+    ]
+  },
+  {
+    "id": "mgt_c09_r5_antes_o_despues",
+    "order": 5,
+    "type": "open",
+    "title": "¿Antes o después del daño?",
+    "category": "Clase 9 — El proyecto de ley de IA",
+    "difficulty": "medium",
+    "answerFormat": "prose",
+    "ranked": true,
+    "durationSeconds": 225,
+    "conceptTags": [
+      "c09_ley_ia_camara",
+      "c09_propuesta_lincolao"
+    ],
+    "context": "Clase 9, lámina 11, «Dos respuestas a la misma pregunta»:\n\n> «¿Cuándo actúa el Estado?: antes de salir al mercado, o después del daño.»\n\nUna respuesta es el texto que aprobó la Cámara (Oficio 20.843). La otra es la propuesta de la ministra **Ximena Lincolao**, anunciada en mayo de 2026 y todavía sin ingresar.",
+    "question": "**Para una empresa con un uso de alto riesgo, ¿qué cambia si gana la propuesta de Lincolao?** Con 2 o 3 frases basta.",
+    "judgeFocus": "ES UNA RONDA DE REPASO Y CON DOS FRASES SE CONTESTA ENTERA. No pidas más desarrollo ni que opine cuál de las dos versiones es mejor: no se preguntó.\n\nEL CRITERIO, y va primero: la respuesta tiene que mostrar el contraste entre las dos versiones PARA ESA EMPRESA, que es lo único que se preguntó. Del lado del texto de la Cámara: antes de salir al mercado tiene que cumplir obligaciones (las seis reglas del art. 9: gestión de riesgos, datos, documentación, registros, supervisión humana, ciberseguridad), y si no cumple arriesga una multa (hasta 10.000 UTM) y una demanda. Del lado de Lincolao: desaparece esa revisión previa —sale la clasificación por niveles de riesgo y salen las multas propias de la ley de IA— y la empresa responde DESPUÉS, cuando hay un daño. Con que se vea qué deja de pedírsele antes y qué le queda después, está completa y vale 100. No exijas que nombre el número de artículo ni las seis reglas una por una: 'tiene que cumplir reglas antes de lanzar' basta.\n\nEJEMPLOS ILUSTRATIVOS, NO UNA LISTA CERRADA. Valen igual, entre otras: (a) 'antes tenía que cumplir seis reglas y si no, multa; con Lincolao lanza y si causa un daño la demandan'; (b) 'deja de ser la ley la que decide si es riesgoso y pasan a ser estándares y la propia empresa' (lámina 11); (c) 'en vez de multa y demanda, arriesga una demanda que le cubre su seguro' (lámina 11, seguros obligatorios de la lámina 10); (d) 'en vez de reglas obligatorias, estándares técnicos, certificaciones voluntarias y auditorías' (lámina 10). Si alguien llega por otra ruta que el material sostiene, vale exactamente igual.\n\nEL MATIZ QUE VALE PUNTAJE ALTO Y NO SE EXIGE: el texto de la Cámara YA permite demandar por daños (art. 18, demanda civil), así que la diferencia no es que aparezca el ex post sino que la propuesta deja SÓLO el ex post. Quien lo nota está leyendo muy bien; quien no lo nota no pierde nada.\n\nQUÉ NO CUENTA. (1) Definir ex ante y ex post en abstracto sin decir qué le pasa a la empresa: es la paráfrasis del enunciado y va bajo en 'Mecanismo'. (2) Describir sólo una de las dos versiones: va bajo en 'Completitud'. (3) Decir que con Lincolao la empresa ya no responde por nada, o que la propuesta agrega más categorías o más prohibiciones: es lo contrario del material y se paga en 'Fidelidad'. (4) Hablar de la propuesta como ley vigente o ya ingresada: está anunciada, no ingresada.\n\nOJO CON LAS CIFRAS. Para el alto riesgo la multa es de hasta 10.000 UTM. Quien confunda con 20.000 UTM —que es la de las infracciones gravísimas, por usar algo prohibido del art. 7— tiene un error menor de dato: 80 en 'Fidelidad al texto', no lo hundas. La propuesta de Lincolao no trae multas propias: si alguien le inventa un monto, eso sí es un dato inventado. Citar la lámina 8 —que la Cámara rechazó artículos y que 'no queda claro quién hace cumplir' las obligaciones— es material del curso y no se castiga.",
+    "evaluationGuide": {
+      "must_hit": [
+        "Dice qué se le exige a la empresa ANTES en el texto de la Cámara: cumplir reglas u obligaciones antes de salir al mercado, con multa si no cumple.",
+        "Dice qué le queda con la propuesta de Lincolao: sin esa revisión previa ni multas propias, responde DESPUÉS, cuando hay un daño."
+      ],
+      "fatal_errors": [
+        "Invertir las versiones: atribuirle a Lincolao la revisión previa, los niveles de riesgo o más prohibiciones, o a la Cámara sólo el ex post.",
+        "Decir que con la propuesta la empresa no responde por nada.",
+        "Inventarle a la propuesta de Lincolao un monto de multa o un artículo."
+      ],
+      "partial_credit": {
+        "una_sola_version": "Describe bien una de las dos versiones y deja la otra sin decir. Bajo en 'Completitud'.",
+        "definicion_abstracta": "Explica qué significan ex ante y ex post sin decir qué cambia para la empresa. Es la paráfrasis del enunciado y va bajo en 'Mecanismo'.",
+        "multa_equivocada": "Contraste correcto pero con la multa de 20.000 UTM en vez de 10.000 para el alto riesgo. 80 en 'Fidelidad al texto', sin tocar las otras dimensiones."
+      },
+      "nice_to_have": [
+        "Notar que el texto de la Cámara ya tiene ex post (la demanda civil del art. 18) y que lo nuevo es que la propuesta deja sólo eso.",
+        "Nombrar lo que entra con la propuesta: estándares técnicos, certificaciones voluntarias, seguros obligatorios por daños.",
+        "Decir quién carga con el costo del cambio: quien sufre el daño tiene que demandar después."
+      ]
+    },
+    "idealAnswer": "Con el texto de la Cámara, antes de salir al mercado la empresa tiene que cumplir las seis reglas del art. 9 (supervisión humana, registros, gestión de riesgos, etc.) y si no cumple arriesga una multa de hasta 10.000 UTM además de una demanda. Con la propuesta de Lincolao sale la clasificación por riesgo y salen esas multas: la empresa lanza siguiendo estándares voluntarios y responde recién cuando causa un daño, con una demanda que le cubre un seguro obligatorio. La demanda civil ya estaba en el texto de la Cámara; lo nuevo es que quedaría sólo eso."
+  },
+  {
+    "id": "mgt_c09_r6_manouchehri",
+    "order": 6,
+    "type": "multiple_choice",
+    "title": "Qué pide cada uno",
+    "category": "Clase 7 — Entre Thiel y el Papa",
+    "ranked": true,
+    "durationSeconds": 66,
+    "conceptTags": [
+      "c07_la_tercera"
+    ],
+    "mcQuestions": [
+      {
+        "question": "En «Entre Thiel y el Papa» (A. Chernin y N. Yáñez, *La Tercera*, 20 de septiembre de 2026), que leyeron en la clase 7, ¿qué pide el diputado **Daniel Manouchehri** (PS)?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Reconversión laboral y cuotas de empleos que no se deban reemplazar"
+          },
+          {
+            "id": "B",
+            "text": "Un impuesto global a todas las inteligencias artificiales del mundo"
+          },
+          {
+            "id": "C",
+            "text": "Que las grandes plataformas tengan un representante legal en Chile"
+          },
+          {
+            "id": "D",
+            "text": "Establecer derechos de las personas, y no regular el funcionamiento de la IA"
+          }
+        ],
+        "correctOptionIndex": 0,
+        "timeLimitSeconds": 30,
+        "explanation": "Manouchehri pide «un plan agresivo» de reconversión laboral y cuotas de puestos indispensables. El impuesto global es de Winter, el representante legal de Serrano y los derechos, de Kaiser. Es también lo único laboral de Lincolao."
+      }
+    ]
+  }
+]
