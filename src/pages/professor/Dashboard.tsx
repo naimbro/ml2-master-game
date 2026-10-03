@@ -19,7 +19,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { useProfessor } from '../../hooks/useProfessor';
 import { usePendingProfessorCount } from '../../hooks/usePendingProfessors';
 import { useCardReorder } from '../../hooks/useCardReorder';
-import { COURSES, getSessionsForCourse, type Course } from '../../lib/courses';
+import { cursosDelRepoPara, getSessionsForCourse, type Course } from '../../lib/courses';
 import { COMPASES } from '../../lib/compasContent';
 import { fetchMyCourses, deleteCourse } from '../../lib/dynamicCourses';
 import { applyCourseOrder } from '../../lib/courseOrder';
@@ -77,8 +77,9 @@ export default function Dashboard() {
     navigate('/');
   };
 
-  // Hardcoded catalog courses are only shown to the admin (they belong to Naim)
-  const builtinCourses = access === 'admin' ? COURSES : [];
+  // Los cursos del repo son de Naim: el admin los ve todos, y un colega solo
+  // los que lo nombran en `verTambien`.
+  const builtinCourses = cursosDelRepoPara(access === 'admin', user?.email);
   // Solo los que se repiten. Un compas de una clase se aplica una vez y no
   // tiene dos momentos que comparar, asi que su enlace llevaria a una pantalla
   // que solo puede decir que no hay nada.

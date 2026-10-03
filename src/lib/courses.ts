@@ -154,6 +154,14 @@ export interface Course {
    * repo no tienen dueno. Ver `src/lib/colaboradores.ts`.
    */
   compartido?: boolean;
+  /**
+   * Solo para los cursos del repo: mails de otros profesores que lo ven en su
+   * panel. Es VISIBILIDAD y nada mas. El permiso ya lo tienen — crear un juego
+   * solo pide estar aprobado en `professors` — pero sin esto un colega aprobado
+   * llega a un panel vacio y concluye que no tiene acceso. Para los cursos de
+   * Firestore la lista equivalente vive en el documento (`colaboradores`).
+   */
+  verTambien?: string[];
 }
 
 export const COURSES: Course[] = [
@@ -204,8 +212,24 @@ export const COURSES: Course[] = [
     tagline: 'Ingenieria Comercial, Escuela de Negocios (UAI)',
     accentClass: 'from-teal-600 to-slate-700',
     iconClass: 'bg-gradient-to-br from-teal-600 to-slate-700',
+    // Felipe Padilla dirige el repaso de la Unidad 2 (clase 9, 6-oct-2026).
+    verTambien: ['fel.padilla@gmail.com'],
   },
 ];
+
+/**
+ * Los cursos del repo que aparecen en el panel de quien mira. El admin los ve
+ * todos; cualquier otro, solo los que lo nombran en `verTambien`. Llegan
+ * marcados `compartido` para que la tarjeta diga que el curso es de otro.
+ */
+export function cursosDelRepoPara(esAdmin: boolean, email: string | null | undefined): Course[] {
+  if (esAdmin) return COURSES;
+  if (!email) return [];
+  const mail = email.trim().toLowerCase();
+  return COURSES
+    .filter((c) => (c.verTambien ?? []).some((m) => m.trim().toLowerCase() === mail))
+    .map((c) => ({ ...c, compartido: true }));
+}
 
 export const SESSIONS: SessionOption[] = [
   {

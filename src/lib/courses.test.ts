@@ -6,7 +6,7 @@
 // esto es lo unico que puede verificar el registro en runtime.
 
 import { describe, it, expect } from 'vitest';
-import { COURSES, SESSIONS, getCourse, getSessionsForCourse } from './courses';
+import { COURSES, SESSIONS, cursosDelRepoPara, getCourse, getSessionsForCourse } from './courses';
 
 describe('registro de sesiones', () => {
   it('registra las sesiones publicadas', () => {
@@ -128,5 +128,24 @@ describe('clase_01_diagnostico', () => {
       'economia',
     ]);
     expect(rubric.dimensions.reduce((sum, d) => sum + d.weight, 0)).toBeCloseTo(1, 5);
+  });
+});
+
+describe('cursosDelRepoPara', () => {
+  it('el admin ve todos los cursos del repo, sin marca de compartido', () => {
+    const vistos = cursosDelRepoPara(true, 'naim.bro@gmail.com');
+    expect(vistos).toHaveLength(COURSES.length);
+    expect(vistos.every((c) => !c.compartido)).toBe(true);
+  });
+
+  it('un colega nombrado en verTambien ve ese curso, aunque escriba su mail distinto', () => {
+    const vistos = cursosDelRepoPara(false, ' Fel.Padilla@Gmail.com ');
+    expect(vistos.map((c) => c.id)).toEqual(['mgt300_2026']);
+    expect(vistos[0].compartido).toBe(true);
+  });
+
+  it('un profesor aprobado que no figura en ninguna lista no ve cursos del repo', () => {
+    expect(cursosDelRepoPara(false, 'otro.profe@gmail.com')).toEqual([]);
+    expect(cursosDelRepoPara(false, null)).toEqual([]);
   });
 });
