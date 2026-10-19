@@ -1,0 +1,115 @@
+{
+  "_doc": "Rúbrica PROPIA de clase_10_tres_variables_y_titular. Hereda de la clase 8 (y ésta de la 7) las tres dimensiones (exactitud 0,60 · completitud 0,25 · claridad 0,15), sus tres techos (entrega incompleta, código que corre y contesta mal, código que no corre), los pesos por juez (0,75 / 0,60 / 0,60 de exactitud) y los dos arreglos de calibración de la clase 3: el doble cobro y la media respuesta resuelta en el ancla de nivel 40.\n\nLO QUE CAMBIA RESPECTO DE LA CLASE 8: el objeto y la forma. Hoy es la tercera variable (`color =` dentro de `aes()` y `facet_wrap()`), y son DOS rondas: R1 pide UNA sola cosa en código (ahí no existe la media respuesta y el techo de entrega incompleta no se aplica); R2 pide DOS casos numerados en castellano, cada uno con su elección y su porqué, sin código.\n\nEL TECHO «CÓDIGO QUE CORRE Y CONTESTA MAL» TIENE HOY DOS CASOS, los dos verificados en R 4.3.3 con ggplot2 3.5.2 el 19-oct-2026: sin `color` y `color = \"problema\"` con comillas dibujan UNA línea en zigzag (1 grupo, 1 color). Y NO CORREN: `geom_line(color = problema)` fuera de `aes()` (objeto 'problema' no encontrado); `%>%` en vez de `+`; `geom_line` sin paréntesis; `Problema` con mayúscula; `facet_wrap(problema)` sin `~`. CORREN Y DIBUJAN ALGO CERCANO (nivel 60): `group = problema` o `linetype = problema` sin color (4 grupos, 1 color), `facet_wrap(~ problema)` (4 paneles, 1 color).\n\nCALIBRACIÓN, con las penalizaciones APAGADAS y la fórmula del juez especialista (0,75 / 0,15 / 0,10):\n\nR1 — la tercera variable (una sola cosa)\n| 100 | `ggplot(cuatro, aes(x = anio, y = porcentaje, color = problema)) + geom_line()` |\n| 97 | LA DE AL LADO: `cuatro %>% ggplot(aes(x = anio, y = porcentaje)) + geom_line(aes(colour = problema)) + geom_point()` |\n| 70 | CERCANA: `aes(x = anio, y = porcentaje, group = problema)` + `geom_line()` — cuatro líneas de un color (Exactitud 60) |\n| 55 | CON UN ERROR: sin `color`, o `color = \"problema\"` (una línea en zigzag), o `geom_line(color = problema)` (no corre) |\n| 40 | ENGAÑOSA: `ggplot(cuatro, aes(x = anio, y = porcentaje)) %>% geom_line(color = problema)` — dos errores, ninguno corre (Exactitud 20) |\n\nR2 — color o facetas (dos casos)\n| 100 | «(1) color: son dos en el mismo eje, se ve quién va arriba y dónde se cruzan. (2) facetas: son ocho, con ocho colores hay que ir y volver a la leyenda» |\n| 97 | LA DE AL LADO: «(1) color, para ver el cruce tienen que estar juntas. (2) facet_wrap, cada problema en su panel y se ve la forma de cada uno» |\n| 70 | RAZÓN ESTÉTICA: las dos bien elegidas, una con «se ve más bonito» (Exactitud 60) |\n| 55 | COMPLETA CON UN ERROR: los dos casos con su razón, uno elegido al revés (Exactitud 40, Completitud 100) |\n| 46 | MEDIA RESPUESTA: «1 color, 2 facetas» sin porqué, o un solo caso perfecto (Exactitud 40, Completitud 40) |\n| 40 | ENGAÑOSA: las dos invertidas, con razones que suenan bien (Exactitud 20) |\n\nLOS DOS PARES QUE IMPORTAN: en R2, la COMPLETA-CON-UN-ERROR por encima de la MEDIA RESPUESTA (55 > 46), y la ENGAÑOSA, con las dos invertidas, por debajo de las dos (40); y en las dos rondas la DE AL LADO junto a la de 100 (97 ≈ 100).\n\nNINGUNA DE ESTAS DOS RÚBRICAS HA CORREGIDO UNA RESPUESTA REAL TODAVÍA. Los puntajes de arriba son predicciones, no mediciones. Después de jugar: `npm run diagnostico <CODIGO>` y `node scripts/judge-levels.cjs`.",
+  "sessionId": "clase_10_tres_variables_y_titular",
+  "globalInstructions": "Evalúa SOLO lo que está escrito. No completes la respuesta con lo que el estudiante 'seguramente quiso decir'.\n\nEsta es la DÉCIMA clase del semestre y su TERCERA CLASE CON `ggplot2`; HOY FUE LA PRIMERA CON UNA TERCERA VARIABLE (`color =` dentro de `aes()` y `facet_wrap()`). Son de primer año, de sociología y negocios. El estándar es «¿corre y dibuja lo que se pidió?» en el código y «¿usa el criterio de la clase?» en el castellano, no elegancia.\n\nLAS DOS RONDAS DE ESTA SESIÓN SON ABIERTAS Y LAS DOS PASAN POR TI. R1 pide UNA SOLA COSA en código (el gráfico con una línea de color por problema): ahí no existe la media respuesta. R2 pide DOS CASOS numerados (1) y (2), en castellano y sin código, y en cada uno la elección (`color =` o `facet_wrap()`) Y el porqué, en una línea. Qué mira exactamente cada ronda está en su judgeFocus, que manda sobre estas instrucciones generales si hay tensión.\n\nCUANDO SE PIDIÓ CÓDIGO (R1), lo que se evalúa es si ese código, pegado en un Colab que ya tiene `cuatro` y `ggplot2` cargados, CORRE Y DIBUJA LO QUE SE PIDIÓ: cuatro líneas, una por problema, cada una de un color. Un bloque de R sin una palabra de prosa alrededor es EXACTAMENTE lo que se pidió: no le bajes nada por eso, y no premies la explicación que nadie pidió.\n\nCUANDO SE PIDIÓ CASTELLANO (R2), no se necesita código ni vocabulario técnico. «Son dos y en el mismo gráfico se ve dónde se cruzan» vale exactamente lo mismo que «pocos grupos comparados en un eje común». El criterio es el de la lámina 6: `color =` para dos a cuatro grupos que se comparan en el mismo eje; `facet_wrap()` para muchos grupos o cuando importa la forma de cada uno; y si para leer el gráfico hay que ir y volver a la leyenda, facetas.\n\nMÁS DE UNA ESCRITURA ES CORRECTA, Y EL CRITERIO MANDA SOBRE CUALQUIER LISTA: si el código corre y dibuja lo pedido, vale 100 aunque no se te haya ocurrido a ti y aunque la lámina no lo haya mostrado. `colour =`, `color = problema` dentro de un `aes()` puesto en `geom_line()`, `geom_point()` agregado, un `labs()`, `data =` y `mapping =` explícitos, el pipe que ENTRA al `ggplot()` (`cuatro %>% ggplot(aes(...)) + geom_line()` corre), rehacer `cuatro` con `filter()`: todo eso corre y dibuja bien. Que una escritura no esté en el material no la hace incorrecta.\n\nLO QUE SÍ SE COBRA EN CÓDIGO, porque es exactamente lo que la clase de hoy enseñó: `color = problema` DENTRO de `aes()` y SIN comillas (sin `color`, o con `\"problema\"` entre comillas, sale UNA sola línea en zigzag; con `geom_line(color = problema)`, fuera de `aes()`, no corre); y el `+` ENTRE LAS PIEZAS (con `%>%` no corre, y R lo dice: «Did you use %>% or |> instead of +?»). Lo que NO importa: espacios, indentación, saltos de línea, tipo de comillas, comentarios, `theme_minimal()`, `labs()`, ni un paréntesis de cierre que falta cuando la intención es inequívoca. Escriben desde un teclado de teléfono.\n\nEste curso NO enseña inferencia estadística en ningún momento: nada de tests, valores-p, intervalos de confianza, márgenes de error, regresión ni representatividad muestral formal. Si una respuesta invoca cualquiera de esas cosas, no está siendo sofisticada: está fuera de lo que se enseñó, y no suma.\n\nEL LARGO PEDIDO. Una o dos líneas de R en R1, y UNA línea de castellano por caso en R2, escritas en dos minutos desde un teléfono. Eso bien puesto vale 100: no esperes párrafos, ni estructura, ni introducción, ni ortografía perfecta, ni tildes. ESCRIBIR MÁS NO SUBE EL PUNTAJE. Premia densidad, no extensión. No penalices la brevedad; penaliza la vaguedad.\n\nMEDIA RESPUESTA NO ES MEDIA NOTA, en R2. Esa ronda pide dos casos y en cada uno la elección y el porqué. Elegir bien los dos sin decir por qué, o contestar un solo caso, es la mitad: no puede pasar de 40 en Exactitud, por muy limpia que esté.\n\nY SU REVERSO, QUE IMPORTA IGUAL: la respuesta que entregó LOS DOS CASOS CON SU RAZÓN y se equivocó en uno va POR ENCIMA de la media respuesta impecable. La incompleta gana gratis las dimensiones de forma justamente por no haberse arriesgado a nada. Si al terminar de puntuar la ronda la completa-con-un-error quedó abajo de la mitad-perfecta, el orden está dado vuelta y hay que revisarlo.\n\nSi un estudiante objeta el enunciado —dice que la premisa le suena falsa, que los números no le calzan, o que falta información para responder— eso NO se penaliza nunca. Si tiene razón, el problema es del enunciado.\n\nSOBRE EL FEEDBACK QUE ESCRIBES, que es lo único que el estudiante se lleva. Tres reglas. (1) La misma regla que te prohíbe bajar el puntaje por una escritura que corre y no es la de la lámina te prohíbe pedirle en el feedback que la cambie por la de la lámina: si su `colour =`, su `aes()` dentro de `geom_line()` o su razón dicha con otras palabras funcionan, no le sugieras «usar la forma de la clase». Si a la respuesta le falta algo, dile QUÉ PIEZA falta —el `color` dentro de `aes()`, el `+`, el porqué, el segundo caso—, nunca qué palabra o qué forma. (2) Antes de advertirle que usó «algo que no se ha visto», revisa el material de referencia: `ggplot()`, `aes()` con `x`, `y` y `color`, `geom_line()`, `geom_point()`, `geom_bar()`, `geom_col()`, `geom_histogram()`, `labs()`, `filter()` con `%in%`, `facet_wrap(~ ...)` con `ncol`, el color fijo fuera de `aes()` y `geom_line(data = ...)` SÍ se mostraron. Y aunque algo no se haya enseñado —`fill =`, `facet_grid()`, `scale_color_manual()`, `theme()`—, si corre y dibuja lo pedido es legítimo. (3) Cierra atando la respuesta al Sprint 3, el prototipo visual, que se presenta el lunes 26 de octubre de 2026, de forma CONCRETA sobre esta respuesta: qué tercera variable de su propio proyecto va a necesitar y si va en color o en facetas. No un consejo genérico de estudio.\n\nEl judgeFocus del escenario es tu prioridad absoluta y manda sobre estas instrucciones generales si hay tensión.",
+  "scoring": {
+    "scaleLevels": [
+      100,
+      80,
+      60,
+      40,
+      20,
+      0
+    ],
+    "instructions": "Elige uno de los seis niveles escritos por dimensión. No inventes valores intermedios. Si la respuesta satisface un nivel solo parcialmente, baja al nivel inferior."
+  },
+  "dimensions": [
+    {
+      "id": "exactitud",
+      "name": "Exactitud",
+      "weight": 0.6,
+      "description": "¿Responde correctamente la pregunta que se hizo? En R1: ¿el código corre tal cual está escrito y DIBUJA cuatro líneas, una por problema, cada una de un color, con `color = problema` dentro de `aes()` sin comillas y las piezas sumadas con `+`? En R2: ¿cada elección es la que da el criterio de la lámina 6, y el porqué llega a ese criterio? Esta dimensión NO mide si se lee ordenado —eso lo mide Claridad y sólo Claridad—. Sí mide, en cambio, si lo entregado responde la pregunta completa: R2 pide dos casos con su porqué, y una respuesta que hace bien la mitad no la responde. Ese caso está escrito en el nivel 40.",
+      "level_100": "Todo lo que la ronda pidió está y es correcto (en R1 una sola cosa; en R2, los dos casos con su elección y su porqué). CÓDIGO: corre tal cual y dibuja cuatro líneas de cuatro colores — `color = problema` dentro de `aes()`, el `+` entre las piezas, `geom_line()` con paréntesis. Cualquier escritura que dibuje lo mismo cuenta igual que la de la lámina. CASTELLANO: color para el caso (1), facetas para el (2), y cada porqué llega al criterio (pocos grupos en el mismo eje / muchos grupos, la forma de cada uno o la leyenda).",
+      "level_80": "En lo esencial acierta, con un detalle que no rompe nada. CÓDIGO: corre y dibuja lo pedido, con algo de más que nadie pidió, o el `+` puesto al comienzo de la línea siguiente en vez de al final. CASTELLANO: las dos elecciones bien y un porqué dicho a medio camino — nombra el criterio sin terminar de decirlo («color, porque son pocos»).",
+      "level_60": "Está todo lo pedido, y una parte tiene un error real que no da vuelta la respuesta. CÓDIGO: corre pero dibuja algo cercano a lo pedido — cuatro líneas de un solo color (`group =` o `linetype =` sin `color`), cuatro paneles con `facet_wrap(~ problema)` en vez de colores, o sólo puntos de colores sin líneas. CASTELLANO: las dos elecciones bien, pero uno de los porqués no toca el criterio de la clase («se ve más bonito», «queda más ordenado»).",
+      "level_40": "CUATRO CASOS, TODOS ACÁ. (1) MEDIA RESPUESTA en R2, aunque esa mitad esté impecable: las dos elecciones sin ningún porqué, o un solo caso. (2) CÓDIGO QUE NO CORRE aunque la estructura sea la correcta: `geom_line(color = problema)` fuera de `aes()`, `%>%` en vez de `+`, `geom_line` sin paréntesis, `Problema` con mayúscula. (3) CÓDIGO QUE CORRE Y DIBUJA MAL: sin `color`, o con `color = \"problema\"` entre comillas — una sola línea en zigzag. (4) CASTELLANO CON UNA DE LAS DOS ELECCIONES AL REVÉS, con su porqué, y la otra bien.",
+      "level_20": "LAS DOS PARTES MAL A LA VEZ: en R2, las dos elecciones invertidas (facetas para dos grupos, color para ocho); en R1, dos errores juntos (`%>%` y además el color fuera de `aes()`). CÓDIGO: inventa funciones o argumentos que no existen, deja los `...` sin rellenar, o describe en palabras lo que habría que hacer sin escribir ninguna línea. CASTELLANO: afirma como criterio algo que la lámina 6 desmiente.",
+      "level_0": "No hay respuesta, o lo que hay no tiene relación con lo que se pidió, o contradice de plano lo que el enunciado muestra."
+    },
+    {
+      "id": "completitud",
+      "name": "Completitud de la entrega",
+      "weight": 0.25,
+      "description": "¿Cuánto de lo que la pregunta pidió llegó? R1 pide UNA cosa (el gráfico completo: datos, `aes()` con la tercera variable y geometría); R2 pide DOS casos, numerados (1) y (2), cada uno con su elección y su porqué. Esta dimensión mide SÓLO cuánto llegó, no qué tan bien hecho está: si una parte llegó y está equivocada, para esta dimensión llegó igual. Lo bien o mal hecha que esté lo mide Exactitud, y no se cobra dos veces acá.",
+      "level_100": "Está todo lo que se pidió —en R1 las piezas del gráfico, en R2 los dos casos con su elección y su porqué—, y nada innecesario alrededor.",
+      "level_80": "Está todo, con algo de más que no se pidió y que no molesta: una línea extra, una explicación en prosa del código donde se pedía sólo el código, un `labs()` o `theme_minimal()`, código en R2 donde se pedía castellano.",
+      "level_60": "Está todo, pero una parte apenas: en R2, uno de los porqués nombrado de pasada en una o dos palabras; en R1, el `ggplot()` con su `aes()` pero sin ninguna geometría.",
+      "level_40": "Falta la mitad de lo pedido: en R2, las dos elecciones sin ningún porqué, o un solo caso de los dos.",
+      "level_20": "Llegó una fracción menor: un fragmento que no llega a ser una línea ejecutable, los `...` sin rellenar, o una sola elección sin porqué.",
+      "level_0": "No entrega ninguna de las partes que se pidieron."
+    },
+    {
+      "id": "claridad",
+      "name": "Claridad",
+      "weight": 0.15,
+      "description": "¿Se entiende de inmediato lo que entregó? En código: se lee limpio, una pieza por línea o todas en una línea que se sigue sin esfuerzo. En castellano: lo entendería alguien de fuera a la primera lectura, y se sabe qué elección va con qué caso. ESTA DIMENSIÓN NO MIDE SI LA RESPUESTA ES CORRECTA. Un código sin `color` que se lee perfecto es CLARO: ya pagó su error en Exactitud, y volvérselo a cobrar acá es cobrar dos veces el mismo error. Tampoco mide si llegaron los dos casos o los porqués —eso lo mide Completitud—: una media respuesta bien escrita es clara. Lo único que se pregunta acá es si se entiende.",
+      "level_100": "CÓDIGO: las piezas en orden, se lee como una receta, sin adorno ni relleno. CASTELLANO: un lector sin formación técnica lo entiende a la primera; cada caso tiene su elección y su porqué identificables.",
+      "level_80": "CÓDIGO: se lee bien, con algo suelto — todo apretado en una línea larga, o un comentario que sobra. CASTELLANO: se entiende bien, con una frase ambigua o un término técnico sin explicar.",
+      "level_60": "CÓDIGO: hay que reordenarlo mentalmente para saber qué va primero, o el código está enterrado en un párrafo. CASTELLANO: se entiende con esfuerzo: no queda claro qué elección va con qué caso, o el lector tiene que reordenar la idea.",
+      "level_40": "CÓDIGO: fragmentos sueltos que no llegan a formar un gráfico. CASTELLANO: enumera observaciones sueltas sin una afirmación principal.",
+      "level_20": "CÓDIGO: mezcla de pseudocódigo y prosa donde no se distingue qué es una instrucción. CASTELLANO: usa vocabulario técnico como sustituto del argumento, o es tan general que no se sabe de qué está hablando.",
+      "level_0": "Ininteligible, o no responde la pregunta que se hizo."
+    }
+  ],
+  "penalties": [
+    {
+      "id": "entrega_incompleta",
+      "description": "R2 pide DOS casos, numerados (1) y (2), y en cada uno la elección Y el porqué. Entregar sólo uno de los dos casos, o las dos elecciones sin ningún porqué, no puede superar 40 en 'Exactitud', por perfecta que esté la parte entregada. NO SE APLICA EN R1, que pide una sola cosa. Se gatilla por lo que FALTA, no por errores en lo que sí está: una respuesta que entregó los dos casos con su porqué y se equivocó en uno NO cae acá — va por las anclas de Exactitud, y queda por encima de la media respuesta impecable. Un porqué que no toca el criterio («se ve más bonito») tampoco cae acá: está, y es nivel 60.",
+      "effect": {
+        "type": "cap",
+        "value": 40,
+        "dimensions": [
+          "exactitud"
+        ]
+      }
+    },
+    {
+      "id": "codigo_que_corre_y_contesta_mal",
+      "description": "El código está entero y corre sin error, pero dibuja otra cosa que la pedida, justamente por la lección de hoy que falta: sin `color` (`aes(x = anio, y = porcentaje)` + `geom_line()`), o con `color = \"problema\"` entre comillas — en los dos casos sale UNA SOLA LÍNEA que salta entre los cuatro problemas de cada año. No puede superar 40 en 'Exactitud'.\n\nNO CAE ACÁ ninguna escritura que dibuje lo pedido, esté o no en la lámina: `colour =`, el `aes()` dentro de `geom_line()`, `geom_point()` o `labs()` agregados, el pipe que entra al `ggplot()`. Tampoco lo que dibuja algo CERCANO (cuatro líneas de un color con `group =` o `linetype =`, cuatro paneles con `facet_wrap(~ problema)`): eso es nivel 60. Ni el `+` al comienzo de la línea siguiente (nivel 80). Lo que se castiga es que el gráfico salga mal, no la forma en que se escribió.",
+      "effect": {
+        "type": "cap",
+        "value": 40,
+        "dimensions": [
+          "exactitud"
+        ]
+      }
+    },
+    {
+      "id": "codigo_que_no_corre",
+      "description": "Código que NO CORRE tal cual está escrito no puede superar 40 en 'Exactitud'. Los casos: (1) `geom_line(color = problema)`, la columna fuera de `aes()` (R: objeto 'problema' no encontrado); (2) `%>%` en vez de `+` entre `ggplot()` y la geometría, o ningún operador entre ellas; (3) una geometría sin paréntesis (`geom_line`); (4) un nombre de columna con otras mayúsculas (`Problema`, `Anio`); (5) `facet_wrap(problema)` sin `~`; (6) una función o un argumento que no existe; (7) prosa que describe lo que habría que hacer sin ninguna línea de R.\n\nEste techo toca UNA SOLA dimensión a propósito: el error ya se paga acá y no se vuelve a cobrar en 'Claridad'. Un código que no corre puede leerse perfectamente claro.\n\nNO CAE ACÁ una escritura que existe y funciona aunque la lámina no la haya mostrado, ni un paréntesis de cierre que falta cuando la intención es inequívoca y todo lo demás está bien, ni el `+` al comienzo de la línea siguiente (en Colab no corre, pero es un salto de línea escrito en un teléfono: nivel 80). Lo que se castiga es equivocar la pieza, no salirse de la lámina.",
+      "effect": {
+        "type": "cap",
+        "value": 40,
+        "dimensions": [
+          "exactitud"
+        ]
+      }
+    }
+  ],
+  "globalPenalties": [
+    "R2: elegir bien los dos casos sin decir por qué, o contestar uno solo: una mitad perfecta sigue sin responder la pregunta.",
+    "R1: sin `color`, o con `\"problema\"` entre comillas: sale una sola línea en zigzag.",
+    "R1: `color = problema` fuera de `aes()`: no corre.",
+    "`%>%` en vez de `+` entre las piezas del gráfico: no corre.",
+    "R2: invertir las dos elecciones, o un porqué que no usa el criterio de la clase («se ve más bonito»).",
+    "Vaguedad intercambiable: una frase que se podría pegar debajo de cualquier otra pregunta del curso sin cambiarle una palabra."
+  ],
+  "bonusIndicators": [
+    "Llega al gráfico correcto por un camino que la lámina no mostró, y lo escribe bien",
+    "Pone `color = problema` dentro de `aes()` y sabe por qué va ahí",
+    "Nombra la prueba de la lámina 6: ir y volver a la leyenda",
+    "Dice que en facetas todos los paneles comparten el eje",
+    "Para dos grupos, propone destacarlos en color y el resto en gris (lámina 8)",
+    "Entrega exactamente lo que se pidió y nada más",
+    "Objeta el enunciado con razón"
+  ],
+  "penaltyIndicators": [
+    "Falta uno de los dos casos, o los porqués (R2)",
+    "Sin `color`, o `color` entre comillas (R1)",
+    "`color = problema` fuera de `aes()` (R1)",
+    "`%>%` en vez de `+` entre las piezas",
+    "Las dos elecciones invertidas (R2)",
+    "Un porqué estético en vez del criterio de la clase (R2)",
+    "Deja los `...` sin rellenar"
+  ]
+}

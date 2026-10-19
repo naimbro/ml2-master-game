@@ -1,0 +1,124 @@
+[
+  {
+    "id": "dv_c10_r1_la_tercera_variable",
+    "order": 1,
+    "title": "La tercera variable",
+    "category": "ggplot2: color = dentro de aes()",
+    "difficulty": "medium",
+    "ranked": true,
+    "durationSeconds": 150,
+    "answerFormat": "code",
+    "conceptTags": [
+      "color_tercera_variable"
+    ],
+    "context": "La tabla `cuatro` ya está hecha, y `ggplot2` cargado. Tiene tres columnas: `anio`, `problema` y `porcentaje`. En `problema` hay cuatro valores: «Delincuencia, asaltos y robos», «Salud», «Pobreza» y «Empleo».",
+    "question": "El gráfico de líneas con **una línea por problema**, cada una de un color.\n\n```r\nggplot(...) ...\n```\n\nSólo el código.",
+    "judgeFocus": "Esta ronda pide UNA SOLA COSA: el código del gráfico de líneas con una línea por problema, cada una de un color. Una o dos líneas de R escritas desde un teléfono; eso bien puesto vale 100 y escribir más no sube el puntaje. Acá no existe la media respuesta, y la penalización de entrega incompleta no se aplica.\n\nEL CRITERIO, que manda sobre cualquier ejemplo: puntúa 100 todo código que, pegado en un Colab con `cuatro` y `ggplot2` cargados, CORRA Y DIBUJE CUATRO LÍNEAS, UNA POR PROBLEMA, CADA UNA DE UN COLOR (con su leyenda, que sale sola). La versión de la lámina 4 es\n\nggplot(cuatro, aes(x = anio, y = porcentaje, color = problema)) +\n  geom_line()\n\npero valen igual, y la lista NO es exhaustiva: `colour =` en vez de `color =`; `color = problema` dentro de un `aes()` puesto en la geometría (`geom_line(aes(color = problema))`); `geom_point()` agregado; un `labs()` con título, ejes o fuente; `data =` y `mapping =` explícitos; `cuatro %>% ggplot(aes(...)) + geom_line()` (el pipe ENTRA al `ggplot()` y después las piezas se suman: corre); rehacer `cuatro` con el `filter()` de la lámina antes del gráfico; `group = problema` además de `color`. La pregunta es siempre si corre y dibuja las cuatro líneas de colores.\n\nLO QUE SÍ ES ERROR, verificado en R 4.3.3 con ggplot2 3.5.2:\n- SIN `color` (`aes(x = anio, y = porcentaje)` + `geom_line()`): CORRE Y CONTESTA MAL. Dibuja UNA SOLA LÍNEA que salta entre los cuatro problemas de cada año. Código que corre y contesta mal.\n- `color = \"problema\"` CON COMILLAS: CORRE Y CONTESTA MAL. La misma línea única en zigzag, de un solo color, porque toma la palabra como un valor fijo y no como la columna.\n- `geom_line(color = problema)`, FUERA de `aes()`: NO CORRE (*objeto 'problema' no encontrado*). Fuera de `aes()` el color es un color fijo, como el `\"#C4878C\"` de la lámina 3; la columna va adentro.\n- `%>%` en vez de `+` entre `ggplot()` y `geom_line()`: NO CORRE (R pregunta si se usó `%>%` en vez de `+`).\n- `geom_line` sin paréntesis, o `Problema` con mayúscula: no corre.\n\nCERCA, PERO NO LO PEDIDO (corren y dibujan algo cercano: nivel 60): `group = problema` o `linetype = problema` sin `color` (cuatro líneas, todas del mismo color); `facet_wrap(~ problema)` en vez de color (una línea por panel, sin colores); sólo `geom_point()` con `color = problema` (puntos de colores, sin líneas).\n\nLO QUE NO SE EXIGE, NUNCA: `library(ggplot2)` ni el `filter()` que arma `cuatro` —el enunciado dice que la tabla ya está hecha—, `labs()`, `theme_minimal()`, el tipo de comillas (rectas o tipográficas), la indentación, los saltos de línea, comentarios, ni un paréntesis de cierre que falta cuando la intención es inequívoca. Escriben desde un teléfono. Y si el estudiante objeta el enunciado —dice que la premisa le suena falsa o que le falta información— eso NO se penaliza nunca: si tiene razón, el problema es del enunciado.\n\nEN EL FEEDBACK: si su escritura corre y dibuja lo pedido aunque no sea la de la lámina, no le pidas que la cambie; dile qué pieza falta, no qué palabra. Y cierra con una frase concreta sobre la tercera variable que su grupo va a necesitar en el gráfico del Sprint 3, que se presenta el lunes 26 de octubre de 2026.",
+    "evaluationGuide": {
+      "must_hit": [
+        "Los datos: `cuatro` como primer argumento de `ggplot()` (o entrando por el pipe)",
+        "`x = anio` e `y = porcentaje` dentro de `aes()`",
+        "`color = problema` (o `colour =`) DENTRO de un `aes()`, sin comillas",
+        "`geom_line()` con paréntesis, sumado con `+`"
+      ],
+      "nice_to_have": [
+        "Agrega un `labs()` con un título que dice qué se ve",
+        "Agrega `geom_point()`",
+        "Llega por otro camino que corre: `aes()` en la geometría, `data =`/`mapping =`, el pipe que entra al `ggplot()`"
+      ],
+      "fatal_errors": [
+        "Sin `color`: una sola línea en zigzag",
+        "`color = \"problema\"` con comillas: una sola línea en zigzag, un color",
+        "`geom_line(color = problema)` fuera de `aes()`: no corre",
+        "`%>%` en vez de `+` entre `ggplot()` y `geom_line()`: no corre",
+        "`geom_line` sin paréntesis: no corre"
+      ],
+      "partial_credit": {
+        "sin_color": "`aes(x = anio, y = porcentaje)` + `geom_line()`: corre y dibuja una línea en zigzag, techo 40 en Exactitud.",
+        "comillas_en_color": "`color = \"problema\"`: corre y dibuja una línea en zigzag de un color, techo 40 en Exactitud.",
+        "color_fuera_de_aes": "`geom_line(color = problema)`: no corre, techo 40 en Exactitud.",
+        "pipe_en_vez_de_mas": "Las piezas bien, unidas con `%>%`: no corre, techo 40 en Exactitud.",
+        "cuatro_lineas_sin_color": "`group =` o `linetype = problema` sin `color`, `facet_wrap(~ problema)` en vez de color, o sólo puntos de colores: corre y dibuja algo cercano, Exactitud 60.",
+        "otra_escritura_correcta": "`colour =`, `aes()` dentro de `geom_line()`, `geom_point()` o `labs()` agregados, pipe que entra al `ggplot()`, `filter()` rehecho: correctas, no bajan."
+      }
+    },
+    "idealAnswer": {
+      "keyPoints": [
+        "ggplot(cuatro, aes(x = anio, y = porcentaje, color = problema)) +",
+        "  geom_line()"
+      ],
+      "expectedConcepts": [
+        "color_tercera_variable"
+      ],
+      "commonMistakes": [
+        "Olvidar `color`: sale una sola línea en zigzag",
+        "`\"problema\"` entre comillas dentro de `aes()`",
+        "`color = problema` dentro de `geom_line()` pero fuera de `aes()`",
+        "Unir las piezas con `%>%` en vez de `+`"
+      ],
+      "excellentResponseIndicators": [
+        "`color = problema` dentro de `aes()`, sin comillas",
+        "El `+` al final de la línea",
+        "Cualquier escritura que dibuje cuatro líneas de cuatro colores"
+      ]
+    }
+  },
+  {
+    "id": "dv_c10_r2_color_o_facetas",
+    "order": 2,
+    "title": "Color o facetas",
+    "category": "ggplot2: color = o facet_wrap()",
+    "difficulty": "easy",
+    "ranked": true,
+    "durationSeconds": 120,
+    "answerFormat": "prose",
+    "conceptTags": [
+      "color_o_facetas"
+    ],
+    "context": "Con la serie CEP de hoy:\n\n**(1)** Comparar la delincuencia y la pobreza en el mismo eje: ¿quién va arriba y dónde se cruzan?\n\n**(2)** Ver cómo se movió cada uno de ocho problemas.",
+    "question": "Para cada caso: ¿`color =` o `facet_wrap()`? Y por qué, en una línea.",
+    "judgeFocus": "Esta ronda pide DOS CASOS numerados (1) y (2), y en cada uno DOS COSAS: la elección (`color =` o `facet_wrap()`) y el porqué, en una línea de castellano. Dos líneas escritas en dos minutos desde un teléfono; eso bien puesto vale 100 y escribir más no sube el puntaje. No se pide código.\n\nEL CRITERIO ES EL DE LA LÁMINA 6, y manda sobre cualquier ejemplo: `color =` para DOS A CUATRO GRUPOS QUE SE COMPARAN EN EL MISMO EJE (se ve quién va arriba y dónde se cruzan); `facet_wrap()` para MUCHOS GRUPOS, o CUANDO IMPORTA LA FORMA DE CADA UNO (todos los paneles comparten el eje). Y la prueba de la lámina: si para leer el gráfico hay que ir y volver a la leyenda, pasen a facetas.\n\nCASO (1) — `color =`. El porqué llega a que son POCOS GRUPOS (dos) y que la pregunta es una COMPARACIÓN EN EL MISMO EJE: quién va arriba, dónde se cruzan. Valen igual, y la lista NO es exhaustiva: «color, porque son solo dos y en el mismo gráfico se ve dónde se cruzan»; «color: dos líneas en el mismo eje, se ve cuál va arriba»; «color, porque para ver el cruce tienen que estar juntas»; «las dos en el mismo gráfico, destacadas en color y el resto en gris» (la técnica de la lámina 8 es una forma de color en el mismo eje: vale).\n\nCASO (2) — `facet_wrap()`. El porqué llega a que son MUCHOS GRUPOS (ocho), o a que importa la FORMA DE CADA UNO, o a la prueba de la leyenda. Valen igual, y la lista NO es exhaustiva: «facetas, porque con ocho colores hay que ir y volver a la leyenda»; «facet_wrap: son muchos y en un solo gráfico se enredan las líneas»; «facetas, un panel por problema y se ve la forma de cada uno»; «son ocho, y con el mismo eje en cada panel se comparan igual».\n\nLO QUE NO CUENTA COMO PORQUÉ: «se ve más bonito», «queda más ordenado», «es más claro» sin decir por qué, o cualquier razón que no toque cuántos grupos son, si se comparan en el mismo eje o la forma de cada uno. Esa razón es un error real: la elección pudo ser correcta, pero no usa el criterio de la clase.\n\nLA RESPUESTA PARCIAL TÍPICA DE ESTA RONDA es elegir bien los dos casos SIN DECIR POR QUÉ («1 color, 2 facetas»): entregó la mitad de lo pedido, techo 40 en Exactitud. Responder sólo uno de los dos casos, aunque sea perfecto, también es media respuesta: techo 40. Y la respuesta que entregó LOS DOS CASOS CON SU RAZÓN y se equivocó en uno va POR ENCIMA de las dos medias respuestas.\n\nLO QUE SÍ ES ERROR: INVERTIR LAS DOS (facetas para la delincuencia y la pobreza, color para los ocho) contradice la lámina 6 en los dos casos: Exactitud 20. Elegir mal uno solo, con su porqué, es un error de fondo en una de las dos partes: Exactitud 40, con Completitud 100.\n\nLO QUE NO SE EXIGE, NUNCA: código, el nombre exacto de la función (`facetas`, `facet`, `paneles`, `un gráfico por problema` valen igual que `facet_wrap()`; `color`, `colores`, `todo en un gráfico con colores` valen igual que `color =`), ortografía, tildes, ni el vocabulario de la lámina. Escriben desde un teléfono. Y si el estudiante objeta el enunciado —dice que la premisa le suena falsa o que le falta información— eso NO se penaliza nunca: si tiene razón, el problema es del enunciado.\n\nEN EL FEEDBACK: si su razón dice lo mismo que la lámina con otras palabras, no le pidas que use las de la lámina; si le falta algo, dile qué parte falta (la elección, el porqué, el segundo caso), no qué palabra. Y cierra con una frase concreta sobre si la tercera variable de su grupo, en el gráfico del Sprint 3 que se presenta el lunes 26 de octubre de 2026, va a ir en color o en facetas, y por qué.",
+    "evaluationGuide": {
+      "must_hit": [
+        "CASO (1): elige `color =` y dice que son pocos grupos que se comparan en el mismo eje (quién va arriba, dónde se cruzan), en cualquier vocabulario",
+        "CASO (2): elige `facet_wrap()` y dice que son muchos grupos, o que importa la forma de cada uno, o que con ocho colores hay que ir y volver a la leyenda, en cualquier vocabulario"
+      ],
+      "nice_to_have": [
+        "Nombra la prueba de la lámina: ir y volver a la leyenda",
+        "Dice que en facetas todos los paneles comparten el eje",
+        "Para el caso (1), propone destacar las dos en color y el resto en gris (lámina 8)"
+      ],
+      "fatal_errors": [
+        "Invierte las dos elecciones: facetas para dos grupos y color para ocho",
+        "Elige sin ninguna razón",
+        "Una razón que no toca el criterio de la clase («se ve más bonito»)"
+      ],
+      "partial_credit": {
+        "sin_porque": "Las dos elecciones bien y ninguna razón: media respuesta, techo 40 en Exactitud.",
+        "un_solo_caso": "Un solo caso, perfecto, y el otro ausente: techo 40 en Exactitud.",
+        "una_eleccion_mal": "Los dos casos con su razón, uno elegido al revés: Exactitud 40, Completitud 100, por encima de las medias respuestas.",
+        "razon_estetica": "Las dos elecciones bien, una de las razones es «se ve más bonito» o «más ordenado»: Exactitud 60.",
+        "invertidas": "Las dos elecciones al revés: Exactitud 20.",
+        "otra_escritura_correcta": "Otro vocabulario para el mismo criterio, «paneles» o «un gráfico por problema» por `facet_wrap()`, la técnica de la lámina 8 para el caso (1): correctas, no bajan."
+      }
+    },
+    "idealAnswer": {
+      "keyPoints": [
+        "(1) `color =`: son dos grupos en el mismo eje, y así se ve quién va arriba y dónde se cruzan",
+        "(2) `facet_wrap()`: son ocho; con ocho colores hay que ir y volver a la leyenda, y en paneles se ve la forma de cada uno"
+      ],
+      "expectedConcepts": [
+        "color_o_facetas"
+      ],
+      "commonMistakes": [
+        "Elegir bien sin decir por qué",
+        "Invertir las dos",
+        "«Facetas porque se ve más bonito»: una razón que no es el criterio de la clase"
+      ],
+      "excellentResponseIndicators": [
+        "El criterio en una línea por caso: pocos en el mismo eje → color; muchos o la forma de cada uno → facetas",
+        "Nombra la prueba de la leyenda"
+      ]
+    }
+  }
+]

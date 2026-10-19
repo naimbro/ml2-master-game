@@ -1,0 +1,42 @@
+{
+  "sessionId": "clase_10_tres_variables_y_titular",
+  "courseId": "dataviz_2026",
+  "title": "Clase 10: Tres variables y un titular",
+  "description": "Juego corto de ~8,5 min de pared, al cierre de la clase después de las exposiciones del ejercicio de redacción: DOS rondas abiertas sobre la tercera variable. R1 es código (`answerFormat: code`, 150 s): con la tabla `cuatro` ya hecha, el gráfico con una línea por problema y cada una de un color — `color = problema` dentro de `aes()` + `geom_line()`, lámina 4. R2 es castellano (120 s): para dos casos numerados (1) y (2), ¿`color =` o `facet_wrap()`?, y por qué en una línea, con el criterio de la lámina 6. Las dos compiten y las dos pasan por los jueces. La rúbrica hereda la de la clase 8.",
+  "date": "2026-10-19",
+  "roundCount": 2,
+  "roundDurationSeconds": 135,
+  "bufferSeconds": 45,
+  "conceptTags": [
+    "color_tercera_variable",
+    "color_o_facetas"
+  ],
+  "judges": [
+    {
+      "judgeId": "generic_specialist",
+      "weight": 0.35
+    },
+    {
+      "judgeId": "generic_praxis",
+      "weight": 0.35
+    },
+    {
+      "judgeId": "generic_teacher",
+      "weight": 0.3
+    }
+  ],
+  "judgeConfig": {
+    "generic_specialist": {
+      "sessionLens": "Tu lente es LA EXACTITUD DE LO ENTREGADO, y en esta sesión son dos preguntas distintas. En R1: ¿ESTE CÓDIGO, PEGADO EN UN COLAB QUE YA TIENE `cuatro` Y `ggplot2` CARGADOS, CORRE Y DIBUJA CUATRO LÍNEAS, UNA POR PROBLEMA, CADA UNA DE UN COLOR? En R2: ¿ELIGE COMO LA LÁMINA 6 —`color =` para pocos grupos que se comparan en el mismo eje, `facet_wrap()` para muchos grupos o cuando importa la forma de cada uno— Y DICE POR QUÉ? Es su tercera clase con `ggplot2` y la primera con una tercera variable. No confundas 'no está en la lámina' con 'está mal': `colour =`, `color = problema` dentro de un `aes()` puesto en `geom_line()`, `geom_point()` agregado, un `labs()`, `data =`/`mapping =` explícitos, el pipe que ENTRA al `ggplot()`, rehacer `cuatro` con `filter()`: todo eso corre y dibuja lo pedido, y vale 100. Lo que SÍ cobras, porque es exactamente lo que la clase de hoy enseñó: `color = problema` DENTRO de `aes()` y SIN comillas (con comillas, o sin `color`, sale UNA línea en zigzag; fuera de `aes()`, no corre), y el `+` entre las piezas. Deliberadamente indulgente con todo lo demás: indentación, tipo de comillas, saltos de línea, un paréntesis de cierre que falta cuando la intención es inequívoca — escriben desde un teléfono. Cierra el feedback atando la respuesta al Sprint 3 (el prototipo visual), que se presenta el lunes 26 de octubre de 2026, de forma concreta sobre ESTA respuesta.",
+      "weightFormula": "score = 0.75 * exactitud + 0.15 * completitud + 0.10 * claridad"
+    },
+    "generic_praxis": {
+      "sessionLens": "Tú eres quien va a tomar lo que el estudiante escribió y usarlo en el Colab del Sprint 3 de su grupo sin poder preguntarle nada. En R1 eso significa copiar y pegar: ¿están los datos, el `aes()` con la tercera variable y la geometría, sumados con `+`, de modo que salgan las cuatro líneas de colores sin que tengas que adivinar ni completar un hueco? Una respuesta que es puro código, sin una palabra de prosa alrededor, es exactamente lo que se pidió y no te molesta. En R2 eres el compañero de grupo que tiene que decidir cómo mostrar SU tercera variable: ¿después de leer las dos líneas sabrías cuándo usar color y cuándo facetas, y por qué? Una elección sin razón no te sirve para decidir el caso siguiente, y «se ve más bonito» tampoco. Premia lo que se entiende a la primera; penaliza el rodeo. Y no pidas prosa donde se pidió código. Cierra el feedback atando la respuesta al Sprint 3 (el prototipo visual), que se presenta el lunes 26 de octubre de 2026, de forma concreta sobre ESTA respuesta.",
+      "weightFormula": "score = 0.60 * exactitud + 0.15 * completitud + 0.25 * claridad"
+    },
+    "generic_teacher": {
+      "sessionLens": "Las dos rondas de esta sesión entran al ranking, así que puntúa con honestidad y sin inflar: un puntaje regalado le quita el puesto a otro. Es su tercera clase con `ggplot2` y la primera con una tercera variable: no exijas elegancia, exige que corra y dibuje lo pedido, y que el criterio sea el de la clase. R1 pide UNA sola cosa: ahí no existe la media respuesta. R2 pide DOS casos numerados (1) y (2), cada uno con su elección y su porqué, y lo que más te importa es que lleguen los dos con su razón: una elección sin porqué es media respuesta. Cuidado con el reverso, que es donde estas rúbricas se dan vuelta solas: la respuesta que entregó LOS DOS CASOS con su razón y se equivocó en uno va POR ENCIMA de la que eligió bien los dos sin decir por qué, porque la incompleta se ganó gratis las dimensiones de forma al no arriesgarse a nada. Si al terminar te quedó al revés, revísalo. En R1 caza los errores de hoy: sin `color`, `\"problema\"` entre comillas, `color = problema` fuera de `aes()`, el `%>%` donde iba `+`. En R2: invertir las dos, o «facetas porque se ve más bonito». En tu feedback escribe en primera persona e incluye un 'yo habría...' concreto a ESTA respuesta, con la línea exacta que le habrías escrito. Cierra el feedback atando la respuesta al Sprint 3 (el prototipo visual), que se presenta el lunes 26 de octubre de 2026, de forma concreta sobre ESTA respuesta.",
+      "weightFormula": "score = 0.60 * exactitud + 0.32 * completitud + 0.08 * claridad"
+    }
+  }
+}
