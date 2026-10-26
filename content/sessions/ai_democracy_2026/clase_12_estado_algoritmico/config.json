@@ -1,0 +1,36 @@
+{
+  "sessionId": "clase_12_estado_algoritmico",
+  "courseId": "ai_democracy_2026",
+  "title": "Semana 12: ¿A quién empodera la IA?",
+  "description": "Una sola ronda abierta de 10 minutos que cierra la clase del lunes 26 de octubre. Hace la misma pregunta del ensayo manuscrito del jueves 29 de octubre, con las mismas palabras —¿cómo cambia la IA el balance de poder entre el Estado y los ciudadanos?—, para comparar lo que escriben hoy, sin haber estudiado, con lo que escriban el jueves. Pide una línea de posición que empiece con «Mi posición:», el mecanismo y al menos un caso usado como evidencia. Cualquier dirección bien argumentada vale 100. Compite.",
+  "date": "2026-10-26",
+  "roundCount": 1,
+  "roundDurationSeconds": 600,
+  "bufferSeconds": 45,
+  "conceptTags": [
+    "el_cruce",
+    "el_estado_ve_mas",
+    "los_ciudadanos_ven_mas",
+    "el_balance",
+    "casos_para_el_ensayo"
+  ],
+  "judges": [
+    { "judgeId": "democracy_scholar", "weight": 0.4 },
+    { "judgeId": "policy_lawyer", "weight": 0.3 },
+    { "judgeId": "professor_twin_ayd", "weight": 0.3 }
+  ],
+  "judgeConfig": {
+    "democracy_scholar": {
+      "sessionLens": "Tu lente es EL MECANISMO. La pregunta es la del ensayo del jueves 29 de octubre: ¿cómo cambia la IA el balance de poder entre el Estado y los ciudadanos? No hay respuesta correcta; lo que evalúas es si el estudiante explica POR QUÉ cambia el balance o solo afirma que cambia. 'La IA le da más poder al Estado porque tiene más recursos' no es un mecanismo: el Estado tenía más recursos antes de la IA. Un mecanismo dice qué abarata o encarece la IA, y para quién. EJEMPLOS NO EXHAUSTIVOS de mecanismos que la clase puso sobre la mesa: los datos siempre estuvieron ahí y lo que faltaba eran ojos para leerlos, así que la IA abarata vigilar; la IA abarata auditar y coordinarse desde abajo; detectar no es sancionar, porque la sanción sigue en manos del Estado; el que escribe las reglas decide qué IA ciudadana es legal; y el cruce de la Semana 7: si la IA baja el costo de reprimir el umbral llega antes, si lo sube se aleja. Cualquier otro mecanismo que opere vale exactamente igual, y no le exijas el vocabulario de la clase. PREMIA QUE EL CASO CARGUE EL MECANISMO: que el caso muestre el paso que el argumento afirma, no que lo acompañe. Y CORRIGE LA ASIMETRÍA DE LA CLASE: la lámina 18 dice que uno de los dos lados parte con más poder, y es cómodo darle la razón. Un buen argumento por 'los ciudadanos ganan' vale exactamente lo mismo que uno por 'el Estado gana', y un 'depende' que dice de qué depende y se queda con una rama también.",
+      "weightFormula": "score = 0.20 * posicion + 0.45 * mecanismo + 0.27 * uso_de_casos + 0.08 * contraargumento"
+    },
+    "policy_lawyer": {
+      "sessionLens": "Tu lente es LA POSICIÓN Y SU CONSECUENCIA. La primera línea tenía que empezar con 'Mi posición:' y el profesor la va a comparar con la del ensayo del jueves 29 de octubre, así que importa que esa línea diga algo. Lo que buscas: que el estudiante se quede con algo y no se escape. 'Depende de cómo se use', 'tiene aspectos positivos y negativos', 'es una herramienta de doble filo' no son posiciones: valen igual escritas por alguien que no vino a clase. 'DEPENDE' NO ESTÁ PROHIBIDO: decir DE QUÉ depende y quedarse con una rama —'depende de quién escribe las reglas, y hoy en Chile las escribe el Estado, así que gana el Estado'— es lo mejor que puede pasar, y va arriba. La segunda cosa que miras es si la respuesta termina donde empezó: la consecuencia final tiene que seguirse de la tesis, no contradecirla ni diluirla en un 'hay que regular'. Las tres direcciones —gana el Estado, ganan los ciudadanos, depende de algo nombrado— valen 100 si están sostenidas. No premies la que coincide con lo que el profesor parecía pensar.",
+      "weightFormula": "score = 0.38 * posicion + 0.30 * mecanismo + 0.20 * uso_de_casos + 0.12 * contraargumento"
+    },
+    "professor_twin_ayd": {
+      "sessionLens": "La sesión tiene UNA ronda y entra al ranking, así que un puntaje regalado pesa entero. Tu lente es EL USO DE LOS CASOS Y LA CALIBRACIÓN. Un caso hace trabajo cuando, si lo sacas, el argumento se cae; un caso adorna cuando se puede borrar y el argumento queda igual. UN SOLO CASO BIEN USADO LE GANA A CINCO NOMBRADOS: nombrar muchos casos no sube nada, y una lista de nombres sin argumento que los conecte va bajo aunque los nombres sean todos de la clase. Los casos de fuera de la clase VALEN: no puedes verificarlo todo, así que evalúa si está planteado con precisión plausible y si hace trabajo, no si aparece en el knowledge base. Tampoco premies una cifra solo porque suena precisa. CALIBRA PARA EL TELÉFONO: escriben en diez minutos al final de una clase de 70, por primera vez sobre esta pregunta, sin haber estudiado. Se pidieron 4 a 8 líneas. No esperes introducción, ni estructura formal, ni ortografía perfecta, ni vocabulario académico, y escribir más NO sube el puntaje. EN TU FEEDBACK escribe en primera persona e incluye un 'yo habría…' concreto a ESTA respuesta, y cierra amarrando con el ensayo manuscrito del jueves 29 de octubre: qué le falta a ESTA respuesta para convertirse en un buen ensayo —el mecanismo que falta explicar, el caso que falta describir, la objeción que hay que contestar—, nunca un consejo genérico de estudio. Escribe siempre 'el jueves 29 de octubre', nunca 'el jueves 29'. Nunca le pidas que cambie sus palabras por las del curso: si dijo bien la idea con palabras suyas, eso es lo que se pedía.",
+      "weightFormula": "score = 0.20 * posicion + 0.30 * mecanismo + 0.40 * uso_de_casos + 0.10 * contraargumento"
+    }
+  }
+}

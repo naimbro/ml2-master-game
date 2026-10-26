@@ -1,0 +1,102 @@
+{
+  "_doc": "Rúbrica de la ÚNICA ronda abierta y rankeada del lunes 26 de octubre. La pregunta es, con las mismas palabras, la del ensayo manuscrito del jueves 29 de octubre (15%), y el profesor va a comparar las dos respuestas: por eso no hay respuesta correcta y la dirección nunca se puntúa. Cuatro dimensiones, y cada una dice qué NO mide para que ningún error se cobre dos veces. 'posicion' es la tesis y la consecuencia: que se quede con algo. 'mecanismo' es el porqué, y pesa más porque es lo que separa un argumento de una opinión. 'uso_de_casos' mide si el caso hace trabajo, no cuántos casos hay. 'contraargumento' pesa poco (0,08-0,12) PORQUE EL ENUNCIADO NO LO PIDE: no anticipar ninguna objeción vale 40 y no 0, así que lo más que cuesta no hacerlo son ~6 puntos; está para premiar a quien lo hace, no para castigar a quien no. No hay dimensión de forma a propósito: una de forma la gana gratis la respuesta corta que no se arriesga, y acá se pidieron 4 a 8 líneas sin estructura. Los ids los referencian por nombre los tres weightFormula de config.json. No usa _shared/base_rubric.json porque aquí no se pide diseñar una institución ni leer un gráfico. Escrita el 26 de octubre de 2026 sobre el deck de la Semana 12 y el syllabus. CALIBRADA CON ARITMÉTICA Y CINCO RESPUESTAS SINTÉTICAS (respuestas_sinteticas.md), CON LAS PENALIZACIONES APAGADAS; NUNCA JUGADA.",
+  "_calibracion": "Puntajes con las weightFormula de config.json y SIN penalizaciones. Niveles en orden posicion/mecanismo/uso_de_casos/contraargumento. BUENA, el Estado gana (100/80/80/60) -> democracy_scholar 82, policy_lawyer 85, professor_twin 82. LA DE AL LADO, ganan los ciudadanos con Rosie (100/80/80/80) -> 84 / 88 / 84: si baja de 60, la rúbrica está premiando una dirección. MEDIOCRE (80/60/60/40) -> 62 / 65 / 62: posición clara, 'el Estado tiene más recursos y datos' como mecanismo, ICE nombrado sin hacer trabajo. PLAUSIBLE PERO VACÍA (20/40/20/40) -> 31 / 28 / 28: 'doble filo', 'depende de cómo se use', cuatro casos nombrados, 'hay que regular'. Si sube de 50, la rúbrica está premiando vocabulario y nombres. EL PAR QUE SE INVIERTE SOLO: COMPLETA-CON-UN-ERROR, describe mal el caso (100/100/40/40) -> 79 / 81 / 70, contra INCOMPLETA-PERO-IMPECABLE, gran tesis y mecanismo sin ningún caso (100/100/0/40) -> 68 / 73 / 54. El orden es el correcto y lo sostienen las anclas solas: la que se arriesga con un caso y lo describe mal queda por encima de la que no trajo ninguno, aunque el enunciado pedía al menos uno.",
+  "sessionId": "clase_12_estado_algoritmico",
+  "globalInstructions": "Evalúa SOLO lo que está escrito. Es la DUODÉCIMA semana del curso 'Inteligencia Artificial y Democracia' (Escuela de Gobierno UAI, 2026), primera sesión de la semana: lunes 26 de octubre, 08:30 a 09:40. Los estudiantes son del Minor en Inteligencia Artificial de la UAI.\n\nLA SESIÓN TIENE UNA SOLA RONDA Y ENTRA AL RANKING. Un puntaje regalado le quita el puesto a otro y no hay otra ronda que lo compense. El campo 'judgeFocus' de la ronda trae las advertencias específicas y MANDA sobre estas instrucciones generales si hay tensión.\n\nLA PREGUNTA ES LA DEL ENSAYO MANUSCRITO DEL JUEVES 29 DE OCTUBRE, con las mismas palabras: ¿cómo cambia la IA el balance de poder entre el Estado y los ciudadanos? Hoy la escriben por primera vez, sin haber estudiado, y el profesor va a comparar lo de hoy con lo del jueves. NO HAY RESPUESTA VERDADERA NI FALSA. Se evalúa la capacidad de articular un argumento —tesis clara, mecanismo, consecuencia— y cómo se movilizan los casos. Las tres direcciones valen 100: 'la IA fortalece al Estado', 'la IA empodera a los ciudadanos', o 'depende' si dice de qué depende y se queda con una rama. Nunca premies la dirección que parece coincidir con el deck.\n\nSE PIDIERON TRES COSAS: una primera línea que empieza con 'Mi posición:', el mecanismo, y al menos un caso concreto. Unas 4 a 8 líneas. La objeción que anticipa NO se pidió: si aparece, suma; si no, no es una falta.\n\nQUÉ VIERON HOY, y es todo lo que puedes exigir: el deck '¿A quién empodera la IA?' (21 láminas): el cruce de la Semana 7 y la pregunta de hacia dónde mueve la IA el costo de reprimir; el Estado ve más (ICE y Palantir, Chile y el art. 104 bis, Argentina); los ciudadanos ven más (Rosie, Operación Retuit, Citizens Police Data Project, IMMPATH y Resistbot); los tres pares y la asimetría. Todo eso está en el knowledge base. Las lecturas (Schneier y Sanders, The Economist, New York Times) son TAREA PARA EL JUEVES: no exijas nada de ellas, y si alguien las usa bien, suma.\n\nCASOS DE FUERA DE LA CLASE VALEN. No puedes verificarlo todo: evalúa si el caso está planteado con precisión plausible y si hace trabajo en el argumento. No castigues un caso solo porque no está en el knowledge base, y no premies una cifra solo porque suena precisa. Un solo caso bien usado le gana a cinco nombrados.\n\nNO EXIJAS NÚMEROS DE LÁMINA, CIFRAS NI NOMBRES DE AUTORES. 'El Estado ya tenía los datos, le faltaban ojos' vale exactamente lo mismo que citar la lámina 7.\n\nOBJETAR EL ENUNCIADO NUNCA BAJA EL PUNTAJE. Si dice que la pregunta está mal planteada —que 'el Estado' no es uno solo, que depende del régimen—, eso puede ser una posición excelente, siempre que la sostenga con mecanismo y caso.\n\nCALIBRACIÓN: escriben desde un teléfono, en diez minutos, al final de una clase de 70. No esperes introducción, ni estructura formal, ni ortografía perfecta, ni vocabulario académico, y escribir MÁS NO SUBE EL PUNTAJE. El largo es una sugerencia y no una regla: no bajes a nadie por una línea de más si aporta algo. Lo que sí baja es el relleno.\n\n===== CÓMO ESCRIBIR EL FEEDBACK =====\n\nEl estudiante no se lleva el número: se lleva los bullets. Tres reglas.\n\n1. NUNCA le pidas que cambie sus palabras por las de la clase. Si a la respuesta le falta algo, dile QUÉ PASO le falta, nunca QUÉ PALABRA. 'Antes tenían toda la información pero nadie alcanzaba a revisarla' ES 'muchos datos, pocos ojos': no lo corrijas. 'Gente común revisando lo que gastan los diputados' ES auditar desde abajo. 'Que encuentren a alguien no significa que lo castiguen' ES detectar no es sancionar.\n\n2. VERIFICA ANTES DE ADVERTIR. Si vas a decirle que un dato no estaba en la clase, búscalo primero en el knowledge base. Y si el caso es de afuera, no le adviertas por traerlo: está permitido. Advierte solo si lo que dice de un caso de la clase contradice lo que se proyectó.\n\n3. CIERRA ATANDO AL ENSAYO, y con la fecha entera. La próxima evaluación es el ENSAYO MANUSCRITO DEL JUEVES 29 DE OCTUBRE, en clase, sobre esta misma pregunta, y se evalúa el argumento y el uso de los casos. El cierre tiene que ser concreto sobre ESTA respuesta —qué mecanismo falta explicar, qué caso falta describir o usar, qué objeción va a tener que contestar—, nunca un consejo genérico de estudio. Escribe siempre 'el jueves 29 de octubre', nunca 'el jueves 29': en un teléfono no se entiende.",
+  "scoring": {
+    "scaleLevels": [100, 80, 60, 40, 20, 0],
+    "instructions": "Elige uno de los seis niveles escritos por dimensión. No inventes valores intermedios. Si la respuesta satisface un nivel solo parcialmente, baja al nivel inferior. Usa el campo 'judgeFocus' del escenario como ancla principal: ahí están las advertencias específicas de esta pregunta y mandan sobre estas instrucciones generales si hay tensión.",
+    "penaltiesNote": "Reporta el id de la penalización solo si la puedes verificar leyendo el texto. Si dudas, no la reportes: los niveles de arriba ya sostienen el puntaje sin ella."
+  },
+  "dimensions": [
+    {
+      "id": "posicion",
+      "name": "La posición",
+      "weight": 0.25,
+      "description": "¿La primera línea dice quién gana con la IA —el Estado, los ciudadanos, o de qué depende y con qué rama se queda— y la respuesta la sostiene hasta el final, terminando en una consecuencia que se sigue de ella? LA DIRECCIÓN NO SE PUNTÚA: las tres valen 100. 'Depende' sin decir de qué depende no es posición. Esta dimensión NO mide por qué cambia el balance —eso lo mide 'mecanismo' y solo 'mecanismo'—, NO mide los casos —eso lo mide 'uso_de_casos'— y NO mide la objeción —eso lo mide 'contraargumento'.",
+      "level_100": "Una tesis propia y clara —o un 'depende' que nombra de qué depende y elige una rama—, y la respuesta termina donde empezó: la consecuencia final se sigue de la tesis.",
+      "level_80": "Tesis clara, pero la respuesta no saca ninguna consecuencia o la consecuencia solo repite la tesis.",
+      "level_60": "Hay posición, pero tibia o que se diluye al final; o un 'depende' que dice de qué depende y no elige.",
+      "level_40": "La primera línea afirma algo que el resto contradice o abandona, o la posición es tan amplia que vale para cualquier dirección.",
+      "level_20": "'Depende de cómo se use', 'doble filo', 'tiene aspectos positivos y negativos', sin decir de qué depende ni quedarse con nada.",
+      "level_0": "No hay posición, o contesta otra cosa."
+    },
+    {
+      "id": "mecanismo",
+      "name": "El mecanismo",
+      "weight": 0.35,
+      "description": "¿Explica POR QUÉ cambia el balance —qué abarata o encarece la IA, y para quién—, o solo afirma que cambia? El mecanismo dicho con palabras propias vale exactamente lo mismo que con las de la clase, y cualquier mecanismo verdadero vale: la lista del judgeFocus no es cerrada. Esta dimensión NO mide qué dirección eligió —eso lo mide 'posicion'—, NO mide si el caso está bien descrito —eso lo mide 'uso_de_casos'— y NO mide la objeción.",
+      "level_100": "Nombra qué cambia con la IA y para quién, y se ve cómo eso mueve el balance en la dirección de su tesis.",
+      "level_80": "Un mecanismo correcto, dicho a medias: se entiende cuál es y no del todo cómo mueve el balance.",
+      "level_60": "Un mecanismo vago o que no depende de la IA ('el Estado tiene más recursos', 'tiene más datos') sin decir qué cambió con ella.",
+      "level_40": "Afirma que el balance cambia sin decir por qué, o con una intuición que no explica nada.",
+      "level_20": "Menciona vigilancia, datos o fiscalización en una frase suelta, sin conectarlos con quién gana.",
+      "level_0": "No hay ningún porqué."
+    },
+    {
+      "id": "uso_de_casos",
+      "name": "El uso de los casos",
+      "weight": 0.3,
+      "description": "¿El caso está bien descrito en lo esencial Y sostiene el mecanismo, de modo que si se borra el argumento se cae? UN SOLO CASO BIEN USADO LE GANA A CINCO NOMBRADOS: nombrar muchos no sube nada. Los casos de fuera de la clase valen igual si están planteados con precisión plausible y hacen trabajo. Esta dimensión NO mide si el mecanismo es bueno —eso lo mide 'mecanismo'—, NO mide la dirección y NO mide la objeción: un caso usado como contraejemplo y contestado suma aquí por el caso y en 'contraargumento' por la objeción, sin cobrarse dos veces.",
+      "level_100": "Al menos un caso descrito bien en lo esencial que muestra el paso que el argumento afirma; si trae un caso del otro lado o un contraejemplo, lo usa.",
+      "level_80": "Un caso bien descrito que sostiene el argumento, pero la conexión con el mecanismo queda implícita.",
+      "level_60": "Un caso real y bien descrito que acompaña el argumento sin cargarlo: se podría borrar y el argumento quedaría igual.",
+      "level_40": "Casos nombrados sin describir ni usar, o un caso descrito con un error en lo esencial (le atribuye algo contrario a lo que se proyectó).",
+      "level_20": "Una lista de nombres de casos, sin argumento que los conecte.",
+      "level_0": "Ningún caso concreto."
+    },
+    {
+      "id": "contraargumento",
+      "name": "La objeción",
+      "weight": 0.1,
+      "description": "¿Anticipa la objeción más fuerte contra su propia posición? NO SE PIDIÓ EN EL ENUNCIADO: no hacerlo vale 40 y no más abajo, y está para premiar a quien lo hace. Esta dimensión NO mide la posición, el mecanismo ni los casos: no bajes aquí por un error que ya se cobró en otra dimensión.",
+      "level_100": "Nombra la objeción más fuerte contra su posición y la contesta con un mecanismo o un caso.",
+      "level_80": "Nombra una objeción seria y la contesta a medias.",
+      "level_60": "Nombra una objeción y no la contesta, o contesta una objeción débil.",
+      "level_40": "No anticipa ninguna objeción, o menciona el otro lado y lo descarta sin razón ('pero el Estado siempre va a tener más poder'). Es el nivel de quien hizo exactamente lo que se pidió.",
+      "level_20": "No uses este nivel: no anticipar ninguna objeción, o descartarla sin razón, vale 40. Lo que esté mal en la tesis, el mecanismo o los casos ya se cobra en esas dimensiones.",
+      "level_0": "No uses este nivel, por la misma razón."
+    }
+  ],
+  "penalties": [
+    {
+      "id": "sin_posicion",
+      "description": "No hay una posición, o es puro 'depende de cómo se use' sin decir de qué depende; incluye recitar el deck —el Estado ve más, los ciudadanos ven más, los tres pares— sin quedarse con nada. No puede superar 20 en 'La posición'. NO aplica a un 'depende' que dice de qué depende y elige una rama: eso vale 100.",
+      "effect": { "type": "cap", "value": 20, "dimensions": ["posicion"] }
+    },
+    {
+      "id": "casos_sin_argumento",
+      "description": "Una lista de casos sin argumento que los conecte: nombra dos o más casos y ninguna frase dice por qué muestran que el balance se mueve. No puede superar 40 en 'El mecanismo' ni 40 en 'El uso de los casos'. NO aplica a quien nombra varios casos y usa al menos uno.",
+      "effect": { "type": "cap", "value": 40, "dimensions": ["mecanismo", "uso_de_casos"] }
+    },
+    {
+      "id": "generalidad_sin_caso",
+      "description": "Una generalidad intercambiable —'la IA es una herramienta de doble filo', 'puede usarse para bien o para mal'— Y ningún caso concreto. Tienen que darse las dos cosas: un argumento específico sin caso se cobra en los niveles de 'uso_de_casos', no aquí. No puede superar 40 en 'El mecanismo'; la falta de posición, si también ocurre, la cobra 'sin_posicion'.",
+      "effect": { "type": "cap", "value": 40, "dimensions": ["mecanismo"] }
+    }
+  ],
+  "globalPenalties": [
+    "Sin posición, o puro 'depende de cómo se use' sin decir de qué depende.",
+    "Lista de casos sin argumento que los conecte.",
+    "Generalidad intercambiable ('herramienta de doble filo') sin ningún caso concreto.",
+    "Recitar el deck sin tomar posición.",
+    "Extensión como sustituto de contenido: nombrar más casos o escribir más no sube el puntaje.",
+    "Atribuirle a un caso de la clase algo contrario a lo que se proyectó."
+  ],
+  "bonusIndicators": [
+    "Usa un caso de cada lado, o un contraejemplo que contesta",
+    "Usa uno de los tres pares de la clase para mostrar quién gana sobre el mismo terreno",
+    "Conecta con el cruce de la Semana 7: hacia dónde mueve la IA el costo de reprimir",
+    "Distingue detectar de sancionar",
+    "Nota que quien escribe las reglas decide qué IA ciudadana es legal",
+    "Nota que 'el Estado' no es uno solo, o que el balance se mueve distinto según el régimen",
+    "Un 'depende' que nombra de qué depende y se queda con una rama"
+  ],
+  "penaltyIndicators": [
+    "'Herramienta de doble filo' o 'depende de cómo se use' en la primera línea",
+    "Cuatro o más casos nombrados y ninguno descrito ni usado",
+    "'El Estado tiene más recursos' como único porqué",
+    "Cierra con 'hay que regular la IA' sin que se siga de nada de lo anterior",
+    "Resume el deck en vez de contestar"
+  ]
+}

@@ -50,6 +50,10 @@ import aydRp1Config from '../../content/sessions/ai_democracy_2026/repaso_prueba
 import aydRp1Scenarios from '../../content/sessions/ai_democracy_2026/repaso_prueba_1/scenarios.json';
 import aydRp1Rubric from '../../content/sessions/ai_democracy_2026/repaso_prueba_1/rubric.json';
 import aydRp1KnowledgeBase from '../../content/sessions/ai_democracy_2026/repaso_prueba_1/knowledge_base.md?raw';
+import aydC12Config from '../../content/sessions/ai_democracy_2026/clase_12_estado_algoritmico/config.json';
+import aydC12Scenarios from '../../content/sessions/ai_democracy_2026/clase_12_estado_algoritmico/scenarios.json';
+import aydC12Rubric from '../../content/sessions/ai_democracy_2026/clase_12_estado_algoritmico/rubric.json';
+import aydC12KnowledgeBase from '../../content/sessions/ai_democracy_2026/clase_12_estado_algoritmico/knowledge_base.md?raw';
 
 import teB2Config from '../../content/sessions/temas_emergentes_2026/bloque_2_concentracion_frontera/config.json';
 import teB2Scenarios from '../../content/sessions/temas_emergentes_2026/bloque_2_concentracion_frontera/scenarios.json';
@@ -355,6 +359,18 @@ export const SESSIONS: SessionOption[] = [
     scenarios: aydRp1Scenarios,
     rubric: aydRp1Rubric,
     knowledgeBase: aydRp1KnowledgeBase,
+  },
+  {
+    id: 'clase_12_estado_algoritmico',
+    courseId: 'ai_democracy_2026',
+    title: aydC12Config.title,
+    description: aydC12Config.description,
+    rounds: aydC12Scenarios.length,
+    duration: Math.round(aydC12Config.roundDurationSeconds / 60),
+    config: aydC12Config,
+    scenarios: aydC12Scenarios,
+    rubric: aydC12Rubric,
+    knowledgeBase: aydC12KnowledgeBase,
   },
   {
     id: 'bloque_2_concentracion_frontera',

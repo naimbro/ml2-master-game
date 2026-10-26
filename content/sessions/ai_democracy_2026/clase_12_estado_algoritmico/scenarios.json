@@ -1,0 +1,54 @@
+[
+  {
+    "id": "ayd_c12_r1_balance_estado_ciudadanos",
+    "order": 1,
+    "title": "¿A quién empodera la IA?",
+    "category": "Argumentación",
+    "difficulty": "hard",
+    "ranked": true,
+    "durationSeconds": 600,
+    "conceptTags": [
+      "el_cruce",
+      "el_estado_ve_mas",
+      "los_ciudadanos_ven_mas",
+      "el_balance",
+      "casos_para_el_ensayo"
+    ],
+    "context": "Es la pregunta del ensayo del **jueves 29 de octubre**. Cualquier posición bien argumentada puede sacar 100.\n\nCasos de la clase:\n— ICE y Palantir\n— Chile, art. 104 bis\n— Argentina: vigilar la protesta\n— Rosie, Operação Serenata de Amor\n— Operación Retuit\n— Citizens Police Data Project\n— IMMPATH y Resistbot\n\nVale otro caso, de donde sea.",
+    "question": "**¿Cómo cambia la IA el balance de poder entre el Estado y los ciudadanos?**\n\n1. Primera línea: «Mi posición: …»\n2. Por qué: el mecanismo.\n3. Al menos un caso concreto que lo sostenga.\n\nUnas 4 a 8 líneas.",
+    "judgeFocus": "LA PREGUNTA ES LA DEL ENSAYO MANUSCRITO DEL JUEVES 29 DE OCTUBRE, con las mismas palabras, y el profesor va a comparar esta respuesta con la del ensayo. Hoy el estudiante la escribe por primera vez, desde el teléfono, sin haber estudiado. NO HAY RESPUESTA VERDADERA NI FALSA: se evalúa el argumento y el uso de los casos, nunca la dirección.\n\nSE PIDIERON TRES COSAS: (1) una primera línea que empiece con 'Mi posición:'; (2) el mecanismo, por qué cambia el balance; (3) al menos un caso concreto usado como evidencia. Unas 4 a 8 líneas. La objeción que anticipa NO se pidió: si aparece, suma en 'contraargumento'; si no aparece, no es una falta.\n\nLA POSICIÓN. Valen las tres direcciones y valen 100 las tres: 'la IA fortalece al Estado', 'la IA empodera a los ciudadanos', o 'depende' SI DICE DE QUÉ DEPENDE Y SE QUEDA CON UNA RAMA. Lo que no es posición: 'depende de cómo se use', 'tiene aspectos positivos y negativos', 'es una herramienta de doble filo' sin decir cuál filo corta más. No premies la dirección que parece coincidir con el deck: la lámina 18 dice que uno de los lados parte con más poder, y darle la razón es lo cómodo.\n\nEL MECANISMO. El criterio: ¿dice QUÉ abarata o encarece la IA, y PARA QUIÉN, de modo que se ve por qué el balance se mueve? 'El Estado tiene más recursos' no es mecanismo, porque ya los tenía antes de la IA. EJEMPLOS NO EXHAUSTIVOS de mecanismos que operan: los datos siempre estuvieron y lo que faltaba eran ojos, así que la IA abarata vigilar; la IA abarata auditar y coordinarse desde abajo; detectar no es sancionar, porque la sanción sigue en manos del Estado; quien escribe las reglas decide qué IA ciudadana es legal; si la IA baja el costo de reprimir, el umbral de la Semana 7 llega antes, y si lo sube, se aleja. Cualquier otro mecanismo verdadero vale exactamente igual, y dicho con palabras propias vale lo mismo que con las de la clase. LO QUE NO CUENTA: afirmar que el balance cambia sin decir por qué.\n\nEL USO DE LOS CASOS. El caso tiene que estar bien descrito en lo esencial Y tiene que sostener el mecanismo: si se borra, el argumento se cae. UN SOLO CASO BIEN USADO LE GANA A CINCO NOMBRADOS. Un caso de cada lado, o un contraejemplo que el estudiante contesta, es lo mejor, pero NO LO EXIJAS. CASOS DE FUERA DE LA CLASE VALEN: no los castigues por no estar en el knowledge base; evalúa si están planteados con precisión plausible y si hacen trabajo. No premies cifras que suenan precisas: una cifra no es mérito, usarla sí. Los casos de la lista del ensayo (Smart Sampa, Catch and Revoke, Navalny, Irán, IJOP, Países Bajos, Robodebt, DOGE, Funes, vTaiwan y Pol.is, máquina de Habermas) no se vieron con contenido en clase: acéptalos si el estudiante los trae y descríbelos solo con lo que él escribe. LO QUE NO CUENTA: una lista de nombres sin argumento que los conecte; o un caso que se menciona y no se usa.\n\nEL ERROR MÁS COMÚN Y EL MÁS ENGAÑOSO: 'la IA es una herramienta de doble filo: el Estado puede vigilar, como ICE, y los ciudadanos pueden fiscalizar, como Rosie; por eso hay que regularla'. Nombra casos de los dos lados, usa el vocabulario de la clase y no dice nada: no hay posición, no hay mecanismo y los casos no hacen trabajo. Va bajo aunque se lea bien. Su hermana: recitar el deck —el Estado ve más, los ciudadanos ven más, los tres pares— sin quedarse con nada.\n\nOBJETAR EL ENUNCIADO NUNCA BAJA EL PUNTAJE. Si el estudiante dice que la pregunta está mal planteada —que 'el Estado' no es uno solo, o que el balance no se mueve—, eso puede ser una posición excelente, siempre que la sostenga con mecanismo y caso.\n\nSE PIDIERON UNAS 4 A 8 LÍNEAS, DESDE UN TELÉFONO, EN DIEZ MINUTOS, AL FINAL DE UNA CLASE DE 70. No esperes introducción, ni estructura formal, ni ortografía perfecta, ni vocabulario académico, y escribir más NO sube el puntaje.",
+    "evaluationGuide": {
+      "must_hit": [
+        "Abre con una posición propia que dice quién gana, o de qué depende y con qué rama se queda",
+        "Explica por qué cambia el balance con un mecanismo: qué abarata o encarece la IA, y para quién",
+        "Usa al menos un caso descrito bien en lo esencial, que sostiene el mecanismo y no solo lo acompaña"
+      ],
+      "fatal_errors": [
+        "Sin posición, o puro 'depende de cómo se use' sin decir de qué depende",
+        "'Herramienta de doble filo' o generalidad equivalente sin ningún caso concreto",
+        "Lista de casos sin argumento que los conecte",
+        "Le atribuye a un caso de la clase algo contrario a lo que se proyectó (por ejemplo, que Rosie era un sistema del Estado)"
+      ],
+      "partial_credit": {
+        "depende_con_rama": "Dice de qué depende y se queda con una rama: 100 en posicion, igual que una tesis directa",
+        "depende_sin_rama": "Dice de qué depende pero no se queda con ninguna rama: 60 en posicion",
+        "mecanismo_afirmado": "Dice que la IA le da más poder al Estado (o a los ciudadanos) porque 'tiene más datos' o 'más recursos', sin decir qué cambia con la IA: 60 en mecanismo",
+        "caso_que_adorna": "Nombra un caso real y bien descrito que no sostiene ningún paso del argumento: 60 en uso_de_casos",
+        "muchos_casos_nombrados": "Nombra cuatro o cinco casos sin usar ninguno: 40 en uso_de_casos. Por debajo de quien usa uno solo bien",
+        "sin_caso": "Argumento bueno sin ningún caso concreto: 0 en uso_de_casos; no baja posicion ni mecanismo",
+        "sin_objecion": "No anticipa ninguna objeción: 40 en contraargumento. No se pidió y no cuesta más que eso",
+        "caso_de_afuera": "Trae un caso que no se vio en clase, planteado con precisión plausible y que hace trabajo: puntúa igual que un caso de la clase"
+      },
+      "nice_to_have": [
+        "Un caso de cada lado, o un contraejemplo que contesta",
+        "Usa uno de los tres pares de la clase para mostrar quién gana sobre el mismo terreno",
+        "Conecta con el cruce de la Semana 7: hacia dónde mueve la IA el costo de reprimir",
+        "Distingue detectar de sancionar, o nota que quien escribe las reglas decide qué IA ciudadana es legal",
+        "Nota que 'el Estado' no es uno solo, o que el balance se mueve distinto según el régimen",
+        "Anticipa la objeción más fuerte contra su propia posición y la contesta",
+        "Objeta cómo está planteada la pregunta y después igual contesta"
+      ]
+    },
+    "idealAnswer": "Mi posición: la IA le da más poder al Estado que a los ciudadanos.\n\nEl Estado siempre tuvo los datos; lo que no tenía eran ojos para leerlos todos. La IA pone esos ojos, y eso abarata vigilar. ELITE, la app de ICE, arma un mapa de direcciones probables de inmigrantes con datos de Medicaid: ir al médico te pone en el mapa.\n\nLos ciudadanos también ganan algo: IMMPATH te explica qué responder a una carta de inmigración. Pero te ayuda a defenderte después de que te encontraron, no evita que te encuentren. Los dos lados usan la misma IA, pero uno parte con los datos."
+  }
+]
