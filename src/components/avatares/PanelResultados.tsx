@@ -80,10 +80,8 @@ export default function PanelResultados({ matriz }: { matriz: Matriz }) {
             <span className="text-lg uppercase" style={ARCHIVO}>Copias idénticas de una persona: {bots}</span>
             <input type="range" min={0} max={40} value={bots} onChange={(e) => setBots(Number(e.target.value))} className="w-64 accent-[#FF5A1F]" />
           </label>
-          <div className="grid gap-5 xl:grid-cols-2">
-            <MapaComun mapa={conBots.mapa} cn={conBots.cn} textos={conBots.textos} fuentes={['humano', 'bot']} />
-            <TablaPuente vista={conBots} camara="humano" />
-          </div>
+          <MapaComun mapa={conBots.mapa} cn={conBots.cn} textos={conBots.textos} fuentes={['humano', 'bot']} />
+          <TablaPuente vista={conBots} camara="humano" />
         </div>
       )}
     </section>
