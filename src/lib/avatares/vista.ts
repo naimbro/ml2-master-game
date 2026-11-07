@@ -21,9 +21,14 @@ export interface Vista {
   textos: Record<string, string>;
 }
 
-function camaras(m: Matriz): Record<string, { etiqueta: string; filtro: FiltroPersona }> {
+function camaras(m: Matriz, incluirBotsEnSala: boolean): Record<string, { etiqueta: string; filtro: FiltroPersona }> {
   const out: Record<string, { etiqueta: string; filtro: FiltroPersona }> = {};
-  if (m.personas.some((p) => p.fuente === 'humano')) out.humano = { etiqueta: 'La sala', filtro: porFuente('humano') };
+  if (m.personas.some((p) => p.fuente === 'humano')) {
+    out.humano = {
+      etiqueta: 'La sala',
+      filtro: incluirBotsEnSala ? (p: Persona) => p.fuente === 'humano' || p.fuente === 'bot' : porFuente('humano'),
+    };
+  }
   const modelos = [...new Set(m.personas.filter((p) => p.fuente === 'avatar').map((p) => p.modelo ?? '?'))].sort();
   for (const mod of modelos) {
     out[`avatar:${mod}`] = {
@@ -37,8 +42,9 @@ function camaras(m: Matriz): Record<string, { etiqueta: string; filtro: FiltroPe
   return out;
 }
 
-export function calcularVista(m: Matriz): Vista {
-  const cs = camaras(m);
+/** `incluirBotsEnSala`: los bots votan como parte de la sala (la pestaña «Bots»). */
+export function calcularVista(m: Matriz, incluirBotsEnSala = false): Vista {
+  const cs = camaras(m, incluirBotsEnSala);
   const porCamara: Vista['porCamara'] = {};
   const correlaciones: Vista['correlaciones'] = {};
   for (const [k, { etiqueta, filtro }] of Object.entries(cs)) {

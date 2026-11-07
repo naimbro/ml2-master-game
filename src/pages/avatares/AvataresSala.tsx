@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { QRCodeSVG } from 'qrcode.react';
 import { httpsCallable } from 'firebase/functions';
 import { functions } from '../../lib/firebase';
 import { useAvataresRun } from '../../hooks/useAvataresRun';
-import { cambiarFase, type Fase } from '../../lib/avatares/sala';
+import { aMatriz, cambiarFase, type Fase } from '../../lib/avatares/sala';
+import PanelResultados from '../../components/avatares/PanelResultados';
 import { currentAvataresUrl } from '../../lib/joinUrl';
 
 const FASES: Fase[] = ['lobby', 'planilla', 'encuesta', 'resultados'];
@@ -15,6 +16,9 @@ export default function AvataresSala() {
   const { code = '' } = useParams<{ code: string }>();
   const { run, loading, error, isHost, planillas, humanos, personas } = useAvataresRun(code);
   const [errorAvatares, setErrorAvatares] = useState<string | null>(null);
+  // La analitica es cara (factorizacion por camara): se recalcula solo cuando cambian los datos.
+  const instrumento = run?.instrumento;
+  const matriz = useMemo(() => (instrumento ? aMatriz(instrumento, humanos, personas) : null), [instrumento, humanos, personas]);
   if (loading) return <p className="p-6">Cargando…</p>;
   if (error || !run) return <p className="p-6">{error ?? 'Sala no encontrada'}</p>;
   if (!isHost) return <p className="p-6">Esta pantalla es del anfitrión.</p>;
@@ -69,7 +73,7 @@ export default function AvataresSala() {
         {run.avatares && <span>Avatares: {run.avatares.estado} · {run.avatares.n} listos · {run.avatares.fallos.length} fallos</span>}
         {errorAvatares && <span className="text-red-600">{errorAvatares}</span>}
       </section>
-      {run.fase === 'resultados' && <p data-testid="resultados-pendientes">Resultados: pendiente.</p>}
+      {run.fase === 'resultados' && matriz && <PanelResultados matriz={matriz} />}
     </main>
   );
 }

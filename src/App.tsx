@@ -37,6 +37,7 @@ import CompasCampos from './pages/compas/CompasCampos';
 import CrearAvatares from './pages/avatares/CrearAvatares';
 import AvataresJugar from './pages/avatares/AvataresJugar';
 import AvataresSala from './pages/avatares/AvataresSala';
+import AvataresPreview from './pages/avatares/AvataresPreview';
 
 // Auth context
 import { AuthProvider, useAuth } from './hooks/useAuth';
@@ -101,6 +102,7 @@ function AppRoutes() {
       <Route path="/preview-reveal" element={<RevealPreview />} />
       <Route path="/preview-mc" element={<MCRepartoPreview />} />
       <Route path="/preview-compas" element={<CompasPreview />} />
+      <Route path="/preview-avatares" element={<AvataresPreview />} />
 
       {/* Compas: el alumno entra por /compas/:code, el anfitrion proyecta /compas/:code/sala */}
       <Route path="/compas/:code" element={<ConSesion><CompasJugar /></ConSesion>} />
