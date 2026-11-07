@@ -3375,8 +3375,33 @@ git push origin main
 
 ## Medido
 
-(Se completa en la Task 14.)
+Corrida en seco SINT01 (7-nov-2026, 16:31–16:50): 28 alumnos sintéticos, 3 réplicas × 12 rondas, `gemini-2.5-flash-lite`.
+
+- **19 min en total** (1.138 s). Grafo + semilla ~2 min; cada réplica ~1,5 min (las 3 terminaron a los 6,5 min);
+  **el cuello de botella es la línea base** (serial, 2 órdenes × 12 ítems × 28 = 672 llamadas), que corre en paralelo.
+- 1.939 llamadas, 3,95 M tokens de entrada + 0,16 M de salida ≈ **US$0,46**. Cero errores, cero rechazos del proxy.
+- Interacción real: 213–241 acciones por réplica (Twitter + Reddit simulados).
+- 112 personas al contrato (28 base + 84 en red), ~12 votos cada una. Con datos sintéticos no hubo homogeneización
+  (dispersión 2,1–2,4) y la aprobación media subió de 0,30 a 0,36.
+- Requisito previo descubierto: tras reiniciar WSL, el bus de systemd de usuario puede faltar
+  (`docs/KNOWN_ISSUES.md` de MiroFish). Ver «Lunes», paso 0.
 
 ## Lunes
 
-(Se completa en la Task 15.)
+Variable: `C` = código de la sala. Rutas WSL: juego en `/mnt/c/Users/naim.bro.k/claude_projects/games/ml2-master-game`,
+MiroFish en `/mnt/c/Users/naim.bro.k/claude_projects/mirofish` (rama `feat/ayd14`). `P=$MF/backend/.venv/bin/python`.
+
+0. **Antes de clase:** computador enchufado, una terminal de Ubuntu abierta (WSL despierto) y
+   `wsl -e bash -lc "systemctl --user is-system-running"` → `running`. Si dice «Failed to connect to bus»:
+   `wsl -u root -- systemctl restart user-runtime-dir@1000.service user@1000.service` (si además hay dos montajes en
+   `findmnt -T /run/user/1000`, primero `wsl -u root -- umount -l /run/user/1000`).
+1. Crear la sala en `/professor/avatares/nuevo` y proyectar `/avatares/C/sala`. Fase **Planilla** (~10 min).
+2. Al cerrar la planilla: botón **Generar avatares** (segundos) y, en WSL:
+   `npx tsx scripts/avatares-mirofish-export.ts C` →
+   `$P -m ayd14.mirofish prepare C` → `$P -m weekly.approve C --results-dir results/ayd14/C` (Naim escribe «aprobar») →
+   `$P -m ayd14.mirofish freeze C` → `scripts/run_ayd14.sh C --simulate --replicates 3 --rounds 12` en segundo plano (~20 min).
+3. Fase **Encuesta** (~8 min). Después, el deck (Diella, Hidalgo, Innerarity, el gradiente, el sesgo).
+4. Fase **Resultados**: «Avatar vs. tú», «Mapa», «Mayoría vs. puente», «Bots».
+5. Cuando termine MiroFish: `$P -m ayd14.mirofish resultados C` → `npx tsx scripts/avatares-mirofish-import.ts C`; la
+   sala muestra la cámara «Avatares después de deliberar» sin recargar.
+6. Si MiroFish falla o no termina: plan B del spec (se arregla en la semana y se muestra el jueves).
