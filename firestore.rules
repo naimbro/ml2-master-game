@@ -306,6 +306,41 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
 
+    // ---------------------------------------------------------------------
+    // Avatares (Semana 14 AyD). Spec 2026-11-07. No es un juego: no puntua.
+    // Planillas y votos humanos los lee SOLO el anfitrion; las personas
+    // (avatares, MiroFish) las escriben solo Functions y scripts de admin.
+    // ---------------------------------------------------------------------
+    match /avataresRuns/{code} {
+      function esHostDe(c) {
+        return get(/databases/$(database)/documents/avataresRuns/$(c)).data.hostId == request.auth.uid;
+      }
+
+      allow read: if isAuthenticated();
+      allow create: if isApprovedProfessor() && request.resource.data.hostId == request.auth.uid;
+      // Alumnos: solo el mapa de participantes. Anfitrion: todo.
+      allow update: if isAuthenticated() && (
+        resource.data.hostId == request.auth.uid
+        || request.resource.data.diff(resource.data).affectedKeys().hasOnly(['participantes'])
+      );
+      allow delete: if isAdmin() || (isAuthenticated() && resource.data.hostId == request.auth.uid);
+
+      match /planillas/{uid} {
+        allow read: if isOwner(uid) || (isAuthenticated() && esHostDe(code));
+        allow create, update: if isOwner(uid) && request.resource.data.uid == request.auth.uid;
+        allow delete: if false;
+      }
+      match /humanos/{uid} {
+        allow read: if isOwner(uid) || (isAuthenticated() && esHostDe(code));
+        allow create, update: if isOwner(uid) && request.resource.data.uid == request.auth.uid;
+        allow delete: if false;
+      }
+      match /personas/{personaId} {
+        allow read: if isAuthenticated() && esHostDe(code);
+        allow write: if false;
+      }
+    }
+
     // Tabla acumulada del curso. Contiene SOLO los diez primeros: el fondo de la
     // tabla no se guarda en ningun documento legible por otro alumno.
     match /standings/{courseId} {

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { buildJoinUrl, buildCompasUrl, destinoSeguro } from './joinUrl';
+import { buildJoinUrl, buildCompasUrl, buildAvataresUrl, destinoSeguro } from './joinUrl';
 
 describe('buildJoinUrl', () => {
   it('respeta el prefijo de GitHub Pages', () => {
@@ -74,5 +74,12 @@ describe('destinoSeguro', () => {
   it('rechaza una URL absoluta', () => {
     expect(destinoSeguro('https://evil.com')).toBeNull();
     expect(destinoSeguro('javascript:alert(1)')).toBeNull();
+  });
+});
+
+describe('buildAvataresUrl', () => {
+  it('arma la URL absoluta con prefijo y codigo limpio', () => {
+    expect(buildAvataresUrl('ab-c123', 'https://naimbro.github.io', '/ml2-master-game/'))
+      .toBe('https://naimbro.github.io/ml2-master-game/avatares/ABC123');
   });
 });

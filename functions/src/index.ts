@@ -21,7 +21,10 @@ import {
   resolveProvider,
   resolveModel,
   type JudgeModelClients,
+  type JudgeProvider,
 } from './lib/judgeModels';
+import { idAvatarFn, promptAvatar, refAvatares } from './lib/avatares';
+import { correrAvatares, type TareaAvatar } from './lib/avataresRun';
 import { splitPrompt } from './lib/promptSplit';
 import {
   validateDraftInput,
@@ -2263,4 +2266,63 @@ export const recomputeCourseStandings = functions
       playerCount: entries.length,
       excludedGameCodes,
     };
+  });
+
+/**
+ * Avatares de la Semana 14 AyD (spec 2026-11-07, M2). Solo el anfitrion.
+ * Una llamada por planilla y por modelo, con todas las propuestas, en una cola
+ * de concurrencia constante con timeout por llamada (lib/avataresRun.ts). Ids
+ * deterministas: correrlo dos veces sobrescribe, no duplica, y salta a quienes
+ * ya quedaron completos. Si algo revienta, el estado queda en 'error' (nunca
+ * pegado en 'corriendo', que bloquearia el boton del anfitrion). Al LLM va solo
+ * el texto seudonimizado de la planilla (sin nombre, uid, correo ni ciudad).
+ */
+export const votarComoAvatares = functions
+  .region('us-central1')
+  .runWith({ timeoutSeconds: 540, memory: '512MB', secrets: ['OPENAI_API_KEY', 'ANTHROPIC_API_KEY', 'GEMINI_API_KEY'] })
+  .https.onCall(async (data, context) => {
+    if (!context.auth) throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
+    const code = String(data?.code ?? '').toUpperCase();
+    if (!code) throw new functions.https.HttpsError('invalid-argument', 'Falta el codigo de sala');
+    const runRef = db.collection('avataresRuns').doc(code);
+    const run = (await runRef.get()).data();
+    if (!run) throw new functions.https.HttpsError('not-found', 'Sala no encontrada');
+    if (run.hostId !== context.auth.uid) throw new functions.https.HttpsError('permission-denied', 'Solo el anfitrion');
+
+    await runRef.update({ avatares: { estado: 'corriendo', n: 0, fallos: [], iniciadoEn: Date.now() } });
+    try {
+      const propuestas = (run.instrumento.propuestas as { id: string; texto: string }[]).map(({ id, texto }) => ({ id, texto }));
+      const ids = propuestas.map((p) => p.id);
+      const etiquetas = run.instrumento.escala.etiquetas as string[];
+      const modelos = (run.modelos ?? []) as { provider: JudgeProvider; model: string }[];
+      // El ref se deriva del uid (id del doc) y no se lee del cliente: nadie puede pisar el avatar de otro.
+      const planillas = (await runRef.collection('planillas').get()).docs
+        .map((d) => ({ ref: refAvatares(d.id, code), texto: String((d.data() as { texto?: string }).texto ?? '') }));
+      const completos = new Set((await runRef.collection('personas').get()).docs
+        .filter((d) => d.data().fuente === 'avatar' && Array.isArray(d.data().faltantes) && d.data().faltantes.length === 0)
+        .map((d) => d.id));
+
+      const clients: JudgeModelClients = {};
+      if (modelos.some((m) => m.provider === 'openai')) clients.openai = await getOpenAI();
+      if (modelos.some((m) => m.provider === 'anthropic')) clients.anthropic = await getAnthropic();
+      if (modelos.some((m) => m.provider === 'gemini')) clients.gemini = await getGemini();
+
+      const tareas: TareaAvatar[] = planillas.flatMap((p) => modelos.map((m) => ({
+        ref: p.ref, texto: p.texto, provider: m.provider, model: m.model, yaCompleto: completos.has(idAvatarFn(m.model, p.ref)),
+      })));
+      const r = await correrAvatares({
+        tareas, ids, concurrencia: 8, timeoutMs: 60_000,
+        llamar: (t) => callJudgeModel(clients, { provider: t.provider, model: t.model, ...promptAvatar(t.texto, propuestas, etiquetas), maxTokens: 800 }),
+        guardar: async (id, d) => { await runRef.collection('personas').doc(id).set(d); },
+        avisar: (msg, extra) => functions.logger.warn(msg, extra),
+      });
+      const intentadas = tareas.length - r.saltados;
+      const estado = intentadas > 0 && r.fallos.length === intentadas ? 'error' : 'listo';
+      await runRef.update({ avatares: { estado, n: r.n + r.saltados, fallos: r.fallos } });
+      return { n: r.n + r.saltados, fallos: r.fallos };
+    } catch (e) {
+      functions.logger.error('votarComoAvatares fallo', { code, error: (e as Error).message });
+      await runRef.update({ avatares: { estado: 'error', n: 0, fallos: [], mensaje: (e as Error).message } });
+      throw new functions.https.HttpsError('internal', `No se pudieron generar los avatares: ${(e as Error).message}`);
+    }
   });

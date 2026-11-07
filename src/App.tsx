@@ -34,6 +34,10 @@ import CompasJugar from './pages/compas/CompasJugar';
 import CrearCompas from './pages/professor/CrearCompas';
 import CompasComparacion from './pages/compas/CompasComparacion';
 import CompasCampos from './pages/compas/CompasCampos';
+import CrearAvatares from './pages/avatares/CrearAvatares';
+import AvataresJugar from './pages/avatares/AvataresJugar';
+import AvataresSala from './pages/avatares/AvataresSala';
+import AvataresPreview from './pages/avatares/AvataresPreview';
 
 // Auth context
 import { AuthProvider, useAuth } from './hooks/useAuth';
@@ -98,11 +102,17 @@ function AppRoutes() {
       <Route path="/preview-reveal" element={<RevealPreview />} />
       <Route path="/preview-mc" element={<MCRepartoPreview />} />
       <Route path="/preview-compas" element={<CompasPreview />} />
+      <Route path="/preview-avatares" element={<AvataresPreview />} />
 
       {/* Compas: el alumno entra por /compas/:code, el anfitrion proyecta /compas/:code/sala */}
       <Route path="/compas/:code" element={<ConSesion><CompasJugar /></ConSesion>} />
       <Route path="/compas/:code/sala" element={<ConSesion><CompasSala /></ConSesion>} />
       <Route path="/compas/:code/campos" element={<ConSesion><CompasCampos /></ConSesion>} />
+
+      {/* Avatares (Semana 14 AyD): el alumno entra por /avatares/:code, el anfitrion proyecta /avatares/:code/sala */}
+      <Route path="/avatares/:code" element={<ConSesion><AvataresJugar /></ConSesion>} />
+      <Route path="/avatares/:code/sala" element={<ConSesion><AvataresSala /></ConSesion>} />
+      <Route path="/professor/avatares/nuevo" element={user ? <CrearAvatares /> : <Navigate to="/" replace />} />
       <Route
         path="/professor/compas/nuevo"
         element={user ? <CrearCompas /> : <Navigate to="/" replace />}
