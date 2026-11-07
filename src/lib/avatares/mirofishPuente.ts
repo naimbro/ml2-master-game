@@ -72,7 +72,7 @@ export function itemsDesdeInstrumento(inst: Instrumento) {
       question: '¿Cuál se acerca más a lo que piensas?',
       options: [
         { letter: 'A', text: p.texto }, { letter: 'B', text: p.polo },
-        { letter: 'C', text: 'Ninguna de las dos' }, { letter: 'D', text: 'No sé' },
+        { letter: 'C', text: 'Ninguna de las dos' }, { letter: 'D', text: 'No sabe / No responde' },
       ],
     };
   });

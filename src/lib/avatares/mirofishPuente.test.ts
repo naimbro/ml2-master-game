@@ -40,7 +40,7 @@ describe('itemsDesdeInstrumento', () => {
     for (const it of [question, ...items]) {
       expect(it.options.map((o) => o.letter)).toEqual(['A', 'B', 'C', 'D']);
       expect(it.options[2].text).toBe('Ninguna de las dos');
-      expect(it.options[3].text).toBe('No sé');
+      expect(it.options[3].text).toBe('No sabe / No responde');
       expect(it.options.some((o) => /acuerdo/i.test(o.text))).toBe(false);
       expect(it.context).not.toMatch(/[0-9%]/);
     }
