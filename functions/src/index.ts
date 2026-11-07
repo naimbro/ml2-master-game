@@ -21,7 +21,9 @@ import {
   resolveProvider,
   resolveModel,
   type JudgeModelClients,
+  type JudgeProvider,
 } from './lib/judgeModels';
+import { idAvatarFn, normalizarVotos, promptAvatar, PROMPT_VERSION } from './lib/avatares';
 import { splitPrompt } from './lib/promptSplit';
 import {
   validateDraftInput,
@@ -2263,4 +2265,64 @@ export const recomputeCourseStandings = functions
       playerCount: entries.length,
       excludedGameCodes,
     };
+  });
+
+/**
+ * Avatares de la Semana 14 AyD (spec 2026-11-07, M2). Solo el anfitrion.
+ * Una llamada por planilla y por modelo, con todas las propuestas. Ids
+ * deterministas: correrlo dos veces sobrescribe, no duplica. Un fallo marca a la
+ * persona con sus faltantes y no tumba la corrida. Al LLM va solo el texto
+ * seudonimizado de la planilla (sin nombre, uid, correo ni ciudad).
+ */
+export const votarComoAvatares = functions
+  .region('us-central1')
+  .runWith({ timeoutSeconds: 540, memory: '512MB', secrets: ['OPENAI_API_KEY', 'ANTHROPIC_API_KEY', 'GEMINI_API_KEY'] })
+  .https.onCall(async (data, context) => {
+    if (!context.auth) throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
+    const code = String(data?.code ?? '').toUpperCase();
+    if (!code) throw new functions.https.HttpsError('invalid-argument', 'Falta el codigo de sala');
+    const runRef = db.collection('avataresRuns').doc(code);
+    const run = (await runRef.get()).data();
+    if (!run) throw new functions.https.HttpsError('not-found', 'Sala no encontrada');
+    if (run.hostId !== context.auth.uid) throw new functions.https.HttpsError('permission-denied', 'Solo el anfitrion');
+
+    const propuestas = (run.instrumento.propuestas as { id: string; texto: string }[]).map(({ id, texto }) => ({ id, texto }));
+    const ids = propuestas.map((p) => p.id);
+    const etiquetas = run.instrumento.escala.etiquetas as string[];
+    const modelos = (run.modelos ?? []) as { provider: JudgeProvider; model: string }[];
+    const planillas = (await runRef.collection('planillas').get()).docs.map((d) => d.data() as { ref: string; texto: string });
+    await runRef.update({ avatares: { estado: 'corriendo', n: 0, fallos: [] } });
+
+    const clients: JudgeModelClients = {};
+    if (modelos.some((m) => m.provider === 'openai')) clients.openai = await getOpenAI();
+    if (modelos.some((m) => m.provider === 'anthropic')) clients.anthropic = await getAnthropic();
+    if (modelos.some((m) => m.provider === 'gemini')) clients.gemini = await getGemini();
+
+    const tareas = planillas.flatMap((p) => modelos.map((m) => ({ p, m })));
+    const fallos: string[] = [];
+    let n = 0;
+    const TOPE = 8;
+    for (let i = 0; i < tareas.length; i += TOPE) {
+      await Promise.all(tareas.slice(i, i + TOPE).map(async ({ p, m }) => {
+        const prompt = promptAvatar(p.texto ?? '', propuestas, etiquetas);
+        let votos: Record<string, number> = {};
+        for (let intento = 0; intento < 2 && Object.keys(votos).length < ids.length; intento++) {
+          try {
+            const raw = await callJudgeModel(clients, { provider: m.provider, model: m.model, ...prompt, maxTokens: 800 });
+            votos = { ...votos, ...normalizarVotos(raw, ids).votos };
+          } catch (e) {
+            functions.logger.warn('avatar fallo', { model: m.model, ref: p.ref, error: (e as Error).message });
+          }
+        }
+        const faltantes = ids.filter((id) => !(id in votos));
+        const id = idAvatarFn(m.model, p.ref);
+        await runRef.collection('personas').doc(id).set({
+          id, ref: p.ref, fuente: 'avatar', via: 'app', modelo: m.model, condicion: PROMPT_VERSION, votos, faltantes,
+        });
+        if (faltantes.length === ids.length) fallos.push(id); else n += 1;
+      }));
+    }
+    const estado = tareas.length > 0 && fallos.length === tareas.length ? 'error' : 'listo';
+    await runRef.update({ avatares: { estado, n, fallos } });
+    return { n, fallos };
   });
