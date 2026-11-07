@@ -34,6 +34,17 @@ export function currentCompasUrl(code: string): string {
   return buildCompasUrl(code, window.location.origin, import.meta.env.BASE_URL || '/');
 }
 
+/** URL absoluta para entrar a una sala de avatares (Semana 14 AyD). */
+export function buildAvataresUrl(code: string, origin: string, baseUrl: string): string {
+  const base = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
+  const limpio = code.toUpperCase().replace(/[^A-Z0-9]/g, '');
+  return `${origin.replace(/\/$/, '')}${base}avatares/${limpio}`;
+}
+
+export function currentAvataresUrl(code: string): string {
+  return buildAvataresUrl(code, window.location.origin, import.meta.env.BASE_URL || '/');
+}
+
 /**
  * A donde iba el alumno antes de que lo mandaran a iniciar sesion.
  *
