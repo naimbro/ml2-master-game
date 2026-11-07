@@ -1,0 +1,42 @@
+{
+  "id": "ayd14_vina_v1",
+  "version": 1,
+  "titulo": "Avatares · Semana 14 (ítems de Viña)",
+  "escala": { "min": 1, "max": 5, "aprueba": 4,
+    "etiquetas": ["Totalmente en desacuerdo", "En desacuerdo", "Ni de acuerdo ni en desacuerdo", "De acuerdo", "Totalmente de acuerdo"] },
+  "planilla": [
+    { "id": "edad", "etiqueta": "Edad", "tipo": "texto" },
+    { "id": "genero", "etiqueta": "Género (opcional)", "tipo": "texto" },
+    { "id": "pais_ciudad", "etiqueta": "País / ciudad", "tipo": "texto", "sensible": true },
+    { "id": "nivel_educativo", "etiqueta": "Nivel educativo", "tipo": "texto" },
+    { "id": "ocupacion", "etiqueta": "Ocupación actual", "tipo": "texto" },
+    { "id": "economia", "etiqueta": "En economía me considero", "tipo": "texto", "ayuda": "ej. izquierda redistributiva, centro socialdemócrata, derecha liberal de mercado" },
+    { "id": "rol_estado", "etiqueta": "El rol del Estado en la economía debería ser", "tipo": "opcion", "opciones": ["mínimo", "equilibrado", "fuerte intervención"] },
+    { "id": "social", "etiqueta": "En temas sociales me considero", "tipo": "texto", "ayuda": "ej. progresista, conservador, libertario" },
+    { "id": "derechos_civiles", "etiqueta": "Respecto a derechos civiles (matrimonio igualitario, aborto, etc.)", "tipo": "opcion", "opciones": ["a favor", "en contra", "con matices"] },
+    { "id": "ambiental", "etiqueta": "En temas ambientales me considero", "tipo": "opcion", "opciones": ["crecimiento económico primero", "balance", "prioridad al medio ambiente"] },
+    { "id": "cambio_climatico", "etiqueta": "Respecto al cambio climático", "tipo": "opcion", "opciones": ["no es prioridad", "es un tema importante", "es una emergencia global"] },
+    { "id": "prioridad_1", "etiqueta": "Prioridad política 1", "tipo": "texto" },
+    { "id": "prioridad_2", "etiqueta": "Prioridad política 2", "tipo": "texto" },
+    { "id": "prioridad_3", "etiqueta": "Prioridad política 3", "tipo": "texto" },
+    { "id": "conf_congreso", "etiqueta": "Confianza en el congreso (1 a 5)", "tipo": "escala" },
+    { "id": "conf_gobierno", "etiqueta": "Confianza en el gobierno (1 a 5)", "tipo": "escala" },
+    { "id": "conf_partidos", "etiqueta": "Confianza en los partidos (1 a 5)", "tipo": "escala" },
+    { "id": "conf_justicia", "etiqueta": "Confianza en la justicia (1 a 5)", "tipo": "escala" },
+    { "id": "conf_ciencia", "etiqueta": "Confianza en la ciencia y la tecnología (1 a 5)", "tipo": "escala" }
+  ],
+  "propuestas": [
+    { "id": "salario_minimo", "origen": "instrumento", "tema": "Salario mínimo", "texto": "El salario mínimo debería aumentar significativamente aunque eso pueda afectar a las empresas.", "polo": "El salario mínimo debería subir solo al ritmo que las empresas puedan pagar sin despedir." },
+    { "id": "estado_servicios", "origen": "instrumento", "tema": "Rol del Estado", "texto": "El Estado debe tener un rol central en proveer servicios básicos como salud y educación.", "polo": "Salud y educación funcionan mejor con proveedores privados que compiten y el Estado solo subsidia a quien lo necesita." },
+    { "id": "impuestos_ricos", "origen": "instrumento", "tema": "Impuestos", "texto": "Los impuestos a los más ricos deberían subir para financiar programas sociales.", "polo": "Subir impuestos a los más ricos espanta la inversión; los programas sociales deben financiarse con crecimiento." },
+    { "id": "matrimonio_igualitario", "origen": "instrumento", "tema": "Matrimonio igualitario", "texto": "El matrimonio igualitario debe estar garantizado en la Constitución.", "polo": "El matrimonio igualitario debe quedar en la ley, que se puede cambiar, no en la Constitución." },
+    { "id": "aborto", "origen": "instrumento", "tema": "Aborto", "texto": "El aborto debería ser legal en todas las circunstancias.", "polo": "El aborto debería ser legal solo en causales acotadas." },
+    { "id": "migracion", "origen": "instrumento", "tema": "Migración", "texto": "La migración debe ser facilitada y apoyada por el Estado.", "polo": "El Estado debe restringir y controlar más estrictamente la migración." },
+    { "id": "cambio_climatico", "origen": "instrumento", "tema": "Cambio climático", "texto": "El Estado debería priorizar la lucha contra el cambio climático aunque afecte el crecimiento económico.", "polo": "El crecimiento económico debe ir primero; la acción climática no puede frenarlo." },
+    { "id": "areas_protegidas", "origen": "instrumento", "tema": "Recursos naturales", "texto": "Se debería prohibir la explotación de recursos naturales en áreas protegidas.", "polo": "En áreas protegidas debería permitirse explotar recursos con evaluación ambiental estricta." },
+    { "id": "regular_ia", "origen": "instrumento", "tema": "Regulación de la IA", "texto": "La inteligencia artificial debería regularse estrictamente para evitar sesgos y manipulación política.", "polo": "Regular estrictamente la IA frena la innovación; bastan reglas mínimas y autorregulación." },
+    { "id": "representantes_humanos", "origen": "instrumento", "tema": "Representación", "texto": "La democracia funciona mejor con representantes electos humanos que con avatares digitales.", "polo": "Un avatar digital entrenado con mis preferencias me representaría mejor que un representante electo." },
+    { "id": "referendos", "origen": "instrumento", "tema": "Democracia directa", "texto": "Se deberían hacer más referendos para decidir directamente sobre leyes importantes.", "polo": "Las leyes importantes deben decidirlas representantes que deliberan, no referendos." },
+    { "id": "ciencia_democracia", "origen": "instrumento", "tema": "Ciencia y democracia", "texto": "Confío en que la ciencia y la tecnología pueden mejorar la calidad de la democracia.", "polo": "La ciencia y la tecnología tienden a concentrar poder y no mejoran la democracia por sí solas." }
+  ]
+}
