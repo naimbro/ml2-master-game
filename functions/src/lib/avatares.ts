@@ -4,6 +4,24 @@
 // Vina, para que el avatar sea el mismo que armaban los alumnos a mano.
 export const PROMPT_VERSION = 'avatar-v1';
 
+/** FNV-1a de 32 bits; copia exacta de refDe (src/lib/avatares/contrato.ts), fijada por prueba. */
+function fnv1a(s: string, seed: number): number {
+  let h = seed >>> 0;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 0x01000193) >>> 0;
+  }
+  return h >>> 0;
+}
+
+/** El seudonimo del alumno, derivado del uid (id del doc) en el servidor: el cliente no lo puede elegir. */
+export function refAvatares(uid: string, code: string): string {
+  const s = `${code}:${uid}`;
+  const a = fnv1a(s, 0x811c9dc5).toString(16).padStart(8, '0');
+  const b = fnv1a(s, 0x9e3779b9).toString(16).padStart(8, '0');
+  return `r${(a + b).slice(0, 12)}`;
+}
+
 export function idAvatarFn(modelo: string, ref: string): string {
   return `a_${modelo.replace(/[/\s]+/g, '-')}_${ref}`;
 }

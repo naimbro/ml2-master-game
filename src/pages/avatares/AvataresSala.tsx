@@ -1,10 +1,10 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { QRCodeSVG } from 'qrcode.react';
 import { httpsCallable } from 'firebase/functions';
 import { functions } from '../../lib/firebase';
 import { useAvataresRun } from '../../hooks/useAvataresRun';
-import { aMatriz, cambiarFase, type Fase } from '../../lib/avatares/sala';
+import { aMatriz, avataresBloqueados, cambiarFase, type Fase } from '../../lib/avatares/sala';
 import PanelResultados from '../../components/avatares/PanelResultados';
 import { currentAvataresUrl } from '../../lib/joinUrl';
 
@@ -16,9 +16,19 @@ export default function AvataresSala() {
   const { code = '' } = useParams<{ code: string }>();
   const { run, loading, error, isHost, planillas, humanos, personas } = useAvataresRun(code);
   const [errorAvatares, setErrorAvatares] = useState<string | null>(null);
+  // Reloj de la pantalla (cada 30 s): destraba el boton si el estado quedo pegado en 'corriendo'.
+  const [ahora, setAhora] = useState(() => Date.now());
+  useEffect(() => {
+    const t = setInterval(() => setAhora(Date.now()), 30_000);
+    return () => clearInterval(t);
+  }, []);
   // La analitica es cara (factorizacion por camara): se recalcula solo cuando cambian los datos.
   const instrumento = run?.instrumento;
-  const matriz = useMemo(() => (instrumento ? aMatriz(instrumento, humanos, personas) : null), [instrumento, humanos, personas]);
+  const runCode = run?.code;
+  const matriz = useMemo(
+    () => (instrumento && runCode ? aMatriz(instrumento, runCode, humanos, personas) : null),
+    [instrumento, runCode, humanos, personas],
+  );
   if (loading) return <p className="p-6">Cargando…</p>;
   if (error || !run) return <p className="p-6">{error ?? 'Sala no encontrada'}</p>;
   if (!isHost) return <p className="p-6">Esta pantalla es del anfitrión.</p>;
@@ -65,12 +75,12 @@ export default function AvataresSala() {
       <section className="flex flex-wrap items-center gap-4">
         <button
           className="rounded border px-3 py-2 disabled:opacity-50"
-          disabled={!planillas.length || run.avatares?.estado === 'corriendo'}
+          disabled={!planillas.length || avataresBloqueados(run.avatares, ahora)}
           onClick={generarAvatares}
         >
           Generar avatares ({planillas.length} planillas × {run.modelos.length} modelos)
         </button>
-        {run.avatares && <span>Avatares: {run.avatares.estado} · {run.avatares.n} listos · {run.avatares.fallos.length} fallos</span>}
+        {run.avatares && <span>Avatares: {run.avatares.estado} · {run.avatares.n} listos · {run.avatares.fallos.length} fallos{run.avatares.mensaje ? ` · ${run.avatares.mensaje}` : ''}</span>}
         {errorAvatares && <span className="text-red-600">{errorAvatares}</span>}
       </section>
       {run.fase === 'resultados' && matriz && <PanelResultados matriz={matriz} />}

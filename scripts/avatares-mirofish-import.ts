@@ -10,7 +10,7 @@
 import admin from 'firebase-admin';
 import fs from 'node:fs';
 import { validarResultadosMirofish } from '../src/lib/avatares/mirofishPuente';
-import type { DocPlanilla } from '../src/lib/avatares/sala';
+import { refDe } from '../src/lib/avatares/contrato';
 
 const code = (process.argv[2] ?? '').toUpperCase();
 if (!code) throw new Error('uso: avatares-mirofish-import.ts <CODE>');
@@ -21,7 +21,7 @@ const db = admin.firestore();
 const runRef = db.collection('avataresRuns').doc(code);
 const run = (await runRef.get()).data();
 if (!run) throw new Error(`sala ${code} no existe`);
-const refs = new Set((await runRef.collection('planillas').get()).docs.map((d) => (d.data() as DocPlanilla).ref));
+const refs = new Set((await runRef.collection('planillas').get()).docs.map((d) => refDe(d.id, code)));
 const props = new Set<string>(run.instrumento.propuestas.map((p: { id: string }) => p.id));
 const { personas, errores } = validarResultadosMirofish(JSON.parse(fs.readFileSync(archivo, 'utf8')), refs, props);
 for (const e of errores) console.warn('aviso:', e);

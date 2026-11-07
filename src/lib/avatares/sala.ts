@@ -15,7 +15,10 @@ export interface AvataresRun {
   code: string; hostId: string; courseId: string; instrumentoId: string; instrumento: Instrumento; fase: Fase;
   modelos: ModeloAvatar[];
   participantes: Record<string, { inscrito?: boolean; planilla?: boolean; votos?: number }>;
-  avatares?: { estado: 'corriendo' | 'listo' | 'error'; n: number; fallos: string[] };
+  avatares?: EstadoAvatares;
+}
+export interface EstadoAvatares {
+  estado: 'corriendo' | 'listo' | 'error'; n: number; fallos: string[]; iniciadoEn?: number; mensaje?: string;
 }
 export interface DocPlanilla { uid: string; ref: string; campos: Planilla; texto: string }
 export interface DocHumano { uid: string; ref: string; votos: Record<string, number> }
@@ -28,17 +31,30 @@ export function codigoNuevo(r: () => number = Math.random): string {
 
 const esVoto = (v: unknown): v is number => Number.isInteger(v) && (v as number) >= 1 && (v as number) <= 5;
 
-export function aMatriz(inst: Instrumento, humanos: DocHumano[], personas: DocPersona[]): Matriz {
+/** El boton de avatares se bloquea mientras corren, salvo que el estado haya quedado pegado mas de 12 minutos. */
+export function avataresBloqueados(av: EstadoAvatares | undefined, ahora: number): boolean {
+  if (!av || av.estado !== 'corriendo' || av.iniciadoEn === undefined) return false;
+  return ahora - av.iniciadoEn < 12 * 60_000;
+}
+
+/**
+ * La matriz de la sala. El ref de cada humano se deriva de su uid (lo que el
+ * cliente escribio en `ref` no cuenta) y los avatares que fallaron entero (sin
+ * ningun voto) quedan fuera: si no, aparecen en el origen del mapa.
+ */
+export function aMatriz(inst: Instrumento, code: string, humanos: DocHumano[], personas: DocPersona[]): Matriz {
   const validas = new Set(inst.propuestas.map((p) => p.id));
   const ps: Persona[] = [];
   const vs: Voto[] = [];
   for (const h of humanos) {
-    const id = idHumano(h.ref);
-    ps.push({ id, ref: h.ref, fuente: 'humano', via: 'app' });
+    const ref = refDe(h.uid, code);
+    const id = idHumano(ref);
+    ps.push({ id, ref, fuente: 'humano', via: 'app' });
     for (const [prop, v] of Object.entries(h.votos ?? {}))
       if (validas.has(prop) && esVoto(v)) vs.push({ persona: id, propuesta: prop, valor: v });
   }
   for (const p of personas) {
+    if (!Object.keys(p.votos ?? {}).length) continue;
     const persona: Persona = { id: p.id, ref: p.ref, fuente: p.fuente, via: p.via };
     if (p.modelo !== undefined) persona.modelo = p.modelo;
     if (p.replica !== undefined) persona.replica = p.replica;

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { idAvatarFn, normalizarVotos, promptAvatar, PROMPT_VERSION } from './avatares';
+import { idAvatarFn, normalizarVotos, promptAvatar, PROMPT_VERSION, refAvatares } from './avatares';
 
 describe('normalizarVotos', () => {
   const ids = ['p1', 'p2', 'p3', 'p4'];
@@ -34,5 +34,12 @@ describe('promptAvatar', () => {
   it('version y ids', () => {
     expect(PROMPT_VERSION).toBe('avatar-v1');
     expect(idAvatarFn('org/x 1', 'r1')).toBe('a_org-x-1_r1');
+  });
+});
+
+describe('refAvatares', () => {
+  it('da exactamente lo mismo que refDe del frontend (src/lib/avatares/contrato.ts)', () => {
+    expect(refAvatares('uid-ana', 'ABC123')).toBe('r8172475a459d');
+    expect(refAvatares('x', 'Y')).toBe('rbbfe24d6a7a8');
   });
 });

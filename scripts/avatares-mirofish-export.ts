@@ -12,6 +12,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { itemsDesdeInstrumento, panelDesdePlanillas } from '../src/lib/avatares/mirofishPuente';
 import type { DocPlanilla } from '../src/lib/avatares/sala';
+import { refDe } from '../src/lib/avatares/contrato';
 
 const MIROFISH_RUNS = '/mnt/c/Users/naim.bro.k/claude_projects/mirofish/projects/ayd14/runs';
 const code = (process.argv[2] ?? '').toUpperCase();
@@ -21,7 +22,8 @@ const db = admin.firestore();
 const run = (await db.collection('avataresRuns').doc(code).get()).data();
 if (!run) throw new Error(`sala ${code} no existe`);
 const planillas = (await db.collection('avataresRuns').doc(code).collection('planillas').get()).docs
-  .map((d) => d.data() as DocPlanilla);
+  // El ref se deriva del uid (id del doc), igual que en la Function: el del cliente no cuenta.
+  .map((d) => ({ ...(d.data() as DocPlanilla), ref: refDe(d.id, code) }));
 if (!planillas.length) throw new Error(`la sala ${code} no tiene planillas`);
 const { panel, spec } = panelDesdePlanillas(planillas, code);
 const items = itemsDesdeInstrumento(run.instrumento);
