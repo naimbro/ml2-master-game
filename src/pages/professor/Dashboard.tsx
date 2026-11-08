@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
+  Bot,
   Compass,
   Gamepad2,
   BookOpen,
@@ -185,6 +186,20 @@ export default function Dashboard() {
               <Compass className="w-5 h-5 shrink-0 text-cyan-400" />
             </Link>
           )}
+
+          {/* La sala de avatares (Semana 14 AyD) tampoco es una sesion de curso. */}
+          <Link
+            to="/professor/avatares/nuevo"
+            className="mb-6 flex items-center justify-between gap-3 rounded-xl border-2 border-line bg-surface-2 px-4 py-3 hover:bg-surface-3"
+          >
+            <span>
+              <span className="block font-bold">Abrir una sala de avatares</span>
+              <span className="text-muted text-sm">
+                Planilla, avatares de IA y votación: avatar vs. tú, mapa común y puentes
+              </span>
+            </span>
+            <Bot className="w-5 h-5 shrink-0 text-cyan-400" />
+          </Link>
 
           {compasComparables.map((p) => (
             <Link
