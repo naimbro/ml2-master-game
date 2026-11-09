@@ -2,7 +2,9 @@
 // viene seudonimizado desde la app (planillaComoTexto): sin nombre, uid, correo
 // ni ciudad, edad en tramos. El parrafo de instrucciones es el de la planilla de
 // Vina, para que el avatar sea el mismo que armaban los alumnos a mano.
-export const PROMPT_VERSION = 'avatar-v1';
+// v2 (2026-11-09): el mismo texto de prompt, pero los modelos razonan antes de votar
+// (callJudgeModel con profundo: true, 16000 tokens). v1 = razonamiento al minimo, 800 tokens.
+export const PROMPT_VERSION = 'avatar-v2';
 
 /** FNV-1a de 32 bits; copia exacta de refDe (src/lib/avatares/contrato.ts), fijada por prueba. */
 function fnv1a(s: string, seed: number): number {
@@ -59,4 +61,22 @@ export function normalizarVotos(raw: Record<string, unknown>, ids: string[]) {
     else faltantes.push(id);
   }
   return { votos, faltantes };
+}
+
+/**
+ * Con menos compañeros que esto, el promedio del curso no se muestra: con 1 o 2
+ * compañeros, el promedio deja ver sus votos (con uno, es exactamente su voto).
+ */
+export const MIN_CURSO = 5;
+
+/**
+ * Promedio por propuesta de las encuestas COMPLETAS de los demás (sin la persona),
+ * o null si son menos de MIN_CURSO. Es la vara del alumno: ¿su avatar lo conoce
+ * mejor que simplemente adivinar lo que piensa el curso?
+ */
+export function promedioCurso(otros: Record<string, unknown>[], ids: string[], min = MIN_CURSO) {
+  const completos = otros.filter((v) => ids.every((id) => Number.isFinite(v?.[id]))) as Record<string, number>[];
+  if (completos.length < min) return { curso: null, n: completos.length };
+  const curso = Object.fromEntries(ids.map((id) => [id, completos.reduce((s, v) => s + v[id], 0) / completos.length]));
+  return { curso, n: completos.length };
 }

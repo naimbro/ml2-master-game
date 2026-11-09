@@ -3396,12 +3396,15 @@ MiroFish en `/mnt/c/Users/naim.bro.k/claude_projects/mirofish` (rama `feat/ayd14
    `wsl -u root -- systemctl restart user-runtime-dir@1000.service user@1000.service` (si además hay dos montajes en
    `findmnt -T /run/user/1000`, primero `wsl -u root -- umount -l /run/user/1000`).
 1. Crear la sala en `/professor/avatares/nuevo` y proyectar `/avatares/C/sala`. Fase **Planilla** (~10 min).
-2. Al cerrar la planilla: botón **Generar avatares** (segundos) y, en WSL:
+2. Al cerrar la planilla: botón **Generar avatares** (desde el 9-nov los modelos razonan: 1–3 min; si un modelo
+   falla, su error aparece bajo el botón) y, en WSL:
    `npx tsx scripts/avatares-mirofish-export.ts C` →
    `$P -m ayd14.mirofish prepare C` → `$P -m weekly.approve C --results-dir results/ayd14/C` (Naim escribe «aprobar») →
    `$P -m ayd14.mirofish freeze C` → `scripts/run_ayd14.sh C --simulate --replicates 3 --rounds 12` en segundo plano (~20 min).
 3. Fase **Encuesta** (~8 min). Después, el deck (Diella, Hidalgo, Innerarity, el gradiente, el sesgo).
-4. Fase **Resultados**: «Avatar vs. tú», «Mapa», «Mayoría vs. puente», «Bots».
+4. Fase **Resultados**: «Avatar vs. tú», «Mapa», «Mayoría vs. puente», «Bots». En el teléfono, cada alumno ve
+   «¿Te achuntó tu avatar?»: sus avatares contra su encuesta, y contra el promedio del curso si hay ≥ 5 compañeros
+   (callable `misAvatares`; ensayo sin login en `/preview-mi-avatar`).
 5. Cuando termine MiroFish: `$P -m ayd14.mirofish resultados C` → `npx tsx scripts/avatares-mirofish-import.ts C`; la
    sala muestra la cámara «Avatares después de deliberar» sin recargar.
 6. Si MiroFish falla o no termina: plan B del spec (se arregla en la semana y se muestra el jueves).

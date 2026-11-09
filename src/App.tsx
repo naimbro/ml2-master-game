@@ -38,6 +38,7 @@ import CrearAvatares from './pages/avatares/CrearAvatares';
 import AvataresJugar from './pages/avatares/AvataresJugar';
 import AvataresSala from './pages/avatares/AvataresSala';
 import AvataresPreview from './pages/avatares/AvataresPreview';
+import MiAvatarPreview from './pages/avatares/MiAvatarPreview';
 
 // Auth context
 import { AuthProvider, useAuth } from './hooks/useAuth';
@@ -103,6 +104,7 @@ function AppRoutes() {
       <Route path="/preview-mc" element={<MCRepartoPreview />} />
       <Route path="/preview-compas" element={<CompasPreview />} />
       <Route path="/preview-avatares" element={<AvataresPreview />} />
+      <Route path="/preview-mi-avatar" element={<MiAvatarPreview />} />
 
       {/* Compas: el alumno entra por /compas/:code, el anfitrion proyecta /compas/:code/sala */}
       <Route path="/compas/:code" element={<ConSesion><CompasJugar /></ConSesion>} />

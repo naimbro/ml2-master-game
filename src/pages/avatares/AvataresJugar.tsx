@@ -6,11 +6,13 @@ import { useAuth } from '../../hooks/useAuth';
 import { useAvataresRun } from '../../hooks/useAvataresRun';
 import { guardarPlanilla, guardarVoto, inscribirse, type DocHumano, type DocPlanilla } from '../../lib/avatares/sala';
 import type { Planilla } from '../../lib/avatares/planilla';
+import MiAvatar from '../../components/avatares/MiAvatar';
 
 /**
  * El telefono del alumno. Recargar a mitad de camino no pierde nada: la
  * planilla y los votos propios se leen de vuelta de Firestore (el alumno puede
- * leer los suyos). Nunca muestra lo que voto su avatar.
+ * leer los suyos). Lo que voto su avatar aparece solo en resultados, despues de
+ * su propia encuesta (MiAvatar; el servidor lo vuelve a exigir).
  */
 export default function AvataresJugar() {
   const { code = '' } = useParams<{ code: string }>();
@@ -123,6 +125,8 @@ export default function AvataresJugar() {
       </main>
     );
   }
+
+  if (run.fase === 'resultados') return <MiAvatar code={run.code} propuestas={inst.propuestas} etiquetas={inst.escala.etiquetas} />;
 
   return <p className="p-6 text-lg">Mira el proyector.</p>;
 }

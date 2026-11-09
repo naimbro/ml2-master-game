@@ -33,7 +33,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.recomputeCourseStandings = exports.generateSessionDraft = exports.seedJudges = exports.exportSignalsSummary = exports.generateClassReport = exports.generateOralTask = exports.generateStudentReport = exports.recalibrateRound = exports.processRoundEnd = exports.evaluateSubmission = void 0;
+exports.misAvatares = exports.votarComoAvatares = exports.recomputeCourseStandings = exports.generateSessionDraft = exports.seedJudges = exports.exportSignalsSummary = exports.generateClassReport = exports.generateOralTask = exports.generateStudentReport = exports.recalibrateRound = exports.processRoundEnd = exports.evaluateSubmission = void 0;
 const functions = __importStar(require("firebase-functions"));
 const admin = __importStar(require("firebase-admin"));
 const recalibration_1 = require("./lib/recalibration");
@@ -44,6 +44,8 @@ const finalScores_1 = require("./lib/finalScores");
 const lateRankings_1 = require("./lib/lateRankings");
 const scoring_1 = require("./lib/scoring");
 const judgeModels_1 = require("./lib/judgeModels");
+const avatares_1 = require("./lib/avatares");
+const avataresRun_1 = require("./lib/avataresRun");
 const promptSplit_1 = require("./lib/promptSplit");
 const sessionDraft_1 = require("./lib/sessionDraft");
 const judgeOverrides_1 = require("./lib/judgeOverrides");
@@ -1982,5 +1984,124 @@ exports.recomputeCourseStandings = functions
         playerCount: entries.length,
         excludedGameCodes,
     };
+});
+/**
+ * Avatares de la Semana 14 AyD (spec 2026-11-07, M2). Solo el anfitrion.
+ * Una llamada por planilla y por modelo, con todas las propuestas, en una cola
+ * de concurrencia constante con timeout por llamada (lib/avataresRun.ts). Ids
+ * deterministas: correrlo dos veces sobrescribe, no duplica, y salta a quienes
+ * ya quedaron completos. Si algo revienta, el estado queda en 'error' (nunca
+ * pegado en 'corriendo', que bloquearia el boton del anfitrion). Al LLM va solo
+ * el texto seudonimizado de la planilla (sin nombre, uid, correo ni ciudad).
+ */
+exports.votarComoAvatares = functions
+    .region('us-central1')
+    .runWith({ timeoutSeconds: 540, memory: '512MB', secrets: ['OPENAI_API_KEY', 'ANTHROPIC_API_KEY', 'GEMINI_API_KEY'] })
+    .https.onCall(async (data, context) => {
+    var _a, _b;
+    if (!context.auth)
+        throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
+    const code = String((_a = data === null || data === void 0 ? void 0 : data.code) !== null && _a !== void 0 ? _a : '').toUpperCase();
+    if (!code)
+        throw new functions.https.HttpsError('invalid-argument', 'Falta el codigo de sala');
+    const runRef = db.collection('avataresRuns').doc(code);
+    const run = (await runRef.get()).data();
+    if (!run)
+        throw new functions.https.HttpsError('not-found', 'Sala no encontrada');
+    if (run.hostId !== context.auth.uid)
+        throw new functions.https.HttpsError('permission-denied', 'Solo el anfitrion');
+    await runRef.update({ avatares: { estado: 'corriendo', n: 0, fallos: [], iniciadoEn: Date.now() } });
+    try {
+        const propuestas = run.instrumento.propuestas.map(({ id, texto }) => ({ id, texto }));
+        const ids = propuestas.map((p) => p.id);
+        const etiquetas = run.instrumento.escala.etiquetas;
+        const modelos = ((_b = run.modelos) !== null && _b !== void 0 ? _b : []);
+        // El ref se deriva del uid (id del doc) y no se lee del cliente: nadie puede pisar el avatar de otro.
+        const planillas = (await runRef.collection('planillas').get()).docs
+            .map((d) => { var _a; return ({ ref: (0, avatares_1.refAvatares)(d.id, code), texto: String((_a = d.data().texto) !== null && _a !== void 0 ? _a : '') }); });
+        const completos = new Set((await runRef.collection('personas').get()).docs
+            .filter((d) => d.data().fuente === 'avatar' && Array.isArray(d.data().faltantes) && d.data().faltantes.length === 0)
+            .map((d) => d.id));
+        const clients = {};
+        if (modelos.some((m) => m.provider === 'openai'))
+            clients.openai = await getOpenAI();
+        if (modelos.some((m) => m.provider === 'anthropic'))
+            clients.anthropic = await getAnthropic();
+        if (modelos.some((m) => m.provider === 'gemini'))
+            clients.gemini = await getGemini();
+        const tareas = planillas.flatMap((p) => modelos.map((m) => ({
+            ref: p.ref, texto: p.texto, provider: m.provider, model: m.model, yaCompleto: completos.has((0, avatares_1.idAvatarFn)(m.model, p.ref)),
+        })));
+        // Avatar v2 (2026-11-09): los modelos razonan antes de votar (profundo), con
+        // 16000 tokens de techo. Mas lento por llamada, por eso 16 en paralelo y 150 s
+        // de timeout: 25 planillas x 3 modelos caben holgados en los 540 s.
+        // El primer error de cada modelo queda en el run: un id de modelo mal escrito
+        // se ve en la pantalla del anfitrion, no solo en los logs.
+        const errores = {};
+        const r = await (0, avataresRun_1.correrAvatares)({
+            tareas, ids, concurrencia: 16, timeoutMs: 150000,
+            llamar: (t) => (0, judgeModels_1.callJudgeModel)(clients, {
+                provider: t.provider, model: t.model, ...(0, avatares_1.promptAvatar)(t.texto, propuestas, etiquetas), maxTokens: 16000, profundo: true,
+            }),
+            guardar: async (id, d) => { await runRef.collection('personas').doc(id).set(d); },
+            avisar: (msg, extra) => {
+                var _a, _b;
+                functions.logger.warn(msg, extra);
+                const m = String((_a = extra.model) !== null && _a !== void 0 ? _a : '');
+                if (m && !errores[m])
+                    errores[m] = String((_b = extra.error) !== null && _b !== void 0 ? _b : msg).slice(0, 300);
+            },
+        });
+        const intentadas = tareas.length - r.saltados;
+        const estado = intentadas > 0 && r.fallos.length === intentadas ? 'error' : 'listo';
+        await runRef.update({ avatares: { estado, n: r.n + r.saltados, fallos: r.fallos, errores } });
+        return { n: r.n + r.saltados, fallos: r.fallos, errores };
+    }
+    catch (e) {
+        functions.logger.error('votarComoAvatares fallo', { code, error: e.message });
+        await runRef.update({ avatares: { estado: 'error', n: 0, fallos: [], mensaje: e.message } });
+        throw new functions.https.HttpsError('internal', `No se pudieron generar los avatares: ${e.message}`);
+    }
+});
+/**
+ * El alumno ve SUS avatares (2026-11-09). Solo los suyos: el ref se deriva de su
+ * uid en el servidor, y `personas` sigue cerrada a los clientes (reglas). Solo
+ * en la fase de resultados y con su encuesta completa: nunca antes de que haya
+ * respondido, para que no copie a su avatar. El promedio del curso va sin la
+ * persona y solo con MIN_CURSO compañeros o mas (con menos dejaria ver votos ajenos).
+ * No llama a ningun LLM.
+ */
+exports.misAvatares = functions
+    .region('us-central1')
+    .https.onCall(async (data, context) => {
+    var _a, _b, _c, _d;
+    if (!context.auth)
+        throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
+    const uid = context.auth.uid;
+    const code = String((_a = data === null || data === void 0 ? void 0 : data.code) !== null && _a !== void 0 ? _a : '').toUpperCase();
+    if (!code)
+        throw new functions.https.HttpsError('invalid-argument', 'Falta el codigo de sala');
+    const runRef = db.collection('avataresRuns').doc(code);
+    const run = (await runRef.get()).data();
+    if (!run)
+        throw new functions.https.HttpsError('not-found', 'Sala no encontrada');
+    if (run.fase !== 'resultados') {
+        throw new functions.https.HttpsError('failed-precondition', 'Tu avatar se muestra cuando la sala pase a resultados.');
+    }
+    const ids = run.instrumento.propuestas.map((p) => p.id);
+    const humanos = (await runRef.collection('humanos').get()).docs;
+    const mios = ((_c = (_b = humanos.find((d) => d.id === uid)) === null || _b === void 0 ? void 0 : _b.data().votos) !== null && _c !== void 0 ? _c : {});
+    if (!ids.every((id) => Number.isFinite(mios[id]))) {
+        throw new functions.https.HttpsError('failed-precondition', 'Primero completa tu encuesta.');
+    }
+    const ref = (0, avatares_1.refAvatares)(uid, code);
+    const modelos = ((_d = run.modelos) !== null && _d !== void 0 ? _d : []);
+    const avatares = await Promise.all(modelos.map(async (m) => {
+        var _a, _b;
+        const s = (await runRef.collection('personas').doc((0, avatares_1.idAvatarFn)(m.model, ref)).get()).data();
+        return { modelo: m.model, votos: ((_a = s === null || s === void 0 ? void 0 : s.votos) !== null && _a !== void 0 ? _a : {}), faltantes: ((_b = s === null || s === void 0 ? void 0 : s.faltantes) !== null && _b !== void 0 ? _b : ids) };
+    }));
+    const { curso, n } = (0, avatares_1.promedioCurso)(humanos.filter((d) => d.id !== uid).map((d) => { var _a; return (_a = d.data().votos) !== null && _a !== void 0 ? _a : {}; }), ids);
+    return { votos: mios, avatares, curso, nCurso: n, minCurso: avatares_1.MIN_CURSO };
 });
 //# sourceMappingURL=index.js.map

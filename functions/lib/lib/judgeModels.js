@@ -50,7 +50,7 @@ exports.DEFAULT_MODELS = {
  * gpt-4o path available so a judge can be pinned back to a chat model.
  */
 function isOpenAIReasoningModel(model) {
-    return /^(gpt-5|o[1-9])/i.test(model);
+    return /^(gpt-[5-9]|o[1-9])/i.test(model);
 }
 /**
  * Gemini hidden-thinking budget, in output tokens.
@@ -148,7 +148,7 @@ function parseJudgeJson(text) {
  */
 async function callJudgeModel(clients, opts) {
     var _a, _b;
-    const { provider, model, systemPrefix, systemSuffix, userPrompt, maxTokens } = opts;
+    const { provider, model, systemPrefix, systemSuffix, userPrompt, maxTokens, profundo = false } = opts;
     // OpenAI and Gemini both cache prompt prefixes implicitly (automatic above ~1k
     // tokens), so they get exactly the string they got before the split — the shared
     // half is already at the front, which is all their caches need.
@@ -172,7 +172,7 @@ async function callJudgeModel(clients, opts) {
             // at temperature 0, so this judge is not bit-reproducible like the other two;
             // the 6-anchor snap in scoring.ts absorbs most of that variance.
             params.max_completion_tokens = maxTokens;
-            params.reasoning_effort = 'minimal';
+            params.reasoning_effort = profundo ? 'medium' : 'minimal';
         }
         else {
             params.temperature = 0;
@@ -220,13 +220,14 @@ async function callJudgeModel(clients, opts) {
             ]
             : systemPrompt;
         const runClaude = async (repair) => {
-            const message = await clients.anthropic.messages.create({
-                model,
-                max_tokens: maxTokens,
-                thinking: { type: 'disabled' },
-                system,
-                messages: [{ role: 'user', content: userPrompt + JSON_SAFETY + (repair ? ' Tu respuesta anterior NO era JSON parseable; corrigela.' : '') }],
-            });
+            var _a, _b;
+            const content = userPrompt + JSON_SAFETY + (repair ? ' Tu respuesta anterior NO era JSON parseable; corrigela.' : '');
+            const message = await clients.anthropic.messages.create(profundo
+                ? { model, max_tokens: maxTokens, output_config: { effort: 'high' }, system, messages: [{ role: 'user', content }] }
+                : { model, max_tokens: maxTokens, thinking: { type: 'disabled' }, system, messages: [{ role: 'user', content }] });
+            if (message.stop_reason === 'refusal') {
+                throw new Error(`el modelo declino responder (${(_b = (_a = message.stop_details) === null || _a === void 0 ? void 0 : _a.category) !== null && _b !== void 0 ? _b : 'sin categoria'})`);
+            }
             const text = (message.content || [])
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 .filter((b) => b.type === 'text')
@@ -257,13 +258,15 @@ async function callJudgeModel(clients, opts) {
         const response = await clients.gemini.models.generateContent({
             model,
             contents: userPrompt,
-            config: {
-                systemInstruction: systemPrompt,
-                responseMimeType: 'application/json',
-                temperature: 0,
-                maxOutputTokens: maxTokens,
-                thinkingConfig: { thinkingBudget: exports.GEMINI_THINKING_BUDGET },
-            },
+            config: profundo
+                ? { systemInstruction: systemPrompt, responseMimeType: 'application/json', maxOutputTokens: maxTokens }
+                : {
+                    systemInstruction: systemPrompt,
+                    responseMimeType: 'application/json',
+                    temperature: 0,
+                    maxOutputTokens: maxTokens,
+                    thinkingConfig: { thinkingBudget: exports.GEMINI_THINKING_BUDGET },
+                },
         });
         return parseJudgeJson(response.text || '');
     }

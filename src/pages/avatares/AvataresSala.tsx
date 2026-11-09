@@ -83,6 +83,13 @@ export default function AvataresSala() {
         {run.avatares && <span>Avatares: {run.avatares.estado} · {run.avatares.n} listos · {run.avatares.fallos.length} fallos{run.avatares.mensaje ? ` · ${run.avatares.mensaje}` : ''}</span>}
         {errorAvatares && <span className="text-red-600">{errorAvatares}</span>}
       </section>
+      {run.avatares && run.avatares.fallos.length > 0 && Object.keys(run.avatares.errores ?? {}).length > 0 && (
+        <ul className="space-y-1 text-sm text-red-700">
+          {Object.entries(run.avatares.errores ?? {}).map(([modelo, msg]) => (
+            <li key={modelo}><b>{modelo}</b>: {msg}</li>
+          ))}
+        </ul>
+      )}
       {run.fase === 'resultados' && matriz && <PanelResultados matriz={matriz} />}
     </main>
   );

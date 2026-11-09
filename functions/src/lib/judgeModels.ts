@@ -46,7 +46,7 @@ export const DEFAULT_MODELS: Record<JudgeProvider, string> = {
  * gpt-4o path available so a judge can be pinned back to a chat model.
  */
 export function isOpenAIReasoningModel(model: string): boolean {
-  return /^(gpt-5|o[1-9])/i.test(model);
+  return /^(gpt-[5-9]|o[1-9])/i.test(model);
 }
 
 /**
@@ -164,6 +164,14 @@ export interface JudgeCallOptions {
   /** The short user turn ("evaluate and respond with JSON only"). */
   userPrompt: string;
   maxTokens: number;
+  /**
+   * Modo avatar (spec 2026-11-07, M2; razonamiento subido el 2026-11-09): los tres
+   * modelos piensan antes de contestar. Los jueces NO lo usan y quedan igual.
+   * OpenAI: reasoning_effort 'medium'. Anthropic: sin `thinking` (adaptativo;
+   * opus-5-5 rechaza 'disabled') y output_config.effort 'high'. Gemini: sin tope de
+   * thinking ni temperature (la serie 3 pide dejar la temperatura por defecto).
+   */
+  profundo?: boolean;
 }
 
 /**
@@ -180,7 +188,7 @@ export async function callJudgeModel(
   clients: JudgeModelClients,
   opts: JudgeCallOptions
 ): Promise<Record<string, unknown>> {
-  const { provider, model, systemPrefix, systemSuffix, userPrompt, maxTokens } = opts;
+  const { provider, model, systemPrefix, systemSuffix, userPrompt, maxTokens, profundo = false } = opts;
 
   // OpenAI and Gemini both cache prompt prefixes implicitly (automatic above ~1k
   // tokens), so they get exactly the string they got before the split — the shared
@@ -205,7 +213,7 @@ export async function callJudgeModel(
       // at temperature 0, so this judge is not bit-reproducible like the other two;
       // the 6-anchor snap in scoring.ts absorbs most of that variance.
       params.max_completion_tokens = maxTokens;
-      params.reasoning_effort = 'minimal';
+      params.reasoning_effort = profundo ? 'medium' : 'minimal';
     } else {
       params.temperature = 0;
       params.max_tokens = maxTokens;
@@ -253,13 +261,13 @@ export async function callJudgeModel(
         ]
       : systemPrompt;
     const runClaude = async (repair: boolean): Promise<string> => {
-      const message = await clients.anthropic.messages.create({
-        model,
-        max_tokens: maxTokens,
-        thinking: { type: 'disabled' },
-        system,
-        messages: [{ role: 'user', content: userPrompt + JSON_SAFETY + (repair ? ' Tu respuesta anterior NO era JSON parseable; corrigela.' : '') }],
-      });
+      const content = userPrompt + JSON_SAFETY + (repair ? ' Tu respuesta anterior NO era JSON parseable; corrigela.' : '');
+      const message = await clients.anthropic.messages.create(profundo
+        ? { model, max_tokens: maxTokens, output_config: { effort: 'high' }, system, messages: [{ role: 'user', content }] }
+        : { model, max_tokens: maxTokens, thinking: { type: 'disabled' }, system, messages: [{ role: 'user', content }] });
+      if (message.stop_reason === 'refusal') {
+        throw new Error(`el modelo declino responder (${message.stop_details?.category ?? 'sin categoria'})`);
+      }
       const text = (message.content || [])
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .filter((b: any) => b.type === 'text')
@@ -289,13 +297,15 @@ export async function callJudgeModel(
     const response = await clients.gemini.models.generateContent({
       model,
       contents: userPrompt,
-      config: {
-        systemInstruction: systemPrompt,
-        responseMimeType: 'application/json',
-        temperature: 0,
-        maxOutputTokens: maxTokens,
-        thinkingConfig: { thinkingBudget: GEMINI_THINKING_BUDGET },
-      },
+      config: profundo
+        ? { systemInstruction: systemPrompt, responseMimeType: 'application/json', maxOutputTokens: maxTokens }
+        : {
+            systemInstruction: systemPrompt,
+            responseMimeType: 'application/json',
+            temperature: 0,
+            maxOutputTokens: maxTokens,
+            thinkingConfig: { thinkingBudget: GEMINI_THINKING_BUDGET },
+          },
     });
     return parseJudgeJson(response.text || '');
   }

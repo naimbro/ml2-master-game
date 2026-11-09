@@ -4,17 +4,23 @@ import { useAuth } from '../../hooks/useAuth';
 import { INSTRUMENTOS } from '../../lib/avatares/instrumentos';
 import { crearSala, type ModeloAvatar } from '../../lib/avatares/sala';
 
-const MODELOS: (ModeloAvatar & { etiqueta: string })[] = [
-  { provider: 'openai', model: 'gpt-5', etiqueta: 'OpenAI · gpt-5' },
-  { provider: 'anthropic', model: 'claude-sonnet-5', etiqueta: 'Anthropic · claude-sonnet-5' },
-  { provider: 'gemini', model: 'gemini-2.5-pro', etiqueta: 'Google · gemini-2.5-pro' },
+// 2026-11-09: los avatares pasan a los modelos de punta de cada proveedor (marcados
+// por defecto). Los de la primera version quedan disponibles, sin marcar, para
+// comparar «¿el modelo mas grande te conoce mejor?» en la misma sala.
+const MODELOS: (ModeloAvatar & { etiqueta: string; porDefecto: boolean })[] = [
+  { provider: 'openai', model: 'gpt-6-astra', etiqueta: 'OpenAI · gpt-6-astra', porDefecto: true },
+  { provider: 'anthropic', model: 'claude-opus-5-5', etiqueta: 'Anthropic · claude-opus-5-5', porDefecto: true },
+  { provider: 'gemini', model: 'gemini-3.1-pro-preview', etiqueta: 'Google · gemini-3.1-pro-preview', porDefecto: true },
+  { provider: 'openai', model: 'gpt-5', etiqueta: 'OpenAI · gpt-5', porDefecto: false },
+  { provider: 'anthropic', model: 'claude-sonnet-5', etiqueta: 'Anthropic · claude-sonnet-5', porDefecto: false },
+  { provider: 'gemini', model: 'gemini-2.5-pro', etiqueta: 'Google · gemini-2.5-pro', porDefecto: false },
 ];
 
 export default function CrearAvatares() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [instrumentoId, setInstrumentoId] = useState(Object.keys(INSTRUMENTOS)[0]);
-  const [elegidos, setElegidos] = useState<string[]>(MODELOS.map((m) => m.model));
+  const [elegidos, setElegidos] = useState<string[]>(MODELOS.filter((m) => m.porDefecto).map((m) => m.model));
   const [error, setError] = useState<string | null>(null);
   const [creando, setCreando] = useState(false);
 

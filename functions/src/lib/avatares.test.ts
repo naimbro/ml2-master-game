@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { idAvatarFn, normalizarVotos, promptAvatar, PROMPT_VERSION, refAvatares } from './avatares';
+import { idAvatarFn, MIN_CURSO, normalizarVotos, promedioCurso, promptAvatar, PROMPT_VERSION, refAvatares } from './avatares';
 
 describe('normalizarVotos', () => {
   const ids = ['p1', 'p2', 'p3', 'p4'];
@@ -32,7 +32,7 @@ describe('promptAvatar', () => {
     expect(q.systemPrefix).toBe(p.systemPrefix);
   });
   it('version y ids', () => {
-    expect(PROMPT_VERSION).toBe('avatar-v1');
+    expect(PROMPT_VERSION).toBe('avatar-v2');
     expect(idAvatarFn('org/x 1', 'r1')).toBe('a_org-x-1_r1');
   });
 });
@@ -42,4 +42,19 @@ describe('refAvatares', () => {
     expect(refAvatares('uid-ana', 'ABC123')).toBe('r8172475a459d');
     expect(refAvatares('x', 'Y')).toBe('rbbfe24d6a7a8');
   });
+});
+
+describe('promedioCurso', () => {
+  const ids = ['a', 'b'];
+  it('promedia solo encuestas completas', () => {
+    const otros = [{ a: 1, b: 5 }, { a: 3, b: 3 }, { a: 5 }, { a: 2, b: 1 }, { a: 4, b: 2 }, { a: 5, b: 4 }];
+    const r = promedioCurso(otros, ids);
+    expect(r.n).toBe(5);
+    expect(r.curso).toEqual({ a: 3, b: 3 });
+  });
+  it('con menos de 5 compañeros no devuelve promedio (dejaria ver votos ajenos)', () => {
+    const r = promedioCurso([{ a: 1, b: 2 }, { a: 3, b: 4 }], ids);
+    expect(r).toEqual({ curso: null, n: 2 });
+  });
+  it('MIN_CURSO es 5', () => expect(MIN_CURSO).toBe(5));
 });

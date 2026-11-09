@@ -254,3 +254,50 @@ describe('callJudgeModel dispatch', () => {
     ).rejects.toThrow('anthropic client not provided');
   });
 });
+
+// Modo avatar (2026-11-09): los modelos piensan antes de votar. Los jueces no lo
+// usan; los tests de arriba fijan que su camino no cambio.
+describe('callJudgeModel en modo profundo (avatares)', () => {
+  const base = { systemPrefix: '', systemSuffix: 'sys', userPrompt: 'usr', maxTokens: 16000, profundo: true };
+
+  it('marca gpt-6 como modelo de razonamiento', () => {
+    expect(isOpenAIReasoningModel('gpt-6-astra')).toBe(true);
+  });
+
+  it('OpenAI: reasoning_effort medium y max_completion_tokens', async () => {
+    const create = vi.fn().mockResolvedValue({ choices: [{ message: { content: '{"a":1}' } }] });
+    await callJudgeModel({ openai: { chat: { completions: { create } } } }, { ...base, provider: 'openai', model: 'gpt-6-astra' });
+    const arg = create.mock.calls[0][0];
+    expect(arg.reasoning_effort).toBe('medium');
+    expect(arg.max_completion_tokens).toBe(16000);
+    expect(arg.temperature).toBeUndefined();
+  });
+
+  it('Anthropic: sin thinking (adaptativo), effort high y sin temperature', async () => {
+    const create = vi.fn().mockResolvedValue({ content: [{ type: 'thinking', thinking: '' }, { type: 'text', text: '{"a":1}' }] });
+    const out = await callJudgeModel({ anthropic: { messages: { create } } }, { ...base, provider: 'anthropic', model: 'claude-opus-5-5' });
+    expect(out).toEqual({ a: 1 });
+    const arg = create.mock.calls[0][0];
+    expect(arg.thinking).toBeUndefined();
+    expect(arg.output_config).toEqual({ effort: 'high' });
+    expect(arg.temperature).toBeUndefined();
+    expect(arg.max_tokens).toBe(16000);
+  });
+
+  it('Anthropic: un rechazo del modelo es un error con su categoria, no un voto vacio', async () => {
+    const create = vi.fn().mockResolvedValue({ content: [], stop_reason: 'refusal', stop_details: { category: 'general_harms' } });
+    await expect(
+      callJudgeModel({ anthropic: { messages: { create } } }, { ...base, provider: 'anthropic', model: 'claude-opus-5-5' }),
+    ).rejects.toThrow('general_harms');
+  });
+
+  it('Gemini: sin tope de thinking ni temperature', async () => {
+    const generateContent = vi.fn().mockResolvedValue({ text: '{"a":1}' });
+    await callJudgeModel({ gemini: { models: { generateContent } } }, { ...base, provider: 'gemini', model: 'gemini-3.1-pro-preview' });
+    const cfg = generateContent.mock.calls[0][0].config;
+    expect(cfg.thinkingConfig).toBeUndefined();
+    expect(cfg.temperature).toBeUndefined();
+    expect(cfg.maxOutputTokens).toBe(16000);
+    expect(cfg.responseMimeType).toBe('application/json');
+  });
+});

@@ -12,16 +12,19 @@
  */
 const LABELS: Record<string, string> = {
   // OpenAI
+  'gpt-6-astra': 'GPT-6 Astra',
   'gpt-5': 'GPT-5',
   'gpt-5-mini': 'GPT-5 mini',
   'gpt-5-nano': 'GPT-5 nano',
   'gpt-4o': 'GPT-4o',
   'gpt-4o-mini': 'GPT-4o mini',
   // Google
+  'gemini-3.1-pro-preview': 'Gemini 3.1 Pro',
   'gemini-2.5-pro': 'Gemini 2.5 Pro',
   'gemini-2.5-flash': 'Gemini 2.5 Flash',
   'gemini-2.5-flash-lite': 'Gemini 2.5 Flash-Lite',
   // Anthropic
+  'claude-opus-5-5': 'Claude Opus 5.5',
   'claude-sonnet-5': 'Claude Sonnet 5',
   'claude-opus-5': 'Claude Opus 5',
   'claude-opus-4-8': 'Claude Opus 4.8',

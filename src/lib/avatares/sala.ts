@@ -19,6 +19,8 @@ export interface AvataresRun {
 }
 export interface EstadoAvatares {
   estado: 'corriendo' | 'listo' | 'error'; n: number; fallos: string[]; iniciadoEn?: number; mensaje?: string;
+  /** Primer error de cada modelo (desde 2026-11-09): un id de modelo malo se ve aqui. */
+  errores?: Record<string, string>;
 }
 export interface DocPlanilla { uid: string; ref: string; campos: Planilla; texto: string }
 export interface DocHumano { uid: string; ref: string; votos: Record<string, number> }
