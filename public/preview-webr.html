@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Prueba de webR</title>
+<!--
+  PRUEBA DESECHABLE (14-nov-2026). No es parte del juego.
+
+  Responde una sola pregunta antes de construir nada: ¿cuánto tarda R en
+  cargar en el teléfono de un alumno, y aguanta? La página carga webR con
+  ggplot2 y dplyr, dibuja la respuesta ideal de la ronda 1 de la clase 8 y
+  muestra los tiempos. Se borra cuando la pregunta esté contestada.
+-->
+<style>
+  :root {
+    --fondo: #f6f5f1; --tinta: #1c1b19; --suave: #6b675f; --linea: #d9d5cb;
+    --caja: #ffffff; --bien: #1f7a4d; --mal: #b3261e; --acento: #1d4ed8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fondo: #151412; --tinta: #efece5; --suave: #a09a8e; --linea: #37342e;
+      --caja: #1f1d1a; --bien: #6fcf97; --mal: #ff8a80; --acento: #8ab4ff;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 20px 16px 48px; background: var(--fondo); color: var(--tinta);
+    font: 16px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  main { max-width: 560px; margin: 0 auto; }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  h2 { font-size: 16px; margin: 28px 0 8px; }
+  p { margin: 0 0 12px; }
+  .suave { color: var(--suave); font-size: 14px; }
+  .caja { background: var(--caja); border: 1px solid var(--linea); border-radius: 10px; padding: 12px; }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  td { padding: 7px 4px; border-bottom: 1px solid var(--linea); vertical-align: top; }
+  tr:last-child td { border-bottom: 0; }
+  td.t { text-align: right; white-space: nowrap; font-weight: 600; }
+  td.t.espera { color: var(--suave); font-weight: 400; }
+  td.t.mal { color: var(--mal); }
+  #veredicto { font-size: 18px; font-weight: 700; margin: 14px 0 4px; }
+  #veredicto.bien { color: var(--bien); }
+  #veredicto.mal { color: var(--mal); }
+  #aviso { color: var(--mal); font-weight: 600; }
+  textarea {
+    width: 100%; min-height: 120px; padding: 10px; border-radius: 8px;
+    border: 1px solid var(--linea); background: var(--caja); color: var(--tinta);
+    font: 15px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  button {
+    font: inherit; font-weight: 600; padding: 12px 18px; border-radius: 8px; border: 0;
+    background: var(--acento); color: #fff; min-height: 44px; margin: 8px 8px 0 0;
+  }
+  @media (prefers-color-scheme: dark) { button { color: #10131a; } }
+  button:disabled { opacity: .45; }
+  button.secundario { background: transparent; color: var(--acento); border: 1px solid var(--acento); }
+  canvas { width: 100%; height: auto; display: block; border-radius: 8px; background: #fff; margin-top: 12px; }
+  pre {
+    white-space: pre-wrap; word-break: break-word; margin: 12px 0 0; padding: 10px; border-radius: 8px;
+    background: var(--caja); border: 1px solid var(--linea);
+    font: 13px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  pre.mal { color: var(--mal); }
+  pre:empty, canvas[hidden] { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Prueba de webR</h1>
+  <p class="suave">Carga R dentro de este navegador y dibuja un gráfico de la clase 8. Deja la pantalla encendida hasta que termine.</p>
+  <p id="aviso"></p>
+
+  <div class="caja">
+    <table id="pasos"></table>
+  </div>
+  <div id="veredicto"></div>
+  <p class="suave" id="detalle"></p>
+  <button id="copiar" class="secundario" hidden>Copiar resultados</button>
+
+  <h2>Pruébalo tú</h2>
+  <p class="suave">La tabla <code>curso</code>, <code>ggplot2</code> y <code>dplyr</code> ya están cargados.</p>
+  <textarea id="codigo" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false">ggplot(curso, aes(x = transporte)) +
+  geom_bar()</textarea>
+  <button id="probar" disabled>Probar</button>
+  <span class="suave" id="cuanto"></span>
+  <canvas id="lienzo" hidden></canvas>
+  <pre id="salida"></pre>
+</main>
+
+<script type="module">
+const VERSION = 'v0.6.1';
+const DATOS = 'https://raw.githubusercontent.com/naimbro/naimbro.github.io/main/materiales/2026_descripcion_visualizacion_datos/datos/encuesta_curso.csv';
+const IDEAL = 'ggplot(curso, aes(x = transporte)) +\n  geom_bar()';
+const CON_PIPE = 'ggplot(curso, aes(x = transporte)) %>%\n  geom_bar()';
+const CLAVE = 'preview-webr-paso';
+
+const PASOS = [
+  ['modulo', 'Bajar webR'],
+  ['init', 'Encender R'],
+  ['paquetes', 'Instalar ggplot2 y dplyr'],
+  ['datos', 'Cargar librerías y datos'],
+  ['grafico1', 'Primer gráfico'],
+  ['grafico2', 'Segundo gráfico'],
+  ['error', 'Mensaje de error de R'],
+];
+
+const $ = (id) => document.getElementById(id);
+const tiempos = {};
+let webR = null;
+
+// La tabla de pasos se arma una vez; después sólo se rellena la columna de tiempo.
+$('pasos').innerHTML = PASOS.map(([k, nombre]) =>
+  `<tr><td>${nombre}</td><td class="t espera" id="t-${k}">—</td></tr>`).join('');
+
+function recordar(paso) {
+  try { paso ? localStorage.setItem(CLAVE, paso) : localStorage.removeItem(CLAVE); } catch { /* sin storage */ }
+}
+
+// Si la pestaña murió a medio camino (lo normal cuando el teléfono se queda sin
+// memoria), no queda nada en pantalla que lo diga. Por eso cada paso se anota
+// antes de empezar y se borra al terminar: lo que quede anotado es dónde se cayó.
+try {
+  const previo = localStorage.getItem(CLAVE);
+  if (previo) {
+    const nombre = (PASOS.find(([k]) => k === previo) || [, previo])[1];
+    $('aviso').textContent = `La vez anterior esta página se cerró en el paso «${nombre}».`;
+    tiempos.caida_previa = nombre;
+  }
+} catch { /* sin storage */ }
+
+async function medir(paso, fn) {
+  const celda = $(`t-${paso}`);
+  celda.textContent = '…';
+  recordar(paso);
+  const t0 = performance.now();
+  try {
+    const r = await fn();
+    const s = (performance.now() - t0) / 1000;
+    tiempos[paso] = Math.round(s * 10) / 10;
+    celda.textContent = `${s.toFixed(1)} s`;
+    celda.className = 't';
+    return r;
+  } catch (e) {
+    celda.textContent = 'falló';
+    celda.className = 't mal';
+    tiempos[paso] = `falló: ${e && e.message ? e.message : e}`;
+    recordar(null); // falló con mensaje: no es una caída de la pestaña
+    throw e;
+  }
+}
+
+// El código del alumno no se le pasa directo a captureR: así el error llega
+// cortado en su primera línea («Problem while computing aesthetics») y se pierde
+// justo la que sirve («object 'Transporte' not found»). cnd_message con
+// inherit = TRUE trae la cadena entera. El parse() va adentro del tryCatch para
+// que un paréntesis sin cerrar también salga como mensaje. Y cada corrida va en
+// un entorno nuevo, para que un `curso <- ...` del alumno no rompa la tabla.
+const ENVOLTORIO = `
+tryCatch(
+  withAutoprint(parse(text = .codigo), evaluated = TRUE, echo = FALSE, local = new.env(parent = globalenv())),
+  error = function(e) stop(rlang::cnd_message(e, inherit = TRUE, prefix = TRUE), call. = FALSE)
+)`;
+
+async function ejecutar(codigo) {
+  const refugio = await new webR.Shelter();
+  try {
+    await webR.objs.globalEnv.bind('.codigo', codigo);
+    const cap = await refugio.captureR(ENVOLTORIO, {
+      withAutoprint: false,
+      captureStreams: true,
+      // Con captureConditions en false el error de R NO se relanza: llega como una
+      // línea más de stderr y el código roto parece haber corrido. Medido acá.
+      captureConditions: true,
+      captureGraphics: { width: 420, height: 320 },
+    });
+    const lineas = [];
+    for (const o of cap.output) {
+      if (typeof o.data === 'string') { lineas.push(o.data); continue; }
+      // warning() y message() llegan como objetos de R, no como texto.
+      try {
+        const msj = String((await (await o.data.get('message')).toArray())[0]).trimEnd();
+        lineas.push(o.type === 'warning' ? `Warning: ${msj}` : msj);
+      } catch { /* condición sin mensaje legible */ }
+    }
+    return { ok: true, imagenes: cap.images, texto: lineas.join('\n') };
+  } catch (e) {
+    const crudo = e && e.message ? e.message : String(e);
+    return { ok: false, imagenes: [], texto: crudo.replace(/^Error in unknown source: /, '') };
+  } finally {
+    await refugio.purge();
+  }
+}
+
+function mostrar(r) {
+  const lienzo = $('lienzo');
+  const img = r.imagenes[r.imagenes.length - 1];
+  if (img) {
+    lienzo.width = img.width;
+    lienzo.height = img.height;
+    lienzo.getContext('2d').drawImage(img, 0, 0);
+    lienzo.hidden = false;
+  } else {
+    lienzo.hidden = true;
+  }
+  $('salida').textContent = r.texto;
+  $('salida').className = r.ok ? '' : 'mal';
+}
+
+function resumen() {
+  const lineas = PASOS.map(([k, nombre]) => `${nombre}: ${tiempos[k] ?? 'no llegó'}${typeof tiempos[k] === 'number' ? ' s' : ''}`);
+  lineas.push(`Total hasta el primer gráfico: ${tiempos.total ?? 'no llegó'}${tiempos.total ? ' s' : ''}`);
+  if (tiempos.caida_previa) lineas.push(`Caída previa en: ${tiempos.caida_previa}`);
+  if (tiempos.error_texto) lineas.push(`Error que mostró R: ${tiempos.error_texto}`);
+  if (tiempos.versiones) lineas.push(tiempos.versiones);
+  lineas.push(`Memoria declarada: ${navigator.deviceMemory ?? 'n/d'} GB · OffscreenCanvas: ${typeof OffscreenCanvas !== 'undefined'} · aislada: ${self.crossOriginIsolated}`);
+  lineas.push(navigator.userAgent);
+  return lineas.join('\n');
+}
+
+async function correrPrueba() {
+  const inicio = performance.now();
+  const { WebR, ChannelType } = await medir('modulo', () => import(`https://webr.r-wasm.org/${VERSION}/webr.mjs`));
+  // PostMessage a propósito: GitHub Pages no puede mandar las cabeceras COOP/COEP
+  // que pide el canal rápido, así que esto mide lo que el juego tendría de verdad.
+  webR = new WebR({ channelType: ChannelType.PostMessage });
+  window.__webR = webR;
+  await medir('init', () => webR.init());
+  await medir('paquetes', () => webR.installPackages(['ggplot2', 'dplyr'], { quiet: true }));
+  await medir('datos', async () => {
+    const csv = await (await fetch(DATOS)).arrayBuffer();
+    await webR.FS.writeFile('/home/web_user/encuesta_curso.csv', new Uint8Array(csv));
+    await webR.evalRVoid('suppressPackageStartupMessages({ library(ggplot2); library(dplyr) }); curso <- read.csv("/home/web_user/encuesta_curso.csv")');
+    tiempos.versiones = await webR.evalRString('paste0(R.version.string, " · ggplot2 ", packageVersion("ggplot2"), " · dplyr ", packageVersion("dplyr"), " · curso: ", nrow(curso), " filas")');
+  });
+
+  const g1 = await medir('grafico1', async () => {
+    const r = await ejecutar(IDEAL);
+    if (!r.ok) throw new Error(r.texto);
+    if (!r.imagenes.length) throw new Error('corrió pero no devolvió ninguna imagen');
+    return r;
+  });
+  tiempos.total = Math.round((performance.now() - inicio) / 100) / 10;
+  mostrar(g1);
+
+  await medir('grafico2', async () => {
+    const r = await ejecutar(IDEAL);
+    if (!r.ok || !r.imagenes.length) throw new Error(r.texto || 'sin imagen');
+  });
+  await medir('error', async () => {
+    const r = await ejecutar(CON_PIPE);
+    if (r.ok) throw new Error('el código con %>% debía fallar y corrió');
+    tiempos.error_texto = r.texto.replace(/\s+/g, ' ').slice(0, 300);
+  });
+  recordar(null);
+
+  const v = $('veredicto');
+  v.textContent = `Listo en ${tiempos.total.toFixed(1)} s hasta el primer gráfico`;
+  v.className = 'bien';
+  $('detalle').textContent = `Después de la carga, cada gráfico toma ${tiempos.grafico2} s. Recarga la página para medir la segunda visita, con todo ya en caché.`;
+  $('probar').disabled = false;
+}
+
+$('probar').addEventListener('click', async () => {
+  $('probar').disabled = true;
+  $('cuanto').textContent = 'ejecutando…';
+  const t0 = performance.now();
+  const r = await ejecutar($('codigo').value);
+  $('cuanto').textContent = `${((performance.now() - t0) / 1000).toFixed(1)} s`;
+  mostrar(r);
+  $('probar').disabled = false;
+});
+
+$('copiar').addEventListener('click', async () => {
+  const texto = resumen();
+  try {
+    await navigator.clipboard.writeText(texto);
+    $('copiar').textContent = 'Copiado';
+  } catch {
+    $('salida').textContent = texto;
+  }
+});
+
+correrPrueba()
+  .catch((e) => {
+    const v = $('veredicto');
+    v.textContent = 'No terminó';
+    v.className = 'mal';
+    $('detalle').textContent = e && e.message ? e.message : String(e);
+  })
+  .finally(() => { $('copiar').hidden = false; });
+</script>
+</body>
+</html>
