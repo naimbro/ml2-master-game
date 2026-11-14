@@ -6,6 +6,9 @@ import { useGame } from '../../hooks/useGame';
 import VueltaAlJuego from '../../components/VueltaAlJuego';
 import { useAuth } from '../../hooks/useAuth';
 import { useTypingTelemetry } from '../../hooks/useTypingTelemetry';
+import { useMotorR } from '../../hooks/useMotorR';
+import { anotarPrueba, configRDe, contadorVacio, motorR, telemetriaR } from '../../lib/rEnVivo';
+import ProbarCodigo from '../../components/ProbarCodigo';
 import { doc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { playCountdownTick, playCriticalTick, playSubmitSuccess, playScoreReveal, playGoodScore, playBadScore, playDrumRoll, startBackgroundMusic, stopBackgroundMusic, getMuted, getCurrentMusicStyle } from '../../lib/sounds';
@@ -253,6 +256,23 @@ export default function Round() {
     roundStartMs: game?.roundStartTime?.toMillis() ?? null,
   });
 
+  // R en vivo: el boton «Probar» de las rondas de codigo. `null` en todo juego
+  // sin bloque `rEnVivo`, que son todos los anteriores al 16-nov-2026. El
+  // profesor que dirige sin jugar no tiene textarea, asi que tampoco baja R.
+  const configR = isSpectator ? null : configRDe(game?.sessionConfig, game?.scenarios);
+  useMotorR(configR);
+  const hayR = configR !== null;
+  const isCodeRound = currentScenarioRef.current?.answerFormat === 'code';
+  // Cuantas veces probo en ESTA ronda. En un ref y no en estado por lo mismo
+  // que la telemetria de escritura: no tiene que re-renderizar nada.
+  const pruebasR = useRef(contadorVacio());
+  useEffect(() => {
+    pruebasR.current = contadorVacio();
+  }, [game?.currentRound]);
+  const alProbar = useCallback((ok: boolean) => {
+    pruebasR.current = anotarPrueba(pruebasR.current, ok);
+  }, []);
+
   // MC: the only clock left. Everything visible is a pure function of the
   // shared round start and this tick, so no screen can drift from another.
   useEffect(() => {
@@ -497,7 +517,15 @@ export default function Round() {
     submittedRef.current = true;
     setIsSubmitting(true);
     try {
-      await submitAnswer(response.trim(), telemetria.snapshot());
+      // El uso del boton «Probar» viaja pegado a la telemetria de escritura:
+      // mismo documento, mismas reglas, y el mismo trato — no puntua.
+      const captura = telemetria.snapshot();
+      await submitAnswer(
+        response.trim(),
+        captura && hayR && isCodeRound
+          ? { ...captura, r: telemetriaR(pruebasR.current, motorR) }
+          : captura,
+      );
       setHasSubmitted(true);
       playSubmitSuccess();
       confettiPop();
@@ -512,7 +540,7 @@ export default function Round() {
     } finally {
       setIsSubmitting(false);
     }
-  }, [response, isSubmitting, submitAnswer, telemetria]);
+  }, [response, isSubmitting, submitAnswer, telemetria, hayR, isCodeRound]);
 
   // Auto-submit when time runs out
   useEffect(() => {
@@ -1295,25 +1323,44 @@ export default function Round() {
                   <label className="block text-xs font-bold text-muted uppercase tracking-widest mb-3">
                     {isCodeAnswer ? 'Tu Codigo' : 'Tu Respuesta'}
                   </label>
-                  <textarea
-                    value={response}
-                    onChange={(e) => {
-                      setResponse(e.target.value);
-                      telemetria.noteChange(e.target.value);
-                    }}
-                    onPaste={telemetria.onPaste}
-                    ref={telemetria.refTextarea}
-                    placeholder={isCodeAnswer ? 'Escribe tu codigo aqui...' : 'Escribe tu respuesta aqui...'}
-                    rows={8}
-                    // En rondas de codigo el teclado del telefono es el enemigo: sin esto
-                    // `count(curso, dominio)` se envia como `Count(Curso, dominio)`.
-                    autoCapitalize={isCodeAnswer ? 'off' : undefined}
-                    autoCorrect={isCodeAnswer ? 'off' : undefined}
-                    autoComplete={isCodeAnswer ? 'off' : undefined}
-                    spellCheck={isCodeAnswer ? false : undefined}
-                    className={`input-field resize-none mb-4 ${isCodeAnswer ? 'font-mono text-[15px] leading-relaxed' : ''}`}
-                    disabled={isSubmitting}
-                  />
+                  {/* Con R en vivo, el textarea y la tira de «Probar» van dentro de
+                      un solo marco. Sin R, el `div` no lleva clase y la ronda
+                      queda exactamente como antes. */}
+                  <div className={configR && isCodeAnswer ? 'editor-probar mb-4' : undefined}>
+                    <textarea
+                      value={response}
+                      onChange={(e) => {
+                        setResponse(e.target.value);
+                        telemetria.noteChange(e.target.value);
+                      }}
+                      onPaste={telemetria.onPaste}
+                      ref={telemetria.refTextarea}
+                      placeholder={isCodeAnswer ? 'Escribe tu codigo aqui...' : 'Escribe tu respuesta aqui...'}
+                      rows={8}
+                      // En rondas de codigo el teclado del telefono es el enemigo: sin esto
+                      // `count(curso, dominio)` se envia como `Count(Curso, dominio)`.
+                      autoCapitalize={isCodeAnswer ? 'off' : undefined}
+                      autoCorrect={isCodeAnswer ? 'off' : undefined}
+                      autoComplete={isCodeAnswer ? 'off' : undefined}
+                      spellCheck={isCodeAnswer ? false : undefined}
+                      // El `mb-4` es una utilidad y le gana a cualquier regla de `.editor-probar`:
+                      // dentro del marco hay que no ponerlo, no pisarlo.
+                      className={`input-field resize-none ${configR && isCodeAnswer ? '' : 'mb-4'} ${isCodeAnswer ? 'font-mono text-[15px] leading-relaxed' : ''}`}
+                      disabled={isSubmitting}
+                    />
+                    {configR && isCodeAnswer && (
+                      <ProbarCodigo
+                        // La `key` bota el resultado de la ronda anterior: sin
+                        // ella, el grafico de la ronda 1 seguiria en pantalla
+                        // bajo el textarea vacio de la ronda 2.
+                        key={game.currentRound}
+                        config={configR}
+                        codigo={response}
+                        bloqueado={isSubmitting}
+                        onPrueba={alProbar}
+                      />
+                    )}
+                  </div>
 
                   <div className="flex justify-between items-center">
                     <span className="text-muted text-sm font-semibold">

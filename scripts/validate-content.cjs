@@ -163,6 +163,55 @@ function checkMediaFileExists(scope, src) {
   }
 }
 
+// El bloque `rEnVivo` de config.json: los paquetes, los CSV y el codigo R que
+// dejan listas las tablas para el boton «Probar» (src/lib/rEnVivo.ts). Si esta
+// mal, el juego NO se rompe —el boton dice que R no cargo y el alumno envia
+// igual—, asi que este es el unico lugar donde el error se ve antes de clase.
+//
+// Devuelve los problemas en vez de reportarlos, para poder probarlo
+// (scripts/rEnVivo.test.ts).
+function problemasDeREnVivo(r, publicRoot = PUBLIC_ROOT) {
+  if (r === undefined) return [];
+  if (!r || typeof r !== 'object' || Array.isArray(r)) {
+    return ['rEnVivo debe ser un objeto { packages, files, setup }'];
+  }
+  const problemas = [];
+
+  // El nombre termina adentro de un `library(...)`: solo puede ser un nombre.
+  const esPaquete = (p) => typeof p === 'string' && /^[A-Za-z][A-Za-z0-9.]*$/.test(p);
+  if (!Array.isArray(r.packages) || r.packages.length === 0 || !r.packages.every(esPaquete)) {
+    problemas.push("rEnVivo.packages debe ser una lista no vacia de nombres de paquetes de R (ej. ['ggplot2', 'dplyr'])");
+  }
+
+  if (r.files !== undefined && !Array.isArray(r.files)) {
+    problemas.push('rEnVivo.files debe ser una lista');
+  }
+  for (const [i, f] of (Array.isArray(r.files) ? r.files : []).entries()) {
+    if (!f || typeof f !== 'object') {
+      problemas.push(`rEnVivo.files#${i} no es un objeto { name, src }`);
+      continue;
+    }
+    if (typeof f.name !== 'string' || !/^[A-Za-z0-9_.-]+$/.test(f.name)) {
+      problemas.push(`rEnVivo.files#${i}: name debe ser un nombre de archivo sin carpetas (ej. 'encuesta_curso.csv')`);
+    }
+    if (typeof f.src !== 'string' || !f.src.trim()) {
+      problemas.push(`rEnVivo.files#${i}: falta src`);
+    } else if (/^(https?:)?\/\//i.test(f.src)) {
+      // Un juego en vivo no puede depender de que otro servidor responda.
+      problemas.push(`rEnVivo.files#${i}: src debe ser un archivo bajo public/, no una URL`);
+    } else if (f.src.startsWith('/')) {
+      problemas.push(`rEnVivo.files#${i}: src no debe empezar con '/' (404ea en GitHub Pages)`);
+    } else if (!fs.existsSync(path.join(publicRoot, f.src))) {
+      problemas.push(`rEnVivo.files#${i}: el archivo no existe: public/${f.src}`);
+    }
+  }
+
+  if (r.setup !== undefined && typeof r.setup !== 'string') {
+    problemas.push('rEnVivo.setup debe ser texto: el codigo R que deja las tablas listas');
+  }
+  return problemas;
+}
+
 // Optional image/audio attached to a scenario or an MC question.
 // `src` is either a path relative to the app base URL (public/...) or an https URL.
 function validateMedia(scope, media, whereLabel) {
@@ -478,6 +527,13 @@ function validateSession(courseId, sessionId, sessionDir, knownJudgeIds) {
       err(scope, `pesos de jueces en config.json suman ${sum.toFixed(3)}, deben sumar 1.0`);
     }
   }
+  for (const problema of problemasDeREnVivo(config.rEnVivo)) {
+    err(scope, `config.json: ${problema}`);
+  }
+  if (config.rEnVivo !== undefined && Array.isArray(scenarios)
+      && !scenarios.some(sc => sc && sc.answerFormat === 'code')) {
+    warn(scope, "config.json trae rEnVivo pero ninguna ronda es answerFormat 'code': el boton «Probar» no va a aparecer");
+  }
 
   // scenarios
   if (!Array.isArray(scenarios)) {
@@ -633,4 +689,5 @@ module.exports = {
   validateEtiquetasAbierta,
   DIFICULTAD_VALORES_CJS,
   FORMATO_VALORES_CJS,
+  problemasDeREnVivo,
 };

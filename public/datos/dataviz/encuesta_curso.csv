@@ -1,0 +1,34 @@
+edad,estatura,hermanos,comuna,minutos_viaje,transporte,horas_sueno,horas_redes,sistema_operativo,tazas_cafe,experiencia,dominio,op_grafico_miente,op_interes_programar,op_datos_chile,op_hablar_publico
+41,173,2,Vitacura,40,Auto,6,0.5,Android,3,Tengo bastante experiencia,Inteligencia artificial,Ni de acuerdo ni en desacuerdo,Ni de acuerdo ni en desacuerdo,De acuerdo,De acuerdo
+19,186,0,Ñuñoa,50,Metro,6,2,iOS (Apple),0,"Ninguna, esta es mi primera vez",Deporte,Muy de acuerdo,De acuerdo,De acuerdo,Muy de acuerdo
+18,1.58,3,Ñuñoa,70,Micro o bus,6,4,Android,0,"Ninguna, esta es mi primera vez",Inteligencia artificial,Ni de acuerdo ni en desacuerdo,Muy de acuerdo,De acuerdo,En desacuerdo
+20,165,1,Maipú,130,Micro o bus,6,4,Android,1,He programado un poco alguna vez,Educación,Muy de acuerdo,Ni de acuerdo ni en desacuerdo,De acuerdo,De acuerdo
+19,165,0,ñuñoa,30,Micro o bus,6,4,Android,0,Sé usar Excel o Google Sheets,Deporte,Ni de acuerdo ni en desacuerdo,Muy de acuerdo,De acuerdo,Ni de acuerdo ni en desacuerdo
+18,173,1,Providencia,70,Micro o bus,6,3,Android,0,Sé usar Excel o Google Sheets,Inteligencia artificial,En desacuerdo,De acuerdo,En desacuerdo,Ni de acuerdo ni en desacuerdo
+18,181,4,las condes,40,Auto,7,3,iOS (Apple),1,"Ninguna, esta es mi primera vez",Vivienda,Muy de acuerdo,Muy de acuerdo,De acuerdo,Ni de acuerdo ni en desacuerdo
+21,162,1,la reina ,15,Auto,7,5,iOS (Apple),2,He programado un poco alguna vez,Medioambiente,De acuerdo,De acuerdo,Ni de acuerdo ni en desacuerdo,En desacuerdo
+18,1.76,3,peñalolen ,30,Micro o bus,6,5,iOS (Apple),3,Sé usar Excel o Google Sheets,Cultura,Ni de acuerdo ni en desacuerdo,Muy de acuerdo,De acuerdo,Muy de acuerdo
+21,165,2,Peñalolén,10 min,Auto,3 horas,5 horas,iOS (Apple),1,He programado un poco alguna vez,Cultura,De acuerdo,Muy de acuerdo,De acuerdo,En desacuerdo
+19,163,3,peñalolen,10,Auto,8,2,iOS (Apple),0,Sé usar Excel o Google Sheets,politica,De acuerdo,Muy de acuerdo,Ni de acuerdo ni en desacuerdo,En desacuerdo
+21,164,0,Las condes,80,Micro o bus,8,2,iOS (Apple),0,"Ninguna, esta es mi primera vez",Vivienda,En desacuerdo,Muy de acuerdo,Muy de acuerdo,De acuerdo
+19,"1,60",0,Las condes,60,Micro o bus,7,3,iOS (Apple),4,"Ninguna, esta es mi primera vez",Inteligencia artificial,Ni de acuerdo ni en desacuerdo,Muy de acuerdo,De acuerdo,De acuerdo
+18,152,2,Peñaflor,150,Metro,7,2,iOS (Apple),0,Sé usar Excel o Google Sheets,Cultura,Ni de acuerdo ni en desacuerdo,De acuerdo,De acuerdo,En desacuerdo
+18,165,1,providencia,85,Micro o bus,7,5,Otro,0,Sé usar Excel o Google Sheets,Salud,Ni de acuerdo ni en desacuerdo,Muy de acuerdo,De acuerdo,En desacuerdo
+18,153,2,providencia,60,Metro,6,5,iOS (Apple),0,Sé usar Excel o Google Sheets,Deporte,De acuerdo,De acuerdo,De acuerdo,Ni de acuerdo ni en desacuerdo
+18,158,3,pirque,100,Metro,6,4,iOS (Apple),0,Sé usar Excel o Google Sheets,Deporte,De acuerdo,De acuerdo,De acuerdo,Ni de acuerdo ni en desacuerdo
+19,175,3,lo barnechea,90,Micro o bus,6,2,iOS (Apple),0,He programado un poco alguna vez,Inteligencia artificial,Ni de acuerdo ni en desacuerdo,Muy de acuerdo,Ni de acuerdo ni en desacuerdo,Muy de acuerdo
+19,185,3,Las condes,40,Micro o bus,6,6,iOS (Apple),2,Sé usar Excel o Google Sheets,Inteligencia artificial,De acuerdo,De acuerdo,Ni de acuerdo ni en desacuerdo,Muy de acuerdo
+19,165,4,Peñalolen ,30,Auto,7,9,iOS (Apple),0,"Ninguna, esta es mi primera vez",Salud,De acuerdo,Muy en desacuerdo,En desacuerdo,Muy en desacuerdo
+21,161,3,Huechuraba,60,Auto,4,9,iOS (Apple),0,Sé usar Excel o Google Sheets,Salud,De acuerdo,Ni de acuerdo ni en desacuerdo,De acuerdo,En desacuerdo
+19,179,1,colina,60,Auto,6,5,iOS (Apple),1,Sé usar Excel o Google Sheets,Transporte,De acuerdo,Ni de acuerdo ni en desacuerdo,Ni de acuerdo ni en desacuerdo,De acuerdo
+19,175,2,vitacura,90,Micro o bus,7,4,iOS (Apple),0,He programado un poco alguna vez,Educación,Ni de acuerdo ni en desacuerdo,De acuerdo,De acuerdo,En desacuerdo
+19,163,1,providencia,50,Metro,7,10,iOS (Apple),1,"Ninguna, esta es mi primera vez",Salud,De acuerdo,De acuerdo,Ni de acuerdo ni en desacuerdo,De acuerdo
+19,178,2,huechuraba,50,Auto,8,2,iOS (Apple),0,"Ninguna, esta es mi primera vez",tecnologia y salud,De acuerdo,Ni de acuerdo ni en desacuerdo,De acuerdo,De acuerdo
+18,"1,69",1,colina,70,Auto,6,5,iOS (Apple),1,Sé usar Excel o Google Sheets,Cultura,De acuerdo,De acuerdo,Ni de acuerdo ni en desacuerdo,De acuerdo
+19,173,1,Las condes,40,Auto,9,3,iOS (Apple),0,He programado un poco alguna vez,Salud,De acuerdo,De acuerdo,De acuerdo,De acuerdo
+20,168,2,las condes ,70,Micro o bus,7,5,iOS (Apple),0,"Ninguna, esta es mi primera vez",Educación,Ni de acuerdo ni en desacuerdo,De acuerdo,De acuerdo,Ni de acuerdo ni en desacuerdo
+19,157,1,colina,180,Micro o bus,6,5,iOS (Apple),0,Sé usar Excel o Google Sheets,Salud,Muy de acuerdo,Muy de acuerdo,Ni de acuerdo ni en desacuerdo,En desacuerdo
+19,174,1,ñuñoa,40,Micro o bus,3,7,iOS (Apple),1,Sé usar Excel o Google Sheets,Deporte,Ni de acuerdo ni en desacuerdo,De acuerdo,Ni de acuerdo ni en desacuerdo,Ni de acuerdo ni en desacuerdo
+19,168,6,Providencia,90,Metro,5,2,iOS (Apple),2,Sé usar Excel o Google Sheets,Deporte,Muy de acuerdo,Muy de acuerdo,Ni de acuerdo ni en desacuerdo,De acuerdo
+21,165,2,Santiago Centro,90,Micro o bus,6,3,iOS (Apple),2,Sé usar Excel o Google Sheets,Educación,De acuerdo,De acuerdo,De acuerdo,Ni de acuerdo ni en desacuerdo
+19,173,0,Nunoa,30,Auto,6,4,iOS (Apple),0,He programado un poco alguna vez,Deporte,De acuerdo,Ni de acuerdo ni en desacuerdo,De acuerdo,Ni de acuerdo ni en desacuerdo

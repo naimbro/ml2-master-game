@@ -10,6 +10,8 @@
  * Ver docs/superpowers/specs/2026-08-08-telemetria-antitrampa-design.md
  */
 
+import type { TelemetriaR } from './rEnVivo';
+
 export interface PegadoEvento {
   /** ms desde que se le abrio la ronda a ese alumno */
   ms: number;
@@ -51,6 +53,15 @@ export interface TelemetriaCaptura {
    * Opcional: los documentos anteriores al 8-ago-2026 no lo traen.
    */
   tiposDeInsercion?: string[];
+  /**
+   * Cuánto se usó el botón «Probar» y si R llegó a cargar en ese teléfono.
+   * Igual que todo lo demás de acá: descriptivo, no puntúa. Es el único dato
+   * que dice, después de una clase, en cuántos teléfonos R no cargó.
+   *
+   * Opcional: sólo lo traen las rondas de código de sesiones con `rEnVivo`,
+   * desde el 16-nov-2026.
+   */
+  r?: TelemetriaR;
 }
 
 /** El documento tal como queda en Firestore. */

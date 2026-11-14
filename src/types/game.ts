@@ -1,5 +1,6 @@
 import { Timestamp } from 'firebase/firestore';
 import type { MCQuestionStats } from '../lib/mcStats';
+import type { ConfigR } from '../lib/rEnVivo';
 
 // =====================================
 // GAME STATE TYPES
@@ -251,6 +252,12 @@ export interface SessionConfig {
   bufferSeconds?: number;
   conceptTags: string[];
   judges: JudgeWeight[];
+  /**
+   * Los paquetes, los CSV y el código R que dejan listas las tablas para el
+   * botón «Probar» de las rondas `answerFormat: 'code'`. Sin este bloque el
+   * botón no aparece y la sesión se juega como siempre. Ver src/lib/rEnVivo.ts.
+   */
+  rEnVivo?: ConfigR;
 }
 
 export interface JudgeWeight {

@@ -27,6 +27,7 @@ import SessionEditor from './pages/professor/SessionEditor';
 import RevealPreview from './pages/RevealPreview';
 import MCRepartoPreview from './pages/MCRepartoPreview';
 import CompasPreview from './pages/CompasPreview';
+import ProbarPreview from './pages/ProbarPreview';
 
 // Compas — instrumento de posicionamiento, hermano del juego
 import CompasSala from './pages/compas/CompasSala';
@@ -103,6 +104,7 @@ function AppRoutes() {
       <Route path="/preview-reveal" element={<RevealPreview />} />
       <Route path="/preview-mc" element={<MCRepartoPreview />} />
       <Route path="/preview-compas" element={<CompasPreview />} />
+      <Route path="/preview-probar" element={<ProbarPreview />} />
       <Route path="/preview-avatares" element={<AvataresPreview />} />
       <Route path="/preview-mi-avatar" element={<MiAvatarPreview />} />
 

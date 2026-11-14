@@ -261,6 +261,27 @@ h1.display,
     box-shadow: 0 0 0 3px rgba(255, 90, 31, 0.18);
   }
 
+  /* R en vivo: en una ronda de codigo con boton «Probar», el textarea, la tira
+     del boton y el resultado comparten UN solo borde, como la consola de un
+     editor (src/components/ProbarCodigo.tsx). El borde y el foco pasan del
+     textarea a este contenedor; sin eso quedarian dos marcos, uno dentro del
+     otro, y el anillo naranja cortado por la tira. */
+  .editor-probar {
+    @apply bg-surface border-2 rounded-xl overflow-hidden transition-all duration-150;
+    border-color: var(--line);
+  }
+  .editor-probar:focus-within {
+    border-color: var(--orange);
+    box-shadow: 0 0 0 3px rgba(255, 90, 31, 0.18);
+  }
+  .editor-probar > .input-field,
+  .editor-probar > .input-field:focus {
+    display: block;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
   .textarea-field {
     @apply bg-surface border-2 rounded-xl px-4 py-3;
     @apply text-ink resize-none font-medium;

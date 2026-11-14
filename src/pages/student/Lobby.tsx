@@ -7,6 +7,8 @@ import { useAuth } from '../../hooks/useAuth';
 import { playPlayerJoin, playRoundStart } from '../../lib/sounds';
 import { QRCodeSVG } from 'qrcode.react';
 import { currentJoinUrl } from '../../lib/joinUrl';
+import { useMotorR } from '../../hooks/useMotorR';
+import { configRDe } from '../../lib/rEnVivo';
 
 // Kahoot-inspired player card colors
 const PLAYER_COLORS = [
@@ -25,6 +27,11 @@ export default function Lobby() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { game, loading, error, isHost, startGame } = useGame(gameCode);
+
+  // R en vivo se empieza a bajar ACA y no en la ronda: son decenas de MB, y el
+  // lobby es el unico rato en que el alumno espera sin reloj corriendo. Si
+  // llega a la ronda 1 sin terminar, el boton «Probar» lo dice y sigue cargando.
+  useMotorR(configRDe(game?.sessionConfig, game?.scenarios));
 
   const prevPlayerCount = useRef(0);
 
