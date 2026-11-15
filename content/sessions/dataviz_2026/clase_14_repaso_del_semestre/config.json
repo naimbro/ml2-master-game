@@ -1,0 +1,64 @@
+{
+  "sessionId": "clase_14_repaso_del_semestre",
+  "courseId": "dataviz_2026",
+  "title": "Clase 14: Repaso del semestre",
+  "description": "Juego largo, unos 30 minutos de pared, a las 11:30 después del recreo de la clase 14: SIETE rondas que repasan el semestre entero, de la clase 3 a la de esta mañana, y premian a quien aprendió a lo largo del curso. Estrena «Probar» (R en vivo en el teléfono) en las tres rondas de código. R1 (clase 3, 10 categorías que no son 10 temas), R2 (clase 6, contar describe y dividir compara) y R4 (clase 9, la torta descartada, con imagen) son alternativas. R3 es código: el filtro de `minutos_viaje > 60` que corre y miente (clases 4 y 5). R5 es código: reproducir la etapa 3 de la clase 13 desde la imagen. R6 es prosa: el título que le falta a la mancuerna de la clase 9. R7 es código: la lámina del carrusel de esta mañana, con `slice_max()` y `geom_text()`. Las siete compiten.",
+  "date": "2026-11-16",
+  "roundCount": 7,
+  "roundDurationSeconds": 150,
+  "bufferSeconds": 45,
+  "conceptTags": [
+    "categorias_y_n",
+    "contar_describe_dividir_compara",
+    "texto_que_parece_numero",
+    "elegir_el_grafico",
+    "grafico_por_etapas",
+    "titulo_hallazgo",
+    "carrusel_slice_max_geom_text"
+  ],
+  "rEnVivo": {
+    "packages": [
+      "ggplot2",
+      "dplyr"
+    ],
+    "files": [
+      {
+        "name": "encuesta_curso.csv",
+        "src": "datos/dataviz/encuesta_curso.csv"
+      },
+      {
+        "name": "cep_problemas_por_anio.csv",
+        "src": "datos/dataviz/cep_problemas_por_anio.csv"
+      }
+    ],
+    "setup": "curso <- read.csv(\"encuesta_curso.csv\")\nproblemas <- read.csv(\"cep_problemas_por_anio.csv\")\ndelinc <- problemas %>% filter(problema == \"Delincuencia, asaltos y robos\")"
+  },
+  "judges": [
+    {
+      "judgeId": "generic_specialist",
+      "weight": 0.35
+    },
+    {
+      "judgeId": "generic_praxis",
+      "weight": 0.35
+    },
+    {
+      "judgeId": "generic_teacher",
+      "weight": 0.3
+    }
+  ],
+  "judgeConfig": {
+    "generic_specialist": {
+      "sessionLens": "Tu lente es LA EXACTITUD DE LO ENTREGADO, y en este repaso del semestre son dos preguntas. En el código (R3, R5, R7): ¿ESTE CÓDIGO, PEGADO EN UN R QUE YA TIENE `curso`, `problemas`, `delinc`, `dplyr` Y `ggplot2` CARGADOS, CORRE Y HACE LO QUE SE PIDIÓ? —contar a los catorce que viajan más de una hora, dibujar la etapa 3 con sus tres rasgos, dibujar las cinco barras de 2026 con su número—. En el título (R6): ¿DICE LO QUE SE VE, CON UN NÚMERO O UNA COMPARACIÓN, Y ES VERDAD SEGÚN EL GRÁFICO? No confundas 'no está en el cuaderno' con 'está mal': `nrow()` en vez de `count()`, `as.numeric()` adentro del `filter()`, `ylim(0, 40)`, el gráfico por etapas con `p <-`, `arrange(desc()) %>% head(5)` en vez de `slice_max()`, `label = porcentaje` sin redondear: todo eso corre y hace lo pedido, y vale 100. Lo que SÍ cobras, porque es lo que el curso enseñó a mirar: filtrar texto como si fuera número, el `+` entre capas, `==` y no `=`, el `filter()` del año antes de `slice_max()`, y un título falso. El estudiante pudo probar su código en el teléfono o no: tú no ves esa ejecución y no la premias. Deliberadamente indulgente con lo demás: indentación, comillas, saltos de línea, el fondo gris, un paréntesis de cierre o un `n =` que falta cuando la intención es inequívoca. Cierra el feedback atando la respuesta al demo day del lunes 23 de noviembre de 2026, de forma concreta sobre ESTA respuesta.",
+      "weightFormula": "score = 0.75 * exactitud + 0.15 * completitud + 0.10 * claridad"
+    },
+    "generic_praxis": {
+      "sessionLens": "Tú eres quien va a tomar lo que el estudiante escribió y pegarlo en el Colab del sitio de su grupo, que se presenta en el demo day del lunes 23 de noviembre de 2026, sin poder preguntarle nada. En el código (R3, R5, R7) eso significa literalmente copiar y pegar: ¿está todo lo que hace falta, en un orden en que correría, sin que tengas que adivinar ni completar un hueco? Una respuesta que es puro código, sin una palabra de prosa alrededor, es exactamente lo que se pidió y no te molesta; lo que te molesta es el código enterrado en un párrafo, los `...` sin rellenar, o una pieza que nunca se armó (el `top5` que no existe). En R6 eres QUIEN VA A VER LA LÁMINA DEL CARRUSEL TRES SEGUNDOS: ¿el título te dice qué se ve, con un número o una comparación, sin tener que mirar el gráfico? Un título que sólo nombra el tema no te dice nada, y uno falso te engaña. Premia lo que se entiende a la primera; penaliza el rodeo. No pidas prosa donde se pidió código, y no premies ni castigues que haya probado el código en el teléfono: no lo ves. Cierra el feedback atando la respuesta al demo day del lunes 23 de noviembre de 2026, de forma concreta sobre ESTA respuesta.",
+      "weightFormula": "score = 0.60 * exactitud + 0.15 * completitud + 0.25 * claridad"
+    },
+    "generic_teacher": {
+      "sessionLens": "Es el último juego del semestre y las siete rondas entran al ranking: premia a quien aprendió a lo largo del curso, y puntúa con honestidad y sin inflar, porque un puntaje regalado le quita el puesto a otro. Muchos empezaron el semestre sin haber programado nunca: no exijas elegancia, exige que corra y haga lo pedido, y que el título diga algo verdadero. R3, R5 y R6 piden UNA sola cosa: ahí no existe la media respuesta. R7 pide DOS piezas dentro del mismo código —armar `top5` y el número en cada barra— y lo que más te importa es que lleguen las dos: media respuesta perfecta sigue siendo media respuesta. Cuidado con el reverso, que es donde estas rúbricas se dan vuelta solas: la respuesta que entregó LAS DOS PIEZAS y se equivocó en una va POR ENCIMA de la mitad impecable. Caza los errores que el curso enseñó a mirar: en R3 la columna que sigue siendo texto (crear `minutos_num` y no usarlo); en R5 el eje que no está fijo o la referencia que falta; en R6 el título que sólo nombra el tema o que lee los colores al revés; en R7 el `slice_max()` sin el año, `=` en vez de `==`, `label` fuera de `aes()`. No sabes si el estudiante pudo probar su código en el teléfono: no lo premies ni lo castigues. En tu feedback escribe en primera persona e incluye un 'yo habría...' concreto a ESTA respuesta, con la línea exacta que le habrías escrito. Cierra atando la respuesta al demo day del lunes 23 de noviembre de 2026, de forma concreta sobre ESTA respuesta.",
+      "weightFormula": "score = 0.60 * exactitud + 0.32 * completitud + 0.08 * claridad"
+    }
+  }
+}
