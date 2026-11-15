@@ -89,6 +89,21 @@ describe('RegistroEscritura — pegados que no disparan `paste`', () => {
   });
 });
 
+describe('RegistroEscritura — codigo inicial', () => {
+  it('el texto precargado no cuenta como tecleado, pegado ni salto', () => {
+    const { reloj, registro } = nuevoRegistro();
+    const inicial = 'curso %>%\n  filter(transporte == "Metro")';
+    registro.textoInicial(inicial);
+    reloj.avanzar(5000);
+    registro.cambio(inicial.replace('==', '!='));
+    const c = registro.cerrar();
+    expect(c.maxInsercionDeGolpe).toBe(0);
+    expect(c.charsPegados).toBe(0);
+    expect(c.largoFinal).toBe(inicial.length);
+    expect(c.msPrimeraTecla).toBe(5000);
+  });
+});
+
 describe('RegistroEscritura — el salto mas grande', () => {
   it('anota el mayor crecimiento de un solo cambio', () => {
     const { registro } = nuevoRegistro();

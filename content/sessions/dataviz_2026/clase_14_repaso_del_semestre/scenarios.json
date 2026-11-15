@@ -1,295 +1,293 @@
 [
   {
-    "id": "dv_c14_r1_diez_categorias",
+    "id": "dv_c14_r1_ver_la_tabla",
     "order": 1,
-    "type": "multiple_choice",
-    "title": "Diez categorías",
-    "category": "Clase 3: contar con count()",
-    "difficulty": "medium",
-    "ranked": true,
-    "durationSeconds": 65,
-    "conceptTags": [
-      "categorias_y_n"
-    ],
-    "mcQuestions": [
-      {
-        "question": "En la clase 3, `count(curso, dominio, sort = TRUE)` devolvió 10 categorías, pero el curso no eligió 10 temas. ¿Por qué?",
-        "options": [
-          {
-            "id": "A",
-            "text": "Porque `dominio` es texto, y R deletrea en vez de comparar"
-          },
-          {
-            "id": "B",
-            "text": "Porque R separa lo que se escribió distinto, como `politica`"
-          },
-          {
-            "id": "C",
-            "text": "Porque `count()` necesita un `group_by()` antes para juntar temas"
-          },
-          {
-            "id": "D",
-            "text": "Porque `sort = TRUE` ordena, y al ordenar separa los repetidos"
-          }
-        ],
-        "correctOptionIndex": 1,
-        "timeLimitSeconds": 30,
-        "explanation": "Alguien escribió `politica` en minúscula, alguien `Medioambiente` en una palabra y alguien `tecnologia y salud` fuera del menú. Decidir qué hacer con eso no lo hace R: lo deciden ustedes, y queda escrito."
-      }
-    ]
-  },
-  {
-    "id": "dv_c14_r2_contar_o_dividir",
-    "order": 2,
-    "type": "multiple_choice",
-    "title": "¿Bajó?",
-    "category": "Clase 6: agrupar y resumir",
-    "difficulty": "medium",
-    "ranked": true,
-    "durationSeconds": 64,
-    "conceptTags": [
-      "contar_describe_dividir_compara"
-    ],
-    "mcQuestions": [
-      {
-        "question": "En la CEP, 1.342 personas nombraron la delincuencia en 2025 y 461 en 2026. ¿Qué se puede concluir de esos dos números?",
-        "options": [
-          {
-            "id": "A",
-            "text": "Que la preocupación por la delincuencia cayó a un tercio"
-          },
-          {
-            "id": "B",
-            "text": "Que hay que sumar los dos años y sacar el promedio"
-          },
-          {
-            "id": "C",
-            "text": "Nada todavía: falta saber a cuántos encuestó cada año"
-          },
-          {
-            "id": "D",
-            "text": "Que 2026 tiene un `NA` y por eso el conteo salió bajo"
-          }
-        ],
-        "correctOptionIndex": 2,
-        "timeLimitSeconds": 30,
-        "explanation": "Contar describe; dividir compara. Fueron 1.342 de 4.217 encuestados contra 461 de 1.466: 31,8% y 31,4%. Casi lo mismo. El error no estaba en R, estaba en la pregunta (cuaderno de la clase 6)."
-      }
-    ]
-  },
-  {
-    "id": "dv_c14_r3_el_filtro_que_miente",
-    "order": 3,
-    "title": "El filtro que miente",
-    "category": "Clases 4 y 5: texto que parece número",
-    "difficulty": "hard",
+    "title": "Ver la tabla",
+    "category": "Clases 2 y 3: mirar los datos",
+    "difficulty": "easy",
     "answerFormat": "code",
     "ranked": true,
-    "durationSeconds": 240,
+    "durationSeconds": 75,
+    "conceptTags": [
+      "ver_la_tabla"
+    ],
+    "codigoInicial": "# Escribe abajo el nombre de la tabla para verla\n",
+    "context": "La tabla `curso` (la encuesta del curso) ya está cargada. En el cuadro hay una línea de comentario.",
+    "question": "Escribe debajo la línea que muestra la tabla `curso`.",
+    "judgeFocus": "Esta ronda es el CALENTAMIENTO del juego y pide UNA SOLA COSA: una línea que muestre la tabla `curso`. El cuadro empezaba con un solo comentario: `# Escribe abajo el nombre de la tabla para verla`.\n\nEL CRITERIO: puntúa 100 toda línea que, con `curso` cargada, MUESTRE LA TABLA O SUS PRIMERAS FILAS. Valen igual, y la lista NO es exhaustiva: `curso` solo (lo que dice el comentario); `head(curso)`; `print(curso)`; `glimpse(curso)`; `str(curso)`; `curso %>% head()`. Verificado en el R del teléfono: `curso` y `head(curso)` imprimen la tabla.\n\nLO QUE SÍ ES ERROR: `Curso` con mayúscula (no existe, no corre: nivel 40); el nombre entre comillas, `\"curso\"` (imprime la palabra, no la tabla: nivel 40); `View(curso)` (en el teléfono corre y no muestra nada: nivel 80, porque la intención es la correcta); devolver el cuadro sin agregar nada (nivel 0-20); `nrow(curso)` o `names(curso)` (corre y muestra algo de la tabla, no la tabla: nivel 60).\n\nLO QUE NO SE COBRA: espacios, saltos de línea, indentación, tipo de comillas, comentarios que el estudiante dejó o borró del código inicial, un paréntesis de cierre que falta cuando la intención es inequívoca. El estudiante pudo probar su código en el teléfono o no: no lo sabes y no importa; juzgas el texto.",
+    "evaluationGuide": {
+      "must_hit": [
+        "Una línea que muestra la tabla `curso` (o sus primeras filas)"
+      ],
+      "fatal_errors": [
+        "Devuelve el cuadro sin agregar nada",
+        "`\"curso\"` entre comillas o `Curso` con mayúscula"
+      ],
+      "partial_credit": {
+        "80": "`View(curso)`",
+        "60": "Muestra una parte de la tabla que no es la tabla: `nrow()`, `names()`",
+        "40": "No corre o imprime otra cosa",
+        "20": "Prosa sin código"
+      },
+      "nice_to_have": [
+        "Usar `head()` para no imprimir las 33 filas"
+      ]
+    },
+    "idealAnswer": "# Escribe abajo el nombre de la tabla para verla\ncurso"
+  },
+  {
+    "id": "dv_c14_r2_contar",
+    "order": 2,
+    "title": "Contar",
+    "category": "Clase 3: count()",
+    "difficulty": "easy",
+    "answerFormat": "code",
+    "ranked": true,
+    "durationSeconds": 75,
+    "conceptTags": [
+      "contar"
+    ],
+    "codigoInicial": "count(curso, transporte)",
+    "context": "Este código cuenta cuántas personas del curso usan cada medio de transporte.",
+    "question": "Cámbialo para contar cuántas personas usan cada `sistema_operativo`.",
+    "judgeFocus": "Esta ronda pide UNA SOLA EDICIÓN: cambiar la columna que se cuenta. El cuadro empezaba con `count(curso, transporte)`.\n\nEL CRITERIO: puntúa 100 todo código que, con `curso` cargada, CUENTE CUÁNTAS PERSONAS HAY EN CADA VALOR DE `sistema_operativo` (verificado: Android 5, Otro 1, iOS (Apple) 27). Valen igual, y la lista NO es exhaustiva: `count(curso, sistema_operativo)`; `curso %>% count(sistema_operativo)`; con `sort = TRUE`; `table(curso$sistema_operativo)` (la forma de la clase 2).\n\nLO QUE SÍ ES ERROR: dejar `transporte` (el cuadro sin editar: nivel 0-20); `sistema operativo` con espacio (no corre: nivel 40); `\"sistema_operativo\"` entre comillas dentro de `count()` (cuenta otra cosa: nivel 40); contar `sistema_operativo` Y `transporte` juntos, `count(curso, transporte, sistema_operativo)` (corre y cuenta las combinaciones, no lo pedido: nivel 60).\n\nLO QUE NO SE COBRA: espacios, saltos de línea, indentación, tipo de comillas, comentarios que el estudiante dejó o borró del código inicial, un paréntesis de cierre que falta cuando la intención es inequívoca. El estudiante pudo probar su código en el teléfono o no: no lo sabes y no importa; juzgas el texto.",
+    "evaluationGuide": {
+      "must_hit": [
+        "Cuenta `sistema_operativo` con `count()` (o `table()`)"
+      ],
+      "fatal_errors": [
+        "Deja `transporte`: el cuadro sin editar",
+        "`sistema operativo` con espacio, o entre comillas"
+      ],
+      "partial_credit": {
+        "80": "Lo pedido con un descuido de tecleo de intención inequívoca",
+        "60": "Cuenta la combinación de las dos columnas",
+        "40": "No corre o cuenta otra cosa",
+        "20": "Prosa sin código"
+      },
+      "nice_to_have": [
+        "`sort = TRUE` para ver primero el más común"
+      ]
+    },
+    "idealAnswer": "count(curso, sistema_operativo)"
+  },
+  {
+    "id": "dv_c14_r3_filtrar",
+    "order": 3,
+    "title": "Filtrar",
+    "category": "Clase 4: filter()",
+    "difficulty": "easy",
+    "answerFormat": "code",
+    "ranked": true,
+    "durationSeconds": 75,
+    "conceptTags": [
+      "filtrar"
+    ],
+    "codigoInicial": "curso %>%\n  filter(transporte == \"Metro\")",
+    "context": "Este código se queda con las personas del curso que llegan en metro. En `transporte` hay tres valores: `\"Auto\"`, `\"Metro\"` y `\"Micro o bus\"`.",
+    "question": "Cámbialo para quedarte con todas las personas que NO llegan en auto.",
+    "judgeFocus": "Esta ronda pide UNA SOLA EDICIÓN dentro del `filter()`. El cuadro empezaba con `curso %>% filter(transporte == \"Metro\")`.\n\nEL CRITERIO: puntúa 100 todo código que, con `curso` cargada, SE QUEDE CON LAS 21 PERSONAS QUE NO VAN EN AUTO (las de metro y las de micro o bus). Valen igual, y la lista NO es exhaustiva: `filter(transporte != \"Auto\")` (la tabla de operadores de la clase 4); `filter(transporte %in% c(\"Metro\", \"Micro o bus\"))`; `filter(transporte == \"Metro\" | transporte == \"Micro o bus\")` (la clase 5); terminar en `nrow()` o `count()`. Verificado en el R del teléfono: las tres dan 21.\n\nLO QUE SÍ ES ERROR: `!= \"auto\"` en minúscula (CORRE Y NO FILTRA NADA: devuelve las 33, porque el valor se escribe exactamente como en la base; nivel 40); `=!` o un solo `=` (no corre: R avisa que se usó `=` en vez de `==`; nivel 40); quedarse sólo con `\"Micro o bus\"` (corre y deja fuera a los de metro: nivel 60); el cuadro sin editar (nivel 0-20).\n\nLO QUE NO SE COBRA: espacios, saltos de línea, indentación, tipo de comillas, comentarios que el estudiante dejó o borró del código inicial, un paréntesis de cierre que falta cuando la intención es inequívoca. El estudiante pudo probar su código en el teléfono o no: no lo sabes y no importa; juzgas el texto.",
+    "evaluationGuide": {
+      "must_hit": [
+        "Se queda con los que NO van en auto: `!= \"Auto\"`, o metro y micro juntos"
+      ],
+      "fatal_errors": [
+        "`\"auto\"` en minúscula: no filtra nada",
+        "`=` en vez de `==`",
+        "El cuadro sin editar"
+      ],
+      "partial_credit": {
+        "80": "Lo pedido con un descuido de tecleo de intención inequívoca",
+        "60": "Sólo una de las dos categorías que no son auto",
+        "40": "No corre, o corre y no filtra",
+        "20": "Prosa sin código"
+      },
+      "nice_to_have": [
+        "Terminar en `nrow()` para ver que son 21"
+      ]
+    },
+    "idealAnswer": "curso %>%\n  filter(transporte != \"Auto\")"
+  },
+  {
+    "id": "dv_c14_r4_texto_que_parece_numero",
+    "order": 4,
+    "title": "El filtro que miente",
+    "category": "Clases 4 y 5: texto que parece número",
+    "difficulty": "medium",
+    "answerFormat": "code",
+    "ranked": true,
+    "durationSeconds": 120,
     "conceptTags": [
       "texto_que_parece_numero"
     ],
-    "context": "La tabla `curso` ya está cargada, tal como viene de la encuesta. Este código corre sin ningún error:\n\n```r\ncurso %>%\n  filter(minutos_viaje > 60) %>%\n  count(minutos_viaje)\n```\n\nPero no responde bien la pregunta: ¿cuántas personas se demoran más de una hora en llegar?",
-    "question": "Arréglalo para que cuente bien.\n\nSólo el código.",
-    "judgeFocus": "Esta ronda pide UNA SOLA COSA: el código arreglado que cuenta bien cuántas personas se demoran más de una hora. Unas pocas líneas de R escritas desde un teléfono; eso bien puesto vale 100 y escribir más no sube el puntaje. Aquí no existe la media respuesta.\n\nEL ERROR DEL CÓDIGO ORIGINAL, que es el cierre de la clase 4 y el arreglo de la clase 5: `minutos_viaje` es TEXTO (alguien escribió `10 min`), y R, al comparar texto con `>`, deletrea: «130» queda antes que «60». El código original corre sin error y lista 70, 80, 85 y 90: diez personas. La respuesta correcta es CATORCE.\n\nEL CRITERIO, que manda sobre cualquier ejemplo: puntúa 100 todo código que CONVIERTA LA COLUMNA A NÚMERO ANTES DE COMPARARLA y, con `curso` cargada, cuente o liste a las catorce personas que viajan MÁS de 60 minutos. La versión del cuaderno 5 es\n\ncurso %>%\n  mutate(minutos_num = as.numeric(minutos_viaje)) %>%\n  filter(minutos_num > 60) %>%\n  count(minutos_num)\n\npero valen igual, y la lista NO es exhaustiva: terminar en `nrow()` o en `summarise(n())`; convertir adentro del filtro, `filter(as.numeric(minutos_viaje) > 60)`; sobrescribir la columna con `mutate(minutos_viaje = as.numeric(minutos_viaje))`; `curso$minutos_viaje <- as.numeric(curso$minutos_viaje)` antes del código original. Todo eso, verificado en el R del teléfono, da 14. El aviso *NAs introduced by coercion* que aparece al convertir NO es un error: es el `10 min`, que queda `NA`.\n\nLO QUE SÍ ES ERROR:\n- Crear `minutos_num` y seguir filtrando `minutos_viaje`, o comparar contra `\"60\"` con comillas: CORRE Y SIGUE DANDO DIEZ. Nivel 40.\n- `as.numeric()` en una línea suelta, sin guardar el resultado ni usarlo en el filtro: corre y sigue dando diez. Nivel 40.\n- Convertir bien pero filtrar `>= 60`: corre, suma a los cuatro que viajan exactamente 60 (18) y la pregunta era «más de una hora». Nivel 60.\n- Explicar en castellano por qué falla sin escribir código: no es lo que se pidió. Nivel 20.\n\nLO QUE NO SE COBRA: terminar en `filter()` sin contar (la tabla de catorce filas igual responde: nivel 80), el aviso de coerción, un paréntesis de cierre que falta con intención inequívoca, una línea de comentario explicando el arreglo. El estudiante pudo probar su código en el teléfono o no: no lo sabes y no importa.",
+    "codigoInicial": "curso %>%\n  # agrega aquí una línea\n  filter(minutos_viaje > 60) %>%\n  count(minutos_viaje)",
+    "context": "Este código cuenta a quienes se demoran más de una hora en llegar. Corre sin error, pero deja fuera justo a los que más se demoran: 100, 130, 150 y 180 minutos.",
+    "question": "Agrega una línea donde dice el comentario para que cuente bien.",
+    "judgeFocus": "Esta ronda pide UNA LÍNEA NUEVA en el lugar marcado. El cuadro empezaba con\n\ncurso %>%\n  # agrega aquí una línea\n  filter(minutos_viaje > 60) %>%\n  count(minutos_viaje)\n\nEL ERROR, que es el cierre de la clase 4 y el arreglo de la clase 5: `minutos_viaje` es TEXTO (alguien escribió `10 min`), y R, al comparar texto, deletrea: «130» queda antes que «60». Por eso el código original da diez personas en vez de catorce.\n\nEL CRITERIO: puntúa 100 todo código que CONVIERTA LA COLUMNA A NÚMERO ANTES DEL `filter()` y compare el número. La forma más corta, en la línea marcada, es\n\n  mutate(minutos_viaje = as.numeric(minutos_viaje)) %>%\n\npero valen igual, y la lista NO es exhaustiva: crear `minutos_num` con `mutate()` Y cambiar el `filter()` y el `count()` para que la usen (es la versión del cuaderno 5: son dos ediciones, y vale 100 igual); convertir adentro del filtro, `filter(as.numeric(minutos_viaje) > 60)`. Verificado en el R del teléfono: dan las catorce personas, de 70 a 180 minutos. El aviso *NAs introduced by coercion* NO es un error: es el `10 min`.\n\nLO QUE SÍ ES ERROR: crear `minutos_num` y dejar el `filter()` sobre `minutos_viaje` (CORRE Y SIGUE DANDO DIEZ: nivel 40); olvidar el `%>%` al final de la línea agregada (no corre: nivel 60, porque la pieza conceptual está; es el único símbolo que el estudiante tuvo que teclear); `as.numeric()` en una línea suelta que no guarda nada (sigue dando diez: nivel 40); el cuadro sin editar (nivel 0-20).\n\nLO QUE NO SE COBRA: espacios, saltos de línea, indentación, tipo de comillas, comentarios que el estudiante dejó o borró del código inicial, un paréntesis de cierre que falta cuando la intención es inequívoca. El estudiante pudo probar su código en el teléfono o no: no lo sabes y no importa; juzgas el texto.",
     "evaluationGuide": {
       "must_hit": [
-        "Convierte `minutos_viaje` a número (`as.numeric()`) antes de compararla con 60",
-        "Filtra a los que viajan MÁS de 60 minutos sobre la columna ya numérica",
-        "El código corre y llega a catorce personas"
+        "Convierte `minutos_viaje` a número (`as.numeric()`) antes de compararla",
+        "El filtro compara la columna ya numérica"
       ],
       "fatal_errors": [
-        "Sigue comparando `minutos_viaje` como texto (crea `minutos_num` y no la usa, o compara contra \"60\"): da diez",
-        "Sólo prosa, sin código"
+        "Crea `minutos_num` y sigue filtrando `minutos_viaje`: sigue dando diez",
+        "El cuadro sin editar"
       ],
       "partial_credit": {
-        "20": "Sólo explica en castellano por qué falla",
-        "40": "Corre y sigue dando diez, o no corre (`%>%` roto, una función que no existe)",
-        "60": "Convierte bien pero filtra `>= 60` (18 personas)",
-        "80": "Correcto, pero termina en el `filter()` sin contar, o con un descuido de tecleo de intención inequívoca"
+        "80": "Lo pedido con un descuido de intención inequívoca",
+        "60": "La conversión correcta sin el `%>%` al final de la línea",
+        "40": "Corre y sigue dando diez, o no corre por otra razón",
+        "20": "Explica en castellano que es texto, sin código"
       },
       "nice_to_have": [
-        "Una línea de comentario que diga que la columna era texto",
-        "Usar `class()` para comprobarlo"
+        "Un comentario que diga que la columna era texto"
       ]
     },
-    "idealAnswer": "curso %>%\n  mutate(minutos_num = as.numeric(minutos_viaje)) %>%\n  filter(minutos_num > 60) %>%\n  count(minutos_num)"
+    "idealAnswer": "curso %>%\n  mutate(minutos_viaje = as.numeric(minutos_viaje)) %>%\n  filter(minutos_viaje > 60) %>%\n  count(minutos_viaje)"
   },
   {
-    "id": "dv_c14_r4_torta_o_barras",
-    "order": 4,
-    "type": "multiple_choice",
-    "title": "La torta descartada",
-    "category": "Clase 9: elegir el gráfico",
-    "difficulty": "medium",
-    "ranked": true,
-    "durationSeconds": 64,
-    "conceptTags": [
-      "elegir_el_grafico"
-    ],
-    "mcQuestions": [
-      {
-        "question": "Clase 9. Tarea: ranking. Pregunta: ¿qué problema preocupa más en 2026? Con los mismos datos, el panel descartó la torta y eligió las barras. ¿Por qué?",
-        "media": [
-          {
-            "kind": "image",
-            "src": "media/dataviz/c14_torta_descartada.png",
-            "alt": "La torta descartada de la lámina 12 de la clase 9: ocho tajadas de colores con los ocho problemas más nombrados en la CEP 2026, y al lado una leyenda en orden alfabético que hay que mirar para saber qué tajada es cuál.",
-            "credit": "Lámina 12 de la clase 9 (Roberto Velázquez)"
-          }
-        ],
-        "options": [
-          {
-            "id": "A",
-            "text": "Porque la torta es para tendencias, y esto es un ranking"
-          },
-          {
-            "id": "B",
-            "text": "Porque la torta ordena de mayor a menor y eso confunde"
-          },
-          {
-            "id": "C",
-            "text": "Porque la torta no muestra el n de cada uno de los problemas"
-          },
-          {
-            "id": "D",
-            "text": "Obliga a ir a la leyenda y reparte un 100% que no existe"
-          }
-        ],
-        "correctOptionIndex": 3,
-        "timeLimitSeconds": 30,
-        "explanation": "Lámina 12: «Ocho tajadas: hay que ir y volver a la leyenda, y la torta reparte el 100% aunque estos ocho problemas suman 83%». Las barras se leen de arriba abajo, y el orden ya es la respuesta."
-      }
-    ]
-  },
-  {
-    "id": "dv_c14_r5_la_etapa_3",
+    "id": "dv_c14_r5_promedio_con_na",
     "order": 5,
-    "title": "La etapa 3",
-    "category": "Clase 13: el gráfico por etapas",
-    "difficulty": "hard",
-    "answerFormat": "code",
-    "ranked": true,
-    "durationSeconds": 240,
-    "conceptTags": [
-      "grafico_por_etapas"
-    ],
-    "media": [
-      {
-        "kind": "image",
-        "src": "media/dataviz/c14_etapa3_referencia.png",
-        "alt": "Gráfico de línea de la delincuencia de 1994 a 2026: eje x «anio», eje y «porcentaje» fijo de 0 a 40, y una línea horizontal punteada a la altura de 19.",
-        "credit": "Etapa 3 de la clase 13 («Al aire»)"
-      }
-    ],
-    "context": "La tabla `delinc` ya está cargada: la serie de la delincuencia de la CEP, con las columnas `anio` y `porcentaje`. Es la de la clase 13.",
-    "question": "Escribe el código que dibuja este gráfico. En tu teléfono va a salir con fondo gris: eso no importa.\n\nSólo el código.",
-    "judgeFocus": "Esta ronda pide UNA SOLA COSA: el código que dibuja el gráfico de la imagen, que es la etapa 3 de la clase 13. Unas pocas líneas de R escritas desde un teléfono; eso bien puesto vale 100 y escribir más no sube el puntaje. Aquí no existe la media respuesta.\n\nEL GRÁFICO TIENE TRES RASGOS, y los tres se ven en la imagen: (a) la LÍNEA de la delincuencia por año (`delinc`, `anio` en x, `porcentaje` en y); (b) el EJE Y FIJO DE 0 A 40; (c) una LÍNEA HORIZONTAL PUNTEADA EN 19, el punto de partida de 1994.\n\nEL CRITERIO, que manda sobre cualquier ejemplo: puntúa 100 todo código que, con `delinc` y `ggplot2` cargados, CORRA Y DIBUJE LOS TRES RASGOS. Una versión es\n\nggplot(delinc, aes(x = anio, y = porcentaje)) +\n  geom_line() +\n  scale_y_continuous(limits = c(0, 40)) +\n  geom_hline(yintercept = 19, linetype = \"dashed\")\n\npero valen igual, y la lista NO es exhaustiva: el código de la clase por etapas (`p <- ggplot(...) + scale_y_continuous(...)`, `p <- p + geom_line()`, `p <- p + geom_hline(...)`, `p`); `ylim(0, 40)` en lugar de `scale_y_continuous()`; `linetype = 2`; las capas en otro orden; agregar el `ggsave()` de la clase. Todo eso, verificado en el R del teléfono, dibuja lo mismo.\n\nEL FONDO NO SE COBRA: la imagen tiene el fondo crema de las láminas, que se suma por fuera del código proyectado; en el teléfono sale gris, y el enunciado lo dice. No pidas `theme_minimal()`, colores ni títulos.\n\nLO QUE SÍ ES ERROR:\n- Sin el eje fijo: corre, pero el eje va de ~12 a ~32 y la línea se ve más dramática (justo lo que la clase quería evitar). Un rasgo ausente: nivel 60. Igual si la referencia está en otro valor (20, el promedio) o los límites cortan la línea (`c(0, 30)`).\n- Dos rasgos ausentes, o `problemas` en vez de `delinc` (todos los problemas en una línea en zigzag): nivel 40.\n- No corre: `geom_hline(19, ...)` sin `yintercept =` (R: *`mapping` must be created by `aes()`*); `limits = 0, 40` sin `c()`; `linetype = dashed` sin comillas; `%>%` en vez de `+`. Nivel 40.\n\nLO QUE NO SE COBRA (nivel 80, no menos): la referencia continua en vez de punteada; guardar todo en `p <-` y olvidar escribir `p` al final (en la clase se dijo que así no se dibuja, pero es una letra); un paréntesis de cierre que falta con intención inequívoca.",
-    "evaluationGuide": {
-      "must_hit": [
-        "La línea de la delincuencia: `delinc`, `anio` en x, `porcentaje` en y, `geom_line()`",
-        "El eje y fijo de 0 a 40",
-        "La línea horizontal en 19, punteada"
-      ],
-      "fatal_errors": [
-        "`problemas` en vez de `delinc`: todos los problemas en una sola línea",
-        "No corre: `geom_hline(19)` sin `yintercept =`, `limits` sin `c()`, `%>%` en vez de `+`"
-      ],
-      "partial_credit": {
-        "20": "Fragmentos o pseudocódigo",
-        "40": "Faltan dos rasgos, o no corre, o grafica `problemas`",
-        "60": "Falta uno de los tres rasgos (casi siempre el eje fijo), o la referencia en otro valor",
-        "80": "Los tres rasgos, con la referencia continua o sin escribir `p` al final"
-      },
-      "nice_to_have": [
-        "Armarlo por etapas con `p <-`, como la clase 13",
-        "Saber que el eje fijo es para que no salte entre etapas y para que parta en cero"
-      ]
-    },
-    "idealAnswer": "ggplot(delinc, aes(x = anio, y = porcentaje)) +\n  geom_line() +\n  scale_y_continuous(limits = c(0, 40)) +\n  geom_hline(yintercept = 19, linetype = \"dashed\")"
-  },
-  {
-    "id": "dv_c14_r6_el_titulo_que_falta",
-    "order": 6,
-    "title": "El título que falta",
-    "category": "Todo el semestre: el título es el hallazgo",
+    "title": "El promedio que no sale",
+    "category": "Clases 6 y 7: agrupar y resumir",
     "difficulty": "easy",
-    "answerFormat": "prose",
-    "ranked": true,
-    "durationSeconds": 135,
-    "conceptTags": [
-      "titulo_hallazgo"
-    ],
-    "media": [
-      {
-        "kind": "image",
-        "src": "media/dataviz/c14_mancuerna_sin_titulo.png",
-        "alt": "Gráfico de mancuernas con siete problemas de la CEP. Cada fila une un punto gris (1994) con uno rosado (2026). Delincuencia pasa de 19 a 31,5; Pobreza de 18,8 a 3,3; Salud y Educación casi no se mueven; Empleo, Sueldos e Inflación bajan.",
-        "credit": "Lámina 10 de la clase 9, sin su título"
-      }
-    ],
-    "context": "Este gráfico de la clase 9 perdió su título.",
-    "question": "Escríbele uno que diga lo que se ve, con un número o una comparación.\n\nUna frase.",
-    "judgeFocus": "Esta ronda pide UNA SOLA FRASE: el título que le falta al gráfico de mancuernas de la clase 9. Una frase escrita en dos minutos desde un teléfono; eso bien puesto vale 100 y escribir más no sube el puntaje. No se pide código.\n\nEL CRITERIO, que manda sobre cualquier ejemplo, es la regla que el curso repitió todo el semestre (el titular de la clase 6, el control antes de mostrar de la clase 8, «el título dice el hallazgo, no el tema» de la clase 9, la portada de la clase 12): el título DICE LO QUE SE VE, CON UN NÚMERO O UNA COMPARACIÓN, Y ESO QUE DICE ES VERDAD SEGÚN EL GRÁFICO. Los datos (gris 1994, rosa 2026): Delincuencia 19,0 → 31,5; Pobreza 18,8 → 3,3; Salud 13,4 → 13,2; Empleo 10,9 → 4,7; Inflación 9,6 → 1,4; Educación 7,8 → 7,9; Sueldos 6,1 → 2,6.\n\nVale CUALQUIER hallazgo verdadero, no sólo el título original («Pobreza abajo, delincuencia arriba»). Ejemplos, y la lista NO es exhaustiva: «En 1994 empataban en 19%; hoy, 31% contra 3%»; «La delincuencia subió de 19% a 31%; la pobreza cayó a 3%»; «Sólo la delincuencia subió»; «Salud y Educación casi no se movieron en 30 años»; «La pobreza, la que más bajó: de 19% a 3%»; «Hoy la delincuencia preocupa diez veces más que la pobreza». Redondear (19, 31, 3, «casi el doble», «diez veces») está bien.\n\nLO QUE NO CUENTA COMO HALLAZGO:\n- Un título que SÓLO NOMBRA EL TEMA («Problemas del país, 1994 y 2026», «Cambio en las preocupaciones»): no es falso, pero no dice nada de lo que se ve. Nivel 40.\n- Un título verdadero pero difuso, que dice que algo cambió sin decir qué («Lo que preocupa a los chilenos cambió mucho»). Nivel 60.\n- Un hallazgo verdadero con una CAUSA que el gráfico no muestra («…porque aumentó el crimen»): el curso describe, no explica (clase 7). Nivel 60.\n- Un título que el gráfico DESMIENTE («La pobreza se disparó», leer los colores al revés, «La salud se desplomó»): peor que el vacío. Nivel 20.\n\nLO QUE NO SE COBRA: la ortografía, las tildes, que no use `labs()` ni código, que sea una frase sin verbo («Pobreza abajo, delincuencia arriba» es un título perfecto), que no nombre la fuente.",
-    "evaluationGuide": {
-      "must_hit": [
-        "Dice lo que se ve, no sólo el tema",
-        "Con un número o una comparación",
-        "Lo que afirma es verdad según los datos del gráfico"
-      ],
-      "fatal_errors": [
-        "Afirma algo que el gráfico desmiente (colores leídos al revés, algo que subió dicho como que bajó)"
-      ],
-      "partial_credit": {
-        "20": "Falso según el gráfico",
-        "40": "Sólo nombra el tema",
-        "60": "Verdadero pero difuso (algo cambió, sin decir qué), o con una causa que el gráfico no muestra",
-        "80": "Verdadero y con hallazgo, con un redondeo que exagera un poco («se duplicó»)"
-      },
-      "nice_to_have": [
-        "Elige el hallazgo más fuerte del gráfico: el cruce de pobreza y delincuencia",
-        "Nota que lo que no se movió también es un hallazgo"
-      ]
-    },
-    "idealAnswer": "En 1994 empataban en 19%; hoy, 31% contra 3%"
-  },
-  {
-    "id": "dv_c14_r7_la_lamina_del_carrusel",
-    "order": 7,
-    "title": "La lámina del carrusel",
-    "category": "Clase 14: slice_max() y geom_text()",
-    "difficulty": "hard",
     "answerFormat": "code",
     "ranked": true,
-    "durationSeconds": 255,
+    "durationSeconds": 90,
     "conceptTags": [
-      "carrusel_slice_max_geom_text"
+      "promedio_con_na"
     ],
-    "context": "La tabla `problemas` ya está cargada: `anio`, `problema` y `porcentaje`. Es la de esta mañana. Este gráfico dibuja una tabla `top5` que todavía no existe:\n\n```r\nggplot(top5, aes(x = porcentaje,\n                 y = reorder(problema, porcentaje))) +\n  geom_col()\n```",
-    "question": "Arma `top5`, los cinco problemas más nombrados en 2026, y súmale al gráfico el porcentaje escrito en cada barra.\n\nEscribe todo el código: `top5` y el gráfico.",
-    "judgeFocus": "Esta ronda pide UN código con DOS PIEZAS, y las dos se califican: (1) ARMAR `top5`, los cinco problemas más nombrados en 2026; (2) SUMARLE AL GRÁFICO el porcentaje escrito en cada barra. Unas seis líneas de R escritas desde un teléfono; eso bien puesto vale 100 y escribir más no sube el puntaje. Es lo que vieron ESTA MAÑANA en la clase 14 (cuaderno 14, láminas 4 y 5).\n\nEL CRITERIO, que manda sobre cualquier ejemplo: puntúa 100 todo código que, con `problemas` y los paquetes cargados, CORRA Y DIBUJE LAS CINCO BARRAS DE 2026 —Delincuencia, asaltos y robos 31,45; Salud 13,17; Narcotráfico 9,69; Pensiones 7,98; Educación 7,91— CON EL NÚMERO ESCRITO EN CADA UNA. La versión de la clase es\n\ntop5 <- problemas %>%\n  filter(anio == 2026) %>%\n  slice_max(porcentaje, n = 5)\n\nggplot(top5, aes(x = porcentaje,\n                 y = reorder(problema, porcentaje))) +\n  geom_col() +\n  geom_text(aes(label = paste0(round(porcentaje), \"%\")),\n            nudge_x = 2)\n\npero valen igual, y la lista NO es exhaustiva: `arrange(desc(porcentaje)) %>% head(5)` en vez de `slice_max()` (la forma de la clase 9: mismas cinco filas); todo en una sola cadena que entra con el pipe al `ggplot()`; sin `nudge_x`; `paste()` en vez de `paste0()`; `label = porcentaje` sin redondear o `label = round(porcentaje)` (el número está escrito, aunque sin `%`). Todo eso, verificado en el R del teléfono, dibuja lo pedido.\n\nLO QUE SÍ ES ERROR:\n- MEDIA RESPUESTA: `top5` impecable y el gráfico sin `geom_text()`, o el `geom_text()` sobre un `top5` que nunca se armó (R: *object 'top5' not found*). Nivel 40, por limpia que esté la mitad.\n- `slice_max()` SIN `filter(anio == 2026)`: corre y toma los cinco porcentajes más altos de toda la serie, mezclando años (Pensiones 2019 arriba). Corre y contesta mal: nivel 40.\n- No corre: `geom_text(label = porcentaje)` fuera de `aes()`; `filter(anio = 2026)` con un solo `=`; `%>%` en vez de `+` entre capas. Nivel 40.\n- `label = problema` (escribe el nombre en vez del número): corre y no es lo pedido. Nivel 60.\n\nY EL REVERSO, QUE IMPORTA IGUAL: la respuesta que entregó LAS DOS PIEZAS y se equivocó en una va POR ENCIMA de la media respuesta impecable.\n\nLO QUE NO SE COBRA (nivel 80, no menos): `slice_max(porcentaje, 5)` sin nombrar `n` (R pide el nombre, pero la intención es inequívoca y no todos pudieron probar); escribir sólo `top5` y la línea `+ geom_text(...)` sin repetir el gráfico del enunciado; un paréntesis de cierre que falta. Tampoco se cobra el fondo gris, un `labs()`, el `fill` destacado de la clase 14 ni el `ggsave()` cuadrado: nadie los pidió, y si están y corren, no restan.",
+    "codigoInicial": "curso %>%\n  mutate(minutos_num = as.numeric(minutos_viaje)) %>%\n  group_by(transporte) %>%\n  summarise(minutos = mean(minutos_num))",
+    "context": "Este código calcula los minutos promedio de viaje por medio de transporte. Metro y micro salen bien, pero el promedio de Auto sale `NA`.",
+    "question": "Arréglalo para que Auto también tenga su promedio.",
+    "judgeFocus": "Esta ronda pide UNA SOLA EDICIÓN dentro del `summarise()`. El cuadro empezaba con\n\ncurso %>%\n  mutate(minutos_num = as.numeric(minutos_viaje)) %>%\n  group_by(transporte) %>%\n  summarise(minutos = mean(minutos_num))\n\nEL ERROR: una persona que va en auto escribió `10 min`, que al convertir queda `NA`, y «el promedio de algo que incluye un \"no sé\" es, correctamente, \"no sé\"» (cuaderno 6). Es el ejercicio 9 del cuaderno 7, literal.\n\nEL CRITERIO: puntúa 100 todo código que, con `curso` cargada, CALCULE EL PROMEDIO DE AUTO IGNORANDO EL `NA` (verificado: Auto 40,5 · Metro 83,3 · Micro o bus 77). La forma del curso es `mean(minutos_num, na.rm = TRUE)`, pero valen igual, y la lista NO es exhaustiva: `na.rm = T`; sacar los `NA` antes con `filter(!is.na(minutos_num))`. Verificado: dan lo mismo.\n\nLO QUE SÍ ES ERROR: `na.rm = TRUE` puesto FUERA de `mean()`, como `summarise(minutos = mean(minutos_num), na.rm = TRUE)` (CORRE Y AUTO SIGUE EN NA: agrega una columna llamada `na.rm`; nivel 40); `narm = TRUE` (corre y Auto sigue en NA: nivel 40); `na.rm == TRUE` (no corre: *object 'na.rm' not found*; nivel 40); el cuadro sin editar (nivel 0-20).\n\nLO QUE NO SE COBRA: espacios, saltos de línea, indentación, tipo de comillas, comentarios que el estudiante dejó o borró del código inicial, un paréntesis de cierre que falta cuando la intención es inequívoca. El estudiante pudo probar su código en el teléfono o no: no lo sabes y no importa; juzgas el texto.",
     "evaluationGuide": {
       "must_hit": [
-        "Arma `top5` con los cinco más nombrados de 2026 (`filter(anio == 2026)` + `slice_max(porcentaje, n = 5)`, o `arrange(desc()) %>% head(5)`)",
-        "Suma `geom_text(aes(label = ...))` con el porcentaje de cada barra",
-        "El código corre y dibuja las cinco barras con su número"
+        "`na.rm = TRUE` dentro de `mean()`, o sacar los `NA` antes de promediar"
       ],
       "fatal_errors": [
-        "Falta una de las dos piezas (media respuesta)",
-        "`slice_max()` sin el `filter()` del año: años mezclados",
-        "No corre: `label` fuera de `aes()`, `=` en vez de `==`, `%>%` entre capas"
+        "`na.rm = TRUE` fuera de `mean()`: Auto sigue en NA",
+        "El cuadro sin editar"
       ],
       "partial_credit": {
-        "20": "Fragmentos o pseudocódigo",
-        "40": "Media respuesta, o corre y contesta mal, o no corre",
-        "60": "Las dos piezas y las etiquetas con el nombre del problema en vez del número",
-        "80": "Todo bien, con `slice_max(porcentaje, 5)` sin nombrar `n`, o sin repetir el gráfico del enunciado"
+        "80": "Lo pedido con un descuido de intención inequívoca",
+        "60": "Saca el `NA` borrando a la persona a mano o cambiando la conversión de una forma que corre pero no se puede repetir",
+        "40": "Corre y Auto sigue en NA, o no corre",
+        "20": "Explica el porqué sin código"
       },
       "nice_to_have": [
-        "`round()` y `%` en la etiqueta, como la lámina 5",
+        "Agregar `personas = n()` para ver con cuántos datos se calculó cada promedio"
+      ]
+    },
+    "idealAnswer": "curso %>%\n  mutate(minutos_num = as.numeric(minutos_viaje)) %>%\n  group_by(transporte) %>%\n  summarise(minutos = mean(minutos_num, na.rm = TRUE))"
+  },
+  {
+    "id": "dv_c14_r6_piezas_ggplot",
+    "order": 6,
+    "title": "El gráfico que no corre",
+    "category": "Clase 8: las piezas de ggplot2",
+    "difficulty": "easy",
+    "answerFormat": "code",
+    "ranked": true,
+    "durationSeconds": 75,
+    "conceptTags": [
+      "piezas_ggplot"
+    ],
+    "codigoInicial": "ggplot(curso, aes(x = transporte)) %>%\n  geom_bar()",
+    "context": "Este código quiere dibujar cuántas personas usan cada medio de transporte, pero no corre.",
+    "question": "Arréglalo.",
+    "judgeFocus": "Esta ronda pide UNA SOLA EDICIÓN: cambiar el operador entre las piezas. El cuadro empezaba con\n\nggplot(curso, aes(x = transporte)) %>%\n  geom_bar()\n\nEL ERROR es «el error más común de hoy» del cuaderno 8: dentro de un gráfico las piezas se SUMAN con `+`; el `%>%` es para las tablas. R responde *`mapping` must be created by `aes()`… Did you use `%>%` or `|>` instead of `+`?*\n\nEL CRITERIO: puntúa 100 todo código que, con `curso` cargada, CORRA Y DIBUJE UNA BARRA POR TRANSPORTE (Auto 12, Metro 6, Micro o bus 15). La forma es cambiar `%>%` por `+`. Verificado en el R del teléfono.\n\nLO QUE SÍ ES ERROR: dejar el `%>%` (el cuadro sin editar: nivel 0-20); poner el `+` al COMIENZO de la línea siguiente en vez de al final (no corre: R avisa *Did you accidentally put `+` on a new line?*; nivel 80, porque la pieza que se pedía está y es un salto de línea escrito en un teléfono); borrar el operador sin poner nada (corre, pero dibuja sólo los ejes, sin barras, porque `geom_bar()` queda suelto: nivel 40); cambiar otra cosa y dejar el `%>%` (nivel 20).\n\nLO QUE NO SE COBRA: espacios, saltos de línea, indentación, tipo de comillas, comentarios que el estudiante dejó o borró del código inicial, un paréntesis de cierre que falta cuando la intención es inequívoca. El estudiante pudo probar su código en el teléfono o no: no lo sabes y no importa; juzgas el texto.",
+    "evaluationGuide": {
+      "must_hit": [
+        "Cambia `%>%` por `+` entre `ggplot()` y `geom_bar()`"
+      ],
+      "fatal_errors": [
+        "Deja el `%>%`: el cuadro sin editar"
+      ],
+      "partial_credit": {
+        "80": "El `+` al comienzo de la línea siguiente",
+        "60": "Corre y dibuja otra cosa",
+        "40": "Borra el operador sin poner otro: dibuja los ejes sin barras",
+        "20": "Cambia otra cosa y deja el `%>%`"
+      },
+      "nice_to_have": [
+        "Saber que `%>%` es para tablas y `+` para las capas del gráfico"
+      ]
+    },
+    "idealAnswer": "ggplot(curso, aes(x = transporte)) +\n  geom_bar()"
+  },
+  {
+    "id": "dv_c14_r7_tercera_variable_color",
+    "order": 7,
+    "title": "Una línea por problema",
+    "category": "Clase 10: la tercera variable",
+    "difficulty": "medium",
+    "answerFormat": "code",
+    "ranked": true,
+    "durationSeconds": 120,
+    "conceptTags": [
+      "tercera_variable_color"
+    ],
+    "codigoInicial": "cuatro <- problemas %>%\n  filter(problema %in% c(\"Delincuencia, asaltos y robos\",\n                         \"Salud\", \"Pobreza\", \"Empleo\"))\n\nggplot(cuatro, aes(x = anio, y = porcentaje)) +\n  geom_line()",
+    "context": "La tabla `cuatro` tiene, año por año, qué porcentaje de la CEP nombra cada uno de cuatro problemas. El gráfico corre, pero dibuja una sola línea que salta de un problema a otro.",
+    "question": "Haz que salga una línea por problema, cada una de su color.",
+    "judgeFocus": "Esta ronda pide UNA SOLA EDICIÓN dentro del gráfico. El cuadro empezaba con una tabla `cuatro` (cuatro problemas de la CEP) y\n\nggplot(cuatro, aes(x = anio, y = porcentaje)) +\n  geom_line()\n\nque CORRE Y DIBUJA UNA SOLA LÍNEA EN ZIGZAG (verificado en el R del teléfono: 128 filas, 4 problemas, una línea).\n\nEL CRITERIO, que es la lámina 4 de la clase 10: puntúa 100 todo código que, con `problemas` cargada, DIBUJE CUATRO LÍNEAS, UNA POR PROBLEMA, CADA UNA DE UN COLOR. La forma es `color = problema` DENTRO de `aes()`:\n\nggplot(cuatro, aes(x = anio, y = porcentaje, color = problema)) +\n  geom_line()\n\npero valen igual, y la lista NO es exhaustiva: `colour =`; el `aes(color = problema)` puesto dentro de `geom_line()`; agregar `geom_point()` o un `labs()`. Verificado: dibujan las cuatro líneas de colores.\n\nLO QUE SÍ ES ERROR: `geom_line(color = problema)`, FUERA de `aes()` (no corre: *object 'problema' not found*; nivel 40); `color = \"problema\"` CON COMILLAS (corre y sigue la línea única, de un solo color: nivel 40); `group = problema` sin color (corre y dibuja cuatro líneas de un mismo color: nivel 60); `+ facet_wrap(~ problema)` (corre y separa los problemas en paneles: nivel 60, es la otra forma de la clase 10 pero no lo pedido); el cuadro sin editar (nivel 0-20).\n\nLO QUE NO SE COBRA: espacios, saltos de línea, indentación, tipo de comillas, comentarios que el estudiante dejó o borró del código inicial, un paréntesis de cierre que falta cuando la intención es inequívoca. El estudiante pudo probar su código en el teléfono o no: no lo sabes y no importa; juzgas el texto.",
+    "evaluationGuide": {
+      "must_hit": [
+        "`color = problema` dentro de `aes()`, sin comillas"
+      ],
+      "fatal_errors": [
+        "`color = problema` fuera de `aes()`: no corre",
+        "`\"problema\"` entre comillas: sigue una sola línea",
+        "El cuadro sin editar"
+      ],
+      "partial_credit": {
+        "80": "Lo pedido con un descuido de intención inequívoca",
+        "60": "Cuatro líneas de un solo color (`group =`) o cuatro paneles (`facet_wrap`)",
+        "40": "No corre, o corre y sigue la línea única",
+        "20": "Prosa sin código"
+      },
+      "nice_to_have": [
+        "Saber que la leyenda sale sola"
+      ]
+    },
+    "idealAnswer": "cuatro <- problemas %>%\n  filter(problema %in% c(\"Delincuencia, asaltos y robos\",\n                         \"Salud\", \"Pobreza\", \"Empleo\"))\n\nggplot(cuatro, aes(x = anio, y = porcentaje, color = problema)) +\n  geom_line()"
+  },
+  {
+    "id": "dv_c14_r8_numero_en_la_barra",
+    "order": 8,
+    "title": "El número en la barra",
+    "category": "Clase 14: geom_text()",
+    "difficulty": "medium",
+    "answerFormat": "code",
+    "ranked": true,
+    "durationSeconds": 120,
+    "conceptTags": [
+      "numero_en_la_barra"
+    ],
+    "codigoInicial": "top5 <- problemas %>%\n  filter(anio == 2026) %>%\n  slice_max(porcentaje, n = 5)\n\nggplot(top5, aes(x = porcentaje,\n                 y = reorder(problema, porcentaje))) +\n  geom_col()",
+    "context": "`top5` son los cinco problemas más nombrados en la CEP de 2026, y el gráfico los dibuja en barras acostadas.",
+    "question": "Agrega el porcentaje escrito al lado de cada barra.",
+    "judgeFocus": "Esta ronda pide UNA CAPA NUEVA en el gráfico. Es lo que vieron ESTA MAÑANA (cuaderno 14, lámina 5: «En tres segundos nadie lee un eje: el número va en la barra»). El cuadro empezaba con `top5` (`slice_max()` sobre 2026) y el gráfico de barras con `geom_col()`.\n\nEL CRITERIO: puntúa 100 todo código que, con `problemas` cargada, DIBUJE LAS CINCO BARRAS CON SU PORCENTAJE ESCRITO (31,45 · 13,17 · 9,69 · 7,98 · 7,91). La versión de la clase es\n\n  geom_col() +\n  geom_text(aes(label = paste0(round(porcentaje), \"%\")), nudge_x = 2)\n\npero valen igual, y la lista NO es exhaustiva: `label = porcentaje` sin redondear o `label = round(porcentaje)` (el número está escrito, aunque sin `%`); sin `nudge_x`; `geom_label()` en vez de `geom_text()`; `paste()` en vez de `paste0()`. Verificado en el R del teléfono.\n\nLO QUE SÍ ES ERROR: `geom_text(label = porcentaje)` FUERA de `aes()` (no corre: *object 'porcentaje' not found*; nivel 40); `geom_text()` sin `label` (no corre: *requires the following missing aesthetics: label*; nivel 40); `label = problema` (corre y escribe el nombre en vez del número: nivel 60); olvidar el `+` antes de `geom_text()` (corre, pero la capa queda suelta y las barras salen sin números: nivel 60, porque la capa está bien escrita); el cuadro sin editar (nivel 0-20).\n\nLO QUE NO SE COBRA: espacios, saltos de línea, indentación, tipo de comillas, comentarios que el estudiante dejó o borró del código inicial, un paréntesis de cierre que falta cuando la intención es inequívoca. El estudiante pudo probar su código en el teléfono o no: no lo sabes y no importa; juzgas el texto.",
+    "evaluationGuide": {
+      "must_hit": [
+        "Agrega `geom_text()` (o `geom_label()`) con `aes(label = ...)` que escribe el porcentaje"
+      ],
+      "fatal_errors": [
+        "`label` fuera de `aes()`, o `geom_text()` sin `label`: no corre",
+        "El cuadro sin editar"
+      ],
+      "partial_credit": {
+        "80": "Lo pedido con un descuido de intención inequívoca",
+        "60": "Escribe el nombre en vez del número, o la capa bien escrita sin el `+` que la suma",
+        "40": "No corre",
+        "20": "Prosa sin código"
+      },
+      "nice_to_have": [
+        "`round()` y `%` en la etiqueta",
         "`nudge_x` para que el número no pise la barra"
       ]
     },
-    "idealAnswer": "top5 <- problemas %>%\n  filter(anio == 2026) %>%\n  slice_max(porcentaje, n = 5)\n\nggplot(top5, aes(x = porcentaje,\n                 y = reorder(problema, porcentaje))) +\n  geom_col() +\n  geom_text(aes(label = paste0(round(porcentaje), \"%\")),\n            nudge_x = 2)"
+    "idealAnswer": "top5 <- problemas %>%\n  filter(anio == 2026) %>%\n  slice_max(porcentaje, n = 5)\n\nggplot(top5, aes(x = porcentaje,\n                 y = reorder(problema, porcentaje))) +\n  geom_col() +\n  geom_text(aes(label = paste0(round(porcentaje), \"%\")), nudge_x = 2)"
   }
 ]

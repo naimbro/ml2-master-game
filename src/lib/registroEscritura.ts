@@ -79,6 +79,17 @@ export class RegistroEscritura {
     return this.ahora() - this.inicio;
   }
 
+  /**
+   * El código que la ronda deja escrito en el cuadro antes de que el alumno
+   * toque nada (`Scenario.codigoInicial`). Fija el largo de partida y NADA más:
+   * no es una tecla, no es un pegado y no es el salto más grande. Sin esto, la
+   * primera tecla que el alumno agrega sobre 150 caracteres precargados se
+   * leería como 151 caracteres que entraron de golpe.
+   */
+  textoInicial(valor: string): void {
+    this.largo = valor.length;
+  }
+
   /** Cada `onChange` del textarea. */
   cambio(valor: string): void {
     const nuevo = valor.length;

@@ -1,83 +1,73 @@
 # Clase 14 — Repaso del semestre
 
-Juego largo del lunes 16 de noviembre de 2026, **a las 11:30, después del
-recreo** de la clase 14 («Community manager»). **Siete rondas, ~29 min de
-pared.** Repasa el semestre entero, de la clase 3 a la de esa misma mañana, y
-premia a quien aprendió a lo largo del curso. Nunca jugado.
+Juego del lunes 16 de noviembre de 2026, **a las 11:30, después del recreo** de
+la clase 14 («Community manager»). **Ocho rondas cortas, ~30 min de pared,
+todas de código y todas de editar.** Nunca jugado con el curso.
 
-Es el **estreno de «Probar» dentro de un juego real**: R en vivo (webR) en el
-teléfono de cada alumno, en las tres rondas de código.
+## Cómo es: editar, no escribir de cero
 
-## De dónde sale cada ronda
+Es la segunda versión, rehecha el 15-nov después de la corrida en seco (sala
+`X9RSDK`). Naim la jugó en su teléfono y pidió tres cosas:
 
-| # | Ronda | Formato | Reloj | Ancla |
-|---|-------|---------|-------|-------|
-| 1 | Diez categorías | alternativas | 65 s | Cuaderno 3, celdas 33–34: 10 categorías que no son 10 temas |
-| 2 | ¿Bajó? | alternativas | 64 s | Cuaderno 6, celdas 1 y 35: contar describe, dividir compara |
-| 3 | El filtro que miente | código `hard` | 240 s | Cuaderno 4, celdas 45–47 (la trampa) y cuaderno 5, celdas 14–21 (el arreglo) |
-| 4 | La torta descartada | alternativas con imagen | 64 s | Lámina 12 de la clase 9 (Roberto Velázquez) |
-| 5 | La etapa 3 | código `hard` con imagen | 240 s | Lámina 6 y cuaderno 13, celdas 3–14 |
-| 6 | El título que falta | prosa `easy` con imagen | 135 s | Lámina 10 de la clase 9 sin su título; la regla de las clases 6, 8, 9, 10 y 12 |
-| 7 | La lámina del carrusel | código `hard` | 255 s | Cuaderno 14, celdas 4–10, y láminas 4–5 de esa mañana |
+1. **Que no dependa del contexto de clases pasadas.** La primera versión
+   preguntaba «en la clase 3 salieron 10 categorías, ¿por qué?», y el profesor
+   no reconoció la referencia. El juego mide **conceptos que les sirven
+   después**, no el recuerdo de una tabla de agosto.
+2. **Que escribir código en el teléfono no sea un infierno** («`%>%` es un
+   infierno»). Cada ronda trae el código **ya escrito en el cuadro**
+   (`codigoInicial`, campo nuevo del escenario) y pide **una edición chica**.
+   En ninguna ronda hay que teclear un `%>%`.
+3. **Fuera las alternativas: todas de código.** Y los jueces tienen que poder
+   juzgar **sin que R haya corrido**: cada `judgeFocus` trae el código inicial
+   y la edición esperada, y un cuadro devuelto sin editar vale 0-20.
 
-**Presupuesto:** 1.063 s de relojes (17,7 min) + overhead. El overhead de las
-abiertas es de 2 min (medido) y el de las alternativas es 1 min (estimado,
-porque no esperan a los jueces): 4 × 2 + 3 × 1 = 11 min. Eso da **~28,7 min**, y
-queda margen para un par de «+30 s».
+## Las rondas
 
-Las tres rondas de código llevan **90 s sobre el piso** de
-`relojDerivadoAbierta()` (150 s): 60 s por «Probar», porque con el botón el
-alumno itera, y 30 s porque este curso necesitó «+30 s» en las tres rondas de la
-clase 8. R7 lleva 15 s más porque son seis líneas.
+| # | Ronda | Concepto (clase) | La edición | Reloj |
+|---|---|---|---|---|
+| 1 | Ver la tabla | mirar los datos (2–3) | escribir `curso` bajo el comentario | 75 s |
+| 2 | Contar | `count()` (3) | `transporte` → `sistema_operativo` | 75 s |
+| 3 | Filtrar | operadores (4) | `== "Metro"` → `!= "Auto"` | 75 s |
+| 4 | El filtro que miente | texto que parece número (4–5) | una línea `mutate(... as.numeric(...)) %>%` | 120 s |
+| 5 | El promedio que no sale | `NA` en un promedio (6–7) | `na.rm = TRUE` dentro de `mean()` | 90 s |
+| 6 | El gráfico que no corre | las piezas de ggplot (8) | `%>%` → `+` | 75 s |
+| 7 | Una línea por problema | la tercera variable (10) | `color = problema` dentro de `aes()` | 120 s |
+| 8 | El número en la barra | `geom_text()` (14) | una capa `+ geom_text(aes(label = ...))` | 120 s |
 
-## El orden y el lobby
+Naim eligió R6 (el `%>%`), R7 (color, no facetas), R8 (el número, no ordenar ni
+la referencia) y ocho rondas, no nueve.
 
-**Abrir la sala a las 11:20, en el corte.** R empieza a bajar en el lobby
-(≈15 s en escritorio con las dos tablas). Durante el recreo, la descarga se
-reparte en diez minutos en vez de caer junta a las 11:30. Además las dos primeras
-rondas son de alternativas: la primera de código parte cerca de las 11:35.
+**Presupuesto:** 750 s de relojes (12,5 min) + ~2 min de overhead por ronda
+abierta (jueces, revelación, leaderboard) = **~28,5 min**. El overhead es lo que
+limita: con nueve rondas se pasaba de 30.
+
+## La app: lo que se agregó para esta sesión
+
+- **`codigoInicial`** (`src/types/game.ts`): `Round.tsx` lo deja escrito en el
+  cuadro al empezar cada ronda de código, una sola vez por ronda. La telemetría
+  de escritura lo registra como largo de partida (`RegistroEscritura.textoInicial`),
+  no como tecleado ni como pegado. El validador rechaza un `codigoInicial` en una
+  ronda que no es de código.
+- **R se reintenta solo** si la carga cayó (`MotorR.reintentarSiFallo`): al
+  volver a la pestaña y al empezar cada ronda de código. Salió de la corrida en
+  seco: en el juego apareció «R no cargó», y la página de la ronda nunca volvía a
+  intentar. El aviso ahora muestra el **motivo** del fallo.
+- `/preview-probar` muestra el código inicial de cada ronda.
+
+## El lobby
+
+**Abrir la sala a las 11:20, en el corte**: R se baja durante el recreo. Si un
+teléfono se apagó y la carga cayó, ahora se reintenta solo al volver.
 
 **Lo que desplaza:** de 11:30 a 12:00 iban la prueba del scroll y la mitad de
 «qué lámina perdió a la sala». Esa decisión es de Naim, no del juego.
 
-## Las decisiones que no son obvias
+## Pendiente conocido
 
-**Las tablas del teléfono** las deja el bloque `rEnVivo` de `config.json`:
-`curso` (encuesta del curso, tal como viene del CSV, con `minutos_viaje` como
-texto: la trampa de R3 necesita que siga así), `problemas`
-(`cep_problemas_por_anio.csv`, copiado a `public/datos/dataviz/` para esta
-sesión) y `delinc`. La CEP consolidada (19 MB) no se usa: por eso no hay ninguna
-ronda de código de `facet_grid()`, cuyos ejemplos de la clase 12 dependen de
-ella.
-
-**Toda ronda se puede contestar bien sin el botón.** R3 es la lección de las
-clases 4 y 5, y R5 copia una imagen. R7 es lo de esa mañana. El botón ayuda a
-verificar, no a adivinar.
-
-**Las imágenes son de la clase, recortadas, no rehechas.** Se sacó el panel de
-código de la etapa 3 (si no, la respuesta venía escrita), el título de la
-mancuerna (que es la respuesta de R6) y el texto con la razón de la lámina 12.
-De la lámina 12 queda sólo la torta: la versión con las barras al lado era
-ilegible a 375 px. El fondo crema de las láminas no está en el código
-proyectado: en el teléfono sale gris, y el enunciado de R5 lo avisa.
-
-**La indulgencia con el paréntesis se mantiene** (decisión de Naim, 15-nov):
-quien no pudo cargar R no puede encontrarlo solo. Por lo mismo,
-`slice_max(porcentaje, 5)` sin nombrar `n` es nivel 80, no «no corre».
-
-**Todo lo que la rúbrica dice que corre o no corre se corrió en el R del
-teléfono** (R 4.6.0, ggplot2 4.0.3, dplyr 1.2.1) el 15-nov, en
-`/preview-probar`, que ahora apunta a la config de esta sesión. Los mensajes de
-error salen en inglés y no son los del Colab (R 4.4).
-
-## Antes de la clase
-
-- **Corrida en seco** con una sala de prueba y el teléfono de Naim: es la
-  primera vez que «Probar» corre dentro de una ronda de verdad. Jugarla con las
-  respuestas de `respuestas_sinteticas.md` y mirar si el orden de los puntajes
-  sale como ahí.
-- Sin probar todavía: iPhone, un Android viejo, y la sala entera bajando R a la
-  vez.
+- **Ventana de incógnito con una segunda cuenta en el mismo teléfono:** R no
+  cargó (15-nov). Lo más probable es la memoria de dos R a la vez en un teléfono.
+  Naim decidió dejarlo para después: los alumnos juegan en su Chrome normal.
+- Sin probar: iPhone y un Android viejo.
 
 ## Después de jugar
 
@@ -86,10 +76,9 @@ npm run diagnostico <CODIGO>
 node scripts/judge-levels.cjs
 ```
 
-**La telemetría de cada ronda de código guarda ahora un campo `r`**
-(`telemetria/{uid}_{ronda}.r`): `pruebas`, `errores`, `ultimaOk`, `estado` (cómo
-estaba R en ese teléfono al enviar: `listo`, `cargando`, `fallo`) y `msCarga`.
-Es el dato que dice **en cuántos teléfonos falló R** y cuánto tardó en cargar.
-Lo tiene que leer `diagnostico-de-clase`. Mirar también si los que no tuvieron R
-sacaron menos en R3, R5 y R7 que los que sí: si la brecha es grande, la
-indulgencia no alcanzó.
+**La telemetría de cada ronda de código guarda un campo `r`**
+(`telemetria/{uid}_{ronda}.r`): `pruebas`, `errores`, `ultimaOk`, `estado`
+(cómo estaba R en ese teléfono al enviar: `listo`, `cargando`, `fallo`) y
+`msCarga`. Es el dato que dice **en cuántos teléfonos falló R**, y lo tiene que
+leer `diagnostico-de-clase`. Mirar también si los que no tuvieron R sacaron
+menos que los que sí.

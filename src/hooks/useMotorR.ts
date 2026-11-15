@@ -26,5 +26,16 @@ export function useMotorR(config: ConfigR | null): EstadoMotor {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clave]);
 
+  // Si la carga se cayó con el teléfono apagado o en otra app, se reintenta
+  // sola al volver a la pantalla. Ver `MotorR.reintentarSiFallo`.
+  useEffect(() => {
+    if (!clave) return;
+    const alVolver = () => {
+      if (document.visibilityState === 'visible') motorR.reintentarSiFallo();
+    };
+    document.addEventListener('visibilitychange', alVolver);
+    return () => document.removeEventListener('visibilitychange', alVolver);
+  }, [clave]);
+
   return estado;
 }

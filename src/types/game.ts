@@ -291,6 +291,15 @@ export interface Scenario {
    * juez termina puntuando al corrector de iOS. Default `'prose'`.
    */
   answerFormat?: 'prose' | 'code';
+  /**
+   * Solo rondas de código. El código que aparece YA ESCRITO en el cuadro al
+   * empezar la ronda, para que el alumno lo edite en vez de teclearlo entero
+   * desde el teléfono (Naim, 15-nov-2026: «%>% es un infierno»). Lo que se
+   * envía es el cuadro completo, así que los jueces leen el código terminado;
+   * el `judgeFocus` de la ronda tiene que decir cuál era el inicial y qué
+   * edición se esperaba.
+   */
+  codigoInicial?: string;
   mcQuestions?: MCQuestion[];
   media?: MediaAsset[];                 // open-round scenario card / MC block intro
   context: string;

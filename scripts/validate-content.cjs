@@ -588,6 +588,16 @@ function validateSession(courseId, sessionId, sessionDir, knownJudgeIds) {
         if (problema.nivel === 'error') err(sScope, problema.mensaje);
         else warn(sScope, problema.mensaje);
       }
+      // `codigoInicial` (Round.tsx lo deja escrito en el cuadro): sólo existe en
+      // rondas de código. En una de prosa o de alternativas no se muestra, y un
+      // texto vacío o que no es texto deja el cuadro igual que sin él, en silencio.
+      if (sc.codigoInicial !== undefined) {
+        if (typeof sc.codigoInicial !== 'string' || !sc.codigoInicial.trim()) {
+          err(sScope, 'codigoInicial debe ser un texto no vacío');
+        } else if (isMC || sc.answerFormat !== 'code') {
+          err(sScope, "codigoInicial sólo va en rondas answerFormat 'code': en otra ronda no se muestra");
+        }
+      }
     }
   }
 

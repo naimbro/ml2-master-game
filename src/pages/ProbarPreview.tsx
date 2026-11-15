@@ -5,6 +5,7 @@ import { useMotorR } from '../hooks/useMotorR';
 import { motorR, type ConfigR } from '../lib/rEnVivo';
 
 import sesionC14 from '../../content/sessions/dataviz_2026/clase_14_repaso_del_semestre/config.json';
+import rondasC14 from '../../content/sessions/dataviz_2026/clase_14_repaso_del_semestre/scenarios.json';
 
 // El hermano de MCRepartoPreview y CompasPreview, para lo unico de R en vivo
 // que ningun test puede decir: si webR carga en ESTE telefono, cuanto tarda, y
@@ -13,37 +14,14 @@ import sesionC14 from '../../content/sessions/dataviz_2026/clase_14_repaso_del_s
 // Sin login y sin juego: se abre por /preview-probar desde cualquier telefono.
 // El contenido NO es inventado: usa el bloque `rEnVivo` de la sesion de la
 // clase 14 de dataviz (el repaso del semestre), asi que las tablas son las
-// mismas que vera el alumno en el juego: `curso`, `problemas` y `delinc`.
-// Los ejemplos son las rondas de codigo de esa sesion, con un error real de
-// su rubrica cada una.
+// mismas que vera el alumno en el juego, y los ejemplos son el codigo inicial
+// (`codigoInicial`) de cada una de sus rondas, tal como aparece en el cuadro.
 
 const CONFIG: ConfigR = sesionC14.rEnVivo;
 
-const EJEMPLOS: { id: string; nombre: string; codigo: string }[] = [
-  { id: 'r3-trampa', nombre: 'R3 · el filtro que miente', codigo: `curso %>%
-  filter(minutos_viaje > 60) %>%
-  count(minutos_viaje)` },
-  { id: 'r3-bien', nombre: 'R3 · arreglado', codigo: `curso %>%
-  mutate(minutos_num = as.numeric(minutos_viaje)) %>%
-  filter(minutos_num > 60) %>%
-  count(minutos_num)` },
-  { id: 'r5-bien', nombre: 'R5 · la etapa 3', codigo: `ggplot(delinc, aes(x = anio, y = porcentaje)) +
-  geom_line() +
-  scale_y_continuous(limits = c(0, 40)) +
-  geom_hline(yintercept = 19, linetype = "dashed")` },
-  { id: 'r7-bien', nombre: 'R7 · la lámina', codigo: `top5 <- problemas %>%
-  filter(anio == 2026) %>%
-  slice_max(porcentaje, n = 5)
-
-ggplot(top5, aes(x = porcentaje,
-                 y = reorder(problema, porcentaje))) +
-  geom_col() +
-  geom_text(aes(label = paste0(round(porcentaje), "%")),
-            nudge_x = 2)` },
-  { id: 'r7-sin-top5', nombre: 'R7 · sin armar top5', codigo: `ggplot(top5, aes(x = porcentaje,
-                 y = reorder(problema, porcentaje))) +
-  geom_col()` },
-];
+const EJEMPLOS: { id: string; nombre: string; codigo: string }[] = rondasC14
+  .filter((r) => typeof r.codigoInicial === 'string')
+  .map((r) => ({ id: r.id, nombre: `R${r.order} · ${r.title}`, codigo: r.codigoInicial as string }));
 
 export default function ProbarPreview() {
   const [codigo, setCodigo] = useState(EJEMPLOS[0].codigo);

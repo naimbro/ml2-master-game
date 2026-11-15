@@ -318,6 +318,23 @@ export class MotorR {
     return this.preparando;
   }
 
+  /**
+   * Vuelve a cargar R sólo si la carga anterior quedó en `'fallo'`, con la
+   * última configuración pedida. Lo llaman la vuelta a la pestaña y el comienzo
+   * de cada ronda de código.
+   *
+   * Existe por la corrida en seco del 15-nov-2026: en un Android que ya había
+   * cargado R sin problema en la vista previa, el juego mostró «R no cargó».
+   * La página de la ronda es la misma de una ronda a otra, así que el `preparar`
+   * del montaje corre una sola vez; si la carga se cae mientras el teléfono
+   * está apagado o en otra app (Android congela la pestaña, el corte de 120 s
+   * vence o la descarga se corta), nada la volvía a intentar salvo el enlace
+   * «Reintentar», que nadie aprieta con el reloj corriendo.
+   */
+  reintentarSiFallo(): void {
+    if (this.estado === 'fallo' && this.config) void this.preparar(this.config);
+  }
+
   private async armar(config: ConfigR): Promise<void> {
     if (!this.webR) {
       const { WebR, ChannelType } = await this.deps.cargar();

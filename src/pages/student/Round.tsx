@@ -261,6 +261,23 @@ export default function Round() {
   // profesor que dirige sin jugar no tiene textarea, asi que tampoco baja R.
   const configR = isSpectator ? null : configRDe(game?.sessionConfig, game?.scenarios);
   useMotorR(configR);
+
+  // Código inicial: la ronda deja el código escrito en el cuadro y el alumno lo
+  // edita (`Scenario.codigoInicial`). Una sola vez por ronda —el ref lo
+  // asegura— para no pisar lo que el alumno ya cambió cuando llega otro
+  // snapshot del juego. Va DESPUÉS de `useTypingTelemetry`, cuyo efecto crea el
+  // registro de la ronda: así `noteInitial` cae sobre el registro nuevo.
+  const escenarioActual = currentScenarioRef.current;
+  const codigoInicial = escenarioActual?.answerFormat === 'code' ? escenarioActual.codigoInicial ?? null : null;
+  const idEscenarioActual = escenarioActual?.id ?? '';
+  const precargadoEn = useRef<string | null>(null);
+  useEffect(() => {
+    if (!codigoInicial || isSpectator || hasSubmitted) return;
+    if (precargadoEn.current === idEscenarioActual) return;
+    precargadoEn.current = idEscenarioActual;
+    setResponse(codigoInicial);
+    telemetria.noteInitial(codigoInicial);
+  }, [idEscenarioActual, codigoInicial, isSpectator, hasSubmitted, telemetria]);
   const hayR = configR !== null;
   const isCodeRound = currentScenarioRef.current?.answerFormat === 'code';
   // Cuantas veces probo en ESTA ronda. En un ref y no en estado por lo mismo

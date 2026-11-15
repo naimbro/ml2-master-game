@@ -47,6 +47,10 @@ export default function ProbarCodigo({ config, codigo, bloqueado = false, onPrue
   const montado = useRef(true);
   useEffect(() => {
     montado.current = true;
+    // Este componente se monta de nuevo en cada ronda de código (Round le pone
+    // `key={currentRound}`): si R había quedado en fallo, es el momento de
+    // reintentar sin que el alumno tenga que apretar nada.
+    motorR.reintentarSiFallo();
     return () => { montado.current = false; };
   }, []);
 
@@ -84,6 +88,10 @@ export default function ProbarCodigo({ config, codigo, bloqueado = false, onPrue
           <strong className="text-ink">R no cargó en este teléfono.</strong>{' '}
           Envía tu respuesta igual: los jueces la leen como siempre.
         </p>
+        {/* El motivo, chico y apagado: no es para el alumno sino para quien
+            mire la captura después. Sin él, «R no cargó» no se puede
+            diagnosticar. */}
+        {motorR.error && <p className="mt-1 text-xs text-muted">Motivo: {motorR.error}</p>}
         <button
           type="button"
           onClick={() => void motorR.preparar(config)}

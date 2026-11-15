@@ -134,8 +134,13 @@ export function useTypingTelemetry({ enabled, round, scenarioId, roundStartMs }:
   // el efecto de auto-envio por tiempo agotado depende de `handleSubmit`. Un
   // objeto nuevo en cada render volveria a montar ese efecto en cada tecla que
   // escribe el alumno.
+  /** El código que la ronda dejó precargado en el cuadro: ver `RegistroEscritura.textoInicial`. */
+  const noteInitial = useCallback((valor: string) => {
+    registro.current?.textoInicial(valor);
+  }, []);
+
   return useMemo(
-    () => ({ noteChange, onPaste, refTextarea, snapshot }),
-    [noteChange, onPaste, refTextarea, snapshot]
+    () => ({ noteChange, noteInitial, onPaste, refTextarea, snapshot }),
+    [noteChange, noteInitial, onPaste, refTextarea, snapshot]
   );
 }

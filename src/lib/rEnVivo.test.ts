@@ -238,6 +238,32 @@ describe('MotorR.preparar', () => {
     expect(cargar).toHaveBeenCalledTimes(2);
   });
 
+  it('reintentarSiFallo vuelve a cargar sólo cuando quedó en fallo', async () => {
+    // Un teléfono que se apagó en el lobby queda en fallo; al volver a la
+    // pantalla o al empezar una ronda de código hay que reintentar solo.
+    let falla = true;
+    const { motor, cargar, traer } = motorCon(webRFalso(), {
+      traer: async () => {
+        if (falla) throw new Error('se cortó la red');
+        return new Uint8Array([1]);
+      },
+    });
+    motor.reintentarSiFallo(); // sin config todavía: no hace nada
+    expect(cargar).toHaveBeenCalledTimes(0);
+
+    await motor.preparar(CONFIG);
+    expect(motor.estado).toBe('fallo');
+
+    falla = false;
+    motor.reintentarSiFallo();
+    await vi.waitFor(() => expect(motor.estado).toBe('listo'));
+
+    // Ya listo: otro llamado no vuelve a bajar nada.
+    const traidosAntes = traer.mock.calls.length;
+    motor.reintentarSiFallo();
+    expect(traer.mock.calls.length).toBe(traidosAntes);
+  });
+
   it('si un CSV no baja, queda en fallo y no en un «listo» sin datos', async () => {
     const falso = webRFalso();
     const { motor } = motorCon(falso, { traer: async () => { throw new Error('404'); } });
