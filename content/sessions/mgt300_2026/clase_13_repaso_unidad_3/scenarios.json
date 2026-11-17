@@ -155,46 +155,8 @@
     "idealAnswer": "No. El 2,3% mezcla la pandemia con quizás la IA, y los datos no permiten separar cuánto es de cada una. Además, la paradoja de Solow muestra que una tecnología de propósito general tarda en verse en la productividad, porque primero las empresas tienen que reorganizarse a su alrededor: con los computadores pasaron dos décadas a 1,4% antes del salto de 1995. Así que un alza ahora no prueba la revolución, y si no hubiera alza, tampoco la descartaría."
   },
   {
-    "id": "mgt_c13_r5_que_canal",
-    "order": 5,
-    "type": "multiple_choice",
-    "title": "¿Qué canal?",
-    "category": "Clase 13 — Clima y extinción",
-    "ranked": true,
-    "durationSeconds": 71,
-    "conceptTags": [
-      "c13_carney"
-    ],
-    "mcQuestions": [
-      {
-        "question": "Mark Carney (2015), «Breaking the tragedy of the horizon», distingue **tres canales** de riesgo climático. Aplicado a la IA:\n\n**Anthropic pagó US$1.500 millones para cerrar la demanda de autores de libros por entrenar sus modelos con sus obras** (S-1).\n\n**¿Qué canal de Carney es?**",
-        "options": [
-          {
-            "id": "A",
-            "text": "Físico"
-          },
-          {
-            "id": "B",
-            "text": "De transición"
-          },
-          {
-            "id": "C",
-            "text": "De responsabilidad"
-          },
-          {
-            "id": "D",
-            "text": "Ninguno: es la tragedia del horizonte"
-          }
-        ],
-        "correctOptionIndex": 2,
-        "timeLimitSeconds": 35,
-        "explanation": "Responsabilidad: quien sufre el daño demanda a quien lo causó. Transición sería una ley de IA o chips obsoletos; físico, el daño directo a los activos. La tragedia del horizonte no es un canal."
-      }
-    ]
-  },
-  {
     "id": "mgt_c13_r6_black_october",
-    "order": 6,
+    "order": 5,
     "type": "open",
     "title": "Black October, con Beck",
     "category": "Clase 13 — Clima y extinción",

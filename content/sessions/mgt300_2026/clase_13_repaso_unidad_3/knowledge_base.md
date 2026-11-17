@@ -14,8 +14,9 @@ Prueba de análisis 3 del martes 24 de noviembre.** Se juega en la segunda mitad
 de la clase, y el profesor detiene el juego después de cada ronda para repasar
 esa materia en voz alta.
 
-Seis rondas, dos por clase. **Sólo tres son juzgadas** —R2 (clase 11), R4
-(clase 12) y R6 (clase 13)—; las otras tres son de alternativas.
+Cinco rondas: dos de la clase 11, dos de la 12 y una de la 13. **Sólo tres son
+juzgadas** —R2 (clase 11), R4 (clase 12) y R5 (clase 13)—; las otras dos son de
+alternativas.
 
 **El estándar de corrección de hoy:**
 
@@ -266,34 +267,9 @@ Solow. Hay dos eslabones, y cualquiera de los dos bien cerrado contesta:
 dato no separa); «no, porque la IA es una burbuja» (opinión que no usa la
 paradoja); o devolver la frase de Solow sin aplicarla al último tramo.
 
-<!-- section: c13_carney -->
-
-## Clase 13 — Carney: la tragedia del horizonte (R5 alternativas)
-
-**Mark Carney (2015), «Breaking the tragedy of the horizon: climate change and
-financial stability»**, discurso en Lloyd's de Londres, siendo gobernador del
-Banco de Inglaterra. Presentación «Clima y extinción», láminas 15 a 17.
-
-- **La tragedia del horizonte:** «los peores costos del clima llegan después del
-  horizonte de quien decide hoy». Tres horizontes: el ciclo de los negocios, el
-  ciclo político y el mandato de las autoridades técnicas (como los bancos
-  centrales). Cuando el costo se vuelve visible, ya es tarde.
-- **La salida:** medir y revelar el riesgo, para que el mercado le ponga precio a
-  tiempo. Un S-1 es eso: una empresa obligada a revelar sus riesgos por escrito.
-- **Tres canales**, lámina 16: «**Físico:** el daño directo de inundaciones,
-  sequías o incendios sobre activos y seguros.» «**Responsabilidad:** quienes
-  sufren el daño demandan a quienes lo causaron.» «**Transición:** activos que
-  pierden valor cuando cambian la política y la tecnología.»
-
-Lámina 17, los tres canales aplicados a la IA: físico, data centers que
-necesitan agua y energía (de 415 a 945 TWh entre 2024 y 2030, AIE);
-**responsabilidad, Anthropic pagó US$1.500 millones por usar obras protegidas
-para entrenar (S-1)**; transición, una ley de IA, el rechazo a los data centers o
-chips que quedan obsoletos en pocos años.
-
 <!-- section: c13_beck -->
 
-## Clase 13 — Beck y Black October (R6 abierta)
+## Clase 13 — Beck y Black October (R5 abierta)
 
 **Ulrich Beck (1986), *La sociedad del riesgo*, cap. 1.** Presentado en la clase
 11 (presentación de la unidad) y retomado hoy (presentación «Clima y extinción»,
@@ -333,7 +309,7 @@ atacantes. Leído con Beck en clase (lámina 14, y la guía de estudio):
    of our most important near-term opportunities». Quien fabrica la capacidad
    ofensiva vende la defensa.
 
-### El paso que pide R6
+### El paso que pide R5
 
 La respuesta tiene que hacer tres cosas: **elegir un hecho**, **nombrar o
 describir una idea de Beck** y **decir por qué ese hecho la ilustra**, es decir,
