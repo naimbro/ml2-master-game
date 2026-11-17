@@ -1,0 +1,44 @@
+{
+  "sessionId": "clase_13_repaso_unidad_3",
+  "courseId": "mgt300_2026",
+  "title": "Clase 13: Repaso de la Unidad 3",
+  "description": "Repaso de la Unidad 3, innovación, valor y riesgo de la IA (clases 11, 12 y 13), de cara a la Prueba de análisis 3 del 24 de noviembre. Seis rondas, dos por clase: tres de alternativas y tres abiertas de 2 o 3 frases (~27 min de pared, más las pausas de repaso del profesor entre rondas). Las abiertas piden lo que pide la prueba: el mecanismo, con el dato o el caso escrito en el enunciado. Todas compiten. No es nota.",
+  "date": "2026-11-17",
+  "roundCount": 6,
+  "roundDurationSeconds": 225,
+  "bufferSeconds": 45,
+  "conceptTags": [
+    "c11_s1_riesgos",
+    "c12_gpt_solow",
+    "c13_carney",
+    "c13_beck"
+  ],
+  "judges": [
+    {
+      "judgeId": "generic_specialist",
+      "weight": 0.35
+    },
+    {
+      "judgeId": "generic_praxis",
+      "weight": 0.35
+    },
+    {
+      "judgeId": "generic_teacher",
+      "weight": 0.3
+    }
+  ],
+  "judgeConfig": {
+    "generic_specialist": {
+      "sessionLens": "Tu lente es el MATERIAL: si lo que el estudiante le atribuye al S-1 de Anthropic (R2), a Aghion y a Solow (R4) o a Beck (R6) está efectivamente en lo que el curso leyó y vio proyectado. Tienes el material de referencia: úsalo para verificar, no para exigir que citen. ENTIENDE QUÉ SESIÓN ES ÉSTA: el repaso de la Unidad 3 antes de la Prueba de análisis 3 del 24 de noviembre. Las tres rondas abiertas traen en el enunciado los datos o el caso, y piden el porqué. Una respuesta de DOS O TRES FRASES que cierra ese porqué con lo que dice el material está completa y saca 100; no le restes por 'poco desarrollo'. Los errores que sí te tocan: en R2, decir que el riesgo es que los contratos se pueden cancelar o que los ingresos son fijos (es al revés: los costos son fijos y los ingresos dependen del uso); en R4, afirmar que el 2,3% de 2019–2025 prueba que la IA ya subió la productividad, cuando la lámina dice que mezcla la pandemia y que los datos no permiten separar la IA; en R6, darle a una idea de Beck una definición que no es la suya (el bumerán no es que el riesgo se reparta parejo). Que la electricidad tardara 'unos treinta' o 'unos 40' años está en el material de las dos formas: ninguna es un dato inventado. Ojo con una trampa tuya: los enunciados TRAEN los datos escritos, así que devolverlos con otras palabras es fiel y no es responder; ese paso faltante lo mide 'Mecanismo', no tú. No exijas vocabulario del curso, ni en el puntaje ni en el feedback: 'si la gente usa menos, igual paga' ES 'costo fijo con ingreso variable'. Cierra siempre con una línea que ate esta respuesta a la Prueba de análisis 3 del 24 de noviembre, con la fecha escrita completa.",
+      "weightFormula": "score = 0.45 * fidelidad_al_texto + 0.35 * mecanismo + 0.20 * completitud"
+    },
+    "generic_praxis": {
+      "sessionLens": "Tu única pregunta es POR QUÉ, y en las tres rondas abiertas de hoy el enunciado ya trae los hechos, así que repetirlos no separa a nadie. En R2 no aceptes 'porque gasta mucho' ni 'porque los contratos son caros': pide el eslabón — los costos quedan fijos por años y los ingresos dependen del uso, así que si el uso crece menos de lo previsto la empresa igual paga todo; y crecer rápido no protege porque los contratos se firmaron contando con ese crecimiento. En R4 no aceptes la frase de Solow suelta: pide que la aplique al último tramo — el dato mezcla la pandemia y no separa la IA, y una GPT tarda en verse porque primero hay que reorganizar la producción, así que ni un alza temprana prueba la revolución ni su ausencia la refuta. En R6 no aceptes el nombre de la idea de Beck pegado al hecho: pide que muestre en el hecho lo que define a la idea (quién queda con la protección y quién sin ella; a quién le vuelve el riesgo; quién vende la defensa). PERO esto es un REPASO: con que cierren el paso en dos frases ya está, cerrado y corto es 100. Y premia igual de alto a quien objeta con fundamento: que un prospecto exagera los riesgos, que el 2,3% podría ser en parte IA aunque no se sepa cuánto, o que un hecho de Black October se lee con otra idea de Beck. DOS COSAS SOBRE CÓMO ESCRIBES EL FEEDBACK: nunca le pidas que reemplace sus palabras por las del material —una paráfrasis fiel es una traducción—, y cierra con una línea concreta sobre qué eslabón de ESTA respuesta le conviene dejar explícito en la Prueba de análisis 3 del 24 de noviembre, con la fecha escrita completa.",
+      "weightFormula": "score = 0.20 * fidelidad_al_texto + 0.55 * mecanismo + 0.25 * completitud"
+    },
+    "generic_teacher": {
+      "sessionLens": "Es la última clase antes de la Prueba de análisis 3, y el profesor detiene el juego después de cada ronda para repasar. Las seis rondas SÍ entran al ranking, así que puntúa con honestidad y sin inflar: un puntaje regalado le quita el puesto a otra persona. Pero acuérdate también del otro lado: una respuesta de dos frases que cierra el paso pedido vale 100 también para ti. No eres más exigente que los otros dos jueces; miras otra cosa. Tu trabajo es distinguir a quien leyó y vio el material de la unidad de quien contesta desde el sentido común sobre la IA, que suena parecido y no lo es. MIRA ESPECIALMENTE SI CONTESTÓ LO QUE SE PREGUNTÓ: en R2 la pregunta incluye 'aunque los ingresos estén creciendo rápido', y quien explica el riesgo sin decir por qué crecer no basta dejó media pregunta; en R4 se pregunta si se PUEDE concluir algo del último tramo, no si la IA es o no una revolución; en R6 hay que elegir un hecho, nombrar una idea de Beck Y decir por qué, y quien comenta los tres hechos sin conectar ninguno con Beck no contestó. En tu feedback escribe en primera persona e incluye un «yo habría...» concreto a ESTA respuesta, y CIERRA SIEMPRE atándolo a la Prueba de análisis 3 del 24 de noviembre: qué eslabón dejar explícito, qué paso escribir aunque parezca obvio. Escribe la fecha completa —«la prueba del 24 de noviembre»—, nunca «la prueba del 24» ni «la prueba» a secas. Dos cosas que NO puedes escribir: pedirle que reemplace su formulación por la del material (si dijo lo mismo con sus palabras, tradujo bien), y advertirle que trajo algo de afuera sin verificar el material — Beck, Carney, Steffen, Aghion, Acemoglu, Solow, los personajes de la Tribuna, Black October, Mythos, Glasswing, el acuerdo con los autores y los data centers de la AIE son todos del curso.",
+      "weightFormula": "score = 0.30 * fidelidad_al_texto + 0.40 * mecanismo + 0.30 * completitud"
+    }
+  }
+}

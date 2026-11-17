@@ -136,6 +136,10 @@ import mgtC09Config from '../../content/sessions/mgt300_2026/clase_09_repaso_uni
 import mgtC09Scenarios from '../../content/sessions/mgt300_2026/clase_09_repaso_unidad_2/scenarios.json';
 import mgtC09Rubric from '../../content/sessions/mgt300_2026/clase_09_repaso_unidad_2/rubric.json';
 import mgtC09KnowledgeBase from '../../content/sessions/mgt300_2026/clase_09_repaso_unidad_2/knowledge_base.md?raw';
+import mgtC13Config from '../../content/sessions/mgt300_2026/clase_13_repaso_unidad_3/config.json';
+import mgtC13Scenarios from '../../content/sessions/mgt300_2026/clase_13_repaso_unidad_3/scenarios.json';
+import mgtC13Rubric from '../../content/sessions/mgt300_2026/clase_13_repaso_unidad_3/rubric.json';
+import mgtC13KnowledgeBase from '../../content/sessions/mgt300_2026/clase_13_repaso_unidad_3/knowledge_base.md?raw';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyJson = any;
@@ -603,6 +607,18 @@ export const SESSIONS: SessionOption[] = [
     scenarios: mgtC09Scenarios,
     rubric: mgtC09Rubric,
     knowledgeBase: mgtC09KnowledgeBase,
+  },
+  {
+    id: 'clase_13_repaso_unidad_3',
+    courseId: 'mgt300_2026',
+    title: mgtC13Config.title,
+    description: mgtC13Config.description,
+    rounds: mgtC13Scenarios.length,
+    duration: Math.round(mgtC13Config.roundDurationSeconds / 60),
+    config: mgtC13Config,
+    scenarios: mgtC13Scenarios,
+    rubric: mgtC13Rubric,
+    knowledgeBase: mgtC13KnowledgeBase,
   },
 ];
 

@@ -1,0 +1,234 @@
+[
+  {
+    "id": "mgt_c13_r1_que_familia",
+    "order": 1,
+    "type": "multiple_choice",
+    "title": "¿Qué familia?",
+    "category": "Clase 11 — Anthropic sale a bolsa",
+    "ranked": true,
+    "durationSeconds": 76,
+    "conceptTags": [
+      "c11_s1_riesgos"
+    ],
+    "mcQuestions": [
+      {
+        "question": "Anthropic, prospecto de salida a bolsa (**S-1/A, 2 de noviembre de 2026**). Uno de sus riesgos:\n\n> «Sus advertencias sobre los peligros de la IA han sido citadas por gobiernos en juicios y en pedidos para restringir el desarrollo de modelos.»\n\n**¿En cuál de las cuatro familias de riesgo va?**",
+        "options": [
+          {
+            "id": "A",
+            "text": "Financiera: ¿alcanza la plata para lo que ya comprometió?"
+          },
+          {
+            "id": "B",
+            "text": "Seguridad: ¿y si el modelo cae en malas manos?"
+          },
+          {
+            "id": "C",
+            "text": "Legal y política: ¿quién puede demandarla, regularla o castigarla?"
+          },
+          {
+            "id": "D",
+            "text": "Reputación y gobierno: ¿qué vale una marca de seguridad?"
+          }
+        ],
+        "correctOptionIndex": 3,
+        "timeLimitSeconds": 40,
+        "explanation": "Reputación y gobierno: lo que la empresa dice se usa en su contra. «Juicios» no la vuelve legal: no es una demanda contra Anthropic, son sus propias advertencias citadas por otros."
+      }
+    ]
+  },
+  {
+    "id": "mgt_c13_r2_se_use_o_no",
+    "order": 2,
+    "type": "open",
+    "title": "Se use o no",
+    "category": "Clase 11 — Anthropic sale a bolsa",
+    "difficulty": "medium",
+    "answerFormat": "prose",
+    "ranked": true,
+    "durationSeconds": 225,
+    "conceptTags": [
+      "c11_s1_riesgos"
+    ],
+    "context": "Anthropic, prospecto de salida a bolsa (**S-1/A, 2 de noviembre de 2026**), familia financiera:\n\n- Firma contratos de cómputo de varios años que paga **se use o no**.\n- Sus ingresos dependen del **uso**, y casi no tienen contratos largos.",
+    "question": "**¿Por qué esa combinación es un riesgo, aunque los ingresos estén creciendo rápido?** Con 2 o 3 frases basta.",
+    "judgeFocus": "ES UNA RONDA DE REPASO Y CON DOS FRASES SE CONTESTA ENTERA. No pidas más desarrollo, ni ejemplos, ni cifras: nada de eso se pidió.\n\nEL CRITERIO, y va primero: el enunciado ya trae los dos hechos —el cómputo se paga SE USE O NO y los ingresos dependen del USO—. Lo que la ronda pide es el paso que el enunciado no dice: POR QUÉ esa combinación expone a la empresa, y por qué crecer rápido no la protege. La respuesta tiene que ligar el desajuste con una consecuencia: un lado del negocio queda fijo y comprometido por años y el otro es variable, así que si el uso crece menos de lo esperado, se frena o cae, la empresa igual paga todo el cómputo y la diferencia sale de ella (pérdidas, falta de caja). Y tiene que tocar el 'aunque crezcan': los contratos se firmaron CONTANDO con ese crecimiento, así que basta con que crezca menos de lo previsto; crecer no es lo mismo que crecer lo que se comprometió. Con que cierre esa cadena, está completa y vale 100.\n\nEJEMPLOS ILUSTRATIVOS, NO UNA LISTA CERRADA. Varias rutas valen lo mismo: (a) costo fijo contra ingreso variable — si baja el uso, el costo no baja; (b) apuesta sobre el futuro — compró capacidad para una demanda que todavía no existe, y si no llega, la paga igual; (c) la del propio S-1 — ya subestimó antes cuánto cómputo necesitaba, y si los ingresos no alcanzan, incumplir con un proveedor puede hacer exigible toda la deuda de una vez; (d) la del 3.er trimestre — los ingresos crecieron menos (47%, un tercio del ritmo anterior) y el cómputo subió de 48% a 58% de los ingresos: volvió a perder. Si alguien llega por otra ruta que el material sostiene, vale exactamente igual: NO la castigues por no ser una de éstas. No exijas la palabra 'incumplimiento cruzado' ni ninguna cifra.\n\nQUÉ NO CUENTA COMO MECANISMO. (1) 'Porque gasta mucho' o 'porque pierde plata': no explica qué tiene de riesgosa la combinación; aunque cite bien una cifra del S-1, va a 40 en 'Mecanismo'. (2) Devolver los dos hechos del enunciado con otras palabras ('paga aunque no use y gana según lo que usan'): es la paráfrasis y va bajo en 'Mecanismo'. (3) Invertir el dato —decir que los ingresos son fijos o que los contratos se pueden cancelar—: es un error de 'Fidelidad'. (4) Un riesgo de otra familia (que hackeen el modelo, que la demanden): material correcto que contesta otra pregunta, bajo en 'Completitud'.\n\nTRES COSAS MÁS. Primero, no exijas las palabras del material NI EN EL PUNTAJE NI EN EL FEEDBACK: 'si la gente deja de usar Claude, igual tiene que pagar los servidores, y crecer rápido no sirve si crece menos de lo que calculó' contestó perfecto sin decir 'costo fijo'. Si a la respuesta le falta algo, dile qué PASO falta, nunca qué PALABRA. Segundo, quien OBJETA con fundamento puede sacar el puntaje más alto —por ejemplo, que el prospecto exagera los riesgos porque responde legalmente si omite uno, o que comprometer cómputo por adelantado es justamente lo que le asegura chips escasos—, siempre que primero muestre que entendió por qué el desajuste es un riesgo. Tercero, citar otras partes del S-1 (el 44% por las nubes, el triángulo con Google y Amazon) para reforzar suma.",
+    "evaluationGuide": {
+      "must_hit": [
+        "Liga el desajuste con una consecuencia: los costos de cómputo quedan fijos y comprometidos, los ingresos varían con el uso, y si el uso no llega la empresa igual paga (pérdidas, falta de caja o no poder pagar).",
+        "Explica por qué crecer rápido no protege: los contratos se firmaron contando con ese crecimiento, así que basta con que crezca menos de lo previsto."
+      ],
+      "fatal_errors": [
+        "Invertir el dato: decir que los ingresos son fijos y los costos variables, o que los contratos se pueden cancelar si no se usan.",
+        "Inventar una cifra, un estudio o un hecho que no está en el material."
+      ],
+      "partial_credit": {
+        "sin_el_aunque": "Explica bien por qué el desajuste es riesgoso pero no dice nada de por qué crecer rápido no basta. Media pregunta: 60 en 'Completitud'.",
+        "gasta_mucho": "Dice que es riesgoso porque gasta mucho o porque pierde plata, sin conectarlo con que el costo es fijo y el ingreso variable. Plausible y no es el mecanismo del material: 40 en 'Mecanismo'.",
+        "parafrasis": "Repite los dos hechos del enunciado sin decir qué pasa si el uso no llega. Es la paráfrasis y va bajo en 'Mecanismo'.",
+        "otra_familia": "Contesta con un riesgo de seguridad, legal o de reputación. Material correcto que contesta otra pregunta: bajo en 'Completitud'."
+      },
+      "nice_to_have": [
+        "Traer el 3.er trimestre de 2026: los ingresos crecieron menos y el cómputo subió de 48% a 58% de ellos, y volvió a perder.",
+        "Mencionar que ya subestimó antes cuánto cómputo necesitaba, o el incumplimiento cruzado: incumplir con un proveedor puede hacer exigible toda la deuda.",
+        "Objetar con fundamento: que el prospecto exagera los riesgos, o que el compromiso por adelantado es lo que le asegura chips escasos."
+      ]
+    },
+    "idealAnswer": "Porque el cómputo es un costo fijo que paga durante años aunque no lo use, y lo que gana depende de cuánto usen Claude. Si el uso crece menos de lo que calculó cuando firmó, igual tiene que pagar todo y la diferencia sale de su bolsillo; en el extremo, no le alcanza para pagarle a un proveedor y se le viene encima toda la deuda. Crecer rápido no basta, porque los contratos ya suponen ese crecimiento: en el tercer trimestre creció menos, el cómputo subió de 48% a 58% de los ingresos y volvió a perder."
+  },
+  {
+    "id": "mgt_c13_r3_que_rasgo",
+    "order": 3,
+    "type": "multiple_choice",
+    "title": "¿Qué rasgo?",
+    "category": "Clase 12 — ¿Revolución o burbuja?",
+    "ranked": true,
+    "durationSeconds": 71,
+    "conceptTags": [
+      "c12_gpt_solow"
+    ],
+    "mcQuestions": [
+      {
+        "question": "Aghion, Antonin y Bunel (2021), *The Power of Creative Destruction*, cap. 3: una **tecnología de propósito general (GPT)** tiene tres rasgos.\n\nUn dato de la IA: **el costo por token cae año a año.**\n\n**¿Qué rasgo de una GPT ilustra?**",
+        "options": [
+          {
+            "id": "A",
+            "text": "Se difunde"
+          },
+          {
+            "id": "B",
+            "text": "Mejora"
+          },
+          {
+            "id": "C",
+            "text": "Engendra"
+          },
+          {
+            "id": "D",
+            "text": "Ninguno: aquí GPT es el de ChatGPT (generative pre-trained transformer)"
+          }
+        ],
+        "correctOptionIndex": 1,
+        "timeLimitSeconds": 35,
+        "explanation": "Mejora: se abarata y se perfecciona con el uso. Se difunde es llegar a casi todos los sectores; engendra, dar origen a innovaciones derivadas. Y en Aghion, GPT es general purpose technology."
+      }
+    ]
+  },
+  {
+    "id": "mgt_c13_r4_el_ultimo_tramo",
+    "order": 4,
+    "type": "open",
+    "title": "El último tramo",
+    "category": "Clase 12 — ¿Revolución o burbuja?",
+    "difficulty": "medium",
+    "answerFormat": "prose",
+    "ranked": true,
+    "durationSeconds": 225,
+    "conceptTags": [
+      "c12_gpt_solow"
+    ],
+    "context": "Crecimiento anual de la productividad laboral en EE. UU. (BLS; presentación «¿Revolución o burbuja?»):\n\n- 1973–1995: **1,4%**\n- 1995–2004: **3,1%**\n- 2019–2025: **2,3%** — el tramo mezcla la pandemia y quizás la IA",
+    "question": "Con la **paradoja de Solow** (Aghion, Antonin y Bunel, cap. 3): **¿permite el último tramo decir que la IA ya está subiendo la productividad? ¿Por qué?** Con 2 o 3 frases basta.",
+    "judgeFocus": "ES UNA RONDA DE REPASO Y CON DOS FRASES SE CONTESTA ENTERA. No pidas más desarrollo, ni ejemplos, ni otras cifras.\n\nEL CRITERIO, y va primero: la respuesta correcta es NO, el último tramo no permite decir que la IA ya está subiendo la productividad. Lo que la ronda pide es el porqué, usando la paradoja de Solow. Hay dos eslabones y CUALQUIERA DE LOS DOS, bien cerrado, contesta: (1) el dato no separa la IA — el tramo 2019–2025 mezcla la pandemia y quizás la IA, y los datos oficiales no permiten saber cuánto es de cada una; (2) lo que enseña Solow — una GPT no sube la productividad el día que se inventa, porque primero hay que inventar tecnologías derivadas y reorganizar la producción a su alrededor; con los computadores la productividad creció poco durante dos décadas (1,4%) y recién saltó desde 1995 (3,1%). La inversión se ve antes que el rendimiento, así que ni un alza temprana prueba la revolución ni su ausencia la refuta. Una respuesta que dice 'no' y cierra uno de los dos eslabones vale 100. Juntar los dos es mejor respuesta, pero NO es requisito.\n\nEJEMPLOS ILUSTRATIVOS, NO UNA LISTA CERRADA. Valen lo mismo: (a) 'no, porque el 2,3% incluye la pandemia y no se puede separar la parte de la IA'; (b) 'no: con los computadores pasaron dos décadas antes del salto, porque las empresas tenían que reorganizarse; es muy pronto para verlo y un alza ahora no prueba nada'; (c) 'no se puede concluir ni que sí ni que no: Solow muestra que el efecto llega tarde, así que tampoco que no se vea probaría que no sirve'. Si alguien llega por otra ruta que el material sostiene, vale exactamente igual.\n\nQUÉ NO CUENTA. (1) 'Sí, porque subió de 1,5 a 2,3%' o 'sí, igual que en 1995': atribuye a la IA lo que el dato no separa; error de 'Fidelidad'. (2) 'No, porque la IA es una burbuja' o 'porque la IA no sirve': opinión que no usa la paradoja ni el dato; 40 en 'Mecanismo'. (3) Recitar la frase de Solow ('se ve en todas partes menos en las estadísticas') sin aplicarla al último tramo: nombra el concepto y no lo usa; 60 en 'Mecanismo'. (4) Repetir que el tramo mezcla la pandemia y la IA sin decir qué se sigue de eso: es la paráfrasis del enunciado.\n\nTRES COSAS MÁS. Primero, no exijas las palabras del material NI EN EL PUNTAJE NI EN EL FEEDBACK: 'primero las empresas tienen que cambiar cómo trabajan, y eso toma años' ES 'reorganizar la producción'; nadie tiene que decir 'desfase' ni 'GPT'. Si a la respuesta le falta algo, dile qué PASO falta, nunca qué PALABRA. Segundo, quien OBJETA con fundamento puede sacar el puntaje más alto —que el 2,3% podría ser en parte IA aunque no se sepa cuánto; que los desfases se acortan (de unos 120 años del vapor a unos 25 del microprocesador) y quizás éste sea corto; que Solow no garantiza que la IA vaya a ser una GPT—, siempre que no afirme que el dato YA lo prueba. Tercero, citar a Aghion o a Acemoglu de los dossiers (Aghion: el impacto se sentirá en los próximos años; Acemoglu: no hay medidas objetivas de grandes ganancias por ahora) suma. Que la electricidad tardara 'unos treinta' o 'unos 40' años está en el material de las dos formas.",
+    "evaluationGuide": {
+      "must_hit": [
+        "Contesta que no: el último tramo no permite decir que la IA ya está subiendo la productividad.",
+        "Da el porqué con al menos un eslabón cerrado: que el dato mezcla la pandemia y no separa la IA, o que una GPT tarda en verse porque primero hay que reorganizar la producción (la inversión llega antes que el rendimiento)."
+      ],
+      "fatal_errors": [
+        "Afirmar que el 2,3% demuestra que la IA ya está subiendo la productividad.",
+        "Atribuirle a Solow lo contrario de lo que dice: que la productividad sube apenas llega la tecnología.",
+        "Inventar una cifra, un estudio o un hecho que no está en el material."
+      ],
+      "partial_credit": {
+        "solo_no": "Dice que no sin dar ningún porqué, o con un porqué que no usa ni el dato ni Solow. Bajo en 'Mecanismo' y 60 en 'Completitud'.",
+        "solow_recitado": "Recita la frase de Solow sin aplicarla al último tramo. Nombra el concepto: 60 en 'Mecanismo'.",
+        "burbuja": "Dice que no porque la IA es una burbuja o no sirve. Opinión sin el mecanismo del material: 40 en 'Mecanismo'.",
+        "otra_pregunta": "Discute si la IA es o no una revolución, sin decir qué permite concluir el último tramo. Responde la pregunta de al lado: 20 en 'Completitud'."
+      },
+      "nice_to_have": [
+        "Juntar los dos eslabones: el dato no separa la IA, y aunque la separara, el efecto de una GPT llega tarde.",
+        "Comparar con el precedente: dos décadas de computadores a 1,4% antes del salto a 3,1% desde 1995.",
+        "Concluir que tampoco la ausencia de un alza refutaría la revolución, u objetar con fundamento que podría ser en parte IA aunque no se sepa cuánto."
+      ]
+    },
+    "idealAnswer": "No. El 2,3% mezcla la pandemia con quizás la IA, y los datos no permiten separar cuánto es de cada una. Además, la paradoja de Solow muestra que una tecnología de propósito general tarda en verse en la productividad, porque primero las empresas tienen que reorganizarse a su alrededor: con los computadores pasaron dos décadas a 1,4% antes del salto de 1995. Así que un alza ahora no prueba la revolución, y si no hubiera alza, tampoco la descartaría."
+  },
+  {
+    "id": "mgt_c13_r5_que_canal",
+    "order": 5,
+    "type": "multiple_choice",
+    "title": "¿Qué canal?",
+    "category": "Clase 13 — Clima y extinción",
+    "ranked": true,
+    "durationSeconds": 71,
+    "conceptTags": [
+      "c13_carney"
+    ],
+    "mcQuestions": [
+      {
+        "question": "Mark Carney (2015), «Breaking the tragedy of the horizon», distingue **tres canales** de riesgo climático. Aplicado a la IA:\n\n**Anthropic pagó US$1.500 millones para cerrar la demanda de autores de libros por entrenar sus modelos con sus obras** (S-1).\n\n**¿Qué canal de Carney es?**",
+        "options": [
+          {
+            "id": "A",
+            "text": "Físico"
+          },
+          {
+            "id": "B",
+            "text": "De transición"
+          },
+          {
+            "id": "C",
+            "text": "De responsabilidad"
+          },
+          {
+            "id": "D",
+            "text": "Ninguno: es la tragedia del horizonte"
+          }
+        ],
+        "correctOptionIndex": 2,
+        "timeLimitSeconds": 35,
+        "explanation": "Responsabilidad: quien sufre el daño demanda a quien lo causó. Transición sería una ley de IA o chips obsoletos; físico, el daño directo a los activos. La tragedia del horizonte no es un canal."
+      }
+    ]
+  },
+  {
+    "id": "mgt_c13_r6_black_october",
+    "order": 6,
+    "type": "open",
+    "title": "Black October, con Beck",
+    "category": "Clase 13 — Clima y extinción",
+    "difficulty": "medium",
+    "answerFormat": "prose",
+    "ranked": true,
+    "durationSeconds": 225,
+    "conceptTags": [
+      "c13_beck"
+    ],
+    "context": "Black October (*The Economist*, «The world must act to stop a cyber-disaster», noviembre de 2026):\n\n1. Anthropic abrió su modelo Mythos sólo a un club por invitación, y sumar miembros exige el visto bueno de Washington.\n2. Los modelos abiertos sirven a cualquiera: una empresa chica sin defensas abre la puerta a la grande.\n3. El S-1 de Anthropic: la ciberseguridad es «one of our most important near-term opportunities».",
+    "question": "Con Ulrich Beck, *La sociedad del riesgo* (1986), cap. 1: **elige UNO de los hechos, di qué idea de Beck ilustra y por qué.** Con 2 o 3 frases basta.",
+    "judgeFocus": "ES UNA RONDA DE REPASO Y CON DOS FRASES SE CONTESTA ENTERA. Se pide UN hecho, no los tres: no pidas que comente los otros dos.\n\nEL CRITERIO, y va primero: la respuesta tiene que hacer tres cosas —elegir un hecho, nombrar o describir una idea de Beck, y decir POR QUÉ ese hecho la ilustra—. El porqué es lo que carga el puntaje: mostrar en el hecho el elemento que define a la idea. Las tres ideas del cap. 1, como las proyectó la clase: REPARTO DE RIESGOS — la modernidad ya no sólo reparte riqueza, también reparte los riesgos que fabrica, y no los reparte igual; EFECTO BUMERÁN — tarde o temprano el riesgo alcanza a quienes lo producen y se benefician de él; EL RIESGO COMO NEGOCIO — cada amenaza abre un mercado para quien vende la protección, y la demanda de protección no tiene fondo. Una respuesta que elige un hecho y muestra en él la definición de una de las tres vale 100.\n\nLA LECTURA DE CLASE ES UNA, NO LA ÚNICA. En la clase se emparejó el hecho 1 con reparto (la protección queda en un club que decide Washington; quien queda fuera, como una empresa chilena, se defiende con los mismos modelos que usan los atacantes), el 2 con bumerán (el riesgo que el ecosistema fabrica vuelve a alcanzar a la empresa grande por la puerta de la chica) y el 3 con negocio (quien fabrica la capacidad ofensiva vende la defensa). OTRO EMPAREJAMIENTO BIEN JUSTIFICADO VALE EXACTAMENTE IGUAL: el club de Mythos leído como negocio (Anthropic vende acceso exclusivo a la protección); la pyme sin defensas leída como reparto desigual (el riesgo cae sobre quien no puede pagar defensas); el 3 leído como bumerán si explica cómo el riesgo vuelve a quien lo produjo. Juzga si la definición de la idea calza con lo que dice del hecho, NO si eligió el par de la clase.\n\nQUÉ NO CUENTA COMO MECANISMO. (1) Nombrar la idea pegada al hecho sin decir por qué ('el hecho 2 es el bumerán'): 60 en 'Mecanismo'. (2) Contar el hecho con otras palabras sin conectarlo con ninguna idea de Beck: es la paráfrasis del enunciado. (3) Darle a la idea una definición que no es la de Beck —el bumerán como 'el riesgo se reparte parejo entre todos', el reparto como 'repartir la riqueza'—: es un error de 'Fidelidad'. (4) Comentar los tres hechos superficialmente sin cerrar ninguno: es peor que cerrar uno bien.\n\nTRES COSAS MÁS. Primero, no exijas las palabras de Beck NI EN EL PUNTAJE NI EN EL FEEDBACK: 'el problema le vuelve al que lo causó' ES el bumerán; 'unos se protegen y otros quedan a la intemperie' ES el reparto desigual; 'le sacan plata al miedo' ES el riesgo como negocio. Si a la respuesta le falta algo, dile qué PASO falta, nunca qué PALABRA. Segundo, quien OBJETA con fundamento puede sacar el puntaje más alto —que un hecho se lee con dos ideas a la vez, o que Anthropic firma la advertencia sobre la IA y vende la protección, y para Beck eso no es contradicción sino la lógica de la sociedad del riesgo—. Tercero, conectar con Carney, con la clase 11 o con la declaración de extinción suma; la 'irresponsabilidad organizada' también es de Beck (aunque de 1988), así que citarla no es un error de autor, pero no reemplaza a una de las tres ideas que se piden.",
+    "evaluationGuide": {
+      "must_hit": [
+        "Elige uno de los tres hechos y lo conecta con una idea de Beck: reparto de riesgos, efecto bumerán o el riesgo como negocio.",
+        "Dice por qué: muestra en el hecho lo que define a esa idea (quién se queda con la protección y quién sin ella; a quién le vuelve el riesgo; quién vende la protección)."
+      ],
+      "fatal_errors": [
+        "Darle a la idea de Beck una definición que no es la suya: el bumerán como reparto parejo, el reparto como reparto de la riqueza, o el negocio como 'las empresas ganan plata con la IA' sin la amenaza y la protección.",
+        "Inventar una cifra, un estudio o un hecho que no está en el material."
+      ],
+      "partial_credit": {
+        "solo_etiqueta": "Empareja un hecho con una idea pero no dice por qué. Nombra el concepto: 60 en 'Mecanismo'.",
+        "sin_beck": "Comenta el hecho con criterio pero sin conectarlo con ninguna idea de Beck. Contesta media pregunta: 40 en 'Completitud'.",
+        "parafrasis": "Repite el hecho con otras palabras. Es la paráfrasis del enunciado y va bajo en 'Mecanismo'.",
+        "los_tres_a_medias": "Recorre los tres hechos nombrando una idea para cada uno sin cerrar el porqué de ninguno. 60 en 'Mecanismo'."
+      },
+      "nice_to_have": [
+        "Traer el detalle del caso: quien queda fuera del club, como una empresa chilena, se defiende con los mismos modelos abiertos que usan los atacantes.",
+        "Notar que la demanda de protección no tiene fondo, o que quien fabrica la capacidad ofensiva vende la defensa.",
+        "Objetar o cruzar con fundamento: un hecho que se lee con dos ideas, o Anthropic que firma la advertencia sobre la IA y vende la protección."
+      ]
+    },
+    "idealAnswer": "Elijo el 1: es el reparto de riesgos de Beck. La modernidad no sólo reparte riqueza, también los riesgos que fabrica, y no los reparte igual: la defensa contra los ataques con IA queda en un club que decide Washington, y quien queda fuera, como una empresa chilena, se tiene que defender con los mismos modelos abiertos que usan los atacantes. El riesgo es de todos; la protección, de unos pocos."
+  }
+]
